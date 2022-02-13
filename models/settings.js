@@ -11,7 +11,7 @@ class SettingsInstance {
     BackgroundImage = '';
     Groups = [];
 
-    _File = '../data/config.json';
+    _File = './data/config.json';
 
     constructor(){}
     
