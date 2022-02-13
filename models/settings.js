@@ -11,25 +11,33 @@ class SettingsInstance {
     BackgroundImage = '';
     Groups = [];
 
+    _File = '../data/config.json';
+
     constructor(){}
     
     load() {        
         let self = this;
         return new Promise(function (resolve, reject) {
-            fs.readFile('./data/config.json', (err, data) => {
-                if(err) {
-                    console.log(err);
-                    reject(err);
-                }
-                else             
-                {
-                    let obj = JSON.parse(data);    
-                    Object.keys(obj).forEach(k => {
-                        self[k] = obj[k];
-                    });         
-                    resolve(self);                   
-                }
-            });
+            if(fs.existsSync(this._File) == false) {
+                this.save();
+            }
+            else
+            {
+                fs.readFile(this._File, (err, data) => {
+                    if(err) {
+                        console.log(err);
+                        reject(err);
+                    }
+                    else             
+                    {
+                        let obj = JSON.parse(data);    
+                        Object.keys(obj).forEach(k => {
+                            self[k] = obj[k];
+                        });         
+                        resolve(self);                   
+                    }
+                });
+            }
         });
     }
 
@@ -37,7 +45,7 @@ class SettingsInstance {
         ++this.Revision;
         let json = this.toJson();
         return new Promise(function (resolve, reject) {
-            fs.writeFile('./data/config.json', json, (err, data) => {
+            fs.writeFile(this._File, json, (err, data) => {
 
             });
         });
