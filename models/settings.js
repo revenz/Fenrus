@@ -19,7 +19,7 @@ class SettingsInstance {
         let self = this;
         return new Promise(function (resolve, reject) {
             if(fs.existsSync(self._File) == false) {
-                this.save();
+                self.save();
             }
             else
             {
