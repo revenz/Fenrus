@@ -18,12 +18,12 @@ class SettingsInstance {
     load() {        
         let self = this;
         return new Promise(function (resolve, reject) {
-            if(fs.existsSync(this._File) == false) {
+            if(fs.existsSync(self._File) == false) {
                 this.save();
             }
             else
             {
-                fs.readFile(this._File, (err, data) => {
+                fs.readFile(self._File, (err, data) => {
                     if(err) {
                         console.log(err);
                         reject(err);
@@ -44,8 +44,9 @@ class SettingsInstance {
     save() {
         ++this.Revision;
         let json = this.toJson();
+        let self = this;
         return new Promise(function (resolve, reject) {
-            fs.writeFile(this._File, json, (err, data) => {
+            fs.writeFile(self._File, json, (err, data) => {
 
             });
         });
