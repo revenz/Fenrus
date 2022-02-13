@@ -1,0 +1,13 @@
+﻿{
+  "Name": "Overseerr",
+  "Function": "Overseerr_Status",
+  "TestFunction": "Overseerr_Test",
+  "Interval": 3,
+  "Properties": [
+    {
+      "Name": "API Key",
+      "Id": "apikey",
+      "Type": "string"
+    }
+  ]
+}

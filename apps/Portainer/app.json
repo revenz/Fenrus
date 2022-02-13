@@ -1,0 +1,11 @@
+﻿{
+  "Name": "Portainer",
+  "Function": "Portainer_Status",
+  "Properties": [
+    {
+      "Name": "Access Token",
+      "Id": "token",
+      "Type": "string"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "node-fetch": "2.0"
+  }
+}

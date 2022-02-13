@@ -1,0 +1,17 @@
+﻿{
+  "Name": "NextCloud",
+  "Function": "NextCloud_Status",
+  "Interval": 30,
+  "Properties": [
+    {
+      "Name": "Username",
+      "Id": "username",
+      "Type": "string"
+    },
+    {
+      "Name": "Application Password",
+      "Id": "password",
+      "Type": "password"
+    }
+  ]
+}

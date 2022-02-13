@@ -1,0 +1,13 @@
+<% 
+    let target = settings.LinkTarget ?? '_self';
+%>
+
+<a class="db-item db-link" href="<%= model.Url%>" onclick="abortRequests()" target="<%= target %>">
+    <div class="icon">
+       <img src="<%= model.Icon %>" />
+    </div>
+    <div class="content">
+        <div class="title"><%= model.Name %></div>
+    </div>
+    <div class="arrow"></div>
+</a>

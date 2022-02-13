@@ -1,0 +1,108 @@
+<%- include('./partials/head.ejs' ) %>
+
+<link rel="stylesheet" href="/css/settings.min.css" />
+<link rel="stylesheet" href="/css/toggle-switchy.css" />
+
+<input type="hidden" id="SettingsData" value="<%= settings.toJson(true) %>" />
+
+
+<div class="general settings-box" x-data="Settings">
+    <div class="header">
+        <span class="title">Settings</span>
+        <div class="buttons">
+            <button class="btn" @click="save">Save</button>
+        </div>
+    </div>
+    <div class="setting">
+        <span class="label">Theme</span>
+        <span class="value">
+            <select x-model="model.Theme">
+                <option value="Default">Default</option>
+                <option value="Heimdall">Heimdall</option>
+            </select>
+        </span>
+    </div>
+    <div class="setting">
+        <span class="label">Link Target</span>
+        <span class="value">
+            <select x-model="model.LinkTarget">
+                <option value="_self">Open in this tab</option>
+                <option value="_blank">Open in new tab</option>
+                <option value="home-portal">Open in same tab</option>
+            </select>
+        </span>
+    </div>
+    <div class="setting">
+        <span class="label">Group Titles</span>
+        <span class="value">
+            <label for="ShowGroupTitles" class="toggle-switchy">
+                <input type="checkbox" id="ShowGroupTitles" x-model="model.ShowGroupTitles" />
+                <span class="toggle">
+                    <span class="switch"></span>
+                </span>
+            </label>
+        </span>
+    </div>
+    <div class="setting">
+        <span class="label">Accent</span>
+        <span class="value color-picker">
+            <input type="text" x-model="model.AccentColor" data-jscolor="{preset:'dark'}" />
+        </span>
+    </div>
+</div>
+
+<div class="groups settings-box">    
+    <div class="header">
+        <span class="title">Background Image</span>
+        <div class="buttons">
+            <a class="btn add" href="/settings/background">Set</a>
+        </div>
+    </div>
+</div>
+
+<script src="/js/settings.js"></script>
+<script src="/js/jscolor.min.js"></script>
+<script src="https://unpkg.com/alpinejs@3.8.1/dist/cdn.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/mattkingshott/iodine/dist/iodine.min.umd.js" defer></script>
+
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        let json = document.getElementById('SettingsData').value;
+        let settings = JSON.parse(json)
+        Alpine.data('Settings', () => ({
+           model: settings, 
+           validate() {
+                let inputs = [...document.querySelectorAll(`.settings-box [data-rules]`)];
+                let valid = true;
+                inputs.map((input) => {
+                    if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
+                        valid = false;
+                        input.classList.add("invalid");
+                    }else{
+                        input.classList.remove("invalid");
+                    }
+                });
+                return valid;
+           },
+           save() {
+                if(!this.validate())
+                    return;
+                    
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify(this.model),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                fetch('/settings', options).then(()=>{
+                    window.location.reload(true);
+                });
+            }
+        }))
+    });
+</script>
+
+<%- include('./partials/footer.ejs') %>

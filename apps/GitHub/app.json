@@ -1,0 +1,11 @@
+﻿{
+  "Name": "GitHub",
+  "Interval": 300,
+  "Properties": [
+    {
+      "Name": "Branch",
+      "Id": "branch",
+      "Type": "string"
+    }
+  ]
+}

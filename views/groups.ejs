@@ -1,0 +1,97 @@
+<%- include('./partials/head.ejs' ) %>
+
+<link rel="stylesheet" href="/css/settings.min.css" />
+
+<div class="groups settings-box" x-data="Groups">    
+    <div class="header">
+        <span class="title">Groups</span>
+        <div class="buttons">
+            <a class="btn add" href="/group/<%= Utils.newGuid() %>">Add</a>
+        </div>
+    </div>
+    <ul class="group-list">
+        <% for(let item of settings.Groups) { 
+            let itemCount = item.Items?.length || 0;
+            let items = itemCount == 1 ? "1 Item" : itemCount + " Items";    
+        %>
+        <li id="<%= item.Uid%>" draggable="true" @dragstart="dragStart" @dragenter="dragEnter" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="dragDrop" @dragend="dragEnd"> 
+            <span class="icon-sort"></span>
+            <span class="name"><%= item.Name %></span>
+            <span class="items"><%= items %></span>
+            <span class="controls">
+                <a title="Edit" class="icon-edit" href="/group/<%= item.Uid %>"></a>
+                <span title="Delete" class="icon-trash" @click="deleteGroup('<%= item.Uid %>')"></span>
+            </span>
+        </li>
+        <% } %>
+    </ul>
+</div>
+
+<script src="/js/settings.js"></script>
+<script src="https://unpkg.com/alpinejs@3.8.1/dist/cdn.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/mattkingshott/iodine/dist/iodine.min.umd.js" defer></script>
+
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('Groups', () => ({
+            deleteGroup(uid) {
+                let name = document.getElementById(uid).querySelector('.name').innerText;
+                confirmPrompt(`Are you sure you want to delete the group "${name}"?`).then(() => 
+                {
+                    fetch('/group/' + encodeURIComponent(uid), { method: 'DELETE'}).then(()=>{
+                        document.getElementById(uid).remove(); 
+                    });
+                });
+            },
+            
+            dragSrcEl:null,
+            dragStart(e){                    
+                e.target.style.opacity = '0.4';
+                this.dragSrcEl = e.target;
+                e.dataTransfer.effectAllowed = 'move';
+            },
+            dragEnter(e){
+                e.target.classList.add('over');
+            },
+            dragLeave(e){
+                e.target.classList.remove('over');
+            },
+            dragOver(e){
+                e.dataTransfer.dropEffect = 'move';
+            },
+            dragEnd(e){
+                e.target.style.opacity = '1';
+                document.querySelectorAll('.group-list li').forEach(function (item) {
+                    item.classList.remove('over');
+                });
+            },
+            dragDrop(e){
+                if (this.dragSrcEl != e.target) {
+                    // this is the target, where we are adding it
+                    // dragSrcEl is the item being dragged
+                    e.target.parentNode.insertBefore(dragSrcEl, e.target);
+
+                    saveLayout();
+                }
+                return false;
+            },            
+            saveLayout() {
+                let uids = Array.from(document.querySelectorAll('.group-list li')).map(x => x.getAttribute('id'));
+
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify({ uids: uids}),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+
+                return fetch('/groups/order', options);
+            }
+        }))
+    });
+</script>
+
+<%- include('./partials/footer.ejs') %>

@@ -1,0 +1,12 @@
+﻿{
+  "Name": "SABnzbd",
+  "Function": "SABnzbd_Status",
+  "Interval":5,
+  "Properties": [
+    {
+      "Name": "API Key",
+      "Id": "apikey",
+      "Type": "string"
+    }
+  ]
+}

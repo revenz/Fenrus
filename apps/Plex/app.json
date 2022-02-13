@@ -1,0 +1,13 @@
+﻿{
+  "Name": "Plex",
+  "Function": "Plex_Status",
+  "TestFunction": "Plex_Test",
+  "Interval": 20,
+  "Properties": [
+    {
+      "Name": "Token",
+      "Id": "token",
+      "Type": "string"
+    }
+  ]
+}

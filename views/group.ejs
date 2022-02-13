@@ -1,0 +1,337 @@
+<%- include('./partials/head.ejs' ) %>
+
+<% 
+
+%> 
+
+<link rel="stylesheet" href="/css/settings.min.css" />
+
+<div x-data="Group">
+    <%- include('./partials/group/editor.ejs' ) %>
+    <%- include('./partials/group/item.ejs' ) %>
+    <%- include('./partials/group/mover.ejs' ) %>
+</div>
+
+<input type="hidden" id="GroupData" value="<%= JSON.stringify(model) %>" />
+<input type="hidden" id="Apps" value="<%= JSON.stringify(apps) %>" />
+
+<script src="/js/settings.js"></script>
+<script src="https://unpkg.com/alpinejs@3.8.1/dist/cdn.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/mattkingshott/iodine/dist/iodine.min.umd.js" defer></script>
+
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        let json = document.getElementById('GroupData').value;
+        let apps = JSON.parse(document.getElementById('Apps').value);
+        let group = JSON.parse(json)
+        Alpine.data('Group', () => ({
+            Items: group.Items,
+            Name: group.Name,
+            Width: group.Width,
+            Height: group.Height,
+            Apps: apps,
+            MoverOpen: false,
+            MoverItem: {},
+            MoverDestination: '',
+            MoverTitle: '',
+            EditorOpen: false,
+            EditModel: { },
+            EditorTitle: '',
+            EditorApp:{},
+            isItemSaved: false,
+            typeChanged(event){
+                if(!event){
+                    this.EditorApp = {TestFunction: ''};
+                    return;
+                }
+                let type = typeof(event) === 'string' ? event : event.target?.value;
+                if(type !== 'DashboardApp')
+                    this.EditorApp = {};
+                this.EditModel.AppName = '';
+            },
+            appChanged(event) {
+                if(!event){
+                    this.EditorApp = {};
+                    return;
+                }
+                if(this.EditModel.Name === this.EditorApp?.Name)
+                    this.EditModel.Name = '';
+                let fromInit = typeof(event) === 'string';
+                let newApp = typeof(event) === 'string' ? event : event.target?.value;
+                if(!newApp){
+                    this.EditorApp = {};
+                    return;
+                }
+                if(fromInit === false || !this.EditModel.Properties){
+                    this.EditModel.Properties = {}; // clear these
+                }
+                let index = this.Apps.findIndex(x => x.Name === newApp);
+                if(index >= 0){
+                    if(this.Apps[index].Icon.indexOf('/') < 0)
+                        this.Apps[index].Icon = `/apps/${this.Apps[index].Name}/${this.Apps[index].Icon}`;
+
+                    this.EditorApp = JSON.parse(JSON.stringify(this.Apps[index]));
+                    if((fromInit === false || !this.EditModel.Icon) && this.EditorApp)
+                        this.EditModel.Icon = this.EditorApp.Icon;
+
+
+                    if(this.EditModel.Icon?.toLowerCase()?.startsWith('app'))
+                        this.EditModel.Icon = '/' + this.EditModel.Icon;
+                }
+                else
+                    this.EditorApp = {};
+
+
+                if(!this.EditModel.Name)
+                    this.EditModel.Name = this.EditorApp.Name;
+            },
+            removeItem(uid) {
+                let index = this.Items.findIndex(x => x.Uid === uid);
+                if(index >= 0){
+                    let name = this.Items[index].Name;
+                    confirmPrompt(`Are you sure you want to remove the item '${name}'?`).then(()=>{
+                        this.Items.splice(index, 1);
+                    });
+                }
+            },
+            moveItem(uid) {
+                let index = this.Items.findIndex(x => x.Uid === uid);
+                if(index >= 0){
+                    this.MoverItem = this.Items[index];
+                    this.MoverTitle = 'Move ' + this.MoverItem.Name;
+                    this.MoverDestination = '';
+                    this.MoverOpen = true;
+                }
+            },
+            validate(){
+
+                if(this.EditorOpen && this.isItemSaved === false)
+                    return true;
+
+                let selector = this.EditorOpen ? 'group-item-editor' : 
+                                this.MoverOpen ? 'group-item-mover-editor' :
+                                'group';
+
+                let inputs = [...document.querySelectorAll(`.${selector}.settings-box [data-rules]`)];
+                let valid = true;
+                inputs.map((input) => {
+                    if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
+                        valid = false;
+                        input.classList.add("invalid");
+                    }else{
+                        input.classList.remove("invalid");
+                    }
+                });
+
+                if(this.EditorOpen){
+                    if(!this.EditModel.Icon){
+                        document.getElementById('file-chooser-btn').classList.add('invalid');
+                        return false;
+                    }else{
+                        document.getElementById('file-chooser-btn').classList.remove('invalid');
+                    }
+                }
+
+                return valid;
+            },
+            save() {
+                // first validate it
+                if(this.validate() === false)
+                    return;
+
+                if(!this.Items?.length){
+                    messageBox('You must add at least one item to the group', 'Item Required');
+                    return;
+                }
+
+                let model = {
+                    _Type:'DashboardGroup',
+                    Name:this.Name,
+                    Height: this.Height,
+                    Width: this.Width,
+                    Items:this.Items,
+                    Uid:group.Uid
+                };
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify(model),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                fetch('/group', options).then(response => {
+                    history.back();
+                });
+            },
+            cancel() {
+                history.back();
+            },
+            addItem() {
+                this.isItemSaved = false;
+                this.EditorApp.Properties = {};
+                this.EditModel = 
+                {
+                    _Type: '@nameof(DashboardApp)',
+                    Uid: newGuid(),
+                    Name: '',
+                    Url: '',
+                    Icon: '',
+                    Properties:{}
+                };
+                this.EditorTitle = 'New Item';                    
+                this.EditorOpen = true;
+            },
+            editItem(uid) {
+                console.log('test');
+                this.isItemSaved = false;
+                this.EditorApp.Properties = {};
+                let item = this.Items.filter(x => x.Uid === uid)[0];
+                console.log('item', item);
+                if(item){
+                    this.EditorTitle = 'Edit Item';
+                    this.EditModel = JSON.parse(JSON.stringify(item)); // clone the object so any changes arent written directly to the model                        
+                    if(!this.EditModel.DisplayName)
+                        this.EditModel.DisplayName = this.EditModel.Name;
+                    if(!this.EditModel.Properties)
+                        this.EditModel.Properties = {};
+                    this.appChanged(this.EditModel.AppName);
+                    this.EditorOpen = true;
+                }
+            },
+
+            // mover
+            moverSave() {
+                if(this.validate() === false)
+                    return;
+                const options = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ItemUid: this.MoverItem.Uid,
+                        SourceUid: '@Model.Uid',
+                        DestinationUid: this.MoverDestination
+                    })
+                }
+                fetch('/group/move', options).then(()=>{
+                    let index = this.Items.indexOf(this.MoverItem);
+                    if(index >= 0)
+                        this.Items.splice(index, 1);
+                    this.MoverOpen = false;
+                    toast(`Moved item '${this.MoverItem.Name}'`, true);
+                    this.MoverItem = {};
+                    this.MoverTitle = '';
+                })
+            },
+            moverCancel() {
+                this.MoverOpen = false;
+                this.MoverItem = {};
+            },
+
+
+            // item editor stuff
+            closeEditor(){
+                this.EditorOpen = false;
+            },
+            getEditModel() {          
+                // first validate it
+                this.isItemSaved = true; // this tells the form its now able to be treated as dirty and errors shown
+                
+                if(this.validate() === false)
+                    return;
+                    
+                return JSON.parse(JSON.stringify(this.EditModel));
+            },
+            saveEditor() {                                            
+                let item = this.getEditModel();
+                if(!item)
+                    return; // must be invalid
+
+                let index = this.Items.findIndex(x => x.Uid === item.Uid);
+                if(index >= 0){
+                    this.Items[index] = item;
+                }
+                else{
+                    this.Items.push(item);
+                }
+
+                this.EditorOpen = false;
+            },
+            imageChosen(event){
+                this.fileToDataUrl(event, src => 
+                {
+                    this.EditModel.Icon = src;
+                    this.validate();
+                })
+            },                
+            fileToDataUrl(event, callback) {
+                if (! event.target.files.length) return;
+
+                let file = event.target.files[0];
+                let reader = new FileReader();
+
+                reader.readAsDataURL(file);
+                reader.onload = e => callback(e.target.result);
+            },
+            testApp() {
+                let model = this.getEditModel();
+                if(!model)
+                    return;
+                TestApp(this.EditorApp.TestFunction, model).then(result => {
+                    toast('Success', true);
+                }).catch(error => {
+                    toast('Failure', false);
+                });
+            },
+
+            // input stuff                 
+            blur(){
+                this.validate();
+            },
+            input(){
+                this.validate();
+            },
+
+            // drag stuff
+            dragSrcEl:null,
+            dragStart(e){                    
+                e.target.style.opacity = '0.4';
+                this.dragSrcEl = e.target;
+                e.dataTransfer.effectAllowed = 'move';
+            },
+            dragEnter(e){
+                e.target.classList.add('over');
+            },
+            dragLeave(e){
+                e.target.classList.remove('over');
+            },
+            dragOver(e){
+                e.dataTransfer.dropEffect = 'move';
+            },
+            dragEnd(e){
+                e.target.style.opacity = '1';
+                document.querySelectorAll('.group-item-list li').forEach(function (item) {
+                    item.classList.remove('over');
+                });
+            },
+            dragDrop(e){
+                if (this.dragSrcEl != e.target) {
+                    let uid = this.dragSrcEl.getAttribute('id');
+                    let targetUid = e.target.getAttribute('id');
+                    let originalIndex = this.Items.findIndex(x => x.Uid === uid);
+                    let targetIndex = this.Items.findIndex(x => x.Uid === targetUid);
+                    if(originalIndex >= 0 && targetIndex >= 0 && originalIndex != targetIndex)
+                    {
+                        let item = this.Items.splice(originalIndex, 1)[0];
+                        if(targetIndex > originalIndex)
+                            --targetIndex; // as now the original item has been removed, everythign afterwards has shifted down
+                        this.Items.splice(targetIndex, 0, item);
+                    }
+                }
+            }
+        }));
+    });
+</script>
+
+<%- include('./partials/footer.ejs') %>

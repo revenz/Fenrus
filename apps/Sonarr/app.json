@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Sonarr",
+  "Function": "Sonarr_Status",
+  "Icon": "icon.png",
+  "Properties": [
+    {
+      "Name": "API Key",
+      "Id": "apikey",
+      "Type": "string"
+    }
+  ]
+}

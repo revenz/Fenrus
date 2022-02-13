@@ -1,0 +1,32 @@
+<% if(model.Items?.length) {  
+    
+    let width = model.Width;
+    if (width < 0)
+        width = 1;
+    else if (width > 10)
+        width = 10;
+
+    let height = model.Height;
+    if (height < 0)
+        height = 1;
+    else if (height > 10)
+        height = 10;
+%>    
+<div class="db-group width-<%= width %> height-<%= height %>">
+    <% if(settings.ShowGroupTitles) { %>
+        <div class="title"><span><%= model.Name %></span></div>
+    <% } %>
+    
+    <div class="items">
+        <% for(let item of model.Items) {
+            if (item) { 
+                let type = item._Type.substring(9).toLowerCase();
+                let partialFile = `${type}.ejs`;
+                let itemModel = { model: item, settings: settings, Utils: Utils};
+            %>
+                <%- include(partialFile, itemModel ) %>
+            <% }
+        } %>
+    </div>
+</div>
+<% } %>

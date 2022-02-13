@@ -1,0 +1,11 @@
+﻿{
+  "Name": "Radarr",
+  "Function": "Radarr_Status",
+  "Properties": [
+    {
+      "Name": "API Key",
+      "Id": "apikey",
+      "Type": "string"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+﻿{
+  "Name": "FileFlows",
+  "Function": "FileFlows_Status",
+  "TestFunction":"FileFlows_Test",
+  "Interval":2
+}

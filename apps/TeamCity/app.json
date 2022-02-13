@@ -1,0 +1,11 @@
+﻿{
+  "Name": "TeamCity",
+  "Function": "TeamCity_Status",
+  "Properties": [
+    {
+      "Name": "Access Token",
+      "Id": "token",
+      "Type": "string"
+    }
+  ]
+}

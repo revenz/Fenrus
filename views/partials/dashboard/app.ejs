@@ -1,0 +1,25 @@
+<% 
+    let app = AppHelper.get(model.AppName);
+    let target = settings.LinkTarget ?? '_self';
+    let title = model.Name ?? model.AppName;
+    let interval = (app.Interval ?? 0) * 1000;
+%>
+
+<a id="<%= model.Uid %>" class="db-item db-app" href="<%= model.Url%>" onclick="abortRequests()" target="<%= target %>">
+    <div class="icon">
+       <img src="<%= `/apps/${encodeURIComponent(app.Name)}/${app.Icon}` %>" />
+    </div>
+    <div class="content">
+        <div class="title"><%= title %></div>
+        <div class="status"></div>
+    </div>
+    <div class="arrow"></div>
+</a>
+
+<% if (interval > 0) { %>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            LiveApp('<%= app.Name %>', '<%= model.Uid %>', <%= interval %>);
+        });
+    </script>
+<% } %>
