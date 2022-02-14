@@ -70,6 +70,7 @@ router.get('/:appName/:uid/status', (req, res) => {
 router.get('/:appName/:icon', (req, res) => {    
     let app = req.app;
     let file = `../apps/${app.Directory}/${app.Icon}`;
+    console.log('Icon file: ' + file);
     res.sendFile(path.resolve(__dirname, file));
 });
 

@@ -33,6 +33,7 @@ class AppHelperInstance {
                         let obj = typeof(json) === 'object' ? json : JSON.parse(json);
                         if(obj?.Name){
                             obj.Directory = startPath.substring(startPath.replace('\\', '/').lastIndexOf('/') + 1);
+                            console.log('App \'' + obj.Name + '\' directory: ' + obj.Directory);
                             obj.Icon = obj.Icon ?? 'icon.png';
                             results[obj.Name] = obj;
                         }else{
