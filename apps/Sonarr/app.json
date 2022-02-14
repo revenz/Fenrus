@@ -1,6 +1,7 @@
 ﻿{
   "Name": "Sonarr",
   "Icon": "icon.png",
+  "TestFunction":true,
   "Interval": 10,
   "Properties": [
     {

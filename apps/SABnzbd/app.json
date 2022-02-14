@@ -1,6 +1,6 @@
 ﻿{
   "Name": "SABnzbd",
-  "Function": "SABnzbd_Status",
+  "TestFunction": true,
   "Interval":5,
   "Properties": [
     {

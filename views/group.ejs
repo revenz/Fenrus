@@ -43,7 +43,7 @@
             isItemSaved: false,
             typeChanged(event){
                 if(!event){
-                    this.EditorApp = {TestFunction: ''};
+                    this.EditorApp = {TestFunction: false};
                     return;
                 }
                 let type = typeof(event) === 'string' ? event : event.target?.value;
@@ -184,7 +184,6 @@
                 this.EditorOpen = true;
             },
             editItem(uid) {
-                console.log('test');
                 this.isItemSaved = false;
                 this.EditorApp.Properties = {};
                 let item = this.Items.filter(x => x.Uid === uid)[0];
@@ -278,13 +277,24 @@
                 reader.readAsDataURL(file);
                 reader.onload = e => callback(e.target.result);
             },
+            testing: false,
             testApp() {
                 let model = this.getEditModel();
                 if(!model)
                     return;
-                TestApp(this.EditorApp.TestFunction, model).then(result => {
+                const options = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({AppInstance: model})
+                }
+                testing = true;
+                fetch(`/apps/${this.EditorApp.Name}/test`, options).then(result => {
+                    if(!result.ok)
+                        throw result;
+                    this.testing = false;
                     toast('Success', true);
                 }).catch(error => {
+                    this.testing = false;
                     toast('Failure', false);
                 });
             },

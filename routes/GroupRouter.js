@@ -2,7 +2,7 @@ const express = require('express');
 const AppHelper = require('../helpers/appHelper');
 const Utils = require('../helpers/utils');
 let Settings = require('../models/settings');
-const { route } = require('./home');
+const { route } = require('./HomeRouter');
 
 const router = express.Router();
 

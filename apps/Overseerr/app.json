@@ -1,7 +1,6 @@
 ﻿{
   "Name": "Overseerr",
-  "Function": "Overseerr_Status",
-  "TestFunction": "Overseerr_Test",
+  "TestFunction": true,
   "Interval": 3,
   "Properties": [
     {

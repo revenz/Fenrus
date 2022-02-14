@@ -1,6 +1,6 @@
 ﻿{
   "Name": "Radarr",
-  "Function": "Radarr_Status",
+  "TestFunction":true,
   "Interval":10,
   "Properties": [
     {

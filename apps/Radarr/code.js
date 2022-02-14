@@ -30,8 +30,8 @@ module.exports = {
     },
     
     test: (args) => {
-        return new Promise(function (resolve, reject) {            
-            args.fetch(getUrl(args, 'movie')).then(data => {
+        return new Promise(function (resolve, reject) {
+            args.fetch(getUrl(args, 'queue')).then(data => {
                 if (data?.records?.length === 0 || data?.records?.length)
                     resolve();
                 else

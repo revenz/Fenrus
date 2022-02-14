@@ -1,11 +1,11 @@
 const http = require('http');
 const express = require('express');
 const morgan = require('morgan');
-const homeRoutes = require('./routes/home');
-const appRoutes = require('./routes/apps');
-const settingsRoutes = require('./routes/settings');
-const groupsRoutes = require('./routes/groups');
-const groupRoutes = require('./routes/group');
+const routerHome = require('./routes/HomeRouter');
+const routerApp = require('./routes/AppRouter');
+const routerSettings = require('./routes/SettingsRouter');
+const routerGroups = require('./routes/GroupsRouter');
+const routerGroup = require('./routes/GroupRouter');
 
 const AppHelper = require('./helpers/appHelper');
 const Settings = require('./models/settings')
@@ -32,8 +32,8 @@ app.use(express.json());
 
 app.use(morgan('dev'));
 
-app.use('/', homeRoutes);
-app.use('/apps', appRoutes);
-app.use('/settings', settingsRoutes);
-app.use('/groups', groupsRoutes);
-app.use('/group', groupRoutes);
+app.use('/', routerHome);
+app.use('/apps', routerApp);
+app.use('/settings', routerSettings);
+app.use('/groups', routerGroups);
+app.use('/group', routerGroup);

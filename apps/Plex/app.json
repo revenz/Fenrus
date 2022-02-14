@@ -1,7 +1,6 @@
 ﻿{
   "Name": "Plex",
-  "Function": "Plex_Status",
-  "TestFunction": "Plex_Test",
+  "TestFunction": true,
   "Interval": 20,
   "Properties": [
     {

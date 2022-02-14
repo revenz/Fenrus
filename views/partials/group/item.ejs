@@ -102,8 +102,13 @@
         <template x-if="EditorApp.TestFunction">
             <div class="setting tester">
                 <span class="label"></span>
-                <span class="value">
-                    <button class="btn" @click="testApp">Test</button>
+                <span class="value">                    
+                    <template x-if="testing">
+                        <button class="btn" disabled>Testing</button>
+                    </template>
+                    <template x-if="!testing">
+                        <button class="btn" @click="testApp">Test</button>
+                    </template>
                 </span>
             </div>
         </template>

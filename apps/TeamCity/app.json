@@ -1,6 +1,7 @@
 ﻿{
   "Name": "TeamCity",
   "Interval": 3,
+  "TestFunction":true,
   "Properties": [
     {
       "Name": "Access Token",

@@ -8,22 +8,7 @@ const path = require('path');
 
 const router = express.Router();
 
-router.get('/:appName/:uid/status', (req, res) => {    
-    let app = req.app;
-    
-    let appInstance = Settings.getInstance().findAppInstance(req.params['uid']);
-    if(!appInstance){
-        res.status(404).send("App instance not found: " + req.params['uid']);
-        return;
-    }
-
-    let func = require(`../apps/${app.Directory}/code.js`).status;
-    if(!func){
-        res.status(500).send("Invalid app");
-        return;
-    }
-
-
+function getAppArgs(appInstance){
     let url = appInstance.Url;
     let utils = new Utils();
     let funcArgs = {
@@ -62,6 +47,20 @@ router.get('/:appName/:uid/status', (req, res) => {
             });
         }
     }
+    return funcArgs;
+}
+
+router.get('/:appName/:uid/status', (req, res) => {    
+    let app = req.app;    
+    
+    let func = require(`../apps/${app.Directory}/code.js`).status;
+    if(!func){
+        res.status(500).send("Invalid app");
+        return;
+    }
+
+    let appInstance = req.appInstance;   
+    let funcArgs = getAppArgs(appInstance);
     func(funcArgs).then((html) =>{
         res.send(html);
     }).catch(error => {
@@ -75,6 +74,23 @@ router.get('/:appName/:icon', (req, res) => {
     res.sendFile(path.resolve(__dirname, file));
 });
 
+router.post('/:appName/test', (req, res) => {
+    let app = req.app;
+    let func = require(`../apps/${app.Directory}/code.js`).test;
+    if(!func){
+        res.status(500).send("Invalid app");
+        return;
+    }
+
+    let appInstance = req.body.AppInstance; 
+    let funcArgs = getAppArgs(appInstance);
+    func(funcArgs).then(() =>{
+        res.status(200).send('');
+    }).catch(error => {
+        res.status(500).send(error);
+    })
+
+});
 
 router.param('appName', (req, res, next, appName) => {
     let app = AppHelper.getInstance().get(appName);
@@ -86,4 +102,17 @@ router.param('appName', (req, res, next, appName) => {
     req.app = app;
     next();
 });
+
+router.param('uid', (req, res, next, uid) => {
+    
+    let appInstance = Settings.getInstance().findAppInstance(uid);
+    if(!appInstance){
+        res.status(404).send("App instance not found: " + uid);
+        return;
+    }
+    req.appInstance = appInstance;
+    next();
+})
+
+
 module.exports = router;

@@ -49,6 +49,18 @@ module.exports = {
                 reject(error);
             });
         });
-
+    },
+    
+    test: (args) => {
+        return new Promise(function (resolve, reject) {
+            doFetch(args, 'buildQueue').then(data => {
+                if (isNaN(data?.count) === false)
+                    resolve();
+                else
+                    reject();
+            }).catch((error) => {
+                reject(error);
+            });
+        })
     }
 }

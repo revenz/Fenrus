@@ -1,6 +1,5 @@
 ﻿{
   "Name": "Pi-hole",
-  "Function": "Pihole_Status",
-  "TestFunction": "Pihole_Test",
+  "TestFunction": true,
   "Interval": 10
 }
