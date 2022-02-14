@@ -10,7 +10,7 @@
   position: fixed;
   z-index: 2000;
   left: 50%;
-  bottom: 30px;
+  top: 30px;
   font-size: 17px;
 }
 #toast.success {
@@ -24,43 +24,23 @@
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
-@-webkit-keyframes fadein {
-  from {
-    bottom: 0;
-    opacity: 0;
-  }
-  to {
-    bottom: 30px;
-    opacity: 1;
-  }
-}
 @keyframes fadein {
   from {
-    bottom: 0;
+    top: 0;
     opacity: 0;
   }
   to {
-    bottom: 30px;
+    top: 30px;
     opacity: 1;
-  }
-}
-@-webkit-keyframes fadeout {
-  from {
-    bottom: 30px;
-    opacity: 1;
-  }
-  to {
-    bottom: 0;
-    opacity: 0;
   }
 }
 @keyframes fadeout {
   from {
-    bottom: 30px;
+    top: 30px;
     opacity: 1;
   }
   to {
-    bottom: 0;
+    top: 0;
     opacity: 0;
   }
 }
@@ -279,6 +259,9 @@
 .btn:hover {
   background: var(--accent);
   color: var(--color);
+}
+.btn:disabled {
+  cursor: not-allowed;
 }
 
 a.btn {

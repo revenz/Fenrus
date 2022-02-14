@@ -256,6 +256,9 @@
         background:var(--accent);
         color:var(--color);
     }
+    &:disabled {
+        cursor:not-allowed;
+    }
 }
 a.btn {
     width:calc(8rem - 2px); // for the border

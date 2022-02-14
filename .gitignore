@@ -1,3 +1,5 @@
 /.vscode
 /data
 /node_modules
+/wwwroot/images/backgrounds
+/wwwroot/images/icons

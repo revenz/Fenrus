@@ -43,8 +43,7 @@ function getAppArgs(appInstance){
                 headers: args.headers
             }).then(res => res.json()).catch(error => {
                 console.log('error: ' + error);
-                res.status(500).send("Error: " + error);
-                return;
+                throw error;
             });
         }
     }

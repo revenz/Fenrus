@@ -1,5 +1,7 @@
 const fsPromises = require("fs/promises");
+const fs = require('fs');
 const Utils = require('../helpers/utils');
+const fetch = require('node-fetch');
 
 class ImageHelper {
 
@@ -20,6 +22,29 @@ class ImageHelper {
         let result = '/images/' + location + '/' + uid + '.' + extension;
         await fsPromises.writeFile('./wwwroot' + result, data, { encoding: 'base64'});
         return result;
+    }
+
+    async downloadFavIcon(url, uid){
+        if(typeof(url) !== 'string')
+            return;
+        let match = url.match(/^http(s)?:\/\/[^/]+/i);
+        if(!match)
+            return;
+        url = match[0] + '/';
+        for(let file of ['favicon', 'icon']){
+            for(let extension of ['.ico', '.png', '.gif', '.svg']){
+                let attempt = url + file + extension;
+                console.log('trying favicon: ' + attempt);
+                const res = await fetch(attempt);
+                if(res.ok === false)
+                    continue;
+                console.log('Got favicon: ' + attempt);
+                let iconUrl = `/images/icons/${uid}${extension}`;
+                console.log('Saving favicon to: ' + iconUrl);
+                res.body.pipe(fs.createWriteStream('./wwwroot' + iconUrl));
+                return iconUrl;            
+            }        
+        }
     }
 }
 module.exports = ImageHelper;

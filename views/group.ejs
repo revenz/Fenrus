@@ -32,6 +32,7 @@
             Width: group.Width,
             Height: group.Height,
             Apps: apps,
+            Saving: false,
             MoverOpen: false,
             MoverItem: {},
             MoverDestination: '',
@@ -41,6 +42,11 @@
             EditorTitle: '',
             EditorApp:{},
             isItemSaved: false,
+            isDisabled() {
+                if(this.Saving)
+                    return true;
+                return false;
+            },
             typeChanged(event){
                 if(!event){
                     this.EditorApp = {TestFunction: false};
@@ -88,6 +94,8 @@
                     this.EditModel.Name = this.EditorApp.Name;
             },
             removeItem(uid) {
+                if(this.isDisabled()) return;
+
                 let index = this.Items.findIndex(x => x.Uid === uid);
                 if(index >= 0){
                     let name = this.Items[index].Name;
@@ -97,6 +105,8 @@
                 }
             },
             moveItem(uid) {
+                if(this.isDisabled()) return;
+
                 let index = this.Items.findIndex(x => x.Uid === uid);
                 if(index >= 0){
                     this.MoverItem = this.Items[index];
@@ -125,7 +135,7 @@
                     }
                 });
 
-                if(this.EditorOpen){
+                if(false && this.EditorOpen){
                     if(!this.EditModel.Icon){
                         document.getElementById('file-chooser-btn').classList.add('invalid');
                         return false;
@@ -137,6 +147,8 @@
                 return valid;
             },
             save() {
+                if(this.isDisabled()) return;
+
                 // first validate it
                 if(this.validate() === false)
                     return;
@@ -161,19 +173,24 @@
                         'Content-Type': 'application/json'
                     }
                 }
+                this.Saving = true;
                 fetch('/group/' + encodeURIComponent(model.Uid), options).then(res => {
                     if(!res.ok)
                         throw res;
+                    this.Saving = false;
                     window.location.href = '/groups';
                 }).catch(err => {
                     console.log(err);
                     toast('Failed to save', false);
+                    this.Saving = false;
                 });
             },
             cancel() {
                 window.location.href = '/groups';
             },
             addItem() {
+                if(this.isDisabled()) return;
+
                 this.isItemSaved = false;
                 this.EditorApp.Properties = {};
                 this.EditModel = 
@@ -189,6 +206,8 @@
                 this.EditorOpen = true;
             },
             editItem(uid) {
+                if(this.isDisabled()) return;
+
                 this.isItemSaved = false;
                 this.EditorApp.Properties = {};
                 let item = this.Items.filter(x => x.Uid === uid)[0];
@@ -207,6 +226,8 @@
 
             // mover
             moverSave() {
+                if(this.isDisabled()) return;
+
                 if(this.validate() === false)
                     return;
                 const options = {
@@ -233,6 +254,8 @@
                 });
             },
             moverCancel() {
+                if(this.isDisabled()) return;
+
                 this.MoverOpen = false;
                 this.MoverItem = {};
             },
@@ -240,6 +263,8 @@
 
             // item editor stuff
             closeEditor(){
+                if(this.isDisabled()) return;
+
                 this.EditorOpen = false;
             },
             getEditModel() {          
@@ -251,7 +276,9 @@
                     
                 return JSON.parse(JSON.stringify(this.EditModel));
             },
-            saveEditor() {                                            
+            saveEditor() {                
+                if(this.isDisabled()) return;
+
                 let item = this.getEditModel();
                 if(!item)
                     return; // must be invalid
@@ -284,6 +311,8 @@
             },
             testing: false,
             testApp() {
+                if(this.isDisabled()) return;
+
                 let model = this.getEditModel();
                 if(!model)
                     return;

@@ -58,7 +58,10 @@ router.route('/:uid')
         let imageHelper = new ImageHelper();
         for(let item of model.Items || [])
         {
-            item.Icon = await imageHelper.saveImageIfBase64(item.Icon, 'icons', item.Uid);
+            if(!item.Icon)
+                item.Icon = await imageHelper.downloadFavIcon(item.Url, item.Uid);
+            else
+                item.Icon = await imageHelper.saveImageIfBase64(item.Icon, 'icons', item.Uid);
         }
 
         let settings = req.settings;
