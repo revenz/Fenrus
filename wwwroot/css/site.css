@@ -271,7 +271,7 @@ body {
 }
 
 .main-content {
-  background: url("/images/default_background.jpg");
+  background: url("/default_background.jpg");
   min-height: calc(100vh - 4rem);
   background-attachment: fixed !important;
   background-repeat: no-repeat !important;

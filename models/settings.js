@@ -44,7 +44,7 @@ class SettingsInstance {
 
     async save() {
         ++this.Revision;
-        if(this.BackgroundImage === '/images/default_background.jpg')
+        if(this.BackgroundImage === '/default_background.jpg')
             this.BackgroundImage = '';
         
         this.BackgroundImage = await new ImageHelper().saveImageIfBase64(this.BackgroundImage, 'backgrounds');
