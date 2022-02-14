@@ -35,7 +35,7 @@
 
         .label {
             width: 16rem;
-            margin: auto;
+            margin: 0.5rem 0 0;
         }
 
         .value {
@@ -259,4 +259,21 @@
 }
 a.btn {
     width:calc(8rem - 2px); // for the border
+}
+
+
+.background-picker 
+{
+    .image-preview {
+        width:min(300px, 50vw, 50vh);
+        height:auto;
+        margin-bottom:1rem;
+    }
+    .buttons {
+        display:flex;
+        flex-direction: row;
+        .btn + .btn {
+            margin-left:1rem;
+        }
+    }
 }

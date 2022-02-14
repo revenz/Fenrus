@@ -2,7 +2,7 @@ const express = require('express');
 const AppHelper = require('../helpers/appHelper');
 const Utils = require('../helpers/utils');
 let Settings = require('../models/settings');
-const { route } = require('./HomeRouter');
+let ImageHelper = require('../helpers/ImageHelper');
 
 const router = express.Router();
 
@@ -47,15 +47,21 @@ router.route('/:uid')
             Utils: new Utils()
         });    
     })
-    .post((req, res) => {
+    .post(async (req, res) => {
         let model = req.body;
         if(!model.Name || model._Type !== 'DashboardGroup')
         {
             res.status(404).send('Invalid group');
             return;
         }
+
+        let imageHelper = new ImageHelper();
+        for(let item of model.Items || [])
+        {
+            item.Icon = await imageHelper.saveImageIfBase64(item.Icon, 'icons', item.Uid);
+        }
+
         let settings = req.settings;
-        console.log('Saving', model);
         if(req.isNew){
             // add to the list
             settings.addGroup(model);

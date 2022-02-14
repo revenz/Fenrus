@@ -1,5 +1,6 @@
 const { promiseImpl } = require('ejs');
 const fs = require('fs');
+const ImageHelper = require('../helpers/ImageHelper');
 
 class SettingsInstance {
 
@@ -41,8 +42,13 @@ class SettingsInstance {
         });
     }
 
-    save() {
+    async save() {
         ++this.Revision;
+        if(this.BackgroundImage === '/images/default_background.jpg')
+            this.BackgroundImage = '';
+        
+        this.BackgroundImage = await new ImageHelper().saveImageIfBase64(this.BackgroundImage, 'backgrounds');
+
         console.log('Saving settings, revision: ' + this.Revision);
         let json = this.toJson();
         let self = this;

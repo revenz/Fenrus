@@ -49,14 +49,25 @@
             <input type="text" x-model="model.AccentColor" data-jscolor="{preset:'dark'}" />
         </span>
     </div>
-</div>
+    <div class="setting">
+        <span class="label">Background</span>
+        <span class="value">
+            <div class="background-picker">
+                <!-- Show the image -->
+                <template x-if="model.BackgroundImage">
+                    <img :src="model.BackgroundImage" class="image-preview">
+                </template>
 
-<div class="groups settings-box">    
-    <div class="header">
-        <span class="title">Background Image</span>
-        <div class="buttons">
-            <a class="btn add" href="/settings/background">Set</a>
-        </div>
+                <div class="buttons">
+                    <button class="btn" id="file-chooser-btn" onclick="document.getElementById('file-chooser').click()">
+                        Browse...
+                    </button>
+                    <button class="btn" @click="resetBackground">Reset</button>
+                </div>
+                <input style="display:none" id="file-chooser" class="file-chooser" type="file" accept="image/*" @change="imageChosen">
+
+            </div>
+        </span>
     </div>
 </div>
 
@@ -100,7 +111,26 @@
                 fetch('/settings', options).then(()=>{
                     window.location.reload(true);
                 });
-            }
+            }, 
+            resetBackground() {
+                this.model.BackgroundImage = '/images/default_background.jpg';
+            },
+            imageChosen(event){
+                this.fileToDataUrl(event, src => 
+                {
+                    this.model.BackgroundImage = src;
+                    this.validate();
+                })
+            },                
+            fileToDataUrl(event, callback) {
+                if (! event.target.files.length) return;
+
+                let file = event.target.files[0];
+                let reader = new FileReader();
+
+                reader.readAsDataURL(file);
+                reader.onload = e => callback(e.target.result);
+            },
         }))
     });
 </script>

@@ -161,8 +161,13 @@
                         'Content-Type': 'application/json'
                     }
                 }
-                fetch('/group/' + encodeURIComponent(model.Uid), options).then(response => {
+                fetch('/group/' + encodeURIComponent(model.Uid), options).then(res => {
+                    if(!res.ok)
+                        throw res;
                     window.location.href = '/groups';
+                }).catch(err => {
+                    console.log(err);
+                    toast('Failed to save', false);
                 });
             },
             cancel() {

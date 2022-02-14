@@ -42,6 +42,7 @@ function getAppArgs(appInstance){
             return fetch(args.url, {
                 headers: args.headers
             }).then(res => res.json()).catch(error => {
+                console.log('error: ' + error);
                 res.status(500).send("Error: " + error);
                 return;
             });

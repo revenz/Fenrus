@@ -1,5 +1,8 @@
 const http = require('http');
 const express = require('express');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+
 const morgan = require('morgan');
 const routerHome = require('./routes/HomeRouter');
 const routerApp = require('./routes/AppRouter');
@@ -16,6 +19,13 @@ appHelper.load();
 let settings = Settings.getInstance();
 settings.load();
 
+if(fs.existsSync('./wwwroot/images/icons') == false){
+    fs.mkdirSync('./wwwroot/images/icons');
+}
+if(fs.existsSync('./wwwroot/images/backgrounds') == false){
+    fs.mkdirSync('./wwwroot/images/backgrounds');
+}
+
 // express app
 const app = express();
 
@@ -28,7 +38,8 @@ app.listen(3000);
 app.use(express.static(__dirname + '/wwwroot'));
 
 // Calling the express.json() method for parsing
-app.use(express.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use(morgan('dev'));
 
