@@ -6,9 +6,11 @@
         for(let item of settings.Groups)
         {
             if (item){ 
+                console.log('about to do another', item);
                 let type = item._Type.substring(9).toLowerCase();
                 let partialFile = `./partials/dashboard/${type}.ejs`;
                 let itemModel = { model: item, settings: settings, Utils: Utils};
+                console.log('partialFile: ' + partialFile + ', item: ' + item.Name);
                 %>
                 <%- include(partialFile, itemModel ) %>
                 <%

@@ -1,6 +1,7 @@
 ﻿{
   "Name": "Radarr",
   "Function": "Radarr_Status",
+  "Interval":10,
   "Properties": [
     {
       "Name": "API Key",

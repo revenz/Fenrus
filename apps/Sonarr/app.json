@@ -1,7 +1,7 @@
 ﻿{
   "Name": "Sonarr",
-  "Function": "Sonarr_Status",
   "Icon": "icon.png",
+  "Interval": 10,
   "Properties": [
     {
       "Name": "API Key",

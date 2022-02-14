@@ -1,5 +1,6 @@
 const http = require('http');
 const express = require('express');
+const morgan = require('morgan');
 const homeRoutes = require('./routes/home');
 const appRoutes = require('./routes/apps');
 const settingsRoutes = require('./routes/settings');
@@ -29,8 +30,10 @@ app.use(express.static(__dirname + '/wwwroot'));
 // Calling the express.json() method for parsing
 app.use(express.json());
 
-app.use(homeRoutes);
-app.use(appRoutes);
-app.use(settingsRoutes);
-app.use(groupsRoutes);
-app.use(groupRoutes);
+app.use(morgan('dev'));
+
+app.use('/', homeRoutes);
+app.use('/apps', appRoutes);
+app.use('/settings', settingsRoutes);
+app.use('/groups', groupsRoutes);
+app.use('/group', groupRoutes);

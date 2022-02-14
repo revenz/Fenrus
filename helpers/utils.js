@@ -9,10 +9,11 @@ class Utils {
     }
 
     htmlEncode(text) {
-        var node = document.createTextNode(text);
-        var p = document.createElement('p');
-        p.appendChild(node);
-        return p.innerHTML;
+        if(text === undefined) 
+            return '';
+        if(typeof(text) !== 'string')
+            text = '' + text;
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&#34;").replace(/\'/g, "&#39;");
     }
         
     formatBytes(bytes) {

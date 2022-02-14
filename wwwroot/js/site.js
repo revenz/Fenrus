@@ -7,7 +7,6 @@ function abortRequests() {
 }
 
 function LiveApp(name, instanceUid, interval) {
-    console.log('live app: ' + name);
     if (!interval) interval = 3000;
 
     fetch(`/apps/${encodeURIComponent(name)}/${encodeURIComponent(instanceUid)}/status?name=` + encodeURIComponent(name), {        
@@ -15,14 +14,13 @@ function LiveApp(name, instanceUid, interval) {
     })
         .then(res => res.text())
         .then(html => {
-        console.log('result', html);
         let ele = document.getElementById(instanceUid).querySelector('.status');
         if (ele && html) {
             ele.innerHTML = html;
         }
         setTimeout(() => LiveApp(name, instanceUid, interval), interval);
     }).catch(error => {
-        console.log('error: ' + error);
+        console.log(name + ' error: ' + error);
         setTimeout(() => LiveApp(name, instanceUid, interval), interval);
     });
 

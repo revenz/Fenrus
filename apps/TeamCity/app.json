@@ -1,6 +1,6 @@
 ﻿{
   "Name": "TeamCity",
-  "Function": "TeamCity_Status",
+  "Interval": 3,
   "Properties": [
     {
       "Name": "Access Token",

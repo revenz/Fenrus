@@ -8,13 +8,9 @@ const path = require('path');
 
 const router = express.Router();
 
-router.get('/apps/:appName/:uid/status', (req, res) => {
+router.get('/:appName/:uid/status', (req, res) => {    
+    let app = req.app;
     
-    let app = AppHelper.getInstance().get(req.params['appName']);
-    if(!app){
-        res.status(404).send("App not found");
-        return;
-    }
     let appInstance = Settings.getInstance().findAppInstance(req.params['uid']);
     if(!appInstance){
         res.status(404).send("App instance not found: " + req.params['uid']);
@@ -29,15 +25,16 @@ router.get('/apps/:appName/:uid/status', (req, res) => {
 
 
     let url = appInstance.Url;
+    let utils = new Utils();
     let funcArgs = {
         url: url,
         properties: appInstance.Properties,
-        Utils: new Utils(),
+        Utils: utils,
         liveStats: (items) => {            
             let html = '<ul class="livestats">';
             for (let item of items) {
 
-                html += `<li><span class="title">${htmlEncode(item[0])}</span><span class="value">${htmlEncode(item[1])}</span></li>`;
+                html += `<li><span class="title">${utils.htmlEncode(item[0])}</span><span class="value">${utils.htmlEncode(item[1])}</span></li>`;
             }
             html += '</ul>';
             return html;
@@ -57,7 +54,6 @@ router.get('/apps/:appName/:uid/status', (req, res) => {
             else if (!args.headers['Accept'])
                 args.headers['Accept'] = 'application/json';
 
-            console.log('about to fetch: ' + args.url);            
             return fetch(args.url, {
                 headers: args.headers
             }).then(res => res.json()).catch(error => {
@@ -73,25 +69,21 @@ router.get('/apps/:appName/:uid/status', (req, res) => {
     })
 });
 
-router.get('/apps/:appName/:icon', (req, res) => {
-    
-    let app = AppHelper.getInstance().get(req.params['appName']);
-    if(!app || app.Icon != req.params['icon']){
-        res.status(404).send("Invalid app icon");
-        return;
-    }
-
+router.get('/:appName/:icon', (req, res) => {    
+    let app = req.app;
     let file = `../apps/${app.Directory}/${app.Icon}`;
     res.sendFile(path.resolve(__dirname, file));
 });
 
 
-function htmlEncode(text) {
-    if(text === undefined) 
-        return '';
-    if(typeof(text) !== 'string')
-        text = '' + text;
-    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&#34;").replace(/\'/g, "&#39;");
-}
-
+router.param('appName', (req, res, next, appName) => {
+    let app = AppHelper.getInstance().get(appName);
+    
+    if(!app){
+        res.status(404).send("App not found");
+        return;
+    }
+    req.app = app;
+    next();
+});
 module.exports = router;

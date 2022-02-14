@@ -1,34 +1,54 @@
-﻿function TeamCity_Status(args) {
+﻿function getUrl(endpoint){
+    return `api/rest/${endpoint}`;
+}
+function doFetch (args, endpoint) {
+    return args.fetch({ url: 'app/rest/' + endpoint, headers: { 'Authorization': 'Bearer ' + args.properties['token'] } })
+}
 
-    doFetch = function (endpoint) {
-        return args.fetch({ url: 'app/rest/' + endpoint, headers: { 'Authorization': 'Bearer ' + args.properties['token'] } })
-    }
 
-    doFetch('buildQueue').then(data => {
-        let queue = data?.count ?? 0;
+module.exports = { 
+    status: (args) => {
+        return new Promise((resolve, reject) => {
+            doFetch(args, 'buildQueue').then(data => {
+                let queue = data?.count ?? 0;
 
-        doFetch('builds?locator=running:true').then(data => {
-            if (data?.count > 1) {
-                args.liveStats([
-                    ['Queue', queue],
-                    ['Building', data.count]
-                ]);
-            }
-            else if (data?.count == 1) {
-                args.liveStats([
-                    ['Queue', queue],//['Building', data.build[0].buildTypeId],
-                    ['Percent', data.build[0].percentageComplete + '%']
-                ]);
-            }
-            else {
-                doFetch('builds').then(data => {
-                    args.liveStats([
-                        ['Queue', queue],
-                        ['Total', data?.build[0]?.id ?? '0']
-                    ]);
+                doFetch(args, 'builds?locator=running:true').then(data => {
+                    if (data?.count > 1) {
+                        resolve(                            
+                            args.liveStats([
+                                ['Queue', queue],
+                                ['Building', data.count]
+                            ])
+                        );
+                    }
+                    else if (data?.count == 1) {
+                        resolve(
+                            args.liveStats([
+                                ['Queue', queue],//['Building', data.build[0].buildTypeId],
+                                ['Percent', data.build[0].percentageComplete + '%']
+                            ])
+                        );
+                    }
+                    else {
+                        doFetch(args, 'builds').then(data => {
+                            resolve(
+                                args.liveStats([
+                                    ['Queue', queue],
+                                    ['Total', data?.build[0]?.id ?? '0']
+                                ])
+                            );
+                        }).catch(error => {
+                            reject(error);
+                        });
+                    }
+                }).catch(error => {
+                    reject(error);
                 });
-            }
+            
+            }).catch(error => {
+                reject(error);
+            });
         });
 
-    });
+    }
 }

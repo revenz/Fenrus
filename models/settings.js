@@ -43,6 +43,7 @@ class SettingsInstance {
 
     save() {
         ++this.Revision;
+        console.log('Saving settings, revision: ' + this.Revision);
         let json = this.toJson();
         let self = this;
         return new Promise(function (resolve, reject) {
@@ -50,6 +51,13 @@ class SettingsInstance {
 
             });
         });
+    }
+
+    addGroup(group) {
+        if(!group)
+            return;
+        this.Groups.push(group);
+        this.save();
     }
 
     toJson(noGroups) { 

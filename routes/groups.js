@@ -4,7 +4,7 @@ let Settings = require('../models/settings');
 
 const router = express.Router();
 
-router.get('/groups', (req, res) => {
+router.get('/', (req, res) => {
     res.render('groups', 
     { 
         title: 'Groups',        
@@ -12,24 +12,9 @@ router.get('/groups', (req, res) => {
         Utils: new Utils()
     });    
 });
-
-router.delete('/group/:uid', (req, res) => {
-    let uid = req.params['uid'];
-    if(!uid){
-        res.status(400).send('no uid specified');
-        return;
-    }
-    let settings = Settings.getInstance();
-    settings.Groups = settings.Groups.filter(x => x.Uid !== uid);
-    console.log('new groups', settings.Groups);
-    
-    settings.save();
-    
-    res.status(200).send('');
-});
   
 
-router.post('/groups/order', (req, res) => {
+router.post('/order', (req, res) => {
 
     let model = req.body;
     if(!model){

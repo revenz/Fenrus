@@ -1,6 +1,6 @@
 ﻿{
   "Name": "Portainer",
-  "Function": "Portainer_Status",
+  "Interval": 10,
   "Properties": [
     {
       "Name": "Access Token",

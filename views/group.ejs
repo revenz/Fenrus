@@ -161,19 +161,19 @@
                         'Content-Type': 'application/json'
                     }
                 }
-                fetch('/group', options).then(response => {
-                    history.back();
+                fetch('/group/' + encodeURIComponent(model.Uid), options).then(response => {
+                    window.location.href = '/groups';
                 });
             },
             cancel() {
-                history.back();
+                window.location.href = '/groups';
             },
             addItem() {
                 this.isItemSaved = false;
                 this.EditorApp.Properties = {};
                 this.EditModel = 
                 {
-                    _Type: '@nameof(DashboardApp)',
+                    _Type: 'DashboardApp',
                     Uid: newGuid(),
                     Name: '',
                     Url: '',
@@ -210,11 +210,13 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         ItemUid: this.MoverItem.Uid,
-                        SourceUid: '@Model.Uid',
+                        SourceUid: group.Uid,
                         DestinationUid: this.MoverDestination
                     })
                 }
-                fetch('/group/move', options).then(()=>{
+                fetch('/group/move', options).then((res)=>{
+                    if(!res.ok)
+                        throw(res);
                     let index = this.Items.indexOf(this.MoverItem);
                     if(index >= 0)
                         this.Items.splice(index, 1);
@@ -222,7 +224,9 @@
                     toast(`Moved item '${this.MoverItem.Name}'`, true);
                     this.MoverItem = {};
                     this.MoverTitle = '';
-                })
+                }).catch(err => {
+                    toast(`Failed to move '${this.MoverItem.Name}`, false);
+                });
             },
             moverCancel() {
                 this.MoverOpen = false;

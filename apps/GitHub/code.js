@@ -13,7 +13,6 @@
         if(url.endsWith('/') === false)
             url += '/';
         url = `${url}commits/${branch}`;
-        console.log('fetchgin: '+ url);
 
         return new Promise((resolve, reject) => {
             args.fetch({ url: url, headers: { 'User-Agent': 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36'} })

@@ -11,6 +11,8 @@
     </div>
     <ul class="group-list">
         <% for(let item of settings.Groups) { 
+            if(!item)
+                continue;
             let itemCount = item.Items?.length || 0;
             let items = itemCount == 1 ? "1 Item" : itemCount + " Items";    
         %>

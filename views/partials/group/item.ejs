@@ -18,12 +18,12 @@
             <span class="label">Type</span>
             <span class="value">
                 <select x-model="EditModel._Type" @change="typeChanged">
-                    <option value="@nameof(DashboardApp)">App</option>
-                    <option value="@nameof(DashboardLink)">Link</option>
+                    <option value="DashboardApp">App</option>
+                    <option value="DashboardLink">Link</option>
                 </select>
             </span>
         </div> 
-        <template x-if="EditModel._Type == '@nameof(DashboardApp)'">
+        <template x-if="EditModel._Type == 'DashboardApp'">
             <div class="setting">
                 <span class="label">App</span>
                 <span class="value">

@@ -1,4 +1,4 @@
-<% if(model.Items?.length) {  
+<% if(model?.Items?.length) {  
     
     let width = model.Width;
     if (width < 0)
@@ -18,7 +18,7 @@
     <% } %>
     
     <div class="items">
-        <% for(let item of model.Items) {
+        <% for(let item of (model?.Items || {})) {
             if (item) { 
                 let type = item._Type.substring(9).toLowerCase();
                 let partialFile = `${type}.ejs`;

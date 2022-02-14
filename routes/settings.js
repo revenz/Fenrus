@@ -3,7 +3,7 @@ let Settings = require('../models/settings');
 
 const router = express.Router();
 
-router.get('/settings', (req, res) => {
+router.get('/', (req, res) => {
     res.render('settings', 
     { 
         title: 'Settings',
@@ -12,7 +12,7 @@ router.get('/settings', (req, res) => {
 });
   
 
-router.post('/settings', (req, res) => {
+router.post('/', (req, res) => {
 
     let model = req.body;
     if(!model){
