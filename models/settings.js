@@ -85,7 +85,7 @@ class SettingsInstance {
             ShowGroupTitles: this.ShowGroupTitles,
             BackgroundImage: this.BackgroundImage,
             Groups: this.Groups
-        });
+        }, null, 2);
     }
 
     findGroupInstance(uid, groups) {
