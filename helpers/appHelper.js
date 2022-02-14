@@ -10,6 +10,10 @@ class AppHelperInstance {
         Object.keys(this.apps).forEach(key => {
             list.push(this.apps[key]);
         })
+        
+        list.sort((a, b) =>{
+            return a.Name.localeCompare(b.Name);
+        })
         return list;
     }
 
@@ -44,9 +48,6 @@ class AppHelperInstance {
                     }
                 }
             };
-            results.sort((a, b) =>{
-                return a.Name.localeCompare(b.Name);
-            })
             return results;
         };
         
