@@ -44,6 +44,9 @@ class AppHelperInstance {
                     }
                 }
             };
+            results.sort((a, b) =>{
+                return a.Name.localeCompare(b.Name);
+            })
             return results;
         };
         
