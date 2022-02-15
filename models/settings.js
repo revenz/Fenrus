@@ -55,7 +55,7 @@ class SettingsInstance {
 
     async save() {
         ++this.Revision;
-        if(this.BackgroundImage.startsWith('/themes'))
+        if(/^\themes/.test(this.BackgroundImage))
             this.BackgroundImage = '';
         
         this.BackgroundImage = await new ImageHelper().saveImageIfBase64(this.BackgroundImage, 'backgrounds');
