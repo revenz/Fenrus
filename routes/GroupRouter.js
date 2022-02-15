@@ -58,6 +58,10 @@ router.route('/:uid')
         let imageHelper = new ImageHelper();
         for(let item of model.Items || [])
         {
+            if(item._Type != 'DashboardLink'){
+                item.Icon = '';
+                continue; // only download icons for links
+            }
             if(!item.Icon)
                 item.Icon = await imageHelper.downloadFavIcon(item.Url, item.Uid);
             else

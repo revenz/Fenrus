@@ -55,6 +55,8 @@ $columnWidth:300;
     > .db-group {
         border-radius:0.5rem;
         background: rgba(0,0,0,0.5);
+        
+        background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2) );
         grid-row-start: span 1;
         grid-column-start: span 1;
         width: -webkit-fill-available;
