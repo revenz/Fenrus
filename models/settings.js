@@ -20,15 +20,21 @@ class SettingsInstance {
         let self = this;
         return new Promise(function (resolve, reject) {
             let file = self._File;
-            if(fs.existsSync(self._File) == false) {
-                if(fs.existsSync(self._DefaultFile) == false) {
+            let save = false;
+            console.log('checking for file: ' + file);
+            if(fs.existsSync(file) == false) {
+                file = self._DefaultFile;
+                console.log('checking for file: ' + file);
+                if(fs.existsSync(file) == false) {
+                    console.log('no config files found');
                     self.save();
                     return;
                 }
-                file = self._DefaultFile;
+                save = true;
             }
+            console.log('using config file: ' + file);
             
-            fs.readFile(self._File, (err, data) => {
+            fs.readFile(file, (err, data) => {
                 if(err) {
                     console.log(err);
                     reject(err);
@@ -39,6 +45,8 @@ class SettingsInstance {
                     Object.keys(obj).forEach(k => {
                         self[k] = obj[k];
                     });         
+                    if(save)
+                        self.save();
                     resolve(self);                   
                 }
             });
