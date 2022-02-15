@@ -84,11 +84,10 @@ $columnWidth:300;
         }
 
         .icon {
-            width: 3.1rem;
             justify-content: center;
             display: flex;
             align-items: center;
-            padding: 0.5rem;
+            padding: 0.5rem .25rem 0.5rem .5rem;
 
             img {
                 max-width: 3rem;
@@ -102,10 +101,6 @@ $columnWidth:300;
             margin-left: 0.5rem;
             flex-direction: column;
             flex-grow: 1;
-            margin-right: 2rem;
-
-            .title {
-            }
         }
     }
 
@@ -141,7 +136,7 @@ $columnWidth:300;
 
 
     .livestats {
-        margin: 0;
+        margin: 2px 0 0;
         padding: 0;
         display: flex;
         flex-direction: column;
@@ -154,9 +149,10 @@ $columnWidth:300;
             display: flex;
             flex-direction: row;
             flex: auto;
+            color:rgba(var(--color-rgb), 0.7);
 
             .title {
-                color: var(--color-secondary);
+                color: var(--accent);
                 padding-bottom: 0.1rem;
                 font-weight: bold;
                 width:5rem;

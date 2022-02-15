@@ -777,11 +777,10 @@ body {
   box-shadow: 0px 0px 0px 1px var(--accent);
 }
 .db-item .icon {
-  width: 3.1rem;
   justify-content: center;
   display: flex;
   align-items: center;
-  padding: 0.5rem;
+  padding: 0.5rem 0.25rem 0.5rem 0.5rem;
 }
 .db-item .icon img {
   max-width: 3rem;
@@ -793,8 +792,8 @@ body {
   margin-left: 0.5rem;
   flex-direction: column;
   flex-grow: 1;
-  margin-right: 2rem;
 }
+
 .db-group > .title {
   text-align: center;
   text-transform: uppercase;
@@ -820,7 +819,7 @@ body {
 }
 
 .livestats {
-  margin: 0;
+  margin: 2px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -833,9 +832,10 @@ body {
   display: flex;
   flex-direction: row;
   flex: auto;
+  color: rgba(var(--color-rgb), 0.7);
 }
 .livestats li .title {
-  color: var(--color-secondary);
+  color: var(--accent);
   padding-bottom: 0.1rem;
   font-weight: bold;
   width: 5rem;
