@@ -12,7 +12,7 @@ class SettingsInstance {
     Groups = [];
 
     _File = './data/config.json';
-    _DefaultFile = '..,/defaultconfig.json';
+    _DefaultFile = './defaultconfig.json';
 
     constructor(){}
     
