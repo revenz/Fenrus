@@ -1,4 +1,3 @@
-const { promiseImpl } = require('ejs');
 const fs = require('fs');
 const ImageHelper = require('../helpers/ImageHelper');
 
@@ -13,32 +12,36 @@ class SettingsInstance {
     Groups = [];
 
     _File = './data/config.json';
+    _DefaultFile = '..,/defaultconfig.json';
 
     constructor(){}
     
     load() {        
         let self = this;
         return new Promise(function (resolve, reject) {
+            let file = self._File;
             if(fs.existsSync(self._File) == false) {
-                self.save();
+                if(fs.existsSync(self._DefaultFile) == false) {
+                    self.save();
+                    return;
+                }
+                file = self._DefaultFile;
             }
-            else
-            {
-                fs.readFile(self._File, (err, data) => {
-                    if(err) {
-                        console.log(err);
-                        reject(err);
-                    }
-                    else             
-                    {
-                        let obj = JSON.parse(data);    
-                        Object.keys(obj).forEach(k => {
-                            self[k] = obj[k];
-                        });         
-                        resolve(self);                   
-                    }
-                });
-            }
+            
+            fs.readFile(self._File, (err, data) => {
+                if(err) {
+                    console.log(err);
+                    reject(err);
+                }
+                else             
+                {
+                    let obj = JSON.parse(data);    
+                    Object.keys(obj).forEach(k => {
+                        self[k] = obj[k];
+                    });         
+                    resolve(self);                   
+                }
+            });
         });
     }
 

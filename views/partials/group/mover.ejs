@@ -7,16 +7,19 @@
                 <button class="btn" @click="moverCancel">Cancel</button>
             </div>
         </div>
-        <div class="setting">
-            <span class="label">Destination</span>
-            <span class="value">
-                <select x-model="MoverDestination" data-rules='["required"]' @blur="blur" @input="input">
-                    <option value="" disabled>Select A Group</option>
-                    <% for(let group of settings.Groups) { %>
-                        <option value="<%= group.Uid %>"><%= group.Name %></option>
-                    <% } %>
-                </select>
-            </span>
-        </div> 
+        
+        <div class="content">
+            <div class="setting">
+                <span class="label">Destination</span>
+                <span class="value">
+                    <select x-model="MoverDestination" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="moverSave">
+                        <option value="" disabled>Select A Group</option>
+                        <% for(let group of settings.Groups) { %>
+                            <option value="<%= group.Uid %>"><%= group.Name %></option>
+                        <% } %>
+                    </select>
+                </span>
+            </div> 
+        </div>
     </div>
 </template>

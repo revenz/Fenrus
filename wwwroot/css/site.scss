@@ -52,8 +52,8 @@ body {
     color:white;
     border:solid 1px rgba(255,255,255,0.3);
     position:absolute;
-    top:50;
-    transform:translateY(-50%);
+    top:50%;
+    transform:translateX(-50%) translateY(-50%);
     font-size:2rem;
     border-radius:2rem;
 }

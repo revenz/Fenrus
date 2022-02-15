@@ -9,7 +9,7 @@
         <title>HomePortal</title>
     <% } %>
     <link rel="stylesheet" href="/css/site.min.css" />
-    <link id="theme-style" rel="stylesheet" href="/themes/<%= settings.Theme %>/theme.min.css" />
+    <link id="theme-style" rel="stylesheet" href="/themes/<%= settings.Theme || 'Default' %>/theme.min.css" />
 
     <% 
         var accentRgb = parseInt(settings.AccentColor.substring(1, 3), 16) + "," + 

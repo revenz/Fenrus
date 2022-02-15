@@ -25,7 +25,9 @@
     document.addEventListener('alpine:init', () => {
         let json = document.getElementById('GroupData').value;
         let apps = JSON.parse(document.getElementById('Apps').value);
-        let group = JSON.parse(json)
+        let group = JSON.parse(json);
+
+        Alpine.plugin(focus);
         Alpine.data('Group', () => ({
             Items: group.Items,
             Name: group.Name,
@@ -42,10 +44,22 @@
             EditorTitle: '',
             EditorApp:{},
             isItemSaved: false,
+            init() {
+                this.focusEditor();
+            },
             isDisabled() {
                 if(this.Saving)
                     return true;
                 return false;
+            },
+            focusEditor(){
+                setTimeout(()=> { document.querySelector('.group .content').querySelector('input, select').focus();}, 250);
+            },
+            focusItem(){
+                setTimeout(()=> { document.querySelector('.group-item-editor .content').querySelector('input, select').focus();}, 250);
+            },
+            focusMover(){
+                setTimeout(()=> { document.querySelector('.group-item-mover-editor .content').querySelector('input, select').focus();}, 250);
             },
             typeChanged(event){
                 if(!event){
@@ -113,6 +127,7 @@
                     this.MoverTitle = 'Move ' + this.MoverItem.Name;
                     this.MoverDestination = '';
                     this.MoverOpen = true;
+                    this.focusMover();
                 }
             },
             validate(){
@@ -204,6 +219,7 @@
                 };
                 this.EditorTitle = 'New Item';                    
                 this.EditorOpen = true;
+                this.focusItem();
             },
             editItem(uid) {
                 if(this.isDisabled()) return;
@@ -211,7 +227,6 @@
                 this.isItemSaved = false;
                 this.EditorApp.Properties = {};
                 let item = this.Items.filter(x => x.Uid === uid)[0];
-                console.log('item', item);
                 if(item){
                     this.EditorTitle = 'Edit Item';
                     this.EditModel = JSON.parse(JSON.stringify(item)); // clone the object so any changes arent written directly to the model                        
@@ -221,6 +236,7 @@
                         this.EditModel.Properties = {};
                     this.appChanged(this.EditModel.AppName);
                     this.EditorOpen = true;
+                    this.focusItem();
                 }
             },
 
@@ -249,6 +265,7 @@
                     toast(`Moved item '${this.MoverItem.Name}'`, true);
                     this.MoverItem = {};
                     this.MoverTitle = '';
+                    this.focusEditor();
                 }).catch(err => {
                     toast(`Failed to move '${this.MoverItem.Name}`, false);
                 });
@@ -258,6 +275,7 @@
 
                 this.MoverOpen = false;
                 this.MoverItem = {};
+                this.focusEditor();
             },
 
 
@@ -266,6 +284,7 @@
                 if(this.isDisabled()) return;
 
                 this.EditorOpen = false;
+                this.focusEditor();
             },
             getEditModel() {          
                 // first validate it
@@ -292,6 +311,7 @@
                 }
 
                 this.EditorOpen = false;
+                this.focusEditor();
             },
             imageChosen(event){
                 this.fileToDataUrl(event, src => 

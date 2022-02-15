@@ -32,6 +32,7 @@ $columnWidth:300;
 .dashboard {
     display: grid;
     gap: 0.5rem;
+    width:100%;
     overflow: auto;
     grid-template-columns: repeat(var(--columns), calc(var(--column-width) - 6px));
 

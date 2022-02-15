@@ -1,4 +1,4 @@
-﻿@media screen and (max-width: 599.999px) {
+@media screen and (max-width: 599.999px) {
   .dashboard {
     --columns: 1;
   }
@@ -366,6 +366,7 @@
 .dashboard {
   display: grid;
   gap: 0.5rem;
+  width: 100%;
   overflow: auto;
   grid-template-columns: repeat(var(--columns), calc(var(--column-width) - 6px));
 }

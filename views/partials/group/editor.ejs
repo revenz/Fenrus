@@ -7,45 +7,47 @@
                 <button :disabled="isDisabled()" class="btn" @click="cancel">Cancel</button>
             </div>
         </div>
-        <div class="setting">
-            <span class="label">Name</span>
-            <span class="value">
-                <input :disabled="isDisabled()" type="text" x-model="Name" data-rules='["required"]' @blur="blur" @input="input">
-            </span>
-        </div>
-        <div class="setting">
-            <span class="label">Width</span>
-            <span class="value">
-                <input :disabled="isDisabled()" type="number" x-model="Width" min="0" max="10" data-rules='["required", "numeric", "min:0", "max:10"]' @blur="blur" @input="input">
-            </span>
-        </div>
-        <div class="setting">
-            <span class="label">Height</span>
-            <span class="value">
-                <input :disabled="isDisabled()" type="number" x-model="Height" min="0" max="10" data-rules='["required", "numeric", "min:0", "max:10"]' @blur="blur" @input="input">
-            </span>
-        </div>
-        <div class="header items-header">
-            <span class="title">Items</span>
-            <div class="buttons">
-                <button :disabled="isDisabled()" class="btn add" @click="addItem">Add Item</button>
+        <div class="content">
+            <div class="setting">
+                <span class="label">Name</span>
+                <span class="value">
+                    <input :disabled="isDisabled()" type="text" x-model="Name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save">
+                </span>
             </div>
+            <div class="setting">
+                <span class="label">Width</span>
+                <span class="value">
+                    <input :disabled="isDisabled()" type="number" x-model="Width" min="0" max="10" data-rules='["required", "numeric", "min:0", "max:10"]' @blur="blur" @input="input" @keydown.enter="save">
+                </span>
+            </div>
+            <div class="setting">
+                <span class="label">Height</span>
+                <span class="value">
+                    <input :disabled="isDisabled()" type="number" x-model="Height" min="0" max="10" data-rules='["required", "numeric", "min:0", "max:10"]' @blur="blur" @input="input" @keydown.enter="save">
+                </span>
+            </div>
+            <div class="header items-header">
+                <span class="title">Items</span>
+                <div class="buttons">
+                    <button :disabled="isDisabled()" class="btn add" @click="addItem">Add Item</button>
+                </div>
+            </div>
+            <ul class="group-item-list">
+                <template x-for="item in Items">
+                    <li x-bind:id="item.Uid" draggable="true" @dragstart="dragStart" @dragenter="dragEnter" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="dragDrop" @dragend="dragEnd">
+                        <span class="mover icon-sort"></span>
+
+                        <span class="name" x-text="item.Name"></span>
+                        <span class="url" x-text="item.Url"></span>
+
+                        <span class="controls">
+                            <span title="Move" class="icon-share-square-o" @click="moveItem(item.Uid)"></span>
+                            <span title="Edit" class="icon-edit" @click="editItem(item.Uid)"></span>
+                            <span title="Delete" class="icon-trash" @click="removeItem(item.Uid)"></span>
+                        </span>
+                    </li>
+                </template>
+            </ul>
         </div>
-        <ul class="group-item-list">
-            <template x-for="item in Items">
-                <li x-bind:id="item.Uid" draggable="true" @dragstart="dragStart" @dragenter="dragEnter" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="dragDrop" @dragend="dragEnd">
-                    <span class="mover icon-sort"></span>
-
-                    <span class="name" x-text="item.Name"></span>
-                    <span class="url" x-text="item.Url"></span>
-
-                    <span class="controls">
-                        <span title="Move" class="icon-share-square-o" @click="moveItem(item.Uid)"></span>
-                        <span title="Edit" class="icon-edit" @click="editItem(item.Uid)"></span>
-                        <span title="Delete" class="icon-trash" @click="removeItem(item.Uid)"></span>
-                    </span>
-                </li>
-            </template>
-        </ul>
     </div>
 </template>
