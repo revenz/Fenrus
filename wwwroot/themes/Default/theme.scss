@@ -1,4 +1,13 @@
-﻿
+﻿body {
+    --c2olor-secondary:red;
+}
+
+.main-content {    
+    background: url('/themes/Default/background.jpg');
+    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('/themes/Default/background.jpg');
+}
+
+
 @media screen and (max-width:599.999px) {
     .dashboard {
         --columns: 1;
@@ -14,16 +23,23 @@ $columnWidth:300;
     {
         .dashboard {
             --columns: #{$i + 1};
-            --column-width: #{$width}%;
+            --column-width: calc(#{$width}% - 3px);
+            padding-left: calc(3px + #{$i * 5}px);
 
-            @for $j from 2 through 10 {
+            @for $j from 1 through 10 {
                 .db-group.width-#{$j} {
                     grid-column-start: span min(#{$j}, #{$i + 1}) !important;
+                    .items > a {
+                        width: #{(100 / $j) + '%'};
+                    }
                 }
             }
 
             .db-group.width-0 {
                 grid-column-start:span #{$i + 1} !important;
+                .items > a {
+                    width: #{(100 / ($i + 1)) + '%'};
+                }
             }
         }
     }
@@ -37,15 +53,16 @@ $columnWidth:300;
     grid-template-columns: repeat(var(--columns), calc(var(--column-width) - 6px));
 
     > .db-group {
-        border: solid 1px var(--accent);
         border-radius:0.5rem;
-        background: rgba(0,0,0,0.2);
+        background: rgba(0,0,0,0.5);
         grid-row-start: span 1;
         grid-column-start: span 1;
         width: -webkit-fill-available;
 
         .items {
             overflow: hidden;
+            padding:1px;
+            font-size:0.8rem;
         }
     }
 }
@@ -54,36 +71,26 @@ $columnWidth:300;
         display: inline-flex;
         flex-direction: row;
         width: 18rem;
-        background: #080808b3;
-        background-image: linear-gradient( 90deg,hsla(0,0%,100%,0),hsla(0,0%,100%,.25));
-        border-radius: 0.5rem;
         color: var(--color);
         position: relative;
         overflow: hidden;
-        border: solid 1px #333;
         text-decoration: none;
-        margin: 0.75rem;
 
         &:hover {
-            box-shadow: 0 0 15px rgba(var(--accent-rgb), .7);
-
-            .icon {
-                background: rgba(var(--accent-rgb), .4);
-            }
+            background:rgba(0,0,0,.3);
+            box-shadow: 0px 0px 0px 1px var(--accent);
         }
 
         .icon {
-            width: 4.1rem;
+            width: 3.1rem;
             justify-content: center;
             display: flex;
             align-items: center;
-            background: rgba(50,50,50,0.3);
-            border-right: solid 1px #333;
             padding: 0.5rem;
 
             img {
-                max-width: 4rem;
-                height: 4rem;
+                max-width: 3rem;
+                height: 3rem;
             }
         }
 
@@ -113,7 +120,6 @@ $columnWidth:300;
             padding: 0.5rem 0.5rem 0.5rem;
             min-width: 10rem;
             display: inline-block;
-            border: solid 1px var(--accent);
             border-top: none;
             position: relative;
             bottom: -1px;
@@ -127,7 +133,6 @@ $columnWidth:300;
     > .items {
         flex-direction: row;
         display: flex;
-        justify-content: center;
         flex-wrap: wrap;
     }
 }
@@ -137,22 +142,24 @@ $columnWidth:300;
         margin: 0;
         padding: 0;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         font-size: 0.8rem;
-        margin-top: 0.5rem;
+        border-top:solid 1px var(--border-color);
 
         li {
             list-style: none;
             padding: 0;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             flex: auto;
 
             .title {
-                text-transform: uppercase;
                 color: var(--color-secondary);
                 padding-bottom: 0.1rem;
                 font-weight: bold;
+                width:5rem;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
         }
     }

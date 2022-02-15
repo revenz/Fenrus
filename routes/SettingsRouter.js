@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 });
   
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
 
     let model = req.body;
     if(!model){
@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
     Object.keys(model).forEach(k => {
         instance[k] = model[k];
     })
-    instance.save();
+    await instance.save();
     res.status(200).send('');
 });
   

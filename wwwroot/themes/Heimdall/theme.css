@@ -1,4 +1,9 @@
-﻿.dashboard {
+@charset "UTF-8";
+.main-content {
+  background: url("/themes/Heimdall/background.jpg");
+}
+
+.dashboard {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,7 +72,7 @@
   top: 1.75rem;
 }
 .db-item .arrow::after {
-  content: "\f0da";
+  content: "";
   font-family: "icomoon" !important;
   font-size: 2rem;
   position: relative;

@@ -55,7 +55,7 @@ class SettingsInstance {
 
     async save() {
         ++this.Revision;
-        if(this.BackgroundImage === '/default_background.jpg')
+        if(this.BackgroundImage.startsWith('/themes'))
             this.BackgroundImage = '';
         
         this.BackgroundImage = await new ImageHelper().saveImageIfBase64(this.BackgroundImage, 'backgrounds');
@@ -65,7 +65,10 @@ class SettingsInstance {
         let self = this;
         return new Promise(function (resolve, reject) {
             fs.writeFile(self._File, json, (err, data) => {
-
+                if(err)
+                    reject();
+                else
+                    resolve();
             });
         });
     }
