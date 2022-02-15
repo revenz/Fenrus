@@ -1,6 +1,6 @@
 ﻿{
   "Name": "NextCloud",
-  "Function": "NextCloud_Status",
+  "TestFunction": true,
   "Interval": 30,
   "Properties": [
     {

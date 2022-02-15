@@ -8,6 +8,13 @@ class Utils {
         });
     }
 
+    btoa(text) {
+        return Buffer.from(text, 'binary').toString('base64');
+    }
+    atoa(base64){        
+        return Buffer.from(base64, 'base64').toString('binary');
+    }
+
     htmlEncode(text) {
         if(text === undefined) 
             return '';

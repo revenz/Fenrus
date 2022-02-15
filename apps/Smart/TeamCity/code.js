@@ -1,7 +1,4 @@
-﻿function getUrl(endpoint){
-    return `api/rest/${endpoint}`;
-}
-function doFetch (args, endpoint) {
+﻿function doFetch (args, endpoint) {
     return args.fetch({ url: 'app/rest/' + endpoint, headers: { 'Authorization': 'Bearer ' + args.properties['token'] } })
 }
 
