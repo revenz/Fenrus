@@ -824,7 +824,6 @@ body {
   display: flex;
   flex-direction: column;
   font-size: 0.8rem;
-  border-top: solid 1px var(--border-color);
 }
 .livestats li {
   list-style: none;
