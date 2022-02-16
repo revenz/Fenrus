@@ -49,7 +49,7 @@ function getAppArgs(appInstance){
     return funcArgs;
 }
 
-router.get('/:appName/:uid/status', (req, res) => {    
+router.get('/:appName/:uid/status', async (req, res) => {    
     let app = req.app;    
     
     let func = require(`../apps/${app.Directory}/code.js`).status;
@@ -60,11 +60,12 @@ router.get('/:appName/:uid/status', (req, res) => {
 
     let appInstance = req.appInstance;   
     let funcArgs = getAppArgs(appInstance);
-    func(funcArgs).then((html) =>{
-        res.send(html);
-    }).catch(error => {
-        res.status(500).send(error);
-    })
+    try
+    {
+        let result = await func(funcArgs);        
+        res.send(result || '');
+    }
+    catch(err){}
 });
 
 router.get('/:appName/:icon', (req, res) => {    
@@ -74,7 +75,7 @@ router.get('/:appName/:icon', (req, res) => {
     res.sendFile(path.resolve(__dirname, file));
 });
 
-router.post('/:appName/test', (req, res) => {
+router.post('/:appName/test', async (req, res) => {
     let app = req.app;
     let func = require(`../apps/${app.Directory}/code.js`).test;
     if(!func){
@@ -84,12 +85,17 @@ router.post('/:appName/test', (req, res) => {
 
     let appInstance = req.body.AppInstance; 
     let funcArgs = getAppArgs(appInstance);
-    func(funcArgs).then(() =>{
-        res.status(200).send('');
-    }).catch(error => {
-        res.status(500).send(error);
-    })
-
+    let msg = '';
+    try
+    {
+        let result = await func(funcArgs);   
+        if(result){
+            res.status(200).send('');
+            return;
+        }        
+    }
+    catch(err){ msg = err; }
+    res.status(500).send(msg);
 });
 
 router.param('appName', (req, res, next, appName) => {

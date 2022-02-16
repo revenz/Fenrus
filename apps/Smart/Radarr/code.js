@@ -3,42 +3,19 @@
 }
 
 module.exports = { 
-    status: (args) => {
-        return new Promise((resolve, reject) => {
-
-        args.fetch(getUrl(args, 'movie'))
-            .then(data => {
-                let missing = data?.filter(x => x.hasFile == false)?.length ?? 0;
-                args.fetch(getUrl(args, 'queue'))
-                    .then(data => {
-
-                        let queue = data?.records?.length ?? 0;
-                        
-                        resolve(
-                            args.liveStats([
-                                ['Missing', missing],
-                                ['Queue', queue]
-                            ])
-                        );
-                    }).catch(error => {
-                        reject(error);
-                    });
-            }).catch(error => {
-                reject(error);
-            });
-        });
+    status: async (args) => {
+        let data = await args.fetch(getUrl(args, 'movie'));
+        let missing = data?.filter(x => x.hasFile == false)?.length ?? 0;
+        data = await args.fetch(getUrl(args, 'queue'));
+        let queue = data?.records?.length ?? 0;
+        return args.liveStats([
+            ['Missing', missing],
+            ['Queue', queue]
+        ]);
     },
     
-    test: (args) => {
-        return new Promise(function (resolve, reject) {
-            args.fetch(getUrl(args, 'queue')).then(data => {
-                if (data?.records?.length === 0 || data?.records?.length)
-                    resolve();
-                else
-                    reject();
-            }).catch((error) => {
-                reject(error);
-            });
-        })
+    test: async (args) => {
+        let data = await args.fetch(getUrl(args, 'queue'));
+        return isNaN(data?.records?.length) === false;
     }
 }

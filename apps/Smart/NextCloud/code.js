@@ -9,34 +9,20 @@
 
 module.exports = { 
 
-    status: (args) => {
-        return new Promise((resolve, reject) => {
-            doFetch(args).then(data => {
-                let free = data?.ocs?.data?.quota?.free ?? 0;
-                //let total = data?.ocs?.data?.quota?.total ?? 0;
-                let used = data?.ocs?.data?.quota?.used ?? 0;
+    status: async (args) => {
+        let data = await doFetch(args);
+        let free = data?.ocs?.data?.quota?.free ?? 0;
+        //let total = data?.ocs?.data?.quota?.total ?? 0;
+        let used = data?.ocs?.data?.quota?.used ?? 0;
 
-                resolve(
-                    args.liveStats([
-                        ['Used', args.Utils.formatBytes(used)],
-                        ['Free', args.Utils.formatBytes(free)]
-                    ])
-                );
-            });
-        });
+        return args.liveStats([
+            ['Used', args.Utils.formatBytes(used)],
+            ['Free', args.Utils.formatBytes(free)]
+        ]);
     },
     
-    test: (args) => {
-        return new Promise(function (resolve, reject) {
-            doFetch(args).then(data => {
-                console.log('data', data);
-                if (isNaN(data?.ocs?.data?.quota?.free) === false)
-                    resolve();
-                else
-                    reject();
-            }).catch((error) => {
-                reject(error);
-            });
-        })
+    test: async (args) => {
+        let data = await doFetch(args);
+        return isNaN(data?.ocs?.data?.quota?.free) === false;
     }
 }

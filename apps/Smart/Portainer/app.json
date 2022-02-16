@@ -1,6 +1,7 @@
 ﻿{
   "Name": "Portainer",
   "Interval": 10,
+  "TestFunction": true,
   "Properties": [
     {
       "Name": "Access Token",

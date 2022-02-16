@@ -1,4 +1,5 @@
 ﻿{
   "Name": "Lidarr",
-  "Function": "Lidarr_Status"
+  "TestFunction": true,
+  "Interval":10
 }

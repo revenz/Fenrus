@@ -1,31 +1,22 @@
-﻿function PlexUrl(endpoint, args) {
+﻿function getUrl(endpoint, args) {
     return `library/${endpoint}?X-Plex-Token=${args.properties['token']}`;
 }
-
-function Plex_Status(args) {
-
-    args.fetch(PlexUrl('recentlyAdded', args)).then(data => {
+module.exports = { 
+    
+    status: async (args) => {
+        let data = await args.fetch(getUrl('recentlyAdded', args));
         let recent = data?.MediaContainer?.size ?? 0;
-        args.fetch(PlexUrl('onDeck', args)).then(data => {
-            let ondeck = data?.MediaContainer?.size ?? 0;
-            args.liveStats([
-                ['Recent', recent],
-                ['On Deck', ondeck]
-            ]);
-        });
-    });
-}
+        data = await args.fetch(getUrl('onDeck', args));
+        let ondeck = data?.MediaContainer?.size ?? 0;
+        return args.liveStats([
+            ['Recent', recent],
+            ['On Deck', ondeck]
+        ]);
+    },
 
-function Plex_Test(args) {
-    return new Promise(function (resolve, reject) {
-        let url = PlexUrl('recentlyAdded', args);
-        args.fetch(url).then(data => {
-            if (isNaN(data.MediaContainer?.size))
-                reject();
-            else
-                resolve();
-        }).catch((error) => {
-            reject(error);
-        });
-    })
+    test: async (args) => {
+        let url = getUrl('recentlyAdded', args);
+        let data = await args.fetch(url);
+        return isNaN(data.MediaContainer?.size) === false;
+    }
 }

@@ -1,39 +1,19 @@
 ﻿module.exports = 
 { 
 
-    status: (args) => {
-        return new Promise((resolve, reject) => {
+    status: async (args) => {
+        if (!args.properties || !args.properties['apikey'])
+            throw 'No API Key';
 
-            if (!args.properties || !args.properties['apikey']){
-                reject('No API Key');
-                return;
-            }
-
-            args.fetch({ url: 'api/v1/request/count', headers: { 'X-Api-Key': args.properties['apikey']} })        
-                .then(data => {                    
-                    resolve(
-                        args.liveStats([
-                            ['Pending', data.pending],
-                            ['Processing', data.processing ]
-                        ])
-                    );
-                }).catch(error => {
-                    reject(error);
-                });
-        });
+        let data = await args.fetch({ url: 'api/v1/request/count', headers: { 'X-Api-Key': args.properties['apikey']} });
+        return args.liveStats([
+            ['Pending', data.pending],
+            ['Processing', data.processing ]
+        ]);
     },
 
-    test: (args) => {
-        return new Promise(function (resolve, reject) {
-            args.fetch({ url: 'api/v1/request/count', headers: { 'X-Api-Key': args.properties['apikey'] } })
-            .then(data => {
-                if (data.pending === 0 || data.pending)
-                    resolve();
-                else
-                    reject();
-            }).catch((error) => {
-                reject(error);
-            });
-        });
+    test: async (args) => {
+        let data = await args.fetch({ url: 'api/v1/request/count', headers: { 'X-Api-Key': args.properties['apikey'] } })        
+        return isNaN(data.pending) === false;
     }
 }

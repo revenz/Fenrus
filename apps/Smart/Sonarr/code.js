@@ -3,47 +3,22 @@
 }
 
 module.exports = { 
-    status: (args) => {
-        return new Promise((resolve, reject) => {
-            let url = getUrl(args, 'wanted/missing') + '&sortKey=airDateUtc&sortDir=desc';
+    status: async (args) => {
+        let url = getUrl(args, 'wanted/missing') + '&sortKey=airDateUtc&sortDir=desc';
 
-            args.fetch(url)
-                .then(data => {
+        let data = await args.fetch(url);
+        let missing = data?.totalRecords ?? 0;
+        data = await args.fetch(getUrl(args, ('queue')))
+        let queue = data?.totalRecords ?? 0;
 
-                    let missing = data?.totalRecords ?? 0;
-
-                    args.fetch(getUrl(args, ('queue')))
-                        .then(data => {
-
-                            let queue = data?.totalRecords ?? 0;
-
-                            resolve(
-                                args.liveStats([
-                                    ['Missing', missing],
-                                    ['Queue', queue]
-                                ])
-                            );
-                        }).catch(error => {
-                            reject(error);
-                        });
-                }).catch(error => {
-                    reject(error);
-                }
-            );
-        })
+        return args.liveStats([
+            ['Missing', missing],
+            ['Queue', queue]
+        ]);
     },
-
     
-    test: (args) => {
-        return new Promise(function (resolve, reject) {            
-            args.fetch(getUrl(args, 'wanted/missing') + '&sortKey=airDateUtc&sortDir=desc').then(data => {
-                if (data?.totalRecords === 0 || data?.totalRecords)
-                    resolve();
-                else
-                    reject();
-            }).catch((error) => {
-                reject(error);
-            });
-        })
+    test: async (args) => {
+        let data = await args.fetch(getUrl(args, 'wanted/missing') + '&sortKey=airDateUtc&sortDir=desc');
+        return isNaN(data?.totalRecords) === false;
     }
 }
