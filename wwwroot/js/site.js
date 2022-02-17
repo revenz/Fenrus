@@ -12,8 +12,8 @@ function getFromLocalStorage(instaceUid){
         if(!item?.date)
             return;
         if(item.date < (new Date().getTime() - 60000))
-            return; // older than a minute reject it
-        return item.html;
+            return { html: item.html, old: true}; // older than a minute reject it
+        return { html: item.html, old: false};
     }
     catch(err) { return; }
 }
@@ -29,22 +29,29 @@ function LiveApp(name, instanceUid, interval, subsequent) {
     if (!interval) interval = 3000;
 
     if(!subsequent){
-        let html = getFromLocalStorage(instanceUid);
-        if(html) {
-            setStatus(name, instanceUid, interval, html);
-            return;
+        let saved = getFromLocalStorage(instanceUid);
+        if(saved) {            
+            setStatus(name, instanceUid, interval, saved.html);
+            if(saved.old === false)
+                return; // dont need to refresh
         }
     }
 
     fetch(`/apps/${encodeURIComponent(name)}/${encodeURIComponent(instanceUid)}/status?name=` + encodeURIComponent(name), {        
         signal: signal
+    })
+    .then(res => {
+        if(!res.ok)
+            throw res;
+        return res.text();
+    })
+    .then(html => {
+        if(html == undefined)
+            return;
+        setStatus(name, instanceUid, interval, html);
     }).catch(error => {
         console.log(name + ' error: ' + error);
         setTimeout(() => LiveApp(name, instanceUid, interval, true), interval + Math.random() + 5);
-    })
-    .then(res => res.text())
-    .then(html => {
-        setStatus(name, instanceUid, interval, html);
     });
 }
 
