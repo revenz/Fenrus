@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
 
     let model = req.body;
     if(!model){
-        res.status(400).send('Invalid data');
+        res.status(400).send('Invalid data').end();
         return;
     }
 
@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
         instance[k] = model[k];
     })
     await instance.save();
-    res.status(200).send('');
+    res.status(200).send('').end();
 });
   
 

@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
         title: 'Groups',        
         settings: Settings.getInstance(),
         Utils: new Utils()
-    });    
+    });
 });
   
 
@@ -41,7 +41,7 @@ router.post('/order', (req, res) => {
 
     settings.save();
 
-    res.status(200).send('');
+    res.status(200).send('').end();
 });
   
 

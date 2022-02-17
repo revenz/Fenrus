@@ -56,7 +56,7 @@ router.get('/:appName/:uid/status', async (req, res) => {
     
     let func = require(`../apps/${app.Directory}/code.js`).status;
     if(!func){
-        res.status(500).send("Invalid app");
+        res.status(500).send("Invalid app").end();
         return;
     }
 
@@ -65,7 +65,7 @@ router.get('/:appName/:uid/status', async (req, res) => {
     try
     {
         let result = await func(funcArgs);        
-        res.send(result || '');
+        res.send(result || '').end();
     }
     catch(err){}
 });
@@ -82,7 +82,7 @@ router.post('/:appName/test', async (req, res) => {
     let app = req.app;
     let func = require(`../apps/${app.Directory}/code.js`).test;
     if(!func){
-        res.status(500).send("Invalid app");
+        res.status(500).send("Invalid app").end();
         return;
     }
 
@@ -94,19 +94,19 @@ router.post('/:appName/test', async (req, res) => {
         let result = await func(funcArgs);   
         console.log('test result', result);
         if(result){
-            res.status(200).send('');
+            res.status(200).send('').end();
             return;
         }        
     }
     catch(err){ msg = err; }
-    res.status(500).send(msg);
+    res.status(500).send(msg).end();
 });
 
 router.param('appName', (req, res, next, appName) => {
     let app = AppHelper.getInstance().get(appName);
     
     if(!app){
-        res.status(404).send("App not found");
+        res.status(404).send("App not found").end();
         return;
     }
     req.app = app;
@@ -117,7 +117,7 @@ router.param('uid', (req, res, next, uid) => {
     
     let appInstance = Settings.getInstance().findAppInstance(uid);
     if(!appInstance){
-        res.status(404).send("App instance not found: " + uid);
+        res.status(404).send("App instance not found: " + uid).end();
         return;
     }
     req.appInstance = appInstance;

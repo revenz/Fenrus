@@ -80,7 +80,7 @@ router.route('/:uid')
             })
             settings.save();
         }
-        res.status(200).send('');
+        res.status(200).send('').end();
     })
     .delete((req, res) => {
         if(req.isNew === false)
@@ -90,12 +90,12 @@ router.route('/:uid')
             settings.Groups = settings.Groups.filter(x => x.Uid !== uid);
             settings.save();
         }
-        res.status(200).send('');
+        res.status(200).send('').end();
     });
 
 router.param('uid', (req, res, next, uid) => {
     if(!uid){
-        res.status(400).send('no uid specified');
+        res.status(400).send('no uid specified').end();
         return;    
     }
 
