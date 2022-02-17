@@ -1,6 +1,6 @@
-﻿module.exports = { 
-
-    status: async (args) => {
+﻿class GitHub
+{
+    async status(args) {
         let branch = args.properties ? args.properties['branch'] : 'master';
         branch = branch || 'master';
         let url = args.url;
@@ -30,3 +30,5 @@
         ]);
     }
 }
+
+module.exports = GitHub;

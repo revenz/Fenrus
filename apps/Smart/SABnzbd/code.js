@@ -1,6 +1,6 @@
-﻿module.exports = { 
-
-    status: async (args) => {
+﻿class SABnzbd
+{ 
+    async status(args) {
         let data = await args.fetch(`api?output=json&apikey=${args.properties['apikey']}&mode=queue`);
         if (isNaN(data?.queue?.mbleft) || isNaN(data?.queue?.kbpersec)){
             return '';
@@ -19,10 +19,12 @@
             ['Queue', mbleft],
             ['Speed', kbpersec ]
         ]);
-    },
+    }
 
-    test: async (args) => {
+    async test(args) {
         let data = await args.fetch(`api?output=json&apikey=${args.properties['apikey']}&mode=queue`);
         return isNaN(data?.queue?.mbleft) === false;
     }
 }
+
+module.exports = SABnzbd;

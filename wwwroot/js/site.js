@@ -71,17 +71,6 @@ function htmlEncode(text) {
     return p.innerHTML;
 }
 
-function liveStats(items) {
-
-    let html = '<ul class="livestats">';
-    for (let item of items) {
-
-        html += `<li><span class="title">${htmlEncode(item[0])}</span><span class="value">${htmlEncode(item[1])}</span></li>`;
-    }
-    html += '</ul>';
-    return html;
-}
-
 function changeTheme(event) {
     let theme = event?.target?.value;
     if (!theme)

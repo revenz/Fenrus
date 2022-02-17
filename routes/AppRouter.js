@@ -8,6 +8,17 @@ const path = require('path');
 
 const router = express.Router();
 
+let instances = {};
+
+function getInstance(app, appInstance){    
+    if(instances[appInstance.Uid])
+        return instances[appInstance.Uid];
+
+    let classType = require(`../apps/${app.Directory}/code.js`);
+    instances[appInstance.Uid] = new classType();
+    return instances[appInstance.Uid];
+}
+
 function getAppArgs(appInstance){
     let url = appInstance.Url;
     let utils = new Utils();
@@ -18,8 +29,15 @@ function getAppArgs(appInstance){
         liveStats: (items) => {            
             let html = '<ul class="livestats">';
             for (let item of items) {
+                
+                for(let i=0;i<item.length;i++){
+                    if(/^:html:/.test(item[i]) == false)
+                        item[i] = utils.htmlEncode(item[i]);
+                    else
+                        item[i] = item[i].substring(6);
+                }
 
-                html += `<li><span class="title">${utils.htmlEncode(item[0])}</span><span class="value">${utils.htmlEncode(item[1])}</span></li>`;
+                html += `<li><span class="title">${item[0]}</span><span class="value">${item[1]}</span></li>`;
             }
             html += '</ul>';
             return html;
@@ -52,19 +70,16 @@ function getAppArgs(appInstance){
 }
 
 router.get('/:appName/:uid/status', async (req, res) => {    
-    let app = req.app;    
-    
-    let func = require(`../apps/${app.Directory}/code.js`).status;
-    if(!func){
-        res.status(500).send("Invalid app").end();
-        return;
-    }
-
+    let app = req.app;        
     let appInstance = req.appInstance;   
+
+    let instance = getInstance(app, appInstance);
+    console.log('instance', instance);
+
     let funcArgs = getAppArgs(appInstance);
     try
     {
-        let result = await func(funcArgs);        
+        let result = await instance.status(funcArgs);        
         res.send(result || '').end();
     }
     catch(err){}
@@ -80,18 +95,15 @@ router.get('/:appName/:icon', (req, res) => {
 
 router.post('/:appName/test', async (req, res) => {
     let app = req.app;
-    let func = require(`../apps/${app.Directory}/code.js`).test;
-    if(!func){
-        res.status(500).send("Invalid app").end();
-        return;
-    }
-
-    let appInstance = req.body.AppInstance; 
+    let appInstance = req.appInstance;   
+    
+    let instance = getInstance(app, appInstance);
+    
     let funcArgs = getAppArgs(appInstance);
     let msg = '';
     try
     {
-        let result = await func(funcArgs);   
+        let result = await instance.test(funcArgs);   
         console.log('test result', result);
         if(result){
             res.status(200).send('').end();

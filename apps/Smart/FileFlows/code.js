@@ -1,6 +1,7 @@
-﻿module.exports = { 
-
-    status: async (args) => {
+﻿class FileFlows
+{
+    async status(args)
+    {
         let data = await args.fetch('api/status');
         if (!data || isNaN(data.queue))
             throw 'no data';            
@@ -22,10 +23,12 @@
             ['Queue', data.queue],
             [secondlbl, secondValue]
         ]);        
-    },
+    }
 
-    test: async (args) => {
+    async test(args){
         let data = await args.fetch(args.url + '/api/status');
         return (data.processed === 0 || data.processed);          
     }
 }
+
+module.exports = FileFlows;

@@ -88,6 +88,7 @@ $columnWidth:300;
             display: flex;
             align-items: center;
             padding: 0.5rem .25rem 0.5rem .5rem;
+            z-index:2;
 
             img {
                 max-width: 3rem;
@@ -134,8 +135,23 @@ $columnWidth:300;
     }
 }
 
+.db-item .status {
+
+    img.background {
+        position:absolute;
+        top:50%;
+        transform:translateY(-50%);
+        right:0;
+        left:0;
+        right:0;
+        z-index:0;
+        width:100%;
+        opacity: 0.3;
+    }
+
 
     .livestats {
+        z-index:1;
         margin: 2px 0 0;
         padding: 0;
         display: flex;
@@ -143,6 +159,7 @@ $columnWidth:300;
         font-size: 0.8rem;
 
         li {
+            z-index:1;
             list-style: none;
             padding: 0;
             display: flex;
@@ -158,5 +175,10 @@ $columnWidth:300;
                 text-overflow: ellipsis;
                 overflow: hidden;
             }
+
+            a {
+                color:var(--color);
+            }
         }
     }
+}
