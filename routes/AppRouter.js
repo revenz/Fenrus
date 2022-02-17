@@ -74,6 +74,7 @@ router.get('/:appName/:icon', (req, res) => {
     let app = req.app;
     let file = `../apps/${app.Directory}/${app.Icon}`;
     console.log('Icon file: ' + file);
+    res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
     res.sendFile(path.resolve(__dirname, file));
 });
 

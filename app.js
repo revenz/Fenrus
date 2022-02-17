@@ -35,11 +35,19 @@ app.set('view engine', 'ejs');
 // listen on port 
 app.listen(3000);
 
-app.use(express.static(__dirname + '/wwwroot'));
-
 // Calling the express.json() method for parsing
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+
+
+app.use(function (req, res, next) {
+    if (req.url.match(/(css|js|img|images|background|font)/)) {
+        res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
+    }
+    next();
+});
+
+app.use(express.static(__dirname + '/wwwroot'));
 
 app.use(morgan('dev'));
 
