@@ -4,9 +4,14 @@
   "TestFunction": true,
   "Properties": [
     {
-      "Name": "Access Token",
-      "Id": "token",
+      "Name": "Username",
+      "Id": "username",
       "Type": "string"
+    },
+    {
+      "Name": "Password",
+      "Id": "password",
+      "Type": "password"
     }
   ]
 }

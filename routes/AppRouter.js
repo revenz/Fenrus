@@ -38,9 +38,11 @@ function getAppArgs(appInstance){
                 args.headers = { 'Accept': 'application/json' };
             else if (!args.headers['Accept'])
                 args.headers['Accept'] = 'application/json';
-
+            console.log(`REQUEST [${args.method || 'GET'}]: ${args.url}`);
             return fetch(args.url, {
-                headers: args.headers
+                headers: args.headers,
+                method: args.method,
+                body: args.body
             }).then(res => res.json()).catch(error => {
                 console.log('error: ' + error);
             });
@@ -89,6 +91,7 @@ router.post('/:appName/test', async (req, res) => {
     try
     {
         let result = await func(funcArgs);   
+        console.log('test result', result);
         if(result){
             res.status(200).send('');
             return;

@@ -48,7 +48,7 @@
                 this.focusEditor();
             },
             isDisabled() {
-                if(this.Saving)
+                if(this.Saving || this.testing)
                     return true;
                 return false;
             },

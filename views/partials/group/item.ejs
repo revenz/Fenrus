@@ -4,21 +4,21 @@
         <div class="header">
             <span class="title" x-text="EditorTitle"></span>
             <div class="buttons">
-                <button class="btn" @click="saveEditor">Save</button>
-                <button class="btn" @click="closeEditor">Cancel</button>
+                <button :disabled="isDisabled()" class="btn" @click="saveEditor">Save</button>
+                <button :disabled="isDisabled()" class="btn" @click="closeEditor">Cancel</button>
             </div>
         </div>
         <div class="content">
             <div class="setting">
                 <span class="label">Name</span>
                 <span class="value">
-                    <input type="text" x-model="EditModel.Name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="saveEditor">
+                    <input :disabled="isDisabled()" type="text" x-model="EditModel.Name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="saveEditor">
                 </span>
             </div>
             <div class="setting">
                 <span class="label">Type</span>
                 <span class="value">
-                    <select x-model="EditModel._Type" @change="typeChanged"  @keydown.enter="saveEditor">
+                    <select :disabled="isDisabled()" x-model="EditModel._Type" @change="typeChanged"  @keydown.enter="saveEditor">
                         <option value="DashboardApp">App</option>
                         <option value="DashboardLink">Link</option>
                     </select>
@@ -28,7 +28,7 @@
                 <div class="setting">
                     <span class="label">App</span>
                     <span class="value">
-                        <select x-model="EditModel.AppName" @change="appChanged" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="saveEditor">
+                        <select :disabled="isDisabled()" x-model="EditModel.AppName" @change="appChanged" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="saveEditor">
                             <option value="" disabled>Select An App</option>
                             <% for(let app of apps) { %>
                                 <option><%= app.Name %></option>
@@ -40,7 +40,7 @@
             <div class="setting">
                 <span class="label">URL</span>
                 <span class="value">
-                    <input type="text" x-model="EditModel.Url" data-rules='["required", "regexMatch:^((http(s)?)|(HTTP(S)?))://."]' @blur="blur" @input="input"  @keydown.enter="saveEditor" />
+                    <input :disabled="isDisabled()" type="text" x-model="EditModel.Url" data-rules='["required", "regexMatch:^((http(s)?)|(HTTP(S)?))://."]' @blur="blur" @input="input"  @keydown.enter="saveEditor" />
                 </span>
             </div> 
             <div class="setting">
@@ -79,17 +79,17 @@
                         <span class="label" x-text="prop.Name"></span>
                         <span class="value">
                             <template x-if="prop.Type === 'string'">
-                                <input type="text" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
+                                <input :disabled="isDisabled()" type="text" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                             </template>
                             <template x-if="prop.Type === 'password'">
                                 <input type="password" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                             </template>
                             <template x-if="prop.Type === 'int'">
-                                <input type="number" x-model.number="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
+                                <input :disabled="isDisabled()" type="number" x-model.number="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                             </template>
                             <template x-if="prop.Type === 'bool'">
                                 <label x:for="$id('toggle')" class="toggle-switchy">
-                                    <input type="checkbox" :id="$id('toggle')" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
+                                    <input :disabled="isDisabled()" type="checkbox" :id="$id('toggle')" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                                     <span class="toggle">
                                         <span class="switch"></span>
                                     </span>
@@ -104,12 +104,7 @@
                 <div class="setting tester">
                     <span class="label"></span>
                     <span class="value">                    
-                        <template x-if="testing">
-                            <button class="btn" disabled>Testing</button>
-                        </template>
-                        <template x-if="!testing">
-                            <button class="btn" @click="testApp">Test</button>
-                        </template>
+                        <button :disabled="isDisabled()" class="btn" @click="testApp" x-text="testing ? 'Testing' : 'Test'"></button>
                     </span>
                 </div>
             </template>
