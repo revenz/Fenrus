@@ -26,6 +26,7 @@
   max-width: 70%;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .steam .price {
   bottom: 0;
