@@ -76,7 +76,7 @@ class EpicGames {
         let country = args.properties['country'] || 'en-NZ';
         item.title = data.title;
         item.image = data.keyImages.filter(x => x.type === 'Thumbnail')[0].url;
-        item.link = `https://www.epicgames.com/store/${country}Z/p/${data.urlSlug}`;
+        item.link = `https://www.epicgames.com/store/${country}/p/${data.urlSlug}`;
         item.price = data.price.totalPrice.discountPrice === 0 ? 'FREE' : data.price.totalPrice.fmtPrice.discountPrice;
         if(item.price.indexOf('$') > 0)
             item.price = item.price.substring(item.price.indexOf('$'));
