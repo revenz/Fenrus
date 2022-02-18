@@ -1,0 +1,45 @@
+.steam {
+    .app-icon {
+        position:absolute;
+        top:.25rem;
+        left:.25rem;
+        img {
+            width:3rem;
+            height:3rem;
+        }
+    }
+    .cover-link {
+        position:absolute;
+        top:0;
+        right:0;
+        bottom:0;
+        left:0;
+    }
+    .name, .price, .discount {
+        background:rgba(0,0,0,0.6);
+        padding:0.5rem;
+        position:absolute;
+        color:var(--color);
+
+    }
+    .name {
+        top:0;
+        right:0;
+        max-width:70%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .price {
+        bottom:0;
+        right:0;
+    }
+    .discount {
+        bottom:0;
+        left:0;
+        color:rgb(0, 235, 0);
+        .down-icon {
+            transform: rotate(-90deg);
+            display: inline-block;
+        }
+    }
+}

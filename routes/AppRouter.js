@@ -22,10 +22,12 @@ function getInstance(app, appInstance){
 function getAppArgs(appInstance){
     let url = appInstance.Url;
     let utils = new Utils();
+    let settings = Settings.getInstance();
     let funcArgs = {
         url: url,
         properties: appInstance.Properties,
         Utils: utils,
+        linkTarget: settings.LinkTarget,
         liveStats: (items) => {            
             let html = '<ul class="livestats">';
             for (let item of items) {
@@ -85,13 +87,20 @@ router.get('/:appName/:uid/status', async (req, res) => {
     catch(err){}
 });
 
-router.get('/:appName/:icon', (req, res) => {    
+router.get('/:appName/app.css', (req, res) => {    
     let app = req.app;
-    let file = `../apps/${app.Directory}/${app.Icon}`;
-    console.log('Icon file: ' + file);
+    let file = `../apps/${app.Directory}/app.css`;
     res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
     res.sendFile(path.resolve(__dirname, file));
 });
+
+router.get('/:appName/:icon', (req, res) => {    
+    let app = req.app;
+    let file = `../apps/${app.Directory}/${app.Icon}`;
+    res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
+    res.sendFile(path.resolve(__dirname, file));
+});
+
 
 router.post('/:appName/test', async (req, res) => {
     let app = req.app;

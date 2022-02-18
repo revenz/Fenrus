@@ -5,7 +5,11 @@
     let interval = (app.Interval ?? 0) * 1000;
 %>
 
-<a id="<%= model.Uid %>" class="db-item db-app" href="<%= model.Url%>" onclick="abortRequests()" target="<%= target %>">
+<% if(app.Css) { %>
+    <link rel="stylesheet" href="<%= app.Css %>" />    
+<% } %>
+
+<a id="<%= model.Uid %>" class="db-item db-app <%= app.Classes %>" href="<%= model.Url%>" onclick="abortRequests()" target="<%= target %>">
     <div class="icon">
        <img src="<%= `/apps/${encodeURIComponent(app.Name)}/${app.Icon}` %>" />
     </div>
@@ -15,6 +19,7 @@
     </div>
     <div class="arrow"></div>
 </a>
+
 
 <% if (interval > 0) { %>
     <script>

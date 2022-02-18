@@ -27,11 +27,26 @@ class Steam {
         if(!item)
             return;
         
-        return `<img class="background" src=\"${args.Utils.htmlEncode(item.small_capsule_image)}" />` + args.liveStats([
-            ['Game', `:html:<a target="_blank" href="https://store.steampowered.com/app/${item.id}">${args.Utils.htmlEncode(item.name)}</a>`],
-            ['Price', '$' + (item.final_price / 100).toFixed(2)],
-            ['Discount', item.discount_percent +'%'],
-        ]); 
+        return `
+<div class="steam fill" style="background-image:url('${args.Utils.htmlEncode(item.large_capsule_image)}');">
+    
+    <div class="name">${args.Utils.htmlEncode(item.name)}</div>
+    <div class="price">
+        ${'$' + (item.final_price / 100).toFixed(2)}
+    </div>
+    <div class="discount">
+        <div class="down-icon"><span class="icon-arrow-left"></span></div>
+        ${item.discount_percent +'%'}
+    </div>
+    <a class="cover-link" target="${args.linkTarget}" href="https://store.steampowered.com/app/${item.id}" />
+    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="/apps/Steam/icon.png" /></a>
+</div>
+`;
+        // return `<img class="background" src=\"${args.Utils.htmlEncode(item.small_capsule_image)}" />` + args.liveStats([
+        //     ['Game', `:html:<a target="_blank" href="https://store.steampowered.com/app/${item.id}">${args.Utils.htmlEncode(item.name)}</a>`],
+        //     ['Price', '$' + (item.final_price / 100).toFixed(2)],
+        //     ['Discount', item.discount_percent +'%'],
+        // ]); 
     }
 }
 

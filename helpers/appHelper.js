@@ -40,6 +40,10 @@ class AppHelperInstance {
                             obj.Directory = obj.Directory.substring(obj.Directory.indexOf('apps/') + 5);
                             console.log('App \'' + obj.Name + '\' directory: ' + obj.Directory);
                             obj.Icon = obj.Icon ?? 'icon.png';
+                            
+                            let css = path.join(startPath, 'app.css');
+                            if(fs.existsSync(css))
+                                obj.Css = `/apps/${obj.Name}/app.css`;
 
                             if(!obj.DefaultUrl){
                                 obj.DefaultUrl = `http://${obj.Name.toLowerCase().replace(/[\s]/g, '-')}.lan/`;

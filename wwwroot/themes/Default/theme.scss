@@ -88,7 +88,6 @@ $columnWidth:300;
             display: flex;
             align-items: center;
             padding: 0.5rem .25rem 0.5rem .5rem;
-            z-index:2;
 
             img {
                 max-width: 3rem;
@@ -135,49 +134,53 @@ $columnWidth:300;
     }
 }
 
-.db-item .status {
-
-    img.background {
-        position:absolute;
-        top:50%;
-        transform:translateY(-50%);
-        right:0;
-        left:0;
-        right:0;
-        z-index:0;
+.db-item
+{
+    &.widget {
         width:100%;
-        opacity: 0.3;
+        height:14rem;
+
+        .fill {
+            position: absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }       
     }
 
 
-    .livestats {
-        z-index:1;
-        margin: 2px 0 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        font-size: 0.8rem;
-
-        li {
-            z-index:1;
-            list-style: none;
+    .status {
+        .livestats {
+            margin: 2px 0 0;
             padding: 0;
             display: flex;
-            flex-direction: row;
-            flex: auto;
-            color:rgba(var(--color-rgb), 0.7);
+            flex-direction: column;
+            font-size: 0.8rem;
 
-            .title {
-                color: var(--accent);
-                padding-bottom: 0.1rem;
-                font-weight: bold;
-                width:5rem;
-                text-overflow: ellipsis;
-                overflow: hidden;
-            }
+            li {
+                list-style: none;
+                padding: 0;
+                display: flex;
+                flex-direction: row;
+                flex: auto;
+                color:rgba(var(--color-rgb), 0.7);
 
-            a {
-                color:var(--color);
+                .title {
+                    color: var(--accent);
+                    padding-bottom: 0.1rem;
+                    font-weight: bold;
+                    width:5rem;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+
+                a {
+                    color:var(--color);
+                }
             }
         }
     }
