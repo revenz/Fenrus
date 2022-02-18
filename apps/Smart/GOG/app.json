@@ -1,0 +1,26 @@
+﻿{
+  "Name": "GOG",
+  "Interval":5,
+  "DefaultUrl":"https://gog.com/",
+  "Classes": "widget",
+  "Properties": [
+    {
+      "Name": "Country",
+      "Id": "country",
+      "Type": "string",
+      "Default":"NZ"
+    },
+    {
+      "Name": "Currency",
+      "Id": "currency",
+      "Type": "string",
+      "Default":"AUD"
+    },
+    {
+      "Name": "Currency Symbol",
+      "Id": "currencySymobol",
+      "Type": "string",
+      "Default":"$"
+    }
+  ]
+}

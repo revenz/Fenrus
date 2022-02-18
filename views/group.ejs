@@ -108,6 +108,15 @@
                 else
                     this.EditorApp = {};
 
+                if(this.EditorApp?.Properties?.length){
+                    // set the default property values if this app defines them
+                    for(let prop of this.EditorApp.Properties)
+                    {
+                        if(prop.Default)
+                            this.EditModel.Properties[prop.Id] = prop.Default;
+                    }
+                }    
+
                 if(resetUrl)
                 {
                     this.EditModel.Url = this.EditorApp.DefaultUrl || 'http://';
