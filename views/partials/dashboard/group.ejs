@@ -13,7 +13,7 @@
         height = 10;
 %>    
 <div class="db-group width-<%= width %> height-<%= height %>">
-    <% if(settings.ShowGroupTitles) { %>
+    <% if(settings.ShowGroupTitles && !model.HideGroupTitle) { %>
         <div class="title"><span><%= model.Name %></span></div>
     <% } %>
     

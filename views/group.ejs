@@ -1,9 +1,6 @@
 <%- include('./partials/head.ejs' ) %>
 
-<% 
-
-%> 
-
+<link rel="stylesheet" href="/css/toggle-switchy.css" />
 <link rel="stylesheet" href="/css/settings.min.css" />
 
 <div x-data="Group">
@@ -29,10 +26,7 @@
 
         Alpine.plugin(focus);
         Alpine.data('Group', () => ({
-            Items: group.Items,
-            Name: group.Name,
-            Width: group.Width,
-            Height: group.Height,
+            Group: group,
             Apps: apps,
             Saving: false,
             MoverOpen: false,
@@ -128,20 +122,20 @@
             removeItem(uid) {
                 if(this.isDisabled()) return;
 
-                let index = this.Items.findIndex(x => x.Uid === uid);
+                let index = this.Group.Items.findIndex(x => x.Uid === uid);
                 if(index >= 0){
-                    let name = this.Items[index].Name;
+                    let name = this.Group.Items[index].Name;
                     confirmPrompt(`Are you sure you want to remove the item '${name}'?`).then(()=>{
-                        this.Items.splice(index, 1);
+                        this.Group.Items.splice(index, 1);
                     });
                 }
             },
             moveItem(uid) {
                 if(this.isDisabled()) return;
 
-                let index = this.Items.findIndex(x => x.Uid === uid);
+                let index = this.Group.Items.findIndex(x => x.Uid === uid);
                 if(index >= 0){
-                    this.MoverItem = this.Items[index];
+                    this.MoverItem = this.Group.Items[index];
                     this.MoverTitle = 'Move ' + this.MoverItem.Name;
                     this.MoverDestination = '';
                     this.MoverOpen = true;
@@ -186,28 +180,20 @@
                 if(this.validate() === false)
                     return;
 
-                if(!this.Items?.length){
+                if(!this.Group.Items?.length){
                     messageBox('You must add at least one item to the group', 'Item Required');
                     return;
                 }
 
-                let model = {
-                    _Type:'DashboardGroup',
-                    Name:this.Name,
-                    Height: this.Height,
-                    Width: this.Width,
-                    Items:this.Items,
-                    Uid:group.Uid
-                };
                 const options = {
                     method: 'POST',
-                    body: JSON.stringify(model),
+                    body: JSON.stringify(this.Group),
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 }
                 this.Saving = true;
-                fetch('/group/' + encodeURIComponent(model.Uid), options).then(res => {
+                fetch('/group/' + encodeURIComponent(this.Group.Uid), options).then(res => {
                     if(!res.ok)
                         throw res;
                     this.Saving = false;
@@ -222,7 +208,7 @@
                 window.location.href = '/groups';
             },
             addSeparator(){
-                this.Items.push({
+                this.Group.Items.push({
                     Uid: newGuid(),
                     _Type: 'DashboardSeparator',
                     Name: 'Seperator',
@@ -252,7 +238,7 @@
 
                 this.isItemSaved = false;
                 this.EditorApp.Properties = {};
-                let item = this.Items.filter(x => x.Uid === uid)[0];
+                let item = this.Group.Items.filter(x => x.Uid === uid)[0];
                 if(item){
                     this.EditorTitle = 'Edit Item';
                     this.EditModel = JSON.parse(JSON.stringify(item)); // clone the object so any changes arent written directly to the model                        
@@ -284,9 +270,9 @@
                 fetch('/group/move', options).then((res)=>{
                     if(!res.ok)
                         throw(res);
-                    let index = this.Items.indexOf(this.MoverItem);
+                    let index = this.Group.Items.indexOf(this.MoverItem);
                     if(index >= 0)
-                        this.Items.splice(index, 1);
+                        this.Group.Items.splice(index, 1);
                     this.MoverOpen = false;
                     toast(`Moved item '${this.MoverItem.Name}'`, true);
                     this.MoverItem = {};
@@ -328,12 +314,12 @@
                 if(!item)
                     return; // must be invalid
 
-                let index = this.Items.findIndex(x => x.Uid === item.Uid);
+                let index = this.Group.Items.findIndex(x => x.Uid === item.Uid);
                 if(index >= 0){
-                    this.Items[index] = item;
+                    this.Group.Items[index] = item;
                 }
                 else{
-                    this.Items.push(item);
+                    this.Group.Items.push(item);
                 }
 
                 this.EditorOpen = false;
@@ -413,14 +399,14 @@
                 if (this.dragSrcEl != e.target) {
                     let uid = this.dragSrcEl.getAttribute('id');
                     let targetUid = e.target.getAttribute('id');
-                    let originalIndex = this.Items.findIndex(x => x.Uid === uid);
-                    let targetIndex = this.Items.findIndex(x => x.Uid === targetUid);
+                    let originalIndex = this.Group.Items.findIndex(x => x.Uid === uid);
+                    let targetIndex = this.Group.Items.findIndex(x => x.Uid === targetUid);
                     if(originalIndex >= 0 && targetIndex >= 0 && originalIndex != targetIndex)
                     {
-                        let item = this.Items.splice(originalIndex, 1)[0];
+                        let item = this.Group.Items.splice(originalIndex, 1)[0];
                         if(targetIndex > originalIndex)
                             --targetIndex; // as now the original item has been removed, everythign afterwards has shifted down
-                        this.Items.splice(targetIndex, 0, item);
+                        this.Group.Items.splice(targetIndex, 0, item);
                     }
                 }
             }

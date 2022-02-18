@@ -11,19 +11,30 @@
             <div class="setting">
                 <span class="label">Name</span>
                 <span class="value">
-                    <input :disabled="isDisabled()" type="text" x-model="Name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save">
+                    <input :disabled="isDisabled()" type="text" x-model="Group.Name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save">
                 </span>
             </div>
             <div class="setting">
                 <span class="label">Width</span>
                 <span class="value">
-                    <input :disabled="isDisabled()" type="number" x-model="Width" min="0" max="10" data-rules='["required", "numeric", "min:0", "max:10"]' @blur="blur" @input="input" @keydown.enter="save">
+                    <input :disabled="isDisabled()" type="number" x-model="Group.Width" min="0" max="10" data-rules='["required", "numeric", "min:0", "max:10"]' @blur="blur" @input="input" @keydown.enter="save">
                 </span>
             </div>
             <div class="setting">
                 <span class="label">Height</span>
                 <span class="value">
-                    <input :disabled="isDisabled()" type="number" x-model="Height" min="0" max="10" data-rules='["required", "numeric", "min:0", "max:10"]' @blur="blur" @input="input" @keydown.enter="save">
+                    <input :disabled="isDisabled()" type="number" x-model="Group.Height" min="0" max="10" data-rules='["required", "numeric", "min:0", "max:10"]' @blur="blur" @input="input" @keydown.enter="save">
+                </span>
+            </div>
+            <div class="setting">
+                <span class="label">Hide Title</span>
+                <span class="value">
+                    <label for="HideGroupTitle" class="toggle-switchy">
+                        <input type="checkbox" id="HideGroupTitle" x-model="Group.HideGroupTitle" />
+                        <span class="toggle">
+                            <span class="switch"></span>
+                        </span>
+                    </label>
                 </span>
             </div>
             <div class="header items-header">
@@ -34,7 +45,7 @@
                 </div>
             </div>
             <ul class="group-item-list">
-                <template x-for="item in Items">
+                <template x-for="item in Group.Items">
                     <li x-bind:id="item.Uid" draggable="true" @dragstart="dragStart" @dragenter="dragEnter" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="dragDrop" @dragend="dragEnd">
                         <span class="mover icon-sort"></span>
 
