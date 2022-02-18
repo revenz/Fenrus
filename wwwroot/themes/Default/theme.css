@@ -794,6 +794,11 @@ body {
   flex-grow: 1;
 }
 
+.db-group .separator {
+  width: 100%;
+  border-top: solid 1px var(--accent);
+  margin: 1rem;
+}
 .db-group > .title {
   text-align: center;
   text-transform: uppercase;

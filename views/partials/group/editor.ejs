@@ -30,6 +30,7 @@
                 <span class="title">Items</span>
                 <div class="buttons">
                     <button :disabled="isDisabled()" class="btn add" @click="addItem">Add Item</button>
+                    <button :disabled="isDisabled()" class="btn" @click="addSeparator">Add Separator</button>
                 </div>
             </div>
             <ul class="group-item-list">
@@ -40,11 +41,13 @@
                         <span class="name" x-text="item.Name"></span>
                         <span class="url" x-text="item.Url"></span>
 
-                        <span class="controls">
-                            <span title="Move" class="icon-share-square-o" @click="moveItem(item.Uid)"></span>
-                            <span title="Edit" class="icon-edit" @click="editItem(item.Uid)"></span>
-                            <span title="Delete" class="icon-trash" @click="removeItem(item.Uid)"></span>
-                        </span>
+                        <template x-if="item._Type !== 'DashboardSeparator'">
+                            <span class="controls">
+                                <span title="Move" class="icon-share-square-o" @click="moveItem(item.Uid)"></span>
+                                <span title="Edit" class="icon-edit" @click="editItem(item.Uid)"></span>
+                                <span title="Delete" class="icon-trash" @click="removeItem(item.Uid)"></span>
+                            </span>
+                        </template>
                     </li>
                 </template>
             </ul>

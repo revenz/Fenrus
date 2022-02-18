@@ -212,6 +212,14 @@
             cancel() {
                 window.location.href = '/groups';
             },
+            addSeparator(){
+                this.Items.push({
+                    Uid: newGuid(),
+                    _Type: 'DashboardSeparator',
+                    Name: 'Seperator',
+                    Url: '-----------------------------------------------------------'
+                });
+            },
             addItem() {
                 if(this.isDisabled()) return;
 

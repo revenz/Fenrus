@@ -107,6 +107,11 @@ $columnWidth:300;
 
 
 .db-group {
+    .separator {
+        width:100%;
+        border-top:solid 1px var(--accent);
+        margin:1rem;
+    }
     > .title {
         text-align: center;
         text-transform: uppercase;
