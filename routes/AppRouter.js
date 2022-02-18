@@ -76,7 +76,6 @@ router.get('/:appName/:uid/status', async (req, res) => {
     let appInstance = req.appInstance;   
 
     let instance = getInstance(app, appInstance);
-    console.log('instance', instance);
 
     let funcArgs = getAppArgs(appInstance);
     try

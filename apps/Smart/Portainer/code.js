@@ -4,7 +4,6 @@
         let username = args.properties['username'];
         let password = args.properties['password'];
         try{
-            console.log('DATA', JSON.stringify({ username: username, password: password }));
             let res = await args.fetch({
                 url: 'api/auth',
                 method: 'POST',

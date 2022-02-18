@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Epic Games",
+  "Interval":5,
+  "DefaultUrl":"https://epicgames.com/",
+  "Classes": "widget",
+  "Properties": [
+    {
+      "Name": "Country",
+      "Id": "country",
+      "Type": "string",
+      "Default":"en-NZ"
+    }
+  ]
+}

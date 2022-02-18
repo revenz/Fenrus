@@ -3,5 +3,13 @@
   "TestFunction":true,
   "Interval":5,
   "DefaultUrl":"https://steampowered.com/",
-  "Classes": "widget"
+  "Classes": "widget",
+  "Properties": [
+    {
+      "Name": "Currency Symbol",
+      "Id": "currency",
+      "Type": "string",
+      "Default":"$"
+    }
+  ]
 }
