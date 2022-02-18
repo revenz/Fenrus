@@ -40,6 +40,11 @@ class AppHelperInstance {
                             obj.Directory = obj.Directory.substring(obj.Directory.indexOf('apps/') + 5);
                             console.log('App \'' + obj.Name + '\' directory: ' + obj.Directory);
                             obj.Icon = obj.Icon ?? 'icon.png';
+
+                            if(!obj.DefaultUrl){
+                                obj.DefaultUrl = `http://${obj.Name.toLowerCase().replace(/[\s]/g, '-')}.lan/`;
+                            }
+
                             results[obj.Name] = obj;
                         }else{
                             console.log('no name: ', obj);

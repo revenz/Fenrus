@@ -76,6 +76,11 @@
                     this.EditorApp = {};
                     return;
                 }
+
+                let resetUrl = !this.EditModel.Url || 
+                               this.EditModel.Url === 'http://' ||
+                               this.EditModel.Url == this.EditorApp?.DefaultUrl;
+
                 if(this.EditModel.Name === this.EditorApp?.Name)
                     this.EditModel.Name = '';
                 let fromInit = typeof(event) === 'string';
@@ -103,6 +108,10 @@
                 else
                     this.EditorApp = {};
 
+                if(resetUrl)
+                {
+                    this.EditModel.Url = this.EditorApp.DefaultUrl || 'http://';
+                }
 
                 if(!this.EditModel.Name)
                     this.EditModel.Name = this.EditorApp.Name;

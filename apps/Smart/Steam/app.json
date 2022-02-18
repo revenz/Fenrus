@@ -1,5 +1,6 @@
 ﻿{
   "Name": "Steam",
   "TestFunction":true,
-  "Interval":5
+  "Interval":5,
+  "DefaultUrl":"https://steampowered.com/"
 }
