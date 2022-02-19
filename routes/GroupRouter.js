@@ -41,6 +41,7 @@ router.route('/:uid')
         { 
             title: 'Group',   
             model: group,     
+            user: req.user,
             settings: settings,
             apps: apps,
             Utils: new Utils()

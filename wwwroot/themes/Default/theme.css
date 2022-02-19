@@ -749,19 +749,6 @@ body {
   overflow: auto;
   grid-template-columns: repeat(var(--columns), calc(var(--column-width) - 6px));
 }
-.dashboard > .db-group {
-  border-radius: 0.5rem;
-  background: rgba(0, 0, 0, 0.5);
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2));
-  grid-row-start: span 1;
-  grid-column-start: span 1;
-  width: -webkit-fill-available;
-}
-.dashboard > .db-group .items {
-  overflow: hidden;
-  padding: 1px;
-  font-size: 0.8rem;
-}
 
 .db-item {
   display: inline-flex;
@@ -794,6 +781,25 @@ body {
   flex-grow: 1;
 }
 
+.db-group {
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2));
+  grid-row-start: span 1;
+  grid-column-start: span 1;
+  width: -webkit-fill-available;
+}
+.db-group.hide-labels .items > a {
+  width: 4.1rem !important;
+}
+.db-group.hide-labels .content {
+  display: none;
+}
+.db-group .items {
+  overflow: hidden;
+  padding: 1px;
+  font-size: 0.8rem;
+}
 .db-group .separator {
   width: 100%;
   border-top: solid 1px var(--accent);

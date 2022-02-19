@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
     res.render('groups', 
     { 
         title: 'Groups',
-        user: req.user,      
+        user: req.user,
         settings: req.settings,
         Utils: new Utils()
     });
