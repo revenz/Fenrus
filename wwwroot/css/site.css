@@ -340,7 +340,7 @@ body {
   background-size: cover !important;
   background-position: center !important;
   justify-content: center;
-  padding: 2rem;
+  padding: 2rem 3rem;
   display: flex;
 }
 
