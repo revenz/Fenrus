@@ -1,13 +1,13 @@
 const express = require('express');
-let Settings = require('../models/Settings');
+let SystemConfig = require('../models/SystemConfig');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render('settings', 
+    res.render('system', 
     { 
-        title: 'Settings',
-        settings: req.settings
+        title: 'System',
+        settings: SystemConfig.getInstance()
     });    
 });
   

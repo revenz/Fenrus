@@ -1,7 +1,6 @@
 const express = require('express');
 const fetch = require('node-fetch');
 
-let Settings = require('../models/settings');
 let Utils = require('../helpers/utils');
 let AppHelper = require('../helpers/appHelper');
 const path = require('path');
@@ -19,10 +18,9 @@ function getInstance(app, appInstance){
     return instances[appInstance.Uid];
 }
 
-function getAppArgs(appInstance){
+function getAppArgs(appInstance, settings){
     let url = appInstance.Url;
     let utils = new Utils();
-    let settings = Settings.getInstance();
     let funcArgs = {
         url: url,
         properties: appInstance.Properties,
@@ -95,7 +93,7 @@ router.get('/:appName/:uid/status', async (req, res) => {
 
     let instance = getInstance(app, appInstance);
 
-    let funcArgs = getAppArgs(appInstance);
+    let funcArgs = getAppArgs(appInstance, req.settings);
     try
     {
         let result = await instance.status(funcArgs);        
@@ -125,7 +123,7 @@ router.post('/:appName/test', async (req, res) => {
     
     let instance = getInstance(app, appInstance);
     
-    let funcArgs = getAppArgs(appInstance);
+    let funcArgs = getAppArgs(appInstance, req.settings);
     let msg = '';
     try
     {
@@ -153,7 +151,7 @@ router.param('appName', (req, res, next, appName) => {
 
 router.param('uid', (req, res, next, uid) => {
     
-    let appInstance = Settings.getInstance().findAppInstance(uid);
+    let appInstance = req.settings.findAppInstance(uid);
     if(!appInstance){
         res.status(404).send("App instance not found: " + uid).end();
         return;

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <% if(title) { %>
+        <title>HomePortal - <%= title %></title>
+    <% } else { %>
+        <title>HomePortal</title>
+    <% } %>
+    <link rel="stylesheet" href="/css/site.min.css" />
+    <link id="theme-style" rel="stylesheet" href="/themes/Default/theme.min.css" />
+    <link rel="stylesheet" href="/css/login.css" />
+</head>
+
+<body>
+
+    <div class="main-content">
+        <div class="login-box" x-data="Login">
+            <div class="header">
+                <span class="title">Login</span>
+            </div>
+            <template x-if="error">
+                <div class="error">
+                    <span x-text="error"></span>
+                </div>
+            </template>
+            <div class="field">
+                <span class="label">Username</span>
+                <span class="value">
+                    <input type="text" x-model="model.Username" autofocus data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="login" />
+                </span>
+            </div>
+            <div class="field">
+                <span class="label">Password</span>
+                <span class="value">
+                    <input type="password" x-model="model.Password" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="login" />
+                </span>
+            </div>
+            <div class="buttons">
+                <button class="btn" @click="login">Login</button>
+                <button class="btn" @click="register">Register</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/alpinejs@3.8.1/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/mattkingshott/iodine/dist/iodine.min.umd.js" defer></script>
+
+
+    <script>
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('Login', () => (
+            {
+                error: '',
+                model: { Username: '', Password: '' },   
+                blur(){
+                    this.validate();
+                },
+                input(){
+                    this.validate();
+                },
+                validate() {
+                    this.error = '';
+                    let inputs = [...document.querySelectorAll(`.settings-box [data-rules]`)];
+                    let valid = true;
+                    inputs.map((input) => {
+                        if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
+                            valid = false;
+                            input.classList.add("invalid");
+                        }else{
+                            input.classList.remove("invalid");
+                        }
+                    });
+                    return valid;
+                },
+                login() {                    
+                    this.doLoginRegister(false);
+                },
+                register(){
+                    this.doLoginRegister(true);
+                },
+                doLoginRegister(register){
+                    if(!this.validate())
+                        return;
+                        
+                    const options = {
+                        method: 'POST',
+                        body: JSON.stringify({ username: this.model.Username, password: this.model.Password, register: register} ),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    };
+
+                    fetch('/login', options).then(res => res.json()).then((res)=>{                        
+                        if(res.success)
+                            window.location.href = '/';
+                        else if(res.error)
+                            this.error = res.error;
+                    });
+
+                }
+            }))
+        });
+    </script>
+
+    <script src="/js/site.js" asp-append-version="true"></script>
+
+</body>
+</html>

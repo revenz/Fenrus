@@ -14,7 +14,12 @@ class SettingsInstance {
     _File = './data/config.json';
     _DefaultFile = './defaultconfig.json';
 
-    constructor(){}
+    uid = '';
+
+    constructor(uid){
+        this.uid = uid;
+        this._File = `./data/configs/${uid}.json`;
+    }
     
     load() {        
         let self = this;
@@ -156,14 +161,20 @@ class SettingsInstance {
 
 class Settings {
     constructor() {
-        throw new Error('Use Settings.getInstance()');
+        throw new Error('Use Settings.getForUser()');
     }
 
-    static getInstance(){
-        if(!SettingsInstance.instance){
-            SettingsInstance.instance = new SettingsInstance();
-        }
-        return SettingsInstance.instance;
+    static async getForUser(uid) 
+    {
+        SettingsInstance.instances = SettingsInstance.instances || {};
+
+        if(SettingsInstance.instances[uid])
+            return SettingsInstance.instances[uid];
+
+        let instance = new SettingsInstance(uid);
+        await instance.load();
+        SettingsInstance.instances[uid] = instance;
+        return instance;
     }
 }
 

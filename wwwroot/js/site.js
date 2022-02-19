@@ -37,6 +37,15 @@ function LiveApp(name, instanceUid, interval, subsequent) {
         }
     }
 
+    var newTimeout = () => {
+        setTimeout(() => LiveApp(name, instanceUid, interval, true), interval + Math.random() + 5);
+    }
+
+    if(subsequent && document.hasFocus() === false){
+        newTimeout();
+        return; // prevent request if the page doesnt have focus
+    }
+
     fetch(`/apps/${encodeURIComponent(name)}/${encodeURIComponent(instanceUid)}/status?name=` + encodeURIComponent(name), {        
         signal: signal
     })
@@ -51,7 +60,7 @@ function LiveApp(name, instanceUid, interval, subsequent) {
         setStatus(name, instanceUid, interval, html, !!subsequent);
     }).catch(error => {
         console.log(name + ' error: ' + error);        
-        setTimeout(() => LiveApp(name, instanceUid, interval, true), interval + Math.random() + 5);
+        newTimeout();
     });
 }
 

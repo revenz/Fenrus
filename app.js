@@ -3,21 +3,28 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 
+// middleware
 const morgan = require('morgan');
+const jwtAuthMiddleware = require('./middleware/JwtAuthMiddleware');
+const cookieParser = require('cookie-parser');
+
+// routers
 const routerHome = require('./routes/HomeRouter');
 const routerApp = require('./routes/AppRouter');
 const routerSettings = require('./routes/SettingsRouter');
 const routerGroups = require('./routes/GroupsRouter');
 const routerGroup = require('./routes/GroupRouter');
+const routerLogin = require('./routes/LoginRouter');
 
 const AppHelper = require('./helpers/appHelper');
+const UserManager = require('./helpers/UserManager');
 const Settings = require('./models/settings')
 
 let appHelper = AppHelper.getInstance();
 appHelper.load();
 
-let settings = Settings.getInstance();
-settings.load();
+let userManager = UserManager.getInstance();
+userManager.load();
 
 if(fs.existsSync('./wwwroot/images/icons') == false){
     fs.mkdirSync('./wwwroot/images/icons');
@@ -31,6 +38,9 @@ const app = express();
 
 // register view engine
 app.set('view engine', 'ejs');
+
+// Import jwt for API's endpoints authentication
+const jwt = require('jsonwebtoken');
 
 // listen on port 
 app.listen(3000);
@@ -50,6 +60,12 @@ app.use(function (req, res, next) {
 app.use(express.static(__dirname + '/wwwroot'));
 
 app.use(morgan('dev'));
+
+app.use(cookieParser());
+
+app.use('/login', routerLogin);
+
+app.use(jwtAuthMiddleware);
 
 app.use('/', routerHome);
 app.use('/apps', routerApp);

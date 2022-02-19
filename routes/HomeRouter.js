@@ -1,16 +1,16 @@
 const express = require('express');
-let Settings = require('../models/settings');
 let Utils = require('../helpers/utils');
 let AppHelper = require('../helpers/appHelper');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
+    console.log('home settings', req.settings);
     res.render('home', 
     { 
         title: 'Home Page', 
         Utils: new Utils(),
-        settings: Settings.getInstance(),
+        settings: req.settings,
         AppHelper: AppHelper.getInstance()
     });    
 });

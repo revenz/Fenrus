@@ -1,4 +1,5 @@
 ﻿@use 'toast';
+@use 'button';
 
 .main-content {
     flex-direction: column;  
@@ -239,29 +240,6 @@
             }
         }
     }
-}
-
-.btn {
-    text-decoration: none;
-    color:var(--button-color);
-    background:var(--button-background);
-    border:solid 1px var(--border-color);
-    border-radius:0.1rem;
-    text-align: center;
-    padding: 0.5rem 0;
-    text-transform: uppercase;
-    width: 8rem;    
-    cursor: pointer;
-    &:hover {
-        background:var(--accent);
-        color:var(--color);
-    }
-    &:disabled {
-        cursor:not-allowed;
-    }
-}
-a.btn {
-    width:calc(8rem - 2px); // for the border
 }
 
 

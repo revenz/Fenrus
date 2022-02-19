@@ -1,0 +1,1 @@
+.btn{text-decoration:none;color:var(--button-color,var(--color,#fff));background:var(--button-background,transparent);border:1px solid;border-radius:.1rem;text-align:center;padding:.5rem 0;text-transform:uppercase;width:8rem;cursor:pointer}.btn:hover{background:var(--accent,#ff0090);color:var(--color,#fff)}.btn:disabled{cursor:not-allowed}a.btn{width:calc(8rem - 2px)}

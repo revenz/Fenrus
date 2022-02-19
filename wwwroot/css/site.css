@@ -323,9 +323,6 @@ body {
   --error: rgb(var(--error-rgb));
   --border-color: rgba(var(--color-rgb), 0.3);
   --input-border: var(---border-color);
-  --button-background-rgb: 255,255,255;
-  --button-background: rgba(var(--button-background-rgb), 0.8);
-  --button-color: rgb(0,0,0);
   --button-color:var(--color);
   --button-background:transparent;
 }

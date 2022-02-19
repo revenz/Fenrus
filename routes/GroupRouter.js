@@ -7,7 +7,7 @@ let ImageHelper = require('../helpers/ImageHelper');
 const router = express.Router();
 
 router.post('/move', (req, res) => {
-    let settings = Settings.getInstance();
+    let settings = req.settings;
     let sourceGroup = settings.findGroupInstance(req.body.SourceUid);
     if(!sourceGroup){
         res.status(404).send('Group not found');
@@ -99,7 +99,7 @@ router.param('uid', (req, res, next, uid) => {
         return;    
     }
 
-    let settings = Settings.getInstance();
+    let settings = req.settings;
     let group = settings.findGroupInstance(uid);
     req.isNew = !group;
     if(!group){

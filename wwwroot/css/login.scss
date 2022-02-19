@@ -1,0 +1,70 @@
+@use 'button';
+
+.main-content {
+    flex-direction: column;  
+}
+
+.login-box {
+    width: min(400px, 70vw);
+    background: rgba(0,0,0,0.6);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    padding: 0.5rem;
+    text-align: center;    
+
+    .title {
+        font-size: 1.5rem;
+        flex-grow: 1;
+        margin: auto;
+    }
+
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        text-align: right;
+
+        * + * {
+            margin-left: 1rem;
+        }
+    }
+}
+.field {
+    margin:1rem 0;
+    .label {
+        text-transform: uppercase;
+    }
+}
+input
+{
+    width: calc(100% - 1rem);
+    padding: 0.5rem;
+    background: var(--input-background);
+    border: solid 1px var(--input-border);
+    color: var(--input-color);
+
+    &:focus {
+        outline: solid 1px var(--accent);
+    }
+}
+.buttons {
+    display: flex;
+    flex-direction: row-reverse;
+    .btn + .btn {
+        margin-right:1rem;
+    }
+}
+
+.error {    
+    text-align: center;
+    color: #ff8484;
+}
