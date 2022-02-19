@@ -31,7 +31,7 @@ function LiveApp(name, instanceUid, interval, subsequent) {
     if(!subsequent){
         let saved = getFromLocalStorage(instanceUid);
         if(saved) {            
-            setStatus(name, instanceUid, interval, saved.html);
+            setStatus(name, instanceUid, interval, saved.html, !!subsequent);
             if(saved.old === false)
                 return; // dont need to refresh
         }
@@ -48,20 +48,29 @@ function LiveApp(name, instanceUid, interval, subsequent) {
     .then(html => {
         if(html == undefined)
             return;
-        setStatus(name, instanceUid, interval, html);
+        setStatus(name, instanceUid, interval, html, !!subsequent);
     }).catch(error => {
-        console.log(name + ' error: ' + error);
+        console.log(name + ' error: ' + error);        
         setTimeout(() => LiveApp(name, instanceUid, interval, true), interval + Math.random() + 5);
     });
 }
 
-function setStatus(name, instanceUid, interval, html){
+function setStatus(name, instanceUid, interval, html, subsequent){
     let ele = document.getElementById(instanceUid).querySelector('.status');
     if (ele && html) {
-        ele.innerHTML = html;
         setInLocalStorage(instanceUid, html);
+        if(/^:carousel:/.test(html)){
+            html = html.substring(10);
+            let index = html.indexOf(':');
+            let carouselId = html.substring(0, index);
+            html = html.substring(index + 1);
+            if(!carouselTimers[carouselId])
+                carouselTimer(carouselId);
+        }
+        ele.innerHTML = html;
     }
-    setTimeout(() => LiveApp(name, instanceUid, interval, true), interval + Math.random() + 5);
+    if((subsequent && interval === -1) === false)
+        setTimeout(() => LiveApp(name, instanceUid, interval, true), interval + Math.random() + 5);
 }
 
 function htmlEncode(text) {
@@ -82,4 +91,52 @@ function newGuid() {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
+}
+
+var carouselTimers = {};
+
+
+function carouselItem(e, id, itemIndex){
+    if(e)
+        e.preventDefault();
+    let carousel = document.getElementById(id);    
+    for(let item of carousel.querySelectorAll('.item')){
+        let visible = item.classList.contains('visible');
+        if(item.id === id + '-' + itemIndex) {
+            item.classList.remove('hidden');
+            if(visible === false)
+                item.classList.add('visible');
+        }
+        else if(visible){
+            item.classList.remove('visible');
+            item.classList.add('hidden');
+        }
+    }
+
+    let controls = carousel.querySelectorAll('.controls a');
+    for(let i=0;i<controls.length;i++){
+        controls[i].classList.remove('selected');
+        if(i === itemIndex)
+            controls[i].classList.add('selected');
+    }
+
+    carouselTimer(id);
+}
+
+function carouselTimer(id) {
+    let existing = carouselTimers[id];
+    if(existing)
+        clearInterval(existing);
+    let timerId = setInterval(() => {
+        let carousel = document.getElementById(id);
+        if(!carousel)
+            return; // happens if the carousel was replaced with newer html
+        
+        let visible = carousel.querySelector('.item.visible');
+        let index = parseInt(visible.id.substring(visible.id.indexOf('-') + 1), 10);
+        ++index;
+        let hasNext = document.getElementById(id + '-' + index);
+        carouselItem(null, id, hasNext ? index : 0);
+    }, 5000);
+    carouselTimers[id] = timerId;
 }

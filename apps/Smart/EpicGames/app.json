@@ -1,6 +1,6 @@
 ﻿{
   "Name": "Epic Games",
-  "Interval":5,
+  "Interval":-1,
   "DefaultUrl":"https://epicgames.com/",
   "Classes": "widget",
   "Properties": [

@@ -1,7 +1,7 @@
 ﻿{
   "Name": "Steam",
   "TestFunction":true,
-  "Interval":5,
+  "Interval":-1,
   "DefaultUrl":"https://steampowered.com/",
   "Classes": "widget",
   "Properties": [

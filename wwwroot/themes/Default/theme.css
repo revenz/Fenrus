@@ -826,6 +826,7 @@ body {
 .db-item.widget {
   width: 100%;
   height: 14rem;
+  position: relative;
 }
 .db-item.widget .fill {
   position: absolute;
@@ -836,6 +837,13 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+.db-item .carousel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 .db-item .status .livestats {
   margin: 2px 0 0;

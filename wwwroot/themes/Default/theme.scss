@@ -144,6 +144,7 @@ $columnWidth:300;
     &.widget {
         width:100%;
         height:14rem;
+        position:relative;
 
         .fill {
             position: absolute;
@@ -155,6 +156,14 @@ $columnWidth:300;
             background-size: cover;
             background-position: center;
         }       
+    }
+
+    .carousel {
+        position: absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
     }
 
 

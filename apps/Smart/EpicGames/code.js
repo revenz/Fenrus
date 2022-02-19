@@ -90,6 +90,15 @@ class EpicGames {
         if(!item)
             return;
 
+        if(this.data.length > 10)
+            this.data.splice(10);
+
+        return args.carousel(this.data.map(x => {
+            return this.getItemHtml(args, x);
+        }));
+    }
+    
+    getItemHtml(args, item) {
         return `
 <div class="epicgames fill" style="background-image:url('${args.Utils.htmlEncode(item.image)}');">
     

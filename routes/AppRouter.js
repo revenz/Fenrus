@@ -43,7 +43,25 @@ function getAppArgs(appInstance){
             }
             html += '</ul>';
             return html;
-        },        
+        },      
+        carousel: (items) => {
+            let id = utils.newGuid().replaceAll('-', '');
+            let html = `:carousel:${id}:<div class="carousel" id="${id}">`;
+            let controls = '<div class="controls" onclick="event.stopImmediatePropagation();return false;">';
+            let count = 0;
+            for(let item of items){
+                let itemId = utils.newGuid();
+                html += `<div class="item ${count === 0 ? 'visible' : ''}" id="${id}-${count}">`;
+                html += item
+                html += '</div>';
+                controls += `<a href="#${itemId}" class="${count === 0 ? 'selected' : ''}" onclick="carouselItem(event, '${id}', ${count})"></a>`;
+                ++count;
+            }
+            controls += '</div>';
+            html += controls;
+            html += '</div>';
+            return html;
+        },
         fetch: (args) => {
             if(typeof(args) === 'string')
                 args = { url: args };

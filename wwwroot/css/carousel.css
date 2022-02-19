@@ -1,0 +1,55 @@
+.carousel {
+  display: flex;
+  flex-direction: row;
+}
+.carousel .item {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: none;
+}
+.carousel .item.visible {
+  display: unset;
+}
+.carousel .controls {
+  position: absolute;
+  bottom: 3px;
+  padding: 0.5rem;
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 8rem);
+  text-align: center;
+  z-index: 5;
+}
+.carousel .controls a {
+  display: inline-block;
+  background-color: var(--color);
+  border-radius: 100%;
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  margin: 0 0.25rem;
+  opacity: 0.7;
+}
+.carousel .controls a:hover {
+  opacity: 0.9;
+}
+.carousel .controls a.selected {
+  background-color: var(--accent);
+}
+.carousel .hidden {
+  transform: translate3d(-90%, 0px, 0px);
+  transition: transform 0.5s ease-out;
+  z-index: 1;
+}
+.carousel .hidden :target {
+  transform: translate3d(0px, 0px, 0px);
+  z-index: 3;
+}
+.carousel .hidden :target ~ .hidden {
+  transform: translate3d(90%, 0px, 0px);
+}
+.carousel .hidden :target + .hidden {
+  z-index: 2;
+}

@@ -44,6 +44,9 @@
   max-width: 4rem;
   height: 4rem;
 }
+.db-item .status .fill {
+  display: none;
+}
 .db-item .content {
   justify-content: center;
   display: flex;

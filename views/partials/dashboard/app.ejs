@@ -2,7 +2,7 @@
     let app = AppHelper.get(model.AppName);
     let target = settings.LinkTarget ?? '_self';
     let title = model.Name ?? model.AppName;
-    let interval = (app.Interval ?? 0) * 1000;
+    let interval = app.Interval === -1 ? -1 : (app.Interval ?? 0) * 1000;
 %>
 
 <% if(app.Css) { %>
@@ -21,7 +21,7 @@
 </a>
 
 
-<% if (interval > 0) { %>
+<% if (interval > 0 || interval === -1) { %>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) { 
             LiveApp('<%= app.Name %>', '<%= model.Uid %>', <%= interval %>);

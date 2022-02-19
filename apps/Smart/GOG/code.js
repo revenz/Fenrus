@@ -59,21 +59,27 @@ class EpicGames {
         if(!item)
             return;
 
+        return args.carousel(this.data.map(x => {
+            return this.getItemHtml(args, x);
+        }));
+    }
+
+    getItemHtml(args, item) {
         return `
-<div class="gog fill" style="background-image:url('${args.Utils.htmlEncode(item.image)}');">
-    
-    <div class="name">${args.Utils.htmlEncode(item.title)}</div>
-    <div class="price">
-        ${item.price}
-    </div>
-    <div class="discount">
-        <div class="down-icon"><span class="icon-arrow-left"></span></div>
-        ${item.discount}
-    </div>
-    <a class="cover-link" target="${args.linkTarget}" href="${item.link}" />
-    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="/apps/GOG/icon.png" /></a>
-</div>
-`;
+        <div class="gog fill" style="background-image:url('${args.Utils.htmlEncode(item.image)}');">
+            
+            <div class="name">${args.Utils.htmlEncode(item.title)}</div>
+            <div class="price">
+                ${item.price}
+            </div>
+            <div class="discount">
+                <div class="down-icon"><span class="icon-arrow-left"></span></div>
+                ${item.discount}
+            </div>
+            <a class="cover-link" target="${args.linkTarget}" href="${item.link}" />
+            <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="/apps/GOG/icon.png" /></a>
+        </div>
+        `;
     }
 }
 
