@@ -51,7 +51,7 @@ function getAppArgs(appInstance){
             let count = 0;
             for(let item of items){
                 let itemId = utils.newGuid();
-                html += `<div class="item ${count === 0 ? 'visible' : ''}" id="${id}-${count}">`;
+                html += `<div class="item ${count === 0 ? 'visible initial' : ''}" id="${id}-${count}">`;
                 html += item
                 html += '</div>';
                 controls += `<a href="#${itemId}" class="${count === 0 ? 'selected' : ''}" onclick="carouselItem(event, '${id}', ${count})"></a>`;

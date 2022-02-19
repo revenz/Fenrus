@@ -15,7 +15,7 @@
   display: inline-flex;
   flex-direction: row;
   width: 18rem;
-  background: #080808b3;
+  background: rgba(8, 8, 8, 0.8);
   background-image: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.25));
   border-radius: 0.5rem;
   color: var(--color);
@@ -26,25 +26,23 @@
   margin: 0.75rem;
 }
 .db-item:hover {
-  box-shadow: 0 0 15px rgba(var(--accent-rgb), 0.7);
+  border-color: var(--accent);
 }
-.db-item:hover .icon {
-  background: rgba(var(--accent-rgb), 0.4);
+.db-item:hover:after {
+  background: rgba(var(--accent-rgb), 0.2);
 }
 .db-item .icon {
   width: 4.1rem;
   justify-content: center;
   display: flex;
   align-items: center;
-  background: rgba(50, 50, 50, 0.3);
-  border-right: solid 1px #333;
   padding: 0.5rem;
 }
 .db-item .icon img {
   max-width: 4rem;
   height: 4rem;
 }
-.db-item .status .fill {
+.db-item .carousel {
   display: none;
 }
 .db-item .content {
@@ -82,6 +80,7 @@
   left: 7px;
   top: -3px;
   color: rgba(255, 255, 255, 0.7);
+  z-index: 2;
 }
 
 .db-group + .db-group {

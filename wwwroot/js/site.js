@@ -107,9 +107,14 @@ function carouselItem(e, id, itemIndex){
             if(visible === false)
                 item.classList.add('visible');
         }
-        else if(visible){
+        else if(visible)
+        {
             item.classList.remove('visible');
             item.classList.add('hidden');
+        }
+        else
+        {
+            item.classList.remove('hidden');
         }
     }
 
