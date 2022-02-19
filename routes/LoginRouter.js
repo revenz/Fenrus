@@ -45,11 +45,13 @@ router.post('/', async (req, res) => {
         JSON.stringify(user),
         'secret--todo---change-this'
     );
-        
+
+    let maxAge = 31 * 24 * 60 * 60 * 1000 // milliseconds, 31 days
+    
     res.cookie("jwt_auth", token, {
-        secure: false,//process.env.NODE_ENV !== "development",
+        secure: false,
         httpOnly: true,
-        maxAge: 31 * 24 * 60 * 60 // seconds, 31 days
+        maxAge: maxAge 
     });
 
     // Pass the data or token in response

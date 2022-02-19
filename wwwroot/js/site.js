@@ -52,6 +52,10 @@ function LiveApp(name, instanceUid, interval, subsequent) {
     .then(res => {
         if(!res.ok)
             throw res;
+        if(res.status === 302){
+            // redirect, to login            
+            window.location.href = '/login';
+        }
         return res.text();
     })
     .then(html => {
