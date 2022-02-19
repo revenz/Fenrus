@@ -11,8 +11,8 @@
             display:unset;
         }
     }
-     .controls 
-     {
+    .controls 
+    {
         position: absolute;
         bottom: 3px;
         padding:0.5rem;
@@ -39,21 +39,5 @@
                 background-color: var(--accent);
             }
         }
-    }
-
-    .hidden {
-        transform: translate3d(-90%, 0px, 0px);
-        transition: transform 0.5s ease-out;
-        z-index: 1;
-        & :target {
-            transform: translate3d(0px, 0px, 0px);
-            z-index: 3;
-            ~ .hidden {
-                transform: translate3d(90%, 0px, 0px);
-            } 
-            + .hidden {
-                z-index: 2;
-            }
-        }        
     }
 }

@@ -277,21 +277,6 @@
 .carousel .controls a.selected {
   background-color: var(--accent);
 }
-.carousel .hidden {
-  transform: translate3d(-90%, 0px, 0px);
-  transition: transform 0.5s ease-out;
-  z-index: 1;
-}
-.carousel .hidden :target {
-  transform: translate3d(0px, 0px, 0px);
-  z-index: 3;
-}
-.carousel .hidden :target ~ .hidden {
-  transform: translate3d(90%, 0px, 0px);
-}
-.carousel .hidden :target + .hidden {
-  z-index: 2;
-}
 
 html {
   font-size: 14px;
