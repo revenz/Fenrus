@@ -32,6 +32,9 @@ if(fs.existsSync('./wwwroot/images/icons') == false){
 if(fs.existsSync('./wwwroot/images/backgrounds') == false){
     fs.mkdirSync('./wwwroot/images/backgrounds');
 }
+if(fs.existsSync('./data/configs') == false){
+    fs.mkdirSync('./data/configs');
+}
 
 // express app
 const app = express();
