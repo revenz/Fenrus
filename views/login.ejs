@@ -94,11 +94,10 @@
                     };
 
                     fetch('/login', options).then(res => res.json()).then((res)=>{           
-                        console.log('login result', res);
                         if(res.error)
                             this.error = res.error;
-                        //else if(res.success)
-                        //    window.location.href = '/';
+                        else if(res.success)
+                            window.location.href = '/';
                     });
 
                 }
