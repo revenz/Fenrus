@@ -6,6 +6,7 @@ router.get('/', (req, res) => {
     res.render('settings', 
     { 
         title: 'Settings',
+        user: req.user,
         settings: req.settings
     });    
 });

@@ -15,10 +15,10 @@ const routerSettings = require('./routes/SettingsRouter');
 const routerGroups = require('./routes/GroupsRouter');
 const routerGroup = require('./routes/GroupRouter');
 const routerLogin = require('./routes/LoginRouter');
+const routerUsers = require('./routes/UsersRouter');
 
 const AppHelper = require('./helpers/appHelper');
 const UserManager = require('./helpers/UserManager');
-const Settings = require('./models/settings')
 
 let appHelper = AppHelper.getInstance();
 appHelper.load();
@@ -75,3 +75,4 @@ app.use('/apps', routerApp);
 app.use('/settings', routerSettings);
 app.use('/groups', routerGroups);
 app.use('/group', routerGroup);
+app.use('/users', routerUsers);

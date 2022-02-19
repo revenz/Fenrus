@@ -38,6 +38,9 @@
         <li><a title="Home" href="/"><span class="icon-home1"></span></a></li>
         <li><a title="Groups" href="/groups"><span class="icon-bars"></span></a></li>
         <li><a title="Settings" href="/settings"><span class="icon-cogs"></span></a></li>
+        <% if(user.IsAdmin) { %>
+            <li><a title="Users" href="/users"><span class="icon-user-circle"></span></a></li>
+        <% } %>
     </ul>
 
 

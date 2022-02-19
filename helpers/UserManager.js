@@ -44,6 +44,15 @@ class UserManagerInstance {
         return user[0];
     }
     
+    getUserByUid(uid)
+    {        
+        let user = this.Users.filter(x => x.Uid === uid);
+        if(!user || user.length === 0)
+            return null;
+
+        return user[0];
+    }
+
     validate(username, password)
     {            
         let user = this.getUser(username);
@@ -73,13 +82,29 @@ class UserManagerInstance {
         return user;
     }
 
+    listUsers(){
+        return this.Users.map(x => {
+            return {
+                Uid: x.Uid,
+                Username: x.Username,
+                IsAdmin: x.IsAdmin
+            }
+        });
+    }
+
     toJson() { 
         return JSON.stringify(this.Users, null, 2);
     }
 
     async save() {
+
+        this.Users.sort((a,b) =>{
+            return a.Username.localeCompare(b.Username);
+        });
+
         let json = this.toJson();
         let self = this;
+
         return new Promise(function (resolve, reject) {
             fs.writeFile(self._File, json, (err, data) => {
                 if(err)
@@ -88,6 +113,12 @@ class UserManagerInstance {
                     resolve();
             });
         });
+    }
+
+    async deleteUser(uid)
+    {
+        this.Users = this.Users.filter(x => x.Uid !== uid);
+        await this.save();        
     }
 }
 

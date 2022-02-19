@@ -258,3 +258,21 @@
         }
     }
 }
+
+.user-list {
+    li {
+        span {
+            margin:auto;
+        }
+    }
+    .list-header {
+        font-weight: bold;
+    }
+    .controls {
+        width:10rem;
+    }
+    .is-admin {
+        width:8rem;
+        text-align: center;
+    }
+}

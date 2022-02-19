@@ -45,7 +45,7 @@
                     fetch('/group/' + encodeURIComponent(uid), { method: 'DELETE'}).then(()=>{
                         document.getElementById(uid).remove(); 
                     });
-                });
+                }).catch(err => {});
             },
             
             dragSrcEl:null,

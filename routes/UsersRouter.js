@@ -1,47 +1,48 @@
 const express = require('express');
 const Utils = require('../helpers/utils');
+const UserManager = require('../helpers/UserManager');
 
 const router = express.Router();
 
+router.use(function (req, res, next) {
+    if(req.user.IsAdmin === false){
+        res.status(401).redirect('/');
+        return;
+    }
+    next();
+});
+
 router.get('/', (req, res) => {
-    res.render('groups', 
+    let userManager = UserManager.getInstance();    
+
+    res.render('users', 
     { 
-        title: 'Groups',        
+        title: 'Users',        
+        user: req.user,
+        users: userManager.listUsers(),
         settings: req.settings,
         Utils: new Utils()
     });
 });
-  
 
-router.post('/order', (req, res) => {
-
-    let model = req.body;
-    if(!model){
-        res.status(400).send('Invalid data');
-        return;
-    }
-    let uids = req.body.uids;
-    let settings = req.settings;
-    settings.Groups = settings.Groups.sort((a, b) => {
-        let aIndex = uids.indexOf(a.Uid);
-        let bIndex = uids.indexOf(b.Uid);
-        if(aIndex == -1 && bIndex == -1){
-            // not in the list
-            aIndex = settings.Groups.indexOf(a);
-            bIndex = settings.Groups.indexOf(b);
-            return aIndex - bIndex;
-        }
-        if(bIndex < 0)
-            return -1;
-        if(aIndex < 0)
-            return 1;
-        return aIndex - bIndex;
-    });
-
-    settings.save();
-
+router.delete('/:uid', async (req, res) => {    
+    let userManager = UserManager.getInstance();  
+    await userManager.deleteUser(req.params.uid);
     res.status(200).send('').end();
 });
-  
+
+router.get('/:uid/set-admin/:isAdmin', async (req, res) => { 
+    let isAdmin = req.params.isAdmin === 'true';
+    
+    let userManager = UserManager.getInstance();  
+    let user = userManager.getUserByUid(req.params.uid);
+    if(!user){
+        res.status(404).send('User not found').end();
+        return;
+    }
+    user.IsAdmin = isAdmin;
+    await userManager.save();
+    res.status(200).send('').end();
+});
 
 module.exports = router;
