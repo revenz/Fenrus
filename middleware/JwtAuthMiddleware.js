@@ -12,6 +12,9 @@ module.exports = async (req, res, next) => {
 
     try{
         const decode = jwt.verify(token, 'secret--todo---change-this');
+        if(typeof(decode) === 'string')
+            decode = JSON.parse(decode);
+            
         if(/^[a-zA-Z0-9\-]+$/.test(decode.Uid) === false)
             throw 'Invalid UID';
 

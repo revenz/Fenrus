@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
     // The jwt.sign method are used
     // to create token
     const token = jwt.sign(
-        user,
+        JSON.stringify(user),
         'secret--todo---change-this'
     );
         
