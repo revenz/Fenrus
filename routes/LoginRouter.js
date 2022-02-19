@@ -1,6 +1,4 @@
-const e = require('express');
 const express = require('express');
-const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const UserManager = require('../helpers/UserManager');
 

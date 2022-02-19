@@ -1,5 +1,4 @@
 const express = require('express');
-let Settings = require('../models/Settings');
 
 const router = express.Router();
 

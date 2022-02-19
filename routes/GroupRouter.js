@@ -1,7 +1,6 @@
 const express = require('express');
 const AppHelper = require('../helpers/appHelper');
 const Utils = require('../helpers/utils');
-let Settings = require('../models/settings');
 let ImageHelper = require('../helpers/ImageHelper');
 
 const router = express.Router();

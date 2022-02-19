@@ -1,6 +1,5 @@
 const express = require('express');
 const Utils = require('../helpers/utils');
-let Settings = require('../models/settings');
 
 const router = express.Router();
 
