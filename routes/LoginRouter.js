@@ -47,8 +47,8 @@ router.post('/', async (req, res) => {
     );
         
     res.cookie("jwt_auth", token, {
-        secure: true,//process.env.NODE_ENV !== "development",
-        //httpOnly: true,
+        secure: false,//process.env.NODE_ENV !== "development",
+        httpOnly: true,
         maxAge: 31 * 24 * 60 * 60 // seconds, 31 days
     });
 
