@@ -74,6 +74,7 @@ body {
         width: 100%;
         text-align: center;
         line-height: $size;
+        transition: transform .2s;
     }
 
     li {
@@ -87,6 +88,11 @@ body {
 
         &:hover {
             background-color: var(--accent);
+            a {                
+                transform: scale(1.4);   
+                position: relative;
+                top:3px;
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ $margin:0;
     color:rgba(255,255,255,0.8);
     margin:$margin;
     padding:$padding;
-    transition: transform .2s; /* Animation */
+    transition: transform .2s;
 
     &:hover {
         background:rgba(var(--accent-rgb), 0.5);        
@@ -58,6 +58,7 @@ $margin:0;
             text-transform: uppercase;
         }
     }
+
     &.small {
         width:$baseSize - (2 * $padding);
         height:$baseSize - (2 * $padding);
@@ -167,10 +168,27 @@ $margin:0;
             }
         }
 
+        &:hover 
+        {
+            background:rgba(0,0,0,0.7);
+            &::before {
+                content: '';
+                z-index:3;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(var(--accent-rgb),.3);
+            }
+            > * {
+                z-index:4;
+            }
+        }
         
         .status {
             .livestats {
-                margin: 2px 0 0;
+                margin: 0.5rem 0 0;
                 padding: 0;
                 display: flex;
                 flex-direction: column;
@@ -188,7 +206,7 @@ $margin:0;
                         color: var(--accent);
                         padding-bottom: 0.1rem;
                         font-weight: bold;
-                        width:5rem;
+                        width:7rem;
                         text-overflow: ellipsis;
                         overflow: hidden;
                     }
@@ -206,7 +224,6 @@ $margin:0;
         grid-column-end: span $multiplier;
         grid-row-end: span $multiplier;
         width:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);
-        height:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);
-        
+        height:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);        
     }
 }

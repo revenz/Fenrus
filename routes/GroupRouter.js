@@ -49,12 +49,13 @@ router.route('/:uid')
     })
     .post(async (req, res) => {
         let model = req.body;
-        if(!model.Name || model._Type !== 'DashboardGroup')
+        if(!model.Name || (model._Type !== 'DashboardGroup' && model._Type))
         {
             res.status(404).send('Invalid group');
             return;
         }
-
+        model._Type = 'DashboardGroup';
+        
         let imageHelper = new ImageHelper();
         for(let item of model.Items || [])
         {

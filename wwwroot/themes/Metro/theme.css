@@ -60,7 +60,6 @@
   margin: 0;
   padding: 0.5rem;
   transition: transform 0.2s;
-  /* Animation */
 }
 .db-item:hover {
   background: rgba(var(--accent-rgb), 0.5);
@@ -180,8 +179,24 @@
   height: 100%;
   object-fit: scale-down;
 }
+.db-item.large:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+.db-item.large:hover::before {
+  content: "";
+  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(var(--accent-rgb), 0.3);
+}
+.db-item.large:hover > * {
+  z-index: 4;
+}
 .db-item.large .status .livestats {
-  margin: 2px 0 0;
+  margin: 0.5rem 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -199,7 +214,7 @@
   color: var(--accent);
   padding-bottom: 0.1rem;
   font-weight: bold;
-  width: 5rem;
+  width: 7rem;
   text-overflow: ellipsis;
   overflow: hidden;
 }

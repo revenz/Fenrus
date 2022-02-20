@@ -374,6 +374,7 @@ body {
   width: 100%;
   text-align: center;
   line-height: 3.5rem;
+  transition: transform 0.2s;
 }
 .main-menu li {
   width: 3.5rem;
@@ -386,6 +387,11 @@ body {
 }
 .main-menu li:hover {
   background-color: var(--accent);
+}
+.main-menu li:hover a {
+  transform: scale(1.4);
+  position: relative;
+  top: 3px;
 }
 
 option {
