@@ -1,3 +1,5 @@
+![icon_128](https://user-images.githubusercontent.com/958400/154829266-62206846-c6ef-4718-9910-2b83eb6aa41c.png)
+
 # Fenrus
 
 
@@ -20,6 +22,42 @@ These are a step above links, they are known to Fenrus, and will have a high-res
 This is where the magic really happens.  These smart apps, or spell casts if you will, have extra information that Fenrus can download and query to display more information about the app.
 This could be as simple as some basic information, or it could be a feature-rich magical experience.
 
+---
+
+## Installation
+
+### Node
+Fenrus is a Node application and requires NodeJS to run.  Once NodeJS is installed you can run Fenrus 
+> node app.js
+
+### Docker
+Docker is the preferred method of installing Fenrus
+```
+docker run -d \
+-name=Fenrus\
+-p 3000:3000 \
+-v /path/to/data:/app/data\
+-v /path/to/logging:/app/wwwroot/images \
+-v /path/to/temp:/temp \
+--restart unless-stopped \
+revenz/fenrus:latest
+```
+```
+services:
+  fenrus:
+    image: revenz/fenrus
+    container_name: fenrus
+    environment:
+      - TZ=Pacific/Auckland
+    volumes:
+      - /path/to/data:/app/data
+      - /path/to/logs:/app/wwwroot/images
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+```
+Fenrus will save all the user confiuration data in the folder /app/data so map this folder outside the docker container.  
+Also it will store custom images under /app/wwwroot/images, so map this folder outside the docker image aswell.
 
 ---
 
