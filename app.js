@@ -34,7 +34,7 @@ if(fs.existsSync('./wwwroot/images/backgrounds') == false){
 }
 if(fs.existsSync('./data/configs') == false){
     fs.mkdirSync('./data/configs');
-}e
+}
 
 // express app
 const app = express();
