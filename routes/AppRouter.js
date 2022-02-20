@@ -10,6 +10,11 @@ const router = express.Router();
 let instances = {};
 
 function getInstance(app, appInstance){    
+    if(!appInstance){
+        // this can be null if testing an app that has not yet been added        
+        let classType = require(`../apps/${app.Directory}/code.js`);
+        return new classType();
+    }
     if(instances[appInstance.Uid])
         return instances[appInstance.Uid];
 
@@ -87,21 +92,6 @@ function getAppArgs(appInstance, settings){
     return funcArgs;
 }
 
-router.get('/:appName/:uid/status', async (req, res) => {    
-    let app = req.app;        
-    let appInstance = req.appInstance;   
-
-    let instance = getInstance(app, appInstance);
-
-    let funcArgs = getAppArgs(appInstance, req.settings);
-    try
-    {
-        let result = await instance.status(funcArgs);        
-        res.send(result || '').end();
-    }
-    catch(err){}
-});
-
 router.get('/:appName/app.css', (req, res) => {    
     let app = req.app;
     let file = `../apps/${app.Directory}/app.css`;
@@ -109,17 +99,10 @@ router.get('/:appName/app.css', (req, res) => {
     res.sendFile(path.resolve(__dirname, file));
 });
 
-router.get('/:appName/:icon', (req, res) => {    
-    let app = req.app;
-    let file = `../apps/${app.Directory}/${app.Icon}`;
-    res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
-    res.sendFile(path.resolve(__dirname, file));
-});
-
 
 router.post('/:appName/test', async (req, res) => {
     let app = req.app;
-    let appInstance = req.appInstance;   
+    let appInstance = req.body.AppInstance;   
     
     let instance = getInstance(app, appInstance);
     
@@ -137,6 +120,30 @@ router.post('/:appName/test', async (req, res) => {
     catch(err){ msg = err; }
     res.status(500).send(msg).end();
 });
+
+router.get('/:appName/:uid/status', async (req, res) => {    
+    let app = req.app;        
+    let appInstance = req.appInstance;   
+
+    let instance = getInstance(app, appInstance);
+
+    let funcArgs = getAppArgs(appInstance, req.settings);
+    try
+    {
+        let result = await instance.status(funcArgs);        
+        res.send(result || '').end();
+    }
+    catch(err){}
+});
+
+
+router.get('/:appName/:icon', (req, res) => {    
+    let app = req.app;
+    let file = `../apps/${app.Directory}/${app.Icon}`;
+    res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
+    res.sendFile(path.resolve(__dirname, file));
+});
+
 
 router.param('appName', (req, res, next, appName) => {
     let app = AppHelper.getInstance().get(appName);
