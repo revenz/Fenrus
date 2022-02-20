@@ -35,14 +35,23 @@ class ImageHelper {
             for(let extension of ['.ico', '.png', '.gif', '.svg']){
                 let attempt = url + file + extension;
                 console.log('trying favicon: ' + attempt);
-                const res = await fetch(attempt);
-                if(res.ok === false)
-                    continue;
-                console.log('Got favicon: ' + attempt);
-                let iconUrl = `/images/icons/${uid}${extension}`;
-                console.log('Saving favicon to: ' + iconUrl);
-                res.body.pipe(fs.createWriteStream('./wwwroot' + iconUrl));
-                return iconUrl;            
+                try
+                {
+                    const res = await fetch(attempt);
+                    if(res.ok === false)
+                        continue;
+                    console.log('Got favicon: ' + attempt);
+                    let iconUrl = `/images/icons/${uid}${extension}`;
+                    console.log('Saving favicon to: ' + iconUrl);
+                    res.body.pipe(fs.createWriteStream('./wwwroot' + iconUrl));
+                    return iconUrl;            
+                }
+                catch(err)
+                {
+                    // fails if cannot reach host
+                    console.warn('Failed to download favicon', err);
+                    return;
+                }
             }        
         }
     }

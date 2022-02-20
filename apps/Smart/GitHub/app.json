@@ -1,6 +1,7 @@
 ﻿{
   "Name": "GitHub",
   "Interval": 300,
+  "DefaultUrl":"https://github.com/revenz/Fenrus/",
   "Properties": [
     {
       "Name": "Branch",
