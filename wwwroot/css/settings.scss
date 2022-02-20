@@ -125,7 +125,7 @@
         width: 100%;
     }
 
-    > ul {
+    ul:not(.value-list) {
         margin: 0;
         padding: 0;
 

@@ -1,11 +1,51 @@
 {
-  "Revision": 9,
+  "Revision": 1,
   "LinkTarget": "_self",
-  "Theme": "",
-  "AccentColor": "#22B14B",
+  "Theme": "Default",
+  "AccentColor": "#FF0090",
   "ShowGroupTitles": true,
   "BackgroundImage": "",
   "Groups": [
+    {
+      "Uid": "aa163b32-b9d7-4a1f-8737-e170091723e5",
+      "Items": [
+        {
+          "_Type": "DashboardApp",
+          "Uid": "33d584ec-8324-4525-8dcb-18d7fd06360f",
+          "Name": "Discord - Fenrus",
+          "Url": "https://discord.gg/xbYK8wFMeU",
+          "Icon": "",
+          "Properties": {},
+          "AppName": "Discord"
+        },
+        {
+          "_Type": "DashboardApp",
+          "Uid": "86496260-3b31-481f-b5cc-98853cfde7bd",
+          "Name": "Patreon - FileFlows",
+          "Url": "https://www.patreon.com/revenz",
+          "Icon": "",
+          "Properties": {},
+          "AppName": "Patreon"
+        },
+        {
+          "_Type": "DashboardApp",
+          "Uid": "eed93c2d-9bdc-465a-84cc-78b8d47bdea4",
+          "Name": "GitHub - Fenrus",
+          "Url": "https://github.com/revenz/Fenrus",
+          "Icon": "",
+          "Size": "large",
+          "Properties": {
+            "branch": ""
+          },
+          "AppName": "GitHub",
+          "DisplayName": "GitHub - Fenrus"
+        }
+      ],
+      "Name": "Fenrus",
+      "Width": "0",
+      "Height": 1,
+      "_Type": "DashboardGroup"
+    },
     {
       "_Type": "DashboardGroup",
       "Name": "FileFlows",
@@ -27,26 +67,17 @@
           "Uid": "e753260d-a031-4e9c-a7d9-60225fd13d1c",
           "Name": "Reddit - FileFlows",
           "Url": "https://reddit.com/r/FileFlows",
-          "Icon": "/apps/Reddit/icon.png",
+          "Icon": "",
           "Properties": {},
           "AppName": "Reddit",
           "DisplayName": "Reddit"
         },
         {
           "_Type": "DashboardApp",
-          "Uid": "33d584ec-8324-4525-8dcb-18d7fd06360f",
-          "Name": "Discord - FileFlows",
-          "Url": "https://discord.gg/xbYK8wFMeU",
-          "Icon": "/apps/Discord/icon.png",
-          "Properties": {},
-          "AppName": "Discord"
-        },
-        {
-          "_Type": "DashboardApp",
           "Uid": "6e7cb2a0-8fe9-485b-9652-dc5e2efc8dce",
           "Name": "YouTube - FileFlows",
           "Url": "https://www.youtube.com/watch?v=4Qu0y5Lem3c&list=PLGMTs-C_ZYk00lTsj6ghqftjykKDlWTDk",
-          "Icon": "/apps/YouTube/icon.png",
+          "Icon": "",
           "Properties": {},
           "AppName": "YouTube"
         },
@@ -55,36 +86,28 @@
           "Uid": "72a0dc02-f263-4e2d-9f12-2cafab585200",
           "Name": "FileFlows Wiki",
           "Url": "https://github.com/revenz/FileFlows/wiki",
-          "Icon": "/apps/Wiki/icon.png",
+          "Icon": "",
           "Properties": {},
           "AppName": "Wiki"
-        },
-        {
-          "_Type": "DashboardApp",
-          "Uid": "2b8b3159-60c6-40d3-b38f-3c8d8fc760f3",
-          "Name": "GitHub - FileFlows",
-          "Url": "https://github.com/revenz/FileFlows",
-          "Icon": "/apps/GitHub/icon.png",
-          "Properties": {},
-          "AppName": "GitHub"
         },
         {
           "_Type": "DashboardApp",
           "Uid": "0eef4385-4983-470f-b64d-3f384aa1c620",
           "Name": "FileFlows - Demo",
           "Url": "https://demo.fileflows.com/",
-          "Icon": "/apps/FileFlows/icon.png",
+          "Icon": "",
           "Properties": {},
           "AppName": "FileFlows"
         },
         {
           "_Type": "DashboardApp",
-          "Uid": "86496260-3b31-481f-b5cc-98853cfde7bd",
-          "Name": "Patreon - FileFlows",
-          "Url": "https://www.patreon.com/revenz",
-          "Icon": "/apps/Patreon/icon.png",
+          "Uid": "2b8b3159-60c6-40d3-b38f-3c8d8fc760f3",
+          "Name": "GitHub - FileFlows",
+          "Url": "https://github.com/revenz/FileFlows",
+          "Icon": "",
+          "Size": "large",
           "Properties": {},
-          "AppName": "Patreon"
+          "AppName": "GitHub"
         }
       ],
       "Uid": "87544728-5584-45ff-8e4b-fcbdbbd27994"
