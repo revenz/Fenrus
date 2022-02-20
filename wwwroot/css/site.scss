@@ -95,6 +95,21 @@ body {
             }
         }
     }
+
+    .li-about:hover a {
+        top:0;
+    }
+    .icon-fenrus {
+        background: url('/favicon.svg');
+        filter: grayscale(1) brightness(12);
+        width: 2rem;
+        height: 2rem;
+        display: inline-block;
+        background-size: contain;
+        background-repeat: no-repeat;
+        position: relative;
+        top:7px;
+    }
 }
 option {
     /* need so our styles dont make these imposssible to read */

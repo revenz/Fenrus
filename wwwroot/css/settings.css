@@ -105,6 +105,20 @@ a.btn {
 .settings-box .setting .value {
   flex-grow: 1;
 }
+.settings-box .setting .value.padtop {
+  margin: 0.5rem 0 0;
+}
+.settings-box .setting .value a {
+  color: var(--color);
+}
+.settings-box .setting .value ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.settings-box .setting .value ul li + li {
+  margin-top: 0.75rem;
+}
 .settings-box h2 {
   margin: 0;
 }
@@ -157,48 +171,48 @@ a.btn {
 .settings-box select {
   width: 100%;
 }
-.settings-box ul {
+.settings-box > ul {
   margin: 0;
   padding: 0;
 }
-.settings-box ul li {
+.settings-box > ul > li {
   list-style: none;
   padding: 1rem;
   border-bottom: 1px solid var(--border-color);
   display: flex;
   flex-direction: row;
 }
-.settings-box ul li .name {
+.settings-box > ul > li .name {
   flex-grow: 1;
 }
-.settings-box ul li .icon-sort + .name {
+.settings-box > ul > li .icon-sort + .name {
   margin-left: 1rem;
 }
-.settings-box ul li .url {
+.settings-box > ul > li .url {
   width: min(28rem, 40vw);
   text-align: left;
 }
-.settings-box ul li .items {
+.settings-box > ul > li .items {
   width: 14rem;
   text-align: center;
 }
-.settings-box ul li .controls {
+.settings-box > ul > li .controls {
   text-align: right;
 }
-.settings-box ul li .controls a, .settings-box ul li .controls span {
+.settings-box > ul > li .controls a, .settings-box > ul > li .controls span {
   margin-left: 0.5rem;
   cursor: pointer;
   color: white;
   opacity: 0.7;
   text-decoration: none !important;
 }
-.settings-box ul li .controls a:hover, .settings-box ul li .controls span:hover {
+.settings-box > ul > li .controls a:hover, .settings-box > ul > li .controls span:hover {
   opacity: 1;
 }
-.settings-box ul li.over {
+.settings-box > ul > li.over {
   border: 3px dotted #666;
 }
-.settings-box ul .mover {
+.settings-box > ul .mover {
   cursor: move;
   margin-right: 0.5rem;
 }

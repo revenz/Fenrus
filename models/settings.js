@@ -2,7 +2,6 @@ const fs = require('fs');
 const ImageHelper = require('../helpers/ImageHelper');
 
 class SettingsInstance {
-
     Revision = 0;
     LinkTarget = '_self';
     Theme = '';

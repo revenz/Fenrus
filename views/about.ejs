@@ -1,0 +1,33 @@
+<%- include('./partials/head.ejs' ) %>
+
+<link rel="stylesheet" href="/css/settings.min.css" />
+
+<div class="settings-box">
+    <div class="header">
+        <span class="title">About</span>
+    </div>
+    <div class="setting">
+        <span class="label">Author</span>
+        <span class="value padtop">John Andrews</span>
+    </div>
+    <div class="setting">
+        <span class="label">Version</span>
+        <span class="value padtop"><%= version %></span>
+    </div>
+    <div class="setting">
+        <span class="label">Website</span>
+        <span class="value padtop"><a href="https://github.com/revenz/Fenrus">https://github.com/revenz/Fenrus</a></span>
+    </div>
+    <div class="setting">
+        <span class="label">3rd Party</span>
+        <span class="value">
+            <ul>
+                <li><a target="_blank" href="https://alpinejs.dev/">AlpineJS</a></li>
+                <li><a target="_blank" href="https://github.com/mattkingshott/iodine">Iodine</a></li>
+                <li><a target="_blank" href="https://heimdall.site/">Heimdall Applicaiton Dashboard</a></li>
+            </ul>
+        </span>
+    </div>
+</div>
+
+<%- include('./partials/footer.ejs') %>

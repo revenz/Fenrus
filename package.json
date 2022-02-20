@@ -1,6 +1,6 @@
 {
-  "name": "NodePortal",
-  "version": "0.0.1",
+  "name": "Fenrus",
+  "version": "0.1.0",
   "description": "",
   "main": "app.js",
   "scripts": {

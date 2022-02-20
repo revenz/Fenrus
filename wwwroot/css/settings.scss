@@ -41,6 +41,20 @@
 
         .value {
             flex-grow: 1;
+            &.padtop {
+                margin:0.5rem 0 0;
+            }
+            a {
+                color:var(--color);
+            }            
+            ul {
+                margin:0;
+                padding:0;
+                list-style: none;
+                li + li {
+                    margin-top:0.75rem;
+                }
+            }
         }
     }
 
@@ -111,11 +125,11 @@
         width: 100%;
     }
 
-    ul {
+    > ul {
         margin: 0;
         padding: 0;
 
-        li {
+        > li {
             list-style: none;
             padding: 1rem;
             border-bottom: 1px solid var(--border-color);

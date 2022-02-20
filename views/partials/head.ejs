@@ -3,10 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.svg">
     <% if(title) { %>
-        <title>HomePortal - <%= title %></title>
+        <title>Fenrus - <%= title %></title>
     <% } else { %>
-        <title>HomePortal</title>
+        <title>Fenrus</title>
     <% } %>
     <link rel="stylesheet" href="/css/site.min.css" />
     <link id="theme-style" rel="stylesheet" href="/themes/<%= settings.Theme || 'Default' %>/theme.min.css" />
@@ -33,7 +34,7 @@
     <% } %> 
 </head>
 
-<body>
+<body>  
     <ul class="main-menu">
         <li><a title="Home" href="/"><span class="icon-home1"></span></a></li>
         <li><a title="Groups" href="/groups"><span class="icon-bars"></span></a></li>
@@ -41,6 +42,7 @@
         <% if(user.IsAdmin) { %>
             <li><a title="Users" href="/users"><span class="icon-user-circle"></span></a></li>
         <% } %>
+        <li class="li-about"><a title="About" href="/about"><span class="icon-fenrus"></span></a></li>
     </ul>
 
 
