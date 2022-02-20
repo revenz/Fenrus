@@ -186,11 +186,6 @@
                 if(this.validate() === false)
                     return;
 
-                if(!this.Group.Items?.length){
-                    messageBox('You must add at least one item to the group', 'Item Required');
-                    return;
-                }
-
                 const options = {
                     method: 'POST',
                     body: JSON.stringify(this.Group),
