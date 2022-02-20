@@ -8,6 +8,9 @@ Fenrus is a magical gateway to the wonderful wizardly world.
 It acts as a magic home page and allows for a quick overview of your favourite apps/sites and lets you organize and quickly navigate this magical world.
 
 ---
+![fenrus_01](https://user-images.githubusercontent.com/958400/154829573-15cc1170-561f-433a-92fc-d0d9daa85902.png)
+
+---
 
 ## Shortcuts
 Shortcuts are broken down into 3 types
