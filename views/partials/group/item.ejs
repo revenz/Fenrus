@@ -44,6 +44,17 @@
                 </span>
             </div> 
             <div class="setting">
+                <span class="label">Size</span>
+                <span class="value">
+                    <select :disabled="isDisabled()" x-model="EditModel.Size" @keydown.enter="saveEditor">
+                        <option value="small">Small</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large</option>
+                        <option value="x-large">X-Large</option>
+                    </select>
+                </span>
+            </div> 
+            <div class="setting">
                 <span class="label">Icon</span>
                 <span class="value">
                     <div class="icon-picker">

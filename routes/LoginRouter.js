@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const UserManager = require('../helpers/UserManager');
+const Settings = require('../models/settings');
 
 const router = express.Router();
 router.get('/', (req, res) => {
@@ -37,6 +38,12 @@ router.post('/', async (req, res) => {
             error: user || (register ? 'Failed to register' : 'Invalid username or password')
         });
         return;
+    }
+
+    if(register === false)
+    {
+        // clear their cached settings if loaded
+        Settings.clearUser(user.Uid);
     }
  
     // The jwt.sign method are used

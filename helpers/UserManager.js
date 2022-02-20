@@ -64,6 +64,7 @@ class UserManagerInstance {
         if(expected !== hash){
             return false;
         }
+
         return user;
     }
 
@@ -119,6 +120,12 @@ class UserManagerInstance {
     {
         this.Users = this.Users.filter(x => x.Uid !== uid);
         await this.save();        
+        let configFile = `./data/configs/${uid}.json`;
+        if(fs.existsSync(configFile)) {
+            fs.unlink(configFile, (err => {
+                console.warn('Failed to delete user config file: ' + configFile + ' => ' + err);
+            }));
+        }
     }
 }
 

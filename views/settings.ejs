@@ -17,8 +17,9 @@
         <span class="label">Theme</span>
         <span class="value">
             <select x-model="model.Theme">
-                <option value="Default">Default</option>
-                <option value="Heimdall">Heimdall</option>
+                <% for(let theme of themes) { %>
+                    <option><%= theme %></option>
+                <% } %>    
             </select>
         </span>
     </div>

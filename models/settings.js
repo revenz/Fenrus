@@ -176,6 +176,12 @@ class Settings {
         SettingsInstance.instances[uid] = instance;
         return instance;
     }
+
+    static clearUser(uid){
+        if(!SettingsInstance.instances)
+            return;
+        delete SettingsInstance.instances[uid];
+    }
 }
 
 

@@ -1,13 +1,19 @@
 const express = require('express');
+const FileHelper = require('../helpers/FileHelper');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+
+    let themes = await FileHelper.getDirectories('./wwwroot/themes');
+
+
     res.render('settings', 
     { 
         title: 'Settings',
         user: req.user,
-        settings: req.settings
+        settings: req.settings,
+        themes: themes
     });    
 });
   
