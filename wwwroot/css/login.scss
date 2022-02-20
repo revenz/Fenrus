@@ -18,24 +18,19 @@
 
 .header {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     padding: 0.5rem;
     text-align: center;    
+
+
+    .logo img {
+        width:6rem;    
+    }
 
     .title {
         font-size: 1.5rem;
         flex-grow: 1;
-        margin: auto;
-    }
-
-    .buttons {
-        display: flex;
-        flex-direction: row;
-        text-align: right;
-
-        * + * {
-            margin-left: 1rem;
-        }
+        margin: 1rem auto 0;        
     }
 }
 .field {
