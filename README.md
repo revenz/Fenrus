@@ -25,8 +25,7 @@ docker run -d \
 -name=Fenrus\
 -p 3000:3000 \
 -v /path/to/data:/app/data\
--v /path/to/logging:/app/wwwroot/images \
--v /path/to/temp:/temp \
+-v /path/to/images:/app/wwwroot/images
 --restart unless-stopped \
 revenz/fenrus:latest
 ```
@@ -39,7 +38,7 @@ services:
       - TZ=Pacific/Auckland
     volumes:
       - /path/to/data:/app/data
-      - /path/to/logs:/app/wwwroot/images
+      - /path/to/images:/app/wwwroot/images
     ports:
       - 3000:3000
     restart: unless-stopped
