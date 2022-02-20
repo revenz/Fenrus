@@ -69,6 +69,11 @@
                                 <span title="Edit" class="icon-edit" @click="editItem(item.Uid)"></span>
                                 <span title="Delete" class="icon-trash" @click="removeItem(item.Uid)"></span>
                             </span>
+                        </template>                        
+                        <template x-if="item._Type === 'DashboardSeparator'">
+                            <span class="controls">
+                                <span title="Delete" class="icon-trash" @click="removeItem(item.Uid, true)"></span>
+                            </span>
                         </template>
                     </li>
                 </template>

@@ -119,13 +119,19 @@
                 if(!this.EditModel.Name)
                     this.EditModel.Name = this.EditorApp.Name;
             },
-            removeItem(uid) {
+            removeItem(uid, separator) {
                 if(this.isDisabled()) return;
 
                 let index = this.Group.Items.findIndex(x => x.Uid === uid);
                 if(index >= 0){
-                    let name = this.Group.Items[index].Name;
-                    confirmPrompt(`Are you sure you want to remove the item '${name}'?`).then(()=>{
+                    let msg;
+                    if(separator)
+                        msg = `Are you sure you want to remove separator?`
+                    else {
+                        let name = this.Group.Items[index].Name;
+                        msg = `Are you sure you want to remove the item '${name}'?`
+                    }
+                    confirmPrompt(msg).then(()=>{
                         this.Group.Items.splice(index, 1);
                     });
                 }
