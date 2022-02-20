@@ -44,20 +44,20 @@ services:
       - 3000:3000
     restart: unless-stopped
 ```
-Fenrus will save all the user confiuration data in the folder /app/data so map this folder outside the docker container.  
-Also it will store custom images under /app/wwwroot/images, so map this folder outside the docker image aswell.
+Fenrus will save all the user configuration data in the folder /app/data so map this folder outside the docker container.  
+Also, it will store custom images under /app/wwwroot/images, so map this folder outside the docker image as well.
 
 ---
 
 ## Getting Started
 
-First you need to register a user, you can do this on the login page by entering a username and password and clicking "Register" if no user with that username exists, a new one will be created.  
+First, you need to register a user, you can do this on the login page by entering a username and password and clicking "Register" if no user with that username exists, a new one will be created.  
 
 ![fenrus_login](https://user-images.githubusercontent.com/958400/154829712-5b7dde64-eb4b-4e1d-9991-29d160d4b057.png)
 
 
 ### Admin
-The first user created in the system will automically be assigned the admin role.
+The first user created in the system will automatically be assigned the admin role.
 This role allows the user to manage other users.
 
 ---
@@ -65,7 +65,7 @@ This role allows the user to manage other users.
 ## Configuration
 
 ### Groups
-Groups contain applications and links.  The Width/Height settings are used by some Themes.   The "Default" theme will use a unit of 1 for the height.   This unit of 1 is size of a "Small" dashboard item.   So in the "Media" group shown in below, the height is set to 4, as it is 4x small items high.  Width is not used in the default theme, it is however used the basic theme.
+Groups contain applications and links.  The Width/Height settings are used by some Themes.   The "Default" theme will use a unit of 1 for the height.   This unit of 1 is the size of a "Small" dashboard item.   So in the "Media" group shown below, the height is set to 4, as it is 4x small items high.  Width is not used in the default theme, it is however used as the basic theme.
 
 ![fenrus_media](https://user-images.githubusercontent.com/958400/154829815-bcb20f43-35bb-4550-a955-319d9216f2be.png)
 
@@ -87,14 +87,17 @@ This could be as simple as some basic information, or it could be a feature-rich
 ## FAQ
 
 Q: What's with all the magic stuff?
+
 A: I named the app Fenrus, Erasmus was taken, from a wizard character from Quest for Glory.  It's hard coming up with a domain, especially for something so generic as a homepage-type app.
 
 
+
 Q: Why is the logo a wolf when it's named after a magic rat?
+
 A: I googled Fenrus, found it's a giant wolf in World of Warcraft, I couldn't find a decent magic icon so I went for the Wolf for now.
 
 ---
 
 ## TODO
-- Implement a application update system, so user do not need to install a new version of Fenrus to get the latest applications
-- Document how to write a application.  These are written in Javascript, and are not complex to write, however there are some gotcha's that I need to document.
+- Implement an application update system, so users do not need to install a new version of Fenrus to get the latest applications
+- Document how to write an application.  These are written in Javascript and are not complex to write, however, there are some gotcha's that I need to document.
