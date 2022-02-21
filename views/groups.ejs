@@ -73,9 +73,9 @@
                 if (this.dragSrcEl != e.target) {
                     // this is the target, where we are adding it
                     // dragSrcEl is the item being dragged
-                    e.target.parentNode.insertBefore(dragSrcEl, e.target);
+                    e.target.parentNode.insertBefore(this.dragSrcEl, e.target);
 
-                    saveLayout();
+                    this.saveLayout();
                 }
                 return false;
             },            

@@ -4,7 +4,6 @@
     background: url('background.jpg');
 }
 
-
 .dashboard {
     $baseSize: 3.75rem;
     width:100%;
@@ -14,9 +13,22 @@
     place-self:self-end;
 }
 
+@media screen and (max-width:720px) {
+    .main-content{
+        padding:1rem;
+    }
+    .main-menu {
+        display:none;
+    }
+    .dashboard
+    {        
+        width: min-content;
+        justify-content: center;
+    }
+}
+
 
 .db-group {
-    background: rgba(0,0,0,0.5);
     margin:1rem;
     text-decoration: unset;
     position: relative;

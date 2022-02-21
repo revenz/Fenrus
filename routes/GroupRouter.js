@@ -59,14 +59,18 @@ router.route('/:uid')
         let imageHelper = new ImageHelper();
         for(let item of model.Items || [])
         {
-            if(item._Type != 'DashboardLink'){
-                item.Icon = '';
-                continue; // only download icons for links
+            console.log('saving item', item);
+            if(item._Type === 'DashboardLink')
+            {
+                if(!item.Icon)
+                    item.Icon = await imageHelper.downloadFavIcon(item.Url, item.Uid);
+                else
+                    item.Icon = await imageHelper.saveImageIfBase64(item.Icon, 'icons', item.Uid);
             }
-            if(!item.Icon)
-                item.Icon = await imageHelper.downloadFavIcon(item.Url, item.Uid);
-            else
+            else if(/data:/.test(item.Icon))                
                 item.Icon = await imageHelper.saveImageIfBase64(item.Icon, 'icons', item.Uid);
+            else if(/^\/apps\//.test(item.Icon))
+                item.Icon = ''; // default icon reset it
         }
 
         let settings = req.settings;

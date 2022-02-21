@@ -1,52 +1,64 @@
-.db-group {
-  width: fit-content;
-  height: fit-content;
+@media screen and (min-width: 720.001px) {
+  .db-group {
+    width: fit-content;
+    height: fit-content;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .db-group .items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 3.75rem);
+    grid-template-rows: repeat(auto-fill, 3.75rem);
+    gap: 0;
+    grid-auto-flow: column dense;
+    height: 100%;
+  }
+  .db-group.height-2 {
+    min-height: 7.5rem;
+    height: 7.5rem;
+  }
+  .db-group.height-3 {
+    min-height: 11.25rem;
+    height: 11.25rem;
+  }
+  .db-group.height-4 {
+    min-height: 15rem;
+    height: 15rem;
+  }
+  .db-group.height-5 {
+    min-height: 18.75rem;
+    height: 18.75rem;
+  }
+  .db-group.height-6 {
+    min-height: 22.5rem;
+    height: 22.5rem;
+  }
+  .db-group.height-7 {
+    min-height: 26.25rem;
+    height: 26.25rem;
+  }
+  .db-group.height-8 {
+    min-height: 30rem;
+    height: 30rem;
+  }
+  .db-group.height-9 {
+    min-height: 33.75rem;
+    height: 33.75rem;
+  }
+  .db-group.height-10 {
+    min-height: 37.5rem;
+    height: 37.5rem;
+  }
 }
-.db-group .items {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 3.75rem);
-  grid-template-rows: repeat(auto-fill, 3.75rem);
-  gap: 0;
-  grid-auto-flow: column dense;
-  height: 100%;
+@media screen and (max-width: 720px) {
+  .db-group {
+    justify-content: center;
+  }
+  .db-group .items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 }
-.db-group.height-2 {
-  min-height: 7.5rem;
-  height: 7.5rem;
-}
-.db-group.height-3 {
-  min-height: 11.25rem;
-  height: 11.25rem;
-}
-.db-group.height-4 {
-  min-height: 15rem;
-  height: 15rem;
-}
-.db-group.height-5 {
-  min-height: 18.75rem;
-  height: 18.75rem;
-}
-.db-group.height-6 {
-  min-height: 22.5rem;
-  height: 22.5rem;
-}
-.db-group.height-7 {
-  min-height: 26.25rem;
-  height: 26.25rem;
-}
-.db-group.height-8 {
-  min-height: 30rem;
-  height: 30rem;
-}
-.db-group.height-9 {
-  min-height: 33.75rem;
-  height: 33.75rem;
-}
-.db-group.height-10 {
-  min-height: 37.5rem;
-  height: 37.5rem;
-}
-
 .separator {
   display: none;
 }
