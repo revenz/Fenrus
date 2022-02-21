@@ -30,9 +30,9 @@
                     <span class="value">
                         <select :disabled="isDisabled()" x-model="EditModel.AppName" @change="appChanged" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="saveEditor">
                             <option value="" disabled>Select An App</option>
-                            <% Object.keys(apps).forEach(function(category) { %>
+                            <% Object.keys(appsGrouped).forEach(function(category) { %>
                                 <optgroup label="<%= category %>">
-                                    <% for(let app of apps[category]) { %>
+                                    <% for(let app of appsGrouped[category]) { %>
                                         <option><%= app.Name %></option>
                                     <% } %>
                                 </optgroup>

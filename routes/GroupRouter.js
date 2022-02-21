@@ -36,14 +36,16 @@ router.route('/:uid')
      .get((req, res) => {
         let settings = req.settings;
         let group = req.group;
-        let apps = AppHelper.getInstance().getAllGrouped();
-        res.render('group', 
+        let apps = AppHelper.getInstance().getAll();
+        let appsGrouped = AppHelper.getInstance().getAllGrouped();
+        res.render('group',
         { 
             title: 'Group',   
             model: group,     
             user: req.user,
             settings: settings,
             apps: apps,
+            appsGrouped: appsGrouped,
             Utils: new Utils()
         });    
     })
