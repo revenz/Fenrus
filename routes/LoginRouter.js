@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const UserManager = require('../helpers/UserManager');
 const Settings = require('../models/settings');
+const GlobalSettings = require('../models/globalsettings');
 
 const router = express.Router();
 router.get('/', (req, res) => {
@@ -50,7 +51,7 @@ router.post('/', async (req, res) => {
     // to create token
     const token = jwt.sign(
         JSON.stringify(user),
-        'secret--todo---change-this'
+        (await GlobalSettings.get()).JWTSecret
     );
 
     let maxAge = 31 * 24 * 60 * 60 * 1000 // milliseconds, 31 days

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-let Settings = require('../models/settings');
+const Settings = require('../models/settings');
+const GlobalSettings = require('../models/globalsettings');
 
 module.exports = async (req, res, next) => {
     var token = req.cookies?.jwt_auth;
@@ -10,7 +11,7 @@ module.exports = async (req, res, next) => {
        
 
     try{
-        const decode = jwt.verify(token, 'secret--todo---change-this');
+        let decode = jwt.verify(token, (await GlobalSettings.get()).JWTSecret);
         if(typeof(decode) === 'string')
             decode = JSON.parse(decode);
 
