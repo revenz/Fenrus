@@ -27,13 +27,13 @@ let userManager = UserManager.getInstance();
 userManager.load();
 
 if(fs.existsSync('./wwwroot/images/icons') == false){
-    fs.mkdirSync('./wwwroot/images/icons');
+    fs.mkdirSync('./wwwroot/images/icons', {recursive: true});
 }
 if(fs.existsSync('./wwwroot/images/backgrounds') == false){
-    fs.mkdirSync('./wwwroot/images/backgrounds');
+    fs.mkdirSync('./wwwroot/images/backgrounds', {recursive: true});
 }
 if(fs.existsSync('./data/configs') == false){
-    fs.mkdirSync('./data/configs');
+    fs.mkdirSync('./data/configs', {recursive: true});
 }
 
 // express app
