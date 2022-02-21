@@ -32,7 +32,7 @@
                             <option value="" disabled>Select An App</option>
                             <% Object.keys(apps).forEach(function(category) { %>
                                 <optgroup label="<%= category %>">
-                                    <% for(let app of apps.Smart) { %>
+                                    <% for(let app of apps[category]) { %>
                                         <option><%= app.Name %></option>
                                     <% } %>
                                 </optgroup>
