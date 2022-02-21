@@ -38,7 +38,6 @@ class AppHelperInstance {
                         if(obj?.Name){
                             obj.Directory = startPath.replace(/\\/g, '/');
                             obj.Directory = obj.Directory.substring(obj.Directory.indexOf('apps/') + 5);
-                            console.log('App \'' + obj.Name + '\' directory: ' + obj.Directory);
                             obj.Icon = obj.Icon ?? 'icon.png';
                             
                             let css = path.join(startPath, 'app.css');

@@ -1,7 +1,8 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const UserManager = require('../helpers/UserManager');
-const Settings = require('../models/settings');
+const Settings = require('../models/Settings');
+const System = require('../models/System');
 
 const router = express.Router();
 router.get('/', (req, res) => {
@@ -45,12 +46,13 @@ router.post('/', async (req, res) => {
         // clear their cached settings if loaded
         Settings.clearUser(user.Uid);
     }
- 
+
+    let system = System.getInstance();
     // The jwt.sign method are used
     // to create token
     const token = jwt.sign(
         JSON.stringify(user),
-        'secret--todo---change-this'
+        system.JwtSecret
     );
 
     let maxAge = 31 * 24 * 60 * 60 * 1000 // milliseconds, 31 days

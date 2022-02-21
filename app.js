@@ -19,13 +19,15 @@ const routerUsers = require('./routes/UsersRouter');
 
 const AppHelper = require('./helpers/appHelper');
 const UserManager = require('./helpers/UserManager');
+const System = require('./models/System');
 
-let appHelper = AppHelper.getInstance();
-appHelper.load();
+// load static configs
+AppHelper.getInstance().load();
+System.getInstance().load();
+UserManager.getInstance().load();
 
-let userManager = UserManager.getInstance();
-userManager.load();
 
+// create default directories
 if(fs.existsSync('./wwwroot/images/icons') == false){
     fs.mkdirSync('./wwwroot/images/icons', {recursive: true});
 }
@@ -53,6 +55,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 
+// set cache control for files
 app.use(function (req, res, next) {
     if (req.url.match(/(css|js|img|images|background|font)/)) {
         res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
@@ -60,14 +63,19 @@ app.use(function (req, res, next) {
     next();
 });
 
+// expose wwwroot files as public
 app.use(express.static(__dirname + '/wwwroot'));
 
+// morgan logs every request coming into the system 
 app.use(morgan('dev'));
 
+// add cookieparser so the JWT cookie can be easily read
 app.use(cookieParser());
 
+// login before the JWT middleware to expose it to the public
 app.use('/login', routerLogin);
 
+// anything past this point will now need to be authenticated against the JWT middleware
 app.use(jwtAuthMiddleware);
 
 app.use('/', routerHome);

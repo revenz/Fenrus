@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-let Settings = require('../models/settings');
+const Settings = require('../models/settings');
+const System = require('../models/System');
 
 module.exports = async (req, res, next) => {
     var token = req.cookies?.jwt_auth;
@@ -8,9 +9,10 @@ module.exports = async (req, res, next) => {
         return;
     } 
        
+    let system = System.getInstance();
 
     try{
-        const decode = jwt.verify(token, 'secret--todo---change-this');
+        const decode = jwt.verify(token, system.JwtSecret);
         if(typeof(decode) === 'string')
             decode = JSON.parse(decode);
 
