@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Settings = require('../models/settings');
+const Settings = require('../models/Settings');
 const System = require('../models/System');
 
 module.exports = async (req, res, next) => {
