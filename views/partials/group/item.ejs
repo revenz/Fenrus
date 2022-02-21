@@ -29,10 +29,17 @@
                     <span class="label">App</span>
                     <span class="value">
                         <select :disabled="isDisabled()" x-model="EditModel.AppName" @change="appChanged" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="saveEditor">
-                            <option value="" disabled>Select An App</option>
-                            <% for(let app of apps) { %>
-                                <option><%= app.Name %></option>
-                            <% } %>
+                            <option value="" disabled>Select An App</option>                            
+                            <optgroup label="Smart">
+                                <% for(let app of apps.filter(x => x.Interval)) { %>
+                                    <option><%= app.Name %></option>
+                                <% } %>
+                            </optgroup>
+                            <optgroup label="Basic">
+                                <% for(let app of apps.filter(x => !x.Interval)) { %>
+                                    <option><%= app.Name %></option>
+                                <% } %>
+                            </optgroup>
                         </select>
                     </span>
                 </div>
