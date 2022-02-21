@@ -6,6 +6,7 @@ const fs = require('fs');
 // middleware
 const morgan = require('morgan');
 const jwtAuthMiddleware = require('./middleware/JwtAuthMiddleware');
+const adminMiddleware = require('./middleware/AdminMiddleware');
 const cookieParser = require('cookie-parser');
 
 // routers
@@ -16,6 +17,7 @@ const routerGroups = require('./routes/GroupsRouter');
 const routerGroup = require('./routes/GroupRouter');
 const routerLogin = require('./routes/LoginRouter');
 const routerUsers = require('./routes/UsersRouter');
+const routerSystem = require('./routes/SystemRouter');
 
 const AppHelper = require('./helpers/appHelper');
 const UserManager = require('./helpers/UserManager');
@@ -83,4 +85,8 @@ app.use('/apps', routerApp);
 app.use('/settings', routerSettings);
 app.use('/groups', routerGroups);
 app.use('/group', routerGroup);
+
+// below are admin only routes, so use the Admin middlweare
+app.use(adminMiddleware);
 app.use('/users', routerUsers);
+app.use('/system', routerSystem);

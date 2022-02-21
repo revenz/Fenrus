@@ -25,6 +25,7 @@ class SystemInstance {
             }     
             if(!self.JwtSecret){
                 self.JwtSecret = crypto.randomBytes(256).toString('base64');
+                self.AllowRegister = true;
                 self.save();
             }
         }

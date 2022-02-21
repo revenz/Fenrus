@@ -1,14 +1,15 @@
-const fsPromises = require("fs/promises");
 const fs = require('fs');
 const Utils = require('../helpers/utils');
 const fetch = require('node-fetch');
 const crypto = require('crypto');
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
 
 class UserManagerInstance {
 
     _File = './data/users.json';
     Users = [];
+    saltRounds = 10;
 
     load() 
     {
@@ -24,8 +25,11 @@ class UserManagerInstance {
         this.Users = typeof(json) === 'object' ? json : JSON.parse(json);
     }
 
+    async hashString(input){
+        return await bcrypt.hash(input, this.saltRounds);
+    }
 
-    hashString(input)
+    hashStringOld(input)
     {
         if(!input || typeof(input) !== 'string')
             return '';
@@ -53,17 +57,27 @@ class UserManagerInstance {
         return user[0];
     }
 
-    validate(username, password)
+    async validate(username, password)
     {            
         let user = this.getUser(username);
         if(!user)
             return false;
+            
+        let matches = await bcrypt.compare(password, user.Password);
+        if(matches)
+            return user;
 
-        let hash = this.hashString(password);
+        // compare SHA256, this code will eventually be removed
+        let hash = this.hashStringOld(password);
         let expected = user.Password.toLowerCase();
-        if(expected !== hash){
+        if(expected !== hash)
+        {
             return false;
         }
+
+        // password saved is a SHA256, update it to bcrypt
+        user.Password = await this.hashString(password);
+        await this.save();
 
         return user;
     }
@@ -75,7 +89,7 @@ class UserManagerInstance {
         
         let user = new User();
         user.Username = username;
-        user.Password = this.hashString(password);
+        user.Password = await this.hashString(password);
         user.Uid = new Utils().newGuid();
         user.IsAdmin = this.Users.length === 0;
         this.Users.push(user);

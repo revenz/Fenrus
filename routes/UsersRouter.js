@@ -4,14 +4,6 @@ const UserManager = require('../helpers/UserManager');
 
 const router = express.Router();
 
-router.use(function (req, res, next) {
-    if(req.user.IsAdmin === false){
-        res.status(401).redirect('/');
-        return;
-    }
-    next();
-});
-
 router.get('/', (req, res) => {
     let userManager = UserManager.getInstance();    
 

@@ -6,9 +6,12 @@ const System = require('../models/System');
 
 const router = express.Router();
 router.get('/', (req, res) => {
+    
+    var system = System.getInstance();
     res.render('login', 
     { 
-        title: 'Login'
+        title: 'Login',
+        allowRegister: system.AllowRegister
     });
 });
 
@@ -16,6 +19,11 @@ router.post('/', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const register = req.body.register;
+
+    var system = System.getInstance();
+    if(!system.AllowRegister && register)
+        register = false; // dont allow registrations
+
     if(!username || !password)
     {        
         res.json({
@@ -47,7 +55,6 @@ router.post('/', async (req, res) => {
         Settings.clearUser(user.Uid);
     }
 
-    let system = System.getInstance();
     // The jwt.sign method are used
     // to create token
     const token = jwt.sign(

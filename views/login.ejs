@@ -43,7 +43,9 @@
             </div>
             <div class="buttons">
                 <button class="btn" @click="login">Login</button>
+                <% if(allowRegister) { %>
                 <button class="btn" @click="register">Register</button>
+                <% } %>
             </div>
         </div>
     </div>
