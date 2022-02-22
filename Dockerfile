@@ -14,7 +14,7 @@ RUN \
   rm -rf ./.git && \
   npm install && \
   npm ci --only=production && \
-  mkdir -p /data && \
+  mkdir -p ./data && \
   apk del --purge \
     build-dependencies
 
