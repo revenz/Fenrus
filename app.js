@@ -7,6 +7,8 @@ const fs = require('fs');
 const morgan = require('morgan');
 const jwtAuthMiddleware = require('./middleware/JwtAuthMiddleware');
 const adminMiddleware = require('./middleware/AdminMiddleware');
+const themeMiddleware = require('./middleware/ThemeMiddleware');
+const fileBlockerMiddleware = require('./middleware/FileBlockerMiddleware');
 const cookieParser = require('cookie-parser');
 
 // routers
@@ -65,8 +67,11 @@ app.use(function (req, res, next) {
     next();
 });
 
+// this prevents any files from themes files being accessed that shouldn't be accessed
+app.use(fileBlockerMiddleware);
 // expose wwwroot files as public
 app.use(express.static(__dirname + '/wwwroot'));
+
 
 // morgan logs every request coming into the system 
 app.use(morgan('dev'));
@@ -79,9 +84,10 @@ app.use('/login', routerLogin);
 
 // anything past this point will now need to be authenticated against the JWT middleware
 app.use(jwtAuthMiddleware);
-
-app.use('/', routerHome);
 app.use('/apps', routerApp);
+
+app.use(themeMiddleware);
+app.use('/', routerHome);
 app.use('/settings', routerSettings);
 app.use('/groups', routerGroups);
 app.use('/group', routerGroup);

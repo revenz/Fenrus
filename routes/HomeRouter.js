@@ -1,20 +1,14 @@
 const express = require('express');
-let Utils = require('../helpers/utils');
-let AppHelper = require('../helpers/appHelper');
 const fsPromises = require("fs/promises");
 const fs = require("fs");
+const common = require('./Common');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render('home', 
-    { 
+    res.render('home', common.getRouterArgs(req, { 
         title: '', 
-        Utils: new Utils(),
-        user: req.user, 
-        settings: req.settings,
-        AppHelper: AppHelper.getInstance()
-    });    
+    }));    
 });
 
 var version;  
@@ -32,14 +26,10 @@ router.get('/about', async (req, res) => {
         if(!version)
             version = 'UNKNOWN';
     }
-    res.render('about', 
-    { 
+    res.render('about', common.getRouterArgs(req, { 
         title: 'About', 
-        user: req.user, 
-        settings: req.settings,
         version: version,
-        AppHelper: AppHelper.getInstance()
-    });    
+    }));      
 });
   
 module.exports = router;

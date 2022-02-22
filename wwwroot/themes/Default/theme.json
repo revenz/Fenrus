@@ -1,0 +1,13 @@
+{
+    "Name":"Default",
+    "Css":[
+        "theme.min.css"
+    ],
+    "Scripts":[
+        "theme.js"
+    ],
+    "Templates":
+    {
+        "Group": "group.ejs"
+    }
+}

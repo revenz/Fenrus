@@ -6,9 +6,15 @@
         for(let item of settings.Groups)
         {
             if (item){ 
-                let type = item._Type.substring(9).toLowerCase();
-                let partialFile = `./partials/dashboard/${type}.ejs`;
+                let type = item._Type.substring(9)
+                let partialFile = '';
                 let itemModel = { model: item, settings: settings, Utils: Utils};
+                if(theme && theme.Templates[type]){
+                    partialFile = `${theme.Directory}/${theme.Templates[type]}`;
+                    itemModel.partialDir = '../../../views/partials/dashboard'; // so theme templates can just refer to partialDir for the dir
+                }
+                else
+                    partialFile = `./partials/dashboard/${type.toLowerCase()}.ejs`;
                 %>
                 <%- include(partialFile, itemModel ) %>
                 <%
@@ -21,6 +27,12 @@
         </div>
     <% } %>
 </div>
+
+<% if(theme?.Scripts?.length) { 
+    for(let script of theme.Scripts) { %>
+        <script src="/themes/<%= theme.DirectoryName %>/<%= script %>"></script>
+ <% }
+} %>
 
 
 <%- include('./partials/footer.ejs') %>
