@@ -59,6 +59,13 @@ class DefaultTheme
         if(maxWidth > 0){
             grp.style.width = maxWidth + 'px';
         }
+
+        // get new bounds, to make sure it didnt shift
+        let newBounds = grp.getBoundingClientRect();
+        if(newBounds.y != grpBounds.y && next){
+            // it shifted, try do this again but pass null for next
+            this.shrinkGroup(grp, previous, null);
+        }
     }
 }
 
