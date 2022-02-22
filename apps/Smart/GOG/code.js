@@ -48,7 +48,7 @@ class EpicGames {
         item.title = data.title;
         item.image = 'https:' + data.image + '_product_tile_304.webp';
         item.id = data.id;        
-        item.link = 'https://www.gog.com/en/' + data.url;
+        item.link = 'https://www.gog.com' + data.url;
         item.price = data.price.isFree ? 'FREE' : currencySymobol + data.price.amount;
         item.discount = data.price.isFree ? '100%' : data.price.discountPercentage + '%';
         return item;
