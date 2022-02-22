@@ -85,6 +85,13 @@ This could be as simple as some basic information, or it could be a feature-rich
 
 ## FAQ
 
+
+Q: What is the default username/password?
+
+A: There is no default user.  Enter a username and password, then click the "Register" button.  This will create a new administrator user.   You can then go ot "System" and turn off registrations if you do not wish to allow open registrations.
+
+
+
 Q: What's with all the magic stuff?
 
 A: I named the app Fenrus, Erasmus was taken, from a wizard character from Quest for Glory.  It's hard coming up with a domain, especially for something so generic as a homepage-type app.
