@@ -54,13 +54,17 @@ $columnWidth:300;
 
 }
 .db-item {
-    display: inline-flex;
-    flex-direction: row;
     width: 18rem;
     color: var(--color);
     position: relative;
     overflow: hidden;
     text-decoration: none;
+    .inner 
+    {        
+        display: inline-flex;
+        flex-direction: row;
+        width:100%;
+    }
 
     &:hover {
         background:rgba(0,0,0,.3);

@@ -168,8 +168,11 @@ $margin:0;
         grid-row-end: span 2;
         width:($baseSize * $width) + (($width - 2)* $margin) - (2 * $padding);
         height:($baseSize * 2) - (2 * $padding);
-        display:flex;
-        flex-direction: row;
+
+        .inner {
+            display:flex;
+            flex-direction: row;
+        }
         .icon {
             width:$baseSize * 1.5;
             height:100%;
@@ -194,7 +197,7 @@ $margin:0;
                 bottom: 0;
                 background: rgba(var(--accent-rgb),.3);
             }
-            > * {
+            .inner > * {
                 z-index:4;
             }
         }
@@ -239,4 +242,39 @@ $margin:0;
         width:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);
         height:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);        
     }
+}
+
+
+
+.db-item.medium {
+    perspective: 1000px; /* Remove this if you don't want the 3D effect */
+      
+      /* This container is needed to position the front and back side */
+      .inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.4s;
+        transform-style: preserve-3d;
+      }
+      
+      /* Do an horizontal flip when you move the mouse over the flip box container */
+      &:hover .inner {
+        transform: rotateY(180deg);
+        top: -0.5rem;
+        right: -0.5rem;
+      }
+      
+      /* Position the front and back side */
+      .icon, .content {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+      }
+            
+      /* Style the back side */
+      .content {
+        transform: rotateY(180deg);
+      }
 }

@@ -3,11 +3,13 @@
 %>
 
 <a class="db-item db-link <%= model.Size || 'medium' %>" href="<%= model.Url%>" title="<%= model.Name %>" onclick="abortRequests()" target="<%= target %>">
-    <div class="icon">
-       <img src="<%= model.Icon || '/favicon.svg' %>" />
+    <div class="inner">
+        <div class="icon">
+        <img src="<%= model.Icon || '/favicon.svg' %>" />
+        </div>
+        <div class="content">
+            <div class="title"><%= model.Name %></div>
+        </div>
+        <div class="arrow"></div>
     </div>
-    <div class="content">
-        <div class="title"><%= model.Name %></div>
-    </div>
-    <div class="arrow"></div>
 </a>

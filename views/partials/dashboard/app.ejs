@@ -10,14 +10,16 @@
 <% } %>
 
 <a id="<%= model.Uid %>" title="<%= model.Name %>" class="db-item db-app <%= model.Size || 'medium' %> <%= app.Classes %>" href="<%= model.Url%>" onclick="abortRequests()" target="<%= target %>">
-    <div class="icon">
-       <img src="<%= model.Icon ? model.Icon : app.Icon ? `/apps/${encodeURIComponent(app.Name)}/${app.Icon}` : '/favicon.svg'  %>" />
+    <div class="inner">
+        <div class="icon">
+        <img src="<%= model.Icon ? model.Icon : app.Icon ? `/apps/${encodeURIComponent(app.Name)}/${app.Icon}` : '/favicon.svg'  %>" />
+        </div>
+        <div class="content">
+            <div class="title"><%= title %></div>
+            <div class="status"></div>
+        </div>
+        <div class="arrow"></div>
     </div>
-    <div class="content">
-        <div class="title"><%= title %></div>
-        <div class="status"></div>
-    </div>
-    <div class="arrow"></div>
 </a>
 
 

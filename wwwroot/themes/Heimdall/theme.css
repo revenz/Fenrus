@@ -12,8 +12,6 @@
 }
 
 .db-item {
-  display: inline-flex;
-  flex-direction: row;
   width: 18rem;
   background: rgba(8, 8, 8, 0.8);
   background-image: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.25));
@@ -24,6 +22,11 @@
   border: solid 1px #333;
   text-decoration: none;
   margin: 0.75rem;
+}
+.db-item .inner {
+  display: inline-flex;
+  flex-direction: row;
+  width: 100%;
 }
 .db-item:hover {
   border-color: var(--accent);

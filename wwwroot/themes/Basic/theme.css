@@ -751,13 +751,16 @@ body {
 }
 
 .db-item {
-  display: inline-flex;
-  flex-direction: row;
   width: 18rem;
   color: var(--color);
   position: relative;
   overflow: hidden;
   text-decoration: none;
+}
+.db-item .inner {
+  display: inline-flex;
+  flex-direction: row;
+  width: 100%;
 }
 .db-item:hover {
   background: rgba(0, 0, 0, 0.3);
