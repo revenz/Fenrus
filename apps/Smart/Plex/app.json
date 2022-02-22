@@ -1,7 +1,7 @@
 ﻿{
   "Name": "Plex",
   "TestFunction": true,
-  "Interval": 20,
+  "Interval": 60,
   "Properties": [
     {
       "Name": "Token",

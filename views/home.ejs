@@ -5,7 +5,7 @@
         
         for(let item of settings.Groups)
         {
-            if (item){ 
+            if (item && item.Enabled !== false){ 
                 let type = item._Type.substring(9)
                 let partialFile = '';
                 let itemModel = { model: item, settings: settings, Utils: Utils};

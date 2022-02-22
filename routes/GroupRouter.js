@@ -32,6 +32,13 @@ router.post('/move', (req, res) => {
     res.status(200).send('');
 });
 
+router.post('/:uid/status/:enabled', (req, res) => {
+    let enabled = req.params.enabled !== false && req.params.enabled !== 'false';
+    req.group.Enabled = enabled;
+    req.settings.save();
+    res.status(200).send('');
+});
+
 router.route('/:uid')
      .get((req, res) => {
         let settings = req.settings;

@@ -86,6 +86,10 @@ class EpicGames {
     }
 
     async status(args) {
+        
+        if(args.size === 'small' || args.size === 'medium')
+            return;
+
         let item = await this.getData(args);
         if(!item)
             return;
@@ -102,11 +106,11 @@ class EpicGames {
         return `
 <div class="epicgames fill" style="background-image:url('${args.Utils.htmlEncode(item.image)}');">
     
-    <div class="name">${args.Utils.htmlEncode(item.title)}</div>
-    <div class="price">
+    <div class="name tr">${args.Utils.htmlEncode(item.title)}</div>
+    <div class="price br">
         ${item.price}
     </div>
-    <div class="discount">
+    <div class="discount bl">
         <div class="down-icon"><span class="icon-arrow-left"></span></div>
         ${item.discount}
     </div>

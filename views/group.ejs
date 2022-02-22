@@ -38,6 +38,7 @@
             EditorTitle: '',
             EditorApp:{},
             isItemSaved: false,
+            NewEdit:false,
             init() {
                 this.focusEditor();
             },
@@ -111,7 +112,10 @@
                     }
                 }    
 
-                this.EditModel.Size = this.EditorApp.DefaultSize || 'medium';
+                if(!this.NewEdit)
+                    this.EditModel.Size = this.EditorApp.DefaultSize || 'medium';
+                else
+                    this.NewEdit = false; // clear it
 
                 if(resetUrl)
                 {
@@ -245,11 +249,12 @@
                 let item = this.Group.Items.filter(x => x.Uid === uid)[0];
                 if(item){
                     this.EditorTitle = 'Edit Item';
-                    this.EditModel = JSON.parse(JSON.stringify(item)); // clone the object so any changes arent written directly to the model                        
+                    this.EditModel = JSON.parse(JSON.stringify(item)); // clone the object so any changes arent written directly to the model                                            
                     if(!this.EditModel.DisplayName)
                         this.EditModel.DisplayName = this.EditModel.Name;
                     if(!this.EditModel.Properties)
                         this.EditModel.Properties = {};
+                    this.NewEdit = this.EditModel._Type === 'DashboardApp';
                     this.appChanged(this.EditModel.AppName);
                     this.EditorOpen = true;
                     this.focusItem();

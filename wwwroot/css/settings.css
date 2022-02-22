@@ -295,16 +295,33 @@ a.btn {
   margin-left: 1rem;
 }
 
-.user-list li span {
-  margin: auto;
-}
 .user-list .list-header {
   font-weight: bold;
 }
 .user-list .controls {
   width: 10rem;
+  position: unset !important;
 }
 .user-list .is-admin {
   width: 8rem;
   text-align: center;
+}
+
+.contains-toggle li span {
+  margin: auto;
+}
+.contains-toggle li .controls {
+  position: relative;
+  top: 0.15rem;
+}
+
+.group-list .no-items {
+  width: 8rem;
+}
+.group-list .enabled {
+  width: 6rem;
+  text-align: center;
+}
+.group-list .controls {
+  width: 4rem;
 }

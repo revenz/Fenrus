@@ -30,6 +30,9 @@ class Steam {
     }
 
     async status(args) {
+        if(args.size === 'small' || args.size === 'medium')
+            return;
+            
         let data = await this.getData(args);
         if(!data)
             return;
@@ -46,9 +49,9 @@ class Steam {
         return `
 <div class="steam fill" style="background-image:url('${args.Utils.htmlEncode(item.image)}');">
     
-    <div class="name">${args.Utils.htmlEncode(item.title)}</div>
-    <div class="price">${item.price}</div>
-    <div class="discount">
+    <div class="name tr">${args.Utils.htmlEncode(item.title)}</div>
+    <div class="price br">${item.price}</div>
+    <div class="discount bl">
         <div class="down-icon"><span class="icon-arrow-left"></span></div>
         ${item.discount}
     </div>

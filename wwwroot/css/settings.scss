@@ -274,19 +274,37 @@
 }
 
 .user-list {
-    li {
-        span {
-            margin:auto;
-        }
-    }
     .list-header {
         font-weight: bold;
     }
     .controls {
         width:10rem;
+        position: unset !important;
     }
     .is-admin {
         width:8rem;
         text-align: center;
+    }
+}
+.contains-toggle li {
+    span {
+        margin:auto;
+    }
+    .controls {
+        position: relative;
+        top:0.15rem;
+    }
+}
+
+.group-list {
+    .no-items {
+        width:8rem;
+    }
+    .enabled {
+        width:6rem;
+        text-align: center;        
+    }
+    .controls {
+        width:4rem;
     }
 }

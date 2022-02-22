@@ -1,6 +1,7 @@
 <%- include('./partials/head.ejs' ) %>
 
 <link rel="stylesheet" href="/css/settings.min.css" />
+<link rel="stylesheet" href="/css/toggle-switchy.css" />
 
 <div class="groups settings-box" x-data="Groups">    
     <div class="header">
@@ -9,7 +10,13 @@
             <a class="btn add" href="/group/<%= Utils.newGuid() %>">Add</a>
         </div>
     </div>
-    <ul class="group-list">
+    <ul class="group-list contains-toggle">
+        <li class="list-header">
+            <span class="name">Name</span>
+            <span class="no-items">Items</span>
+            <span class="enabled">Enabled</span>
+            <span class="controls"></span>
+        </li>
         <% for(let item of settings.Groups) { 
             if(!item)
                 continue;
@@ -19,7 +26,15 @@
         <li id="<%= item.Uid%>" draggable="true" @dragstart="dragStart" @dragenter="dragEnter" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="dragDrop" @dragend="dragEnd"> 
             <span class="icon-sort"></span>
             <span class="name"><%= item.Name %></span>
-            <span class="items"><%= items %></span>
+            <span class="no-items"><%= items %></span>
+            <span class="enabled">                
+                <label for="<%= item.Uid %>Enabled" class="toggle-switchy">
+                    <input type="checkbox" id="<%= item.Uid %>Enabled" <%= item.Enabled !== false ? "checked" : "" %> @change="setStatus('<%= item.Uid %>', event.target.checked)" />
+                    <span class="toggle">
+                        <span class="switch"></span>
+                    </span>
+                </label>
+            </span>
             <span class="controls">
                 <a title="Edit" class="icon-edit" href="/group/<%= item.Uid %>"></a>
                 <span title="Delete" class="icon-trash" @click="deleteGroup('<%= item.Uid %>')"></span>
@@ -46,6 +61,10 @@
                         document.getElementById(uid).remove(); 
                     });
                 }).catch(err => {});
+            },
+            setStatus(uid, enabled){
+
+                fetch('/group/' + encodeURIComponent(uid) + '/status/' + (enabled === true), { method: 'POST'});
             },
             
             dragSrcEl:null,

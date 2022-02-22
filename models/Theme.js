@@ -46,7 +46,7 @@ class Theme {
             theme[k] = obj[k];
         }); 
 
-        console.log('############## THEME', theme);
+        console.log('# THEME', theme);
         
         if(!theme.Templates)
             theme.Templates = {
