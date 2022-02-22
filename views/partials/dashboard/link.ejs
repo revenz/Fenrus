@@ -2,7 +2,7 @@
     let target = settings.LinkTarget ?? '_self';
 %>
 
-<a class="db-item db-link <%= model.Size || 'medium' %>" href="<%= model.Url%>" onclick="abortRequests()" target="<%= target %>">
+<a class="db-item db-link <%= model.Size || 'medium' %>" href="<%= model.Url%>" title="<%= model.Name %>" onclick="abortRequests()" target="<%= target %>">
     <div class="icon">
        <img src="<%= model.Icon || '/favicon.svg' %>" />
     </div>

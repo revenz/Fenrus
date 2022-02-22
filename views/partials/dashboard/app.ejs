@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<%= app.Css %>" />    
 <% } %>
 
-<a id="<%= model.Uid %>" class="db-item db-app <%= model.Size || 'medium' %> <%= app.Classes %>" href="<%= model.Url%>" onclick="abortRequests()" target="<%= target %>">
+<a id="<%= model.Uid %>" title="<%= model.Name %>" class="db-item db-app <%= model.Size || 'medium' %> <%= app.Classes %>" href="<%= model.Url%>" onclick="abortRequests()" target="<%= target %>">
     <div class="icon">
        <img src="<%= model.Icon ? model.Icon : app.Icon ? `/apps/${encodeURIComponent(app.Name)}/${app.Icon}` : '/favicon.svg'  %>" />
     </div>

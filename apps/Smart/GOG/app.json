@@ -2,6 +2,7 @@
   "Name": "GOG",
   "Interval":-1,
   "DefaultUrl":"https://gog.com/",
+  "DefaultSize":"large",
   "Classes": "widget",
   "Properties": [
     {
