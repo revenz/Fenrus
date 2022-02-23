@@ -236,11 +236,37 @@ $margin:0;
     }
 
     &.x-large{
+        $multiplier: 4;
+        grid-column-end: span $multiplier;
+        grid-row-end: span $multiplier;
+        width:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);
+        height:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);        
+        .icon > img 
+        {            
+            width: 100%;
+            height: 100%;
+            object-fit: scale-down;
+        }
+        .title {
+            display:none;
+        }
+    }
+
+    &.xx-large{
         $multiplier: 6;
         grid-column-end: span $multiplier;
         grid-row-end: span $multiplier;
         width:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);
         height:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);        
+        .icon > img 
+        {            
+            width: 100%;
+            height: 100%;
+            object-fit: scale-down;
+        }
+        .title {
+            display:none;
+        }
     }
 }
 

@@ -234,10 +234,32 @@
   color: var(--color);
 }
 .db-item.x-large {
+  grid-column-end: span 4;
+  grid-row-end: span 4;
+  width: 14rem;
+  height: 14rem;
+}
+.db-item.x-large .icon > img {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+.db-item.x-large .title {
+  display: none;
+}
+.db-item.xx-large {
   grid-column-end: span 6;
   grid-row-end: span 6;
   width: 21.5rem;
   height: 21.5rem;
+}
+.db-item.xx-large .icon > img {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+.db-item.xx-large .title {
+  display: none;
 }
 
 .db-item.medium {

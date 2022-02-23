@@ -9,13 +9,10 @@
 
         if(!data.MediaContainer)
             return;
-        
-        if(args.size === 'x-large' || args.size == 'large'){
+        if(args.size.indexOf('large') >= 0)
             return this.statusXLarge(args, data);
-        }
-        else{
+        else
             return await this.statusMedium(args, data);
-        }
     }
 
     statusXLarge(args, data){
@@ -34,8 +31,9 @@
                 image: url + md.art + '?X-Plex-Token='  + args.properties['token']
             })
         }
-        if(items.length > 10)
-        items.splice(10);
+        let max = args.size === 'x-large' ? 7 : 10;
+        if(items.length > max)
+            items.splice(max);
         
         return args.carousel(items.map(x => {
             return this.getItemHtml(args, x);
