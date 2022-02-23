@@ -30,7 +30,7 @@
 
 <% if(theme?.Scripts?.length) { 
     for(let script of theme.Scripts) { %>
-        <script src="/themes/<%= theme.DirectoryName %>/<%= script %>"></script>
+        <script src="/themes/<%= theme.DirectoryName %>/<%= script %>?version=<%= version %>"></script>
  <% }
 } %>
 

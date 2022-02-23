@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const UserManager = require('../helpers/UserManager');
 const Settings = require('../models/Settings');
 const System = require('../models/System');
+const Globals = require('../Globals')
 
 const router = express.Router();
 router.get('/', (req, res) => {
@@ -11,6 +12,7 @@ router.get('/', (req, res) => {
     res.render('login', 
     { 
         title: 'Login',
+        version: Globals.Version,
         allowRegister: system.AllowRegister
     });
 });

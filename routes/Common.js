@@ -1,6 +1,7 @@
 
 let Utils = require('../helpers/utils');
 let AppHelper = require('../helpers/appHelper');
+let Globals = require("../Globals");
 
 class Common
 {
@@ -11,6 +12,7 @@ class Common
             user: req.user, 
             settings: req.settings,
             Utils: new Utils(),
+            version: Globals.Version,
             AppHelper: AppHelper.getInstance()
         }
 

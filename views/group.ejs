@@ -1,7 +1,7 @@
 <%- include('./partials/head.ejs' ) %>
 
 <link rel="stylesheet" href="/css/toggle-switchy.css" />
-<link rel="stylesheet" href="/css/settings.min.css" />
+<link rel="stylesheet" href="/css/settings.min.css?version=<%= version %>" />
 
 <div x-data="Group">
     <%- include('./partials/group/editor.ejs' ) %>
@@ -12,7 +12,7 @@
 <input type="hidden" id="GroupData" value="<%= JSON.stringify(model) %>" />
 <input type="hidden" id="Apps" value="<%= JSON.stringify(apps) %>" />
 
-<script src="/js/settings.js"></script>
+<script src="/js/settings.js?version=<%= version %>"></script>
 <script src="/js/alpinejs-3.8.1.min.js" defer></script>
 <script src="/js/iodine.min.js" defer></script>
 
