@@ -86,10 +86,17 @@
   margin-left: 0.5rem;
   flex-direction: column;
   flex-grow: 1;
+  overflow: hidden;
 }
 .db-item .content > .title {
   font-size: 1.1rem;
   text-transform: uppercase;
+}
+.db-item .livestats li .title.span {
+  width: 100% !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .db-item.small {
   width: 2.75rem;
@@ -180,11 +187,13 @@
 .db-item.large .inner {
   display: flex;
   flex-direction: row;
+  height: 100%;
 }
 .db-item.large .icon {
-  width: 5.625rem;
+  width: 6.50625rem;
+  min-width: 6.50625rem;
   height: 100%;
-  margin-right: 1rem;
+  margin: auto 1rem auto 0;
 }
 .db-item.large .icon img {
   width: 100%;

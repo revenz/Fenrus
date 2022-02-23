@@ -2,6 +2,7 @@ const express = require('express');
 const AppHelper = require('../helpers/appHelper');
 const Utils = require('../helpers/utils');
 let ImageHelper = require('../helpers/ImageHelper');
+const common = require('./Common');
 
 const router = express.Router();
 
@@ -41,18 +42,14 @@ router.post('/:uid/status/:enabled', (req, res) => {
 
 router.route('/:uid')
      .get((req, res) => {
-        let settings = req.settings;
         let group = req.group;
         let apps = AppHelper.getInstance().getList();
-        res.render('group', 
+        res.render('group', common.getRouterArgs(req, 
         { 
             title: 'Group',   
-            model: group,     
-            user: req.user,
-            settings: settings,
-            apps: apps,
-            Utils: new Utils()
-        });    
+            model: group,
+            apps: apps            
+        }));    
     })
     .post(async (req, res) => {
         let model = req.body;

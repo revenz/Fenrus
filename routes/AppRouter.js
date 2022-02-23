@@ -42,8 +42,13 @@ function getAppArgs(appInstance, settings){
                     else
                         item[i] = item[i].substring(6);
                 }
-
-                html += `<li><span class="title">${item[0]}</span><span class="value">${item[1]}</span></li>`;
+                if(item.length ===  1)
+                {
+                    // special case, this is doing a span
+                    html += `<li><span class="title span">${item[0]}</span</li>`;
+                } else {
+                    html += `<li><span class="title">${item[0]}</span><span class="value">${item[1]}</span></li>`;
+                }
             }
             html += '</ul>';
             return html;

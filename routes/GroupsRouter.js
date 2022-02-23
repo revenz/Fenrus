@@ -1,16 +1,14 @@
 const express = require('express');
 const Utils = require('../helpers/utils');
+const common = require('./Common');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render('groups', 
+    res.render('groups', common.getRouterArgs(req, 
     { 
-        title: 'Groups',
-        user: req.user,
-        settings: req.settings,
-        Utils: new Utils()
-    });
+        title: 'Groups'
+    }));
 });
   
 
