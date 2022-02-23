@@ -2,6 +2,7 @@ const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const Globals = require('./Globals');
 
 // middleware
 const morgan = require('morgan');
@@ -29,6 +30,16 @@ const System = require('./models/System');
 AppHelper.getInstance().load();
 System.getInstance().load();
 UserManager.getInstance().load();
+
+// set the version number
+if(fs.existsSync('./buildnum.txt')){            
+    let build = fs.readFileSync('./buildnum.txt', { encoding: 'utf-8'});
+    if(build){
+        build = build.trim();
+        Globals.Version = `${Globals.MajorVersion}.${Globals.MinorVersion}.${Globals.Revision}.${build}`;
+        console.log('Version: ', Globals.Version);
+    }
+}
 
 
 // create default directories
