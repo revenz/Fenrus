@@ -8,7 +8,8 @@ function abortRequests() {
 
 function getFromLocalStorage(instaceUid){
     try{
-        let item = JSON.parse(localStorage.getItem(instaceUid));
+        let size = getItemSize(instanceUid);
+        let item = JSON.parse(localStorage.getItem(instaceUid + '-' + size));
         if(!item?.date)
             return;
         if(item.date < (new Date().getTime() - 60000))
@@ -18,8 +19,26 @@ function getFromLocalStorage(instaceUid){
     catch(err) { return; }
 }
 
-function setInLocalStorage(instanceUid, html){
-    localStorage.setItem(instanceUid, JSON.stringify({
+function getItemSize(instanceUid)
+{
+    let ele = document.getElementById(instanceUid);
+    if(!ele)
+        return '';
+    if(ele.classList.contains('x-large'))
+        return 'x-large'
+    if(ele.classList.contains('large'))
+        return 'large'
+    if(ele.classList.contains('medium'))
+        return 'medium'
+    if(ele.classList.contains('small'))
+        return 'small';
+    return '';
+}
+
+function setInLocalStorage(instanceUid, html)
+{
+    let size = getItemSize(instanceUid);
+    localStorage.setItem(instanceUid + '-' + size, JSON.stringify({
         date: new Date().getTime(),
         html: html
     }));
