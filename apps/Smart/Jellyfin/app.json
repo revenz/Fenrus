@@ -1,0 +1,20 @@
+{
+  "Name": "Jellyfin",
+  "Icon": "icon.png",
+  "TestFunction": true,
+  "Interval": 60,
+  "DefaultSize":"x-large",
+  "Properties": [
+    {
+      "Name": "Username",
+      "Id": "username",
+      "Type": "string"
+    },
+    {
+      "Name": "Password",
+      "Id": "password",
+      "Type": "password"
+    }
+  ]
+
+}
