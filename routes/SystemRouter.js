@@ -1,6 +1,7 @@
 const express = require('express');
 const FileHelper = require('../helpers/FileHelper');
 const System = require('../models/System');
+const common = require('./Common');
 
 const router = express.Router();
 
@@ -10,14 +11,11 @@ router.get('/', async (req, res) => {
 
     var system = System.getInstance();
 
-    res.render('system', 
-    { 
+    res.render('system', common.getRouterArgs(req, { 
         title: 'System',
         system: system,
-        user: req.user,
-        settings: req.settings,
         themes: themes
-    });    
+    }));    
 });
   
 

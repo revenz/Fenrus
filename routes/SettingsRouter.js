@@ -1,5 +1,6 @@
 const express = require('express');
 const FileHelper = require('../helpers/FileHelper');
+const common = require('./Common');
 
 const router = express.Router();
 
@@ -7,14 +8,10 @@ router.get('/', async (req, res) => {
 
     let themes = await FileHelper.getDirectories('./wwwroot/themes');
 
-
-    res.render('settings', 
-    { 
+    res.render('settings', common.getRouterArgs(req, { 
         title: 'Settings',
-        user: req.user,
-        settings: req.settings,
         themes: themes
-    });    
+    }));    
 });
   
 

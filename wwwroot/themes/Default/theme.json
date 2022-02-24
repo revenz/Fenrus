@@ -9,5 +9,31 @@
     "Templates":
     {
         "Group": "group.ejs"
-    }
+    },
+    "Settings":[
+        {
+            "Name":"Placement",
+            "Type":"Select",
+            "Default":"bottom-left",
+            "Options":
+            [
+                { 
+                    "Label": "Bottom Left",
+                    "Value":"bottom-left"
+                },
+                { 
+                    "Label": "Bottom Right",
+                    "Value":"bottom-right"
+                },
+                { 
+                    "Label": "Top Right",
+                    "Value":"top-right"
+                },
+                { 
+                    "Label": "Top Left",
+                    "Value":"top-left"
+                }
+            ]
+        }
+    ]
 }

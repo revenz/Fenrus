@@ -1,20 +1,16 @@
 const express = require('express');
-const Utils = require('../helpers/utils');
 const UserManager = require('../helpers/UserManager');
+const common = require('./Common');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
     let userManager = UserManager.getInstance();    
 
-    res.render('users', 
-    { 
+    res.render('users', common.getRouterArgs(req, { 
         title: 'Users',        
-        user: req.user,
-        users: userManager.listUsers(),
-        settings: req.settings,
-        Utils: new Utils()
-    });
+        users: userManager.listUsers()
+    }));
 });
 
 router.delete('/:uid', async (req, res) => {    
