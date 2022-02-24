@@ -1,0 +1,83 @@
+<%- include('./partials/head.ejs' ) %>
+
+<link rel="stylesheet" href="/css/settings.min.css?version=<%= version %>" />
+<link rel="stylesheet" href="/css/toggle-switchy.css" />
+
+<input type="hidden" id="ThemeModel" value="<%= JSON.stringify(themeModel) %>" />
+
+<div class="theme settings-box" x-data="Theme">
+    <div class="header">
+        <span class="title">Theme Settings: <%= theme.Name %></span>
+        <div class="buttons">
+            <button class="btn" @click="save">Save</button>
+        </div>
+    </div>
+    <% 
+        for(let setting of model.Settings) { %>
+        <div class="setting">
+            <span class="label"><%= setting.Name %></span>
+            <span class="value">
+                <% if(setting.Type === 'Boolean') { %>
+                    <label for="<%= setting.Name %>" class="toggle-switchy">
+                        <input type="checkbox" id="<%= setting.Name %>"  x-model="model.<%= setting.Name %>"/>
+                        <span class="toggle">
+                            <span class="switch"></span>
+                        </span>
+                    </label>
+                <% } else if(setting.Type === 'Select') { %>
+                    <select x-model="model.<%= setting.Name %>">
+                        <% for(let opt of setting.Options ) { %>
+                            <option value="<%= opt.Value %>"><%= opt.Label %></option>
+                        <% } %>
+                    </select>
+                <% } %>
+            </span>
+        </div>
+    <% } %>
+</div>
+
+<script src="/js/settings.js?version=<%= version %>"></script>
+<script src="/js/alpinejs-3.8.1.min.js" defer></script>
+<script src="/js/iodine.min.js" defer></script>
+
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        let json = document.getElementById('ThemeModel').value;
+        let themeModel = JSON.parse(json)
+        Alpine.data('Theme', () => ({
+            model: themeModel,
+            validate() {
+                let inputs = [...document.querySelectorAll(`.settings-box [data-rules]`)];
+                let valid = true;
+                inputs.map((input) => {
+                    if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
+                        valid = false;
+                        input.classList.add("invalid");
+                    }else{
+                        input.classList.remove("invalid");
+                    }
+                });
+                return valid;
+            },
+            save() {
+                if(!this.validate())
+                    return;
+                    
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify(this.model),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                fetch('/theme-settings', options).then(()=>{
+                    window.location.reload(true);
+                });
+            }
+        }))
+    });
+</script>
+
+<%- include('./partials/footer.ejs') %>

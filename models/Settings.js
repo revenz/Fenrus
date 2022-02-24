@@ -9,6 +9,7 @@ class SettingsInstance {
     ShowGroupTitles = true;
     BackgroundImage = '';
     Groups = [];
+    ThemeSettings = {};
 
     _File = './data/config.json';
     _DefaultFile = './defaultconfig.json';
@@ -93,6 +94,7 @@ class SettingsInstance {
                 AccentColor: this.AccentColor,
                 ShowGroupTitles: this.ShowGroupTitles,
                 BackgroundImage: this.BackgroundImage,
+                ThemeSettings: this.ThemeSettings
             });
         }
         return JSON.stringify({                
@@ -102,6 +104,7 @@ class SettingsInstance {
             AccentColor: this.AccentColor,
             ShowGroupTitles: this.ShowGroupTitles,
             BackgroundImage: this.BackgroundImage,
+            ThemeSettings: this.ThemeSettings,
             Groups: this.Groups
         }, null, 2);
     }

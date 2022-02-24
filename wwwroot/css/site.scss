@@ -65,6 +65,14 @@ body {
     font-size: 1.5rem;
 
     $size: 3.5rem;
+    transform: translateY(calc(100% - 3.5rem));
+    display: flex;
+    flex-direction: column-reverse;
+    transition: transform .4s;
+
+    &:hover {
+        transform: translateY(0);
+    }
 
     a {
         color: var(--color);
@@ -96,8 +104,11 @@ body {
         }
     }
 
-    .li-about:hover a {
-        top:0;
+    .li-about
+    {
+        &:hover a {
+            top:0;
+        }
     }
     .icon-fenrus {
         background: url('/favicon.svg');

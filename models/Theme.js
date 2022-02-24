@@ -1,4 +1,5 @@
 const fs = require('fs');
+const FileHelper = require('../helpers/FileHelper');
 
 class Theme {
     Name = '';
@@ -7,6 +8,7 @@ class Theme {
     Templates = {};
     Directory = '';
     DirectoryName= '';
+    Settings = [];
 
     constructor(name){
         this.Name = name;
@@ -56,6 +58,17 @@ class Theme {
             };
         
         return theme;
+    }
+
+    static async getThemes(){
+        let themeDirs = await FileHelper.getDirectories('./wwwroot/themes');
+        let themes = [];
+        for(let dir of themeDirs){
+            let theme = Theme.getTheme(dir);
+            console.log('got theme', theme);
+            themes.push(theme);
+        }
+        return themes;
     }
 }
 

@@ -1,8 +1,8 @@
 @charset "UTF-8";
 @font-face {
   font-family: "icomoon";
-  src: url("/fonts/icomoon.eot?i76gfk");
-  src: url("/fonts/icomoon.eot?i76gfk#iefix") format("embedded-opentype"), url("/fonts/icomoon.ttf?i76gfk") format("truetype"), url("/fonts/icomoon.woff?i76gfk") format("woff"), url("/fonts/icomoon.svg?i76gfk#icomoon") format("svg");
+  src: url("/fonts/icomoon.eot?d1vm3p");
+  src: url("/fonts/icomoon.eot?d1vm3p#iefix") format("embedded-opentype"), url("/fonts/icomoon.ttf?d1vm3p") format("truetype"), url("/fonts/icomoon.woff?d1vm3p") format("woff"), url("/fonts/icomoon.svg?d1vm3p#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -73,8 +73,16 @@
   content: "";
 }
 
+.icon-tint:before {
+  content: "";
+}
+
 .icon-share-square-o:before {
   content: "";
+}
+
+.icon-arrows:before {
+  content: "";
 }
 
 .icon-chevron-left:before {
@@ -93,6 +101,22 @@
   content: "";
 }
 
+.icon-expand:before {
+  content: "";
+}
+
+.icon-compress:before {
+  content: "";
+}
+
+.icon-bar-chart:before {
+  content: "";
+}
+
+.icon-bar-chart-o:before {
+  content: "";
+}
+
 .icon-cogs:before {
   content: "";
 }
@@ -101,8 +125,28 @@
   content: "";
 }
 
+.icon-sign-out:before {
+  content: "";
+}
+
 .icon-github:before {
   content: "";
+}
+
+.icon-bell-o:before {
+  content: "";
+}
+
+.icon-globe:before {
+  content: "";
+}
+
+.icon-group:before {
+  content: "";
+}
+
+.icon-users:before {
+  content: "";
 }
 
 .icon-bars:before {
@@ -131,6 +175,30 @@
 
 .icon-unsorted:before {
   content: "";
+}
+
+.icon-dashboard:before {
+  content: "";
+}
+
+.icon-tachometer:before {
+  content: "";
+}
+
+.icon-sitemap:before {
+  content: "";
+}
+
+.icon-puzzle-piece:before {
+  content: "";
+}
+
+.icon-sliders:before {
+  content: "";
+}
+
+.icon-paint-brush:before {
+  content: "";
 }
 
 .icon-user-circle:before {
