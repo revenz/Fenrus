@@ -21,7 +21,7 @@
             "Maximum":32
         },
         {
-            "Name":"Vertical",
+            "Name":"Horizontal",
             "Type":"Boolean"
         },
         {

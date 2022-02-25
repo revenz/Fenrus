@@ -47,233 +47,237 @@
     height: 37.5rem;
   }
 
-  .dashboard.vertical {
+  .dashboard.horizontal {
     padding: 1rem;
     display: flex;
     flex-direction: column;
     height: calc(100vh - 2rem);
     overflow-y: hidden;
   }
-  .dashboard.vertical.width-6 .db-group {
+  .dashboard.horizontal.width-6 .db-group {
     min-width: 22.5rem;
     width: 22.5rem;
   }
-  .dashboard.vertical.width-7 .db-group {
+  .dashboard.horizontal.width-7 .db-group {
     min-width: 26.25rem;
     width: 26.25rem;
   }
-  .dashboard.vertical.width-8 .db-group {
+  .dashboard.horizontal.width-8 .db-group {
     min-width: 30rem;
     width: 30rem;
   }
-  .dashboard.vertical.width-9 .db-group {
+  .dashboard.horizontal.width-9 .db-group {
     min-width: 33.75rem;
     width: 33.75rem;
   }
-  .dashboard.vertical.width-10 .db-group {
+  .dashboard.horizontal.width-10 .db-group {
     min-width: 37.5rem;
     width: 37.5rem;
   }
-  .dashboard.vertical.width-11 .db-group {
+  .dashboard.horizontal.width-11 .db-group {
     min-width: 41.25rem;
     width: 41.25rem;
   }
-  .dashboard.vertical.width-12 .db-group {
+  .dashboard.horizontal.width-12 .db-group {
     min-width: 45rem;
     width: 45rem;
   }
-  .dashboard.vertical.width-13 .db-group {
+  .dashboard.horizontal.width-13 .db-group {
     min-width: 48.75rem;
     width: 48.75rem;
   }
-  .dashboard.vertical.width-14 .db-group {
+  .dashboard.horizontal.width-14 .db-group {
     min-width: 52.5rem;
     width: 52.5rem;
   }
-  .dashboard.vertical.width-15 .db-group {
+  .dashboard.horizontal.width-15 .db-group {
     min-width: 56.25rem;
     width: 56.25rem;
   }
-  .dashboard.vertical.width-16 .db-group {
+  .dashboard.horizontal.width-16 .db-group {
     min-width: 60rem;
     width: 60rem;
   }
-  .dashboard.vertical.width-17 .db-group {
+  .dashboard.horizontal.width-17 .db-group {
     min-width: 63.75rem;
     width: 63.75rem;
   }
-  .dashboard.vertical.width-18 .db-group {
+  .dashboard.horizontal.width-18 .db-group {
     min-width: 67.5rem;
     width: 67.5rem;
   }
-  .dashboard.vertical.width-19 .db-group {
+  .dashboard.horizontal.width-19 .db-group {
     min-width: 71.25rem;
     width: 71.25rem;
   }
-  .dashboard.vertical.width-20 .db-group {
+  .dashboard.horizontal.width-20 .db-group {
     min-width: 75rem;
     width: 75rem;
   }
-  .dashboard.vertical.width-21 .db-group {
+  .dashboard.horizontal.width-21 .db-group {
     min-width: 78.75rem;
     width: 78.75rem;
   }
-  .dashboard.vertical.width-22 .db-group {
+  .dashboard.horizontal.width-22 .db-group {
     min-width: 82.5rem;
     width: 82.5rem;
   }
-  .dashboard.vertical.width-23 .db-group {
+  .dashboard.horizontal.width-23 .db-group {
     min-width: 86.25rem;
     width: 86.25rem;
   }
-  .dashboard.vertical.width-24 .db-group {
+  .dashboard.horizontal.width-24 .db-group {
     min-width: 90rem;
     width: 90rem;
   }
-  .dashboard.vertical.width-25 .db-group {
+  .dashboard.horizontal.width-25 .db-group {
     min-width: 93.75rem;
     width: 93.75rem;
   }
-  .dashboard.vertical.width-26 .db-group {
+  .dashboard.horizontal.width-26 .db-group {
     min-width: 97.5rem;
     width: 97.5rem;
   }
-  .dashboard.vertical.width-27 .db-group {
+  .dashboard.horizontal.width-27 .db-group {
     min-width: 101.25rem;
     width: 101.25rem;
   }
-  .dashboard.vertical.width-28 .db-group {
+  .dashboard.horizontal.width-28 .db-group {
     min-width: 105rem;
     width: 105rem;
   }
-  .dashboard.vertical.width-29 .db-group {
+  .dashboard.horizontal.width-29 .db-group {
     min-width: 108.75rem;
     width: 108.75rem;
   }
-  .dashboard.vertical.width-30 .db-group {
+  .dashboard.horizontal.width-30 .db-group {
     min-width: 112.5rem;
     width: 112.5rem;
   }
-  .dashboard.vertical.width-31 .db-group {
+  .dashboard.horizontal.width-31 .db-group {
     min-width: 116.25rem;
     width: 116.25rem;
   }
-  .dashboard.vertical.width-32 .db-group {
+  .dashboard.horizontal.width-32 .db-group {
     min-width: 120rem;
     width: 120rem;
   }
 
-  .dashboard.horizontal {
+  .dashboard.vertical {
     display: flex;
     flex-direction: row;
   }
-  .dashboard.horizontal.height-6 .db-group {
+  .dashboard.vertical.height-6 .db-group {
     min-height: 22.5rem;
     height: 22.5rem;
   }
-  .dashboard.horizontal.height-7 .db-group {
+  .dashboard.vertical.height-7 .db-group {
     min-height: 26.25rem;
     height: 26.25rem;
   }
-  .dashboard.horizontal.height-8 .db-group {
+  .dashboard.vertical.height-8 .db-group {
     min-height: 30rem;
     height: 30rem;
   }
-  .dashboard.horizontal.height-9 .db-group {
+  .dashboard.vertical.height-9 .db-group {
     min-height: 33.75rem;
     height: 33.75rem;
   }
-  .dashboard.horizontal.height-10 .db-group {
+  .dashboard.vertical.height-10 .db-group {
     min-height: 37.5rem;
     height: 37.5rem;
   }
-  .dashboard.horizontal.height-11 .db-group {
+  .dashboard.vertical.height-11 .db-group {
     min-height: 41.25rem;
     height: 41.25rem;
   }
-  .dashboard.horizontal.height-12 .db-group {
+  .dashboard.vertical.height-12 .db-group {
     min-height: 45rem;
     height: 45rem;
   }
-  .dashboard.horizontal.height-13 .db-group {
+  .dashboard.vertical.height-13 .db-group {
     min-height: 48.75rem;
     height: 48.75rem;
   }
-  .dashboard.horizontal.height-14 .db-group {
+  .dashboard.vertical.height-14 .db-group {
     min-height: 52.5rem;
     height: 52.5rem;
   }
-  .dashboard.horizontal.height-15 .db-group {
+  .dashboard.vertical.height-15 .db-group {
     min-height: 56.25rem;
     height: 56.25rem;
   }
-  .dashboard.horizontal.height-16 .db-group {
+  .dashboard.vertical.height-16 .db-group {
     min-height: 60rem;
     height: 60rem;
   }
-  .dashboard.horizontal.height-17 .db-group {
+  .dashboard.vertical.height-17 .db-group {
     min-height: 63.75rem;
     height: 63.75rem;
   }
-  .dashboard.horizontal.height-18 .db-group {
+  .dashboard.vertical.height-18 .db-group {
     min-height: 67.5rem;
     height: 67.5rem;
   }
-  .dashboard.horizontal.height-19 .db-group {
+  .dashboard.vertical.height-19 .db-group {
     min-height: 71.25rem;
     height: 71.25rem;
   }
-  .dashboard.horizontal.height-20 .db-group {
+  .dashboard.vertical.height-20 .db-group {
     min-height: 75rem;
     height: 75rem;
   }
-  .dashboard.horizontal.height-21 .db-group {
+  .dashboard.vertical.height-21 .db-group {
     min-height: 78.75rem;
     height: 78.75rem;
   }
-  .dashboard.horizontal.height-22 .db-group {
+  .dashboard.vertical.height-22 .db-group {
     min-height: 82.5rem;
     height: 82.5rem;
   }
-  .dashboard.horizontal.height-23 .db-group {
+  .dashboard.vertical.height-23 .db-group {
     min-height: 86.25rem;
     height: 86.25rem;
   }
-  .dashboard.horizontal.height-24 .db-group {
+  .dashboard.vertical.height-24 .db-group {
     min-height: 90rem;
     height: 90rem;
   }
-  .dashboard.horizontal.height-25 .db-group {
+  .dashboard.vertical.height-25 .db-group {
     min-height: 93.75rem;
     height: 93.75rem;
   }
-  .dashboard.horizontal.height-26 .db-group {
+  .dashboard.vertical.height-26 .db-group {
     min-height: 97.5rem;
     height: 97.5rem;
   }
-  .dashboard.horizontal.height-27 .db-group {
+  .dashboard.vertical.height-27 .db-group {
     min-height: 101.25rem;
     height: 101.25rem;
   }
-  .dashboard.horizontal.height-28 .db-group {
+  .dashboard.vertical.height-28 .db-group {
     min-height: 105rem;
     height: 105rem;
   }
-  .dashboard.horizontal.height-29 .db-group {
+  .dashboard.vertical.height-29 .db-group {
     min-height: 108.75rem;
     height: 108.75rem;
   }
-  .dashboard.horizontal.height-30 .db-group {
+  .dashboard.vertical.height-30 .db-group {
     min-height: 112.5rem;
     height: 112.5rem;
   }
-  .dashboard.horizontal.height-31 .db-group {
+  .dashboard.vertical.height-31 .db-group {
     min-height: 116.25rem;
     height: 116.25rem;
   }
-  .dashboard.horizontal.height-32 .db-group {
+  .dashboard.vertical.height-32 .db-group {
     min-height: 120rem;
     height: 120rem;
+  }
+
+  .dashboard.automatic .db-group {
+    margin-bottom: 3rem;
   }
 }
 @media screen and (max-width: 720px) {

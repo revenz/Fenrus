@@ -1,5 +1,5 @@
 ﻿@use 'tiles';
-body.vertical {
+body.horizontal {
     overflow:hidden;
     .main-menu {
         bottom:unset;
@@ -7,6 +7,10 @@ body.vertical {
         display:flex;
         flex-direction: row;
     }       
+}
+body:not(.horizontal){
+    padding-top:2rem;
+    padding-right:3rem;
 }
 body {    
     background: url('background.jpg');
@@ -24,26 +28,55 @@ body {
     flex-direction: row;
     flex-wrap: wrap;    
     place-self:self-end;
-    &.top-left {
-        place-self:self-start;
+    &:not(.horizontal)
+    {
+        &.top-left {
+            place-self:self-start;
+        }
+        &.top-right{
+            justify-content:end;
+            place-self:self-start;
+        }
+        &.bottom-right{
+            justify-content:end;
+        }
+        &.center-left {
+            place-self:center;
+        }
+        &.center-right {
+            place-self:center;
+            justify-content:end;
+        }
+        &.center {
+            place-self:center;
+            justify-content:center;
+        }
     }
-    &.top-right{
-        justify-content:end;
-        place-self:self-start;
-    }
-    &.bottom-right{
-        justify-content:end;
-    }
-    &.center-left {
-        place-self:center;
-    }
-    &.center-right {
-        place-self:center;
-        justify-content:end;
-    }
-    &.center {
-        place-self:center;
-        justify-content:center;
+    &.horizontal
+    {
+        &.top-left {
+            place-self:self-start;
+        }
+        &.top-right{
+            place-self:self-start;
+        }
+        &.bottom-right{
+            justify-content:end;
+        }
+        &.bottom-left{
+            justify-content:end;
+        }
+        &.center-left {
+            place-self:center;
+        }
+        &.center-right {
+            place-self:center;
+            justify-content:end;
+        }
+        &.center {
+            place-self:center;
+            justify-content:center;
+        }
     }
 }
 

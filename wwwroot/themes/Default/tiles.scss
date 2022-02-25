@@ -24,7 +24,7 @@ $margin:0;
             }
         }
     }
-    .dashboard.vertical
+    .dashboard.horizontal
     {
         padding:1rem;
         display:flex;
@@ -41,7 +41,7 @@ $margin:0;
             }
         }
     }
-    .dashboard.horizontal
+    .dashboard.vertical
     {
         display:flex;
         flex-direction: row;
@@ -53,6 +53,11 @@ $margin:0;
                     height: $height;
                 }
             }
+        }
+    }
+    .dashboard.automatic {
+        .db-group {
+            margin-bottom:3rem;
         }
     }
 }
