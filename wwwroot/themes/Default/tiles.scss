@@ -102,6 +102,126 @@ $margin:0;
         height:($baseSize * 2) - (2 * $padding);
         grid-column-end: span 2;
         grid-row-end: span 2;
+    }
+
+    &.large{
+        $width: 6;
+        grid-column-end: span $width;
+        grid-row-end: span 2;
+        width:($baseSize * $width) + (($width - 2)* $margin) - (2 * $padding);
+        height:($baseSize * 2) - (2 * $padding);
+
+        .inner {
+            display:flex;
+            flex-direction: row;
+            height: 100%;
+        }
+        .icon {
+            width:$baseSize * 1.735;
+            min-width:$baseSize * 1.735;
+            height:100%;
+            margin:auto 1rem auto 0;
+            img {
+                width:100%;
+                height:100%;
+                object-fit: contain;
+            }
+        }
+
+        &:hover 
+        {
+            background:rgba(0,0,0,0.7);
+            &::before {
+                content: '';
+                z-index:3;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(var(--accent-rgb),.3);
+            }
+            .inner > * {
+                z-index:4;
+            }
+        }
+        
+        .status {
+            .livestats {
+                margin: 0.5rem 0 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                font-size: 0.8rem;
+
+                li {
+                    list-style: none;
+                    padding: 0;
+                    display: flex;
+                    flex-direction: row;
+                    flex: auto;
+                    color:rgba(var(--color-rgb), 0.7);
+
+                    .title {
+                        color: var(--accent);
+                        padding-bottom: 0.1rem;
+                        font-weight: bold;
+                        width:7rem;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                    }
+
+                    a {
+                        color:var(--color);
+                    }
+                }
+            }
+        }
+    }
+
+    &.x-large{
+        $multiplier: 4;
+        grid-column-end: span $multiplier;
+        grid-row-end: span $multiplier;
+        width:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);
+        height:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);        
+        .icon > img 
+        {            
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .content > .title {
+            display:none;
+        }
+    }
+
+    &.xx-large{
+        $multiplier: 6;
+        grid-column-end: span $multiplier;
+        grid-row-end: span $multiplier;
+        width:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);
+        height:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);        
+        .icon > img 
+        {            
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .content > .title {
+            display:none;
+        }
+    }
+}
+
+
+
+.db-item:not(.carousel)
+{
+    &.medium, &.x-large, &.xx-large
+    {
+        perspective: 1000px; /* Remove this if you don't want the 3D effect */
+        
         .content {
             display:none;
             position: absolute;
@@ -169,151 +289,35 @@ $margin:0;
                 }
             }
         }
-    }
-
-    &.large{
-        $width: 6;
-        grid-column-end: span $width;
-        grid-row-end: span 2;
-        width:($baseSize * $width) + (($width - 2)* $margin) - (2 * $padding);
-        height:($baseSize * 2) - (2 * $padding);
-
+        /* This container is needed to position the front and back side */
         .inner {
-            display:flex;
-            flex-direction: row;
+            position: relative;
+            width: 100%;
             height: 100%;
-        }
-        .icon {
-            width:$baseSize * 1.735;
-            min-width:$baseSize * 1.735;
-            height:100%;
-            margin:auto 1rem auto 0;
-            img {
-                width:100%;
-                height:100%;
-                object-fit: scale-down;
-            }
-        }
-
-        &:hover 
-        {
-            background:rgba(0,0,0,0.7);
-            &::before {
-                content: '';
-                z-index:3;
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(var(--accent-rgb),.3);
-            }
-            .inner > * {
-                z-index:4;
-            }
+            transition: transform 0.4s;
+            transform-style: preserve-3d;
         }
         
-        .status {
-            .livestats {
-                margin: 0.5rem 0 0;
-                padding: 0;
-                display: flex;
-                flex-direction: column;
-                font-size: 0.8rem;
-
-                li {
-                    list-style: none;
-                    padding: 0;
-                    display: flex;
-                    flex-direction: row;
-                    flex: auto;
-                    color:rgba(var(--color-rgb), 0.7);
-
-                    .title {
-                        color: var(--accent);
-                        padding-bottom: 0.1rem;
-                        font-weight: bold;
-                        width:7rem;
-                        text-overflow: ellipsis;
-                        overflow: hidden;
-                    }
-
-                    a {
-                        color:var(--color);
-                    }
-                }
-            }
+        /* Do an horizontal flip when you move the mouse over the flip box container */
+        &:hover .inner {
+            transform: rotateY(180deg);
+            top: -0.5rem;
+            right: -0.5rem;
         }
-    }
-
-    &.x-large{
-        $multiplier: 4;
-        grid-column-end: span $multiplier;
-        grid-row-end: span $multiplier;
-        width:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);
-        height:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);        
-        .icon > img 
-        {            
+        
+        /* Position the front and back side */
+        .icon, .content {
+            position: absolute;
             width: 100%;
             height: 100%;
-            object-fit: scale-down;
+            backface-visibility: hidden;
         }
-        .title {
-            display:none;
-        }
-    }
-
-    &.xx-large{
-        $multiplier: 6;
-        grid-column-end: span $multiplier;
-        grid-row-end: span $multiplier;
-        width:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);
-        height:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);        
-        .icon > img 
-        {            
-            width: 100%;
-            height: 100%;
-            object-fit: scale-down;
-        }
-        .title {
-            display:none;
+                
+        /* Style the back side */
+        .content {
+            transform: rotateY(180deg);
         }
     }
-}
-
-
-
-.db-item.medium {
-    perspective: 1000px; /* Remove this if you don't want the 3D effect */
-      
-      /* This container is needed to position the front and back side */
-      .inner {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        transition: transform 0.4s;
-        transform-style: preserve-3d;
-      }
-      
-      /* Do an horizontal flip when you move the mouse over the flip box container */
-      &:hover .inner {
-        transform: rotateY(180deg);
-        top: -0.5rem;
-        right: -0.5rem;
-      }
-      
-      /* Position the front and back side */
-      .icon, .content {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        backface-visibility: hidden;
-      }
-            
-      /* Style the back side */
-      .content {
-        transform: rotateY(180deg);
-      }
 }
 
 .db-item.small, .db-item.medium {
@@ -324,6 +328,9 @@ $margin:0;
 }
 
 .carousel {
+    .inner > .icon {
+        display:none;
+    }
     .app-icon {
         position:absolute;
         top:.25rem;

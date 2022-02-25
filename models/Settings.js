@@ -5,6 +5,7 @@ class SettingsInstance {
     Revision = 0;
     LinkTarget = '_self';
     Theme = '';
+    CollapseMenu = false;
     AccentColor = '#ff0090';
     ShowGroupTitles = true;
     BackgroundImage = '';
@@ -93,6 +94,7 @@ class SettingsInstance {
                 Theme: this.Theme,
                 AccentColor: this.AccentColor,
                 ShowGroupTitles: this.ShowGroupTitles,
+                CollapseMenu: this.CollapseMenu,
                 BackgroundImage: this.BackgroundImage,
                 ThemeSettings: this.ThemeSettings
             });
@@ -103,6 +105,7 @@ class SettingsInstance {
             Theme: this.Theme,
             AccentColor: this.AccentColor,
             ShowGroupTitles: this.ShowGroupTitles,
+            CollapseMenu: this.CollapseMenu,
             BackgroundImage: this.BackgroundImage,
             ThemeSettings: this.ThemeSettings,
             Groups: this.Groups

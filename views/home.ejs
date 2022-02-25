@@ -1,6 +1,6 @@
 <%- include('./partials/head.ejs' ) %>
 
-<div class="dashboard">
+<div class="dashboard <%= themeVariables?.ClassName %>">
     <% if(settings.Groups?.length) {
         
         for(let item of settings.Groups)

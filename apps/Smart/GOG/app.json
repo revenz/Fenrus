@@ -4,6 +4,7 @@
   "DefaultUrl":"https://gog.com/",
   "DefaultSize":"large",
   "Classes": "widget",
+  "Carousel": true,
   "Properties": [
     {
       "Name": "Country",

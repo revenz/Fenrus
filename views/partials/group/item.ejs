@@ -65,10 +65,47 @@
             <div class="setting">
                 <span class="label">Icon</span>
                 <span class="value">
-                    <div class="icon-picker">
+                    <div class="item-icon-picker">
                         <!-- Show the image -->
                         <template x-if="EditModel.Icon">
-                            <img :src="EditModel.Icon" class="icon-pick" style="width: 100px; height: 100px; margin-bottom:1rem">
+                            <a :class="{'db-item':true, 'db-link': EditModel._Type === 'DashboardLink', 'db-app': EditModel._Type === 'DashboardApp',
+                             'small': EditModel.Size === 'small', 'medium': EditModel.Size === 'medium', 'large': EditModel.Size === 'large', 
+                             'x-large': EditModel.Size === 'x-large', 'xx-large': EditModel.Size === 'xx-large', 'carousel': EditorApp.Carousel && EditModel.Size.indexOf('large') >= 0}" >
+                                <div class="inner">
+                                    <div class="icon">
+                                        <img :src="EditModel.Icon" class="icon-pick">
+                                    </div>
+                                    <div class="content">
+                                        <div class="title" x-text="EditModel.Name"></div>
+                                        <template x-if="!EditorApp.Carousel || EditModel.Size.indexOf('large') < 0">
+                                            <div class="status">
+                                                <ul class="livestats">
+                                                    <li><span class="title">Sample</span><span class="value">1234</span></li>
+                                                    <li><span class="title">Other</span><span class="value">5657</span></li>
+                                                </ul>
+                                            </div>
+                                        </template>
+                                        <template x-if="EditorApp.Carousel && EditModel.Size.indexOf('large') >= 0">
+                                            <div class="status">
+                                                <div class="carousel">
+                                                    <div class="item visible">
+                                                        <div class="fill" style="background:#333">
+                                                            <div class="name tr">Sample item</div>
+                                                            <div class="br">2010</div>
+                                                            <a class="app-icon"><img :src="EditModel.Icon"></a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="controls">
+                                                        <a></a><a></a><a></a><a></a><a></a><a></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="arrow"></div>
+                                </div>
+                            </a>
+                            
                         </template>
 
                         <!-- Show the gray box when image is not available -->

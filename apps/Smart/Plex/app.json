@@ -2,6 +2,7 @@
   "Name": "Plex",
   "TestFunction": true,
   "Interval": 60,
+  "Carousel":true,
   "Properties": [
     {
       "Name": "Token",

@@ -31,6 +31,7 @@ function getAppArgs(appInstance, settings){
         properties: appInstance.Properties,
         Utils: utils,
         linkTarget: settings.LinkTarget,
+        appIcon: appInstance.Icon,
         size: appInstance.Size,
         liveStats: (items) => {            
             let html = '<ul class="livestats">';

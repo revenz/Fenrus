@@ -81,7 +81,7 @@ class EpicGames {
                 ${item.discount}
             </div>
             <a class="cover-link" target="${args.linkTarget}" href="${item.link}" />
-            <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="/apps/GOG/icon.png" /></a>
+            <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon}" /></a>
         </div>
         `;
     }

@@ -4,6 +4,7 @@
   "DefaultUrl":"https://epicgames.com/",
   "DefaultSize":"xx-large",
   "Classes": "widget",
+  "Carousel": true,
   "Properties": [
     {
       "Name": "Country",

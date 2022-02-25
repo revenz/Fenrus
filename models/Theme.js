@@ -1,6 +1,10 @@
 const fs = require('fs');
 const FileHelper = require('../helpers/FileHelper');
 
+class HomeVariables{
+    ClassName = '';
+}
+
 class Theme {
     Name = '';
     Css = [];
@@ -20,10 +24,20 @@ class Theme {
         }
     }
 
+
+    loadScript(){
+        if(!this.Scripts?.length)
+            return null;
+        
+        return require(`${this.Directory}/${this.Scripts[0]}`);
+    }
+
     static getTheme(name)
     {
-        if(!name || typeof(name) !== 'string')
+        if(!name || typeof(name) !== 'string'){
+            
             return new Theme(name);
+        }
         name = name.replace(/[^a-z0-9_]/gi, '').trim(); //  make the name safe
         if(!name)
             return new Theme(name);

@@ -171,48 +171,48 @@ a.btn {
 .settings-box select {
   width: 100%;
 }
-.settings-box ul:not(.value-list) {
+.settings-box ul:not(.value-list):not(.livestats) {
   margin: 0;
   padding: 0;
 }
-.settings-box ul:not(.value-list) > li {
+.settings-box ul:not(.value-list):not(.livestats) > li {
   list-style: none;
   padding: 1rem;
   border-bottom: 1px solid var(--border-color);
   display: flex;
   flex-direction: row;
 }
-.settings-box ul:not(.value-list) > li .name {
+.settings-box ul:not(.value-list):not(.livestats) > li .name {
   flex-grow: 1;
 }
-.settings-box ul:not(.value-list) > li .icon-sort + .name {
+.settings-box ul:not(.value-list):not(.livestats) > li .icon-sort + .name {
   margin-left: 1rem;
 }
-.settings-box ul:not(.value-list) > li .url {
+.settings-box ul:not(.value-list):not(.livestats) > li .url {
   width: min(28rem, 40vw);
   text-align: left;
 }
-.settings-box ul:not(.value-list) > li .items {
+.settings-box ul:not(.value-list):not(.livestats) > li .items {
   width: 14rem;
   text-align: center;
 }
-.settings-box ul:not(.value-list) > li .controls {
+.settings-box ul:not(.value-list):not(.livestats) > li .controls {
   text-align: right;
 }
-.settings-box ul:not(.value-list) > li .controls a, .settings-box ul:not(.value-list) > li .controls span {
+.settings-box ul:not(.value-list):not(.livestats) > li .controls a, .settings-box ul:not(.value-list):not(.livestats) > li .controls span {
   margin-left: 0.5rem;
   cursor: pointer;
   color: white;
   opacity: 0.7;
   text-decoration: none !important;
 }
-.settings-box ul:not(.value-list) > li .controls a:hover, .settings-box ul:not(.value-list) > li .controls span:hover {
+.settings-box ul:not(.value-list):not(.livestats) > li .controls a:hover, .settings-box ul:not(.value-list):not(.livestats) > li .controls span:hover {
   opacity: 1;
 }
-.settings-box ul:not(.value-list) > li.over {
+.settings-box ul:not(.value-list):not(.livestats) > li.over {
   border: 3px dotted #666;
 }
-.settings-box ul:not(.value-list) .mover {
+.settings-box ul:not(.value-list):not(.livestats) .mover {
   cursor: move;
   margin-right: 0.5rem;
 }
@@ -231,9 +231,7 @@ a.btn {
   position: relative;
   bottom: 2px;
 }
-.settings-box .icon-picker img {
-  width: 100px;
-  height: 100px;
+.settings-box .item-icon-picker .db-item {
   margin-bottom: 1rem;
 }
 

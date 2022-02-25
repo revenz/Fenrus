@@ -433,12 +433,14 @@ body {
   bottom: 0;
   right: 0;
   font-size: 1.5rem;
+}
+.main-menu.collapsible {
   transform: translateY(calc(100% - 3.5rem));
   display: flex;
   flex-direction: column-reverse;
   transition: transform 0.4s;
 }
-.main-menu:hover {
+.main-menu.collapsible:hover {
   transform: translateY(0);
 }
 .main-menu a {

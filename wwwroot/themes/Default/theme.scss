@@ -9,8 +9,29 @@
     width:100%;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: wrap;    
     place-self:self-end;
+    &.top-left {
+        place-self:self-start;
+    }
+    &.top-right{
+        justify-content:end;
+        place-self:self-start;
+    }
+    &.bottom-right{
+        justify-content:end;
+    }
+    &.center-left {
+        place-self:center;
+    }
+    &.center-right {
+        place-self:center;
+        justify-content:end;
+    }
+    &.center {
+        place-self:center;
+        justify-content:center;
+    }
 }
 
 @media screen and (max-width:720px) {

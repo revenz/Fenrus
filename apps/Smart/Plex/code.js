@@ -61,7 +61,7 @@
     <div class="name tr">${title}</div>
     <div class="br">${item.year}</div>
     <a class="cover-link" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}" />
-    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="/apps/Plex/icon.png" /></a>
+    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon}" /></a>
 </div>
 `;
     }

@@ -4,6 +4,7 @@
   "TestFunction": true,
   "Interval": 60,
   "DefaultSize":"x-large",
+  "Carousel": true,
   "Properties": [
     {
       "Name": "Username",

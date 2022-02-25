@@ -2,12 +2,21 @@ class DefaultTheme
 {
     constructor()
     {
-        window.addEventListener('load', (event) => {
-            this.init();
-        });
-        window.addEventListener('resize', (event) => {
-            this.init();
-        });
+        if(typeof window !== "undefined")
+        {
+            window.addEventListener('load', (event) => {
+                this.init();
+            });
+            window.addEventListener('resize', (event) => {
+                this.init();
+            });        
+        }
+    }
+
+    getVariables(args){
+        return {
+            ClassName: args.Placement
+        };
     }
 
     init(){
@@ -70,3 +79,6 @@ class DefaultTheme
 }
 
 var defaultTheme = new DefaultTheme();
+
+if(module)
+    module.exports = defaultTheme;

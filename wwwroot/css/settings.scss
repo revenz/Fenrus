@@ -125,7 +125,7 @@
         width: 100%;
     }
 
-    ul:not(.value-list) {
+    ul:not(.value-list):not(.livestats) {
         margin: 0;
         padding: 0;
 
@@ -199,11 +199,9 @@
         }
     }
 
-    .icon-picker {
-        img {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 1rem;
+    .item-icon-picker {
+        .db-item {
+            margin-bottom:1rem;
         }
     }
 }

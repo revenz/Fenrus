@@ -119,65 +119,6 @@
   grid-column-end: span 2;
   grid-row-end: span 2;
 }
-.db-item.medium .content {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: -0.5rem;
-  right: 0;
-  bottom: 0;
-  background: rgba(var(--accent-rgb), 0.2);
-  padding: 0.5rem;
-  overflow: hidden;
-}
-.db-item.medium:hover .icon::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-}
-.db-item.medium:hover .content {
-  display: unset;
-}
-.db-item.medium .icon {
-  width: 100%;
-  height: 100%;
-}
-.db-item.medium .icon img {
-  width: 100%;
-  height: 100%;
-}
-.db-item.medium .livestats {
-  margin: 0.25rem 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  font-size: 0.8rem;
-}
-.db-item.medium .livestats li {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  flex: auto;
-  color: var(--color);
-}
-.db-item.medium .livestats li .title {
-  padding-bottom: 0.1rem;
-  font-weight: bold;
-  width: 5rem;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.db-item.medium .livestats li a {
-  color: var(--color);
-}
-.db-item.medium .livestats li + li {
-  margin-top: 0.5rem;
-}
 .db-item.large {
   grid-column-end: span 6;
   grid-row-end: span 2;
@@ -198,7 +139,7 @@
 .db-item.large .icon img {
   width: 100%;
   height: 100%;
-  object-fit: scale-down;
+  object-fit: contain;
 }
 .db-item.large:hover {
   background: rgba(0, 0, 0, 0.7);
@@ -251,9 +192,9 @@
 .db-item.x-large .icon > img {
   width: 100%;
   height: 100%;
-  object-fit: scale-down;
+  object-fit: contain;
 }
-.db-item.x-large .title {
+.db-item.x-large .content > .title {
   display: none;
 }
 .db-item.xx-large {
@@ -265,13 +206,13 @@
 .db-item.xx-large .icon > img {
   width: 100%;
   height: 100%;
-  object-fit: scale-down;
+  object-fit: contain;
 }
-.db-item.xx-large .title {
+.db-item.xx-large .content > .title {
   display: none;
 }
 
-.db-item.medium {
+.db-item:not(.carousel).medium, .db-item:not(.carousel).x-large, .db-item:not(.carousel).xx-large {
   perspective: 1000px;
   /* Remove this if you don't want the 3D effect */
   /* This container is needed to position the front and back side */
@@ -279,25 +220,84 @@
   /* Position the front and back side */
   /* Style the back side */
 }
-.db-item.medium .inner {
+.db-item:not(.carousel).medium .content, .db-item:not(.carousel).x-large .content, .db-item:not(.carousel).xx-large .content {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: -0.5rem;
+  right: 0;
+  bottom: 0;
+  background: rgba(var(--accent-rgb), 0.2);
+  padding: 0.5rem;
+  overflow: hidden;
+}
+.db-item:not(.carousel).medium:hover .icon::after, .db-item:not(.carousel).x-large:hover .icon::after, .db-item:not(.carousel).xx-large:hover .icon::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+.db-item:not(.carousel).medium:hover .content, .db-item:not(.carousel).x-large:hover .content, .db-item:not(.carousel).xx-large:hover .content {
+  display: unset;
+}
+.db-item:not(.carousel).medium .icon, .db-item:not(.carousel).x-large .icon, .db-item:not(.carousel).xx-large .icon {
+  width: 100%;
+  height: 100%;
+}
+.db-item:not(.carousel).medium .icon img, .db-item:not(.carousel).x-large .icon img, .db-item:not(.carousel).xx-large .icon img {
+  width: 100%;
+  height: 100%;
+}
+.db-item:not(.carousel).medium .livestats, .db-item:not(.carousel).x-large .livestats, .db-item:not(.carousel).xx-large .livestats {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+}
+.db-item:not(.carousel).medium .livestats li, .db-item:not(.carousel).x-large .livestats li, .db-item:not(.carousel).xx-large .livestats li {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  flex: auto;
+  color: var(--color);
+}
+.db-item:not(.carousel).medium .livestats li .title, .db-item:not(.carousel).x-large .livestats li .title, .db-item:not(.carousel).xx-large .livestats li .title {
+  padding-bottom: 0.1rem;
+  font-weight: bold;
+  width: 5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.db-item:not(.carousel).medium .livestats li a, .db-item:not(.carousel).x-large .livestats li a, .db-item:not(.carousel).xx-large .livestats li a {
+  color: var(--color);
+}
+.db-item:not(.carousel).medium .livestats li + li, .db-item:not(.carousel).x-large .livestats li + li, .db-item:not(.carousel).xx-large .livestats li + li {
+  margin-top: 0.5rem;
+}
+.db-item:not(.carousel).medium .inner, .db-item:not(.carousel).x-large .inner, .db-item:not(.carousel).xx-large .inner {
   position: relative;
   width: 100%;
   height: 100%;
   transition: transform 0.4s;
   transform-style: preserve-3d;
 }
-.db-item.medium:hover .inner {
+.db-item:not(.carousel).medium:hover .inner, .db-item:not(.carousel).x-large:hover .inner, .db-item:not(.carousel).xx-large:hover .inner {
   transform: rotateY(180deg);
   top: -0.5rem;
   right: -0.5rem;
 }
-.db-item.medium .icon, .db-item.medium .content {
+.db-item:not(.carousel).medium .icon, .db-item:not(.carousel).medium .content, .db-item:not(.carousel).x-large .icon, .db-item:not(.carousel).x-large .content, .db-item:not(.carousel).xx-large .icon, .db-item:not(.carousel).xx-large .content {
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
 }
-.db-item.medium .content {
+.db-item:not(.carousel).medium .content, .db-item:not(.carousel).x-large .content, .db-item:not(.carousel).xx-large .content {
   transform: rotateY(180deg);
 }
 
@@ -305,6 +305,9 @@
   display: none;
 }
 
+.carousel .inner > .icon {
+  display: none;
+}
 .carousel .app-icon {
   position: absolute;
   top: 0.25rem;
@@ -364,6 +367,27 @@
   flex-direction: row;
   flex-wrap: wrap;
   place-self: self-end;
+}
+.dashboard.top-left {
+  place-self: self-start;
+}
+.dashboard.top-right {
+  justify-content: end;
+  place-self: self-start;
+}
+.dashboard.bottom-right {
+  justify-content: end;
+}
+.dashboard.center-left {
+  place-self: center;
+}
+.dashboard.center-right {
+  place-self: center;
+  justify-content: end;
+}
+.dashboard.center {
+  place-self: center;
+  justify-content: center;
 }
 
 @media screen and (max-width: 720px) {

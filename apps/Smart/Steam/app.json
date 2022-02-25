@@ -5,6 +5,7 @@
   "DefaultUrl":"https://steampowered.com/",
   "DefaultSize":"xx-large",
   "Classes": "widget",
+  "Carousel": true,
   "Properties": [
     {
       "Name": "Currency Symbol",
