@@ -27,14 +27,14 @@
 
     <% if(settings.BackgroundImage) { %>
         <style>
-            .main-content{        
+            body{        
                 background: url('<%= settings.BackgroundImage %>');
             }
         </style>
     <% } %> 
 </head>
 
-<body>  
+<body class="<%= themeVariables?.BodyClassName %>">  
     <ul class="main-menu <%= settings.CollapseMenu ? 'collapsible' : '' %>">
         <li><a title="Home" href="/"><span class="icon-home1"></span></a></li>
         <li><a title="Groups" href="/groups"><span class="icon-bars"></span></a></li>

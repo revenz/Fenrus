@@ -15,7 +15,8 @@ router.get('/', async (req, res) => {
     }
     res.render('home', common.getRouterArgs(req, { 
         title: '', 
-        themeVariables: themeVariables
+        themeVariables: themeVariables,
+        themeSettings: req.settings.ThemeSettings ? req.settings.ThemeSettings[req.theme.Name] : {}
     }));    
 });
 

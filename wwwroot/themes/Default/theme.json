@@ -4,13 +4,30 @@
         "theme.min.css"
     ],
     "Scripts":[
-        "theme.js"
+        "theme.js",
+        "potpack.js"
     ],
     "Templates":
     {
         "Group": "group.ejs"
     },
-    "Settings":[
+    "Settings":[        
+        {
+            "Name":"GroupSize",
+            "Label":"Group Size",
+            "Type":"Integer",
+            "Default":16,
+            "Minimum":6,
+            "Maximum":32
+        },
+        {
+            "Name":"Vertical",
+            "Type":"Boolean"
+        },
+        {
+            "Name":"Automatic",
+            "Type":"Boolean"
+        },
         {
             "Name":"Placement",
             "Type":"Select",

@@ -28,8 +28,9 @@
     <% } %>
 </div>
 
-<% if(theme?.Scripts?.length) { 
-    for(let script of theme.Scripts) { %>
+<% if(theme?.Scripts?.length) { %>
+    <input type="hidden" id="theme-settings" value="<%= JSON.stringify(themeSettings) %>" />
+    <% for(let script of theme.Scripts) { %>
         <script src="/themes/<%= theme.DirectoryName %>/<%= script %>?version=<%= version %>"></script>
  <% }
 } %>

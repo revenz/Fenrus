@@ -9,6 +9,7 @@ class Common
     {
         let args = {            
             theme: req.theme,
+            themeVariables: {},
             user: req.user, 
             settings: req.settings,
             Utils: new Utils(),

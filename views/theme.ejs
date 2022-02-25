@@ -15,7 +15,7 @@
     <% 
         for(let setting of model.Settings) { %>
         <div class="setting">
-            <span class="label"><%= setting.Name %></span>
+            <span class="label"><%= setting.Label || setting.Name %></span>
             <span class="value">
                 <% if(setting.Type === 'Boolean') { %>
                     <label for="<%= setting.Name %>" class="toggle-switchy">
@@ -30,6 +30,9 @@
                             <option value="<%= opt.Value %>"><%= opt.Label %></option>
                         <% } %>
                     </select>
+                <% } else if(setting.Type === 'Integer') { %>
+                    <input type="range" min="<%= setting.Minimum || 0 %>" max="<%= setting.Maximum || 100 %>" x-model="model.<%= setting.Name %>" />
+                    <span class="range-value" x-text="model.<%= setting.Name %>"></span>
                 <% } %>
             </span>
         </div>
