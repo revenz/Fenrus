@@ -48,119 +48,128 @@
   }
 
   .dashboard.horizontal {
-    padding: 1rem;
+    padding: 2rem 1rem 1rem;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 2rem);
+    height: calc(100vh - 3rem);
     overflow-y: hidden;
   }
-  .dashboard.horizontal.width-6 .db-group {
+  .dashboard.horizontal:not(.automatic).width-6 .db-group {
     min-width: 22.5rem;
     width: 22.5rem;
   }
-  .dashboard.horizontal.width-7 .db-group {
+  .dashboard.horizontal:not(.automatic).width-7 .db-group {
     min-width: 26.25rem;
     width: 26.25rem;
   }
-  .dashboard.horizontal.width-8 .db-group {
+  .dashboard.horizontal:not(.automatic).width-8 .db-group {
     min-width: 30rem;
     width: 30rem;
   }
-  .dashboard.horizontal.width-9 .db-group {
+  .dashboard.horizontal:not(.automatic).width-9 .db-group {
     min-width: 33.75rem;
     width: 33.75rem;
   }
-  .dashboard.horizontal.width-10 .db-group {
+  .dashboard.horizontal:not(.automatic).width-10 .db-group {
     min-width: 37.5rem;
     width: 37.5rem;
   }
-  .dashboard.horizontal.width-11 .db-group {
+  .dashboard.horizontal:not(.automatic).width-11 .db-group {
     min-width: 41.25rem;
     width: 41.25rem;
   }
-  .dashboard.horizontal.width-12 .db-group {
+  .dashboard.horizontal:not(.automatic).width-12 .db-group {
     min-width: 45rem;
     width: 45rem;
   }
-  .dashboard.horizontal.width-13 .db-group {
+  .dashboard.horizontal:not(.automatic).width-13 .db-group {
     min-width: 48.75rem;
     width: 48.75rem;
   }
-  .dashboard.horizontal.width-14 .db-group {
+  .dashboard.horizontal:not(.automatic).width-14 .db-group {
     min-width: 52.5rem;
     width: 52.5rem;
   }
-  .dashboard.horizontal.width-15 .db-group {
+  .dashboard.horizontal:not(.automatic).width-15 .db-group {
     min-width: 56.25rem;
     width: 56.25rem;
   }
-  .dashboard.horizontal.width-16 .db-group {
+  .dashboard.horizontal:not(.automatic).width-16 .db-group {
     min-width: 60rem;
     width: 60rem;
   }
-  .dashboard.horizontal.width-17 .db-group {
+  .dashboard.horizontal:not(.automatic).width-17 .db-group {
     min-width: 63.75rem;
     width: 63.75rem;
   }
-  .dashboard.horizontal.width-18 .db-group {
+  .dashboard.horizontal:not(.automatic).width-18 .db-group {
     min-width: 67.5rem;
     width: 67.5rem;
   }
-  .dashboard.horizontal.width-19 .db-group {
+  .dashboard.horizontal:not(.automatic).width-19 .db-group {
     min-width: 71.25rem;
     width: 71.25rem;
   }
-  .dashboard.horizontal.width-20 .db-group {
+  .dashboard.horizontal:not(.automatic).width-20 .db-group {
     min-width: 75rem;
     width: 75rem;
   }
-  .dashboard.horizontal.width-21 .db-group {
+  .dashboard.horizontal:not(.automatic).width-21 .db-group {
     min-width: 78.75rem;
     width: 78.75rem;
   }
-  .dashboard.horizontal.width-22 .db-group {
+  .dashboard.horizontal:not(.automatic).width-22 .db-group {
     min-width: 82.5rem;
     width: 82.5rem;
   }
-  .dashboard.horizontal.width-23 .db-group {
+  .dashboard.horizontal:not(.automatic).width-23 .db-group {
     min-width: 86.25rem;
     width: 86.25rem;
   }
-  .dashboard.horizontal.width-24 .db-group {
+  .dashboard.horizontal:not(.automatic).width-24 .db-group {
     min-width: 90rem;
     width: 90rem;
   }
-  .dashboard.horizontal.width-25 .db-group {
+  .dashboard.horizontal:not(.automatic).width-25 .db-group {
     min-width: 93.75rem;
     width: 93.75rem;
   }
-  .dashboard.horizontal.width-26 .db-group {
+  .dashboard.horizontal:not(.automatic).width-26 .db-group {
     min-width: 97.5rem;
     width: 97.5rem;
   }
-  .dashboard.horizontal.width-27 .db-group {
+  .dashboard.horizontal:not(.automatic).width-27 .db-group {
     min-width: 101.25rem;
     width: 101.25rem;
   }
-  .dashboard.horizontal.width-28 .db-group {
+  .dashboard.horizontal:not(.automatic).width-28 .db-group {
     min-width: 105rem;
     width: 105rem;
   }
-  .dashboard.horizontal.width-29 .db-group {
+  .dashboard.horizontal:not(.automatic).width-29 .db-group {
     min-width: 108.75rem;
     width: 108.75rem;
   }
-  .dashboard.horizontal.width-30 .db-group {
+  .dashboard.horizontal:not(.automatic).width-30 .db-group {
     min-width: 112.5rem;
     width: 112.5rem;
   }
-  .dashboard.horizontal.width-31 .db-group {
+  .dashboard.horizontal:not(.automatic).width-31 .db-group {
     min-width: 116.25rem;
     width: 116.25rem;
   }
-  .dashboard.horizontal.width-32 .db-group {
+  .dashboard.horizontal:not(.automatic).width-32 .db-group {
     min-width: 120rem;
     width: 120rem;
+  }
+  .dashboard.horizontal.automatic {
+    align-content: center;
+  }
+  .dashboard.horizontal.automatic.center-left {
+    align-content: start;
+  }
+  .dashboard.horizontal.automatic.center-right {
+    align-content: end;
   }
 
   .dashboard.vertical {

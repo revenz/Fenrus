@@ -32,7 +32,8 @@ class DefaultTheme
         classes.push(args?.Placement || 'bottom-left');
         if(args?.Automatic)
             classes.push('automatic');
-        else if(args?.Horizontal){
+        
+        if(args?.Horizontal){
             classes.push('horizontal');
             bodyClasses.push('horizontal');
             classes.push('width-' + args.GroupSize);
@@ -119,7 +120,9 @@ class DefaultTheme
                 item.ele.style.top = ((horizontal ? item.y : item.x) * 3.75) + 'rem';
             }
             group.style.width = 'unset';
+            group.style.minWidth = 'unset';
             group.style.height = 'unset';
+            group.style.minHeight = 'unset';
         }
     }
     shrinkGroup(grp, previous, next){

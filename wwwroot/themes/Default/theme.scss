@@ -52,19 +52,38 @@ body {
             justify-content:center;
         }
     }
+    &.vertical:not(.automatic) {
+        &.bottom-right, &.bottom-left {
+            .db-group {
+                margin-top:auto;
+            }
+        }
+    }
     &.horizontal
     {
         &.top-left {
-            place-self:self-start;
+            justify-content:start;
+            align-content: flex-start;
+            .main-menu {
+                bottom:0;
+                top:unset;
+            }       
         }
         &.top-right{
-            place-self:self-start;
+            justify-content:start;
+            align-content: flex-end;
+            .main-menu {
+                bottom:0;
+                top:unset;
+            }       
         }
         &.bottom-right{
             justify-content:end;
+            align-content: flex-end;
         }
         &.bottom-left{
             justify-content:end;
+            align-content: flex-start;
         }
         &.center-left {
             place-self:center;
