@@ -121,7 +121,7 @@
     <div class="name tr">${title}</div>
     ${item.date ? `<div class="br">${item.date.getFullYear()}</div>` : ''}
     <a class="cover-link" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}" />
-    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon}" /></a>
+    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon || '/apps/Jellyfin/icon.png'}" /></a>
 </div>
 `;
     }

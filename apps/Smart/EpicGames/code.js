@@ -36,18 +36,11 @@ class EpicGames {
     {
         let data = await args.fetch('https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?country=' + this.getCountryCode(args));
         if (!data?.data?.Catalog?.searchStore?.elements?.length)
-            return null;
+            return null;            
         let now = new Date().getTime();
-        let sorted = data.data.Catalog.searchStore.elements.sort((a,b) => {
-            let aDate = new Date(a.effectiveDate);
-            let bDate = new Date(b.effectiveDate);
-            aDate = aDate.getTime();
-            bDate = bDate.getTime();
-            if(aDate > now)
-                aDate = 0;
-            if(bDate > now)
-                bDate = 0;
-            return bDate - aDate;
+        let sorted = data.data.Catalog.searchStore.elements.filter(x =>{
+            let lineOffers = x.price?.lineOffers[0]?.appliedRules;
+            return lineOffers?.length > 0;
         });
         return this.getItem(sorted[0], args);
     }
@@ -115,7 +108,7 @@ class EpicGames {
         ${item.discount}
     </div>
     <a class="cover-link" target="${args.linkTarget}" href="${item.link}" />
-    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon}" /></a>
+    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon || '/apps/Epic%20Games/icon.png'}" /></a>
 </div>
 `;
     }
