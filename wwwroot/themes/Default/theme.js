@@ -15,7 +15,7 @@ class DefaultTheme
 
     getVariables(args){
         return {
-            ClassName: args.Placement
+            ClassName: args?.Placement || 'bottom-left'
         };
     }
 
