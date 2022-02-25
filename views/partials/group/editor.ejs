@@ -15,18 +15,6 @@
                 </span>
             </div>
             <div class="setting">
-                <span class="label">Width</span>
-                <span class="value">
-                    <input :disabled="isDisabled()" type="number" x-model="Group.Width" min="0" max="10" data-rules='["required", "numeric", "min:0", "max:10"]' @blur="blur" @input="input" @keydown.enter="save">
-                </span>
-            </div>
-            <div class="setting">
-                <span class="label">Height</span>
-                <span class="value">
-                    <input :disabled="isDisabled()" type="number" x-model="Group.Height" min="0" max="10" data-rules='["required", "numeric", "min:0", "max:10"]' @blur="blur" @input="input" @keydown.enter="save">
-                </span>
-            </div>
-            <div class="setting">
                 <span class="label">Hide Title</span>
                 <span class="value">
                     <label for="HideGroupTitle" class="toggle-switchy">

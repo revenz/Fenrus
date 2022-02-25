@@ -254,6 +254,8 @@
                         this.EditModel.DisplayName = this.EditModel.Name;
                     if(!this.EditModel.Properties)
                         this.EditModel.Properties = {};
+                    if(!this.EditModel.Size)
+                        this.EditModel.Size = 'medium';
                     this.NewEdit = this.EditModel._Type === 'DashboardApp';
                     this.appChanged(this.EditModel.AppName);
                     this.EditorOpen = true;
