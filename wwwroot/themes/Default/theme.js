@@ -80,5 +80,5 @@ class DefaultTheme
 
 var defaultTheme = new DefaultTheme();
 
-if(module)
+if(typeof(module) !== 'undefined')
     module.exports = defaultTheme;
