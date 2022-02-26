@@ -119,12 +119,25 @@ body {
                 top:3.75rem;
                 font-size:1rem;
                 z-index:10;
-                > span 
-                {
-                    margin-bottom:0.25rem;
-                }
-                > span + * + *{
-                    margin-top:1rem;
+                .setting {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    .label {
+                        width:8rem;
+                    }
+                    + .setting {
+                        margin-top:1rem;
+                    }
+                    &.integer .value {
+                        display: flex;
+                        flex-direction: row;
+                        .range-value {
+                            width:2rem;
+                            margin: auto;
+                            text-align: right;
+                        }
+                    }
                 }
             }
         }

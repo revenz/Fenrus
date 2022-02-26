@@ -45,10 +45,8 @@
         <% } %>
         <li class="li-about">
             <a title="About" href="/about"><span class="icon-fenrus"></span></a>
-            <% if(isHome && theme.ThemeSettings) {
-                let partialThemeSettings = `../${theme.Directory}/${theme.ThemeSettings}`;
-            %>
-            <%- include(partialThemeSettings) %>
+            <% if(isHome === true && theme.Settings?.length) { %>
+            <%- include('theme-settings.ejs') %>
             <% } %>
         </li>
     </ul>

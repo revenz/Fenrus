@@ -8,7 +8,7 @@ class Common
     getRouterArgs(req, customArgs)
     {
         let args = {         
-            isHome:req.url === '/',
+            isHome:req.originalUrl === '/' || !req.originalUrl,
             theme: req.theme,
             themeVariables: {},
             user: req.user, 

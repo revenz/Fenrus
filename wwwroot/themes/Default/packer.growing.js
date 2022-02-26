@@ -101,16 +101,9 @@ GrowingPacker.prototype = {
   },
 
   growNode: function(w, h) {
-    // width and height are swapped here for some reason...
-
-    console.log('grownode:', w, h);
-    console.log('grownode w', w, this.root.w, this.maxWidth);
-    console.log('grownode h', h, this.root.h, this.maxHeight);
     var canGrowDown  = (w <= this.root.w && (!this.maxHeight || this.root.h + h <= this.maxHeight));
     var canGrowRight = (h <= this.root.h && (!this.maxWidth || this.root.w + w <= this.maxWidth));
 
-
-    console.log('cangrow down', canGrowDown, 'right', canGrowRight);
     if(!canGrowDown && !canGrowRight){
       if(this.maxWidth)
         canGrowDown = true;

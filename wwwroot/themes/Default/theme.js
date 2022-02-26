@@ -26,6 +26,22 @@ class DefaultTheme
         }
     }
 
+    init(){
+        let eleDashboard = document.querySelector('.dashboard');
+        let className = 'dashboard ' + this.settings.Placement;
+        className += this.settings.Horizontal ? ' horizontal' : ' vertical';
+        if(this.settings.Automatic)
+            className += ' automatic';
+
+        eleDashboard.className = className;
+
+        this.shrinkGroups();
+
+        document.body.classList.remove('horizontal');
+        document.body.classList.remove('vertical');
+        document.body.classList.add(this.settings.Horizontal ? 'horizontal' : 'vertical');
+    }
+
     getVariables(args){
         let classes = [];
         let bodyClasses = [];
@@ -125,7 +141,7 @@ class DefaultTheme
             }else{                
                 var packer = new GrowingPacker();
                 packer.fit({
-                    maxHeight: 8, 
+                    maxHeight: this.settings.MaxHeight || 8, 
                     blocks: items
                 });
                 console.log('items', items);
@@ -201,7 +217,7 @@ class DefaultTheme
     }
 }
 
-var defaultTheme = new DefaultTheme();
+var themeInstance = new DefaultTheme();
 
 if(typeof(module) !== 'undefined')
-    module.exports = defaultTheme;
+    module.exports = themeInstance;

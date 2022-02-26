@@ -22,64 +22,58 @@ body {
     flex-direction: row;
     flex-wrap: wrap;    
     place-self:self-end;
-    &:not(.horizontal)
+    justify-content: center;
+    &.left{
+        justify-content: start;
+    }
+    &.top {
+        place-self:self-start;
+        align-content: flex-start;    
+    }
+    &.right{
+        justify-content: end;
+    }
+    &.bottom{
+    }
+    &.center {
+        place-self:center;
+    }
+}
+
+@media screen and (min-width:720.001px) {        
+    .dashboard.horizontal
     {
-        &.top {
-            place-self:self-start;
+        padding:0 1rem 1rem;
+        display:flex;
+        flex-direction: column; 
+        height: calc(100vh - 5rem);
+        overflow-y: hidden;
+        &.center {            
+            align-content: center;
+            justify-content: center;
         }
-        &.right{
-            justify-content:end;
+        &.left {     
+            align-content: start;
         }
-        &.center {
-            place-self:center;
-            justify-content:center;
-        }
-    }
-    &.vertical:not(.automatic) {
-        &.bottom-right, &.bottom-left {
-            .db-group {
-                margin-top:auto;
-            }
-        }
-    }
-    &.vertical
-    {
-        &.left{
-            justify-content: start;
-        }
-        &.top {
-            align-content: flex-start;    
-        }
-        &.right{
-            align-content: flex-end;   
-        }
-        &.bottom{
-            justify-content:end;
-        }
-        &.center {
-            place-self:unset;
-        }
-    }
-    &.horizontal {
-        &.bottom {
-            justify-content: end;
+        &.right {     
+            align-content: end;
         }
     }
 }
 
-@media screen and (max-width:720px) {
-    .main-content{
-        padding:1rem;
-    }
-    .main-menu {
-        display:none;
-    }
-    .dashboard
-    {        
-        width: min-content;
-        justify-content: center;
-    }
-}
+// @media screen and (max-width:720px) {
+//     .main-content{
+//         padding:1rem;
+//     }
+//     .main-menu {
+//         display:none;
+//     }
+//     .dashboard
+//     {        
+//         width: min-content;
+//         justify-content: center;
+//     }
+// }
 
 
 .db-group {
@@ -104,19 +98,5 @@ body {
             font-weight:600;
             color: var(--color);
         }
-    }
-}
-
-
-
-.theme-setting2 {
-    position:absolute;
-    top:0.25rem;
-    left:1rem;
-    display:flex;
-    flex-direction:row;
-    align-items: center;
-    > * {
-        margin-right:1rem;
     }
 }

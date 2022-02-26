@@ -1,0 +1,58 @@
+<div class="theme-settings" x-data="ThemeSettings">
+    <% for(let setting of theme.Settings) { %>
+        <div class="setting <%= setting.Type.toLowerCase()%>">
+            <span class="label"><%= setting.Label || setting.Name %></span>
+            <span class="value">
+                <% if(setting.Type === 'Boolean') { %>
+                    <label for="<%= setting.Name %>" class="toggle-switchy">
+                        <input @change="update"type="checkbox" id="<%= setting.Name %>"  x-model="model.<%= setting.Name %>"/>
+                        <span class="toggle">
+                            <span class="switch"></span>
+                        </span>
+                    </label>
+                <% } else if(setting.Type === 'Select') { %>
+                    <select @change="update" x-model="model.<%= setting.Name %>">
+                        <% for(let opt of setting.Options ) { %>
+                            <option value="<%= opt.Value %>"><%= opt.Label %></option>
+                        <% } %>
+                    </select>
+                <% } else if(setting.Type === 'Integer') { %>
+                    <input @change="update" type="range" min="<%= setting.Minimum || 0 %>" max="<%= setting.Maximum || 100 %>" x-model="model.<%= setting.Name %>" />
+                    <span class="range-value" x-text="model.<%= setting.Name %>"></span>
+                <% } %>
+            </span>
+        </div>
+    <% } %>
+</div>
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        let json = document.getElementById('theme-settings').value;
+        let settings = JSON.parse(json);
+
+        Alpine.data('ThemeSettings', () => ({
+            model: settings,
+            update() {
+                console.log('update', JSON.parse(JSON.stringify(this.model)));
+
+
+                Object.keys(this.model).forEach(x => {
+                    themeInstance.settings[x] = this.model[x];
+                })             
+
+                if(themeInstance.init)   
+                    themeInstance.init();
+
+                fetch('/theme-settings', {
+                    method: 'POST',
+                    body: JSON.stringify(this.model),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            }
+        }));
+    });
+
+</script>

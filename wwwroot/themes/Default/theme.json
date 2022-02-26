@@ -1,6 +1,5 @@
 {
     "Name":"Default",
-    "ThemeSettings":"theme-settings.ejs",
     "Css":[
         "theme.min.css"
     ],
@@ -14,22 +13,6 @@
         "Group": "group.ejs"
     },
     "Settings":[        
-        {
-            "Name":"GroupSize",
-            "Label":"Group Size",
-            "Type":"Integer",
-            "Default":16,
-            "Minimum":6,
-            "Maximum":32
-        },
-        {
-            "Name":"Horizontal",
-            "Type":"Boolean"
-        },
-        {
-            "Name":"Automatic",
-            "Type":"Boolean"
-        },
         {
             "Name":"Placement",
             "Type":"Select",
@@ -65,6 +48,18 @@
                     "Value":"center right"
                 }
             ]
+        },
+        {
+            "Name":"MaxHeight",
+            "Label":"Group Height",
+            "Type":"Integer",
+            "Default":16,
+            "Minimum":6,
+            "Maximum":32
+        },
+        {
+            "Name":"Horizontal",
+            "Type":"Boolean"
         }
     ]
 }
