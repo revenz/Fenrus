@@ -1,10 +1,5 @@
 <div class="theme-settings panel" x-data="ThemeSettings">
-    <% if(isGuest) { %>
-        <div class="setting login">
-            <a href="/login" class="btn">Login</a>
-        </div>
-    <% } else { 
-        let showSettings = isHome === true && theme.Settings?.length;
+    <%  let showSettings = isHome === true && theme.Settings?.length;
         if(showSettings) { %>
             <% for(let setting of theme.Settings) { %>
                 <div class="setting <%= setting.Type.toLowerCase()%>">
@@ -32,17 +27,27 @@
             <% } %>
         <% } %>
         <div class="setting logout <%= showSettings ? 'has-settings' : 'no-settings'%>">
-            <a href="/logout" class="btn">Logout</a>
+            <a href="/<%= isGuest ? 'login' : 'logout'%>" class="btn"><%= isGuest ? 'Login' : 'Logout' %></a>
         </div>
-    <% } %>
 </div>
 
 <% if(isHome === true && theme.Settings?.length) { %>
     <script>
 
-        document.addEventListener('alpine:init', () => {
-            let json = document.getElementById('theme-settings').value;
+        document.addEventListener('alpine:init', () => {            
+            let json = document.getElementById('theme-settings').value;            
             let settings = json ? JSON.parse(json) : { };
+
+            <% if(isGuest) { %>
+                // save to local storage for guests
+                let lsJson = localStorage.getItem('fenrus-guest');            
+                if(lsJson){
+                    let localSettings = JSON.parse(lsJson);
+                    Object.keys(localSettings).forEach(x => {
+                        settings[x] = localSettings[x];
+                    });
+                }
+            <% } %>
 
             Alpine.data('ThemeSettings', () => ({
                 model: settings,
@@ -55,6 +60,14 @@
                         let percent = (value - min) / (max - min) * 100;
                         range.style.backgroundSize = percent + '% 100%';
                     }
+                    <% if(isGuest) { %>                        
+                        if(themeInstance.init){                               
+                            Object.keys(this.model).forEach(x => {
+                                themeInstance.settings[x] = this.model[x];
+                            })  
+                            themeInstance.init();
+                        }
+                    <% } %>
                 },
                 updateSlider(id, min, max) {
                     let ele = document.getElementById(id);
@@ -71,13 +84,21 @@
                     if(themeInstance.init)   
                         themeInstance.init();
 
-                    fetch('/theme-settings', {
-                        method: 'POST',
-                        body: JSON.stringify(this.model),
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
+                    <% if(isGuest) { 
+                        // save to local storage for guests
+                    %>
+                        localStorage.setItem('fenrus-guest', JSON.stringify(this.model));
+                    <% } else { 
+                        // save to server for logged in users    
+                    %>
+                        fetch('/theme-settings', {
+                            method: 'POST',
+                            body: JSON.stringify(this.model),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                    <% } %>
                 }
             }));
         });
