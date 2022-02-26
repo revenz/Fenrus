@@ -380,3 +380,7 @@ body {
   font-weight: 600;
   color: var(--color);
 }
+
+.dashboard.vertical .db-group {
+  margin-top: 3rem;
+}

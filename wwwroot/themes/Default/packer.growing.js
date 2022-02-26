@@ -117,6 +117,10 @@ GrowingPacker.prototype = {
     if (shouldGrowRight)
       return this.growRight(w, h);
     else if (shouldGrowDown)
+      return this.growDown(w, h);      
+    else if(w <= h && canGrowRight)
+      return this.growRight(w, h);
+    else if (h < w && canGrowDown)
       return this.growDown(w, h);
     else if (canGrowRight)
      return this.growRight(w, h);
@@ -143,7 +147,6 @@ GrowingPacker.prototype = {
   },
 
   growDown: function(w, h) {
-    console.log('growing down', h, this.root.h);
     this.root = {
       used: true,
       x: 0,
