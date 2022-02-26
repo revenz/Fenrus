@@ -50,11 +50,12 @@ $columnWidth:300;
     gap: 0.5rem;
     width:100%;
     overflow: auto;
+    margin-top:2rem;
     grid-template-columns: repeat(var(--columns), calc(var(--column-width) - 6px));
 
 }
 .db-item {
-    width: 18rem;
+    width: 100%;
     color: var(--color);
     position: relative;
     overflow: hidden;
@@ -152,11 +153,23 @@ $columnWidth:300;
 
 .db-item
 {
-    &.widget {
-        width:100%;
+    &.xx-large {
         height:14rem;
-        position:relative;
-     
+        position:relative;     
+    }
+    &.x-large {
+        height:10rem;
+        position:relative;     
+    }
+    &.large {
+        height:6rem;
+        position:relative;     
+    }
+
+    &.small {
+        .status {
+            display:none;
+        }
     }
 
     .status {
@@ -190,4 +203,18 @@ $columnWidth:300;
             }
         }
     }
+}
+
+.item-icon-picker .db-item {
+    /* the preview item */
+    border:solid 1px var(--accent);
+    display: block;
+    &:hover {
+        background:rgba(0,0,0,.3);
+        box-shadow: unset;
+    }
+    &.small, &.medium {
+        height:56px;
+    }
+
 }

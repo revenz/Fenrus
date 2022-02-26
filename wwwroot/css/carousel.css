@@ -64,3 +64,58 @@
     opacity: 1;
   }
 }
+.db-item.small .carousel, .db-item.medium .carousel {
+  display: none;
+}
+
+.carousel .inner > .icon {
+  display: none;
+}
+.carousel .app-icon {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+}
+.carousel .app-icon img {
+  width: 3rem;
+  height: 3rem;
+}
+.carousel .cover-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.carousel .tl, .carousel .tr, .carousel .br, .carousel .bl {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 0.5rem;
+  position: absolute;
+  color: var(--color);
+}
+.carousel .tr, .carousel .br {
+  text-align: right;
+}
+.carousel .tr {
+  top: 0;
+  right: 0;
+  max-width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.carousel .br {
+  bottom: 0;
+  right: 0;
+}
+.carousel .bl {
+  bottom: 0;
+  left: 0;
+}
+.carousel .discount {
+  color: #00eb00;
+}
+.carousel .discount .down-icon {
+  transform: rotate(-90deg);
+  display: inline-block;
+}

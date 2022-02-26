@@ -111,12 +111,12 @@ a.btn {
 .settings-box .setting .value a {
   color: var(--color);
 }
-.settings-box .setting .value ul {
+.settings-box .setting .value ul:not(.livestats) {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.settings-box .setting .value ul li + li {
+.settings-box .setting .value ul:not(.livestats) li + li {
   margin-top: 0.75rem;
 }
 .settings-box h2 {

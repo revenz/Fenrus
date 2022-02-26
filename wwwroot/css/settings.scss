@@ -47,7 +47,7 @@
             a {
                 color:var(--color);
             }            
-            ul {
+            ul:not(.livestats) {
                 margin:0;
                 padding:0;
                 list-style: none;

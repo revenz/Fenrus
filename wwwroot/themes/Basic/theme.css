@@ -747,11 +747,12 @@ body {
   gap: 0.5rem;
   width: 100%;
   overflow: auto;
+  margin-top: 2rem;
   grid-template-columns: repeat(var(--columns), calc(var(--column-width) - 6px));
 }
 
 .db-item {
-  width: 18rem;
+  width: 100%;
   color: var(--color);
   position: relative;
   overflow: hidden;
@@ -832,10 +833,20 @@ body {
   flex-wrap: wrap;
 }
 
-.db-item.widget {
-  width: 100%;
+.db-item.xx-large {
   height: 14rem;
   position: relative;
+}
+.db-item.x-large {
+  height: 10rem;
+  position: relative;
+}
+.db-item.large {
+  height: 6rem;
+  position: relative;
+}
+.db-item.small .status {
+  display: none;
 }
 .db-item .status .livestats {
   margin: 2px 0 0;
@@ -862,4 +873,17 @@ body {
 }
 .db-item .status .livestats li a {
   color: var(--color);
+}
+
+.item-icon-picker .db-item {
+  /* the preview item */
+  border: solid 1px var(--accent);
+  display: block;
+}
+.item-icon-picker .db-item:hover {
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: unset;
+}
+.item-icon-picker .db-item.small, .item-icon-picker .db-item.medium {
+  height: 56px;
 }

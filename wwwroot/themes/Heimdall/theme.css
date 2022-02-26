@@ -136,3 +136,8 @@
   padding-bottom: 0.1rem;
   font-weight: bold;
 }
+
+.item-icon-picker .db-item {
+  display: block;
+  height: 72px;
+}
