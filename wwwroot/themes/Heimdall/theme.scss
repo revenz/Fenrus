@@ -53,6 +53,13 @@
         display:none;
     }
 
+    &.carousel {
+        // this theme doesnt support these
+        .inner>.icon {
+            display:unset;
+        }
+    }
+
     .content {
         justify-content: center;
         display: flex;

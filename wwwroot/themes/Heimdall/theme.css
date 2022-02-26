@@ -48,6 +48,9 @@
 .db-item .carousel {
   display: none;
 }
+.db-item.carousel .inner > .icon {
+  display: unset;
+}
 .db-item .content {
   justify-content: center;
   display: flex;
