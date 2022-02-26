@@ -29,7 +29,7 @@
 
     document.addEventListener('alpine:init', () => {
         let json = document.getElementById('theme-settings').value;
-        let settings = JSON.parse(json);
+        let settings = json ? JSON.parse(json) : { };
 
         Alpine.data('ThemeSettings', () => ({
             model: settings,
@@ -40,7 +40,6 @@
                     let max = parseInt(range.getAttribute('max') || 100, 10);
                     let value = settings[range.id.substring(7)];
                     let percent = (value - min) / (max - min) * 100;
-                    console.log(min, max, value, percent);
                     range.style.backgroundSize = percent + '% 100%';
                 }
             },

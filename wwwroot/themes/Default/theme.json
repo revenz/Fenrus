@@ -11,7 +11,7 @@
         {
             "Name":"Placement",
             "Type":"Select",
-            "Default":"bottom-left",
+            "Default":"center",
             "Options":
             [
                 { 
@@ -48,9 +48,9 @@
             "Name":"MaxHeight",
             "Label":"Group Height",
             "Type":"Integer",
-            "Default":16,
-            "Minimum":6,
-            "Maximum":32
+            "Default":8,
+            "Minimum":4,
+            "Maximum":16
         },
         {
             "Name":"Horizontal",

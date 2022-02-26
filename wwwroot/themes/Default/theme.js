@@ -6,7 +6,8 @@ class DefaultTheme
     {
         if(typeof window !== "undefined")
         {
-            this.settings = JSON.parse(document.getElementById('theme-settings').value);
+            let json = document.getElementById('theme-settings').value;            
+            this.settings = json ? JSON.parse(json) : {};
             window.addEventListener('load', (event) => {
                 this.shrinkGroups();
             });

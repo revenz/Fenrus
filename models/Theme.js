@@ -61,8 +61,6 @@ class Theme {
         Object.keys(obj).forEach(k => {
             theme[k] = obj[k];
         }); 
-
-        console.log('# THEME', theme);
         
         if(!theme.Templates)
             theme.Templates = {

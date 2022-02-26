@@ -5,10 +5,30 @@
   "AccentColor": "#FF0090",
   "ShowGroupTitles": true,
   "BackgroundImage": "",
+  "ThemeSettings": {
+    "Default": {
+      "Placement": "center",
+      "MaxHeight": 8,
+      "Horizontal": false
+    }
+  },
   "Groups": [
     {
       "Uid": "aa163b32-b9d7-4a1f-8737-e170091723e5",
       "Items": [
+        {
+          "_Type": "DashboardApp",
+          "Uid": "eed93c2d-9bdc-465a-84cc-78b8d47bdea4",
+          "Name": "GitHub - Fenrus",
+          "Url": "https://github.com/revenz/Fenrus",
+          "Icon": "",
+          "Size": "large",
+          "Properties": {
+            "branch": ""
+          },
+          "AppName": "GitHub",
+          "DisplayName": "GitHub - Fenrus"
+        },
         {
           "_Type": "DashboardApp",
           "Uid": "33d584ec-8324-4525-8dcb-18d7fd06360f",
@@ -26,19 +46,6 @@
           "Icon": "",
           "Properties": {},
           "AppName": "Patreon"
-        },
-        {
-          "_Type": "DashboardApp",
-          "Uid": "eed93c2d-9bdc-465a-84cc-78b8d47bdea4",
-          "Name": "GitHub - Fenrus",
-          "Url": "https://github.com/revenz/Fenrus",
-          "Icon": "",
-          "Size": "large",
-          "Properties": {
-            "branch": ""
-          },
-          "AppName": "GitHub",
-          "DisplayName": "GitHub - Fenrus"
         }
       ],
       "Name": "Fenrus",
@@ -92,22 +99,23 @@
         },
         {
           "_Type": "DashboardApp",
+          "Uid": "2b8b3159-60c6-40d3-b38f-3c8d8fc760f3",
+          "Name": "GitHub - FileFlows",
+          "Url": "https://github.com/revenz/FileFlows",
+          "Icon": "",
+          "Size": "medium",
+          "Properties": {},
+          "AppName": "GitHub",
+          "DisplayName": "GitHub - FileFlows"
+        },
+        {
+          "_Type": "DashboardApp",
           "Uid": "0eef4385-4983-470f-b64d-3f384aa1c620",
           "Name": "FileFlows - Demo",
           "Url": "https://demo.fileflows.com/",
           "Icon": "",
           "Properties": {},
           "AppName": "FileFlows"
-        },
-        {
-          "_Type": "DashboardApp",
-          "Uid": "2b8b3159-60c6-40d3-b38f-3c8d8fc760f3",
-          "Name": "GitHub - FileFlows",
-          "Url": "https://github.com/revenz/FileFlows",
-          "Icon": "",
-          "Size": "large",
-          "Properties": {},
-          "AppName": "GitHub"
         }
       ],
       "Uid": "87544728-5584-45ff-8e4b-fcbdbbd27994"
