@@ -1,4 +1,5 @@
-﻿
+﻿const e = require("express");
+
 class EpicGames {
     dataAge;
     data;
@@ -69,7 +70,15 @@ class EpicGames {
         let country = args.properties['country'] || 'en-NZ';
         item.title = data.title;
         item.image = data.keyImages.filter(x => x.type === 'Thumbnail')[0].url;
-        item.link = `https://www.epicgames.com/store/${country}/p/${data.urlSlug}`;
+        let slug = data.productSlug;
+        if(!slug){
+            if(data.offerMappings?.length && data.offerMappings[0].pageSlug)
+                slug = data.offerMappings[0].pageSlug;
+        }else if(slug.indexOf('/') > 0)
+            slug = slug.substring(0, slug.indexOf('/')); // sometimes has a /home on the end which breaks the url
+        if(!slug)
+            return;
+        item.link = `https://www.epicgames.com/store/${country}/p/${slug}`;
         item.price = data.price.totalPrice.discountPrice === 0 ? 'FREE' : data.price.totalPrice.fmtPrice.discountPrice;
         if(item.price.indexOf('$') > 0)
             item.price = item.price.substring(item.price.indexOf('$'));
