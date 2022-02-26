@@ -6,7 +6,8 @@
     ],
     "Scripts":[
         "theme.js",
-        "potpack.js"
+        "potpack.js",
+        "packer.growing.js"
     ],
     "Templates":
     {

@@ -42,7 +42,7 @@ class DefaultTheme
             classes.push('vertical');
             bodyClasses.push('vertical');
             classes.push('height-' + args.GroupSize);
-        }
+        }   
         return {
             ClassName: classes.join(' '),
             BodyClassName: bodyClasses.join(' ')
@@ -92,8 +92,10 @@ class DefaultTheme
                 }
                 else if(item.classList.contains("large"))
                 {
-                    w = horizontal ? 6 : 2;
-                    h = horizontal ? 2 : 6;    
+                    w = 6;
+                    h = 2;
+                    //w = horizontal ? 6 : 2;
+                    //h = horizontal ? 2 : 6;    
                 }
                 else if(item.classList.contains("x-large"))
                 {
@@ -109,15 +111,39 @@ class DefaultTheme
             }
 
 
-            const {w, h, fill} = potpack(items, groupSize);
-            let eleItems = group.querySelector('.items');
-            eleItems.style.width = ((horizontal ? w : h) * 3.75) + 'rem';
-            eleItems.style.height = ((horizontal ? h : w) * 3.75) + 'rem';
-            eleItems.style.position = 'relative';
-            for(let item of items){
-                item.ele.style.position = 'absolute';
-                item.ele.style.left = ((horizontal ? item.x : item.y) * 3.75) + 'rem';
-                item.ele.style.top = ((horizontal ? item.y : item.x) * 3.75) + 'rem';
+            if(false){
+                const {w, h, fill} = potpack(items, groupSize);
+                let eleItems = group.querySelector('.items');
+                eleItems.style.width = ((horizontal ? w : h) * 3.75) + 'rem';
+                eleItems.style.height = ((horizontal ? h : w) * 3.75) + 'rem';
+                eleItems.style.position = 'relative';
+                for(let item of items){
+                    item.ele.style.position = 'absolute';
+                    item.ele.style.left = ((horizontal ? item.x : item.y) * 3.75) + 'rem';
+                    item.ele.style.top = ((horizontal ? item.y : item.x) * 3.75) + 'rem';
+                }
+            }else{                
+                var packer = new GrowingPacker();
+                packer.fit({
+                    maxHeight: 8, 
+                    blocks: items
+                });
+                console.log('items', items);
+                let groupW = 0, groupH = 0;
+                for(var n = 0 ; n < items.length ; n++) {
+                    var item = items[n];
+                    if (item.fit) {
+                        item.ele.style.position = 'absolute';
+                        item.ele.style.left = (item.fit.x * 3.75) + 'rem';
+                        item.ele.style.top = (item.fit.y * 3.75) + 'rem';
+                        groupW = Math.max(item.fit.x + item.fit.w, groupW);
+                        groupH = Math.max(item.fit.y + item.fit.h, groupH);
+                    }
+                }
+                let eleItems = group.querySelector('.items');
+                eleItems.style.width = (groupW  * 3.75) + 'rem';
+                eleItems.style.height = (groupH * 3.75) + 'rem';
+                eleItems.style.position = 'relative';
             }
             group.style.width = 'unset';
             group.style.minWidth = 'unset';
