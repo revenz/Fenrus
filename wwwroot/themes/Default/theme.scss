@@ -1,18 +1,12 @@
 ﻿@use 'tiles';
 body.horizontal {
     overflow:hidden;
-    .main-menu {
-        bottom:unset;
-        top:0;
-        display:flex;
-        flex-direction: row;
-    }       
 }
 body:not(.horizontal){
-    padding-top:2rem;
     padding-right:3rem;
 }
 body {    
+    padding-top:4rem;
     background: url('background.jpg');
     background-size:cover;
     background-repeat: no-repeat;
@@ -30,21 +24,10 @@ body {
     place-self:self-end;
     &:not(.horizontal)
     {
-        &.top-left {
+        &.top {
             place-self:self-start;
         }
-        &.top-right{
-            justify-content:end;
-            place-self:self-start;
-        }
-        &.bottom-right{
-            justify-content:end;
-        }
-        &.center-left {
-            place-self:center;
-        }
-        &.center-right {
-            place-self:center;
+        &.right{
             justify-content:end;
         }
         &.center {
@@ -59,42 +42,27 @@ body {
             }
         }
     }
-    &.horizontal
+    &.vertical
     {
-        &.top-left {
-            justify-content:start;
-            align-content: flex-start;
-            .main-menu {
-                bottom:0;
-                top:unset;
-            }       
+        &.left{
+            justify-content: start;
         }
-        &.top-right{
-            justify-content:start;
-            align-content: flex-end;
-            .main-menu {
-                bottom:0;
-                top:unset;
-            }       
+        &.top {
+            align-content: flex-start;    
         }
-        &.bottom-right{
-            justify-content:end;
-            align-content: flex-end;
+        &.right{
+            align-content: flex-end;   
         }
-        &.bottom-left{
-            justify-content:end;
-            align-content: flex-start;
-        }
-        &.center-left {
-            place-self:center;
-        }
-        &.center-right {
-            place-self:center;
+        &.bottom{
             justify-content:end;
         }
         &.center {
-            place-self:center;
-            justify-content:center;
+            place-self:unset;
+        }
+    }
+    &.horizontal {
+        &.bottom {
+            justify-content: end;
         }
     }
 }
@@ -139,3 +107,16 @@ body {
     }
 }
 
+
+
+.theme-setting2 {
+    position:absolute;
+    top:0.25rem;
+    left:1rem;
+    display:flex;
+    flex-direction:row;
+    align-items: center;
+    > * {
+        margin-right:1rem;
+    }
+}

@@ -1,5 +1,11 @@
 <%- include('./partials/head.ejs' ) %>
 
+<% if(theme.Head) {    
+    let themeHead = `${theme.Directory}/${theme.Head}`;
+%>
+<%- include(themeHead) %>
+<% } %>
+
 <div class="dashboard <%= themeVariables?.ClassName %>">
     <% if(settings.Groups?.length) {
         

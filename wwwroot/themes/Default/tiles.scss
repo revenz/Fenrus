@@ -6,7 +6,6 @@ $margin:0;
     .dashboard.automatic
     {
         .db-group {
-            background: rgba(0,0,0,0.5);
             .items {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, $baseSize);
@@ -26,10 +25,10 @@ $margin:0;
     }
     .dashboard.horizontal
     {
-        padding:2rem 1rem 1rem;
+        padding:0 1rem 1rem;
         display:flex;
         flex-direction: column; 
-        height: calc(100vh - 3rem);
+        height: calc(100vh - 5rem);
         overflow-y: hidden;
         &:not(.automatic){
             @for $i from 6 through 32 {    
@@ -42,13 +41,14 @@ $margin:0;
                 }
             }
         }
-        &.automatic {            
+        &.center {            
             align-content: center;
+            justify-content: center;
         }
-        &.automatic.center-left {     
+        &.left {     
             align-content: start;
         }
-        &.automatic.center-right {     
+        &.right {     
             align-content: end;
         }
     }

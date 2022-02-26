@@ -1,5 +1,6 @@
 {
     "Name":"Default",
+    "ThemeSettings":"theme-settings.ejs",
     "Css":[
         "theme.min.css"
     ],
@@ -36,23 +37,23 @@
             [
                 { 
                     "Label": "Bottom Left",
-                    "Value":"bottom-left"
+                    "Value":"bottom left"
                 },
                 { 
                     "Label": "Bottom Right",
-                    "Value":"bottom-right"
+                    "Value":"bottom right"
                 },
                 { 
                     "Label": "Top Right",
-                    "Value":"top-right"
+                    "Value":"top right"
                 },
                 { 
                     "Label": "Top Left",
-                    "Value":"top-left"
+                    "Value":"top left"
                 },
                 { 
                     "Label": "Center Left",
-                    "Value":"center-left"
+                    "Value":"center left"
                 },
                 { 
                     "Label": "Center",
@@ -60,7 +61,7 @@
                 },
                 { 
                     "Label": "Center Right",
-                    "Value":"center-right"
+                    "Value":"center right"
                 }
             ]
         }

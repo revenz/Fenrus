@@ -1,0 +1,70 @@
+
+
+<div class="theme-settings" x-data="ThemeSettings">
+    <span>Placement:</span>
+    <select x-model="model.Placement" @change="update">        
+        <% 
+            let placement = theme.Settings.filter(x => x.Name === 'Placement')[0];
+            for(let opt of placement.Options){%>
+            <option value="<%= opt.Value %>"><%= opt.Label %></option>
+        <%}%>
+    </select>
+    
+    <span>Automatic:</span>
+    <label for="tsAutomatic" class="toggle-switchy" @change="update">
+        <input type="checkbox" id="tsAutomatic"  x-model="model.Automatic"/>
+        <span class="toggle">
+            <span class="switch"></span>
+        </span>
+    </label>
+    
+    <span>Horizontal:</span>
+    <label for="tsHorizontal" class="toggle-switchy" @change="update">
+        <input type="checkbox" id="tsHorizontal" x-model="model.Horizontal"/>
+        <span class="toggle">
+            <span class="switch"></span>
+        </span>
+    </label>
+</div>
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        let json = document.getElementById('theme-settings').value;
+        let settings = JSON.parse(json);
+
+        let eleDashboard = document.querySelector('.dashboard');
+        Alpine.data('ThemeSettings', () => ({
+            model: settings,
+            update() {
+                console.log('update', JSON.parse(JSON.stringify(this.model)));
+
+                let className = 'dashboard ' + this.model.Placement;
+                className += this.model.Horizontal ? ' horizontal' : ' vertical';
+                if(this.model.Automatic)
+                    className += ' automatic';                
+                
+                eleDashboard.className = className;
+
+                defaultTheme.settings.Placement = this.model.Placement;
+                defaultTheme.settings.Automatic = this.model.Automatic;
+                defaultTheme.settings.Horizontal = this.model.Horizontal;
+                defaultTheme.shrinkGroups();
+
+
+                document.body.classList.remove('horizontal');
+                document.body.classList.remove('vertical');
+                document.body.classList.add(this.model.Horizontal ? 'horizontal' : 'vertical');
+
+                fetch('/theme-settings', {
+                    method: 'POST',
+                    body: JSON.stringify(this.model),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            }
+        }));
+    });
+
+</script>

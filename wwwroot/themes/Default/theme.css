@@ -1,7 +1,4 @@
 @media screen and (min-width: 720.001px) {
-  .dashboard.automatic .db-group {
-    background: rgba(0, 0, 0, 0.5);
-  }
   .dashboard.automatic .db-group .items {
     display: grid;
     grid-template-columns: repeat(auto-fill, 3.75rem);
@@ -48,10 +45,10 @@
   }
 
   .dashboard.horizontal {
-    padding: 2rem 1rem 1rem;
+    padding: 0 1rem 1rem;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 3rem);
+    height: calc(100vh - 5rem);
     overflow-y: hidden;
   }
   .dashboard.horizontal:not(.automatic).width-6 .db-group {
@@ -162,13 +159,14 @@
     min-width: 120rem;
     width: 120rem;
   }
-  .dashboard.horizontal.automatic {
+  .dashboard.horizontal.center {
     align-content: center;
+    justify-content: center;
   }
-  .dashboard.horizontal.automatic.center-left {
+  .dashboard.horizontal.left {
     align-content: start;
   }
-  .dashboard.horizontal.automatic.center-right {
+  .dashboard.horizontal.right {
     align-content: end;
   }
 
@@ -602,19 +600,13 @@
 body.horizontal {
   overflow: hidden;
 }
-body.horizontal .main-menu {
-  bottom: unset;
-  top: 0;
-  display: flex;
-  flex-direction: row;
-}
 
 body:not(.horizontal) {
-  padding-top: 2rem;
   padding-right: 3rem;
 }
 
 body {
+  padding-top: 4rem;
   background: url("background.jpg");
   background-size: cover;
   background-repeat: no-repeat;
@@ -631,21 +623,10 @@ body {
   flex-wrap: wrap;
   place-self: self-end;
 }
-.dashboard:not(.horizontal).top-left {
+.dashboard:not(.horizontal).top {
   place-self: self-start;
 }
-.dashboard:not(.horizontal).top-right {
-  justify-content: end;
-  place-self: self-start;
-}
-.dashboard:not(.horizontal).bottom-right {
-  justify-content: end;
-}
-.dashboard:not(.horizontal).center-left {
-  place-self: center;
-}
-.dashboard:not(.horizontal).center-right {
-  place-self: center;
+.dashboard:not(.horizontal).right {
   justify-content: end;
 }
 .dashboard:not(.horizontal).center {
@@ -655,40 +636,23 @@ body {
 .dashboard.vertical:not(.automatic).bottom-right .db-group, .dashboard.vertical:not(.automatic).bottom-left .db-group {
   margin-top: auto;
 }
-.dashboard.horizontal.top-left {
+.dashboard.vertical.left {
   justify-content: start;
+}
+.dashboard.vertical.top {
   align-content: flex-start;
 }
-.dashboard.horizontal.top-left .main-menu {
-  bottom: 0;
-  top: unset;
-}
-.dashboard.horizontal.top-right {
-  justify-content: start;
+.dashboard.vertical.right {
   align-content: flex-end;
 }
-.dashboard.horizontal.top-right .main-menu {
-  bottom: 0;
-  top: unset;
-}
-.dashboard.horizontal.bottom-right {
-  justify-content: end;
-  align-content: flex-end;
-}
-.dashboard.horizontal.bottom-left {
-  justify-content: end;
-  align-content: flex-start;
-}
-.dashboard.horizontal.center-left {
-  place-self: center;
-}
-.dashboard.horizontal.center-right {
-  place-self: center;
+.dashboard.vertical.bottom {
   justify-content: end;
 }
-.dashboard.horizontal.center {
-  place-self: center;
-  justify-content: center;
+.dashboard.vertical.center {
+  place-self: unset;
+}
+.dashboard.horizontal.bottom {
+  justify-content: end;
 }
 
 @media screen and (max-width: 720px) {
@@ -726,4 +690,16 @@ body {
   padding: 0.5rem 0.5rem 0.5rem;
   font-weight: 600;
   color: var(--color);
+}
+
+.theme-setting2 {
+  position: absolute;
+  top: 0.25rem;
+  left: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.theme-setting2 > * {
+  margin-right: 1rem;
 }

@@ -1,7 +1,4 @@
 @media screen and (min-width: 720.001px) {
-  .dashboard.automatic .db-group {
-    background: rgba(0, 0, 0, 0.5);
-  }
   .dashboard.automatic .db-group .items {
     display: grid;
     grid-template-columns: repeat(auto-fill, 3.75rem);
@@ -48,10 +45,10 @@
   }
 
   .dashboard.horizontal {
-    padding: 2rem 1rem 1rem;
+    padding: 0 1rem 1rem;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 3rem);
+    height: calc(100vh - 5rem);
     overflow-y: hidden;
   }
   .dashboard.horizontal:not(.automatic).width-6 .db-group {
@@ -162,13 +159,14 @@
     min-width: 120rem;
     width: 120rem;
   }
-  .dashboard.horizontal.automatic {
+  .dashboard.horizontal.center {
     align-content: center;
+    justify-content: center;
   }
-  .dashboard.horizontal.automatic.center-left {
+  .dashboard.horizontal.left {
     align-content: start;
   }
-  .dashboard.horizontal.automatic.center-right {
+  .dashboard.horizontal.right {
     align-content: end;
   }
 

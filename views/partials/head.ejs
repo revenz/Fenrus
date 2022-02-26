@@ -39,14 +39,18 @@
         <li><a title="Home" href="/"><span class="icon-home1"></span></a></li>
         <li><a title="Groups" href="/groups"><span class="icon-bars"></span></a></li>
         <li><a title="Settings" href="/settings"><span class="icon-sliders"></span></a></li>
-        <% if(theme.Settings?.length) { %>
-            <li><a title="Theme Settings" href="/theme-settings"><span class="icon-paint-brush"></span></a></li>
-        <%}%>
         <% if(user.IsAdmin) { %>
             <li><a title="Users" href="/users"><span class="icon-users"></span></a></li>
             <li><a title="System" href="/system"><span class="icon-cogs"></span></a></li>
         <% } %>
-        <li class="li-about"><a title="About" href="/about"><span class="icon-fenrus"></span></a></li>
+        <li class="li-about">
+            <a title="About" href="/about"><span class="icon-fenrus"></span></a>
+            <% if(isHome && theme.ThemeSettings) {
+                let partialThemeSettings = `../${theme.Directory}/${theme.ThemeSettings}`;
+            %>
+            <%- include(partialThemeSettings) %>
+            <% } %>
+        </li>
     </ul>
 
 
