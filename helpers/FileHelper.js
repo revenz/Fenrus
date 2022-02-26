@@ -9,6 +9,14 @@ class FileHelper {
         let list = await fsPromises.readdir(source, { withFileTypes: true });
         return list.filter(dirent => dirent.isDirectory()).map(dirent => dirent.name);
     }
+
+    getDirectoriesSync(source) {
+        if(fs.existsSync(source) === false)
+            return [];
+            
+        let list = fs.readdirSync(source, { withFileTypes: true });
+        return list.filter(dirent => dirent.isDirectory()).map(dirent => dirent.name);
+    }
 }
 
 module.exports = new FileHelper();

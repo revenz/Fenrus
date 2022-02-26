@@ -1,11 +1,11 @@
-<div class="theme-settings" x-data="ThemeSettings">
+<div class="theme-settings panel" x-data="ThemeSettings">
     <% for(let setting of theme.Settings) { %>
         <div class="setting <%= setting.Type.toLowerCase()%>">
             <span class="label"><%= setting.Label || setting.Name %></span>
             <span class="value">
                 <% if(setting.Type === 'Boolean') { %>
                     <label for="<%= setting.Name %>" class="toggle-switchy">
-                        <input @change="update"type="checkbox" id="<%= setting.Name %>"  x-model="model.<%= setting.Name %>"/>
+                        <input @change="update" type="checkbox" id="<%= setting.Name %>"  x-model="model.<%= setting.Name %>"/>
                         <span class="toggle">
                             <span class="switch"></span>
                         </span>
@@ -17,7 +17,7 @@
                         <% } %>
                     </select>
                 <% } else if(setting.Type === 'Integer') { %>
-                    <input @change="update" type="range" min="<%= setting.Minimum || 0 %>" max="<%= setting.Maximum || 100 %>" x-model="model.<%= setting.Name %>" />
+                    <input @change="update" @input="updateSlider('slider-<%= setting.Name%>', <%= setting.Minimum || 0 %>, <%= setting.Maximum|| 100 %>)" id="slider-<%= setting.Name%>" type="range" min="<%= setting.Minimum || 0 %>" max="<%= setting.Maximum || 100 %>" x-model="model.<%= setting.Name %>" />
                     <span class="range-value" x-text="model.<%= setting.Name %>"></span>
                 <% } %>
             </span>
@@ -33,9 +33,24 @@
 
         Alpine.data('ThemeSettings', () => ({
             model: settings,
+            init() {
+                let ranges = document.querySelectorAll('.theme-settings input[type=range]');
+                for(let range of ranges){
+                    let min = parseInt(range.getAttribute('min') || 0, 10);
+                    let max = parseInt(range.getAttribute('max') || 100, 10);
+                    let value = settings[range.id.substring(7)];
+                    let percent = (value - min) / (max - min) * 100;
+                    console.log(min, max, value, percent);
+                    range.style.backgroundSize = percent + '% 100%';
+                }
+            },
+            updateSlider(id, min, max) {
+                let ele = document.getElementById(id);
+                let value = ele.value;
+                let percent = (value - min) / (max - min) * 100;
+                ele.style.backgroundSize = percent + '% 100%';
+            },
             update() {
-                console.log('update', JSON.parse(JSON.stringify(this.model)));
-
 
                 Object.keys(this.model).forEach(x => {
                     themeInstance.settings[x] = this.model[x];

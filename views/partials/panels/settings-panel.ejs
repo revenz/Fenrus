@@ -1,0 +1,79 @@
+<input type="hidden" id="SettingsData" value="<%= settings.toJson(true) %>" />
+
+<div class="settings panel" x-data="Settings">
+    <div class="setting">
+        <span class="label">Theme</span>
+        <span class="value">
+            <select x-model="model.Theme" @change="update">
+                <% for(let theme of themes) { %>
+                    <option><%= theme %></option>
+                <% } %>    
+            </select>
+        </span>
+    </div>
+    <div class="setting">
+        <span class="label">Link Target</span>
+        <span class="value">
+            <select x-model="model.LinkTarget" @change="update">
+                <option value="_self">Open in this tab</option>
+                <option value="_blank">Open in new tab</option>
+                <option value="home-portal">Open in same tab</option>
+            </select>
+        </span>
+    </div>
+    <div class="setting">
+        <span class="label">Group Titles</span>
+        <span class="value">
+            <label for="ShowGroupTitles" class="toggle-switchy" @change="update">
+                <input type="checkbox" id="ShowGroupTitles" x-model="model.ShowGroupTitles" />
+                <span class="toggle">
+                    <span class="switch"></span>
+                </span>
+            </label>
+        </span>
+    </div>
+</div>
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        let json = document.getElementById('SettingsData').value;
+        let settings = JSON.parse(json)
+        let eleDashboard = document.querySelector('.dashboard');
+        let target = settings.LinkTarget;
+        let theme = settings.Theme;
+        Alpine.data('Settings', () => ({
+            model: settings, 
+            update(){
+                let reload = theme != this.model.Theme;
+                if(reload === false)
+                {
+                    eleDashboard.classList.remove('hide-group-titles');
+                    if(this.model.ShowGroupTitles === false)
+                        eleDashboard.classList.add('hide-group-titles');
+
+                    if(this.model.LinkTarget != target){
+                        // need to update all the targets
+                        target = this.model.LinkTarget;
+                        eleDashboard.querySelectorAll('a').forEach(a => {
+                            if(a.getAttribute('href').length > 1)
+                                a.setAttribute('target', target);
+                        });
+                    }
+                }
+ 
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify(this.model),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                fetch('/settings', options).then(()=>{
+                    if(reload)
+                        window.location.reload(true);
+                });
+            }
+        }))
+    });
+</script>

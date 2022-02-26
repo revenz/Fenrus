@@ -1,6 +1,6 @@
 <% if(model?.Items?.length) { %>    
 <div class="db-group <%= model.HideLabels ? 'hide-labels' : '' %>">
-    <% if(settings.ShowGroupTitles && !model.HideGroupTitle) { %>
+    <% if(!model.HideGroupTitle) { %>
         <div class="title"><span><%= model.Name %></span></div>
     <% } %>
     

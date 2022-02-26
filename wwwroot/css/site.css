@@ -746,7 +746,7 @@ body {
   position: relative;
   top: 3px;
 }
-.main-menu li:hover .theme-settings {
+.main-menu li:hover .panel {
   display: flex;
   flex-direction: column;
   background: #000001;
@@ -757,27 +757,65 @@ body {
   font-size: 1rem;
   z-index: 10;
 }
-.main-menu li:hover .theme-settings .setting {
+.main-menu li:hover .panel.groups .setting .value {
+  min-width: unset;
+}
+.main-menu li:hover .panel .setting {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-.main-menu li:hover .theme-settings .setting .label {
+.main-menu li:hover .panel .setting .label {
   width: 8rem;
 }
-.main-menu li:hover .theme-settings .setting + .setting {
+.main-menu li:hover .panel .setting + .setting {
   margin-top: 1rem;
 }
-.main-menu li:hover .theme-settings .setting.integer .value {
+.main-menu li:hover .panel .setting.integer .value {
   display: flex;
   flex-direction: row;
+  place-items: center;
 }
-.main-menu li:hover .theme-settings .setting.integer .value .range-value {
+.main-menu li:hover .panel .setting.integer .value .range-value {
   width: 2rem;
   margin: auto;
-  text-align: right;
+  background: var(--accent);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
 }
-.main-menu .theme-settings {
+.main-menu li:hover .panel .setting .value {
+  flex-grow: 1;
+  min-width: 10rem;
+}
+.main-menu li:hover .panel .setting select {
+  width: 100%;
+  background: var(--accent);
+  color: var(--color);
+  height: 2rem;
+  border-radius: 0.25rem;
+}
+.main-menu li:hover .panel .setting input[type=range] {
+  appearance: none;
+  margin-right: 15px;
+  width: 200px;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 70% 100%;
+  background-repeat: no-repeat;
+}
+.main-menu li:hover .panel .setting input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 2px 0 #555;
+  transition: background 0.3s ease-in-out;
+}
+.main-menu .panel {
   display: none;
 }
 .main-menu .li-about:hover a {
@@ -827,4 +865,8 @@ option {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+
+.hide-group-titles .db-group > .title {
+  display: none;
 }

@@ -1,0 +1,28 @@
+<div class="groups panel" x-data="Groups">
+    <% for(let item of settings.Groups) { %>
+    <div class="setting">
+        <span class="label"><%= item.Name %></span>
+        <span class="value">
+            <label for="<%= item.Uid %>Enabled" class="toggle-switchy">
+                <input type="checkbox" id="<%= item.Uid %>Enabled" <%= item.Enabled !== false ? "checked" : "" %> @change="setStatus('<%= item.Uid %>', event.target.checked)" />
+                <span class="toggle">
+                    <span class="switch"></span>
+                </span>
+            </label>
+        </span>
+    </div>
+    <% } %>
+</div>
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('Groups', () => ({            
+            setStatus(uid, enabled){
+                fetch('/group/' + encodeURIComponent(uid) + '/status/' + (enabled === true), { method: 'POST'}).then(()=>{
+                    window.location.reload(true);
+                });
+            }
+        }))
+    });
+</script>

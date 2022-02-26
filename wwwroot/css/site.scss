@@ -98,7 +98,7 @@ body {
                 position: relative;
                 top:3px;
             }
-            .theme-settings {
+            .panel {
                 display:flex;
                 flex-direction: column;
                 background:rgba(0,0,0.5);
@@ -108,6 +108,9 @@ body {
                 top:3.75rem;
                 font-size:1rem;
                 z-index:10;
+                &.groups .setting .value {
+                    min-width:unset;
+                }
                 .setting {
                     display: flex;
                     flex-direction: row;
@@ -121,18 +124,55 @@ body {
                     &.integer .value {
                         display: flex;
                         flex-direction: row;
+                        place-items: center;
                         .range-value {
                             width:2rem;
                             margin: auto;
-                            text-align: right;
+                            background: var(--accent);
+                            border-radius: 0.5rem;
+                            padding: 0.5rem;
+                            text-align: center;
                         }
                     }
+                    .value {
+                        flex-grow:1;
+                        min-width:10rem;
+                    }                    
+                    select {
+                        width:100%;
+                        background:var(--accent);
+                        color:var(--color);
+                        height:2rem;
+                        border-radius:0.25rem;
+                    }
+
+                    input[type="range"] {
+                        appearance: none;
+                        margin-right: 15px;
+                        width: 200px;
+                        height: 7px;
+                        background: rgba(255, 255, 255, 0.6);
+                        border-radius: 5px;
+                        background-image: linear-gradient(var(--accent), var(--accent));
+                        background-size: 70% 100%;
+                        background-repeat: no-repeat;
+                        &::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            height: 20px;
+                            width: 20px;
+                            border-radius: 50%;
+                            background: var(--accent);
+                            box-shadow: 0 0 2px 0 #555;
+                            transition: background .3s ease-in-out;
+                        }
+                      }
+                      
                 }
             }
         }
     }
 
-    .theme-settings {
+    .panel {
         display:none;
     }
 
@@ -188,4 +228,9 @@ option {
         background-size: cover;
         background-position: center;
     }  
+}
+
+
+.hide-group-titles .db-group > .title {
+    display:none;
 }

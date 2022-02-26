@@ -7,10 +7,6 @@
         "theme.js",
         "packer.growing.min.js"
     ],
-    "Templates":
-    {
-        "Group": "group.ejs"
-    },
     "Settings":[        
         {
             "Name":"Placement",
