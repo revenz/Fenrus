@@ -37,27 +37,27 @@
 <body class="<%= themeVariables?.BodyClassName %>">  
     <ul class="main-menu">
         <li><a title="Home" href="/"><span class="icon-home1"></span></a></li>
-        <li>
-            <a title="Groups" href="/groups"><span class="icon-bars"></span></a>
-            <% if(isHome) { %>
-            <%- include('panels/groups-panel.ejs') %>
+        <% if(isGuest !== true) { %>
+            <li>
+                <a title="Groups" href="/groups"><span class="icon-bars"></span></a>
+                <% if(isHome) { %>
+                <%- include('panels/groups-panel.ejs') %>
+                <% } %>
+            </li>
+            <li>
+                <a title="Settings" href="/settings"><span class="icon-sliders"></span></a>
+                <% if(isHome) { %>
+                <%- include('panels/settings-panel.ejs') %>
+                <% } %>
+            </li>
+            <% if(user.IsAdmin) { %>
+                <li><a title="Users" href="/users"><span class="icon-users"></span></a></li>
+                <li><a title="System" href="/system"><span class="icon-cogs"></span></a></li>
             <% } %>
-        </li>
-        <li>
-            <a title="Settings" href="/settings"><span class="icon-sliders"></span></a>
-            <% if(isHome) { %>
-            <%- include('panels/settings-panel.ejs') %>
-            <% } %>
-        </li>
-        <% if(user.IsAdmin) { %>
-            <li><a title="Users" href="/users"><span class="icon-users"></span></a></li>
-            <li><a title="System" href="/system"><span class="icon-cogs"></span></a></li>
         <% } %>
         <li class="li-about">
-            <a title="About" href="/about"><span class="icon-fenrus"></span></a>
-            <% if(isHome === true && theme.Settings?.length) { %>
+            <a title="About" href="/about"><span class="icon-fenrus"></span></a>            
             <%- include('panels/theme-settings.ejs') %>
-            <% } %>
         </li>
     </ul>
 

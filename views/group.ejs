@@ -1,5 +1,10 @@
 <%- include('./partials/head.ejs' ) %>
 
+<% 
+    var urlPrefix = guestSettings ? '/system/guest' : '';
+    var urlGroupUrl = guestSettings ? '/system/guest' : '/groups';
+%> 
+
 <link rel="stylesheet" href="/css/settings.min.css?version=<%= version %>" />
 
 <div x-data="Group">
@@ -197,11 +202,11 @@
                     }
                 }
                 this.Saving = true;
-                fetch('/group/' + encodeURIComponent(this.Group.Uid), options).then(res => {
+                fetch('<%= urlPrefix %>/group/' + encodeURIComponent(this.Group.Uid), options).then(res => {
                     if(!res.ok)
                         throw res;
                     this.Saving = false;
-                    window.location.href = '/groups';
+                    window.location.href = '<%= urlGroupUrl %>';
                 }).catch(err => {
                     console.log(err);
                     toast('Failed to save', false);
@@ -209,7 +214,7 @@
                 });
             },
             cancel() {
-                window.location.href = '/groups';
+                window.location.href = '<%= urlGroupUrl %>';
             },
             addSeparator(){
                 this.Group.Items.push({
@@ -275,7 +280,7 @@
                         DestinationUid: this.MoverDestination
                     })
                 }
-                fetch('/group/move', options).then((res)=>{
+                fetch('<%= urlPrefix %>/group/move', options).then((res)=>{
                     if(!res.ok)
                         throw(res);
                     let index = this.Group.Items.indexOf(this.MoverItem);

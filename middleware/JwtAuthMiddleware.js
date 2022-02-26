@@ -4,14 +4,23 @@ const System = require('../models/System');
 
 module.exports = async (req, res, next) => {
     var token = req.cookies?.jwt_auth;
+    console.log('token', token);
+    let system = System.getInstance();
     if (!token) {
-        res.status(401).redirect('/login?error=401');
+        if(system.AllowGuest === false)
+            res.status(401).redirect('/login?error=401');
+        else
+        {
+            req.isGuest = true;
+            req.settings = await Settings.getForGuest();
+            next();
+        }
         return;
     } 
        
-    let system = System.getInstance();
 
-    try{
+    try
+    {
         const decode = jwt.verify(token, system.JwtSecret);
         if(typeof(decode) === 'string')
             decode = JSON.parse(decode);
@@ -24,8 +33,14 @@ module.exports = async (req, res, next) => {
     }
     catch(err)
     {
-        res.status(401).redirect('/login?error=401');
-        return;
+        if(system.AllowGuest === false)
+        {
+            res.status(401).redirect('/login?error=401');
+            return;
+        }
+
+        req.isGuest = true;
+        req.settings = await Settings.getForGuest();
     }
     next();
 }

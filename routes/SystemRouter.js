@@ -30,10 +30,12 @@ router.post('/', async (req, res) => {
     var system = System.getInstance();
     // explicitly set these variables for security
     system.AllowRegister = model.AllowRegister === true;
+    system.AllowGuest = model.AllowGuest === true;
     
     await system.save();
     res.status(200).send('').end();
 });
+
   
 
 module.exports = router;

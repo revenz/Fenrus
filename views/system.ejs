@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" href="/css/settings.min.css?version=<%= version %>" />
 
-<input type="hidden" id="SystemData" value="<%= system.toJson() %>" />
+<input type="hidden" id="SystemData" value="<%= system.toJson(true) %>" />
 
 <div class="general settings-box" x-data="System">
     <div class="header">
@@ -20,6 +20,20 @@
                     <span class="switch"></span>
                 </span>
             </label>
+        </span>
+    </div>
+    <div class="setting">
+        <span class="label">Allow Guest</span>
+        <span class="value">
+            <label for="AllowGuest" class="toggle-switchy">
+                <input type="checkbox" id="AllowGuest" x-model="model.AllowGuest" />
+                <span class="toggle">
+                    <span class="switch"></span>
+                </span>
+            </label>
+            <template x-if="model.AllowGuest">
+                <button style="display:block;margin-top:1rem" class="btn" @click="editGuest">Configure</button>
+            </template>
         </span>
     </div>
 </div>
@@ -49,7 +63,7 @@
            },
            save() {
                 if(!this.validate())
-                    return;
+                    return false;
                     
                 const options = {
                     method: 'POST',
@@ -58,9 +72,13 @@
                         'Content-Type': 'application/json'
                     }
                 }
-                fetch('/system', options).then(()=>{
-                    window.location.reload(true);
-                });
+                fetch('/system', options);
+                return true;
+            },
+            editGuest() {
+                if(!this.save())
+                    return;
+                window.location.href = '/system/guest';                
             }
         }))
     });

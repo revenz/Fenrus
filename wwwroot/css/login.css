@@ -78,6 +78,9 @@ input:focus {
 .buttons .btn + .btn {
   margin-right: 1rem;
 }
+.buttons .btn + .btn + .btn {
+  margin-right: auto;
+}
 
 .error {
   text-align: center;

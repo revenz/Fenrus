@@ -1,12 +1,17 @@
 <%- include('./partials/head.ejs' ) %>
 
+<% 
+    var urlPrefix = guestSettings ? '/system/guest' : '';
+    var urlGroupUrl = guestSettings ? '/system/guest' : '/groups';
+%> 
+
 <link rel="stylesheet" href="/css/settings.min.css?version=<%= version %>" />
 
 <div class="groups settings-box" x-data="Groups">    
     <div class="header">
         <span class="title">Groups</span>
         <div class="buttons">
-            <a class="btn add" href="/group/<%= Utils.newGuid() %>">Add</a>
+            <a class="btn add" href="<%= urlPrefix %>/group/<%= Utils.newGuid() %>">Add</a>
         </div>
     </div>
     <ul class="group-list contains-toggle">
@@ -35,7 +40,7 @@
                 </label>
             </span>
             <span class="controls">
-                <a title="Edit" class="icon-edit" href="/group/<%= item.Uid %>"></a>
+                <a title="Edit" class="icon-edit" href="<%= urlPrefix %>/group/<%= item.Uid %>"></a>
                 <span title="Delete" class="icon-trash" @click="deleteGroup('<%= item.Uid %>')"></span>
             </span>
         </li>
@@ -54,14 +59,14 @@
                 let name = document.getElementById(uid).querySelector('.name').innerText;
                 confirmPrompt(`Are you sure you want to delete the group "${name}"?`).then(() => 
                 {
-                    fetch('/group/' + encodeURIComponent(uid), { method: 'DELETE'}).then(()=>{
+                    fetch('<%= urlPrefix %>/group/' + encodeURIComponent(uid), { method: 'DELETE'}).then(()=>{
                         document.getElementById(uid).remove(); 
                     });
                 }).catch(err => {});
             },
             setStatus(uid, enabled){
 
-                fetch('/group/' + encodeURIComponent(uid) + '/status/' + (enabled === true), { method: 'POST'});
+                fetch('<%= urlPrefix %>/group/' + encodeURIComponent(uid) + '/status/' + (enabled === true), { method: 'POST'});
             },
             
             dragSrcEl:null,
@@ -107,7 +112,7 @@
                     }
                 }
 
-                return fetch('/groups/order', options);
+                return fetch('<%= urlGroupUrl %>/order', options);
             }
         }))
     });

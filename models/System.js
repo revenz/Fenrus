@@ -5,6 +5,7 @@ class SystemInstance {
     
     JwtSecret = '';
     AllowRegister = true;
+    AllowGuest = true;
     _File = './data/system.json';
 
     constructor(){
@@ -48,10 +49,17 @@ class SystemInstance {
         });
     }
 
-    toJson() { 
+    toJson(noSecret) { 
+        if(noSecret){
+            return JSON.stringify({       
+                AllowRegister: this.AllowRegister,
+                AllowGuest: this.AllowGuest
+            });
+        }
         return JSON.stringify({                
             JwtSecret: this.JwtSecret,
-            AllowRegister: this.AllowRegister
+            AllowRegister: this.AllowRegister,
+            AllowGuest: this.AllowGuest
         }, null, 2);
     }
 }

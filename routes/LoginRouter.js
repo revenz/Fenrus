@@ -13,7 +13,8 @@ router.get('/', (req, res) => {
     { 
         title: 'Login',
         version: Globals.Version,
-        allowRegister: system.AllowRegister
+        allowRegister: system.AllowRegister,
+        allowGuest: system.AllowGuest,
     });
 });
 

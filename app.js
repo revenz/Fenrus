@@ -16,8 +16,8 @@ const cookieParser = require('cookie-parser');
 const routerHome = require('./routes/HomeRouter');
 const routerApp = require('./routes/AppRouter');
 const routerSettings = require('./routes/SettingsRouter');
-const routerGroups = require('./routes/GroupsRouter');
-const routerGroup = require('./routes/GroupRouter');
+const GroupsRouter = require('./routes/GroupsRouter');
+const GroupRouter = require('./routes/GroupRouter');
 const routerLogin = require('./routes/LoginRouter');
 const routerUsers = require('./routes/UsersRouter');
 const routerSystem = require('./routes/SystemRouter');
@@ -101,11 +101,13 @@ app.use('/apps', routerApp);
 app.use(themeMiddleware);
 app.use('/', routerHome);
 app.use('/settings', routerSettings);
-app.use('/groups', routerGroups);
-app.use('/group', routerGroup);
+app.use('/groups', new GroupsRouter(false).get());
+app.use('/group', new GroupRouter(false).get());
 app.use('/theme-settings', routerTheme);
 
 // below are admin only routes, so use the Admin middlweare
 app.use(adminMiddleware);
 app.use('/users', routerUsers);
+app.use('/system/guest', new GroupsRouter(true).get());
+app.use('/system/guest/group', new GroupRouter(true).get());
 app.use('/system', routerSystem);

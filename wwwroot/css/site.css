@@ -652,6 +652,30 @@ CORE STYLES ABOVE - NO TOUCHY
   width: 40px;
 }
 
+.btn {
+  text-decoration: none;
+  color: var(--button-color, var(--color, #fff));
+  background: var(--button-background, transparent);
+  border: solid 1px var(--border-color, var(--color, rgba(255, 255, 255, 0.3)));
+  border-radius: 0.1rem;
+  text-align: center;
+  padding: 0.5rem 0;
+  text-transform: uppercase;
+  width: 8rem;
+  cursor: pointer;
+}
+.btn:hover {
+  background: var(--accent, #ff0090);
+  color: var(--color, #fff);
+}
+.btn:disabled {
+  cursor: not-allowed;
+}
+
+a.btn {
+  width: calc(8rem - 2px);
+}
+
 html {
   font-size: 14px;
   font-family: sans-serif;
@@ -718,7 +742,7 @@ body {
   display: flex;
   flex-direction: row;
 }
-.main-menu a {
+.main-menu a:not(.btn) {
   color: var(--color);
   text-decoration: none !important;
   margin: auto;
@@ -727,6 +751,12 @@ body {
   text-align: center;
   line-height: 3.5rem;
   transition: transform 0.2s;
+}
+.main-menu .btn {
+  transform: scale(1) !important;
+}
+.main-menu .logout.has-settings {
+  padding-left: 8rem;
 }
 .main-menu li {
   width: 3.5rem;

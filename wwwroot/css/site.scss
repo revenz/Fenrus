@@ -1,6 +1,7 @@
 ﻿@use 'fonticons';
 @use 'carousel';
 @use 'toggle-switchy';
+@use 'button';
 
 html {
     font-size: 14px;
@@ -70,7 +71,7 @@ body {
 
     $size: 3.5rem;
 
-    a {
+    a:not(.btn) {
         color: var(--color);
         text-decoration: none !important;
         margin: auto;
@@ -79,6 +80,14 @@ body {
         text-align: center;
         line-height: $size;
         transition: transform .2s;
+    }
+
+    .btn {        
+        transform: scale(1) !important;
+    }
+
+    .logout.has-settings {
+        padding-left: 8rem;
     }
 
     li {

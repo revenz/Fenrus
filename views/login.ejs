@@ -46,6 +46,9 @@
                 <% if(allowRegister) { %>
                 <button class="btn" @click="register">Register</button>
                 <% } %>
+                <% if(allowGuest) { %>
+                <button class="btn" @click="guest">Guest</button>
+                <% } %>
             </div>
         </div>
     </div>
@@ -86,6 +89,9 @@
                 },
                 register(){
                     this.doLoginRegister(true);
+                },
+                guest() {
+                    window.location.href = '/';
                 },
                 doLoginRegister(register){
                     if(!this.validate())

@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
         next();
         return;
     }
-
-    req.theme = Theme.getTheme(req.settings.Theme);
+    
+    req.theme = Theme.getTheme(req.isGuest ? 'Default' : req.settings.Theme);
     next();
 };

@@ -1,72 +1,87 @@
 <div class="theme-settings panel" x-data="ThemeSettings">
-    <% for(let setting of theme.Settings) { %>
-        <div class="setting <%= setting.Type.toLowerCase()%>">
-            <span class="label"><%= setting.Label || setting.Name %></span>
-            <span class="value">
-                <% if(setting.Type === 'Boolean') { %>
-                    <label for="<%= setting.Name %>" class="toggle-switchy">
-                        <input @change="update" type="checkbox" id="<%= setting.Name %>"  x-model="model.<%= setting.Name %>"/>
-                        <span class="toggle">
-                            <span class="switch"></span>
-                        </span>
-                    </label>
-                <% } else if(setting.Type === 'Select') { %>
-                    <select @change="update" x-model="model.<%= setting.Name %>">
-                        <% for(let opt of setting.Options ) { %>
-                            <option value="<%= opt.Value %>"><%= opt.Label %></option>
+    <% if(isGuest) { %>
+        <div class="setting login">
+            <a href="/login" class="btn">Login</a>
+        </div>
+    <% } else { 
+        let showSettings = isHome === true && theme.Settings?.length;
+        if(showSettings) { %>
+            <% for(let setting of theme.Settings) { %>
+                <div class="setting <%= setting.Type.toLowerCase()%>">
+                    <span class="label"><%= setting.Label || setting.Name %></span>
+                    <span class="value">
+                        <% if(setting.Type === 'Boolean') { %>
+                            <label for="<%= setting.Name %>" class="toggle-switchy">
+                                <input @change="update" type="checkbox" id="<%= setting.Name %>"  x-model="model.<%= setting.Name %>"/>
+                                <span class="toggle">
+                                    <span class="switch"></span>
+                                </span>
+                            </label>
+                        <% } else if(setting.Type === 'Select') { %>
+                            <select @change="update" x-model="model.<%= setting.Name %>">
+                                <% for(let opt of setting.Options ) { %>
+                                    <option value="<%= opt.Value %>"><%= opt.Label %></option>
+                                <% } %>
+                            </select>
+                        <% } else if(setting.Type === 'Integer') { %>
+                            <input @change="update" @input="updateSlider('slider-<%= setting.Name%>', <%= setting.Minimum || 0 %>, <%= setting.Maximum|| 100 %>)" id="slider-<%= setting.Name%>" type="range" min="<%= setting.Minimum || 0 %>" max="<%= setting.Maximum || 100 %>" x-model="model.<%= setting.Name %>" />
+                            <span class="range-value" x-text="model.<%= setting.Name %>"></span>
                         <% } %>
-                    </select>
-                <% } else if(setting.Type === 'Integer') { %>
-                    <input @change="update" @input="updateSlider('slider-<%= setting.Name%>', <%= setting.Minimum || 0 %>, <%= setting.Maximum|| 100 %>)" id="slider-<%= setting.Name%>" type="range" min="<%= setting.Minimum || 0 %>" max="<%= setting.Maximum || 100 %>" x-model="model.<%= setting.Name %>" />
-                    <span class="range-value" x-text="model.<%= setting.Name %>"></span>
-                <% } %>
-            </span>
+                    </span>
+                </div>
+            <% } %>
+        <% } %>
+        <div class="setting logout <%= showSettings ? 'has-settings' : 'no-settings'%>">
+            <a href="/logout" class="btn">Logout</a>
         </div>
     <% } %>
 </div>
 
-<script>
+<% if(isHome === true && theme.Settings?.length) { %>
+    <script>
 
-    document.addEventListener('alpine:init', () => {
-        let json = document.getElementById('theme-settings').value;
-        let settings = json ? JSON.parse(json) : { };
+        document.addEventListener('alpine:init', () => {
+            let json = document.getElementById('theme-settings').value;
+            let settings = json ? JSON.parse(json) : { };
 
-        Alpine.data('ThemeSettings', () => ({
-            model: settings,
-            init() {
-                let ranges = document.querySelectorAll('.theme-settings input[type=range]');
-                for(let range of ranges){
-                    let min = parseInt(range.getAttribute('min') || 0, 10);
-                    let max = parseInt(range.getAttribute('max') || 100, 10);
-                    let value = settings[range.id.substring(7)];
-                    let percent = (value - min) / (max - min) * 100;
-                    range.style.backgroundSize = percent + '% 100%';
-                }
-            },
-            updateSlider(id, min, max) {
-                let ele = document.getElementById(id);
-                let value = ele.value;
-                let percent = (value - min) / (max - min) * 100;
-                ele.style.backgroundSize = percent + '% 100%';
-            },
-            update() {
-
-                Object.keys(this.model).forEach(x => {
-                    themeInstance.settings[x] = this.model[x];
-                })             
-
-                if(themeInstance.init)   
-                    themeInstance.init();
-
-                fetch('/theme-settings', {
-                    method: 'POST',
-                    body: JSON.stringify(this.model),
-                    headers: {
-                        'Content-Type': 'application/json'
+            Alpine.data('ThemeSettings', () => ({
+                model: settings,
+                init() {
+                    let ranges = document.querySelectorAll('.theme-settings input[type=range]');
+                    for(let range of ranges){
+                        let min = parseInt(range.getAttribute('min') || 0, 10);
+                        let max = parseInt(range.getAttribute('max') || 100, 10);
+                        let value = settings[range.id.substring(7)];
+                        let percent = (value - min) / (max - min) * 100;
+                        range.style.backgroundSize = percent + '% 100%';
                     }
-                })
-            }
-        }));
-    });
+                },
+                updateSlider(id, min, max) {
+                    let ele = document.getElementById(id);
+                    let value = ele.value;
+                    let percent = (value - min) / (max - min) * 100;
+                    ele.style.backgroundSize = percent + '% 100%';
+                },
+                update() {
 
-</script>
+                    Object.keys(this.model).forEach(x => {
+                        themeInstance.settings[x] = this.model[x];
+                    })             
+
+                    if(themeInstance.init)   
+                        themeInstance.init();
+
+                    fetch('/theme-settings', {
+                        method: 'POST',
+                        body: JSON.stringify(this.model),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                }
+            }));
+        });
+
+    </script>
+
+<% } %>

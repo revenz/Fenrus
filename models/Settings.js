@@ -181,6 +181,19 @@ class Settings {
         SettingsInstance.instances[uid] = instance;
         return instance;
     }
+    
+    static async getForGuest() 
+    {
+        SettingsInstance.instances = SettingsInstance.instances || {};
+
+        if(SettingsInstance.instances['guest'])
+            return SettingsInstance.instances['guest'];
+
+        let instance = new SettingsInstance('guest');
+        await instance.load();
+        SettingsInstance.instances['guest'] = instance;
+        return instance;
+    }
 
     static clearUser(uid){
         if(!SettingsInstance.instances)
