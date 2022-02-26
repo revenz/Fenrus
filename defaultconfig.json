@@ -4,6 +4,7 @@
   "Theme": "Default",
   "AccentColor": "#FF0090",
   "ShowGroupTitles": true,
+  "CollapseMenu": false,
   "BackgroundImage": "",
   "ThemeSettings": {
     "Default": {
@@ -28,6 +29,16 @@
           },
           "AppName": "GitHub",
           "DisplayName": "GitHub - Fenrus"
+        },
+        {
+          "_Type": "DashboardApp",
+          "Uid": "afc3d25e-31d4-45ac-baf0-ea228813e611",
+          "Name": "Reddit - Fenrus",
+          "Url": "https://reddit.com/r/Fenrus",
+          "Icon": "",
+          "Size": "medium",
+          "Properties": {},
+          "AppName": "Reddit"
         },
         {
           "_Type": "DashboardApp",
