@@ -791,6 +791,7 @@ body {
 .main-menu li:hover .panel .setting select {
   width: 100%;
   background: var(--accent);
+  border-color: var(--accent);
   color: var(--color);
   height: 2rem;
   border-radius: 0.25rem;
