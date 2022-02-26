@@ -70,17 +70,6 @@ body {
 
     $size: 3.5rem;
 
-    &.collapsible{
-        transform: translateY(calc(100% - 3.5rem));
-        display: flex;
-        flex-direction: column-reverse;    
-        transition: transform .4s;
-
-        &:hover {
-            transform: translateY(0);
-        }
-    }
-
     a {
         color: var(--color);
         text-decoration: none !important;

@@ -718,15 +718,6 @@ body {
   display: flex;
   flex-direction: row;
 }
-.main-menu.collapsible {
-  transform: translateY(calc(100% - 3.5rem));
-  display: flex;
-  flex-direction: column-reverse;
-  transition: transform 0.4s;
-}
-.main-menu.collapsible:hover {
-  transform: translateY(0);
-}
 .main-menu a {
   color: var(--color);
   text-decoration: none !important;
