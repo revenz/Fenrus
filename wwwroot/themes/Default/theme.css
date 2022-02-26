@@ -300,6 +300,10 @@ body {
   }
   .dashboard.horizontal.right {
     align-content: end;
+    justify-content: unset;
+  }
+  .dashboard.horizontal.bottom {
+    justify-content: end;
   }
 }
 .db-group {
