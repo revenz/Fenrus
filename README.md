@@ -3,9 +3,9 @@
 # Fenrus
 
 
-Fenrus is a magical gateway to the wonderful wizardly world.   
+Fenrus personal home page/dasbhoard.  
 
-It acts as a magic home page and allows for a quick overview of your favourite apps/sites and lets you organize and quickly navigate this magical world.
+It allows you to have a custom home page/new tab page with quick access to your personal apps.
 
 ---
 ![image](https://user-images.githubusercontent.com/958400/155836968-6f85270a-fba3-4613-89d8-9f4afac2de34.png)
@@ -90,20 +90,8 @@ Q: What is the default username/password?
 
 A: There is no default user.  Enter a username and password, then click the "Register" button.  This will create a new administrator user.   You can then go ot "System" and turn off registrations if you do not wish to allow open registrations.
 
-
-
-Q: What's with all the magic stuff?
-
-A: I named the app Fenrus, Erasmus was taken, from a wizard character from Quest for Glory.  It's hard coming up with a domain, especially for something so generic as a homepage-type app.
-
-
-
-Q: Why is the logo a wolf when it's named after a magic rat?
-
-A: I googled Fenrus, found it's a giant wolf in World of Warcraft, I couldn't find a decent magic icon so I went for the Wolf for now.
-
 ---
 
 ## TODO
-- Implement an application update system, so users do not need to install a new version of Fenrus to get the latest applications
+- Implement an application update system, so users do not need to install a new version of Fenrus to get the latest applications.  This will be done once the app has matured a little more.   I need to add more helpers for different types of Smart apps.
 - Document how to write an application.  These are written in Javascript and are not complex to write, however, there are some gotcha's that I need to document.
