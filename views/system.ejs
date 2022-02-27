@@ -8,6 +8,7 @@
     <div class="header">
         <span class="title">System</span>
         <div class="buttons">
+            <button class="btn" @click="searchEngines" style="width:12rem"> Search Engines</button>
             <button class="btn" @click="save">Save</button>
         </div>
     </div>
@@ -48,6 +49,9 @@
         let system = JSON.parse(json)
         Alpine.data('System', () => ({
            model: system, 
+           searchEngines() {
+                window.location = '/system/search-engines';
+           },
            validate() {
                 let inputs = [...document.querySelectorAll(`.settings-box [data-rules]`)];
                 let valid = true;

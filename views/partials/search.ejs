@@ -31,7 +31,7 @@
                     styleFilter.innerHTML = '';
                     return;
                 }                
-                styleFilter.innerHTML = `.dashboard .db-item:not([title^="${CSS.escape(filterText)}" i]) { opacity:0.3 }`;
+                styleFilter.innerHTML = `.dashboard .db-item:not([title*="${CSS.escape(filterText)}" i]) { opacity:0.3 }`;
             },
             search() {
                 let searchText = this.model.SearchText.trim();

@@ -7,6 +7,7 @@ class SystemInstance {
     AllowRegister = true;
     AllowGuest = true;
     _File = './data/system.json';
+    SearchEngines = [];
 
     constructor(){
     }    
@@ -59,7 +60,8 @@ class SystemInstance {
         return JSON.stringify({                
             JwtSecret: this.JwtSecret,
             AllowRegister: this.AllowRegister,
-            AllowGuest: this.AllowGuest
+            AllowGuest: this.AllowGuest,
+            SearchEngines: this.SearchEngines
         }, null, 2);
     }
 }

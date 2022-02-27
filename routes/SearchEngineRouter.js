@@ -1,16 +1,16 @@
 const express = require('express');
 const common = require('./Common');
-const Settings = require('../models/Settings');
 let ImageHelper = require('../helpers/ImageHelper');
+const System = require('../models/System');
 
 class SearchEngineRouter{
     
-    isGuest;
+    isSystem;
     router;
 
-    constructor(isGuest)
+    constructor(isSystem)
     {
-        this.isGuest = isGuest;
+        this.isSystem = isSystem;
         this.router = express.Router();
         this.init();
     }
@@ -21,10 +21,10 @@ class SearchEngineRouter{
     }
 
     async getSettings(req){
-        if(!this.isGuest)
+        if(!this.isSystem)
             return req.settings;
-        // get the guest settings        
-        return await Settings.getForGuest();
+        // get the system settings settings        
+        return await System.getInstance();
     }
 
     init() {
@@ -33,21 +33,21 @@ class SearchEngineRouter{
             let args = common.getRouterArgs(req, 
             { 
                 title: 'Search Engines',
-                guestSettings: this.isGuest
+                isSystem: this.isSystem
             });
-            args.settings = await this.getSettings(req);
+            args.model = await this.getSettings(req);
             res.render('search-engines', args);
         });
 
         this.router.post('/:uid/default/:isDefault', async(req, res) => {
             if(req.isNew === false)
             {              
-                for(let se of req.settings.SearchEngines)
+                for(let se of req.model.SearchEngines)
                 {
                     se.IsDefault = false;
                 }      
                 req.searchEngine.IsDefault = req.params.isDefault === 'true';
-                req.settings.save();
+                req.model.save();
             }
             res.status(200).send('');
         });        
@@ -56,14 +56,14 @@ class SearchEngineRouter{
             if(req.isNew === false)
             {            
                 req.searchEngine.Enabled = req.params.enabled === 'true';
-                req.settings.save();
+                req.model.save();
             }
             res.status(200).send('');
         });        
 
         this.router.route('/:uid')
             .get((req, res) => {
-                if(req.searchEngine.IsSystem)
+                if(!this.isSystem && req.searchEngine.IsSystem)
                 {
                     res.status(400).send('Cannot modify a system search engine');
                     return;
@@ -72,11 +72,11 @@ class SearchEngineRouter{
                 { 
                     title: 'Search Engine',   
                     model: req.searchEngine,
-                    guestSettings: this.isGuest
+                    isSystem: this.isSystem
                 }));    
             })
             .post(async (req, res) => {
-                if(req.searchEngine.IsSystem)
+                if(!this.isSystem && req.searchEngine.IsSystem)
                 {
                     res.status(400).send('Cannot modify a system search engine');
                     return;
@@ -85,9 +85,9 @@ class SearchEngineRouter{
                 let icon = await new ImageHelper().saveImageIfBase64(req.body.Icon, 'icons', req.uid);
                 if(req.isNew)
                 {
-                    if(!req.settings.SearchEngines)
-                        req.settings.SearchEngines = [];
-                    req.settings.SearchEngines.push({
+                    if(!req.model.SearchEngines)
+                        req.model.SearchEngines = [];
+                    req.model.SearchEngines.push({
                         Uid: req.uid,
                         Name: req.body.Name,
                         Url: req.body.Url,
@@ -102,7 +102,7 @@ class SearchEngineRouter{
                     req.searchEngine.Shortcut = req.body.Shortcut;
                     req.searchEngine.Icon = icon;
                 }
-                req.settings.save();
+                req.model.save();
                 res.status(200).send('');
             })
             // .delete('/:uid', async (req, res) => {
@@ -114,7 +114,7 @@ class SearchEngineRouter{
             //             return;
             //         }
             //         let uid = req.uid;        
-            //         let settings = req.settings;
+            //         let settings = req.model;
             //         settings.SearchEngines = settings.SearchEngines.filter(x => x.Uid !== uid);
             //         await settings.save();
             //     }
@@ -139,12 +139,13 @@ class SearchEngineRouter{
                     Uid: uid,
                     Icon: '',
                     Name: '',
-                    Url: 'http://google.com/?q=%s',                    
-                    IsDefault: false
+                    Url: 'https://www.google.com/search?q=%s',                    
+                    IsDefault: false,
+                    IsSystem: this.isSystem
                 };
             }
             req.uid = uid;
-            req.settings = settings;
+            req.model = settings;
             req.searchEngine = searchEngine;
             next();
         });

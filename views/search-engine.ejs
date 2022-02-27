@@ -1,8 +1,8 @@
 <%- include('./partials/head.ejs' ) %>
 
 <% 
-    var urlPrefix = guestSettings ? '/system/search-engine' : '/search-engines';
-    var urlGroupUrl = guestSettings ? '/system/search-engine' : '/search-engines';
+    var urlPrefix = isSystem ? '/system/search-engines' : '/search-engines';
+    var urlGroupUrl = isSystem ? '/system/search-engines' : '/search-engines';
 %> 
 
 <link rel="stylesheet" href="/css/settings.min.css?version=<%= version %>" />

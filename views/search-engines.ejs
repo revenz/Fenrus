@@ -1,8 +1,8 @@
 <%- include('./partials/head.ejs' ) %>
 
 <% 
-    var urlPrefix = guestSettings ? '/system/guest' : '/search-engines';
-    var urlGroupUrl = guestSettings ? '/system/guest' : '/search-engines';
+    var urlPrefix = isSystem ? '/system/search-engines' : '/search-engines';
+    var urlGroupUrl = isSystem ? '/system/search-engines' : '/search-engines';
 %> 
 
 <link rel="stylesheet" href="/css/settings.min.css?version=<%= version %>" />
@@ -21,7 +21,7 @@
             <span class="enabled">Enabled</span>
             <span class="controls"></span>
         </li>
-        <% for(let item of settings.SearchEngines) { 
+        <% for(let item of model.SearchEngines) { 
             if(!item)
                 continue;
             let itemCount = item.Items?.length || 0;

@@ -113,3 +113,4 @@ app.use('/users', routerUsers);
 app.use('/system/guest', new GroupsRouter(true).get());
 app.use('/system/guest/group', new GroupRouter(true).get());
 app.use('/system', routerSystem);
+app.use('/system/search-engines', new SearchEngineRouter(true).get());
