@@ -1,9 +1,7 @@
 const express = require('express');
 const common = require('./Common');
 const Globals = require('../Globals');
-const Theme = require('../models/Theme');
 const FileHelper = require('../helpers/FileHelper');
-const { restart } = require('nodemon');
 const System = require('../models/System');
 
 const router = express.Router();
@@ -11,7 +9,6 @@ const router = express.Router();
 let themes = FileHelper.getDirectoriesSync('./wwwroot/themes');
 
 router.get('/', async (req, res) => {
-    console.log('home router');
     let themeVariables = {};
     if(req.theme?.loadScript) {
         let instance = req.theme.loadScript();
