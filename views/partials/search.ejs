@@ -5,12 +5,14 @@
         <button @click="search">Search</button>
     </div>
 </div>
+<style id="styleFilter"></style>
 <input type="hidden" id="searchEngines" value="<%= JSON.stringify(searchEngines) %>" />
 <script>
     document.addEventListener('alpine:init', () => {            
         let json = document.getElementById('searchEngines').value;            
         let searchEngines = json ? JSON.parse(json) : [];
         let defaultEngine = searchEngines.filter(x => x.IsDefault);
+        let styleFilter = document.getElementById('styleFilter');
         if(defaultEngine?.length)
             defaultEngine = defaultEngine[0];
         else
@@ -23,6 +25,13 @@
             },
             init() {
                 document.getElementById('search-text').focus();
+            },
+            filter(filterText) {
+                if(!filterText){
+                    styleFilter.innerHTML = '';
+                    return;
+                }                
+                styleFilter.innerHTML = `.dashboard .db-item:not([title^="${CSS.escape(filterText)}" i]) { opacity:0.3 }`;
             },
             search() {
                 let searchText = this.model.SearchText.trim();
@@ -50,6 +59,13 @@
                 window.location = url;
             },
             onInput(event) {    
+                if(this.model.SearchText[0] === '/'){
+                    // special to filter out item                    
+                    this.filter(this.model.SearchText.slice(1));
+                    return;
+                }else {
+                    this.filter('');
+                }
                 if(event.inputType.startsWith('delete'))
                 {
                     if(!this.model.SearchText && this.model.SearchEngine){
