@@ -34,7 +34,7 @@
     <% } %> 
 </head>
 
-<body class="<%= themeVariables?.BodyClassName %>">  
+<body class="<%= isHome ? 'home' : '' %> <%= themeVariables?.BodyClassName %>">  
     <ul class="main-menu">
         <li><a title="Home" href="/"><span class="icon-home1"></span></a></li>
         <% if(isGuest !== true) { %>

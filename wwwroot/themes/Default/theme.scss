@@ -6,7 +6,9 @@ body {
     background: url('background.jpg');
     background-size:cover;
     background-repeat: no-repeat;
-    visibility: hidden;
+    &.home {
+        visibility: hidden;
+    }
 }
 .main-content {    
     padding:0;
