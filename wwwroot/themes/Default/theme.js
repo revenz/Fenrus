@@ -39,6 +39,7 @@ class DefaultTheme
         document.body.classList.remove('horizontal');
         document.body.classList.remove('vertical');
         document.body.classList.add(this.settings.Horizontal ? 'horizontal' : 'vertical');
+        eleDashboard.style.visibility = 'unset';
     }
 
     getVariables(args){

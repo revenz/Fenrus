@@ -12,6 +12,7 @@ body {
 }
 
 .dashboard {
+    visibility: hidden;
     $baseSize: 3.75rem;
     width:100%;
     display: flex;

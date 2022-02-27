@@ -257,6 +257,7 @@ body {
 }
 
 .dashboard {
+  visibility: hidden;
   width: 100%;
   display: flex;
   flex-direction: row;
