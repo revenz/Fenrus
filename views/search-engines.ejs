@@ -48,7 +48,7 @@
             </span>
             <span class="controls">
                 <a title="Edit" class="icon-edit" href="<%= urlPrefix %>/<%= item.Uid %>"></a>
-                <span title="Delete" class="icon-trash" @click="delete('<%= item.Uid %>')"></span>
+                <span title="Delete" class="icon-trash" @click="deleteItem('<%= item.Uid %>')"></span>
             </span>
         </li>
         <% } %>
@@ -62,7 +62,7 @@
 
     document.addEventListener('alpine:init', () => {
         Alpine.data('SearchEngines', () => ({
-            delete(uid) {
+            deleteItem(uid) {
                 let name = document.getElementById(uid).querySelector('.name').innerText;
                 confirmPrompt(`Are you sure you want to delete the search engine "${name}"?`).then(() => 
                 {

@@ -23,7 +23,7 @@ class SearchEngineRouter{
     async getSettings(req){
         if(!this.isSystem)
             return req.settings;
-        // get the system settings settings        
+        // get the system settings settings                  
         return await System.getInstance();
     }
 
@@ -63,11 +63,6 @@ class SearchEngineRouter{
 
         this.router.route('/:uid')
             .get((req, res) => {
-                if(!this.isSystem && req.searchEngine.IsSystem)
-                {
-                    res.status(400).send('Cannot modify a system search engine');
-                    return;
-                }
                 res.render('search-engine', common.getRouterArgs(req, 
                 { 
                     title: 'Search Engine',   
@@ -76,11 +71,6 @@ class SearchEngineRouter{
                 }));    
             })
             .post(async (req, res) => {
-                if(!this.isSystem && req.searchEngine.IsSystem)
-                {
-                    res.status(400).send('Cannot modify a system search engine');
-                    return;
-                }
 
                 let icon;
                 if(!req.body.Icon)
@@ -89,7 +79,7 @@ class SearchEngineRouter{
                     icon = await new ImageHelper().saveImageIfBase64(req.body.Icon, 'icons', req.uid);
                     
                 let shortcut = (req.body.Shortcut || req.body.Name).replace(/\s/g, '').toLowerCase();
-                
+
                 if(req.isNew)
                 {
                     if(!req.model.SearchEngines)
@@ -112,22 +102,17 @@ class SearchEngineRouter{
                 req.model.save();
                 res.status(200).send('');
             })
-            // .delete('/:uid', async (req, res) => {
-            //     if(req.isNew === false)
-            //     {
-            //         if(req.searchEngine.IsSystem)
-            //         {
-            //             res.status(400).send('Cannot delete a system search engine, only disable it');
-            //             return;
-            //         }
-            //         let uid = req.uid;        
-            //         let settings = req.model;
-            //         settings.SearchEngines = settings.SearchEngines.filter(x => x.Uid !== uid);
-            //         await settings.save();
-            //     }
+            .delete(async (req, res) => {
+                if(req.isNew === false)
+                {
+                    let uid = req.uid;        
+                    let settings = req.model;
+                    settings.SearchEngines = settings.SearchEngines.filter(x => x.Uid !== uid);
+                    await settings.save();
+                }
 
-            //     res.status(200).send('').end();
-            // });
+                res.status(200).send('');
+            });
 
         
         this.router.param('uid', async (req, res, next, uid) => {
