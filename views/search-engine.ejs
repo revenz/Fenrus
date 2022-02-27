@@ -103,13 +103,6 @@
                     }
                 });
 
-                if(!this.model.Icon){
-                    document.getElementById('file-chooser-btn').classList.add('invalid');
-                    return false;
-                }else{
-                    document.getElementById('file-chooser-btn').classList.remove('invalid');
-                }
-
                 return valid;
             },
             save() {

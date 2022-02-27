@@ -82,7 +82,14 @@ class SearchEngineRouter{
                     return;
                 }
 
-                let icon = await new ImageHelper().saveImageIfBase64(req.body.Icon, 'icons', req.uid);
+                let icon;
+                if(!req.body.Icon)
+                    icon = await new ImageHelper().downloadFavIcon(req.body.Url, req.uid);
+                else
+                    icon = await new ImageHelper().saveImageIfBase64(req.body.Icon, 'icons', req.uid);
+                    
+                let shortcut = (req.body.Shortcut || req.body.Name).replace(/\s/g, '').toLowerCase();
+                
                 if(req.isNew)
                 {
                     if(!req.model.SearchEngines)
@@ -91,7 +98,7 @@ class SearchEngineRouter{
                         Uid: req.uid,
                         Name: req.body.Name,
                         Url: req.body.Url,
-                        Shortcut: req.body.Shortcut,
+                        Shortcut: shortcut,
                         Icon: icon
                     });
                 }
@@ -99,7 +106,7 @@ class SearchEngineRouter{
                 {
                     req.searchEngine.Name = req.body.Name;
                     req.searchEngine.Url = req.body.Url;
-                    req.searchEngine.Shortcut = req.body.Shortcut;
+                    req.searchEngine.Shortcut = shortcut;
                     req.searchEngine.Icon = icon;
                 }
                 req.model.save();
