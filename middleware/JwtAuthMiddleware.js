@@ -5,7 +5,6 @@ const System = require('../models/System');
 module.exports = async (req, res, next) => {
     var token = req.cookies?.jwt_auth;
     let system = System.getInstance();
-    console.log('system.AllowGuest', system.AllowGuest);
     if (!token) {
         if(!system.AllowGuest)
             res.status(401).redirect('/login?error=401');

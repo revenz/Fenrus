@@ -33,6 +33,12 @@
         </span>
     </div>
     <div class="setting">
+        <span class="label">Accent</span>
+        <span class="value color-picker">
+            <input type="text" x-model="model.AccentColor" data-jscolor="{preset:'dark'}" />
+        </span>
+    </div>
+    <div class="setting">
         <span class="label">Group Titles</span>
         <span class="value">
             <label for="ShowGroupTitles" class="toggle-switchy">
@@ -44,9 +50,11 @@
         </span>
     </div>
     <div class="setting">
-        <span class="label">Accent</span>
-        <span class="value color-picker">
-            <input type="text" x-model="model.AccentColor" data-jscolor="{preset:'dark'}" />
+        <span class="label">Search Engines</span>
+        <span class="value">
+            <a class="subpage" @click.default="searchEngines">
+                <span class="icon-chevron-right"></span>
+            </a>
         </span>
     </div>
     <div class="setting">
@@ -95,9 +103,9 @@
                 });
                 return valid;
            },
-           save() {
+           save(dontReload) {
                 if(!this.validate())
-                    return;
+                    return false;
                     
                 const options = {
                     method: 'POST',
@@ -107,9 +115,16 @@
                     }
                 }
                 fetch('/settings', options).then(()=>{
-                    window.location.reload(true);
+                    if(!dontReload)
+                        window.location.reload(true);
                 });
+                return true;
             }, 
+            searchEngines() {
+                if(!this.save(true))
+                    return;
+                window.location = '/search-engines';
+            },
             resetBackground() {
                 this.model.BackgroundImage = '';
             },

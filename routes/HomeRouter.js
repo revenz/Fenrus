@@ -33,12 +33,18 @@ router.get('/', async (req, res) => {
                 themeSettings[setting.Name] = '';
         }
     }
+
+    let searchEngines = req.isGuest ? [] : req.settings.SearchEngines.filter(x => x.Enabled != false) || [];
+    let system = System.getInstance();
+    if(system.SearchEngines?.length)
+        searchEngines = searchEngines.concat(system.SearchEngines.filter(x => x.Enabled != false));
+    
     res.render('home', common.getRouterArgs(req, { 
         title: '', 
         themes:themes,
         themeVariables: themeVariables,
         themeSettings: themeSettings,
-        searchEngines: req.settings.SearchEngines
+        searchEngines: searchEngines
         // [
         //     { Name: 'DuckDuckGo', Icon: '/search-engines/duckduckgo.jpg', Url: 'https://duckduckgo.com/?q=%s', IsDefault: true },
         //     { Name: 'Google', Icon: '/search-engines/google.png', Url: 'https://www.google.com/search?q=%s', Shortcut: 'g' },

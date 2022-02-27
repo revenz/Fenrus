@@ -49,7 +49,7 @@
     var accentSettings;
 
     document.addEventListener('alpine:init', () => {            
-        let json = document.getElementById('theme-settings').value;            
+        let json = document.getElementById('theme-settings')?.value;            
         let settings = json ? JSON.parse(json) : { };
         
         <% if(isGuest) { %>
