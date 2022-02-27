@@ -7,6 +7,8 @@ Fenrus personal home page/dasbhoard.
 
 It allows you to have a custom home page/new tab page with quick access to your personal apps.
 
+For support use our [Discord Server](https://discord.gg/xbYK8wFMeU)
+
 ---
 ![image](https://user-images.githubusercontent.com/958400/155836968-6f85270a-fba3-4613-89d8-9f4afac2de34.png)
 
