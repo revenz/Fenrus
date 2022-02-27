@@ -1,7 +1,7 @@
 <div class="search" x-data="SearchSettings">
     <div class="search-inner">
         <img :src="model.SearchEngine?.Icon || model.DefaultEngine?.Icon">
-        <input @input="onInput" @keydown.enter="search" x-model="model.SearchText" autofocus autocomplete="off" />
+        <input id="search-text" @input="onInput" @keydown.enter="search" x-model="model.SearchText" autofocus autocomplete="off" />
         <button @click="search">Search</button>
     </div>
 </div>
@@ -22,11 +22,29 @@
                 DefaultEngine: defaultEngine
             },
             init() {
+                document.getElementById('search-text').focus();
             },
             search() {
                 let searchText = this.model.SearchText.trim();
                 if(!searchText)
                     return;
+
+                if(/^(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}($|\/)/.test(searchText)){
+                    // ip address url, lets just go right there
+                    window.location = 'http://' + searchText;
+                    return;
+                }
+                if(/^[a-z][a-z\-]*(:[\d]+)?\//i.test(searchText)){
+                    // hostname /
+                    window.location = 'http://' + searchText;
+                    return;
+                }
+                if(/^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$/.test(searchText)){
+                    // donamename 
+                    window.location = 'http://' + searchText;
+                    return;
+                }
+
                 let url = (this.model.SearchEngine || this.model.DefaultEngine || { Url: 'https://duckduckgo.com/?q=%s'}).Url;
                 url = url.replace('%s', encodeURIComponent(searchText));
                 window.location = url;
