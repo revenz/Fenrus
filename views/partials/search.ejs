@@ -1,7 +1,7 @@
 <div class="search" x-data="SearchSettings">
     <div class="search-inner">
         <img :src="model.SearchEngine?.Icon || model.DefaultEngine?.Icon">
-        <input @input="onInput" @keydown.enter="search" x-model="model.SearchText" autofocus />
+        <input @input="onInput" @keydown.enter="search" x-model="model.SearchText" autofocus autocomplete="off" />
         <button @click="search">Search</button>
     </div>
 </div>
