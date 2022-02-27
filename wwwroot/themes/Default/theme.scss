@@ -2,11 +2,7 @@
 body.horizontal {
     overflow:hidden;
 }
-body:not(.horizontal){
-    padding-right:3rem;
-}
 body {    
-    padding-top:4rem;
     background: url('background.jpg');
     background-size:cover;
     background-repeat: no-repeat;
@@ -43,11 +39,14 @@ body {
 @media screen and (min-width:720.001px) {        
     .dashboard.horizontal
     {
-        padding:0 1rem 1rem;
+        padding:1rem 0 0;
         display:flex;
         flex-direction: column; 
-        height: calc(100vh - 5rem);
         overflow-y: hidden;
+        overflow-x:auto;
+        height:calc(100% - 1rem);
+        width:unset;
+        min-width: 100%;
         &.center {            
             align-content: center;
             justify-content: center;

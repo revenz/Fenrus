@@ -8,7 +8,8 @@
 <%- include(themeHead) %>
 <% } %>
 
-<div class="dashboard <%= themeVariables?.ClassName %> <%= settings.ShowGroupTitles === false ? 'hide-group-titles' : '' %>">
+
+<div class="dashboard <%= themeVariables?.ClassName %> <%= settings.ShowGroupTitles === false ? 'hide-group-titles' : '' %>">    
     <% if(settings.Groups?.length) {
         
         for(let item of settings.Groups)

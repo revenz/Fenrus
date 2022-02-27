@@ -1,0 +1,60 @@
+<div class="search" x-data="SearchSettings">
+    <div class="search-inner">
+        <img :src="model.SearchEngine?.Icon || model.DefaultEngine?.Icon">
+        <input @input="onInput" @keydown.enter="search" x-model="model.SearchText" autofocus />
+        <button @click="search">Search</button>
+    </div>
+</div>
+<input type="hidden" id="searchEngines" value="<%= JSON.stringify(searchEngines) %>" />
+<script>
+    document.addEventListener('alpine:init', () => {            
+        let json = document.getElementById('searchEngines').value;            
+        let searchEngines = json ? JSON.parse(json) : [];
+        let defaultEngine = searchEngines.filter(x => x.IsDefault);
+        if(defaultEngine?.length)
+            defaultEngine = defaultEngine[0];
+        else
+            defaultEngine = searchEngines[0];
+        Alpine.data('SearchSettings', () => ({
+            model: {
+                SearchText: '',
+                SearchEngine: null,
+                DefaultEngine: defaultEngine
+            },
+            init() {
+            },
+            search() {
+                let searchText = this.model.SearchText.trim();
+                if(!searchText)
+                    return;
+                let url = (this.model.SearchEngine || this.model.DefaultEngine || { Url: 'https://duckduckgo.com/?q=%s'}).Url;
+                url = url.replace('%s', encodeURIComponent(searchText));
+                window.location = url;
+            },
+            onInput(event) {    
+                if(event.inputType.startsWith('delete'))
+                {
+                    if(!this.model.SearchText && this.model.SearchEngine){
+                        // clear the search engine
+                        this.model.SearchEngine = null;
+                        return;
+                    } 
+                }
+                if(this.model.SearchEngine)
+                    return; // already using a search engine
+                if(/^[a-zA-Z]+ /.test(this.model.SearchText)){
+                    // matches how a search engine shortcut is used
+                    let shortcut = this.model.SearchText.slice(0, -1).toLowerCase();
+                    let se = searchEngines.filter(x => x.Shortcut === shortcut);
+                    if(!se?.length)
+                        return;
+                    this.model.SearchEngine = se[0];
+                    this.model.SearchText = ' ';
+                    return;
+                }
+            }
+        }));
+    });
+
+</script>
+        

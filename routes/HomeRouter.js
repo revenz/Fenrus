@@ -37,7 +37,13 @@ router.get('/', async (req, res) => {
         title: '', 
         themes:themes,
         themeVariables: themeVariables,
-        themeSettings: themeSettings
+        themeSettings: themeSettings,
+        searchEngines: req.settings.SearchEngines
+        // [
+        //     { Name: 'DuckDuckGo', Icon: '/search-engines/duckduckgo.jpg', Url: 'https://duckduckgo.com/?q=%s', IsDefault: true },
+        //     { Name: 'Google', Icon: '/search-engines/google.png', Url: 'https://www.google.com/search?q=%s', Shortcut: 'g' },
+        //     { Name: 'MightyApe', Icon: '/apps/MightyApe/icon.png', Url: 'https://www.mightyape.co.nz/search?q=%s', Shortcut: 'ma' },
+        // ]
     }));    
 });
 

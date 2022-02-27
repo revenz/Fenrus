@@ -11,6 +11,8 @@ class SettingsInstance {
     BackgroundImage = '';
     Groups = [];
     ThemeSettings = {};
+    ShowSearch = false;
+    SearchEngines = [];    
 
     _File = './data/config.json';
     _DefaultFile = './defaultconfig.json';
@@ -108,6 +110,7 @@ class SettingsInstance {
             CollapseMenu: this.CollapseMenu,
             BackgroundImage: this.BackgroundImage,
             ThemeSettings: this.ThemeSettings,
+            SearchEngines: this.SearchEngines,
             Groups: this.Groups
         }, null, 2);
     }
@@ -181,7 +184,7 @@ class Settings {
         SettingsInstance.instances[uid] = instance;
         return instance;
     }
-    
+
     static async getForGuest() 
     {
         SettingsInstance.instances = SettingsInstance.instances || {};

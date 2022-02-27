@@ -22,6 +22,7 @@ const routerLogin = require('./routes/LoginRouter');
 const routerUsers = require('./routes/UsersRouter');
 const routerSystem = require('./routes/SystemRouter');
 const routerTheme = require('./routes/ThemeRouter');
+const SearchEngineRouter = require('./routes/SearchEngineRouter');
 
 const AppHelper = require('./helpers/appHelper');
 const UserManager = require('./helpers/UserManager');
@@ -104,6 +105,7 @@ app.use('/settings', routerSettings);
 app.use('/groups', new GroupsRouter(false).get());
 app.use('/group', new GroupRouter(false).get());
 app.use('/theme-settings', routerTheme);
+app.use('/search-engines', new SearchEngineRouter(false).get());
 
 // below are admin only routes, so use the Admin middlweare
 app.use(adminMiddleware);

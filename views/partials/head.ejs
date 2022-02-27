@@ -50,6 +50,7 @@
                 <%- include('panels/settings-panel.ejs') %>
                 <% } %>
             </li>
+            <li><a title="Search Engines" href="/search-engines"><span class="icon-search"></span></a></li>
             <% if(user.IsAdmin) { %>
                 <li><a title="Users" href="/users"><span class="icon-users"></span></a></li>
                 <li><a title="System" href="/system"><span class="icon-cogs"></span></a></li>
@@ -57,9 +58,14 @@
         <% } %>
         <li class="li-about">
             <a title="About" href="/about"><span class="icon-fenrus"></span></a>            
-            <%- include('panels/theme-settings.ejs') %>
+            <% if(isHome) {%>
+                <%- include('panels/theme-settings.ejs') %>
+            <% } %>
         </li>
     </ul>
 
+    <% if(isHome && searchEngines?.length) { %>
+        <%- include('search.ejs') %>
+    <% } %>
 
     <div class="main-content">

@@ -1,12 +1,7 @@
 ﻿body {
-    --c2olor-secondary:red;
-}
-
-.main-content {    
     background: url('/themes/Default/background.jpg');
     background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('/themes/Default/background.jpg');
 }
-
 
 @media screen and (max-width:599.999px) {
     .dashboard {
@@ -48,9 +43,6 @@ $columnWidth:300;
 .dashboard {
     display: grid;
     gap: 0.5rem;
-    width:100%;
-    overflow: auto;
-    margin-top:2rem;
     grid-template-columns: repeat(var(--columns), calc(var(--column-width) - 6px));
 
 }

@@ -1,0 +1,166 @@
+<%- include('./partials/head.ejs' ) %>
+
+<% 
+    var urlPrefix = guestSettings ? '/system/search-engine' : '/search-engines';
+    var urlGroupUrl = guestSettings ? '/system/search-engine' : '/search-engines';
+%> 
+
+<link rel="stylesheet" href="/css/settings.min.css?version=<%= version %>" />
+
+<div class="search-engine settings-box" x-data="SearchEngine">
+    <div class="header">
+        <span class="title">Search Engine</span>
+        <div class="buttons">
+            <button :disabled="isDisabled()" class="btn" @click="save">Save</button>
+            <button :disabled="isDisabled()" class="btn" @click="cancel">Cancel</button>
+        </div>
+    </div>
+    <div class="content">
+        <div class="setting">
+            <span class="label">Name</span>
+            <span class="value">
+                <input :disabled="isDisabled()" autofocus type="text" x-model="model.Name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save">
+            </span>
+        </div>
+        <div class="setting">
+            <span class="label">URL</span>
+            <span class="value">
+                <input :disabled="isDisabled()" type="text" x-model="model.Url" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save">
+            </span>
+        </div>
+        <div class="setting">
+            <span class="label">Shortcut</span>
+            <span class="value">
+                <input :disabled="isDisabled()" type="text" x-model="model.Shortcut" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save">
+            </span>
+        </div>
+        
+        <div class="setting">
+            <span class="label">Icon</span>
+            <span class="value">
+                <div class="item-icon-picker">
+                    <template x-if="model.Icon">
+                        <img :src="model.Icon" style="width: 100px;height: 100px;object-fit: scale-down;margin-bottom:1rem" />
+                    </template>
+
+                    <template x-if="!model.Icon">
+                        <div class="no-image"></div>
+                    </template>
+
+                    <button class="btn" id="file-chooser-btn" onclick="document.getElementById('file-chooser').click()">
+                        Browse...
+                    </button>
+                    <input style="display:none" id="file-chooser" class="file-chooser" type="file" accept="image/*" @change="imageChosen">
+
+                </div>
+            </span>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="SearchEngine" value="<%= JSON.stringify(model) %>" />
+
+<script src="/js/settings.js?version=<%= version %>"></script>
+
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        let json = document.getElementById('SearchEngine').value;
+        let model = JSON.parse(json);
+
+        Alpine.data('SearchEngine', () => ({
+            model: model,
+            Saving: false,
+            Saved: false,
+            init() {
+            },  
+            blur(){
+                if(this.Saved === false)
+                    return;
+                this.validate();
+            },
+            input(){
+                if(this.Saved === false)
+                    return;
+                this.validate();
+            },
+            isDisabled() {
+                if(this.Saving)
+                    return true;
+                return false;
+            },
+            validate(){
+
+                let inputs = [...document.querySelectorAll(`.search-engine.settings-box [data-rules]`)];
+                let valid = true;
+                inputs.map((input) => {
+                    if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
+                        valid = false;
+                        input.classList.add("invalid");
+                    }else{
+                        input.classList.remove("invalid");
+                    }
+                });
+
+                if(!this.model.Icon){
+                    document.getElementById('file-chooser-btn').classList.add('invalid');
+                    return false;
+                }else{
+                    document.getElementById('file-chooser-btn').classList.remove('invalid');
+                }
+
+                return valid;
+            },
+            save() {
+                if(this.isDisabled()) return;
+
+                this.Saved = true;
+
+                // first validate it
+                if(this.validate() === false)
+                    return;
+
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify(this.model),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                this.Saving = true;
+                fetch('<%= urlPrefix %>/' + encodeURIComponent(this.model.Uid), options).then(res => {
+                    if(!res.ok)
+                        throw res;
+                    this.Saving = false;
+                    window.location.href = '<%= urlGroupUrl %>';
+                }).catch(err => {
+                    console.log(err);
+                    toast('Failed to save', false);
+                    this.Saving = false;
+                });
+            },
+            cancel() {
+                window.location.href = '<%= urlGroupUrl %>';
+            },
+            imageChosen(event){
+                this.fileToDataUrl(event, src => 
+                {
+                    this.model.Icon = src;
+                    this.validate();
+                })
+            },                
+            fileToDataUrl(event, callback) {
+                if (! event.target.files.length) return;
+
+                let file = event.target.files[0];
+                let reader = new FileReader();
+
+                reader.readAsDataURL(file);
+                reader.onload = e => callback(e.target.result);
+            }
+        }));
+    });
+</script>
+
+<%- include('./partials/footer.ejs') %>

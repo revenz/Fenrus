@@ -299,3 +299,11 @@
 .group-list .controls {
   width: 4rem;
 }
+
+.search-engine-list .enabled, .search-engine-list .default {
+  width: 8rem;
+  text-align: center;
+}
+.search-engine-list .controls {
+  width: 4rem;
+}
