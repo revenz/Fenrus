@@ -250,6 +250,7 @@ body {
   background: url("background.jpg");
   background-size: cover;
   background-repeat: no-repeat;
+  visibility: hidden;
 }
 
 .main-content {
@@ -257,7 +258,6 @@ body {
 }
 
 .dashboard {
-  visibility: hidden;
   width: 100%;
   display: flex;
   flex-direction: row;

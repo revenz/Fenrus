@@ -10,8 +10,7 @@ class DefaultTheme
             this.settings = json ? JSON.parse(json) : {};
             window.addEventListener('load', (event) => {
                 this.shrinkGroups();
-                let eleDashboard = document.querySelector('.dashboard');
-                eleDashboard.style.visibility = 'unset';
+                document.body.style.visibility = 'unset';
             });
             window.addEventListener('resize', (event) => {
                 this.shrinkGroups();
