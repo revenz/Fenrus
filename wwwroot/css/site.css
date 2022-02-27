@@ -768,15 +768,15 @@ body {
   justify-content: center;
   position: relative;
 }
-.main-menu li:hover {
+.main-menu li:hover, .main-menu li.force-hover {
   background-color: var(--accent);
 }
-.main-menu li:hover a {
+.main-menu li:hover a, .main-menu li.force-hover a {
   transform: scale(1.4);
   position: relative;
   top: 3px;
 }
-.main-menu li:hover .panel {
+.main-menu li:hover .panel, .main-menu li.force-hover .panel {
   display: flex;
   flex-direction: column;
   background: #000001;
@@ -787,26 +787,26 @@ body {
   font-size: 1rem;
   z-index: 10;
 }
-.main-menu li:hover .panel.groups .setting .value {
+.main-menu li:hover .panel.groups .setting .value, .main-menu li.force-hover .panel.groups .setting .value {
   min-width: unset;
 }
-.main-menu li:hover .panel .setting {
+.main-menu li:hover .panel .setting, .main-menu li.force-hover .panel .setting {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-.main-menu li:hover .panel .setting .label {
+.main-menu li:hover .panel .setting .label, .main-menu li.force-hover .panel .setting .label {
   width: 8rem;
 }
-.main-menu li:hover .panel .setting + .setting {
+.main-menu li:hover .panel .setting + .setting, .main-menu li.force-hover .panel .setting + .setting {
   margin-top: 1rem;
 }
-.main-menu li:hover .panel .setting.integer .value {
+.main-menu li:hover .panel .setting.integer .value, .main-menu li.force-hover .panel .setting.integer .value {
   display: flex;
   flex-direction: row;
   place-items: center;
 }
-.main-menu li:hover .panel .setting.integer .value .range-value {
+.main-menu li:hover .panel .setting.integer .value .range-value, .main-menu li.force-hover .panel .setting.integer .value .range-value {
   width: 2rem;
   margin: auto;
   background: var(--accent);
@@ -814,11 +814,11 @@ body {
   padding: 0.5rem;
   text-align: center;
 }
-.main-menu li:hover .panel .setting .value {
+.main-menu li:hover .panel .setting .value, .main-menu li.force-hover .panel .setting .value {
   flex-grow: 1;
   min-width: 10rem;
 }
-.main-menu li:hover .panel .setting select {
+.main-menu li:hover .panel .setting select, .main-menu li.force-hover .panel .setting select {
   width: 100%;
   background: var(--accent);
   border-color: var(--accent);
@@ -826,7 +826,7 @@ body {
   height: 2rem;
   border-radius: 0.25rem;
 }
-.main-menu li:hover .panel .setting input[type=range] {
+.main-menu li:hover .panel .setting input[type=range], .main-menu li.force-hover .panel .setting input[type=range] {
   appearance: none;
   margin-right: 15px;
   width: 200px;
@@ -837,7 +837,7 @@ body {
   background-size: 70% 100%;
   background-repeat: no-repeat;
 }
-.main-menu li:hover .panel .setting input[type=range]::-webkit-slider-thumb {
+.main-menu li:hover .panel .setting input[type=range]::-webkit-slider-thumb, .main-menu li.force-hover .panel .setting input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 20px;
   width: 20px;
@@ -849,7 +849,7 @@ body {
 .main-menu .panel {
   display: none;
 }
-.main-menu .li-about:hover a {
+.main-menu .li-about:hover a, .main-menu .li-about.force-hover a {
   top: 0;
 }
 .main-menu .icon-fenrus {
@@ -862,6 +862,16 @@ body {
   background-repeat: no-repeat;
   position: relative;
   top: 7px;
+}
+.main-menu .color-picker input {
+  height: 2rem;
+  border-radius: 0.25rem;
+  background: var(--accent);
+  color: var(--color);
+  border: none;
+  width: calc(100% - 40px);
+  background-image: unset !important;
+  padding-left: 1rem !important;
 }
 
 option {

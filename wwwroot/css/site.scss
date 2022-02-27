@@ -100,7 +100,7 @@ body {
         justify-content: center;        
         position:relative;
 
-        &:hover {
+        &:hover, &.force-hover {
             background-color: var(--accent);
             a {                
                 transform: scale(1.4);   
@@ -188,8 +188,11 @@ body {
 
     .li-about
     {
-        &:hover a {
-            top:0;
+        &:hover, &.force-hover
+        {
+            a {
+                top:0;
+            }
         }
     }
     .icon-fenrus {
@@ -202,6 +205,20 @@ body {
         background-repeat: no-repeat;
         position: relative;
         top:7px;
+    }
+
+    .color-picker
+    {        
+        input {
+            height: 2rem;
+            border-radius: 0.25rem;
+            background: var(--accent);
+            color: var(--color);
+            border: none;
+            width: calc(100% - 40px);
+            background-image: unset !important;        
+            padding-left: 1rem !important;
+        }
     }
 }
 option {
