@@ -869,7 +869,7 @@ body {
   background: var(--accent);
   color: var(--color);
   border: none;
-  width: calc(100% - 40px);
+  width: calc(100% - 0.75rem);
   background-image: unset !important;
   padding-left: 1rem !important;
 }
