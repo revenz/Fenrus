@@ -251,15 +251,13 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
 }
-body.home {
-  visibility: hidden;
-}
 
 .main-content {
   padding: 0;
 }
 
 .dashboard {
+  visibility: hidden;
   width: 100%;
   display: flex;
   flex-direction: row;

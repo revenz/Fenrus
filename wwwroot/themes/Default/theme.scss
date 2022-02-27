@@ -6,15 +6,13 @@ body {
     background: url('background.jpg');
     background-size:cover;
     background-repeat: no-repeat;
-    &.home {
-        visibility: hidden;
-    }
 }
 .main-content {    
     padding:0;
 }
 
 .dashboard {
+    visibility: hidden;
     $baseSize: 3.75rem;
     width:100%;
     display: flex;
