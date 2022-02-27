@@ -4,10 +4,10 @@ const System = require('../models/System');
 
 module.exports = async (req, res, next) => {
     var token = req.cookies?.jwt_auth;
-    console.log('token', token);
     let system = System.getInstance();
+    console.log('system.AllowGuest', system.AllowGuest);
     if (!token) {
-        if(system.AllowGuest === false)
+        if(!system.AllowGuest)
             res.status(401).redirect('/login?error=401');
         else
         {
@@ -33,7 +33,7 @@ module.exports = async (req, res, next) => {
     }
     catch(err)
     {
-        if(system.AllowGuest === false)
+        if(!system.AllowGuest)
         {
             res.status(401).redirect('/login?error=401');
             return;

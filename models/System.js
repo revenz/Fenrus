@@ -5,7 +5,7 @@ class SystemInstance {
     
     JwtSecret = '';
     AllowRegister = true;
-    AllowGuest = true;
+    AllowGuest = false;
     _File = './data/system.json';
 
     constructor(){
