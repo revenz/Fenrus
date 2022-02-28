@@ -111,7 +111,6 @@ option {
 }
 
 .search {    
-    width: 100%;
     text-align: center;
     margin:1rem;
     .search-inner {
@@ -121,6 +120,9 @@ option {
         border-radius:0.5rem;
         overflow: hidden;
         width:min(90vw, 50rem);
+        @media screen and (max-width:600px){
+            width:100%;
+        }
         margin:auto;
         > * {
             background:rgba(0,0,0,.8);
@@ -145,11 +147,14 @@ option {
             text-transform: uppercase;
             padding:0 1rem;
             background:rgba(0,0,0,.8);
-            color:var(--color);
+            color:var(--color);            
             &:hover {
                 background:var(--accent);
                 color:var(--color);
                 cursor:pointer;
+            }
+            @media screen and (max-width:600px){
+                font-size:0.8rem;
             }
         }
     }

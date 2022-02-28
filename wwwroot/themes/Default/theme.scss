@@ -1,7 +1,5 @@
 ﻿@use 'tiles';
-body.horizontal {
-    overflow:hidden;
-}
+
 body {    
     background: url('background.jpg');
     background-size:cover;
@@ -37,7 +35,40 @@ body {
     }
 }
 
-@media screen and (min-width:720.001px) {        
+.db-group {
+    margin:1rem;
+    text-decoration: unset;
+    position: relative;
+
+    > .title {
+        text-align: center;
+        text-transform: uppercase;
+        position: absolute;
+        left:0.5rem;
+        top:-1.5rem;
+
+        span {
+            padding: 0.5rem 0.5rem 0.5rem;
+            font-weight:600;
+            color: var(--color);
+        }
+    }
+}
+
+.dashboard.db-group {
+    margin-top:3rem;
+}
+
+@media screen and (max-width:450px){
+    .dashboard {
+        justify-content: center !important;
+    }
+}
+
+@media screen and (min-width:720.001px) {    
+    body.horizontal {
+        overflow:hidden;
+    }
     .dashboard.horizontal
     {
         padding:1rem 0 0;
@@ -62,48 +93,8 @@ body {
         &.bottom {           
             justify-content: end;
         }
-    }
-}
-
-// @media screen and (max-width:720px) {
-//     .main-content{
-//         padding:1rem;
-//     }
-//     .main-menu {
-//         display:none;
-//     }
-//     .dashboard
-//     {        
-//         width: min-content;
-//         justify-content: center;
-//     }
-// }
-
-
-.db-group {
-    margin:1rem;
-    text-decoration: unset;
-    position: relative;
-
-    .separator2 {
-        width:100%;
-        border-top:solid 1px var(--accent);
-        margin:1rem;
-    }
-    > .title {
-        text-align: center;
-        text-transform: uppercase;
-        position: absolute;
-        left:0.5rem;
-        top:-1.5rem;
-
-        span {
-            padding: 0.5rem 0.5rem 0.5rem;
-            font-weight:600;
-            color: var(--color);
+        .db-group {
+            margin-top:unset;
         }
     }
-}
-.dashboard.vertical .db-group {
-    margin-top:3rem;
 }

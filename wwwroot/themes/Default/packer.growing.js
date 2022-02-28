@@ -111,6 +111,7 @@ GrowingPacker.prototype = {
         canGrowRight = true;
     }
 
+
     var shouldGrowRight = canGrowRight && (this.root.h >= (this.root.w + w)); // attempt to keep square-ish by growing right when height is much greater than width
     var shouldGrowDown  = canGrowDown  && (this.root.w >= (this.root.h + h)); // attempt to keep square-ish by growing down  when width  is much greater than height
 

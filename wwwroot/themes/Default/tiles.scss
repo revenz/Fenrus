@@ -152,7 +152,14 @@ $margin:0;
         grid-column-end: span $multiplier;
         grid-row-end: span $multiplier;
         width:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);
-        height:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);        
+        height:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);     
+
+        @media screen and (max-width:600px) {
+            $multiplier:6;
+            grid-column-end: span $multiplier;
+            grid-row-end: span $multiplier;
+            width:($baseSize * $multiplier) + (($multiplier - 2)* $margin) - (2 * $padding);
+        }   
         .icon > img 
         {            
             width: 100%;
@@ -181,8 +188,6 @@ $margin:0;
         }
     }
 }
-
-
 
 .db-item:not(.carousel)
 {

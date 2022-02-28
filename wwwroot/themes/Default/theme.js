@@ -2,10 +2,15 @@ class DefaultTheme
 {
     unit = 3.75;
     settings;
+    oneRem;
+    oneUnit;
     constructor()
     {
         if(typeof window !== "undefined")
         {
+            this.oneRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            this.oneUnit = this.oneRem * this.unit;
+
             let json = document.getElementById('theme-settings').value;            
             this.settings = json ? JSON.parse(json) : {};
             window.addEventListener('load', (event) => {
@@ -90,6 +95,18 @@ class DefaultTheme
                 groupSize = forcedHeight;
                 horizontal = false;
             }
+            let maxWidth = 0;
+            let maxHeight = this.settings.MaxHeight || 8;
+            
+            let largeWidth = 4;
+            if(screen.width <= 600){
+                // its getting small, we will limit it
+                maxHeight = 0;
+                maxWidth = 6;
+                largeWidth= 6;
+                console.log('maxWidth', maxWidth);
+            }
+
             for(let item of group.querySelectorAll('.items .db-item')){
                 let w = 1, h = 1;
                 if(item.classList.contains("medium"))
@@ -104,7 +121,7 @@ class DefaultTheme
                 }
                 else if(item.classList.contains("x-large"))
                 {
-                    w = 4;
+                    w = largeWidth;
                     h = 4;    
                 }
                 else if(item.classList.contains("xx-large"))
@@ -117,7 +134,8 @@ class DefaultTheme
           
             var packer = new GrowingPacker();
             packer.fit({
-                maxHeight: this.settings.MaxHeight || 8, 
+                maxHeight: maxHeight, 
+                maxWidth: maxWidth,
                 blocks: items
             });
             let groupW = 0, groupH = 0;
@@ -141,54 +159,6 @@ class DefaultTheme
             group.style.height = 'unset';
             group.style.minHeight = 'unset';
         }
-    }
-    shrinkGroup(grp, previous, next){
-        let maxWidth = 0;
-
-        let grpBounds = grp.getBoundingClientRect();
-        let height = 0;
-        // see if there is a previous element, if so match that height, if not a next element, if so match that height
-        if(previous){
-            let prevBounds = previous.getBoundingClientRect();
-            if(prevBounds.y === grpBounds.y){
-                // make sure same row
-                height = prevBounds.height;
-            }
-        }
-        if(next){
-            let nextBounds = next.getBoundingClientRect();
-            if(nextBounds.y === grpBounds.y){
-                // make sure same row
-                height = Math.max(nextBounds.height, height);
-            }
-        }
-        if(height === 0){
-            height = grpBounds.height;
-        }
-        grp.style.height = height +'px';
-
-        let offset = grp.getBoundingClientRect().x;
-        
-        for(let item of grp.querySelectorAll('.items .db-item')){
-            let bounds = item.getBoundingClientRect();
-            let width = bounds.x + bounds.width - offset;
-            if(maxWidth < width)
-                maxWidth = width;
-        }
-        if(maxWidth > 0){
-            grp.style.width = maxWidth + 'px';
-        }
-
-        // get new bounds, to make sure it didnt shift
-        let newBounds = grp.getBoundingClientRect();
-        if(newBounds.y != grpBounds.y && next){
-            // it shifted, try do this again but pass null for next
-            this.shrinkGroup(grp, previous, null);
-        }
-        let oneRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-        let oneUnit = oneRem * this.unit;
-        let finalBounds = grp.getBoundingClientRect();
-        return finalBounds.height / oneUnit;
     }
 }
 

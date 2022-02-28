@@ -130,6 +130,13 @@
   width: 14rem;
   height: 14rem;
 }
+@media screen and (max-width: 600px) {
+  .db-item.x-large {
+    grid-column-end: span 6;
+    grid-row-end: span 6;
+    width: 21.5rem;
+  }
+}
 .db-item.x-large .icon > img {
   width: 100%;
   height: 100%;

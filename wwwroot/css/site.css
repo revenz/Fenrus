@@ -942,7 +942,6 @@ option {
 }
 
 .search {
-  width: 100%;
   text-align: center;
   margin: 1rem;
 }
@@ -954,6 +953,11 @@ option {
   overflow: hidden;
   width: min(90vw, 50rem);
   margin: auto;
+}
+@media screen and (max-width: 600px) {
+  .search .search-inner {
+    width: 100%;
+  }
 }
 .search .search-inner > * {
   background: rgba(0, 0, 0, 0.8);
@@ -984,4 +988,9 @@ option {
   background: var(--accent);
   color: var(--color);
   cursor: pointer;
+}
+@media screen and (max-width: 600px) {
+  .search .search-inner button {
+    font-size: 0.8rem;
+  }
 }
