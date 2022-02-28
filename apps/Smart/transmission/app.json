@@ -9,7 +9,7 @@
       "Type": "string"
     },
 	{
-      "Name": "Application Password",
+      "Name": "Password",
       "Id": "password",
       "Type": "password"
     }
