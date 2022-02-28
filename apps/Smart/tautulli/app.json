@@ -1,0 +1,13 @@
+{
+  "Name": "tautulli",
+  "TestFunction": true,
+  "Interval":10,
+  "Icon": "icon.png",
+  "Properties": [
+    {
+      "Name": "API Key",
+      "Id": "apikey",
+      "Type": "password"
+    }
+  ]
+}
