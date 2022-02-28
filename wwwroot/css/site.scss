@@ -139,6 +139,7 @@ option {
             border-right:solid 1px black;
             padding:0 0.5rem;
             color:var(--color);
+            max-width: calc(100% - 9.5rem);
         }
         button {
             margin-left:1px;
