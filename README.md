@@ -85,6 +85,16 @@ This could be as simple as some basic information, or it could be a feature-rich
 
 ---
 
+### Search Engines
+```
+Name: The name of the search engine
+URL: The URL for the search query with %s being repalced by the search term
+Shortcut: The shortcut to type to use this search engine (if not the default)
+Icon: The icon to show when using this search engine
+```
+![image](https://user-images.githubusercontent.com/958400/155925011-d62067df-687a-4d04-af03-6e82890f9398.png)
+
+
 ## FAQ
 
 
