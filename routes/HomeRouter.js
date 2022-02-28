@@ -8,7 +8,8 @@ const router = express.Router();
 
 let themes = FileHelper.getDirectoriesSync('./wwwroot/themes');
 
-router.get('/', async (req, res) => {
+
+router.get('/', async (req, res) => {    
     let themeVariables = {};
     if(req.theme?.loadScript) {
         let instance = req.theme.loadScript();

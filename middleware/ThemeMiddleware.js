@@ -11,6 +11,6 @@ module.exports = (req, res, next) => {
         return;
     }
     
-    req.theme = Theme.getTheme(req.isGuest ? 'Default' : req.settings.Theme);
+    req.theme = Theme.getTheme(req.settings?.Theme || 'Default');
     next();
 };

@@ -1,4 +1,3 @@
-const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
@@ -6,11 +5,9 @@ const Globals = require('./Globals');
 
 // middleware
 const morgan = require('morgan');
-const jwtAuthMiddleware = require('./middleware/JwtAuthMiddleware');
 const adminMiddleware = require('./middleware/AdminMiddleware');
 const themeMiddleware = require('./middleware/ThemeMiddleware');
 const fileBlockerMiddleware = require('./middleware/FileBlockerMiddleware');
-const cookieParser = require('cookie-parser');
 
 // routers
 const routerHome = require('./routes/HomeRouter');
@@ -18,7 +15,6 @@ const routerApp = require('./routes/AppRouter');
 const routerSettings = require('./routes/SettingsRouter');
 const GroupsRouter = require('./routes/GroupsRouter');
 const GroupRouter = require('./routes/GroupRouter');
-const routerLogin = require('./routes/LoginRouter');
 const routerUsers = require('./routes/UsersRouter');
 const routerSystem = require('./routes/SystemRouter');
 const routerTheme = require('./routes/ThemeRouter');
@@ -27,10 +23,12 @@ const SearchEngineRouter = require('./routes/SearchEngineRouter');
 const AppHelper = require('./helpers/appHelper');
 const UserManager = require('./helpers/UserManager');
 const System = require('./models/System');
+const InitialConfigRouter = require('./routes/InitialConfigRouter');
 
 // load static configs
 AppHelper.getInstance().load();
-System.getInstance().load();
+let system = System.getInstance();
+system.load();
 UserManager.getInstance().load();
 
 // set the version number
@@ -54,15 +52,13 @@ if(fs.existsSync('./wwwroot/images/backgrounds') == false){
 if(fs.existsSync('./data/configs') == false){
     fs.mkdirSync('./data/configs', {recursive: true});
 }
-
 // express app
 const app = express();
 
+
+
 // register view engine
 app.set('view engine', 'ejs');
-
-// Import jwt for API's endpoints authentication
-const jwt = require('jsonwebtoken');
 
 // listen on port 
 app.listen(3000);
@@ -84,33 +80,63 @@ app.use(function (req, res, next) {
 app.use(fileBlockerMiddleware);
 // expose wwwroot files as public
 app.use(express.static(__dirname + '/wwwroot'));
+app.use(themeMiddleware);
 
 
 // morgan logs every request coming into the system 
 app.use(morgan('dev'));
 
-// add cookieparser so the JWT cookie can be easily read
-app.use(cookieParser());
+if(system.getIsConfigured() === false){
+    // not yet configured, we have to add a special /initial-config route
+    let callback = (authStrategy) => {
+        configureRoutes(app, authStrategy);
+    }
+    app.use('/initial-config', new InitialConfigRouter(callback).get());
+}
+else
+{    
+    let authStrategy =  system.getAuthStrategy();    
+    configureRoutes(app, authStrategy);
+}
 
-// login before the JWT middleware to expose it to the public
-app.use('/login', routerLogin);
+app.use('/', ((req, res, next) => {
+    console.log('checking is configured');
+    var system = System.getInstance();
+    if(system.getIsConfigured() === false)
+    {
+        res.redirect('/initial-config');
+        return;
+    }
+    next();
+}));
 
-// anything past this point will now need to be authenticated against the JWT middleware
-app.use(jwtAuthMiddleware);
-app.use('/apps', routerApp);
+function configureRoutes(app, authStrategy)
+{
+    app.system = system;
+    authStrategy.init(app);
 
-app.use(themeMiddleware);
-app.use('/', routerHome);
-app.use('/settings', routerSettings);
-app.use('/groups', new GroupsRouter(false).get());
-app.use('/group', new GroupRouter(false).get());
-app.use('/theme-settings', routerTheme);
-app.use('/search-engines', new SearchEngineRouter(false).get());
+    // anything past this point will now need to be authenticated against the JWT middleware
+    //app.use(jwtAuthMiddleware);
+    if(authStrategy.authMiddleware)
+        app.use(authStrategy.authMiddleware);
 
-// below are admin only routes, so use the Admin middlweare
-app.use(adminMiddleware);
-app.use('/users', routerUsers);
-app.use('/system/guest', new GroupsRouter(true).get());
-app.use('/system/guest/group', new GroupRouter(true).get());
-app.use('/system', routerSystem);
-app.use('/system/search-engines', new SearchEngineRouter(true).get());
+    app.use('/', routerHome);
+
+    app.use('/apps', routerApp);
+
+    app.use('/settings', routerSettings);
+    app.use('/groups', new GroupsRouter(false).get());
+    app.use('/group', new GroupRouter(false).get());
+    app.use('/theme-settings', routerTheme);
+    app.use('/search-engines', new SearchEngineRouter(false).get());
+
+    // below are admin only routes, so use the Admin middlweare
+    app.use(adminMiddleware);
+
+
+    app.use('/users', routerUsers);
+    app.use('/system/guest', new GroupsRouter(true).get());
+    app.use('/system/guest/group', new GroupRouter(true).get());
+    app.use('/system', routerSystem);
+    app.use('/system/search-engines', new SearchEngineRouter(true).get());
+}

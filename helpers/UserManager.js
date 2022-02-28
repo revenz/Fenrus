@@ -25,6 +25,12 @@ class UserManagerInstance {
         this.Users = typeof(json) === 'object' ? json : JSON.parse(json);
     }
 
+    getNumberOfUsers() {
+        if(!this.Users)
+            return 0;
+        return this.Users.length;
+    }
+
     async hashString(input){
         return await bcrypt.hash(input, this.saltRounds);
     }
@@ -82,17 +88,22 @@ class UserManagerInstance {
         return user;
     }
 
-    async register(username, password){
+    async register(username, password, isAdmin){
+        if(!username)
+            return;
+
         let existing = this.getUser(username)
-        if(existing)
+        if(isAdmin == false && existing)
             return `Existing user with username '${username}'`;
         
-        let user = new User();
+        let user = existing || new User();
         user.Username = username;
         user.Password = await this.hashString(password);
         user.Uid = new Utils().newGuid();
-        user.IsAdmin = this.Users.length === 0;
-        this.Users.push(user);
+        user.IsAdmin = isAdmin === true || this.Users.length === 0;        
+        if(!existing)
+            this.Users.push(user);
+            
         await this.save();
         return user;
     }

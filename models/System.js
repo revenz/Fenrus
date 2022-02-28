@@ -1,17 +1,44 @@
 const fs = require('fs');
-const crypto = require('crypto');
+const UserManager = require('../helpers/UserManager');
 
-class SystemInstance {
-    
-    JwtSecret = '';
+class SystemInstance 
+{
     AllowRegister = true;
     AllowGuest = true;
     _File = './data/system.json';
     SearchEngines = [];
+    Properties = {};
+    AuthStrategy;
 
     constructor(){
     }    
+
+    getIsConfigured() {
+        if(UserManager.getInstance().getNumberOfUsers() === 0){
+            console.log('No users configured');
+            return false;
+        }
+        if(!this.AuthStrategy){
+            console.log('No AuthStrategy configured');
+            return false;
+        }
+        return true;
+    }
     
+    getAuthStrategy(name){
+        name = name || this.AuthStrategy;
+        if(/^[a-zA-Z0-9\-]+$/.test(name) === false)
+            return;
+  
+        let filename = `./strategies/${name}.js`
+        if(fs.existsSync(filename) == false){
+            console.log('Strategy does not exist: ' + filename);
+            return;
+        }
+        let classType = require('.' + filename); // this needs another dot
+        return new classType();
+    }
+
     async load() {   
         let self = this;
         try{
@@ -24,12 +51,7 @@ class SystemInstance {
                 Object.keys(obj).forEach(k => {
                     self[k] = obj[k];
                 });         
-            }     
-            if(!self.JwtSecret){
-                self.JwtSecret = crypto.randomBytes(256).toString('base64');
-                self.AllowRegister = true;
-                self.save();
-            }
+            }  
         }
         catch(err)
         {
@@ -50,6 +72,19 @@ class SystemInstance {
         });
     }
 
+    getProperty(name) {
+        if(this.Properties && this.Properties[name])
+            return this.Properties[name];
+        return null;
+    }
+    
+    async setProperty(name, value) {
+        if(!this.Properties)
+            this.Properties = {};
+        this.Properties[name] = value;
+        await this.save();
+    }
+
     toJson(noSecret) { 
         if(noSecret){
             return JSON.stringify({       
@@ -58,10 +93,11 @@ class SystemInstance {
             });
         }
         return JSON.stringify({                
-            JwtSecret: this.JwtSecret,
+            AuthStrategy: this.AuthStrategy,
             AllowRegister: this.AllowRegister,
             AllowGuest: this.AllowGuest,
-            SearchEngines: this.SearchEngines
+            SearchEngines: this.SearchEngines,
+            Properties: this.Properties
         }, null, 2);
     }
 }

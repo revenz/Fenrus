@@ -25,6 +25,7 @@ class SettingsInstance {
     }
     
     load() {        
+        console.log('loading!');
         let self = this;
         return new Promise(function (resolve, reject) {
             let file = self._File;

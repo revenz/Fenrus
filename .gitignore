@@ -4,3 +4,4 @@
 /wwwroot/images/backgrounds
 /wwwroot/images/icons
 buildnum.txt
+.env

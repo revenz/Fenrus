@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.svg">
+    <% if(title) { %>
+        <title>Fenrus - <%= title %></title>
+    <% } else { %>
+        <title>Fenrus</title>
+    <% } %>
+    <link rel="stylesheet" href="/css/site.min.css?version=<%= version %>" />
+    <link id="theme-style" rel="stylesheet" href="/themes/Default/theme.min.css?version=<%= version %>" />
+    <link rel="stylesheet" href="/css/settings.min.css?version=<%= version %>" />
+</head>
+
+<body>
+
+    <div class="main-content">
+
+
+    <div class="initial-config settings-box" x-data="InitialConfig">
+        <div class="header">
+            <span class="title">Initial Configuration</span>
+            <div class="buttons">
+                <button class="btn" @click="save">Save</button>
+            </div>
+        </div>
+        <div class="setting">
+            <span class="label">Login Strategy</span>
+            <span class="value">
+                <select x-model="model.Strategy">
+                    <option value="LocalStrategy">Local Username/Password</option>
+                    <option value="OAuthStrategy">OAuth</option>
+                </select>
+            </span>
+        </div>
+        <template x-if="model.Strategy === 'LocalStrategy'">
+            <div>
+                <div class="setting">
+                    <span class="label">Admin Username</span>
+                    <span class="value">
+                        <input type="text" x-model="model.LocalStrategy.Username" autofocus data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">Password</span>
+                    <span class="value">
+                        <input type="password" x-model="model.LocalStrategy.Password" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+                    </span>
+                </div>
+            </div>
+        </template>
+        <template x-if="model.Strategy == 'OAuthStrategy'">
+            <div>
+                <div class="setting">
+                    <span class="label">Issuer Base URL</span>
+                    <span class="value">
+                        <input type="text" x-model="model.OAuthStrategy.IssuerBaseUrl" autofocus data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">Client ID</span>
+                    <span class="value">
+                        <input type="text" x-model="model.OAuthStrategy.ClientId" autofocus data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">Secret</span>
+                    <span class="value">
+                        <input type="text" x-model="model.OAuthStrategy.Secret" autofocus data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">Base URL</span>
+                    <span class="value">
+                        <input type="text" x-model="model.OAuthStrategy.BaseUrl" autofocus data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">Administrator</span>
+                    <span class="value">
+                        <input type="text" x-model="model.OAuthStrategy.AdminUsername" autofocus data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+                    </span>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <script src="/js/site.js?version=<%= version %>" asp-append-version="true"></script>
+    <script src="/js/alpinejs-3.8.1.min.js" defer></script>
+    <script src="/js/iodine.min.js" defer></script>
+
+    <script>
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('InitialConfig', () => ({
+                model: {
+                    Strategy: 'LocalStrategy',
+                    LocalStrategy: { Username: 'admin', Password: ''},
+                    OAuthStrategy: {
+                        AdminUsername: '',
+                        IssuerBaseUrl: 'https://accounts.google.com/',
+                        ClientId: '',
+                        Secret: '',
+                        BaseUrl: window.location.origin
+                    }
+                }, 
+                blur(){
+                    this.validate();
+                },
+                input(){
+                    this.validate();
+                },
+                validate() {
+                    let inputs = [...document.querySelectorAll(`.settings-box [data-rules]`)];
+                    let valid = true;
+                    inputs.map((input) => {
+                        if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
+                            valid = false;
+                            input.classList.add("invalid");
+                        }else{
+                            input.classList.remove("invalid");
+                        }
+                    });
+                    return valid;
+                },
+                save(dontReload) {
+                    if(!this.validate())
+                        return;
+                        
+                    const options = {
+                        method: 'POST',
+                        body: JSON.stringify(this.model),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                    fetch('/initial-config', options).then(()=>{
+                        window.location = '/login';
+                    });
+                }
+            }))
+        });
+    </script>
+
+</body>
+</html>
