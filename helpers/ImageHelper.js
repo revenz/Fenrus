@@ -37,7 +37,8 @@ class ImageHelper {
             let link;
             let favIconUrl;
             while(link = rgxLinks.exec(html)){
-                console.log(link);
+                html = html.replace(link[0], '');
+                console.log(link[0]);
                 if(link[0].toLowerCase().indexOf('shortcut') < 0 || link[0].toLowerCase().indexOf('icon') < 0)
                     continue;
                 let matchIconUrl = link[0].match(/href="([^"]+)"/i, link[0]);
