@@ -92,13 +92,11 @@ function getAppArgs(appInstance, settings){
                 method: args.method,
                 body: args.body
             }).then(res => {
-				if(args.headers['Accept'].includes('json')){
+				if(args.headers['Accept'].includes('json'))
 					return res.json();
-				} else {
+				else
 					return res;
-				}
-			}
-			).catch(error => {
+			}).catch(error => {
                 console.log('error: ' + error);
             });
         }
