@@ -105,11 +105,12 @@
                 else
                     this.EditorApp = {};
 
-                if(this.EditorApp?.Properties?.length){
+                if(this.EditorApp?.Properties?.length)
+                {
                     // set the default property values if this app defines them
                     for(let prop of this.EditorApp.Properties)
                     {
-                        if(prop.Default)
+                        if(prop.Default && this.EditModel.Properties[prop.Id] === undefined)
                             this.EditModel.Properties[prop.Id] = prop.Default;
                     }
                 }    
@@ -175,15 +176,6 @@
                         input.classList.remove("invalid");
                     }
                 });
-
-                if(false && this.EditorOpen){
-                    if(!this.EditModel.Icon){
-                        document.getElementById('file-chooser-btn').classList.add('invalid');
-                        return false;
-                    }else{
-                        document.getElementById('file-chooser-btn').classList.remove('invalid');
-                    }
-                }
 
                 return valid;
             },

@@ -7,6 +7,12 @@
   "Carousel": true,
   "Properties": [
     {
+      "Name": "Currency Symbol",
+      "Id": "currencySymobol",
+      "Type": "string",
+      "Default":"$"
+    },
+    {
       "Name": "Country",
       "Id": "country",
       "Type": "string",
@@ -17,12 +23,6 @@
       "Id": "currency",
       "Type": "string",
       "Default":"AUD"
-    },
-    {
-      "Name": "Currency Symbol",
-      "Id": "currencySymobol",
-      "Type": "string",
-      "Default":"$"
     }
   ]
 }
