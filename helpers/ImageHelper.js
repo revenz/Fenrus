@@ -30,8 +30,14 @@ class ImageHelper {
         let match = url.match(/^http(s)?:\/\/[^/]+/i);
         if(!match)
             return;
-        let html = await fetch(url);
-        html = await html.text();
+        url = match[0] + '/';
+        let html;
+        try
+        {
+            let html = await fetch(url);
+            html = await html.text();
+        }
+        catch(err) {}
         if(html){
             let rgxLinks = /<link[^>]+>/;
             let link;
@@ -68,7 +74,6 @@ class ImageHelper {
                     return iconUrl; 
             }
         }
-        url = match[0] + '/';
         for(let file of ['favicon', 'icon']){
             for(let extension of ['.ico', '.png', '.gif', '.svg']){
                 let attempt = url + file + extension;

@@ -90,7 +90,6 @@ class GroupRouter{
                 let imageHelper = new ImageHelper();
                 for(let item of model.Items || [])
                 {
-                    console.log('saving item', item);
                     if(item._Type === 'DashboardLink')
                     {
                         if(!item.Icon)
