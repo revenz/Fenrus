@@ -1,0 +1,29 @@
+{
+  "Name": "Glances",
+  "Icon": "icon.png",
+  "TestFunction": true,
+  "Interval":10,
+  "Properties": [
+    {
+      "Name": "1st stat title",
+      "Id": "firstStatTitle",
+      "Type": "string",
+	  "Default":"RAM Used"
+    },{
+      "Name": "1st stat query",
+      "Id": "firstStatQuery",
+      "Type": "string",
+	  "Default":"mem/percent"
+    },{
+      "Name": "2nd stat title",
+      "Id": "secStatTitle",
+      "Type": "string",
+	  "Default":"CPU Used"
+    },{
+      "Name": "2nd stat query",
+      "Id": "secStatQuery",
+      "Type": "string",
+	  "Default":"cpu/total"
+    }      
+  ]
+}
