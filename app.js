@@ -81,7 +81,6 @@ app.use(function (req, res, next) {
 app.use(fileBlockerMiddleware);
 // expose wwwroot files as public
 app.use(express.static(__dirname + '/wwwroot'));
-app.use(themeMiddleware);
 
 
 // morgan logs every request coming into the system 
@@ -123,6 +122,8 @@ function configureRoutes(app, authStrategy)
     //app.use(jwtAuthMiddleware);
     if(authStrategy.authMiddleware)
         app.use(authStrategy.authMiddleware);
+
+    app.use(themeMiddleware);
 
     app.use('/', routerHome);
 
