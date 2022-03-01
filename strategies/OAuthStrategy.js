@@ -30,7 +30,8 @@ class OAuthStrategy {
                 issuerBaseURL: oauth.IssuerBaseUrl,
                 clientID: oauth.ClientId,
                 baseURL: oauth.BaseUrl,
-                secret: oauth.Secret
+                secret: oauth.Secret,
+                idpLogout: true
             })
         );
 
