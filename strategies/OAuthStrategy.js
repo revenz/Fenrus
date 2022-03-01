@@ -56,9 +56,17 @@ class OAuthStrategy {
             }
             next();
         })
-
-        //app.post('/callback');
     }
+
+    errorHandler = (err, req, res, next) => {
+        console.log(`ERROR FOR: [${req.url}] [${req.baseUrl}] ${err.statusCode}: `, err);
+        if(req.url === '/callback' && err.error === 'unauthorized') {
+            res.redirect('/');
+        }
+        else{
+            next(err);
+        }
+    };
 }
 
 module.exports = OAuthStrategy;

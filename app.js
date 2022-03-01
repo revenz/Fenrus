@@ -139,4 +139,8 @@ function configureRoutes(app, authStrategy)
     app.use('/system/guest/group', new GroupRouter(true).get());
     app.use('/system', routerSystem);
     app.use('/system/search-engines', new SearchEngineRouter(true).get());
+
+    if(authStrategy.errorHandler)
+        app.use(authStrategy.errorHandler);    
 }
+
