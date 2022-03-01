@@ -99,11 +99,14 @@ class UserManagerInstance {
         let user = existing || new User();
         user.Username = username;
         user.Password = await this.hashString(password);
-        user.Uid = new Utils().newGuid();
+
+        if(!existing) // otherwise we re-registering the user their config will go
+            user.Uid = new Utils().newGuid();
+
         user.IsAdmin = isAdmin === true || this.Users.length === 0;        
         if(!existing)
             this.Users.push(user);
-            
+
         await this.save();
         return user;
     }
