@@ -14,10 +14,6 @@ class SystemInstance
     }    
 
     getIsConfigured() {
-        if(UserManager.getInstance().getNumberOfUsers() === 0){
-            console.log('No users configured');
-            return false;
-        }
         if(!this.AuthStrategy){
             console.log('No AuthStrategy configured');
             return false;

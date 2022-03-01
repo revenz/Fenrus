@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const Settings = require('../models/Settings');
 const System = require('../models/System');
 const crypto = require('crypto');
-const routerLogin = require('../routes/LoginRouter');
 const UserManager = require('../helpers/UserManager');
 const cookieParser = require('cookie-parser');
 const Globals = require('../Globals');
@@ -11,12 +10,47 @@ class LocalStrategy
 {
     JwtSecret;
 
-    async saveInitialConfig(settings){
+    constructor(){
+        let system = System.getInstance();
+        this.JwtSecret = system.getProperty('JwtSecret');
+        if(!this.JwtSecret)
+        {
+            this.JwtSecret = crypto.randomBytes(256).toString('base64');
+            system.AllowRegister = true;
+            system.setProperty('JwtSecret', this.JwtSecret);
+        }
+    }
+
+    async saveInitialConfig(settings, req, res){
         let adminUser = settings.Username;
         let adminPassword = settings.Password;
         let userManager = UserManager.getInstance();
-        await userManager.register(adminUser, adminPassword, true);
+        let user = await userManager.register(adminUser, adminPassword, true);
+
+        if(user)
+            this.createAuthCookie(user, res);
+        
         return true;
+    }
+
+    createAuthCookie(user, res) {
+        
+        // The jwt.sign method are used
+        // to create token
+        const token = jwt.sign(
+            JSON.stringify(user),
+            this.JwtSecret
+        );
+
+        let maxAge = 31 * 24 * 60 * 60 * 1000 // milliseconds, 31 days
+        
+        res.cookie("jwt_auth", token, {
+            secure: false,
+            httpOnly: true,
+            maxAge: maxAge 
+        });
+
+        return token;
     }
 
     init(app) 
@@ -86,20 +120,7 @@ class LocalStrategy
                 Settings.clearUser(user.Uid);
             }
 
-            // The jwt.sign method are used
-            // to create token
-            const token = jwt.sign(
-                JSON.stringify(user),
-                this.JwtSecret
-            );
-
-            let maxAge = 31 * 24 * 60 * 60 * 1000 // milliseconds, 31 days
-            
-            res.cookie("jwt_auth", token, {
-                secure: false,
-                httpOnly: true,
-                maxAge: maxAge 
-            });
+            let token = this.createAuthCookie(user, res);
 
             // Pass the data or token in response
             res.json({

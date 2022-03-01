@@ -77,12 +77,6 @@
                         <input type="text" x-model="model.OAuthStrategy.BaseUrl" autofocus data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
                     </span>
                 </div>
-                <div class="setting">
-                    <span class="label">Administrator</span>
-                    <span class="value">
-                        <input type="text" x-model="model.OAuthStrategy.AdminUsername" autofocus data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
-                    </span>
-                </div>
             </div>
         </template>
     </div>
@@ -137,7 +131,7 @@
                         }
                     }
                     fetch('/initial-config', options).then(()=>{
-                        window.location = '/login';
+                        window.location = '/';
                     });
                 }
             }))

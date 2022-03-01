@@ -50,13 +50,12 @@ class InitialConfigRouter{
                 return;
             }
 
-            let success = await strategy.saveInitialConfig(req.body[req.body.Strategy]);
+            let success = await strategy.saveInitialConfig(req.body[req.body.Strategy], req, res);
             if(success){
                 system.AuthStrategy = strategyName;
                 await system.save();
                 this.callback(strategy);
-                res.sendStatus(200);
-            }
+                res.sendStatus(200);            }
         });    
     }
 }

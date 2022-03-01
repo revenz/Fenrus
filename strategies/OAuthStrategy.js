@@ -14,9 +14,6 @@ class OAuthStrategy {
             BaseUrl: settings.BaseUrl,
             Secret: settings.Secret
         });
-        let adminUser = settings.AdminUsername;
-        let userManager = UserManager.getInstance();
-        await userManager.register(adminUser, new Utils().newGuid(), true);
         return true;
     }
 
