@@ -5,7 +5,7 @@
   "Interval":10,
   "Properties": [
     {
-      "Name": "apikey",
+      "Name": "API Key",
       "Id": "apikey",
       "Type": "password"
     },{
