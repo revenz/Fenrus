@@ -1,0 +1,18 @@
+﻿{
+  "Name": "Transmission",
+  "TestFunction": true,
+  "Interval":5,
+  "Properties": [
+    {
+      "Name": "username",
+      "Id": "username",
+      "Type": "string"
+    },
+	{
+      "Name": "Password",
+      "Id": "password",
+      "Type": "password"
+    }
+	
+  ]
+}
