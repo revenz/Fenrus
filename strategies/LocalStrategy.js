@@ -107,6 +107,17 @@ class LocalStrategy
                 token: token
             });
         });
+
+        
+        app.get('/logout', (req, res) => {    
+            res.clearCookie("jwt_auth");
+            
+            var system = System.getInstance();
+            if(system.AllowGuest)
+                res.redirect('/').end();
+            else
+                res.redirect('/login').end();
+        });
         
     }
 

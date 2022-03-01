@@ -19,6 +19,7 @@ const routerUsers = require('./routes/UsersRouter');
 const routerSystem = require('./routes/SystemRouter');
 const routerTheme = require('./routes/ThemeRouter');
 const SearchEngineRouter = require('./routes/SearchEngineRouter');
+const Four01Router = require('./routes/Four01Router');
 
 const AppHelper = require('./helpers/appHelper');
 const UserManager = require('./helpers/UserManager');
@@ -109,6 +110,9 @@ app.use('/', ((req, res, next) => {
     }
     next();
 }));
+
+app.use('/401', new Four01Router().get());
+
 
 function configureRoutes(app, authStrategy)
 {

@@ -31,12 +31,17 @@ class OAuthStrategy {
                 clientID: oauth.ClientId,
                 baseURL: oauth.BaseUrl,
                 secret: oauth.Secret,
+                enableTelemetry: false,
                 idpLogout: true
             })
         );
 
         app.use(async (req, res, next) =>{
-            console.log('oauth middleware!!!');
+            if(req.url.startsWith('/401'))
+            {
+                next();
+                return;
+            }
             if(req.oidc.isAuthenticated()){
                 if(!req.user){
                     console.log('user: ', req.oidc.user);
@@ -45,10 +50,19 @@ class OAuthStrategy {
                     req.user = userManager.getUser(username);
                     if(!req.user){
                         // register the user
+                        if(userManager.getNumberOfUsers() > 0 && system.AllowRegister === false){
+                            res.redirect('/401?msg=no-register');
+                            return;
+                        }
                         req.user = await userManager.register(username, new Utils().newGuid());
                     }
                     req.settings = await Settings.getForUser(req.user.Uid);
                 }
+            }
+            else if(system.AllowGuest === false)
+            {
+                res.redirect('/login');
+                return;
             }
             else 
             {                
@@ -62,7 +76,7 @@ class OAuthStrategy {
     errorHandler = (err, req, res, next) => {
         console.log(`ERROR FOR: [${req.url}] [${req.baseUrl}] ${err.statusCode}: `, err);
         if(req.url === '/callback' && err.error === 'unauthorized') {
-            res.redirect('/');
+            res.redirect('/401?msg=unauthorized');
         }
         else{
             next(err);

@@ -10,6 +10,7 @@ let themes = FileHelper.getDirectoriesSync('./wwwroot/themes');
 
 
 router.get('/', async (req, res) => {    
+
     let themeVariables = {};
     if(req.theme?.loadScript) {
         let instance = req.theme.loadScript();
@@ -62,14 +63,6 @@ router.get('/about', async (req, res) => {
     }));      
 });
 
-router.get('/logout', (req, res) => {    
-    res.clearCookie("jwt_auth");
-    
-    var system = System.getInstance();
-    if(system.AllowGuest)
-        res.redirect('/').end();
-    else
-        res.redirect('/login').end();
-});
+
   
 module.exports = router;
