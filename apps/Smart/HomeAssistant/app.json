@@ -12,22 +12,22 @@
       "Name": "1st stat title",
       "Id": "firstStatTitle",
       "Type": "string",
-	  "Default":"Lights On"
+      "Default":"Lights On"
     },{
       "Name": "1st stat template",
       "Id": "firstStatTemplate",
       "Type": "string",
-	  "Default":"{{ ((states.light | list) + (states.switch | list)) | selectattr('state','equalto','on') | list | count }}"
+      "Default":"{{ ((states.light | list) + (states.switch | list)) | selectattr('state','equalto','on') | list | count }}"
     },{
       "Name": "2nd stat title",
       "Id": "secStatTitle",
       "Type": "string",
-	  "Default":"Windows Open"
+      "Default":"Windows Open"
     },{
       "Name": "2nd stat template",
       "Id": "secStatTemplate",
       "Type": "string",
-	  "Default":"{{ states.window | selectattr('state','equalto','on') | list | count }}"
+      "Default":"{{ states.window | selectattr('state','equalto','on') | list | count }}"
     }      
   ]
 }
