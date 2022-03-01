@@ -1,5 +1,7 @@
 <% 
     let app = AppHelper.get(model.AppName);
+    if(!app)
+        return; // can happen if the app has been deleted/renamed
     let target = settings.LinkTarget ?? '_self';
     let title = model.Name ?? model.AppName;
     let interval = app.Interval === -1 ? -1 : (app.Interval ?? 0) * 1000;

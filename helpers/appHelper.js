@@ -48,7 +48,7 @@ class AppHelperInstance {
                                 obj.DefaultUrl = `http://${obj.Name.toLowerCase().replace(/[\s]/g, '-')}.lan/`;
                             }
 
-                            results[obj.Name] = obj;
+                            results[obj.Name.toLowerCase()] = obj;
                         }else{
                             console.log('no name: ', obj);
                         }
@@ -64,7 +64,7 @@ class AppHelperInstance {
     }
 
     get(name) {
-        return this.apps[name];
+        return this.apps[name.toLowerCase()];
     }
 }
 
