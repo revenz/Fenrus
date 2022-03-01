@@ -339,7 +339,4 @@ body {
   .dashboard.horizontal.bottom {
     justify-content: end;
   }
-  .dashboard.horizontal .db-group {
-    margin-top: unset;
-  }
 }

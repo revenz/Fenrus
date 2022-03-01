@@ -43,8 +43,18 @@
                     window.location = 'http://' + searchText;
                     return;
                 }
+                if(/^lh:[\d]+/i.test(searchText)){
+                    // localhost shortcut
+                    window.location = 'http://localhost:' + searchText.substring(3);
+                    return;
+                }
                 if(/^[a-z][a-z\-]*(:[\d]+)?\//i.test(searchText)){
                     // hostname /
+                    window.location = 'http://' + searchText;
+                    return;
+                }
+                if(/^[a-z][a-z\-]*:[\d]+/i.test(searchText)){
+                    // hostname with port
                     window.location = 'http://' + searchText;
                     return;
                 }
