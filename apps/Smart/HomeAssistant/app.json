@@ -1,0 +1,33 @@
+{
+  "Name": "Home Assistant",
+  "Icon": "icon.png",
+  "TestFunction": true,
+  "Interval":10,
+  "Properties": [
+    {
+      "Name": "apikey",
+      "Id": "apikey",
+      "Type": "password"
+    },{
+      "Name": "1st stat title",
+      "Id": "firstStatTitle",
+      "Type": "string",
+	  "Default":"Lights On"
+    },{
+      "Name": "1st stat template",
+      "Id": "firstStatTemplate",
+      "Type": "string",
+	  "Default":"{{ ((states.light | list) + (states.switch | list)) | selectattr('state','equalto','on') | list | count }}"
+    },{
+      "Name": "2nd stat title",
+      "Id": "secStatTitle",
+      "Type": "string",
+	  "Default":"Windows Open"
+    },{
+      "Name": "2nd stat template",
+      "Id": "secStatTemplate",
+      "Type": "string",
+	  "Default":"{{ states.window | selectattr('state','equalto','on') | list | count }}"
+    }      
+  ]
+}
