@@ -4,7 +4,7 @@
   "Interval":5,
   "Properties": [
     {
-      "Name": "username",
+      "Name": "Username",
       "Id": "username",
       "Type": "string"
     },

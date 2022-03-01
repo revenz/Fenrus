@@ -1,5 +1,5 @@
 ﻿{
-  "Name": "adguardhome",
+  "Name": "AdGuard Home",
   "TestFunction": true,
   "Interval":30,
   "Properties": [
