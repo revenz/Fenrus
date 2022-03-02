@@ -1,4 +1,4 @@
-﻿class FileFlows {
+﻿class Tdarr {
     async status(args) {
       const data = await args.fetch(
         {
@@ -38,5 +38,5 @@
     }
   }
   
-  module.exports = FileFlows;
+  module.exports = Tdarr;
   
