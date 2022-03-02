@@ -11,7 +11,7 @@ RUN \
     npm && \
   apk -U --update --no-cache add \
     nodejs && \    
-  apk add --no-cache python3 py3-pip && \
+  apk add --no-cache python make g++ fontconfig && \
   rm -rf ./.git && \
   npm install && \
   npm ci --only=production && \
