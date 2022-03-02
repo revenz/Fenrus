@@ -11,6 +11,7 @@ RUN \
     npm && \
   apk -U --update --no-cache add \
     nodejs && \    
+  apk add --no-cache python3 py3-pip && \
   rm -rf ./.git && \
   npm install && \
   npm ci --only=production && \
