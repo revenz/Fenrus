@@ -160,7 +160,7 @@
   display: none;
 }
 
-.db-item:not(.carousel).medium, .db-item:not(.carousel).x-large, .db-item:not(.carousel).xx-large {
+.db-item.db-basic.medium, .db-item.db-basic.x-large, .db-item.db-basic.xx-large {
   perspective: 1000px;
   /* Remove this if you don't want the 3D effect */
   /* This container is needed to position the front and back side */
@@ -168,7 +168,7 @@
   /* Position the front and back side */
   /* Style the back side */
 }
-.db-item:not(.carousel).medium .content, .db-item:not(.carousel).x-large .content, .db-item:not(.carousel).xx-large .content {
+.db-item.db-basic.medium .content, .db-item.db-basic.x-large .content, .db-item.db-basic.xx-large .content {
   display: none;
   position: absolute;
   top: 0;
@@ -179,7 +179,7 @@
   padding: 0.5rem;
   overflow: hidden;
 }
-.db-item:not(.carousel).medium:hover .icon::after, .db-item:not(.carousel).x-large:hover .icon::after, .db-item:not(.carousel).xx-large:hover .icon::after {
+.db-item.db-basic.medium:hover .icon::after, .db-item.db-basic.x-large:hover .icon::after, .db-item.db-basic.xx-large:hover .icon::after {
   content: "";
   position: absolute;
   top: 0;
@@ -188,25 +188,25 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
 }
-.db-item:not(.carousel).medium:hover .content, .db-item:not(.carousel).x-large:hover .content, .db-item:not(.carousel).xx-large:hover .content {
+.db-item.db-basic.medium:hover .content, .db-item.db-basic.x-large:hover .content, .db-item.db-basic.xx-large:hover .content {
   display: unset;
 }
-.db-item:not(.carousel).medium .icon, .db-item:not(.carousel).x-large .icon, .db-item:not(.carousel).xx-large .icon {
+.db-item.db-basic.medium .icon, .db-item.db-basic.x-large .icon, .db-item.db-basic.xx-large .icon {
   width: 100%;
   height: 100%;
 }
-.db-item:not(.carousel).medium .icon img, .db-item:not(.carousel).x-large .icon img, .db-item:not(.carousel).xx-large .icon img {
+.db-item.db-basic.medium .icon img, .db-item.db-basic.x-large .icon img, .db-item.db-basic.xx-large .icon img {
   width: 100%;
   height: 100%;
 }
-.db-item:not(.carousel).medium .livestats, .db-item:not(.carousel).x-large .livestats, .db-item:not(.carousel).xx-large .livestats {
+.db-item.db-basic.medium .livestats, .db-item.db-basic.x-large .livestats, .db-item.db-basic.xx-large .livestats {
   margin: 0.25rem 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   font-size: 0.8rem;
 }
-.db-item:not(.carousel).medium .livestats li, .db-item:not(.carousel).x-large .livestats li, .db-item:not(.carousel).xx-large .livestats li {
+.db-item.db-basic.medium .livestats li, .db-item.db-basic.x-large .livestats li, .db-item.db-basic.xx-large .livestats li {
   list-style: none;
   padding: 0;
   display: flex;
@@ -214,39 +214,51 @@
   flex: auto;
   color: var(--color);
 }
-.db-item:not(.carousel).medium .livestats li .title, .db-item:not(.carousel).x-large .livestats li .title, .db-item:not(.carousel).xx-large .livestats li .title {
+.db-item.db-basic.medium .livestats li .title, .db-item.db-basic.x-large .livestats li .title, .db-item.db-basic.xx-large .livestats li .title {
   padding-bottom: 0.1rem;
   font-weight: bold;
   width: 5rem;
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.db-item:not(.carousel).medium .livestats li a, .db-item:not(.carousel).x-large .livestats li a, .db-item:not(.carousel).xx-large .livestats li a {
+.db-item.db-basic.medium .livestats li a, .db-item.db-basic.x-large .livestats li a, .db-item.db-basic.xx-large .livestats li a {
   color: var(--color);
 }
-.db-item:not(.carousel).medium .livestats li + li, .db-item:not(.carousel).x-large .livestats li + li, .db-item:not(.carousel).xx-large .livestats li + li {
+.db-item.db-basic.medium .livestats li + li, .db-item.db-basic.x-large .livestats li + li, .db-item.db-basic.xx-large .livestats li + li {
   margin-top: 0.5rem;
 }
-.db-item:not(.carousel).medium .inner, .db-item:not(.carousel).x-large .inner, .db-item:not(.carousel).xx-large .inner {
+.db-item.db-basic.medium .inner, .db-item.db-basic.x-large .inner, .db-item.db-basic.xx-large .inner {
   position: relative;
   width: 100%;
   height: 100%;
   transition: transform 0.4s;
   transform-style: preserve-3d;
 }
-.db-item:not(.carousel).medium:hover .inner, .db-item:not(.carousel).x-large:hover .inner, .db-item:not(.carousel).xx-large:hover .inner {
+.db-item.db-basic.medium:hover .inner, .db-item.db-basic.x-large:hover .inner, .db-item.db-basic.xx-large:hover .inner {
   transform: rotateY(180deg);
   top: -0.5rem;
   right: -0.5rem;
 }
-.db-item:not(.carousel).medium .icon, .db-item:not(.carousel).medium .content, .db-item:not(.carousel).x-large .icon, .db-item:not(.carousel).x-large .content, .db-item:not(.carousel).xx-large .icon, .db-item:not(.carousel).xx-large .content {
+.db-item.db-basic.medium .icon, .db-item.db-basic.medium .content, .db-item.db-basic.x-large .icon, .db-item.db-basic.x-large .content, .db-item.db-basic.xx-large .icon, .db-item.db-basic.xx-large .content {
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
 }
-.db-item:not(.carousel).medium .content, .db-item:not(.carousel).x-large .content, .db-item:not(.carousel).xx-large .content {
+.db-item.db-basic.medium .content, .db-item.db-basic.x-large .content, .db-item.db-basic.xx-large .content {
   transform: rotateY(180deg);
+}
+
+.db-item.chart .inner > .icon {
+  display: none;
+}
+.db-item.chart .inner > .content > .title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5rem;
+  text-transform: unset;
 }
 
 body {

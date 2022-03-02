@@ -45,7 +45,14 @@
   }
 }
 .main-content {
-  flex-direction: column;
+  display: flex;
+  overflow: auto;
+}
+.main-content > div {
+  margin: auto;
+}
+.main-content > div .settings-box {
+  margin: 2rem 0;
 }
 
 .settings-box {

@@ -87,22 +87,35 @@ function LiveApp(name, instanceUid, interval, subsequent) {
     });
 }
 
-function setStatus(name, instanceUid, interval, html, subsequent){
-    let ele = document.getElementById(instanceUid).querySelector('.status');
-    if (ele && html) {
-        setInLocalStorage(instanceUid, html);
-        if(/^:carousel:/.test(html)){
-            html = html.substring(10);
-            let index = html.indexOf(':');
-            let carouselId = html.substring(0, index);
-            html = html.substring(index + 1);
+function setStatus(name, instanceUid, interval, content, subsequent){
+    let eleItem = document.getElementById(instanceUid);
+    let ele = eleItem.querySelector('.status');
+    if (ele && content) {
+        setInLocalStorage(instanceUid, content);        
+        if(/^:carousel:/.test(content)){
+            content = content.substring(10);
+            let index = content.indexOf(':');
+            let carouselId = content.substring(0, index);
+            content = content.substring(index + 1);
             if(!carouselTimers[carouselId])
                 carouselTimer(carouselId);
+            setItemClass(eleItem, 'carousel');
         }
-        ele.innerHTML = html;
+        else if(/^data:/.test(content)){
+            content = `<img class="app-chart" src="${content}" />`;
+            setItemClass(eleItem, 'chart');
+        }
+        else {
+            setItemClass(eleItem, 'db-basic');
+        }
+        ele.innerHTML = content;
     }
     if((subsequent && interval === -1) === false)
         setTimeout(() => LiveApp(name, instanceUid, interval, true), interval + Math.random() + 5);
+}
+
+function setItemClass(item, className) {
+    item.className = item.className.replace(/(carousel|chart|db-basic)/g, '') + ' ' + className;
 }
 
 function htmlEncode(text) {

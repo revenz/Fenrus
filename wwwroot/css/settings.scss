@@ -1,7 +1,14 @@
 ﻿@use 'toast';
 
-.main-content {
-    flex-direction: column;  
+.main-content{
+    display: flex;
+    overflow: auto;
+    > div {    
+        margin:auto;
+        .settings-box {
+            margin:2rem 0;
+        }
+    }
 }
 
 .settings-box {

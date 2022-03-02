@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="<%= app.Css %>" />    
 <% } %>
 
-<a id="<%= model.Uid %>" title="<%= model.Name %>" class="db-item db-app <%= model.Size || 'medium' %> <%= app.Classes %> <%= app.Carousel && model.Size.indexOf('large') >= 0 ? 'carousel' : '' %>" href="<%= model.Url%>" onclick="abortRequests()" target="<%= target %>">
+<a id="<%= model.Uid %>" title="<%= model.Name %>" class="db-item db-app db-basic <%= model.Size || 'medium' %> <%= app.Classes %> <%= app.Carousel && model.Size.indexOf('large') >= 0 ? 'carousel' : '' %>" href="<%= model.Url%>" onclick="abortRequests()" target="<%= target %>">
     <div class="inner">
         <div class="icon">
         <img src="<%= model.Icon ? model.Icon : app.Icon ? `/apps/${encodeURIComponent(app.Name)}/${app.Icon}` : '/favicon.svg'  %>" />

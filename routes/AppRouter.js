@@ -4,6 +4,7 @@ const fetch = require('node-fetch');
 let Utils = require('../helpers/utils');
 let AppHelper = require('../helpers/appHelper');
 const path = require('path');
+const ChartHelper = require('../helpers/ChartHelper');
 
 const router = express.Router();
 
@@ -23,9 +24,37 @@ function getInstance(app, appInstance){
     return instances[appInstance.Uid];
 }
 
+function getChartHelper(appInstance){
+    let w = 1, h = 1;
+    // this should move into a theme somehow, since it will be theme depednant
+    if(appInstance.Size === 'medium')
+        w = 2, h = 2;
+    else if(appInstance.Size === 'large')
+        w = 6, h = 2;
+    else if(appInstance.Size === 'x-large')
+        w = 4, h = 4;
+    else if(appInstance.Size === 'xx-large')
+        w = 6, h = 6;
+    let unit = 3.75 * 14; // 1rem 
+    let chartHelper = new ChartHelper(w * unit, h * unit);
+    
+    let chart = {};
+    Object.getOwnPropertyNames(ChartHelper.prototype).forEach(x => {
+        if(x === 'render' || x === 'constructor')
+            return;
+        chart[x] = async (config) => { 
+            return await chartHelper[x](config); 
+        }
+    })
+    return chart;
+}
+
 function getAppArgs(appInstance, settings){
     let url = appInstance.Url;
     let utils = new Utils();
+
+    let chartHelper = getChartHelper(appInstance);
+
     let funcArgs = {
         url: url,
         properties: appInstance.Properties,
@@ -33,6 +62,7 @@ function getAppArgs(appInstance, settings){
         linkTarget: settings.LinkTarget,
         appIcon: appInstance.Icon,
         size: appInstance.Size,
+        chart: chartHelper,
         liveStats: (items) => {            
             let html = '<ul class="livestats">';
             for (let item of items) {
@@ -140,12 +170,24 @@ router.get('/:appName/:uid/status', async (req, res) => {
     let instance = getInstance(app, appInstance);
 
     let funcArgs = getAppArgs(appInstance, req.settings);
-    try
+    //try
     {
-        let result = await instance.status(funcArgs);        
-        res.send(result || '').end();
+        let result = await instance.status(funcArgs);    
+        if(!result || typeof(result) === 'string')
+            res.send(result || '').end();
+        else{
+            res.type("image/png");
+            res.status(201); // tell the UI its an image
+            //res.Headers = { ContentType: 'image/png' };
+            res.write(result);
+            res.end();
+        }
     }
-    catch(err){}
+
+    // catch(err){ 
+    //     console.log('err', err);
+    //     res.send('').end();
+    // }
 });
 
 

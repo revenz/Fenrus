@@ -134,16 +134,23 @@
                     <div class="setting">
                         <span class="label" x-text="prop.Name"></span>
                         <span class="value">
-                            <template x-if="prop.Type === 'string'">
+                            <template x-if="prop.Type.toLowerCase() === 'string'">
                                 <input :disabled="isDisabled()" type="text" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                             </template>
-                            <template x-if="prop.Type === 'password'">
+                            <template x-if="prop.Type.toLowerCase() === 'password'">
                                 <input type="password" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                             </template>
-                            <template x-if="prop.Type === 'int'">
+                            <template x-if="prop.Type.toLowerCase() === 'int'">
                                 <input :disabled="isDisabled()" type="number" x-model.number="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                             </template>
-                            <template x-if="prop.Type === 'bool'">
+                            <template x-if="prop.Type.toLowerCase() === 'select'">
+                                <select :disabled="isDisabled()" x-model="EditModel.Properties[prop.Id]">
+                                    <template x-for="opt in prop.Options">
+                                        <option :value="opt.Value" x-text="opt.Label" :selected="opt.Value === EditModel.Properties[prop.Id]"></option>
+                                    </template>
+                                </select>
+                            </template>
+                            <template x-if="prop.Type.toLowerCase() === 'bool'">
                                 <label x:for="$id('toggle')" class="toggle-switchy">
                                     <input :disabled="isDisabled()" type="checkbox" :id="$id('toggle')" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                                     <span class="toggle">
