@@ -15,6 +15,7 @@ RUN apk add --update --no-cache \
     giflib-dev \
     pango-dev \
     libtool \
+    freetype-dev \
     autoconf \
     automake
 
