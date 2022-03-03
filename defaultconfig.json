@@ -118,15 +118,6 @@
           "Properties": {},
           "AppName": "GitHub",
           "DisplayName": "GitHub - FileFlows"
-        },
-        {
-          "_Type": "DashboardApp",
-          "Uid": "0eef4385-4983-470f-b64d-3f384aa1c620",
-          "Name": "FileFlows - Demo",
-          "Url": "https://demo.fileflows.com/",
-          "Icon": "",
-          "Properties": {},
-          "AppName": "FileFlows"
         }
       ],
       "Uid": "87544728-5584-45ff-8e4b-fcbdbbd27994"

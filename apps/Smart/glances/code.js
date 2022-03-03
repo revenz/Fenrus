@@ -17,7 +17,7 @@ class Glances {
 
     async chart(args) 
     {
-        let chartType = args.properties['chart'].toLowerCase();
+        let chartType = (args.properties['chart'] || 'cpu').toLowerCase();
         switch(chartType){
             case 'cpu': return await this.chartCpu(args);
             default: return await this.chartGeneric(args, chartType);
