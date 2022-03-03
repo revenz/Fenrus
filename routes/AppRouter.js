@@ -170,7 +170,7 @@ router.get('/:appName/:uid/status', async (req, res) => {
     let instance = getInstance(app, appInstance);
 
     let funcArgs = getAppArgs(appInstance, req.settings);
-    //try
+    try
     {
         let result = await instance.status(funcArgs);    
         if(!result || typeof(result) === 'string')
@@ -183,11 +183,11 @@ router.get('/:appName/:uid/status', async (req, res) => {
             res.end();
         }
     }
-
-    // catch(err){ 
-    //     console.log('err', err);
-    //     res.send('').end();
-    // }
+    catch(err)
+    { 
+        console.log('error in app: ' + app.Name, err);
+        res.send('').end();
+    }
 });
 
 

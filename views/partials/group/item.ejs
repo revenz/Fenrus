@@ -68,7 +68,7 @@
                     <div class="item-icon-picker">
                         <!-- Show the image -->
                         <template x-if="EditModel.Icon">
-                            <a :class="{'db-item':true, 'db-link': EditModel._Type === 'DashboardLink', 'db-app': EditModel._Type === 'DashboardApp',
+                            <a :class="{'db-item':true, 'db-link': EditModel._Type === 'DashboardLink', 'db-basic': !EditorApp.Carousel, 'db-app': EditModel._Type === 'DashboardApp',
                              'small': EditModel.Size === 'small', 'medium': EditModel.Size === 'medium', 'large': EditModel.Size === 'large', 
                              'x-large': EditModel.Size === 'x-large', 'xx-large': EditModel.Size === 'xx-large', 'carousel': EditorApp.Carousel && EditModel.Size.indexOf('large') >= 0}" >
                                 <div class="inner">
