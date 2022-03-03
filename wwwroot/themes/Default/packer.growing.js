@@ -67,7 +67,7 @@ GrowingPacker.prototype = {
   fit: function(args) {
     let blocks = args.blocks;
     // sort the boxes for insertion by height, descending
-    blocks.sort(function (a, b) { return b.h - a.h; });
+    blocks.sort(function (a, b) { return b.w - a.w; });
     this.maxHeight = args.maxHeight;
     this.maxWidth = args.maxWidth;
 
