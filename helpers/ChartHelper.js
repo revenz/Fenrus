@@ -83,7 +83,6 @@ class ChartHelper
     }
 
     async render(configuration) {
-        console.log('render config', configuration);
         // See https://www.chartjs.org/docs/latest/configuration            
         configuration = configuration || {
             type: 'bar',

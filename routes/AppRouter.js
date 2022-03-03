@@ -69,7 +69,8 @@ function barInfo(args, items)
 }
 
 function getAppArgs(appInstance, settings){
-    let url = appInstance.Url;
+    let url = appInstance.ApiUrl || appInstance.Url;
+    console.log(appInstance.Name + ', url: ' + url);
     let utils = new Utils();
 
     let chartHelper = getChartHelper(appInstance);

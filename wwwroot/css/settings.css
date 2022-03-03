@@ -83,6 +83,7 @@
 }
 .settings-box .setting .label {
   width: 16rem;
+  min-width: 16rem;
   margin: 0.5rem 0 0;
 }
 .settings-box .setting .value {
@@ -331,4 +332,12 @@ a.subpage span {
   position: relative;
   top: 1px;
   left: 1px;
+}
+
+.help-text {
+  padding-top: 0.5rem;
+  display: block;
+  font-style: italic;
+  color: rgba(var(--color-rgb), 0.8);
+  font-size: 0.9rem;
 }

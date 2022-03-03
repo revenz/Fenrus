@@ -314,6 +314,7 @@ $margin:0;
 }
 
 .db-item.bar-info {
+    
     &.xx-large, &.x-large {
         .inner {
             display:flex;
@@ -333,19 +334,20 @@ $margin:0;
             {
                 position: absolute;
                 left:1rem;
-                top:0.5rem;
-                height: 4rem;
-                width: 4rem;
+                top:0.25rem;
+                height: 3.5rem;
+                width: 3.5rem;
             }
         }
         .content {
             flex-grow:1;
             overflow: hidden;
-            padding-right:1rem;
+            padding:0 1rem 0 0.5rem;
+            justify-content: unset;
             > .title {
                 position:absolute;
                 left: 6rem;
-                top: 1.75rem;
+                top: 1.4rem;
                 width: calc(100% - 7rem);
                 display: unset;
 

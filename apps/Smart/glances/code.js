@@ -127,6 +127,9 @@ class Glances {
             await this.doFetch(args, firstQuery),
             await this.doFetch(args, secondQuery)
         ]);
+
+        if(!first || !second)
+            return;
         
         let firstQueryResult = first[firstQueryValue];
         let secondQueryResult = second[secondQueryValue];
