@@ -6,18 +6,28 @@ WORKDIR /app
 # Bundle app source
 COPY . .
 
-RUN \
-  apk -U --update --no-cache add --virtual=build-dependencies \
-    npm && \
-  apk -U --update --no-cache add \
-    nodejs && \    
-  apk add --no-cache python make g++ fontconfig && \
-  rm -rf ./.git && \
-  npm install && \
-  npm ci --only=production && \
-  mkdir -p ./data && \
-  apk del --purge \
-    build-dependencies
+
+RUN apk add --update --no-cache \
+    make \
+    g++ \
+    jpeg-dev \
+    cairo-dev \
+    giflib-dev \
+    pango-dev \
+    libtool \
+    autoconf \
+    automake
+
+RUN apk -U --update --no-cache add --virtual=build-dependencies \
+      npm && \
+    apk -U --update --no-cache add \
+      nodejs && \    
+    rm -rf ./.git && \
+    npm install && \
+    npm ci --only=production && \
+    mkdir -p ./data && \
+    apk del --purge \
+      build-dependencies
 
 EXPOSE 3000
 CMD [ "node", "app.js" ]
