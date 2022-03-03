@@ -6,18 +6,6 @@ WORKDIR /app
 # Bundle app source
 COPY . .
 
-#RUN apk add --no-cache \
-#  build-base \
-#  g++ \
-#  cairo-dev \
-#  jpeg-dev \
-#  pango-dev \
-#  giflib-dev
-
-#RUN apk --no-cache add msttcorefonts-installer fontconfig && \
-#    update-ms-fonts && \
-#    fc-cache -f
-
 # Add what to need for build/compose deps to build-dependencies
 RUN apk -U --update --no-cache add --virtual=build-dependencies \
       npm \
