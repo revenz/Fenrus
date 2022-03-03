@@ -2,51 +2,63 @@
   "Name": "Glances",
   "Icon": "icon.png",
   "TestFunction": true,
-  "Interval": 3,
-  "Properties": [{
-      "Name": "Display Chart",
-      "Id": "displayChart",
-      "Type": "bool"
-    },
+  "Interval": -1,
+  "Properties": [
     {
-      "Name": "Chart",
-      "Id": "chart",
+      "Name": "Mode",
+      "Id": "mode",
       "Type": "select",
       "Options":
       [
-          { 
-              "Label": "CPU",
-              "Value":"cpu"
-          },
-          { 
-              "Label": "RAM",
-              "Value":"mem"
-          }
+        { 
+            "Label": "Automatic",
+            "Value":""
+        },
+        { 
+            "Label": "Overview",
+            "Value":"overview"
+        },
+        { 
+            "Label": "Basic",
+            "Value":"basic"
+        },
+        { 
+            "Label": "CPU Graph",
+            "Value":"cpu"
+        },
+        { 
+            "Label": "RAM Graph",
+            "Value":"mem"
+        }
       ]
     },
     {
       "Name": "1st stat title",
       "Id": "firstStatTitle",
       "Type": "string",
-      "Default": "RAM Used"
+      "Default": "RAM Used",
+      "IfValue": { "mode" : "basic" }
     },
     {
       "Name": "1st stat query",
       "Id": "firstStatQuery",
       "Type": "string",
-      "Default": "mem/percent"
+      "Default": "mem/percent",
+      "IfValue": { "mode" : "basic" }
     },
     {
       "Name": "2nd stat title",
       "Id": "secStatTitle",
       "Type": "string",
-      "Default": "CPU Used"
+      "Default": "CPU Used",
+      "IfValue": { "mode" : "basic" }
     },
     {
       "Name": "2nd stat query",
       "Id": "secStatQuery",
       "Type": "string",
-      "Default": "cpu/total"
+      "Default": "cpu/total",
+      "IfValue": { "mode" : "basic" }
     }
   ]
 }

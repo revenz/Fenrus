@@ -312,3 +312,63 @@ $margin:0;
 
 
 }
+
+.db-item.bar-info {
+    &.xx-large, &.x-large {
+        .inner {
+            display:flex;
+            flex-direction: column;
+            position: absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0.5rem;
+            overflow: hidden;
+        }
+        .icon {
+            height:4rem;
+            min-height:4rem;
+            max-height:4rem;
+            > img 
+            {
+                position: absolute;
+                left:1rem;
+                top:0.5rem;
+                height: 4rem;
+                width: 4rem;
+            }
+        }
+        .content {
+            flex-grow:1;
+            overflow: hidden;
+            padding-right:1rem;
+            > .title {
+                position:absolute;
+                left: 6rem;
+                top: 1.75rem;
+                width: calc(100% - 7rem);
+                display: unset;
+
+            }
+        }
+        .bar-info
+        {
+            margin-bottom:1rem;                        
+            font-weight: 600;
+            font-size: 0.85rem; 
+        }
+
+    }
+
+    &.x-large {
+        .bar-info:nth-child(n + 4) {
+            display:none;
+        }
+    }
+    &.large {
+        .bar-info:nth-child(n + 3) {
+            display:none;
+        }
+
+    }
+}

@@ -100,6 +100,10 @@ function setStatus(name, instanceUid, interval, content, subsequent){
             if(!carouselTimers[carouselId])
                 carouselTimer(carouselId);
             setItemClass(eleItem, 'carousel');
+        }    
+        else if(/^:bar-info:/.test(content)){
+            content = content.substring(10);
+            setItemClass(eleItem, 'bar-info');
         }
         else if(/^data:/.test(content)){
             content = `<img class="app-chart" src="${content}" />`;

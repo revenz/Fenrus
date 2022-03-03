@@ -5,6 +5,7 @@ let Utils = require('../helpers/utils');
 let AppHelper = require('../helpers/appHelper');
 const path = require('path');
 const ChartHelper = require('../helpers/ChartHelper');
+const fsExists = require('fs.promises.exists');
 
 const router = express.Router();
 
@@ -49,6 +50,24 @@ function getChartHelper(appInstance){
     return chart;
 }
 
+function barInfo(args, items)
+{    
+    let html = ':bar-info:';
+    for(let item of items){
+        html += '<div class="bar-info">' +
+                    (item.icon ? `<div class="bar-icon"><img src="${item.icon}" /></div>` : '') +
+                    '<div class="bar">' +
+                        `<div class="fill" style="width:${item.percent}%"></div>` +
+                        '<div class="labels">' +
+                            `<span class="info-label">${args.Utils.htmlEncode(item.label)}</span>` +
+                            `<span class="fill-label">${item.percent} %</span>` +
+                        '</div>' + 
+                    '</div>' + 
+                '</div>';
+    }        
+    return html;
+}
+
 function getAppArgs(appInstance, settings){
     let url = appInstance.Url;
     let utils = new Utils();
@@ -84,6 +103,7 @@ function getAppArgs(appInstance, settings){
             html += '</ul>';
             return html;
         },      
+        barInfo: (items) => barInfo(funcArgs, items),
         carousel: (items) => {
             let id = utils.newGuid().replaceAll('-', '');
             let html = `:carousel:${id}:<div class="carousel" id="${id}">`;
@@ -161,6 +181,18 @@ router.post('/:appName/test', async (req, res) => {
     }
     catch(err){ msg = err; }
     res.status(500).send(msg).end();
+});
+router.get('/:appName/www/:resource', async (req, res) => {    
+    let resource = req.params.resource;
+    if(/^[\w\d-_'"]+\.(png|jp(e)?g|css|svg|ico|gif)$/.test(resource) == false)
+        return res.sendStatus(404);
+
+    let app = req.app;
+    let file = `../apps/${app.Directory}/${resource}`;
+    file = path.join(__dirname, file);
+    if(await fsExists(file) === false)
+        return res.sendStatus(404);
+    res.sendFile(file);    
 });
 
 router.get('/:appName/:uid/status', async (req, res) => {    

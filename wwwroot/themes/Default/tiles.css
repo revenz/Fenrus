@@ -260,3 +260,49 @@
   padding: 0.5rem;
   text-transform: unset;
 }
+
+.db-item.bar-info.xx-large .inner, .db-item.bar-info.x-large .inner {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0.5rem;
+  overflow: hidden;
+}
+.db-item.bar-info.xx-large .icon, .db-item.bar-info.x-large .icon {
+  height: 4rem;
+  min-height: 4rem;
+  max-height: 4rem;
+}
+.db-item.bar-info.xx-large .icon > img, .db-item.bar-info.x-large .icon > img {
+  position: absolute;
+  left: 1rem;
+  top: 0.5rem;
+  height: 4rem;
+  width: 4rem;
+}
+.db-item.bar-info.xx-large .content, .db-item.bar-info.x-large .content {
+  flex-grow: 1;
+  overflow: hidden;
+  padding-right: 1rem;
+}
+.db-item.bar-info.xx-large .content > .title, .db-item.bar-info.x-large .content > .title {
+  position: absolute;
+  left: 6rem;
+  top: 1.75rem;
+  width: calc(100% - 7rem);
+  display: unset;
+}
+.db-item.bar-info.xx-large .bar-info, .db-item.bar-info.x-large .bar-info {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.db-item.bar-info.x-large .bar-info:nth-child(n+4) {
+  display: none;
+}
+.db-item.bar-info.large .bar-info:nth-child(n+3) {
+  display: none;
+}
