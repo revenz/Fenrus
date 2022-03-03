@@ -36,6 +36,7 @@ RUN apk -U --update --no-cache add --virtual=build-dependencies \
       giflib \
       msttcorefonts-installer \
       fontconfig && \
+      update-ms-fonts && \
       fc-cache -f &&\
       rm -rf ./.git && \
       npm install && \
