@@ -2,7 +2,7 @@
   "Name": "Glances",
   "Icon": "icon.png",
   "TestFunction": true,
-  "Interval": -1,
+  "Interval": 3,
   "Properties": [
     {
       "Name": "Mode",
