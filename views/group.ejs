@@ -392,6 +392,16 @@
                 return show;
             },
 
+            selectFirstIfNull(prop) {
+                if(!this.EditModel || !prop?.Options?.length)
+                    return;
+                if(!this.EditModel.Properties)
+                    this.EditModel.Properties = {};
+                if(this.EditModel.Properties[prop.Id])
+                    return;
+                this.EditModel.Properties[prop.Id] = prop.Options[0].Value;
+            },
+
             // input stuff                 
             blur(){
                 this.validate();

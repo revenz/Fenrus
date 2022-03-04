@@ -154,7 +154,7 @@
                                 <input @change="itemChange" :disabled="isDisabled()" type="number" x-model.number="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                             </template>
                             <template x-if="prop.Type.toLowerCase() === 'select'">
-                                <select @change="itemChange" :disabled="isDisabled()" x-model="EditModel.Properties[prop.Id]">
+                                <select @change="itemChange" :disabled="isDisabled()" x-model="EditModel.Properties[prop.Id]" x-init="selectFirstIfNull(prop)">
                                     <template x-for="opt in prop.Options">
                                         <option :value="opt.Value" x-text="opt.Label" :selected="opt.Value === EditModel.Properties[prop.Id]"></option>
                                     </template>
