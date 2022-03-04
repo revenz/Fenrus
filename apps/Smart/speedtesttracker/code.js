@@ -45,7 +45,6 @@ class SpeedtestTracker {
                 data[i][j] = data[i][j] * yRatio;
             }
         }
-        console.log("data", data);
 
         let title = 'Speedtest Mb/s (Max Y ' + Math.round(maxValue * 100) / 100 + ')';
 
