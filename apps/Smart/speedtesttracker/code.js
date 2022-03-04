@@ -1,4 +1,3 @@
-// https://glances.readthedocs.io/en/latest/api.html
 class SpeedtestTracker {
     doFetch(args, endpoint) {
         return args.fetch({
