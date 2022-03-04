@@ -168,16 +168,22 @@
 }
 .settings-box ul:not(.value-list):not(.livestats) > li .name {
   flex-grow: 1;
+  white-space: nowrap;
 }
 .settings-box ul:not(.value-list):not(.livestats) > li .icon-sort + .name {
   margin-left: 1rem;
 }
 .settings-box ul:not(.value-list):not(.livestats) > li .url {
-  width: min(28rem, 40vw);
+  width: min(21rem, 40vw);
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .settings-box ul:not(.value-list):not(.livestats) > li .enabled {
   width: 6rem;
+  min-width: 6rem;
+  max-width: 6rem;
 }
 .settings-box ul:not(.value-list):not(.livestats) > li .items {
   width: 14rem;
@@ -185,6 +191,7 @@
 }
 .settings-box ul:not(.value-list):not(.livestats) > li .controls {
   text-align: right;
+  white-space: nowrap;
 }
 .settings-box ul:not(.value-list):not(.livestats) > li .controls a, .settings-box ul:not(.value-list):not(.livestats) > li .controls span {
   margin-left: 0.5rem;

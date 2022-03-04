@@ -145,18 +145,24 @@
 
             .name {
                 flex-grow: 1;
+                white-space: nowrap;
             }
             .icon-sort + .name {
                 margin-left:1rem;
             }
 
             .url {
-                width: min(28rem, 40vw);
+                width: min(21rem, 40vw);
                 text-align: left;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .enabled {
                 width:6rem;
+                min-width: 6rem;
+                max-width: 6rem;
             }
 
             .items {
@@ -166,6 +172,7 @@
 
             .controls {
                 text-align: right;
+                white-space: nowrap;
 
                 a, span {
                     margin-left: 0.5rem;
