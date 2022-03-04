@@ -1,6 +1,6 @@
 // https://glances.readthedocs.io/en/latest/api.html
 
-class Glances {
+class NodeLance {
     doFetch(args, endpoint) {
         return args.fetch({
             url: `api/3/` + endpoint,
@@ -25,9 +25,10 @@ class Glances {
     }
 
     async systemInfo(args){
-        const [ cpu, memory, fileSystem ] = await Promise.all([
+        const [ cpu, memory, gpu, fileSystem ] = await Promise.all([
           await this.doFetch(args, 'cpu'),
           await this.doFetch(args, 'mem'),
+          await this.doFetch(args, 'gpu'),
           await this.doFetch(args, 'fs'),
         ]);
 
@@ -42,14 +43,19 @@ class Glances {
         // {"available": 31510020096, "total": 68659789824, "percent": 54.1, "free": 31510020096, "used": 37149769728}
         if(!memory?.total)
             return;
-        items.push({label:'RAM', percent:memory.percent, icon: '/apps/Glances/www/ram.svg'});
+        items.push({label:'RAM', percent:memory.percent, icon: '/apps/NodeLance/www/ram.svg'});
+
+        console.log('gpu', gpu);
+        if(gpu?.percent != null){
+            items.push({label:'GPU', percent:gpu.percent, icon: '/apps/NodeLance/www/gpu.svg'});
+        }
 
         if(fileSystem?.length){
             for(let fs of fileSystem){
                 items.push({
                     label: fs.mnt_point,
                     percent: fs.percent,
-                    icon: '/apps/Glances/www/hdd.svg'
+                    icon: '/apps/NodeLance/www/hdd.svg'
                 });
             }
         }
@@ -61,8 +67,12 @@ class Glances {
         let chartType = mode;
         switch(chartType){
             case 'cpu': return await this.chartCpu(args);
-            case 'ram': return await this.chartGeneric(args, 'mem', (value) => value + ' %');
-            default: return await this.chartGeneric(args, chartType);
+            //case 'mem': return await this.chartGeneric(args, 'mem', (value) => value.toFixed(0) + ' %');
+            default: return await this.chartGeneric(args, chartType, (value) => {
+                if(value === null)
+                    return '';
+                return isNaN(value) ? '' : value.toFixed(0) + ' %'
+            });
         }
     }
 
@@ -147,4 +157,4 @@ class Glances {
     }
 }
 
-module.exports = Glances;
+module.exports = NodeLance;

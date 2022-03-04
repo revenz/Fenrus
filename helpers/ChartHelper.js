@@ -4,7 +4,7 @@ class ChartHelper
 {
     width = 400; //px
     height = 400; //px
-    backgroundColour = 'rgba(0,0,0,0.3)'; // Uses https://www.w3schools.com/tags/canvas_fillstyle.asp
+    backgroundColour = 'rgba(0,0,0,0)'; // Uses https://www.w3schools.com/tags/canvas_fillstyle.asp
     chartJSNodeCanvas;
 
     constructor(widthPixels, heightPixels) {
@@ -109,7 +109,6 @@ class ChartHelper
         //const dataUrl = await chartJSNodeCanvas.renderToDataURL(configuration);
         //const stream = chartJSNodeCanvas.renderToStream(configuration);
         try{
-            console.log(';about to render!');
             let result = await this.chartJSNodeCanvas.renderToDataURL(configuration);
             //let result = await this.chartJSNodeCanvas.renderToBuffer(configuration);//,'image/svg+xml')
         

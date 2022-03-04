@@ -43,13 +43,22 @@
                     <button :disabled="isDisabled()" class="btn" @click="addSeparator">Separator</button>
                 </div>
             </div>
-            <ul class="group-item-list">
+            <ul class="group-item-list contains-toggle">
                 <template x-for="item in Group.Items">
                     <li x-bind:id="item.Uid" draggable="true" @dragstart="dragStart" @dragenter="dragEnter" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="dragDrop" @dragend="dragEnd">
                         <span class="mover icon-sort"></span>
 
                         <span class="name" x-text="item.Name"></span>
                         <span class="url" x-text="item.Url"></span>
+
+                        <span class="enabled">                            
+                            <label :for="item.Uid + '-enabled'" class="toggle-switchy">
+                                <input type="checkbox" :id="item.Uid + '-enabled'" x-model="item.Enabled" />
+                                <span class="toggle">
+                                    <span class="switch"></span>
+                                </span>
+                            </label>
+                        </span>
 
                         <template x-if="item._Type !== 'DashboardSeparator'">
                             <span class="controls">

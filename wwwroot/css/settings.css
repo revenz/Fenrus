@@ -176,6 +176,9 @@
   width: min(28rem, 40vw);
   text-align: left;
 }
+.settings-box ul:not(.value-list):not(.livestats) > li .enabled {
+  width: 6rem;
+}
 .settings-box ul:not(.value-list):not(.livestats) > li .items {
   width: 14rem;
   text-align: center;

@@ -54,6 +54,16 @@ class SettingsInstance {
                     Object.keys(obj).forEach(k => {
                         self[k] = obj[k];
                     });         
+                    if(self.Groups?.length) {
+                        for(let grp of self.Groups) {
+                            if(!grp?.Items?.length)
+                                continue;
+                            for(let item of grp.Items){
+                                if(item.Enabled === undefined)
+                                    item.Enabled = true;
+                            }
+                        }
+                    }
                     if(save)
                         self.save();
                     resolve(self);                   

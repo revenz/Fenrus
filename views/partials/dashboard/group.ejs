@@ -10,6 +10,8 @@
                 let type = item._Type.substring(9).toLowerCase();
                 let partialFile = `${type}.ejs`;
                 let itemModel = { model: item, settings: settings, Utils: Utils};
+                if(item.Enabled === false)
+                    continue;
             %>
                 <%- include(partialFile, itemModel ) %>
             <% }
