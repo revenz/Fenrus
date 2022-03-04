@@ -370,6 +370,28 @@
                 });
             },
 
+            itemChange() {
+                // this makes the ifValue conditions re-run, messy but works
+                this.EditorApp.Properties = this.EditorApp.Properties.map(x => JSON.parse(JSON.stringify(x)));
+            },
+
+            ifValue(ifValue) {
+                if(!ifValue)
+                    return true;
+                let show = true;
+                Object.keys(ifValue).forEach(key => {
+                    let ok = this.EditModel[key] == ifValue[key];
+                    if(ok)
+                        return;
+                    ok = this.EditModel.Properties[key] == ifValue[key];
+                    if(ok)
+                        return;
+
+                    show = false;
+                });
+                return show;
+            },
+
             // input stuff                 
             blur(){
                 this.validate();

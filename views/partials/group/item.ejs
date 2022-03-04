@@ -53,7 +53,7 @@
             <div class="setting">
                 <span class="label">Size</span>
                 <span class="value">
-                    <select :disabled="isDisabled()" x-model="EditModel.Size" @keydown.enter="saveEditor">
+                    <select @change="itemChange" :disabled="isDisabled()" x-model="EditModel.Size" @keydown.enter="saveEditor">
                         <option value="small">Small</option>
                         <option value="medium">Medium</option>
                         <option value="large">Large</option>
@@ -140,21 +140,21 @@
             </template>
 
             <template x-for="prop in EditorApp.Properties">     
-                <template x-if="prop.Name">
+                <template x-if="prop.Name && ifValue(prop.IfValue)">
                     <div class="setting">
                         <span class="label" x-text="prop.Name"></span>
                         <span class="value">
                             <template x-if="prop.Type.toLowerCase() === 'string'">
-                                <input :disabled="isDisabled()" type="text" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
+                                <input @change="itemChange" :disabled="isDisabled()" type="text" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                             </template>
                             <template x-if="prop.Type.toLowerCase() === 'password'">
-                                <input type="password" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
+                                <input @change="itemChange" type="password" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                             </template>
                             <template x-if="prop.Type.toLowerCase() === 'int'">
-                                <input :disabled="isDisabled()" type="number" x-model.number="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
+                                <input @change="itemChange" :disabled="isDisabled()" type="number" x-model.number="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                             </template>
                             <template x-if="prop.Type.toLowerCase() === 'select'">
-                                <select :disabled="isDisabled()" x-model="EditModel.Properties[prop.Id]">
+                                <select @change="itemChange" :disabled="isDisabled()" x-model="EditModel.Properties[prop.Id]">
                                     <template x-for="opt in prop.Options">
                                         <option :value="opt.Value" x-text="opt.Label" :selected="opt.Value === EditModel.Properties[prop.Id]"></option>
                                     </template>
@@ -162,7 +162,7 @@
                             </template>
                             <template x-if="prop.Type.toLowerCase() === 'bool'">
                                 <label x:for="$id('toggle')" class="toggle-switchy">
-                                    <input :disabled="isDisabled()" type="checkbox" :id="$id('toggle')" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
+                                    <input @change="itemChange" :disabled="isDisabled()" type="checkbox" :id="$id('toggle')" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
                                     <span class="toggle">
                                         <span class="switch"></span>
                                     </span>
