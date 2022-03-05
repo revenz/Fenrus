@@ -16,7 +16,7 @@ class Jenkins {
         let xmlStr = await data.text();
         var count = (xmlStr.match(/<\/url>/g) || []).length;
         return args.liveStats([
-            ['Jobs Active', count]
+            ['Active jobs', count]
         ]);
     }
 
