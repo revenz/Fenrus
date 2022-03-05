@@ -1,0 +1,18 @@
+{
+  "Name": "Jenkins",
+  "Icon": "icon.png",
+  "TestFunction": true,
+  "Interval": 20,
+  "Properties": [
+    {
+      "Name": "Username",
+      "Id": "username",
+      "Type": "string"
+    },
+    {
+      "Name": "Password/ApiKey",
+      "Id": "password",
+      "Type": "password"
+    }
+  ]
+}
