@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
     if(system.SearchEngines?.length)
         searchEngines = searchEngines.concat(system.SearchEngines.filter(x => x.Enabled != false));
 
-    let dashboards = settings.Dashboards.map(x => {
+    let dashboards = settings.Dashboards.filter(x => x.Enabled !== false).map(x => {
         return {
             Uid: x.Uid,
             Name: x.Name

@@ -11,16 +11,18 @@
             </select>
         </span>
     </div>
-    <div class="setting">
-        <span class="label">Dashboard</span>
-        <span class="value">
-            <select x-model="model.Dashboard" @change="updateDashboard">
-                <% for(let dashboard of dashboards) { %>
-                    <option value="<%= dashboard.Uid %>"><%= dashboard.Name %></option>
-                <% } %>    
-            </select>
-        </span>
-    </div>
+    <% if(dashboards?.length > 1) { %>
+        <div class="setting">
+            <span class="label">Dashboard</span>
+            <span class="value">
+                <select x-model="model.Dashboard" @change="updateDashboard">
+                    <% for(let dashboard of dashboards) { %>
+                        <option value="<%= dashboard.Uid %>"><%= dashboard.Name %></option>
+                    <% } %>    
+                </select>
+            </span>
+        </div>
+    <% } %>
     <div class="setting">
         <span class="label">Link Target</span>
         <span class="value">

@@ -134,6 +134,7 @@ class GroupsRouter{
                 settings.Groups.push(group);
             }
             group.Name = name;
+            group._Type = 'DashboardGroup';
             group.HideGroupTitle = req.body.HideGroupTitle;
             group.Items = req.body.Items || [];
             if(req.body.AccentColor.toLowerCase() === settings.AccentColor.toLowerCase())

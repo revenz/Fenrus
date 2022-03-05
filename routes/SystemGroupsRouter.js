@@ -138,6 +138,7 @@ class SystemGroupsRouter
 
             // get existing 
             group.Name = name;
+            group._Type = 'DashboardGroup';
             group.HideGroupTitle = req.body.HideGroupTitle;
             group.Items = req.body.Items || [];
             if(req.body.AccentColor.toLowerCase() === req.settings.AccentColor.toLowerCase())

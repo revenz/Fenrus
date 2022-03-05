@@ -13,6 +13,7 @@
         for(let item of dashboard.Groups)
         {
             if (item && item.Enabled !== false){ 
+                console.log('item: ',item);
                 let type = item._Type.substring(9)
                 let partialFile = '';
                 let itemModel = { model: item, settings: settings, Utils: Utils};
@@ -22,6 +23,7 @@
                 }
                 else
                     partialFile = `./partials/dashboard/${type.toLowerCase()}.ejs`;
+                console.log('partial file: ',partialFile);
                 %>
                 <%- include(partialFile, itemModel ) %>
                 <%

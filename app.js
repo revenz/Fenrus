@@ -14,8 +14,6 @@ const cookieParser = require('cookie-parser');
 const routerHome = require('./routes/HomeRouter');
 const routerApp = require('./routes/AppRouter');
 const routerSettings = require('./routes/SettingsRouter');
-const GroupsRouter = require('./routes/GroupsRouterOld');
-const GroupRouter = require('./routes/GroupRouter');
 const routerUsers = require('./routes/UsersRouter');
 const routerSystem = require('./routes/SystemRouter');
 const routerTheme = require('./routes/ThemeRouter');
@@ -132,8 +130,6 @@ function configureRoutes(app, authStrategy)
     app.use('/apps', routerApp);
 
     app.use('/settings', routerSettings);
-    app.use('/groups', new GroupsRouter(false).get());
-    app.use('/group', new GroupRouter(false).get());
     app.use('/theme-settings', routerTheme);
     app.use('/search-engines', new SearchEngineRouter(false).get());
 
@@ -142,8 +138,6 @@ function configureRoutes(app, authStrategy)
 
 
     app.use('/users', routerUsers);
-    app.use('/system/guest', new GroupsRouter(true).get());
-    app.use('/system/guest/group', new GroupRouter(true).get());
     app.use('/system', routerSystem);
     app.use('/system/search-engines', new SearchEngineRouter(true).get());
 
