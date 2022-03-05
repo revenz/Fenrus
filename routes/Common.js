@@ -9,6 +9,7 @@ class Common
     {
         let args = {         
             isHome:req.originalUrl === '/' || !req.originalUrl,
+            pageUrl: req.originalUrl,
             isGuest: req.isGuest,
             theme: req.theme,
             themeVariables: {},

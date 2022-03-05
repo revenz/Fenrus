@@ -1,0 +1,32 @@
+
+<table>
+    <thead>
+        <tr>
+            <th class="name">Name</th>
+            <th class="enabled">Enabled</th>
+            <th class="controls"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <template x-for="item in model.items">
+            <tr :id="item.Uid">
+                <td class="name">
+                    <a :href="model.baseUrl + '/' + item.Uid" x-text="item.Name"></a>
+                </td>
+                <td class="enabled">                            
+                    <label :for="item.Uid + '-enabled'" class="toggle-switchy">
+                        <input type="checkbox" :id="item.Uid + '-enabled'" x-model="item.Enabled" />
+                        <span class="toggle">
+                            <span class="switch"></span>
+                        </span>
+                    </label>
+                </td>
+                <td class="controls">
+                    <span title="Move" class="icon-share-square-o" @click="move(item.Uid)"></span>
+                    <span title="Edit" class="icon-edit" @click="edit(item.Uid)"></span>
+                    <span title="Delete" class="icon-trash" @click="remove(item)"></span>
+                </td>
+            </tr>
+        </template>
+    </tbody>
+</table>

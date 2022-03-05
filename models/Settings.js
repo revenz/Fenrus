@@ -1,5 +1,6 @@
 const fs = require('fs');
 const ImageHelper = require('../helpers/ImageHelper');
+const Utils = require('../helpers/utils');
 
 class SettingsInstance {
     Revision = 0;
@@ -10,6 +11,7 @@ class SettingsInstance {
     ShowGroupTitles = true;
     BackgroundImage = '';
     Groups = [];
+    Dashboards = [];
     ThemeSettings = {};
     ShowSearch = false;
     SearchEngines = [];    
@@ -63,6 +65,22 @@ class SettingsInstance {
                                     item.Enabled = true;
                             }
                         }
+                    }
+
+                    if(!self.Dashboards?.length) {
+                        save = true;
+                        self.Dashboards = [ {
+                            Uid: new Utils().newGuid(),
+                            Name: 'Default',
+                            Groups: self.Groups.map(x => { return {
+                                Uid: x.Uid,
+                                Name: x.Name,
+                                Enabled: true
+                            }})
+                        }];   
+                        console.log('########### save dashboards!', self.Dashboards);                     
+                    }else {
+                        console.log('########### has dashboards!', self.Dashboards);
                     }
                     if(save)
                         self.save();
@@ -122,6 +140,7 @@ class SettingsInstance {
             BackgroundImage: this.BackgroundImage,
             ThemeSettings: this.ThemeSettings,
             SearchEngines: this.SearchEngines,
+            Dashboards: this.Dashboards,
             Groups: this.Groups
         }, null, 2);
     }

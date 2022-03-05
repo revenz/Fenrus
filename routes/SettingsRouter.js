@@ -1,14 +1,24 @@
 const express = require('express');
 const FileHelper = require('../helpers/FileHelper');
 const common = require('./Common');
-
+const routerDashboard = require('./DashboardRouter');
 const router = express.Router();
 
+// router.get('/', async (req, res) => {
+
+//     let themes = await FileHelper.getDirectories('./wwwroot/themes');
+
+//     res.render('settings', common.getRouterArgs(req, { 
+//         title: 'Settings',
+//         themes: themes
+//     }));    
+// });
+  
 router.get('/', async (req, res) => {
 
     let themes = await FileHelper.getDirectories('./wwwroot/themes');
 
-    res.render('settings', common.getRouterArgs(req, { 
+    res.render('settings/general', common.getRouterArgs(req, { 
         title: 'Settings',
         themes: themes
     }));    
@@ -30,6 +40,8 @@ router.post('/', async (req, res) => {
     await instance.save();
     res.status(200).send('').end();
 });
+
+router.use('/dashboards', routerDashboard);
   
 
 module.exports = router;

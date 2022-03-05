@@ -12,22 +12,35 @@ html {
     position: relative;
     min-height: 100%;
 }
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("/fonts/SourceSansPro-Regular.woff") format("woff");
+}
 body {
     /* variables */
     --color-rgb: 240,240,240;
     --color: rgb(var(--color-rgb));
+    --color-darkest: rgb(160, 160, 160);
     --color-secondary-rgb: 170,170,170;
     --color-secondary: rgb(var(--color-secondary-rgb));
-    --input-background: rgb(0,0,0,0.75);
+    --input-background-rgb: 49, 49, 49;
+    --input-background: rgb(var(--input-background-rgb));
     --input-border: rgba(50,50,50);
     --input-color: white;
     --error-rgb: 255,0,0;
     --error: rgb(var(--error-rgb));
+    
+    --base: rgb(17, 18, 20);
+    --base-rgb: 7, 18, 20;
+    --base-darker: rgb(6, 17, 19);
+    --base-darker-rgb: 6, 17, 19;
 
     --border-color: rgba(var(--color-rgb), 0.3);
     --input-border: var(---border-color);
     --button-color:var(--color);
     --button-background:transparent;
+
+    font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
 }
 
 body {

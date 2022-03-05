@@ -1,18 +1,21 @@
 .btn {
-  text-decoration: none;
-  color: var(--button-color, var(--color, #fff));
-  background: var(--button-background, transparent);
-  border: solid 1px var(--border-color, var(--color, rgba(255, 255, 255, 0.3)));
-  border-radius: 0.1rem;
-  text-align: center;
-  padding: 0.5rem 0;
+  height: 2.1875rem;
+  font-weight: normal;
+  outline: none !important;
+  line-height: initial;
+  box-shadow: none;
+  border-radius: unset !important;
+  font-size: 0.85rem !important;
   text-transform: uppercase;
+  border: solid 1px var(--accent);
+  background-color: transparent;
+  color: var(--color);
   width: 8rem;
   cursor: pointer;
 }
 .btn:hover {
-  background: var(--accent, #ff0090);
-  color: var(--color, #fff);
+  background-image: linear-gradient(rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.3)) !important;
+  box-shadow: inset 0 -3px 0 0 var(--accent) !important;
 }
 .btn:disabled {
   cursor: not-allowed;
@@ -20,4 +23,8 @@
 
 a.btn {
   width: calc(8rem - 2px);
+  display: flex;
+  place-content: center;
+  align-items: center;
+  text-decoration: none;
 }

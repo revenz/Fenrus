@@ -1,0 +1,145 @@
+<%- include('../partials/settings/head.ejs') %>
+
+<input type="hidden" id="DashboardData" value="<%= JSON.stringify(model) %>" />
+
+<div x-data="Settings">
+    <div class="top-row">
+        <span class="title">
+            <span class="icon-home"></span>
+            <span>Name:&nbsp;</span>
+            <input type="text" x-model="model.name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+        </span>
+        <span class="buttons">
+            <button class="btn" @click="save">Save</button>
+        </span>
+    </div>
+
+    <div class="list">
+        <div class="list-toolbar">
+            <span @click="addGroup">
+                <span class="icon-plus"></span>
+                Add
+            </span>
+        </div>
+        <%- include('../settings/generic-list.ejs') %>
+    </div>
+
+    <%- include('./group-modal.ejs') %>
+</div>
+
+
+<script src="/js/settings.js?version=<%= version %>"></script>
+<script src="/js/jscolor.min.js"></script>
+
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        let json = document.getElementById('DashboardData').value;
+        let data = JSON.parse(json);
+        let model = {
+            uid: data.dashboard.Uid,
+            name: data.dashboard.Name,
+            items: data.dashboard.Groups
+        }
+        Alpine.data('Settings', () => ({
+            model: model, 
+            Saved: false,
+            blur(){
+                if(this.Saved === false)
+                    return;
+                this.validate();
+            },
+            input(){
+                if(this.Saved === false)
+                    return;
+                this.validate();
+            },
+            isDisabled() {
+                if(this.Saving)
+                    return true;
+                return false;
+            },
+            validate() {
+                let inputs = [...document.querySelectorAll(`.settings-box [data-rules]`)];
+                let valid = true;
+                inputs.map((input) => {
+                    if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
+                        valid = false;
+                        input.classList.add("invalid");
+                    }else{
+                        input.classList.remove("invalid");
+                    }
+                });
+                return valid;
+           },
+           save(dontReload) {
+                if(this.isDisabled()) return;
+                
+                this.Saved = true;
+
+                if(!this.validate())
+                    return false;
+                    
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        Uid: this.model.uid,
+                        Name: this.model.name,
+                        Groups: this.model.items
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                console.log('this.model', JSON.parse(JSON.stringify(this.model)));
+                fetch(`/settings/dashboards/${this.model.uid}`, options).then(async (res)=>{
+                    if(!res.ok)
+                        throw await res.text();
+                        
+                    window.location = '/settings/dashboards';
+                }).catch(err => {
+                    toast(err || 'Failed to save', false);
+                });
+                return true;
+            }, 
+
+            remove(item) {
+                console.log('removing', JSON.parse(JSON.stringify(item)));
+                confirmPrompt(`Are you sure you want to remove the group "${item.Name}"?`).then(() => 
+                {
+                    this.model.items = this.model.items.filter(x => x.Uid !== item.Uid);
+                }).catch(err => {});
+            },
+
+            addingGroup: false,
+            modalGroups: [],
+            modalGroup: null,
+            addGroup() {
+                this.modalGroup = null;
+                let unavailable = this.model.items.map(x => x.Uid);                
+                this.modalGroups = data.groups.filter(x => unavailable.indexOf(x.Uid) === -1);
+                this.addingGroup = true;
+            },
+            modalAdd(){
+                if(!this.modalGroup)
+                    return; // they need to pick one
+                console.log('modalGroup', this.modalGroup);
+                let group = data.groups.find(x => x.Uid == this.modalGroup);
+                if(!group)
+                    return;
+                this.model.items.push({
+                    Uid: group.Uid,
+                    Name: group.Name,
+                    Enabled: true
+                });
+                this.addingGroup = false;
+            },
+            modalCancel() {
+                this.addingGroup = false;
+            }
+        }))
+    });
+</script>
+
+<%- include('../partials/settings/foot.ejs') %>

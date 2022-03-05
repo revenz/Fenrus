@@ -55,10 +55,22 @@
   margin: 2rem 0;
 }
 
+input[type=text], input[type=password], input[type=number], select {
+  width: calc(100% - 1rem);
+  padding: 0.5rem;
+  background: var(--input-background);
+  border: solid 1px var(--input-border);
+  color: var(--input-color);
+}
+input[type=text]:focus, input[type=password]:focus, input[type=number]:focus, select:focus {
+  outline: solid 1px var(--accent);
+}
+
+select {
+  width: 100%;
+}
+
 .settings-box {
-  width: min(700px, 70vw);
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 1rem;
   padding: 1rem;
   margin: 0 auto 3rem;
   display: flex;
@@ -79,7 +91,6 @@
   display: flex;
   flex-direction: row;
   padding: 1rem;
-  border-top: solid 1px var(--border-color);
 }
 .settings-box .setting .label {
   width: 16rem;
@@ -141,19 +152,6 @@
 }
 .settings-box .color-picker input {
   width: calc(100% - 1rem - 40px) !important;
-}
-.settings-box input[type=text], .settings-box input[type=password], .settings-box input[type=number], .settings-box select {
-  width: calc(100% - 1rem);
-  padding: 0.5rem;
-  background: var(--input-background);
-  border: solid 1px var(--input-border);
-  color: var(--input-color);
-}
-.settings-box input[type=text]:focus, .settings-box input[type=password]:focus, .settings-box input[type=number]:focus, .settings-box select:focus {
-  outline: solid 1px var(--accent);
-}
-.settings-box select {
-  width: 100%;
 }
 .settings-box ul:not(.value-list):not(.livestats) {
   margin: 0;
@@ -245,32 +243,38 @@
 
 .modal {
   z-index: 101;
-  display: flex;
-  flex-direction: column;
-  width: min(70vw, 36rem);
-  background: rgba(0, 0, 0, 0.7);
-  border: solid 1px var(--border-color);
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.modal .modal-title {
+
+.modal, .modal-box {
+  display: flex;
+  flex-direction: column;
+  width: min(70vw, 36rem);
+  background: rgba(0, 0, 0, 0.7);
+  border: solid 1px var(--border-color);
+}
+
+.modal-title {
   font-size: 1.5rem;
   border-bottom: solid 1px var(--border-color);
   padding: 1rem 2rem;
 }
-.modal .modal-message {
+
+.modal-body {
   padding: 1rem 2rem;
   margin: 2rem 0;
 }
-.modal .modal-buttons {
+
+.modal-buttons {
   padding: 1rem 2rem;
   display: flex;
   flex-direction: row;
   justify-content: end;
 }
-.modal .modal-buttons button + button {
+.modal-buttons button + button {
   margin-left: 1rem;
 }
 
@@ -348,6 +352,225 @@ a.subpage span {
   padding-top: 0.5rem;
   display: block;
   font-style: italic;
-  color: rgba(var(--color-rgb), 0.8);
+  color: var(--color-darkest);
   font-size: 0.9rem;
+}
+
+.settings-outer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  background: var(--base);
+}
+
+.settings-menu {
+  width: 250px;
+  background-color: rgba(var(--base-rgb), 0.15);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+.settings-menu .logo {
+  margin: 1.5rem 1rem 1rem 2rem;
+  display: flex;
+  place-items: center;
+}
+.settings-menu .logo img {
+  width: 2.5rem;
+  margin-right: 0.5rem;
+}
+.settings-menu .logo .title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #ff0090;
+  font-style: italic;
+}
+.settings-menu .version-info {
+  height: 3rem;
+  text-align: center;
+  color: rgba(var(--color-rgb), 0.4);
+  font-size: 1.15rem;
+}
+.settings-menu .group {
+  margin-top: 2rem;
+  text-transform: uppercase;
+  padding-left: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.settings-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-grow: 1;
+}
+.settings-menu li {
+  border-left: solid 0.5rem transparent;
+}
+.settings-menu li:not(.group):hover {
+  background: rgba(var(--accent-rgb), 0.2);
+}
+.settings-menu li.active {
+  background-color: rgba(var(--accent-rgb), 0.3);
+  border-color: var(--accent);
+}
+.settings-menu a {
+  color: var(--color);
+  text-decoration: none;
+  padding: 1rem;
+  display: block;
+  height: 1.25rem;
+  display: flex;
+  place-items: center;
+  padding-left: 2rem;
+}
+.settings-menu span[class^=icon-] {
+  font-size: 1.5rem;
+  width: 2rem;
+  text-align: center;
+  display: block;
+  margin-right: 0.5rem;
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.settings-content .top-row {
+  height: 3.5rem;
+  display: flex !important;
+  align-items: center;
+  padding: 0 1.5rem;
+}
+.settings-content .top-row input[type=text] {
+  width: calc(100% - 1rem);
+  padding: 7px 0 3px;
+  margin-left: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1em;
+  border-bottom: solid 1px var(--accent);
+  color: var(--input-color);
+}
+.settings-content .top-row input[type=text]:focus {
+  outline: none;
+}
+.settings-content .top-row .title {
+  align-items: center;
+  font-size: 1.15rem;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+}
+.settings-content .top-row .title span[class^=icon-] {
+  color: var(--accent);
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+.settings-content .top-row .buttons {
+  white-space: nowrap;
+  margin-left: 1rem;
+  margin-right: -0.5rem;
+}
+.settings-content .list {
+  margin: 2rem;
+}
+
+.list-toolbar {
+  display: flex;
+  flex-direction: row;
+  margin: 0.5rem;
+}
+.list-toolbar > span, .list-toolbar a {
+  text-decoration: none;
+  cursor: pointer;
+  color: rgba(var(--color-rgb), 0.8);
+  text-transform: uppercase;
+}
+.list-toolbar > span span[class^=icon-], .list-toolbar a span[class^=icon-] {
+  margin-right: 0.25rem;
+}
+.list-toolbar > span:hover, .list-toolbar a:hover {
+  color: var(--color);
+}
+
+table {
+  border: solid 1px var(--input-background);
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+table thead th {
+  font-weight: 600;
+  background: rgba(var(--input-background-rgb), 0.3);
+  border: none;
+  border-bottom: solid 1px var(--input-background);
+  text-align: left;
+  height: 2.2rem;
+  line-height: 2.2rem;
+}
+table tr > :first-child {
+  padding-left: 1rem;
+}
+table td {
+  height: 3rem;
+  line-height: 3rem;
+}
+table .name a {
+  color: var(--color);
+  text-decoration: none;
+}
+table .name a:hover {
+  text-decoration: underline;
+}
+table .enabled {
+  width: 8rem;
+  text-align: center;
+}
+table .enabled label {
+  position: relative;
+  top: -2px;
+}
+table .controls {
+  width: 8rem;
+  text-align: right;
+}
+table .controls span[class^=icon-] {
+  padding-top: 3px;
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  position: relative;
+  top: 0.35rem;
+  opacity: 0.5;
+}
+table .controls span[class^=icon-]:hover {
+  opacity: 1;
+}
+
+.modal-wrapper {
+  display: none;
+}
+.modal-wrapper.visible {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+.modal-wrapper .modal-body {
+  display: flex;
+  flex-direction: column;
+}
+.modal-wrapper .modal-body > * + * {
+  margin-top: 0.5rem;
 }

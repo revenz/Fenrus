@@ -1,0 +1,20 @@
+<div :class="{'modal-wrapper': true, 'visible': addingGroup}">
+    <div :class="{'modal-box': true, 'visible': addingGroup}">
+        <div class="modal-title">
+            Add Group
+        </div>
+        <div class="modal-body">
+            <span>Select a group to insert into the the dashboard</span>
+            <select x-model="modalGroup">
+                <option selected>Pick one</option>
+                <template x-for="grp of modalGroups">
+                    <option :value="grp.Uid" :selected="grp.Uid === modalGroup" x-text="grp.Name"></option>
+                </template>
+            </select>
+        </div>
+        <div class="modal-buttons">
+            <button class="btn" @click="modalAdd">Add</button>
+            <button class="btn" @click="modalCancel">Cancel</button>
+        </div>
+    </div>
+</div>

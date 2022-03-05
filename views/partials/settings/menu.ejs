@@ -1,0 +1,63 @@
+<nav class="settings-menu">
+    <div class="logo">
+        <img src="/favicon.svg">
+        <span class="title">Fenrus</span>
+    </div>
+    <ul>
+        <li class="group">
+            General
+        </li>
+        <li>
+           <a href="/">
+                <span class="icon-home"></span>
+               <span class="title">Home</span>
+            </a>
+        </li>
+        <li <%= pageUrl == '/settings' ? 'class=active' : '' %>>
+           <a href="/settings">
+                <span class="icon-sliders"></span>
+               <span class="title">General</span>
+            </a>
+        </li>
+        <li class="group">
+            Dashboard
+        </li>
+        <li <%= pageUrl == '/settings/dashboards' ? 'class=active' : '' %>>
+           <a href="/settings/dashboards">
+                <span class="icon-home"></span>
+               <span class="title">Dashboards</span>
+            </a>
+        </li>
+        <li <%= pageUrl == '/settings/groups' ? 'class=active' : '' %>>
+           <a href="/settings/groups">
+                <span class="icon-bars"></span>
+               <span class="title">Groups</span>
+            </a>
+        </li>
+        <li <%= pageUrl == '/settings/search-engines' ? 'class=active' : '' %>>
+           <a href="/settings/search-engines">
+                <span class="icon-search"></span>
+               <span class="title">Search Engines</span>
+            </a>
+        </li>
+        <li class="group">
+            Administrator
+        </li>
+        <li <%= pageUrl == '/settings/users' ? 'class=active' : '' %>>
+           <a href="/settings/users">
+                <span class="icon-users"></span>
+               <span class="title">Users</span>
+            </a>
+        </li>
+        <li <%= pageUrl == '/settings/system' ? 'class=active' : '' %>>
+           <a href="/settings/system">
+                <span class="icon-cogs"></span>
+               <span class="title">System</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="version-info">
+        Version: <%= version %>
+    </div>
+</nav>
