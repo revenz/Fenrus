@@ -161,35 +161,9 @@
 }
 
 .db-item.db-basic.medium, .db-item.db-basic.x-large, .db-item.db-basic.xx-large {
-  perspective: 1000px;
-  /* Remove this if you don't want the 3D effect */
   /* This container is needed to position the front and back side */
-  /* Do an horizontal flip when you move the mouse over the flip box container */
   /* Position the front and back side */
   /* Style the back side */
-}
-.db-item.db-basic.medium .content, .db-item.db-basic.x-large .content, .db-item.db-basic.xx-large .content {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: -0.5rem;
-  right: 0;
-  bottom: 0;
-  background: rgba(var(--accent-rgb), 0.2);
-  padding: 0.5rem;
-  overflow: hidden;
-}
-.db-item.db-basic.medium:hover .icon::after, .db-item.db-basic.x-large:hover .icon::after, .db-item.db-basic.xx-large:hover .icon::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-}
-.db-item.db-basic.medium:hover .content, .db-item.db-basic.x-large:hover .content, .db-item.db-basic.xx-large:hover .content {
-  display: unset;
 }
 .db-item.db-basic.medium .icon, .db-item.db-basic.x-large .icon, .db-item.db-basic.xx-large .icon {
   width: 100%;
@@ -234,11 +208,6 @@
   transition: transform 0.4s;
   transform-style: preserve-3d;
 }
-.db-item.db-basic.medium:hover .inner, .db-item.db-basic.x-large:hover .inner, .db-item.db-basic.xx-large:hover .inner {
-  transform: rotateY(180deg);
-  top: -0.5rem;
-  right: -0.5rem;
-}
 .db-item.db-basic.medium .icon, .db-item.db-basic.medium .content, .db-item.db-basic.x-large .icon, .db-item.db-basic.x-large .content, .db-item.db-basic.xx-large .icon, .db-item.db-basic.xx-large .content {
   position: absolute;
   width: 100%;
@@ -247,6 +216,24 @@
 }
 .db-item.db-basic.medium .content, .db-item.db-basic.x-large .content, .db-item.db-basic.xx-large .content {
   transform: rotateY(180deg);
+}
+
+.dashboard .db-item.db-basic.medium:hover .icon::after, .dashboard .db-item.db-basic.x-large:hover .icon::after, .dashboard .db-item.db-basic.xx-large:hover .icon::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+.dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .content {
+  display: unset;
+}
+.dashboard .db-item.db-basic.medium:hover .inner, .dashboard .db-item.db-basic.x-large:hover .inner, .dashboard .db-item.db-basic.xx-large:hover .inner {
+  transform: rotateY(180deg);
+  top: -0.5rem;
+  right: -0.5rem;
 }
 
 .db-item.chart .inner > .icon {

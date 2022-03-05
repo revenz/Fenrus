@@ -11,20 +11,36 @@
         <template x-for="item in model.items">
             <tr :id="item.Uid">
                 <td class="name">
-                    <a :href="model.baseUrl + '/' + item.Uid" x-text="item.Name"></a>
+                    <template x-if="item.IsSystem && !model.IsAdmin">
+                        <span x-text="item.Name"></span>
+                    </template>
+                    <template x-if="!item.IsSystem">
+                        <a :href="model.baseUrl + '/' + item.Uid" x-text="item.Name"></a>
+                    </template>
+                    <template x-if="item.IsSystem && model.IsAdmin">
+                        <a :href="model.baseUrl + '/system/' + item.Uid" x-text="item.Name"></a>
+                    </template>
                 </td>
-                <td class="enabled">                            
-                    <label :for="item.Uid + '-enabled'" class="toggle-switchy">
-                        <input type="checkbox" :id="item.Uid + '-enabled'" x-model="item.Enabled" @change="setStatus(item.Uid, event.target.checked)" />
-                        <span class="toggle">
-                            <span class="switch"></span>
-                        </span>
-                    </label>
+                <td class="enabled">      
+                    <template x-if="item.Uid !== 'Guest'">
+                        <label :for="item.Uid + '-enabled'" class="toggle-switchy">
+                            <input type="checkbox" :id="item.Uid + '-enabled'" x-model="item.Enabled" @change="setStatus(item.Uid, event.target.checked)" />
+                            <span class="toggle">
+                                <span class="switch"></span>
+                            </span>
+                        </label>
+                    </template>
                 </td>
                 <td class="controls">
-                    <span title="Move" class="icon-share-square-o" @click="move(item.Uid)"></span>
-                    <span title="Edit" class="icon-edit" @click="edit(item.Uid)"></span>
-                    <span title="Delete" class="icon-trash" @click="remove(item)"></span>
+                    <template x-if="!item.IsSystem">
+                        <a title="Edit" :href="model.baseUrl + '/' + item.Uid" class="icon-edit"></a>
+                    </template>    
+                    <template x-if="item.IsSystem && model.IsAdmin">
+                        <a title="Edit" :href="model.baseUrl + '/system/' + item.Uid" class="icon-edit"></a>
+                    </template>        
+                    <template x-if="item.Uid !== 'Guest'">                 
+                        <span title="Delete" class="icon-trash" @click="remove(item)"></span>
+                    </template>
                 </td>
             </tr>
         </template>

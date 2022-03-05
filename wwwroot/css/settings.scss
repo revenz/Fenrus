@@ -27,7 +27,6 @@ select {
 
 .settings-box {
     padding: 1rem;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -100,7 +99,7 @@ select {
             text-align: right;
 
             * + * {
-                margin-left: 1rem;
+                margin-left: 0.25rem;
             }
         }
     }
@@ -439,11 +438,17 @@ a.subpage{
     display: flex;
     flex-direction: column;
     flex-grow:1;
+    > div {
+        display:flex;
+        flex-direction: column;
+        height: 100vh;
+    }
     .top-row {        
         height: 3.5rem;
+        min-height: 3.5rem;
         display: flex !important;
-        align-items: center;
         padding: 0 1.5rem;
+        align-items: center;    
         input[type=text] {
             width: calc(100% - 1rem);
             padding: 7px 0 3px;
@@ -465,7 +470,7 @@ a.subpage{
                 color: var(--accent);
                 font-size:1.5rem;
                 margin-right:0.5rem;
-            }
+            }    
             align-items: center;
             font-size: 1.15rem;
             flex-grow: 1;
@@ -473,6 +478,7 @@ a.subpage{
             text-overflow: ellipsis;
             white-space: nowrap;
             display: flex;
+            width:100%;
         }
         .buttons {            
             white-space: nowrap;
@@ -548,7 +554,9 @@ table {
     .controls {
         width:8rem;
         text-align: right;
-        span[class^="icon-"] {
+        [class^="icon-"] {
+            color:var(--color);
+            text-decoration: none;
             padding-top:3px;
             font-size:1.5rem;
             margin-right:0.5rem;
@@ -591,8 +599,9 @@ table {
     margin-right: 1rem;
     position: absolute;
     bottom: 2rem;
-    right: 2rem;
+    right: 3rem;
     transform: scale(1.5);
+    z-index:3;
 }
 
 .side-edior-background {
@@ -614,4 +623,32 @@ table {
     width:min(700px, 70vw);
     background: var(--base-darker);
     z-index:5;
+    padding:2px 0.5rem;
+}
+
+.preview-dashboard {
+    overflow: auto;
+    .db-item {
+        .actions {
+            display:none;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.7);
+            span {
+                font-size:1.5rem;
+                margin:0.5rem;
+                cursor:pointer;
+            }
+        }
+        &:hover {
+            .actions {
+                display: flex;
+            }
+        }
+    }
 }

@@ -1,17 +1,32 @@
 const express = require('express');
 const Utils = require('../helpers/utils');
 const common = require('./Common');
+const System = require('../models/System');
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
     console.log('test');
 
-    let isAdmin = req.user?.isAdmin === true;
-    let dashboards = req.settings.Dashboards || [];
+    let isAdmin = req.user?.IsAdmin === true;
+    let dashboards = [...(req.settings.Dashboards || [])];
+
+    dashboards.sort((a,b) => {
+        if(a.Name === 'Default')
+            return -1;
+        if(b.Name === 'Default')
+            return 1;
+        return a.Name.localeCompare(b.Name);
+    });
+
     if(isAdmin)
     {
         // get guest dashboards
+        dashboards.splice(0, 0, {
+            Uid: 'Guest',
+            Name: 'Guest',
+            Enabled: true
+        });
     }
 
     res.render('settings/list', common.getRouterArgs(req, { 
@@ -25,45 +40,94 @@ router.get('/', async (req, res) => {
         },
     }));    
 });
+
 router.get('/:uid', async (req, res) => {    
     let uid = req.params.uid;
     let isNew = uid === 'new';
-    let dashboard = isNew ? {
-        Uid: 'new',
-        Name: 'New Dashboard',
-        Groups: []
-    } : req.settings.Dashboards?.find(x => x.Uid === uid);
+    let dashboard;
+    let system = System.getInstance();
+    if(uid === 'Guest'){
+        if(req.user?.IsAdmin !== true)
+            return res.sendStatus(401);
+        dashboard = {
+            Uid: 'Guest',
+            Name: 'Guest',
+            Groups: system.GuestDashboard?.Groups || []
+        };
+    }
+    else {
+        dashboard = isNew ? {
+            Uid: 'new',
+            Name: 'New Dashboard',
+            Groups: []
+        } : req.settings.Dashboards?.find(x => x.Uid === uid);
+    }
 
     if(!dashboard){
         return res.sendStatus(404);
     }
+
+    let groups = getGroups(req.settings, system);
     
     res.render('dashboards/editor', common.getRouterArgs(req, { 
         title: 'Dashboards',
         model: {
             dashboard: dashboard,
-            groups: req.settings.Groups.filter(x =>{ return {
-                Uid: x.Uid,
-                Name: x.Name
-            }})
+            groups: groups
         }
     }));  
 });
+
+function getGroups(settings, system){
+    
+    let groups = settings.Groups?.filter(x => x.Enabled)?.map(x => {
+        return { 
+            Uid: x.Uid,
+            Name: x.Name,
+            IsSystem:false
+        }
+    }) || [];
+    groups = groups.concat(system?.SystemGroups?.filter(x => x.Enabled)?.map(x => {
+        return { 
+            Uid: x.Uid,
+            Name: x.Name,
+            IsSystem:true
+        }
+    }) || []);
+
+    groups.sort((a, b) => {
+        if(a.IsSystem === b.IsSystem)
+            return a.Name.localeCompare(b.Name);
+        return a.IsSystem ? -1 : 1;
+    })
+    
+    return groups;
+}
   
 
 router.post('/:uid', async (req, res) => {
 
     let name = req.body.Name.trim();
+    let uid = req.params.uid;
+    if(uid === 'Guest'){
+        if(req.user?.IsAdmin !== true)
+            return res.sendStatus(401);
+        let system = System.getInstance();
+
+        system.GuestDashboard.Groups = req.body.Groups || [];
+        await system.save();
+        return res.sendStatus(200);
+    }
 
     let settings = req.settings;
     // check for duplicate names
-    let dupName = settings.Dashboards.find(x => x.Uid != req.params.uid && x.Name?.toLowerCase() == name.toLowerCase());
+    let dupName = settings.Dashboards.find(x => x.Uid != uid && x.Name?.toLowerCase() == name.toLowerCase());
     if(dupName)
         return res.status(400).send('Duplicate name');
 
 
     // get existing 
-    let existing = settings.Dashboards.find(x => x.Uid === req.params.uid)
+    let existing = settings.Dashboards.find(x => x.Uid === uid)
 
     if(!existing) {
         if(name === 'Guest' || name === 'Default')
@@ -93,14 +157,16 @@ router.post('/:uid', async (req, res) => {
 
 
 router.delete('/:uid', async (req, res) => {
-    let dashboard = req.settings.Dashboards.find(x => x.Uid === req.params.uid);
+    let uid = req.params.uid;
+    if(uid === 'Guest')
+        return res.status(400).send("Cannot delete 'Guest' dashboard");
+
+    let dashboard = req.settings.Dashboards.find(x => x.Uid === uid);
     if(!dashboard)
         return res.sendStatus(200); // already gone
 
     if(dashboard.Name === 'Default')
         return res.status(400).send('Cannot delete the \'Default\' dashboard.');
-    else if(dashboard.Name === 'Guest')
-        return res.status(400).send('Cannot delete the \'Guest\' dashboard.');
 
     req.settings.Dashboards = req.settings.Dashboards.filter(x => x.Uid != dashboard.Uid);
     await req.settings.save();
@@ -108,6 +174,10 @@ router.delete('/:uid', async (req, res) => {
 });
 
 router.post('/:uid/status/:enabled', async (req, res) => {
+    let uid = req.params.uid;
+    if(uid === 'Guest')
+        return res.status(400).send("Cannot change 'Guest' dashboard enabled state");
+
     let enabled = req.params.enabled !== false && req.params.enabled !== 'false';
 
     let settings = req.settings;

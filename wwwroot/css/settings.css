@@ -69,7 +69,6 @@ select {
 
 .settings-box {
   padding: 1rem;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -132,7 +131,7 @@ select {
   text-align: right;
 }
 .settings-box .header .buttons * + * {
-  margin-left: 1rem;
+  margin-left: 0.25rem;
 }
 .settings-box td {
   padding: 0.5rem;
@@ -434,11 +433,17 @@ a.subpage span {
   flex-direction: column;
   flex-grow: 1;
 }
+.settings-content > div {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 .settings-content .top-row {
   height: 3.5rem;
+  min-height: 3.5rem;
   display: flex !important;
-  align-items: center;
   padding: 0 1.5rem;
+  align-items: center;
 }
 .settings-content .top-row input[type=text] {
   width: calc(100% - 1rem);
@@ -461,6 +466,7 @@ a.subpage span {
   text-overflow: ellipsis;
   white-space: nowrap;
   display: flex;
+  width: 100%;
 }
 .settings-content .top-row .title span[class^=icon-] {
   color: var(--accent);
@@ -536,7 +542,9 @@ table .controls {
   width: 8rem;
   text-align: right;
 }
-table .controls span[class^=icon-] {
+table .controls [class^=icon-] {
+  color: var(--color);
+  text-decoration: none;
   padding-top: 3px;
   font-size: 1.5rem;
   margin-right: 0.5rem;
@@ -545,7 +553,7 @@ table .controls span[class^=icon-] {
   top: 0.35rem;
   opacity: 0.5;
 }
-table .controls span[class^=icon-]:hover {
+table .controls [class^=icon-]:hover {
   opacity: 1;
 }
 
@@ -576,8 +584,9 @@ table .controls span[class^=icon-]:hover {
   margin-right: 1rem;
   position: absolute;
   bottom: 2rem;
-  right: 2rem;
+  right: 3rem;
   transform: scale(1.5);
+  z-index: 3;
 }
 
 .side-edior-background {
@@ -599,4 +608,28 @@ table .controls span[class^=icon-]:hover {
   width: min(700px, 70vw);
   background: var(--base-darker);
   z-index: 5;
+  padding: 2px 0.5rem;
+}
+
+.preview-dashboard {
+  overflow: auto;
+}
+.preview-dashboard .db-item .actions {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+}
+.preview-dashboard .db-item .actions span {
+  font-size: 1.5rem;
+  margin: 0.5rem;
+  cursor: pointer;
+}
+.preview-dashboard .db-item:hover .actions {
+  display: flex;
 }

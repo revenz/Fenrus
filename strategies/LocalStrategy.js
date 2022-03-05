@@ -3,7 +3,6 @@ const Settings = require('../models/Settings');
 const System = require('../models/System');
 const crypto = require('crypto');
 const UserManager = require('../helpers/UserManager');
-const cookieParser = require('cookie-parser');
 const Globals = require('../Globals');
 
 class LocalStrategy 
@@ -62,9 +61,6 @@ class LocalStrategy
             app.system.AllowRegister = true;
             app.system.setProperty('JwtSecret', this.JwtSecret);
         }
-
-        // add cookieparser so the JWT cookie can be easily read
-        app.use(cookieParser());
                 
         app.get('/login', (req, res) => {
             

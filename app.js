@@ -8,12 +8,13 @@ const morgan = require('morgan');
 const adminMiddleware = require('./middleware/AdminMiddleware');
 const themeMiddleware = require('./middleware/ThemeMiddleware');
 const fileBlockerMiddleware = require('./middleware/FileBlockerMiddleware');
+const cookieParser = require('cookie-parser');
 
 // routers
 const routerHome = require('./routes/HomeRouter');
 const routerApp = require('./routes/AppRouter');
 const routerSettings = require('./routes/SettingsRouter');
-const GroupsRouter = require('./routes/GroupsRouter');
+const GroupsRouter = require('./routes/GroupsRouterOld');
 const GroupRouter = require('./routes/GroupRouter');
 const routerUsers = require('./routes/UsersRouter');
 const routerSystem = require('./routes/SystemRouter');
@@ -67,6 +68,7 @@ app.listen(3000);
 // Calling the express.json() method for parsing
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(cookieParser());
 
 
 // set cache control for files

@@ -1,6 +1,7 @@
 <%- include('../partials/settings/head.ejs') %>
 
 <input type="hidden" id="GroupData" value="<%= JSON.stringify(model) %>" />
+<input type="hidden" id="Apps" value="<%= JSON.stringify(apps) %>" />
 
 <div x-data="Settings">
     <div class="top-row">
@@ -48,13 +49,13 @@
     <div class="preview-dashboard ">
         
         <div :class="{'db-group': true, 'hide-labels': model.HideLabels}">
-            <template x-if="!model.HideGroupTitle">
+            <template x-if="model.ShowGroupTitle">
                 <div class="title"><span x-text="model.Name"></span></div>
             </template>
                 
             <div class="items">
                 <template x-for="item of model.Items">
-                    <a :class="item.Size +' db-' + item._Type.substring(9).toLowerCase() + ' db-item db-basic'" :href="item.Url" :title="item.Name" target="_blank">
+                    <a :class="(item.Size || 'medium') + ' db-' + item._Type.substring(9).toLowerCase() + ' db-item db-basic'" :title="item.Name">
                         <div class="inner">
                             <div class="icon">
                                 <img :src="item.Icon || item.AppName ? `/apps/${encodeURIComponent(item.AppName)}/app.png` : '/favicon.svg'" />
@@ -64,6 +65,14 @@
                                 <div class="status"></div>
                             </div>
                             <div class="arrow"></div>
+                            <div class="actions">
+                                <span class="edit" @click="editItem(item)">
+                                    <span class="icon-edit"></span>
+                                </span>
+                                <span class="delete" @click="remove(item)">
+                                    <span class="icon-trash"></span>
+                                </span>
+                            </div>
                         </div>
                     </a>
                 </template>
@@ -83,243 +92,11 @@
 <script>
 
     document.addEventListener('alpine:init', () => {
-        let json = document.getElementById('GroupData').value;
-        let data = JSON.parse(json);
-        console.log(data);
-        Alpine.data('Settings', () => ({
-            model: data, 
-            Saved: false,
-            EditorOpen: false,
-            EditModel: { },
-            EditorTitle: '',
-            EditorApp:{},
-            isItemSaved: false,
-            NewEdit:false,
-            blur(){
-                if(this.Saved === false)
-                    return;
-                this.validate();
-            },
-            input(){
-                if(this.Saved === false)
-                    return;
-                this.validate();
-            },
-            isDisabled() {
-                if(this.Saving)
-                    return true;
-                return false;
-            },
-            validate() {
-                let inputs = [...document.querySelectorAll(`.settings-box [data-rules]`)];
-                let valid = true;
-                inputs.map((input) => {
-                    if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
-                        valid = false;
-                        input.classList.add("invalid");
-                    }else{
-                        input.classList.remove("invalid");
-                    }
-                });
-                return valid;
-           },
-           save(dontReload) {
-                if(this.isDisabled()) return;
-                
-                this.Saved = true;
+        
+        <%- include('./editor.alpine.js') %>
+        <%- include('./item-editor.alpine.js') %>
 
-                if(!this.validate())
-                    return false;
-                    
-                const options = {
-                    method: 'POST',
-                    body: JSON.stringify(this.model),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-                fetch(`/settings/groups/${this.model.uid}`, options).then(async (res)=>{
-                    if(!res.ok)
-                        throw await res.text();
-                        
-                    window.location = '/settings/groups';
-                }).catch(err => {
-                    toast(err || 'Failed to save', false);
-                });
-                return true;
-            }, 
-
-            remove(item) {
-                confirmPrompt(`Are you sure you want to delete the item "${item.Name}"?`).then(() => 
-                {
-                    this.model.items = this.model.items.filter(x => x.Uid !== item.Uid);
-                }).catch(err => {});
-            },
-
-            addGroup() {
-                this.modalGroup = null;
-                let unavailable = this.model.items.map(x => x.Uid);                
-                this.modalGroups = data.groups.filter(x => unavailable.indexOf(x.Uid) === -1);
-                this.addingGroup = true;
-            },
-
-
-
-
-            // item editor stuff
-            focusItem(){
-                setTimeout(()=> { document.querySelector('.group-item-editor .content').querySelector('input, select').focus();}, 250);
-            },
-            addItem() {
-                console.log('add item!');
-                if(this.isDisabled()) return;
-
-                this.isItemSaved = false;
-                this.EditorApp.Properties = {};
-                console.log('add item 1s!');
-                this.EditModel = 
-                {
-                    _Type: 'DashboardApp',
-                    Uid: newGuid(),
-                    Name: '',
-                    Url: 'http://',
-                    Icon: '',
-                    Size: 'medium',
-                    Properties:{}
-                };
-                console.log('add item2!');
-                this.EditorTitle = 'New Item';                    
-                this.EditorOpen = true;
-                console.log('add item3!');
-                this.focusItem();
-                console.log('add item4!');
-            },
-            editItem(uid) {
-                if(this.isDisabled()) return;
-
-                this.isItemSaved = false;
-                this.EditorApp.Properties = {};
-                let item = this.Group.Items.filter(x => x.Uid === uid)[0];
-                if(item){
-                    this.EditorTitle = 'Edit Item';
-                    this.EditModel = JSON.parse(JSON.stringify(item)); // clone the object so any changes arent written directly to the model                                            
-                    if(!this.EditModel.DisplayName)
-                        this.EditModel.DisplayName = this.EditModel.Name;
-                    if(!this.EditModel.Properties)
-                        this.EditModel.Properties = {};
-                    if(!this.EditModel.Size)
-                        this.EditModel.Size = 'medium';
-                    this.NewEdit = this.EditModel._Type === 'DashboardApp';
-                    this.appChanged(this.EditModel.AppName);
-                    this.EditorOpen = true;
-                    this.focusItem();
-                }
-            },
-            closeEditor(){
-                if(this.isDisabled()) return;
-
-                this.EditorOpen = false;
-                this.focusEditor();
-            },
-            getEditModel() {          
-                // first validate it
-                this.isItemSaved = true; // this tells the form its now able to be treated as dirty and errors shown
-                
-                if(this.validate() === false)
-                    return;
-                    
-                return JSON.parse(JSON.stringify(this.EditModel));
-            },
-            saveEditor() {                
-                if(this.isDisabled()) return;
-
-                let item = this.getEditModel();
-                if(!item)
-                    return; // must be invalid
-
-                let index = this.Group.Items.findIndex(x => x.Uid === item.Uid);
-                if(index >= 0){
-                    this.Group.Items[index] = item;
-                }
-                else{
-                    this.Group.Items.push(item);
-                }
-
-                this.EditorOpen = false;
-                this.focusEditor();
-            },
-            imageChosen(event){
-                this.fileToDataUrl(event, src => 
-                {
-                    this.EditModel.Icon = src;
-                    this.validate();
-                })
-            },                
-            fileToDataUrl(event, callback) {
-                if (! event.target.files.length) return;
-
-                let file = event.target.files[0];
-                let reader = new FileReader();
-
-                reader.readAsDataURL(file);
-                reader.onload = e => callback(e.target.result);
-            },
-            testing: false,
-            testApp() {
-                if(this.isDisabled()) return;
-
-                let model = this.getEditModel();
-                if(!model)
-                    return;
-                const options = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({AppInstance: model})
-                }
-                testing = true;
-                fetch(`/apps/${this.EditorApp.Name}/test`, options).then(result => {
-                    if(!result.ok)
-                        throw result;
-                    this.testing = false;
-                    toast('Success', true);
-                }).catch(error => {
-                    this.testing = false;
-                    toast('Failure', false);
-                });
-            },
-
-            itemChange() {
-                // this makes the ifValue conditions re-run, messy but works
-                this.EditorApp.Properties = this.EditorApp.Properties.map(x => JSON.parse(JSON.stringify(x)));
-            },
-
-            ifValue(ifValue) {
-                if(!ifValue)
-                    return true;
-                let show = true;
-                Object.keys(ifValue).forEach(key => {
-                    let ok = this.EditModel[key] == ifValue[key];
-                    if(ok)
-                        return;
-                    ok = this.EditModel.Properties[key] == ifValue[key];
-                    if(ok)
-                        return;
-
-                    show = false;
-                });
-                return show;
-            },
-
-            selectFirstIfNull(prop) {
-                if(!this.EditModel || !prop?.Options?.length)
-                    return;
-                if(!this.EditModel.Properties)
-                    this.EditModel.Properties = {};
-                if(this.EditModel.Properties[prop.Id])
-                    return;
-                this.EditModel.Properties[prop.Id] = prop.Options[0].Value;
-            },
-        }))
+        
     });
 </script>
 

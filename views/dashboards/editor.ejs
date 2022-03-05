@@ -40,8 +40,10 @@
         let model = {
             uid: data.dashboard.Uid,
             name: data.dashboard.Name,
-            items: data.dashboard.Groups
-        }
+            items: data.dashboard.Groups,
+            baseUrl: '/settings/groups',
+            IsAdmin: <%= isAdmin %>
+        };
         Alpine.data('Settings', () => ({
             model: model, 
             Saved: false,
@@ -113,11 +115,16 @@
 
             addingGroup: false,
             modalGroups: [],
+            hasSystemGroups: false,
+            hasNonSystemGroups: false,
             modalGroup: null,
             addGroup() {
                 this.modalGroup = null;
                 let unavailable = this.model.items.map(x => x.Uid);                
                 this.modalGroups = data.groups.filter(x => unavailable.indexOf(x.Uid) === -1);
+                this.hasSystemGroups = !!this.modalGroups.find(x => x.IsSystem);
+                console.log('hasSystemGroups', this.hasSystemGroups, JSON.parse(JSON.stringify(this.modalGroups)));
+                this.hasNonSystemGroups = !!this.modalGroups.find(x => !x.IsSystem);
                 this.addingGroup = true;
             },
             modalAdd(){
@@ -130,6 +137,7 @@
                 this.model.items.push({
                     Uid: group.Uid,
                     Name: group.Name,
+                    IsSystem: group.IsSystem,
                     Enabled: true
                 });
                 this.addingGroup = false;
