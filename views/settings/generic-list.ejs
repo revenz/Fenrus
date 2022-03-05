@@ -15,7 +15,7 @@
                 </td>
                 <td class="enabled">                            
                     <label :for="item.Uid + '-enabled'" class="toggle-switchy">
-                        <input type="checkbox" :id="item.Uid + '-enabled'" x-model="item.Enabled" />
+                        <input type="checkbox" :id="item.Uid + '-enabled'" x-model="item.Enabled" @change="setStatus(item.Uid, event.target.checked)" />
                         <span class="toggle">
                             <span class="switch"></span>
                         </span>

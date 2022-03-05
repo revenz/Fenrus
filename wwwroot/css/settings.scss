@@ -5,9 +5,6 @@
     overflow: auto;
     > div {    
         margin:auto;
-        .settings-box {
-            margin:2rem 0;
-        }
     }
 }
 
@@ -30,9 +27,8 @@ select {
 
 .settings-box {
     padding: 1rem;
-    margin: 0 auto 3rem;
+    margin: 0 auto;
     display: flex;
-    justify-content: center;
     flex-direction: column;
     position: relative;
 
@@ -372,6 +368,7 @@ a.subpage{
 
 .settings-menu {
     width:250px;    
+    min-width: 250px;
     background-color: rgba(var(--base-rgb), 0.15);
     border-right: 1px solid rgba(255,255,255,.05);
     display: flex;
@@ -588,4 +585,33 @@ table {
             margin-top:0.5rem;
         }
     }
+}
+
+#add-group-item{
+    margin-right: 1rem;
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    transform: scale(1.5);
+}
+
+.side-edior-background {
+    position:fixed;
+    z-index:4;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    background:rgba(var(--base-rgb), 0.8);
+}
+
+.side-editor {
+    position:fixed;
+    display: flex;
+    top:0;
+    bottom:0;
+    right:0;
+    width:min(700px, 70vw);
+    background: var(--base-darker);
+    z-index:5;
 }

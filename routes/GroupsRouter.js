@@ -1,15 +1,16 @@
 const express = require('express');
 const common = require('./Common');
 const Settings = require('../models/Settings');
+const AppHelper = require('../helpers/appHelper');
 
 class GroupsRouter{
     
-    isGuest;
+    isSystem;
     router;
 
-    constructor(isGuest)
+    constructor(isSystem)
     {
-        this.isGuest = isGuest;
+        this.isSystem = isSystem;
         this.router = express.Router();
         this.init();
     }
@@ -20,7 +21,7 @@ class GroupsRouter{
     }
 
     async getSettings(req){
-        if(!this.isGuest)
+        if(!this.isSystem)
             return req.settings;
         // get the guest settings        
         return await Settings.getForGuest();
@@ -29,45 +30,74 @@ class GroupsRouter{
     init() {
         
         this.router.get('/', async (req, res) => {
+
             let args = common.getRouterArgs(req, 
             { 
-                title: 'Groups',
-                guestSettings: this.isGuest
+                title: 'Groups'
             });
             args.settings = await this.getSettings(req);
-            res.render('groups', args);
+            args.data = {
+                typeName: 'Group',
+                title: 'Groups',
+                icon: 'icon-bars',
+                baseUrl: '/settings/groups',
+                items: args.settings.Groups
+            };
+            
+            res.render('settings/list', common.getRouterArgs(req, args)); 
+        });
+
+        this.router.post('/:uid/status/:enabled', async (req, res) => {
+            let enabled = req.params.enabled !== false && req.params.enabled !== 'false';
+        
+            let settings = await this.getSettings(req);
+            let group = settings.Groups.find(x => x.Uid === req.params.uid);
+            if(!group)
+                return req.sendStatus(200); // silent fail
+        
+            group.Enabled = enabled;
+            await settings.save();
+            res.sendStatus(200);
         });
         
 
-        this.router.post('/order', async (req, res) => {
-
-            let model = req.body;
-            if(!model){
-                res.status(400).send('Invalid data');
-                return;
-            }
-            let uids = req.body.uids;
+        this.router.delete('/:uid', async (req, res) => {
             let settings = await this.getSettings(req);
+            let group = settings.Groups.find(x => x.Uid === req.params.uid);
+            if(!group)
+                return res.sendStatus(200); // already gone
 
-            settings.Groups = settings.Groups.sort((a, b) => {
-                let aIndex = uids.indexOf(a.Uid);
-                let bIndex = uids.indexOf(b.Uid);
-                if(aIndex == -1 && bIndex == -1){
-                    // not in the list
-                    aIndex = settings.Groups.indexOf(a);
-                    bIndex = settings.Groups.indexOf(b);
-                    return aIndex - bIndex;
-                }
-                if(bIndex < 0)
-                    return -1;
-                if(aIndex < 0)
-                    return 1;
-                return aIndex - bIndex;
-            });
+            settings.Groups = settings.Groups.filter(x => x.Uid != group.Uid);
 
-            settings.save();
+            // basic remove from group
+            for(let db of settings.Dashboards || [])
+            {
+                db.Groups = db.Groups.filter(x => x.Uid != group.Uid);
+            }
 
-            res.status(200).send('').end();
+            await settings.save();
+            res.sendStatus(200);
+        });
+
+        this.router.get('/:uid', async (req, res) => {    
+            let uid = req.params.uid;
+            let isNew = uid === 'new';
+            let group = isNew ? {
+                Uid: 'new',
+                Name: 'New Group',
+                Items: []
+            } : req.settings.Groups?.find(x => x.Uid === uid);
+        
+            if(!group){
+                return res.sendStatus(404);
+            }
+            
+            let apps = AppHelper.getInstance().getList();
+            res.render('groups/editor', common.getRouterArgs(req, { 
+                title: 'Group',
+                apps: apps,
+                model:group
+            }));  
         });
     }
 }

@@ -106,6 +106,19 @@ router.delete('/:uid', async (req, res) => {
     await req.settings.save();
     res.sendStatus(200);
 });
+
+router.post('/:uid/status/:enabled', async (req, res) => {
+    let enabled = req.params.enabled !== false && req.params.enabled !== 'false';
+
+    let settings = req.settings;
+    let dashboard = settings.Dashboards.find(x => x.Uid === req.params.uid);
+    if(!dashboard)
+        return req.sendStatus(200); // silent fail
+
+    dashboard.Enabled = enabled;
+    await settings.save();
+    res.sendStatus(200);
+});
   
 
 module.exports = router;

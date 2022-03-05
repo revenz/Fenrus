@@ -92,7 +92,6 @@
                         'Content-Type': 'application/json'
                     }
                 }
-                console.log('this.model', JSON.parse(JSON.stringify(this.model)));
                 fetch(`/settings/dashboards/${this.model.uid}`, options).then(async (res)=>{
                     if(!res.ok)
                         throw await res.text();

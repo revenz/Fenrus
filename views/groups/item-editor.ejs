@@ -1,0 +1,188 @@
+<template x-if="EditorOpen">
+    <div>
+        <div class="side-edior-background"></div>
+        <div class="settings-box side-editor">
+            <div class="header">
+                <span class="title" x-text="EditorTitle"></span>
+                <div class="buttons">
+                    <button :disabled="isDisabled()" class="btn" @click="saveEditor">Save</button>
+                    <button :disabled="isDisabled()" class="btn" @click="closeEditor">Cancel</button>
+                </div>
+            </div>
+            <div class="content">
+                <div class="setting">
+                    <span class="label">Name</span>
+                    <span class="value">
+                        <input :disabled="isDisabled()" type="text" x-model="EditModel.Name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="saveEditor">
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">Type</span>
+                    <span class="value">
+                        <select :disabled="isDisabled()" x-model="EditModel._Type" @change="typeChanged"  @keydown.enter="saveEditor">
+                            <option value="DashboardApp">App</option>
+                            <option value="DashboardLink">Link</option>
+                        </select>
+                    </span>
+                </div> 
+                <template x-if="EditModel._Type == 'DashboardApp'">
+                    <div class="setting">
+                        <span class="label">App</span>
+                        <span class="value">
+                            <select :disabled="isDisabled()" x-model="EditModel.AppName" @change="appChanged" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="saveEditor">
+                                <option value="" disabled>Select An App</option>                            
+                                <optgroup label="Smart">
+                                    <% for(let app of apps.filter(x => x.Interval)) { %>
+                                        <option><%= app.Name %></option>
+                                    <% } %>
+                                </optgroup>
+                                <optgroup label="Basic">
+                                    <% for(let app of apps.filter(x => !x.Interval)) { %>
+                                        <option><%= app.Name %></option>
+                                    <% } %>
+                                </optgroup>
+                            </select>
+                        </span>
+                    </div>
+                </template>
+                <div class="setting">
+                    <span class="label">URL</span>
+                    <span class="value">
+                        <input :disabled="isDisabled()" type="text" x-model="EditModel.Url" data-rules='["required", "regexMatch:^((http(s)?)|(HTTP(S)?))://."]' @blur="blur" @input="input"  @keydown.enter="saveEditor" />
+                    </span>
+                </div> 
+                <div class="setting">
+                    <span class="label">Size</span>
+                    <span class="value">
+                        <select @change="itemChange" :disabled="isDisabled()" x-model="EditModel.Size" @keydown.enter="saveEditor">
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                            <option value="x-large">X-Large</option>
+                            <option value="xx-large">XX-Large</option>
+                        </select>
+                    </span>
+                </div> 
+                <div class="setting">
+                    <span class="label">Icon</span>
+                    <span class="value">
+                        <div class="item-icon-picker">
+                            <!-- Show the image -->
+                            <template x-if="EditModel.Icon">
+                                <a :class="{'db-item':true, 'db-link': EditModel._Type === 'DashboardLink', 'db-basic': !EditorApp.Carousel, 'db-app': EditModel._Type === 'DashboardApp',
+                                'small': EditModel.Size === 'small', 'medium': EditModel.Size === 'medium', 'large': EditModel.Size === 'large', 
+                                'x-large': EditModel.Size === 'x-large', 'xx-large': EditModel.Size === 'xx-large', 'carousel': EditorApp.Carousel && EditModel.Size.indexOf('large') >= 0}" >
+                                    <div class="inner">
+                                        <div class="icon">
+                                            <img :src="EditModel.Icon" class="icon-pick">
+                                        </div>
+                                        <div class="content">
+                                            <div class="title" x-text="EditModel.Name"></div>
+                                            <template x-if="!EditorApp.Carousel || EditModel.Size.indexOf('large') < 0">
+                                                <div class="status">
+                                                    <ul class="livestats">
+                                                        <li><span class="title">Sample</span><span class="value">1234</span></li>
+                                                        <li><span class="title">Other</span><span class="value">5657</span></li>
+                                                    </ul>
+                                                </div>
+                                            </template>
+                                            <template x-if="EditorApp.Carousel && EditModel.Size.indexOf('large') >= 0">
+                                                <div class="status">
+                                                    <div class="carousel">
+                                                        <div class="item visible">
+                                                            <div class="fill" style="background:#333">
+                                                                <div class="name tr">Sample item</div>
+                                                                <div class="br">2010</div>
+                                                                <a class="app-icon"><img :src="EditModel.Icon"></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="controls">
+                                                            <a></a><a></a><a></a><a></a><a></a><a></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="arrow"></div>
+                                    </div>
+                                </a>
+                                
+                            </template>
+
+                            <!-- Show the gray box when image is not available -->
+                            <template x-if="!EditModel.Icon">
+                                <div class="no-image"></div>
+                            </template>
+
+                            <!-- Image file selector -->
+                            <button class="btn" id="file-chooser-btn" onclick="document.getElementById('file-chooser').click()">
+                                Browse...
+                            </button>
+                            <input style="display:none" id="file-chooser" class="file-chooser" type="file" accept="image/*" @change="imageChosen">
+
+                        </div>
+                    </span>
+                </div>
+
+                <template x-if="EditorApp.Properties?.length > 0">
+                    <div class="header">
+                        <span class="title">Properties</span>
+                    </div>
+                </template>
+
+                <template x-if="EditorApp?.Interval || EditorApp?.Interval === -1">                
+                    <div class="setting">
+                        <span class="label">API URL</span>
+                        <span class="value">
+                            <input :disabled="isDisabled()" type="text" x-model="EditModel.ApiUrl" data-rules='["regexMatch:^($|((http(s)?)|(HTTP(S)?))://.)"]' @blur="blur" @input="input"  @keydown.enter="saveEditor" />
+                            <span class="help-text">Optional URL to use to contact the API.<br/>The main URL will be where the user is taken when the item is clicked.</span>
+                        </span>
+                    </div> 
+                </template>
+
+                <template x-for="prop in EditorApp.Properties">     
+                    <template x-if="prop.Name && ifValue(prop.IfValue)">
+                        <div class="setting">
+                            <span class="label" x-text="prop.Name"></span>
+                            <span class="value">
+                                <template x-if="prop.Type.toLowerCase() === 'string'">
+                                    <input @change="itemChange" :disabled="isDisabled()" type="text" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
+                                </template>
+                                <template x-if="prop.Type.toLowerCase() === 'password'">
+                                    <input @change="itemChange" type="password" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
+                                </template>
+                                <template x-if="prop.Type.toLowerCase() === 'int'">
+                                    <input @change="itemChange" :disabled="isDisabled()" type="number" x-model.number="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
+                                </template>
+                                <template x-if="prop.Type.toLowerCase() === 'select'">
+                                    <select @change="itemChange" :disabled="isDisabled()" x-model="EditModel.Properties[prop.Id]" x-init="selectFirstIfNull(prop)">
+                                        <template x-for="opt in prop.Options">
+                                            <option :value="opt.Value" x-text="opt.Label" :selected="opt.Value === EditModel.Properties[prop.Id]"></option>
+                                        </template>
+                                    </select>
+                                </template>
+                                <template x-if="prop.Type.toLowerCase() === 'bool'">
+                                    <label x:for="$id('toggle')" class="toggle-switchy">
+                                        <input @change="itemChange" :disabled="isDisabled()" type="checkbox" :id="$id('toggle')" x-model="EditModel.Properties[prop.Id]"  @keydown.enter="saveEditor" />
+                                        <span class="toggle">
+                                            <span class="switch"></span>
+                                        </span>
+                                    </label>
+                                </template>
+                            </span>
+                        </div> 
+                    </template>
+                </template>
+
+                <template x-if="EditorApp.TestFunction">
+                    <div class="setting tester">
+                        <span class="label"></span>
+                        <span class="value">                    
+                            <button :disabled="isDisabled()" class="btn" @click="testApp" x-text="testing ? 'Testing' : 'Test'"></button>
+                        </span>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>
