@@ -1,12 +1,12 @@
 const express = require('express');
 const common = require('./Common');
-const Settings = require('../models/Settings');
 const AppHelper = require('../helpers/appHelper');
 const System = require('../models/System');
 const Utils = require('../helpers/utils');
+const adminMiddleware = require('../middleware/AdminMiddleware');
 
-class GroupsRouter{
-    
+class SystemGroupsRouter
+{    
     router;
 
     constructor()
@@ -20,34 +20,34 @@ class GroupsRouter{
         return this.router;
     }
 
-    async getSettings(req){
-        return req.settings;
-    }
-
     init() {
+
+        this.router.use(adminMiddleware);
         
         this.router.get('/', async (req, res) => {
 
             let args = common.getRouterArgs(req, 
             { 
-                title: 'Groups'
-            });
-            args.settings = await this.getSettings(req);
-            let groups = (args.settings.Groups || []).map(x => { 
-                return {
-                    Uid: x.Uid,
-                    Name: x.Name,
-                    Enabled: x.Enabled,
-                    IsSystem: false
-                }
+                title: 'System Groups'
             });
 
+            let system = System.getInstance();
+            let groups = system.SystemGroups?.map(x => { 
+                            return {
+                                Uid: x.Uid,
+                                Name: x.Name,
+                                Enabled: x.Enabled,
+                                IsSystem: true
+                            }
+                         }) || [];
+
             args.data = {
-                typeName: 'Group',
-                title: 'Groups',
+                typeName: 'System Group',
+                title: 'System Groups',
                 icon: 'icon-puzzle-piece',
-                baseUrl: '/settings/groups',
-                items: groups
+                baseUrl: '/settings/system/groups',
+                items: groups,
+                IsAdmin: true
             };
             
             res.render('settings/list', common.getRouterArgs(req, args)); 
@@ -56,8 +56,8 @@ class GroupsRouter{
         this.router.post('/:uid/status/:enabled', async (req, res) => {
             let enabled = req.params.enabled !== false && req.params.enabled !== 'false';
         
-            let settings = await this.getSettings(req);
-            let group = settings.Groups.find(x => x.Uid === req.params.uid);
+            let system = System.getInstance();
+            let group = system.SystemGroups.find(x => x.Uid === req.params.uid);
             if(!group)
                 return req.sendStatus(200); // silent fail
         
@@ -68,84 +68,88 @@ class GroupsRouter{
         
 
         this.router.delete('/:uid', async (req, res) => {
-            let settings = await this.getSettings(req);
-            let group = settings.Groups.find(x => x.Uid === req.params.uid);
+            let system = System.getInstance();
+            let group = system.SystemGroups.find(x => x.Uid === req.params.uid);
             if(!group)
                 return res.sendStatus(200); // already gone
 
-            settings.Groups = settings.Groups.filter(x => x.Uid != group.Uid);
+            system.SystemGroups = system.SystemGroups.filter(x => x.Uid != group.Uid);
 
             // basic remove from group
-            for(let db of settings.Dashboards || [])
+            if(system.GuestDashboard?.Groups?.length)
             {
-                db.Groups = db.Groups.filter(x => x.Uid != group.Uid);
+                system.GuestDashboard.Groups = system.GuestDashboard.Groups.filter(x => x.Uid != group.Uid);
             }
 
-            await settings.save();
+            await system.save();
             res.sendStatus(200);
         });
 
-        this.router.get('/:uid', async (req, res) => {    
+        this.router.get('/:uid', async (req, res) => {   
             let uid = req.params.uid;
-            let settings = await this.getSettings(req);
+            
+            let system = System.getInstance();
             let isNew = uid === 'new';
             let group = isNew ? {
                 Uid: 'new',
+                IsSystem: true,
                 Name: 'New Group',
                 Items: []
-            } : settings.Groups?.find(x => x.Uid === uid);
+            } : system.SystemGroups?.find(x => x.Uid === uid);
         
             if(!group){
                 return res.sendStatus(404);
             }
 
             if(!group.AccentColor)
-                group.AccentColor = settings.AccentColor || '#ff0090';
+                group.AccentColor = req.settings.AccentColor || '#ff0090';
             
+            group.IsSystem = true;
             let apps = AppHelper.getInstance().getList();
             res.render('groups/editor', common.getRouterArgs(req, { 
-                title: 'Group',
+                title: 'System Group',
                 apps: apps,
                 model:group
-            }));  
+            }));   
         });
-
         
         this.router.post('/:uid', async (req, res) => {    
 
             let uid = req.params.uid;
+            let system = System.getInstance();
 
             let name = req.body.Name.trim();
-            let settings = await this.getSettings(req);
+            let group = system.SystemGroups?.find(x => x.Uid === uid);
 
             // check for duplicate names
-            let dupName = settings.Groups.find(x => x.Uid != uid && x.Name?.toLowerCase() == name.toLowerCase());
+            let dupName = system.SystemGroups.find(x => x.Uid != uid && x.Name?.toLowerCase() == name.toLowerCase());
             if(dupName)
                 return res.status(400).send('Duplicate name');
 
-            // get existing 
-            let group = settings.Groups.find(x => x.Uid === uid)
-
-            if(!group) {
+            if(!group)
+            {
+                // new group                    
                 group = {
                     Uid: new Utils().newGuid(),
                     Enabled: true
                 };
-                settings.Groups.push(group);
+                system.SystemGroups.push(group);
             }
+
+            // get existing 
             group.Name = name;
             group.HideGroupTitle = req.body.HideGroupTitle;
             group.Items = req.body.Items || [];
-            if(req.body.AccentColor.toLowerCase() === settings.AccentColor.toLowerCase())
+            if(req.body.AccentColor.toLowerCase() === req.settings.AccentColor.toLowerCase())
                 group.AccentColor = '';
             else
                 group.AccentColor = req.body.AccentColor;
-            await settings.save();
-            return res.sendStatus(200); 
+            await system.save();
+            return res.sendStatus(200);                     
         });
     }
 }
   
 
 
-module.exports = GroupsRouter;
+module.exports = SystemGroupsRouter;

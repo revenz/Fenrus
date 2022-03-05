@@ -22,15 +22,15 @@
         <li class="group">
             Dashboard
         </li>
-        <li <%= pageUrl == '/settings/dashboards' ? 'class=active' : '' %>>
+        <li <%= /^\/settings\/dashboards(\/[a-z0-9\-]{36})?$/.test(pageUrl) ? 'class=active' : '' %>>
            <a href="/settings/dashboards">
-                <span class="icon-home"></span>
+                <span class="icon-th-large"></span>
                <span class="title">Dashboards</span>
             </a>
         </li>
-        <li <%= pageUrl == '/settings/groups' ? 'class=active' : '' %>>
+        <li <%= /^\/settings\/groups(\/[a-z0-9\-]{36})?$/.test(pageUrl) ? 'class=active' : '' %>>
            <a href="/settings/groups">
-                <span class="icon-bars"></span>
+                <span class="icon-puzzle-piece"></span>
                <span class="title">Groups</span>
             </a>
         </li>
@@ -40,8 +40,22 @@
                <span class="title">Search Engines</span>
             </a>
         </li>
+
+        <% if(isAdmin) { %>
         <li class="group">
             Administrator
+        </li>
+        <li <%= pageUrl == '/settings/dashboards/Guest' ? 'class=active' : '' %>>
+           <a href="/settings/dashboards/Guest">
+                <span class="icon-th-large"></span>
+               <span class="title">Guest Dashboard</span>
+            </a>
+        </li>        
+        <li <%= /^\/settings\/system\/groups(\/[a-z0-9\-]{36})?$/.test(pageUrl) ? 'class=active' : '' %>>
+           <a href="/settings/system/groups">
+                <span class="icon-puzzle-piece"></span>
+               <span class="title">System Groups</span>
+            </a>
         </li>
         <li <%= pageUrl == '/settings/users' ? 'class=active' : '' %>>
            <a href="/settings/users">
@@ -55,6 +69,7 @@
                <span class="title">System</span>
             </a>
         </li>
+        <% } %>
     </ul>
 
     <div class="version-info">

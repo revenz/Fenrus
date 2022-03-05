@@ -19,16 +19,6 @@ router.get('/', async (req, res) => {
         return a.Name.localeCompare(b.Name);
     });
 
-    if(isAdmin)
-    {
-        // get guest dashboards
-        dashboards.splice(0, 0, {
-            Uid: 'Guest',
-            Name: 'Guest',
-            Enabled: true
-        });
-    }
-
     res.render('settings/list', common.getRouterArgs(req, { 
         title: 'Dashboards',
         data: {
@@ -68,6 +58,16 @@ router.get('/:uid', async (req, res) => {
     }
 
     let groups = getGroups(req.settings, system);
+
+    // filter out any missing groups, incase they have been deleted
+    let groupUids = groups.map(x => x.Uid);
+    let groupCount = dashboard.Groups.length;
+    dashboard.Groups = dashboard.Groups.filter(x => groupUids.indexOf(x.Uid) >= 0);
+    if(groupCount != dashboard.Groups.length){
+        // save it, so we remove the deleted groups
+        if(uid !== 'Guest')
+            req.settings.save();
+    }
     
     res.render('dashboards/editor', common.getRouterArgs(req, { 
         title: 'Dashboards',

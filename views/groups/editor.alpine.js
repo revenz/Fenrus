@@ -1,10 +1,16 @@
 let json = document.getElementById('GroupData').value;
 let data = JSON.parse(json);
 console.log(data);
+let isSystem = data.IsSystem;
 data.ShowGroupTitle = !data.HideGroupTitle;
 let groupEditor;
 Alpine.data('Settings', () => ({
-    init(){ groupEditor = this; },
+    init(){ 
+        groupEditor = this; 
+        setTimeout(() => {
+            this.updatePreview();
+        }, 0);
+    },
     model: data, 
     Saved: false,
     isItemSaved: false,
@@ -59,11 +65,12 @@ Alpine.data('Settings', () => ({
                 'Content-Type': 'application/json'
             }
         }
-        fetch(`/settings/groups/${this.model.Uid}`, options).then(async (res)=>{
+        let url = (isSystem ? '/settings/system/groups/' : '/settings/groups/') + this.model.Uid;
+        fetch(url, options).then(async (res)=>{
             if(!res.ok)
                 throw await res.text();
                 
-            window.location = '/settings/groups';
+            window.location = isSystem ? '/settings/system/groups' : '/settings/groups';
         }).catch(err => {
             toast(err || 'Failed to save', false);
         });

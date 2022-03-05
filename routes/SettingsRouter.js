@@ -3,6 +3,7 @@ const FileHelper = require('../helpers/FileHelper');
 const common = require('./Common');
 const routerDashboard = require('./DashboardRouter');
 const GroupsRouter = require('./GroupsRouter');
+const SystemGroupsRouter = require('./SystemGroupsRouter');
 const router = express.Router();
 
 // router.get('/', async (req, res) => {
@@ -43,7 +44,9 @@ router.post('/', async (req, res) => {
 });
 
 router.use('/dashboards', routerDashboard);
-router.use('/groups', new GroupsRouter(false).get());
+router.use('/groups', new GroupsRouter().get());
+router.use('/system/groups', new SystemGroupsRouter().get());
+
   
 
 module.exports = router;
