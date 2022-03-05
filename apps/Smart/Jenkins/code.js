@@ -1,4 +1,3 @@
-// https://glances.readthedocs.io/en/latest/api.html
 class Jenkins {
     doFetch(args) {
         return args.fetch({
