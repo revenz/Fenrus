@@ -1,5 +1,4 @@
 const fs = require('fs');
-const UserManager = require('../helpers/UserManager');
 
 class SystemInstance 
 {
@@ -9,6 +8,8 @@ class SystemInstance
     SearchEngines = [];
     Properties = {};
     AuthStrategy;
+    GuestDashboard;
+    SystemGroups;
 
     constructor(){
     }    
@@ -48,6 +49,29 @@ class SystemInstance
                     self[k] = obj[k];
                 });         
             }  
+            let guestFile = './data/configs/guest.json';
+            if(fs.existsSync(guestFile) == true) {   
+                let json = fs.readFileSync(guestFile, { encoding: 'utf-8'});                
+                if(json.trim() !== ''){
+                    if(json.charCodeAt(0) === 65279)
+                        json = json.substring(1);
+                    let obj = JSON.parse(json);  
+                    this.SystemGroups = obj.Groups || [];
+                    this.GuestDashboard = {
+                        Uid: 'Guest',
+                        Name: 'Guest',
+                        Groups: obj.Groups.map(x => {
+                            return {
+                                Uid: x.Uid,
+                                Name: x.Name,
+                                Enabled: true
+                            }
+                        })
+                    }
+                    await this.save();     
+                }  
+                fs.unlink(guestFile, () => {});
+            }
         }
         catch(err)
         {
@@ -93,7 +117,9 @@ class SystemInstance
             AllowRegister: this.AllowRegister,
             AllowGuest: this.AllowGuest,
             SearchEngines: this.SearchEngines,
-            Properties: this.Properties
+            Properties: this.Properties,
+            GuestDashboard: this.GuestDashboard,
+            SystemGroups: this.SystemGroups
         }, null, 2);
     }
 }

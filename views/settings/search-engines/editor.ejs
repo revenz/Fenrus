@@ -1,21 +1,24 @@
-<%- include('./partials/head.ejs' ) %>
+<%- include('../head.ejs') %>
 
 <% 
-    var urlPrefix = isSystem ? '/system/search-engines' : '/search-engines';
-    var urlGroupUrl = isSystem ? '/system/search-engines' : '/search-engines';
+    let baseUrl = isSystem ? '/settings/system/search-engines' : '/settings/search-engines';
 %> 
 
-<link rel="stylesheet" href="/css/settings.min.css?version=<%= version %>" />
+<input type="hidden" id="SearchEngine" value="<%= JSON.stringify(model) %>" />
 
-<div class="search-engine settings-box" x-data="SearchEngine">
-    <div class="header">
-        <span class="title">Search Engine</span>
-        <div class="buttons">
-            <button :disabled="isDisabled()" class="btn" @click="save">Save</button>
-            <button :disabled="isDisabled()" class="btn" @click="cancel">Cancel</button>
-        </div>
+<div class="editor" x-data="SearchEngine">
+    <div class="top-row">
+        <span class="title">
+            <span class="icon-search"></span>
+            Search Engine
+        </span>
+        <span class="buttons">
+            <button class="btn" @click="save">Save</button>
+            <button class="btn" @click="cancel">Cancel</button>
+        </span>
     </div>
-    <div class="content">
+
+    <div class="general settings-box">
         <div class="setting">
             <span class="label">Name</span>
             <span class="value">
@@ -40,7 +43,7 @@
             <span class="value">
                 <div class="item-icon-picker">
                     <template x-if="model.Icon">
-                        <img :src="model.Icon" style="width: 100px;height: 100px;object-fit: scale-down;margin-bottom:1rem" />
+                        <img :src="model.Icon" style="width: 100px;height: 100px;object-fit: contain;margin-bottom:1rem" />
                     </template>
 
                     <template x-if="!model.Icon">
@@ -58,62 +61,23 @@
     </div>
 </div>
 
-<input type="hidden" id="SearchEngine" value="<%= JSON.stringify(model) %>" />
-
 <script src="/js/settings.js?version=<%= version %>"></script>
+<script src="/js/jscolor.min.js"></script>
 
 
 <script>
 
     document.addEventListener('alpine:init', () => {
         let json = document.getElementById('SearchEngine').value;
-        let model = JSON.parse(json);
-
+        let model = JSON.parse(json)
         Alpine.data('SearchEngine', () => ({
-            model: model,
-            Saving: false,
-            Saved: false,
-            init() {
-            },  
-            blur(){
-                if(this.Saved === false)
-                    return;
-                this.validate();
-            },
-            input(){
-                if(this.Saved === false)
-                    return;
-                this.validate();
-            },
-            isDisabled() {
-                if(this.Saving)
-                    return true;
-                return false;
-            },
-            validate(){
-
-                let inputs = [...document.querySelectorAll(`.search-engine.settings-box [data-rules]`)];
-                let valid = true;
-                inputs.map((input) => {
-                    if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
-                        valid = false;
-                        input.classList.add("invalid");
-                    }else{
-                        input.classList.remove("invalid");
-                    }
-                });
-
-                return valid;
-            },
-            save() {
-                if(this.isDisabled()) return;
-
+           model: model, 
+           <%- include('../generic-alpine-editor.js') %>
+           save() {
+                if(!this.validate())
+                    return false;
                 this.Saved = true;
-
-                // first validate it
-                if(this.validate() === false)
-                    return;
-
+                    
                 const options = {
                     method: 'POST',
                     body: JSON.stringify(this.model),
@@ -122,19 +86,20 @@
                     }
                 }
                 this.Saving = true;
-                fetch('<%= urlPrefix %>/' + encodeURIComponent(this.model.Uid), options).then(res => {
+                fetch('<%= baseUrl %>/' + encodeURIComponent(this.model.Uid), options).then(res => {
                     if(!res.ok)
                         throw res;
                     this.Saving = false;
-                    window.location.href = '<%= urlGroupUrl %>';
+                    this.markClean();
+                    window.location.href = '<%= baseUrl %>';
                 }).catch(err => {
                     console.log(err);
                     toast('Failed to save', false);
                     this.Saving = false;
                 });
-            },
+            }, 
             cancel() {
-                window.location.href = '<%= urlGroupUrl %>';
+                this.cancelGoto('<%= baseUrl %>');
             },
             imageChosen(event){
                 this.fileToDataUrl(event, src => 
@@ -144,7 +109,7 @@
                 })
             },                
             fileToDataUrl(event, callback) {
-                if (! event.target.files.length) return;
+                if (!event.target.files.length) return;
 
                 let file = event.target.files[0];
                 let reader = new FileReader();
@@ -152,8 +117,8 @@
                 reader.readAsDataURL(file);
                 reader.onload = e => callback(e.target.result);
             }
-        }));
+        }))
     });
 </script>
 
-<%- include('./partials/footer.ejs') %>
+<%- include('../foot.ejs') %>

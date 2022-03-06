@@ -1,0 +1,72 @@
+
+<% 
+    if(typeof(showIsDefault) === 'undefined')
+        showIsDefault = false;
+    if(typeof(allowMove) === 'undefined')
+        allowMove = false;
+%> 
+
+<table class="generic-list">
+    <thead>
+        <tr>
+            <th class="name">Name</th>
+            <% if(showIsDefault) { %>
+                <th class="default switch">Default</th>
+            <% } %>
+            <th class="enabled switch">Enabled</th>
+            <th class="controls"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <template x-for="item in model.items">
+            <tr :id="item.Uid">
+                <td class="name">
+                    <template x-if="item.IsSystem && !model.IsAdmin">
+                        <span x-text="item.Name"></span>
+                    </template>
+                    <template x-if="!item.IsSystem">
+                        <a :href="model.baseUrl + '/' + item.Uid" x-text="item.Name"></a>
+                    </template>
+                    <template x-if="item.IsSystem && model.IsAdmin">
+                        <a :href="(model.baseUrl.indexOf('/system/') > 0 ? model.baseUrl : (model.baseUrl.replace('/settings/', '/settings/system/'))) + '/' + item.Uid" x-text="item.Name"></a>
+                    </template>
+                </td>
+                <% if(showIsDefault) { %>
+                    <td class="default switch">      
+                        <label :for="item.Uid + '-default'" class="toggle-switchy">
+                            <input type="checkbox" :id="item.Uid + '-default'" x-model="item.IsDefault" @change="setDefault(item.Uid, event.target.checked)" />
+                            <span class="toggle">
+                                <span class="switch"></span>
+                            </span>
+                        </label>
+                    </td>
+                <% } %>
+                <td class="enabled switch">      
+                    <template x-if="item.Uid !== 'Guest'">
+                        <label :for="item.Uid + '-enabled'" class="toggle-switchy">
+                            <input type="checkbox" :id="item.Uid + '-enabled'" x-model="item.Enabled" @change="setStatus(item.Uid, event.target.checked)" />
+                            <span class="toggle">
+                                <span class="switch"></span>
+                            </span>
+                        </label>
+                    </template>
+                </td>
+                <td class="controls">  
+                    <% if(allowMove) { %>
+                        <span title="Move Up" class="icon-arrow-up" @click="move(item, true)"></span>
+                        <span title="Move Down" class="icon-arrow-down" @click="move(item, false)"></span>
+                    <% } %>
+                    <template x-if="!item.IsSystem">
+                        <a title="Edit" class="icon-edit" :href="model.baseUrl + '/' + item.Uid"></a>
+                    </template>
+                    <template x-if="item.IsSystem && model.IsAdmin">
+                        <a title="Edit" class="icon-edit" :href="(model.baseUrl.indexOf('/system/') > 0 ? model.baseUrl : (model.baseUrl.replace('/settings/', '/settings/system/'))) + '/' + item.Uid"></a>
+                    </template>
+                    <template x-if="item.Uid !== 'Guest'">                 
+                        <span title="Delete" class="icon-trash" @click="remove(item)"></span>
+                    </template>
+                </td>
+            </tr>
+        </template>
+    </tbody>
+</table>

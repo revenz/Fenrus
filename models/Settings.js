@@ -1,5 +1,7 @@
 const fs = require('fs');
 const ImageHelper = require('../helpers/ImageHelper');
+const Utils = require('../helpers/utils');
+const System = require('./System');
 
 class SettingsInstance {
     Revision = 0;
@@ -10,6 +12,7 @@ class SettingsInstance {
     ShowGroupTitles = true;
     BackgroundImage = '';
     Groups = [];
+    Dashboards = [];
     ThemeSettings = {};
     ShowSearch = false;
     SearchEngines = [];    
@@ -56,13 +59,45 @@ class SettingsInstance {
                     });         
                     if(self.Groups?.length) {
                         for(let grp of self.Groups) {
+                            if(grp.Enabled === undefined){
+                                grp.Enabled = true;
+                                save = true;
+                            }
                             if(!grp?.Items?.length)
-                                continue;
+                                continue;                                
                             for(let item of grp.Items){
-                                if(item.Enabled === undefined)
+                                if(item.Enabled === undefined){
                                     item.Enabled = true;
+                                    save = true;
+                                }
                             }
                         }
+                    }    
+                    if(self.SearchEngines?.length) {
+                        for(let se of self.SearchEngines) {
+                            if(se.Enabled === undefined){
+                                se.Enabled = true;
+                                save = true;
+                            }
+                        }
+                    }
+
+
+                    if(!self.Dashboards?.length) {
+                        save = true;
+                        self.Dashboards = [ {
+                            Uid: new Utils().newGuid(),
+                            Name: 'Default',
+                            Enabed: true,
+                            Groups: self.Groups.map(x => { return {
+                                Uid: x.Uid,
+                                Name: x.Name,
+                                Enabled: true
+                            }})
+                        }];   
+                        console.log('########### save dashboards!', self.Dashboards);                     
+                    }else {
+                        console.log('########### has dashboards!', self.Dashboards);
                     }
                     if(save)
                         self.save();
@@ -122,6 +157,7 @@ class SettingsInstance {
             BackgroundImage: this.BackgroundImage,
             ThemeSettings: this.ThemeSettings,
             SearchEngines: this.SearchEngines,
+            Dashboards: this.Dashboards,
             Groups: this.Groups
         }, null, 2);
     }
@@ -198,15 +234,16 @@ class Settings {
 
     static async getForGuest() 
     {
-        SettingsInstance.instances = SettingsInstance.instances || {};
-
-        if(SettingsInstance.instances['guest'])
-            return SettingsInstance.instances['guest'];
-
-        let instance = new SettingsInstance('guest');
-        await instance.load();
-        SettingsInstance.instances['guest'] = instance;
-        return instance;
+        let system = System.getInstance();
+        let settings = {};
+        settings.Dashboards = [
+            system.GuestDashboard
+        ];
+        settings.Theme = 'Default';
+        settings.Groups = system.SystemGroups.filter(x => x.Enabled !== false);
+        settings.AccentColor = '#ff0090';
+        console.log(settings);
+        return settings;
     }
 
     static clearUser(uid){

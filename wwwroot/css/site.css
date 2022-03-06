@@ -1,8 +1,8 @@
 @charset "UTF-8";
 @font-face {
   font-family: "icomoon";
-  src: url("/fonts/icomoon.eot?d1vm3p");
-  src: url("/fonts/icomoon.eot?d1vm3p#iefix") format("embedded-opentype"), url("/fonts/icomoon.ttf?d1vm3p") format("truetype"), url("/fonts/icomoon.woff?d1vm3p") format("woff"), url("/fonts/icomoon.svg?d1vm3p#icomoon") format("svg");
+  src: url("/fonts/icomoon.eot?axq5b8");
+  src: url("/fonts/icomoon.eot?axq5b8#iefix") format("embedded-opentype"), url("/fonts/icomoon.ttf?axq5b8") format("truetype"), url("/fonts/icomoon.woff?axq5b8") format("woff"), url("/fonts/icomoon.svg?axq5b8#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -19,6 +19,10 @@
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-search1:before {
+  content: "";
 }
 
 .icon-user1:before {
@@ -73,6 +77,10 @@
   content: "";
 }
 
+.icon-adjust:before {
+  content: "";
+}
+
 .icon-tint:before {
   content: "";
 }
@@ -93,6 +101,42 @@
   content: "";
 }
 
+.icon-plus-circle:before {
+  content: "";
+}
+
+.icon-minus-circle:before {
+  content: "";
+}
+
+.icon-times-circle:before {
+  content: "";
+}
+
+.icon-check-circle:before {
+  content: "";
+}
+
+.icon-question-circle:before {
+  content: "";
+}
+
+.icon-info-circle:before {
+  content: "";
+}
+
+.icon-times-circle-o:before {
+  content: "";
+}
+
+.icon-check-circle-o:before {
+  content: "";
+}
+
+.icon-ban:before {
+  content: "";
+}
+
 .icon-arrow-left:before {
   content: "";
 }
@@ -101,12 +145,24 @@
   content: "";
 }
 
+.icon-arrow-up:before {
+  content: "";
+}
+
+.icon-arrow-down:before {
+  content: "";
+}
+
 .icon-expand:before {
   content: "";
 }
 
 .icon-compress:before {
   content: "";
+}
+
+.icon-folder:before {
+  content: "";
 }
 
 .icon-bar-chart:before {
@@ -137,8 +193,28 @@
   content: "";
 }
 
+.icon-arrow-circle-left:before {
+  content: "";
+}
+
+.icon-arrow-circle-right:before {
+  content: "";
+}
+
+.icon-arrow-circle-up:before {
+  content: "";
+}
+
+.icon-arrow-circle-down:before {
+  content: "";
+}
+
 .icon-globe:before {
   content: "";
+}
+
+.icon-wrench:before {
+  content: "";
 }
 
 .icon-group:before {
@@ -189,6 +265,22 @@
   content: "";
 }
 
+.icon-angle-left:before {
+  content: "";
+}
+
+.icon-angle-right:before {
+  content: "";
+}
+
+.icon-angle-up:before {
+  content: "";
+}
+
+.icon-angle-down:before {
+  content: "";
+}
+
 .icon-puzzle-piece:before {
   content: "";
 }
@@ -207,6 +299,10 @@
 
 .icon-user-circle-o:before {
   content: "";
+}
+
+.icon-microchip:before {
+  content: "";
 }
 
 .icon-plus:before {
@@ -653,20 +749,23 @@ CORE STYLES ABOVE - NO TOUCHY
 }
 
 .btn {
-  text-decoration: none;
-  color: var(--button-color, var(--color, #fff));
-  background: var(--button-background, transparent);
-  border: solid 1px var(--border-color, var(--color, rgba(255, 255, 255, 0.3)));
-  border-radius: 0.1rem;
-  text-align: center;
-  padding: 0.5rem 0;
+  height: 2.1875rem;
+  font-weight: normal;
+  outline: none !important;
+  line-height: initial;
+  box-shadow: none;
+  border-radius: unset !important;
+  font-size: 0.85rem !important;
   text-transform: uppercase;
+  border: solid 1px var(--accent);
+  background-color: transparent;
+  color: var(--color);
   width: 8rem;
   cursor: pointer;
 }
 .btn:hover {
-  background: var(--accent, #ff0090);
-  color: var(--color, #fff);
+  background-image: linear-gradient(rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.3)) !important;
+  box-shadow: inset 0 -3px 0 0 var(--accent) !important;
 }
 .btn:disabled {
   cursor: not-allowed;
@@ -674,6 +773,10 @@ CORE STYLES ABOVE - NO TOUCHY
 
 a.btn {
   width: calc(8rem - 2px);
+  display: flex;
+  place-content: center;
+  align-items: center;
+  text-decoration: none;
 }
 
 .main-menu {
@@ -796,17 +899,6 @@ a.btn {
 .main-menu .li-about:hover a, .main-menu .li-about.force-hover a {
   top: 0;
 }
-.main-menu .icon-fenrus {
-  background: url("/favicon.svg");
-  filter: grayscale(1) brightness(12);
-  width: 2rem;
-  height: 2rem;
-  display: inline-block;
-  background-size: contain;
-  background-repeat: no-repeat;
-  position: relative;
-  top: 7px;
-}
 .main-menu .color-picker input {
   height: 2rem;
   border-radius: 0.25rem;
@@ -816,6 +908,22 @@ a.btn {
   width: calc(100% - 0.75rem);
   background-image: unset !important;
   padding-left: 1rem !important;
+}
+.main-menu .icon-fenrus {
+  position: relative;
+  top: 7px;
+}
+
+.icon-fenrus {
+  background: url("/favicon.svg");
+  width: 2rem;
+  height: 2rem;
+  display: inline-block;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.icon-fenrus:not(.coloured) {
+  filter: grayscale(1) brightness(12);
 }
 
 ::-webkit-scrollbar {
@@ -889,21 +997,32 @@ html {
   min-height: 100%;
 }
 
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("/fonts/SourceSansPro-Regular.woff") format("woff");
+}
 body {
   /* variables */
   --color-rgb: 240,240,240;
   --color: rgb(var(--color-rgb));
+  --color-darkest: rgb(160, 160, 160);
   --color-secondary-rgb: 170,170,170;
   --color-secondary: rgb(var(--color-secondary-rgb));
-  --input-background: rgb(0,0,0,0.75);
+  --input-background-rgb: 49, 49, 49;
+  --input-background: rgb(var(--input-background-rgb));
   --input-border: rgba(50,50,50);
   --input-color: white;
   --error-rgb: 255,0,0;
   --error: rgb(var(--error-rgb));
+  --base: rgb(17, 18, 20);
+  --base-rgb: 7, 18, 20;
+  --base-darker: rgb(6, 17, 19);
+  --base-darker-rgb: 6, 17, 19;
   --border-color: rgba(var(--color-rgb), 0.3);
   --input-border: var(---border-color);
   --button-color:var(--color);
   --button-background:transparent;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 body {

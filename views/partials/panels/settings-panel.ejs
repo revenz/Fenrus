@@ -11,6 +11,18 @@
             </select>
         </span>
     </div>
+    <% if(dashboards?.length > 1) { %>
+        <div class="setting">
+            <span class="label">Dashboard</span>
+            <span class="value">
+                <select x-model="model.Dashboard" @change="updateDashboard">
+                    <% for(let dashboard of dashboards) { %>
+                        <option value="<%= dashboard.Uid %>"><%= dashboard.Name %></option>
+                    <% } %>    
+                </select>
+            </span>
+        </div>
+    <% } %>
     <div class="setting">
         <span class="label">Link Target</span>
         <span class="value">
@@ -42,8 +54,16 @@
         let eleDashboard = document.querySelector('.dashboard');
         let target = settings.LinkTarget;
         let theme = settings.Theme;
+        let dashboard = getCookie('dashboard');
+        if(dashboard)
+            settings.Dashboard = dashboard;
         Alpine.data('Settings', () => ({
             model: settings, 
+            updateDashboard() {
+                let dashboardUid = settings.Dashboard;
+                document.cookie = 'dashboard=' + dashboardUid;
+                window.location.reload(true);
+            },
             update(){
                 let reload = theme != this.model.Theme;
                 if(reload === false)

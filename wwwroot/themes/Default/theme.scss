@@ -9,6 +9,16 @@ body {
     padding:0;
 }
 
+.preview-dashboard{
+    padding-top:1rem;
+    .db-group {        
+        text-align: -webkit-center;
+        .title {
+            position: unset;
+        }
+    }
+}
+
 .dashboard {
     visibility: hidden;
     padding-top:1rem;

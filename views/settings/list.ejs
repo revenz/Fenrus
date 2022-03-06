@@ -1,0 +1,120 @@
+<%- include('head.ejs') %>
+
+<% 
+    showIsDefault  = data.baseUrl.indexOf('search-engine') > 0;
+%> 
+
+<input id="view-data" type="hidden" value="<%= JSON.stringify(data) %>" />
+
+<div class="top-row">
+    <span class="title">
+        <span class="<%= data.icon %>"></span>
+        <%= data.title %>
+    </span>
+</div>
+
+<% if( data.description) { %>
+    <div class="page-description"><%= data.description %></div>
+<% } %>
+
+<div class="list" x-data="List">
+    <div class="list-toolbar">
+        <a @click="addGroup" href="<%= data.baseUrl %>/new">
+            <span class="icon-plus"></span>
+            Add
+        </a>
+    </div>
+    <%- include('./generic-list.ejs') %>
+</div>
+
+
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        let data = JSON.parse(document.getElementById('view-data').value);
+        let typeName = data.typeName || 'item';
+        let baseUrl = data.baseUrl;
+
+        Alpine.data('List', () => ({
+            model: data,
+            remove(item) {
+                console.log('removing', item);
+                confirmPrompt(`Are you sure you want to delete the ${typeName} "${item.Name}"?`).then(() => 
+                {
+                    fetch(`${baseUrl}/${encodeURIComponent(item.Uid)}`, { method: 'DELETE'}).then(async (res)=>{
+                        if(!res.ok)
+                            throw await res.text();
+                        document.getElementById(item.Uid).remove(); 
+                    }).catch(err => {
+                        toast(err || 'Failed to delete', false);
+                    });
+                }).catch(err => {});
+            },
+            setStatus(uid, enabled)
+            {
+                fetch(`${baseUrl}/${encodeURIComponent(uid)}/status/${(enabled === true)}`, { method: 'POST'});
+            },
+            setDefault(uid, checked){
+                // unselect any other defaults
+                for(let tr of document.querySelectorAll('.generic-list tr')){
+                    if(tr.getAttribute('id') === uid)
+                        continue;
+                    let eleIsDefault = tr.querySelector('.is-default');
+                    if(!eleIsDefault)
+                        continue;
+                    eleIsDefault.checked = false;
+                }
+                fetch(`${baseUrl}/${encodeURIComponent(uid)}/default/${checked === true}`, { method: 'POST'});
+            }
+            
+            // dragSrcEl:null,
+            // dragStart(e){                    
+            //     e.target.style.opacity = '0.4';
+            //     this.dragSrcEl = e.target;
+            //     e.dataTransfer.effectAllowed = 'move';
+            // },
+            // dragEnter(e){
+            //     e.target.classList.add('over');
+            // },
+            // dragLeave(e){
+            //     e.target.classList.remove('over');
+            // },
+            // dragOver(e){
+            //     e.dataTransfer.dropEffect = 'move';
+            // },
+            // dragEnd(e){
+            //     e.target.style.opacity = '1';
+            //     document.querySelectorAll('.group-list li').forEach(function (item) {
+            //         item.classList.remove('over');
+            //     });
+            // },
+            // dragDrop(e){
+            //     if (this.dragSrcEl != e.target) {
+            //         // this is the target, where we are adding it
+            //         // dragSrcEl is the item being dragged
+            //         try{         
+            //             e.target.parentNode.insertBefore(this.dragSrcEl, e.target);
+            //             this.saveLayout();
+            //         }catch(err){}
+            //     }
+            //     return false;
+            // },            
+            // saveLayout() {
+            //     let uids = Array.from(document.querySelectorAll('.group-list li')).map(x => x.getAttribute('id'));
+
+            //     const options = {
+            //         method: 'POST',
+            //         body: JSON.stringify({ uids: uids}),
+            //         headers: {
+            //             'Content-Type': 'application/json'
+            //         }
+            //     }
+
+            //     return fetch(`${baseUrl}/order`, options);
+            // }
+        }))
+    });
+</script>
+
+<%- include('foot.ejs') %>

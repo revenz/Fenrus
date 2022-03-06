@@ -24,7 +24,7 @@ function modal(message, title, confirm){
         divTitle.appendChild(divTitleSpan);
 
         let divMessageBody = document.createElement('div');
-        divMessageBody.classList.add('modal-message');
+        divMessageBody.classList.add('modal-body');
         divModal.appendChild(divMessageBody);
         
         let divMessageSpan = document.createElement('span');

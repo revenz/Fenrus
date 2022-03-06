@@ -1,15 +1,16 @@
 const express = require('express');
 const common = require('./Common');
 const Settings = require('../models/Settings');
+const AppHelper = require('../helpers/appHelper');
+const System = require('../models/System');
+const Utils = require('../helpers/utils');
 
 class GroupsRouter{
     
-    isGuest;
     router;
 
-    constructor(isGuest)
+    constructor()
     {
-        this.isGuest = isGuest;
         this.router = express.Router();
         this.init();
     }
@@ -20,54 +21,146 @@ class GroupsRouter{
     }
 
     async getSettings(req){
-        if(!this.isGuest)
-            return req.settings;
-        // get the guest settings        
-        return await Settings.getForGuest();
+        return req.settings;
     }
 
     init() {
         
         this.router.get('/', async (req, res) => {
+
             let args = common.getRouterArgs(req, 
             { 
-                title: 'Groups',
-                guestSettings: this.isGuest
+                title: 'Groups'
             });
             args.settings = await this.getSettings(req);
-            res.render('groups', args);
+            let groups = (args.settings.Groups || []).map(x => { 
+                return {
+                    Uid: x.Uid,
+                    Name: x.Name,
+                    Enabled: x.Enabled,
+                    IsSystem: false
+                }
+            });
+
+            args.data = {
+                typeName: 'Group',
+                title: 'Groups',
+                description: 'This page lets you create groups which can be used on Dashboards.\n\nA group will not appear by itself, it must be added to a dashboard.',
+                icon: 'icon-puzzle-piece',
+                baseUrl: '/settings/groups',
+                items: groups
+            };
+            
+            res.render('settings/list', common.getRouterArgs(req, args)); 
+        });
+
+        this.router.post('/:uid/status/:enabled', async (req, res) => {
+            let enabled = req.params.enabled !== false && req.params.enabled !== 'false';
+        
+            let settings = await this.getSettings(req);
+            let group = settings.Groups.find(x => x.Uid === req.params.uid);
+            if(!group)
+                return req.sendStatus(200); // silent fail
+        
+            group.Enabled = enabled;
+            await settings.save();
+            res.sendStatus(200);
         });
         
 
-        this.router.post('/order', async (req, res) => {
+        this.router.delete('/:uid', async (req, res) => {
+            let settings = await this.getSettings(req);
+            let group = settings.Groups.find(x => x.Uid === req.params.uid);
+            if(!group)
+                return res.sendStatus(200); // already gone
 
-            let model = req.body;
-            if(!model){
-                res.status(400).send('Invalid data');
-                return;
+            settings.Groups = settings.Groups.filter(x => x.Uid != group.Uid);
+
+            // basic remove from group
+            for(let db of settings.Dashboards || [])
+            {
+                db.Groups = db.Groups.filter(x => x.Uid != group.Uid);
             }
-            let uids = req.body.uids;
+
+            await settings.save();
+            res.sendStatus(200);
+        });
+
+        this.router.get('/:uid', async (req, res) => {    
+            let uid = req.params.uid;
+            let settings = await this.getSettings(req);
+            let isNew = uid === 'new';
+            let group = isNew ? {
+                Uid: 'new',
+                Name: 'New Group',
+                Items: []
+            } : settings.Groups?.find(x => x.Uid === uid);
+        
+            if(!group){
+                return res.sendStatus(404);
+            }
+
+            if(!group.AccentColor)
+                group.AccentColor = settings.AccentColor || '#ff0090';
+            
+            let apps = AppHelper.getInstance().getList();
+            res.render('settings/groups/editor', common.getRouterArgs(req, { 
+                title: 'Group',
+                apps: apps,
+                model:group
+            }));  
+        });
+
+        
+        this.router.post('/:uid', async (req, res) => {    
+
+            let uid = req.params.uid;
+
+            let name = req.body.Name.trim();
             let settings = await this.getSettings(req);
 
-            settings.Groups = settings.Groups.sort((a, b) => {
-                let aIndex = uids.indexOf(a.Uid);
-                let bIndex = uids.indexOf(b.Uid);
-                if(aIndex == -1 && bIndex == -1){
-                    // not in the list
-                    aIndex = settings.Groups.indexOf(a);
-                    bIndex = settings.Groups.indexOf(b);
-                    return aIndex - bIndex;
+            // check for duplicate names
+            let dupName = settings.Groups.find(x => x.Uid != uid && x.Name?.toLowerCase() == name.toLowerCase());
+            if(dupName)
+                return res.status(400).send('Duplicate name');
+
+            // get existing 
+            let group = settings.Groups.find(x => x.Uid === uid);
+
+            let addToDashboard = false;
+
+            if(!group) {
+                group = {
+                    Uid: new Utils().newGuid(),
+                    Enabled: true
+                };
+                addToDashboard = req.body.AddToDashboard === true;
+                settings.Groups.push(group);
+            }
+            group.Name = name;
+            group._Type = 'DashboardGroup';
+            group.HideGroupTitle = req.body.HideGroupTitle;
+            group.Items = req.body.Items || [];
+            if(req.body.AccentColor.toLowerCase() === settings.AccentColor.toLowerCase())
+                group.AccentColor = '';
+            else
+                group.AccentColor = req.body.AccentColor;
+
+            if(addToDashboard) {
+                let defaultDashboard = settings.Dashboards?.find(x => x.Name === 'Default');
+                if(defaultDashboard){
+                    if(!defaultDashboard.Groups)
+                        defaultDashboard.Groups = [];
+                    defaultDashboard.Groups.push({
+                        Uid: group.Uid,
+                        Name: group.Name,
+                        Enabled: true
+                    });
                 }
-                if(bIndex < 0)
-                    return -1;
-                if(aIndex < 0)
-                    return 1;
-                return aIndex - bIndex;
-            });
+            }
 
-            settings.save();
-
-            res.status(200).send('').end();
+            await settings.save();
+            return res.sendStatus(200); 
         });
     }
 }

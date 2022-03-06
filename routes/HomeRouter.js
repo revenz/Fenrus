@@ -10,48 +10,46 @@ let themes = FileHelper.getDirectoriesSync('./wwwroot/themes');
 
 
 router.get('/', async (req, res) => {    
+    
+    let settings = req.settings;
+    let dashboardUid = req.isGuest ? 'Guest' : req.cookies?.dashboard || 'Default';
+    let dashboardInstance = settings.Dashboards?.find(x => x.Uid === dashboardUid && x.Enabled !== false);
+    if(!dashboardInstance)
+        dashboardInstance = settings.Dashboards.find(x => x.Enabled !== false) || req.settings.Dashboards[0];
 
-    let themeVariables = {};
-    if(req.theme?.loadScript) {
-        let instance = req.theme.loadScript();
-        if(instance?.getVariables){
-            themeVariables = instance.getVariables(req.settings.ThemeSettings ? req.settings.ThemeSettings[req.theme.Name] : null);
-        }
-    }
-    let themeSettings = {};
-    if(req.settings.ThemeSettings && req.settings.ThemeSettings[req.theme.Name])
-        themeSettings = req.settings.ThemeSettings[req.theme.Name];
-    else if(req.theme.Settings?.length){
-        // need to get default settings
-        console.log(';theme.Settings', req.theme.Settings);
-        for(let setting of req.theme.Settings){
-            if(setting.Default)
-                themeSettings[setting.Name] = setting.Default;
-            else if(setting.Type === 'Integer')
-                themeSettings[setting.Name] = 0;
-            else if(setting.Type === 'Boolean')
-                themeSettings[setting.Name] = false;
-            else if(setting.Type === 'String')
-                themeSettings[setting.Name] = '';
-        }
+    let dashboard = { Groups: []};
+    for(let grp of dashboardInstance?.Groups || []){
+        if(grp.Enabled === false)
+            continue;
+
+        let actualGroup = settings.Groups.find(x => x.Uid === grp.Uid);
+        if(!actualGroup || actualGroup.Enabled === false)
+            continue;
+        dashboard.Groups.push(actualGroup);
     }
 
     let searchEngines = req.isGuest ? [] : req.settings.SearchEngines.filter(x => x.Enabled != false) || [];
     let system = System.getInstance();
     if(system.SearchEngines?.length)
         searchEngines = searchEngines.concat(system.SearchEngines.filter(x => x.Enabled != false));
+
+    let dashboards = settings.Dashboards.filter(x => x.Enabled !== false).map(x => {
+        return {
+            Uid: x.Uid,
+            Name: x.Name
+        };
+    });
+
+    dashboards.sort((a, b) => {
+        return a.Name.localeCompare(b.Name);
+    })
     
     res.render('home', common.getRouterArgs(req, { 
         title: '', 
+        dashboard: dashboard,
         themes:themes,
-        themeVariables: themeVariables,
-        themeSettings: themeSettings,
+        dashboards: dashboards,
         searchEngines: searchEngines
-        // [
-        //     { Name: 'DuckDuckGo', Icon: '/search-engines/duckduckgo.jpg', Url: 'https://duckduckgo.com/?q=%s', IsDefault: true },
-        //     { Name: 'Google', Icon: '/search-engines/google.png', Url: 'https://www.google.com/search?q=%s', Shortcut: 'g' },
-        //     { Name: 'MightyApe', Icon: '/apps/MightyApe/icon.png', Url: 'https://www.mightyape.co.nz/search?q=%s', Shortcut: 'ma' },
-        // ]
     }));    
 });
 

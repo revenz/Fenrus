@@ -880,3 +880,8 @@ body {
 .item-icon-picker .db-item.small, .item-icon-picker .db-item.medium {
   height: 56px;
 }
+
+.preview-dashboard {
+  width: min(30rem, 80vw);
+  margin: auto;
+}

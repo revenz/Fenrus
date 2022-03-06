@@ -1,0 +1,162 @@
+<%- include('../head.ejs') %>
+
+
+<input type="hidden" id="DashboardData" value="<%= JSON.stringify(model) %>" />
+
+<div class="editor" x-data="Settings">
+    <div class="top-row">
+        <span class="title">
+            <span class="icon-home"></span>
+            <% if(model.dashboard.Name === 'Guest') { %>
+                Guest Dashboard                
+            <% } else { %>
+                <span>Name:&nbsp;</span>
+                <input type="text" x-model="model.name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+            <% } %>
+        </span>
+        <% if(model.dashboard.Name === 'Guest') { %>
+            <span style="padding-right:1rem">Enabled:</span>
+            <span class="enable">                
+                <label for="enabled" class="toggle-switchy">
+                    <input type="checkbox" id="enabled" x-model="model.enabled" />
+                    <span class="toggle">
+                        <span class="switch"></span>
+                    </span>
+                </label>
+            </span>
+        <% } %>
+        <span class="buttons">
+            <button class="btn" @click="save">Save</button>
+        </span>
+    </div>
+
+    <% if(description) { %>
+        <div class="page-description"><%= description %></div>
+    <% } %>
+    
+    <div class="list">
+        <div class="list-toolbar">
+            <span @click="addGroup">
+                <span class="icon-plus"></span>
+                Add
+            </span>
+        </div>
+        <%     
+            allowMove = true;
+        %> 
+        <%- include('../generic-list.ejs') %>
+    </div>
+
+    <%- include('./group-modal.ejs') %>
+</div>
+
+
+<script src="/js/settings.js?version=<%= version %>"></script>
+<script src="/js/jscolor.min.js"></script>
+
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        let json = document.getElementById('DashboardData').value;
+        let data = JSON.parse(json);
+        let model = {
+            uid: data.dashboard.Uid,
+            name: data.dashboard.Name,
+            items: data.dashboard.Groups,
+            enabled: data.dashboard.Enabled,
+            baseUrl: '/settings/groups',
+            IsAdmin: <%= isAdmin %>
+        };
+        Alpine.data('Settings', () => ({
+            model: model,
+            <%- include('../generic-alpine-editor.js') %>
+            save(dontReload) {
+                if(this.isDisabled()) return;
+                
+                this.Saved = true;
+
+                if(!this.validate())
+                    return false;
+                    
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        Uid: this.model.uid,
+                        Name: this.model.name,
+                        Groups: this.model.items,
+                        Enabled: this.model.enabled
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                fetch(`/settings/dashboards/${this.model.uid}`, options).then(async (res)=>{
+                    if(!res.ok)
+                        throw await res.text();
+                    this.markClean();
+                    <% if(model.dashboard.Name !== 'Guest') { %>
+                        window.location = '/settings/dashboards';                                            
+                    <% } %>
+                }).catch(err => {
+                    toast(err || 'Failed to save', false);
+                });
+                return true;
+            }, 
+
+            remove(item) {
+                console.log('removing', JSON.parse(JSON.stringify(item)));
+                confirmPrompt(`Are you sure you want to remove the group "${item.Name}"?`).then(() => 
+                {
+                    this.model.items = this.model.items.filter(x => x.Uid !== item.Uid);
+                }).catch(err => {});
+            },
+            move(item, up) {
+                let index = this.model.items.indexOf(item);
+                if(up && index < 1)
+                    return;
+                if(!up && index >= this.model.items.length - 1)
+                    return;
+                let dest = index + (up ? -1 : 1);
+                let temp = this.model.items[index];
+                this.model.items[index] = this.model.items[dest];
+                this.model.items[dest] = temp;
+            },
+
+            addingGroup: false,
+            modalGroups: [],
+            hasSystemGroups: false,
+            hasNonSystemGroups: false,
+            modalGroup: null,
+            addGroup() {
+                this.modalGroup = null;
+                let unavailable = this.model.items.map(x => x.Uid);                
+                this.modalGroups = data.groups.filter(x => unavailable.indexOf(x.Uid) === -1);
+                this.hasSystemGroups = !!this.modalGroups.find(x => x.IsSystem);
+                console.log('hasSystemGroups', this.hasSystemGroups, JSON.parse(JSON.stringify(this.modalGroups)));
+                this.hasNonSystemGroups = !!this.modalGroups.find(x => !x.IsSystem);
+                this.addingGroup = true;
+            },
+            modalAdd(){
+                if(!this.modalGroup)
+                    return; // they need to pick one
+                console.log('modalGroup', this.modalGroup);
+                let group = data.groups.find(x => x.Uid == this.modalGroup);
+                if(!group)
+                    return;
+                this.model.items.push({
+                    Uid: group.Uid,
+                    Name: group.Name,
+                    IsSystem: group.IsSystem,
+                    Enabled: true
+                });
+                this.addingGroup = false;
+            },
+            modalCancel() {
+                this.addingGroup = false;
+            }
+        }))
+    });
+</script>
+
+<%- include('../foot.ejs') %>

@@ -4,6 +4,14 @@
 <script src="/js/alpinejs-3.8.1.min.js" defer></script>
 <script src="/js/iodine.min.js" defer></script>
 
+
+<% if(theme?.Scripts?.length) { %>
+    <input type="hidden" id="theme-settings" value="<%= JSON.stringify(themeSettings) %>" />
+    <% for(let script of theme.Scripts) { %>
+        <script src="/themes/<%= theme.DirectoryName %>/<%= script %>?version=<%= version %>"></script>
+ <% }
+} %>
+
 </body>
 
 </html>

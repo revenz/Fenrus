@@ -8,11 +8,12 @@
 
 
 <div class="dashboard <%= themeVariables?.ClassName %> <%= settings.ShowGroupTitles === false ? 'hide-group-titles' : '' %>">    
-    <% if(settings.Groups?.length) {
+    <% if(dashboard.Groups?.length) {
         
-        for(let item of settings.Groups)
+        for(let item of dashboard.Groups)
         {
             if (item && item.Enabled !== false){ 
+                console.log('item: ',item);
                 let type = item._Type.substring(9)
                 let partialFile = '';
                 let itemModel = { model: item, settings: settings, Utils: Utils};
@@ -22,6 +23,7 @@
                 }
                 else
                     partialFile = `./partials/dashboard/${type.toLowerCase()}.ejs`;
+                console.log('partial file: ',partialFile);
                 %>
                 <%- include(partialFile, itemModel ) %>
                 <%
@@ -34,13 +36,5 @@
         </div>
     <% } %>
 </div>
-
-<% if(theme?.Scripts?.length) { %>
-    <input type="hidden" id="theme-settings" value="<%= JSON.stringify(themeSettings) %>" />
-    <% for(let script of theme.Scripts) { %>
-        <script src="/themes/<%= theme.DirectoryName %>/<%= script %>?version=<%= version %>"></script>
- <% }
-} %>
-
 
 <%- include('./partials/footer.ejs') %>

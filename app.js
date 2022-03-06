@@ -5,20 +5,15 @@ const Globals = require('./Globals');
 
 // middleware
 const morgan = require('morgan');
-const adminMiddleware = require('./middleware/AdminMiddleware');
 const themeMiddleware = require('./middleware/ThemeMiddleware');
 const fileBlockerMiddleware = require('./middleware/FileBlockerMiddleware');
+const cookieParser = require('cookie-parser');
 
 // routers
 const routerHome = require('./routes/HomeRouter');
 const routerApp = require('./routes/AppRouter');
 const routerSettings = require('./routes/SettingsRouter');
-const GroupsRouter = require('./routes/GroupsRouter');
-const GroupRouter = require('./routes/GroupRouter');
-const routerUsers = require('./routes/UsersRouter');
-const routerSystem = require('./routes/SystemRouter');
 const routerTheme = require('./routes/ThemeRouter');
-const SearchEngineRouter = require('./routes/SearchEngineRouter');
 const Four01Router = require('./routes/Four01Router');
 
 const AppHelper = require('./helpers/appHelper');
@@ -67,6 +62,7 @@ app.listen(3000);
 // Calling the express.json() method for parsing
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(cookieParser());
 
 
 // set cache control for files
@@ -130,20 +126,7 @@ function configureRoutes(app, authStrategy)
     app.use('/apps', routerApp);
 
     app.use('/settings', routerSettings);
-    app.use('/groups', new GroupsRouter(false).get());
-    app.use('/group', new GroupRouter(false).get());
     app.use('/theme-settings', routerTheme);
-    app.use('/search-engines', new SearchEngineRouter(false).get());
-
-    // below are admin only routes, so use the Admin middlweare
-    app.use(adminMiddleware);
-
-
-    app.use('/users', routerUsers);
-    app.use('/system/guest', new GroupsRouter(true).get());
-    app.use('/system/guest/group', new GroupRouter(true).get());
-    app.use('/system', routerSystem);
-    app.use('/system/search-engines', new SearchEngineRouter(true).get());
 
     if(authStrategy.errorHandler)
         app.use(authStrategy.errorHandler);    
