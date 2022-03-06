@@ -1,9 +1,17 @@
 
-<table>
+<% 
+    if(typeof(showIsDefault) === 'undefined')
+        showIsDefault = false;
+%> 
+
+<table class="generic-list">
     <thead>
         <tr>
             <th class="name">Name</th>
-            <th class="enabled">Enabled</th>
+            <% if(showIsDefault) { %>
+                <th class="default switch">Default</th>
+            <% } %>
+            <th class="enabled switch">Enabled</th>
             <th class="controls"></th>
         </tr>
     </thead>
@@ -21,7 +29,17 @@
                         <a :href="(model.baseUrl.indexOf('/system/') > 0 ? model.baseUrl : (model.baseUrl.replace('/settings/', '/settings/system/'))) + '/' + item.Uid" x-text="item.Name"></a>
                     </template>
                 </td>
-                <td class="enabled">      
+                <% if(showIsDefault) { %>
+                    <td class="default switch">      
+                        <label :for="item.Uid + '-default'" class="toggle-switchy">
+                            <input type="checkbox" :id="item.Uid + '-default'" x-model="item.IsDefault" @change="setDefault(item.Uid, event.target.checked)" />
+                            <span class="toggle">
+                                <span class="switch"></span>
+                            </span>
+                        </label>
+                    </td>
+                <% } %>
+                <td class="enabled switch">      
                     <template x-if="item.Uid !== 'Guest'">
                         <label :for="item.Uid + '-enabled'" class="toggle-switchy">
                             <input type="checkbox" :id="item.Uid + '-enabled'" x-model="item.Enabled" @change="setStatus(item.Uid, event.target.checked)" />

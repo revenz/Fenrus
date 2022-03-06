@@ -2,6 +2,7 @@ const express = require('express');
 const common = require('./Common');
 let ImageHelper = require('../helpers/ImageHelper');
 const System = require('../models/System');
+const Utils = require('../helpers/utils');
 
 class SearchEngineRouter{
     
@@ -30,13 +31,23 @@ class SearchEngineRouter{
     init() {
         
         this.router.get('/', async (req, res) => {
-            let args = common.getRouterArgs(req, 
-            { 
-                title: 'Search Engines',
-                isSystem: this.isSystem
+            let settings = await this.getSettings(req);
+            let data = [...(settings.SearchEngines || [])];
+        
+            data.sort((a,b) => {
+                return a.Name.localeCompare(b.Name);
             });
-            args.model = await this.getSettings(req);
-            res.render('search-engines', args);
+            
+            res.render('settings/list', common.getRouterArgs(req, { 
+                title: 'Dashboards',
+                data: {
+                    typeName: (this.isSystem ? 'System ' : '') + 'Search Engine',
+                    title: (this.isSystem ? 'System ' : '') + 'Search Engines',
+                    icon: 'icon-search',
+                    baseUrl: '/settings/' + (this.isSystem ? 'system/' : '') + 'search-engines',
+                    items: data
+                },
+            })); 
         });
 
         this.router.post('/:uid/default/:isDefault', async(req, res) => {
@@ -63,7 +74,7 @@ class SearchEngineRouter{
 
         this.router.route('/:uid')
             .get((req, res) => {
-                res.render('search-engine', common.getRouterArgs(req, 
+                res.render('settings/search-engines/editor', common.getRouterArgs(req, 
                 { 
                     title: 'Search Engine',   
                     model: req.searchEngine,
@@ -85,10 +96,12 @@ class SearchEngineRouter{
                     if(!req.model.SearchEngines)
                         req.model.SearchEngines = [];
                     req.model.SearchEngines.push({
-                        Uid: req.uid,
+                        Uid: new Utils().newGuid(),
                         Name: req.body.Name,
                         Url: req.body.Url,
                         Shortcut: shortcut,
+                        Enabled: true,
+                        IsDefault: false,
                         Icon: icon
                     });
                 }

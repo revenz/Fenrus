@@ -1,11 +1,15 @@
-<%- include('./partials/head.ejs' ) %>
+<%- include('../head.ejs') %>
 
 <link rel="stylesheet" href="/css/settings.min.css?version=<%= version %>" />
 
+<div class="top-row">
+    <span class="title">
+        <span class="icon-fenrus coloured"></span>
+        About
+    </span>
+</div>
+
 <div class="settings-box">
-    <div class="header">
-        <span class="title">About</span>
-    </div>
     <div class="setting">
         <span class="label">Author</span>
         <span class="value padtop">John Andrews</span>
@@ -32,4 +36,4 @@
     </div>
 </div>
 
-<%- include('./partials/footer.ejs') %>
+<%- include('../foot.ejs') %>

@@ -803,17 +803,6 @@ a.btn {
 .main-menu .li-about:hover a, .main-menu .li-about.force-hover a {
   top: 0;
 }
-.main-menu .icon-fenrus {
-  background: url("/favicon.svg");
-  filter: grayscale(1) brightness(12);
-  width: 2rem;
-  height: 2rem;
-  display: inline-block;
-  background-size: contain;
-  background-repeat: no-repeat;
-  position: relative;
-  top: 7px;
-}
 .main-menu .color-picker input {
   height: 2rem;
   border-radius: 0.25rem;
@@ -823,6 +812,22 @@ a.btn {
   width: calc(100% - 0.75rem);
   background-image: unset !important;
   padding-left: 1rem !important;
+}
+.main-menu .icon-fenrus {
+  position: relative;
+  top: 7px;
+}
+
+.icon-fenrus {
+  background: url("/favicon.svg");
+  width: 2rem;
+  height: 2rem;
+  display: inline-block;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.icon-fenrus:not(.coloured) {
+  filter: grayscale(1) brightness(12);
 }
 
 ::-webkit-scrollbar {

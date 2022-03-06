@@ -103,7 +103,7 @@ class GroupsRouter{
                 group.AccentColor = settings.AccentColor || '#ff0090';
             
             let apps = AppHelper.getInstance().getList();
-            res.render('groups/editor', common.getRouterArgs(req, { 
+            res.render('settings/groups/editor', common.getRouterArgs(req, { 
                 title: 'Group',
                 apps: apps,
                 model:group

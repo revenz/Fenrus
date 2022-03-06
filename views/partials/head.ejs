@@ -51,13 +51,9 @@
                 <%- include('panels/settings-panel.ejs') %>
                 <% } %>
             </li>
-            <% if(user.IsAdmin) { %>
-                <li><a title="Users" href="/users"><span class="icon-users"></span></a></li>
-                <li><a title="System" href="/system"><span class="icon-cogs"></span></a></li>
-            <% } %>
         <% } %>
         <li class="li-about">
-            <a title="About" href="<%= isGuest ? '/login' : '/about' %>"><span class="icon-fenrus"></span></a>            
+            <a title="About" href="<%= isGuest ? '/login' : '/settings/about' %>"><span class="icon-fenrus"></span></a>            
             <% if(isHome) {%>
                 <%- include('panels/theme-settings.ejs') %>
             <% } %>

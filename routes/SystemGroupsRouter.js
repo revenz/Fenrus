@@ -106,7 +106,7 @@ class SystemGroupsRouter
             
             group.IsSystem = true;
             let apps = AppHelper.getInstance().getList();
-            res.render('groups/editor', common.getRouterArgs(req, { 
+            res.render('settings/groups/editor', common.getRouterArgs(req, { 
                 title: 'System Group',
                 apps: apps,
                 model:group

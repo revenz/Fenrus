@@ -6,9 +6,6 @@ const System = require('../models/System');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    console.log('test');
-
-    let isAdmin = req.user?.IsAdmin === true;
     let dashboards = [...(req.settings.Dashboards || [])];
 
     dashboards.sort((a,b) => {
@@ -42,7 +39,8 @@ router.get('/:uid', async (req, res) => {
         dashboard = {
             Uid: 'Guest',
             Name: 'Guest',
-            Groups: system.GuestDashboard?.Groups || []
+            Groups: system.GuestDashboard?.Groups || [],
+            Enabled: system.AllowGuest
         };
     }
     else {
@@ -69,7 +67,7 @@ router.get('/:uid', async (req, res) => {
             req.settings.save();
     }
     
-    res.render('dashboards/editor', common.getRouterArgs(req, { 
+    res.render('settings/dashboards/editor', common.getRouterArgs(req, { 
         title: 'Dashboards',
         model: {
             dashboard: dashboard,
@@ -115,6 +113,7 @@ router.post('/:uid', async (req, res) => {
         let system = System.getInstance();
 
         system.GuestDashboard.Groups = req.body.Groups || [];
+        system.AllowGuest = req.body.Enabled;
         await system.save();
         return res.sendStatus(200);
     }

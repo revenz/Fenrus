@@ -447,6 +447,7 @@ a.subpage{
         height: 3.5rem;
         min-height: 3.5rem;
         display: flex !important;
+        flex-direction: row;
         padding: 0 1.5rem;
         align-items: center;    
         input[type=text] {
@@ -484,6 +485,10 @@ a.subpage{
             white-space: nowrap;
             margin-left: 1rem;
             margin-right: -0.5rem;
+        }
+        .allow-register-label {
+            white-space: nowrap;
+            padding-right:1rem;
         }
     }
 
@@ -543,7 +548,7 @@ table {
             }
         }
     }
-    .enabled {
+    .switch {
         width:8rem;
         text-align: center;
         label {            

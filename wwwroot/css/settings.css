@@ -442,6 +442,7 @@ a.subpage span {
   height: 3.5rem;
   min-height: 3.5rem;
   display: flex !important;
+  flex-direction: row;
   padding: 0 1.5rem;
   align-items: center;
 }
@@ -477,6 +478,10 @@ a.subpage span {
   white-space: nowrap;
   margin-left: 1rem;
   margin-right: -0.5rem;
+}
+.settings-content .top-row .allow-register-label {
+  white-space: nowrap;
+  padding-right: 1rem;
 }
 .settings-content .list {
   margin: 2rem;
@@ -530,11 +535,11 @@ table .name a {
 table .name a:hover {
   text-decoration: underline;
 }
-table .enabled {
+table .switch {
   width: 8rem;
   text-align: center;
 }
-table .enabled label {
+table .switch label {
   position: relative;
   top: -2px;
 }

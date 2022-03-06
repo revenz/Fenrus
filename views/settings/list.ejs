@@ -1,4 +1,8 @@
-<%- include('../partials/settings/head.ejs') %>
+<%- include('head.ejs') %>
+
+<% 
+    showIsDefault  = data.baseUrl.indexOf('search-engine') > 0;
+%> 
 
 <input id="view-data" type="hidden" value="<%= JSON.stringify(data) %>" />
 
@@ -48,13 +52,18 @@
             {
                 fetch(`${baseUrl}/${encodeURIComponent(uid)}/status/${(enabled === true)}`, { method: 'POST'});
             },
-
-            edit(uid) {
-
-            },
-            move(uid) {
-
-            },
+            setDefault(uid, checked){
+                // unselect any other defaults
+                for(let tr of document.querySelectorAll('.generic-list tr')){
+                    if(tr.getAttribute('id') === uid)
+                        continue;
+                    let eleIsDefault = tr.querySelector('.is-default');
+                    if(!eleIsDefault)
+                        continue;
+                    eleIsDefault.checked = false;
+                }
+                fetch(`${baseUrl}/${encodeURIComponent(uid)}/default/${checked === true}`, { method: 'POST'});
+            }
             
             // dragSrcEl:null,
             // dragStart(e){                    
@@ -105,4 +114,4 @@
     });
 </script>
 
-<%- include('../partials/settings/foot.ejs') %>
+<%- include('foot.ejs') %>

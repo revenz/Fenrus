@@ -34,7 +34,7 @@
                <span class="title">Groups</span>
             </a>
         </li>
-        <li <%= pageUrl == '/settings/search-engines' ? 'class=active' : '' %>>
+        <li <%= /^\/settings\/search-engines(\/[a-z0-9\-]{36})?$/.test(pageUrl) ? 'class=active' : '' %>>
            <a href="/settings/search-engines">
                 <span class="icon-search"></span>
                <span class="title">Search Engines</span>
@@ -57,19 +57,25 @@
                <span class="title">System Groups</span>
             </a>
         </li>
+        <li <%= /^\/settings\/system\/search-engines(\/[a-z0-9\-]{36})?$/.test(pageUrl) ? 'class=active' : '' %>>
+           <a href="/settings/system/search-engines">
+                <span class="icon-search"></span>
+               <span class="title">System Search Engines</span>
+            </a>
+        </li>
         <li <%= pageUrl == '/settings/users' ? 'class=active' : '' %>>
            <a href="/settings/users">
                 <span class="icon-users"></span>
                <span class="title">Users</span>
             </a>
         </li>
-        <li <%= pageUrl == '/settings/system' ? 'class=active' : '' %>>
-           <a href="/settings/system">
-                <span class="icon-cogs"></span>
-               <span class="title">System</span>
+        <% } %>
+        <li <%= pageUrl == '/settings/about' ? 'class=active' : '' %>>
+           <a href="/settings/about">
+                <span class="icon-fenrus"></span>
+                <span class="title">About</span>
             </a>
         </li>
-        <% } %>
     </ul>
 
     <div class="version-info">

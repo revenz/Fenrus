@@ -5,7 +5,6 @@ const Globals = require('./Globals');
 
 // middleware
 const morgan = require('morgan');
-const adminMiddleware = require('./middleware/AdminMiddleware');
 const themeMiddleware = require('./middleware/ThemeMiddleware');
 const fileBlockerMiddleware = require('./middleware/FileBlockerMiddleware');
 const cookieParser = require('cookie-parser');
@@ -14,10 +13,7 @@ const cookieParser = require('cookie-parser');
 const routerHome = require('./routes/HomeRouter');
 const routerApp = require('./routes/AppRouter');
 const routerSettings = require('./routes/SettingsRouter');
-const routerUsers = require('./routes/UsersRouter');
-const routerSystem = require('./routes/SystemRouter');
 const routerTheme = require('./routes/ThemeRouter');
-const SearchEngineRouter = require('./routes/SearchEngineRouter');
 const Four01Router = require('./routes/Four01Router');
 
 const AppHelper = require('./helpers/appHelper');
@@ -131,15 +127,6 @@ function configureRoutes(app, authStrategy)
 
     app.use('/settings', routerSettings);
     app.use('/theme-settings', routerTheme);
-    app.use('/search-engines', new SearchEngineRouter(false).get());
-
-    // below are admin only routes, so use the Admin middlweare
-    app.use(adminMiddleware);
-
-
-    app.use('/users', routerUsers);
-    app.use('/system', routerSystem);
-    app.use('/system/search-engines', new SearchEngineRouter(true).get());
 
     if(authStrategy.errorHandler)
         app.use(authStrategy.errorHandler);    

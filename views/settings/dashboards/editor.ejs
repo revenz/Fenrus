@@ -1,4 +1,4 @@
-<%- include('../partials/settings/head.ejs') %>
+<%- include('../head.ejs') %>
 
 <input type="hidden" id="DashboardData" value="<%= JSON.stringify(model) %>" />
 
@@ -6,9 +6,24 @@
     <div class="top-row">
         <span class="title">
             <span class="icon-home"></span>
-            <span>Name:&nbsp;</span>
-            <input type="text" x-model="model.name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+            <% if(model.dashboard.Name === 'Guest') { %>
+                Guest Dashboard                
+            <% } else { %>
+                <span>Name:&nbsp;</span>
+                <input type="text" x-model="model.name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+            <% } %>
         </span>
+        <% if(model.dashboard.Name === 'Guest') { %>
+            <span style="padding-right:1rem">Enabled:</span>
+            <span class="enable">                
+                <label for="enabled" class="toggle-switchy">
+                    <input type="checkbox" id="enabled" x-model="model.enabled" />
+                    <span class="toggle">
+                        <span class="switch"></span>
+                    </span>
+                </label>
+            </span>
+        <% } %>
         <span class="buttons">
             <button class="btn" @click="save">Save</button>
         </span>
@@ -21,7 +36,7 @@
                 Add
             </span>
         </div>
-        <%- include('../settings/generic-list.ejs') %>
+        <%- include('../generic-list.ejs') %>
     </div>
 
     <%- include('./group-modal.ejs') %>
@@ -41,6 +56,7 @@
             uid: data.dashboard.Uid,
             name: data.dashboard.Name,
             items: data.dashboard.Groups,
+            enabled: data.dashboard.Enabled,
             baseUrl: '/settings/groups',
             IsAdmin: <%= isAdmin %>
         };
@@ -88,7 +104,8 @@
                     body: JSON.stringify({
                         Uid: this.model.uid,
                         Name: this.model.name,
-                        Groups: this.model.items
+                        Groups: this.model.items,
+                        Enabled: this.model.enabled
                     }),
                     headers: {
                         'Content-Type': 'application/json'
@@ -97,8 +114,9 @@
                 fetch(`/settings/dashboards/${this.model.uid}`, options).then(async (res)=>{
                     if(!res.ok)
                         throw await res.text();
-                        
-                    window.location = '/settings/dashboards';
+                    <% if(model.dashboard.Name !== 'Guest') { %>
+                        window.location = '/settings/dashboards';
+                    <% } %>
                 }).catch(err => {
                     toast(err || 'Failed to save', false);
                 });
@@ -149,4 +167,4 @@
     });
 </script>
 
-<%- include('../partials/settings/foot.ejs') %>
+<%- include('../foot.ejs') %>
