@@ -8,7 +8,7 @@
         <% for(let item of (model?.Items || {})) {
             if (item) { 
                 let type = item._Type === 'Dashboard' ? item._Type : item._Type.substring(9);
-                let partialFile = `${type}.ejs`;
+                let partialFile = `${type.toLowerCase()}.ejs`;
                 let itemModel = { model: item, settings: settings, Utils: Utils};
                 if(item.Enabled === false)
                     continue;
