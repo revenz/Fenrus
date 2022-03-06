@@ -94,10 +94,7 @@ class SettingsInstance {
                                 Name: x.Name,
                                 Enabled: true
                             }})
-                        }];   
-                        console.log('########### save dashboards!', self.Dashboards);                     
-                    }else {
-                        console.log('########### has dashboards!', self.Dashboards);
+                        }];                     
                     }
                     if(save)
                         self.save();

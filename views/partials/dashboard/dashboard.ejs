@@ -1,0 +1,20 @@
+<% 
+    let dashboard = dashboards.find(x => x.Uid === model.Url);
+    if(!dashboard || dashboard.Enabled === false)
+        return;
+
+    let target = settings.LinkTarget ?? '_self';
+
+%>
+
+<a class="db-item db-dasboard db-basic <%= model.Size || 'medium' %>" onclick="fetchDashboard('<%= model.Url%>')" title="<%= model.Name %>">
+    <div class="inner">
+        <div class="icon">
+        <img src="<%= model.Icon || '/favicon.svg' %>" />
+        </div>
+        <div class="content">
+            <div class="title"><%= model.Name %></div>
+        </div>
+        <div class="arrow"></div>
+    </div>
+</a>

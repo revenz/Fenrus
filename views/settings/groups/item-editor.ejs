@@ -12,17 +12,12 @@
                 </div>
                 <div class="content">
                     <div class="setting">
-                        <span class="label">Name</span>
-                        <span class="value">
-                            <input :disabled="isDisabled()" type="text" x-model="model.Name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="saveEditor">
-                        </span>
-                    </div>
-                    <div class="setting">
                         <span class="label">Type</span>
                         <span class="value">
                             <select :disabled="isDisabled()" x-model="model._Type" @change="typeChanged"  @keydown.enter="saveEditor">
                                 <option value="DashboardApp">App</option>
                                 <option value="DashboardLink">Link</option>
+                                <option value="Dashboard">Dashboard</option>
                             </select>
                         </span>
                     </div> 
@@ -46,12 +41,34 @@
                             </span>
                         </div>
                     </template>
-                    <div class="setting">
-                        <span class="label">URL</span>
-                        <span class="value">
-                            <input :disabled="isDisabled()" type="text" x-model="model.Url" data-rules='["required", "regexMatch:^((http(s)?)|(HTTP(S)?))://."]' @blur="blur" @input="input"  @keydown.enter="saveEditor" />
-                        </span>
-                    </div> 
+                    <template x-if="model._Type === 'Dashboard'">
+                        <div class="setting">
+                            <span class="label">Dashboard</span>
+                            <span class="value">                                
+                                <select :disabled="isDisabled()" x-model="model.Url" @keydown.enter="saveEditor">
+                                    <% for(let dashboard of dashboards) { %>
+                                        <option value="<%= dashboard.Uid %>"><%= dashboard.Name %></option>
+                                    <% } %>
+                                </select>
+                            </span>
+                        </div>
+                    </template>
+                    <template x-if="model._Type != 'Dashboard'">
+                        <div class="setting">
+                            <span class="label">Name</span>
+                            <span class="value">
+                                <input :disabled="isDisabled()" type="text" x-model="model.Name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="saveEditor">
+                            </span>
+                        </div>
+                    </template>
+                    <template x-if="model._Type != 'Dashboard'">
+                        <div class="setting">
+                            <span class="label">URL</span>
+                            <span class="value">
+                                <input :disabled="isDisabled()" type="text" x-model="model.Url" data-rules='["required", "regexMatch:^((http(s)?)|(HTTP(S)?))://."]' @blur="blur" @input="input"  @keydown.enter="saveEditor" />
+                            </span>
+                        </div> 
+                    </template>
                     <div class="setting">
                         <span class="label">Size</span>
                         <span class="value">

@@ -1,9 +1,15 @@
-﻿const abortController = new AbortController();
-const signal = abortController.signal;
+﻿var abortController = new AbortController();
+var signal = abortController.signal;
 Scripts = [];
+
+LiveAppsTimers = [];
 
 function abortRequests() {
     abortController.abort();
+    for(let app of LiveAppsTimers){
+        clearInterval(app);
+    }
+    LiveAppsTimers = [];
 }
 
 function getFromLocalStorage(instaceUid){
@@ -44,20 +50,52 @@ function setInLocalStorage(instanceUid, html)
     }));
 }
 
-function LiveApp(name, instanceUid, interval, subsequent) {
+function getDashboardInstanceUid()
+{
+    return document.getElementById('dashboard-instance')?.value;
+}
+
+function LiveApp(name, instanceUid, interval) 
+{    
+    let dashboardInstanceUid = getDashboardInstanceUid();
+    let args =  {
+        name: name,
+        instanceUid: instanceUid,
+        interval: interval,
+        dashboardInstanceUid: dashboardInstanceUid
+    };
+    LiveAppActual(args);
+}
+
+
+function LiveAppActual(args, subsequent)
+{
+    let name = args.name;
+    let instanceUid = args.instanceUid;
+    let interval = args.interval;
+    let dashboardInstanceUid = args.dashboardInstanceUid
     if (!interval) interval = 3000;
+
 
     if(!subsequent){
         let saved = getFromLocalStorage(instanceUid);
         if(saved) {            
-            setStatus(name, instanceUid, interval, saved.html, !!subsequent);
+            appSetStatus(args, saved.html, !!subsequent);
             if(saved.old === false)
                 return; // dont need to refresh
         }
     }
 
     var newTimeout = () => {
-        setTimeout(() => LiveApp(name, instanceUid, interval, true), interval + Math.random() + 5);
+        let timer = setTimeout(() => {
+            let currentDashboard = getDashboardInstanceUid();
+            if(currentDashboard != dashboardInstanceUid)
+                return; // if they changed dashboards
+
+            LiveAppActual(args, true);
+            LiveAppsTimers = LiveAppsTimers.filter(x => x != timer);
+        }, interval + Math.random() + 5);
+        LiveAppsTimers.push(timer);
     }
 
     if(subsequent && document.hasFocus() === false){
@@ -69,6 +107,10 @@ function LiveApp(name, instanceUid, interval, subsequent) {
         signal: signal
     })
     .then(res => {
+        let currentDashboard = getDashboardInstanceUid();
+        if(currentDashboard != dashboardInstanceUid)
+            return; // if they changed dashboards
+
         if(!res.ok)
             throw res;
         if(res.status === 302){
@@ -80,14 +122,19 @@ function LiveApp(name, instanceUid, interval, subsequent) {
     .then(html => {
         if(html == undefined)
             return;
-        setStatus(name, instanceUid, interval, html, !!subsequent);
+        appSetStatus(args, html, !!subsequent);
     }).catch(error => {
-        console.log(name + ' error: ' + error);        
+        let currentDashboard = getDashboardInstanceUid();
+        if(currentDashboard != dashboardInstanceUid)
+            return; // if they changed dashboards
+        console.log(name + ' error: ', error);        
         newTimeout();
     });
 }
 
-function setStatus(name, instanceUid, interval, content, subsequent){
+function appSetStatus(args, content, subsequent){
+    let instanceUid = args.instanceUid;
+    let interval = args.interval;
     let eleItem = document.getElementById(instanceUid);
     let ele = eleItem.querySelector('.status');
     if (ele && content) {
@@ -115,7 +162,7 @@ function setStatus(name, instanceUid, interval, content, subsequent){
         ele.innerHTML = content;
     }
     if((subsequent && interval === -1) === false)
-        setTimeout(() => LiveApp(name, instanceUid, interval, true), interval + Math.random() + 5);
+        setTimeout(() => LiveApp(args, true), interval + Math.random() + 5);
 }
 
 function setItemClass(item, className) {
@@ -211,4 +258,34 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+function fetchDashboard(uid) {
+    fetch('/dashboard/' + uid).then(res => {
+        if(!res.ok)
+            return;
+        this.abortRequests();
+        return res.text();        
+    }).then(html => {
+        html = html.replace(/x-text=\"[^"]+\"/g, '');
+
+        abortController = new AbortController();
+        signal = abortController.signal;
+        let eleDashboard = document.querySelector('.dashboard');
+        eleDashboard.innerHTML = html;
+        if(typeof(themeInstance) !== 'undefined')
+            themeInstance.init();
+
+        let rgx = /LiveApp\('([^']+)', '([^']+)', ([\d]+)\);/g;
+        let count = 0;
+        while (match = rgx.exec(html)){
+          let name = match[1];
+          let uid = match[2];
+          let interval = parseInt(match[3], 10);
+          LiveApp(name, uid, interval);
+
+          if(++count > 100) // avoid infinite while loop, shouldnt happen, but safety first
+            break;
+        }
+    });
 }
