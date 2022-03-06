@@ -10,7 +10,7 @@ const fileBlockerMiddleware = require('./middleware/FileBlockerMiddleware');
 const cookieParser = require('cookie-parser');
 
 // routers
-const routerHome = require('./routes/HomeRouter');
+const HomeRouter = require('./routes/HomeRouter');
 const routerApp = require('./routes/AppRouter');
 const routerSettings = require('./routes/SettingsRouter');
 const routerTheme = require('./routes/ThemeRouter');
@@ -121,7 +121,7 @@ function configureRoutes(app, authStrategy)
 
     app.use(themeMiddleware);
 
-    app.use('/', routerHome);
+    app.use('/', new HomeRouter().get());
 
     app.use('/apps', routerApp);
 

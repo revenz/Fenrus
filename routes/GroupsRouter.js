@@ -102,11 +102,24 @@ class GroupsRouter{
 
             if(!group.AccentColor)
                 group.AccentColor = settings.AccentColor || '#ff0090';
+
+            let dashboards = (settings.Dashboards || []).filter(x => x.Enabled !== false).map(x => {
+                return {
+                    Uid: x.Uid,
+                    Name: x.Name
+                }
+            });
+            dashboards.sort((a,b) => {
+                a.Name.localeCompare(b.Name);
+            })
+
+            console.log('dashboards', dashboards);
             
             let apps = AppHelper.getInstance().getList();
             res.render('settings/groups/editor', common.getRouterArgs(req, { 
                 title: 'Group',
                 apps: apps,
+                dashboards: dashboards,
                 model:group
             }));  
         });

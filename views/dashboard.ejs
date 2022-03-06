@@ -1,0 +1,28 @@
+<input type="hidden" id="dashboard-instance" value="<%= dashboardInstanceUid %>" />
+
+<% if(dashboard.Groups?.length) {
+        
+    for(let item of dashboard.Groups)
+    {
+        if (item && item.Enabled !== false){ 
+            let type = item._Type === 'Dashboard' ? item._Type : item._Type.substring(9);
+            
+            let partialFile = '';
+            let itemModel = { model: item, settings: settings, Utils: Utils};
+            if(theme && theme.Templates[type]){
+                partialFile = `${theme.Directory}/${theme.Templates[type]}`;
+                itemModel.partialDir = '../../../views/partials/dashboard'; // so theme templates can just refer to partialDir for the dir
+            }
+            else
+                partialFile = `./partials/dashboard/${type.toLowerCase()}.ejs`;
+            %>
+            <%- include(partialFile, itemModel ) %>
+            <%
+        }
+    }
+
+} else { %>
+    <div class="no-dashboard">
+        No items configured
+    </div>
+<% } %>

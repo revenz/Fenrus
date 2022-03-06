@@ -44,7 +44,7 @@
                 <td class="enabled switch">      
                     <template x-if="item.Uid !== 'Guest'">
                         <label :for="item.Uid + '-enabled'" class="toggle-switchy">
-                            <input type="checkbox" :id="item.Uid + '-enabled'" x-model="item.Enabled" @change="setStatus(item.Uid, event.target.checked)" />
+                            <input type="checkbox" :id="item.Uid + '-enabled'" x-model="item.Enabled" @change="if(typeof(setStatus) !== 'undefined')setStatus(item.Uid, event.target.checked)" />
                             <span class="toggle">
                                 <span class="switch"></span>
                             </span>

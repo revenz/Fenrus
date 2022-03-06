@@ -8,33 +8,7 @@
 
 
 <div class="dashboard <%= themeVariables?.ClassName %> <%= settings.ShowGroupTitles === false ? 'hide-group-titles' : '' %>">    
-    <% if(dashboard.Groups?.length) {
-        
-        for(let item of dashboard.Groups)
-        {
-            if (item && item.Enabled !== false){ 
-                console.log('item: ',item);
-                let type = item._Type.substring(9)
-                let partialFile = '';
-                let itemModel = { model: item, settings: settings, Utils: Utils};
-                if(theme && theme.Templates[type]){
-                    partialFile = `${theme.Directory}/${theme.Templates[type]}`;
-                    itemModel.partialDir = '../../../views/partials/dashboard'; // so theme templates can just refer to partialDir for the dir
-                }
-                else
-                    partialFile = `./partials/dashboard/${type.toLowerCase()}.ejs`;
-                console.log('partial file: ',partialFile);
-                %>
-                <%- include(partialFile, itemModel ) %>
-                <%
-            }
-        }
-
-    } else { %>
-        <div class="no-dashboard">
-            No items configured
-        </div>
-    <% } %>
+    <%- include('dashboard.ejs') %>
 </div>
 
 <%- include('./partials/footer.ejs') %>
