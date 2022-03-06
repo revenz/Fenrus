@@ -12,14 +12,14 @@
                 </template>
                 <template x-if="hasSystemGroups">
                     <template x-for="grp of modalGroups.filter(x => x.IsSystem)">
-                        <option :value="grp.Uid" :selected="grp.Uid === modalGroup" x-text="'SYSTEM:' + grp.Name"></option>
+                        <option :value="grp.Uid" :selected="grp.Uid === modalGroup" x-text="grp.Name"></option>
                     </template>
                 </template>
                 <template x-if="hasSystemGroups && hasNonSystemGroups">
                     <optgroup label="User"></optgroup>
                 </template>
                 <template x-for="grp of modalGroups.filter(x => !x.IsSystem)">
-                    <option :value="grp.Uid" :selected="grp.Uid === modalGroup" x-text="'USER:' + grp.Name"></option>
+                    <option :value="grp.Uid" :selected="grp.Uid === modalGroup" x-text="grp.Name"></option>
                 </template>
             </select>
         </div>
