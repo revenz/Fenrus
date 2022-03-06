@@ -1,5 +1,5 @@
 ﻿{
-  "Name": "Minecraft (External)",
+  "Name": "Minecraft",
   "Interval":180,
   "Icon": "Icon.png",
   "TestFunction": true,
