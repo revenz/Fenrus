@@ -21,6 +21,7 @@ router.get('/', async (req, res) => {
         data: {
             typeName: 'Dashboard',
             title: 'Dashboards',
+            description: 'This page lets you create Dashboards.  Having more than one dashboard will let you switch between them on the home screen.\n\nTo add items to your Dashboard, first create a Group containing the items you wish to add.  Then you can add that new Group to a Dashboard.',
             icon: 'icon-home',
             baseUrl: '/settings/dashboards',
             items: dashboards
@@ -33,9 +34,11 @@ router.get('/:uid', async (req, res) => {
     let isNew = uid === 'new';
     let dashboard;
     let system = System.getInstance();
+    let description;
     if(uid === 'Guest'){
         if(req.user?.IsAdmin !== true)
             return res.sendStatus(401);
+        description = 'This page lets you configure the Guest dashboard, the dashboard that will be shown to users if they have not signed in.\n\nYou can disable this dashboard if you wish for users to login before using Fenrus.';
         dashboard = {
             Uid: 'Guest',
             Name: 'Guest',
@@ -69,6 +72,7 @@ router.get('/:uid', async (req, res) => {
     
     res.render('settings/dashboards/editor', common.getRouterArgs(req, { 
         title: 'Dashboards',
+        description: description,
         model: {
             dashboard: dashboard,
             groups: groups

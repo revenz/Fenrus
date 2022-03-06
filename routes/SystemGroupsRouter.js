@@ -44,6 +44,7 @@ class SystemGroupsRouter
             args.data = {
                 typeName: 'System Group',
                 title: 'System Groups',
+                description: 'This page lets you configure groups that will be available to all users and will be available to use on the Guest dashboard.\n\nIf you disable a group here that group will become unavailable to all users using it.',
                 icon: 'icon-puzzle-piece',
                 baseUrl: '/settings/system/groups',
                 items: groups,

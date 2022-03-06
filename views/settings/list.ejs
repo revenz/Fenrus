@@ -13,6 +13,10 @@
     </span>
 </div>
 
+<% if( data.description) { %>
+    <div class="page-description"><%= data.description %></div>
+<% } %>
+
 <div class="list" x-data="List">
     <div class="list-toolbar">
         <a @click="addGroup" href="<%= data.baseUrl %>/new">

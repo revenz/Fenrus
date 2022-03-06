@@ -45,6 +45,7 @@ class GroupsRouter{
             args.data = {
                 typeName: 'Group',
                 title: 'Groups',
+                description: 'This page lets you create groups which can be used on Dashboards.\n\nA group will not appear by itself, it must be added to a dashboard.',
                 icon: 'icon-puzzle-piece',
                 baseUrl: '/settings/groups',
                 items: groups

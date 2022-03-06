@@ -438,6 +438,11 @@ a.subpage span {
   flex-direction: column;
   height: 100vh;
 }
+.settings-content .page-description {
+  height: unset;
+  margin: 1rem 3rem;
+  white-space: pre-wrap;
+}
 .settings-content .top-row {
   height: 3.5rem;
   min-height: 3.5rem;

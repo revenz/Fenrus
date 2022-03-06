@@ -443,6 +443,11 @@ a.subpage{
         flex-direction: column;
         height: 100vh;
     }
+    .page-description {
+        height:unset;
+        margin:1rem 3rem;
+        white-space: pre-wrap;
+    }
     .top-row {        
         height: 3.5rem;
         min-height: 3.5rem;

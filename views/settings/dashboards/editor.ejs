@@ -30,6 +30,10 @@
         </span>
     </div>
 
+    <% if(description) { %>
+        <div class="page-description"><%= description %></div>
+    <% } %>
+    
     <div class="list">
         <div class="list-toolbar">
             <span @click="addGroup">

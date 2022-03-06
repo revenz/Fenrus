@@ -43,6 +43,9 @@ class SearchEngineRouter{
                 data: {
                     typeName: (this.isSystem ? 'System ' : '') + 'Search Engine',
                     title: (this.isSystem ? 'System ' : '') + 'Search Engines',
+                    description: this.isSystem  ? 
+                        'This page lets you configure system wide search engines that will be available to all users and guests on the system.' : 
+                        'This page lets you configure search engines that can be used on the home screen.\n\nIf you do not configure any and have no system search engines configured, the search box will not appear on the home screen.\n\nTo switch to an non-default search engine on the home screen type in the search engine Shortcut followed by a space.',
                     icon: 'icon-search',
                     baseUrl: '/settings/' + (this.isSystem ? 'system/' : '') + 'search-engines',
                     items: data
