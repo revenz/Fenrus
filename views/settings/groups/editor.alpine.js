@@ -61,6 +61,18 @@ Alpine.data('Settings', () => ({
             setTimeout(() => themeInstance.initPreview(), 1);
         }
     },
+    move(item, up) {
+        let index = this.model.Items.indexOf(item);
+        if(up && index < 1)
+            return;
+        if(!up && index >= this.model.Items.length - 1)
+            return;
+        let dest = index + (up ? -1 : 1);
+        let temp = this.model.Items[index];
+        this.model.Items[index] = this.model.Items[dest];
+        this.model.Items[dest] = temp;
+        this.updatePreview();
+    },
 
     // item editor stuff
     focusItem(){

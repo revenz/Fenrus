@@ -80,10 +80,16 @@
                             </div>
                             <div class="arrow"></div>
                             <div class="actions">
-                                <span class="edit" @click="editItem(item)">
+                                <span title="Move Up" class="edit" @click="move(item, true)">
+                                    <span class="icon-arrow-up"></span>
+                                </span>
+                                <span title="Move Down" class="edit" @click="move(item, false)">
+                                    <span class="icon-arrow-up"></span>
+                                </span>
+                                <span title="Edit" class="edit" @click="editItem(item)">
                                     <span class="icon-edit"></span>
                                 </span>
-                                <span class="delete" @click="remove(item)">
+                                <span title="Delete" class="delete" @click="remove(item)">
                                     <span class="icon-trash"></span>
                                 </span>
                             </div>

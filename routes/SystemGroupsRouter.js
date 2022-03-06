@@ -62,7 +62,7 @@ class SystemGroupsRouter
                 return req.sendStatus(200); // silent fail
         
             group.Enabled = enabled;
-            await settings.save();
+            await system.save();
             res.sendStatus(200);
         });
         
@@ -153,7 +153,7 @@ class SystemGroupsRouter
                     system.GuestDashboard = { Uid: 'Guest', Name: 'Name', Groups: []};
                 if(!system.GuestDashboard.Groups)
                     system.GuestDashboard.Groups = [];
-                    
+
                 system.GuestDashboard.Groups.push({
                     Uid: group.Uid,
                     Name: group.Name,
