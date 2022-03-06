@@ -16,9 +16,9 @@ class Common
             }
         }
         let themeSettings = {};
-        if(req.settings.ThemeSettings && req.settings.ThemeSettings[req.theme.Name])
+        if(req.settings?.ThemeSettings && req.settings.ThemeSettings[req.theme.Name])
             themeSettings = req.settings.ThemeSettings[req.theme.Name];
-        else if(req.theme.Settings?.length){
+        else if(req.theme?.Settings?.length){
             // need to get default settings
             console.log(';theme.Settings', req.theme.Settings);
             for(let setting of req.theme.Settings){

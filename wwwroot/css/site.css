@@ -757,9 +757,9 @@ CORE STYLES ABOVE - NO TOUCHY
   border-radius: unset !important;
   font-size: 0.85rem !important;
   text-transform: uppercase;
-  border: solid 1px var(--accent);
+  border: solid 1px var(--accent, #ff0090);
   background-color: transparent;
-  color: var(--color);
+  color: var(--color, white);
   width: 8rem;
   cursor: pointer;
 }
