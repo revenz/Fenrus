@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const Globals = require('./Globals');
+const http = require('http');
 const https = require("https");
 
 // middleware
