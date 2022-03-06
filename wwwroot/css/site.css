@@ -1098,6 +1098,10 @@ option {
   background-position: center;
 }
 
+.db-item.db-dashboard {
+  cursor: pointer;
+}
+
 .hide-group-titles .db-group > .title {
   display: none;
 }
@@ -1166,4 +1170,12 @@ option {
   object-fit: scale-down;
   width: 100%;
   height: 100%;
+}
+
+#dashboard-name {
+  position: fixed;
+  top: 1rem;
+  left: 2rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
 }

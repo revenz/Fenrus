@@ -41,28 +41,41 @@ class HomeRouter {
 
     async home(req, res) 
     {        
+        let dashboardInstance = this.getDefaultDashboard(req, res);
+        return this.renderDashboard(req, res, dashboardInstance, false);
+    }
+
+    getDefaultDashboard(req, res){
         let settings = req.settings;
         let dashboardUid = req.isGuest ? 'Guest' : req.cookies?.dashboard || 'Default';
         let dashboardInstance = settings.Dashboards?.find(x => x.Uid === dashboardUid && x.Enabled !== false);
         if(!dashboardInstance)
             dashboardInstance = settings.Dashboards.find(x => x.Enabled !== false) || req.settings.Dashboards[0];
-
-        return this.renderDashboard(req, res, dashboardInstance, false);
+        return dashboardInstance;
     }
 
     async dashboard(req, res){
         let dashboardUid = req.params.uid;
-        let settings = req.settings;
-        let dashboardInstance = settings.Dashboards?.find(x => x.Uid === dashboardUid && x.Enabled !== false);
-        if(!dashboardInstance)
-            return res.redirect('/');
-        return this.renderDashboard(req, res, dashboardInstance, true);
+        let dashboardInstance;
+        let inline = req.query.inline === 'true';
+        if(dashboardUid === 'Default')
+        {
+            dashboardInstance = this.getDefaultDashboard(req, res);
+        }
+        else
+        {
+            let settings = req.settings;
+            dashboardInstance = settings.Dashboards?.find(x => x.Uid === dashboardUid && x.Enabled !== false);
+            if(!dashboardInstance)
+                return res.sendStatus(404);
+        }
+        return this.renderDashboard(req, res, dashboardInstance, inline);
     }
 
     async renderDashboard(req, res, dashboardInstance, inline)
     {
         let settings = req.settings;
-        let dashboard = { Groups: []};
+        let dashboard = { Groups: [], Name: dashboardInstance?.Name };
         for(let grp of dashboardInstance?.Groups || []){
             if(grp.Enabled === false)
                 continue;
@@ -91,7 +104,7 @@ class HomeRouter {
         
         res.render(inline ? 'dashboard' : 'home', common.getRouterArgs(req, { 
             title: '', 
-            dashboardInstanceUid: new Utils().newGuid(),
+            dashboardInstanceUid: new Utils().newGuid(),            
             dashboard: dashboard,
             themes:this.themes,
             dashboards: dashboards,

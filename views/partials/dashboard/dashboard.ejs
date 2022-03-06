@@ -7,13 +7,13 @@
 
 %>
 
-<a class="db-item db-dasboard db-basic <%= model.Size || 'medium' %>" onclick="fetchDashboard('<%= model.Url%>')" title="<%= model.Name %>">
+<a class="db-item db-dashboard db-basic <%= model.Size || 'medium' %>" onclick="fetchDashboard('<%= model.Url %>')" title="<%= model.Name %>">
     <div class="inner">
         <div class="icon">
         <img src="<%= model.Icon || '/favicon.svg' %>" />
         </div>
         <div class="content">
-            <div class="title"><%= model.Name %></div>
+            <div class="title">Dashboard: <%= dashboard.Name %></div>
         </div>
         <div class="arrow"></div>
     </div>

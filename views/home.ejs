@@ -6,6 +6,7 @@
 <%- include(themeHead) %>
 <% } %>
 
+<div id="dashboard-name"><%= dashboard.Name === 'Default' ? '' : dashboard.Name %></div>
 
 <div class="dashboard <%= themeVariables?.ClassName %> <%= settings.ShowGroupTitles === false ? 'hide-group-titles' : '' %>">    
     <%- include('dashboard.ejs') %>

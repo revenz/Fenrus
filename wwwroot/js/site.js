@@ -4,6 +4,13 @@ Scripts = [];
 
 LiveAppsTimers = [];
 
+window.onpopstate = function(event) {
+    console.log('document.location', document.location, event);
+    let path = document.location.pathname;
+    path = path.substring(path.lastIndexOf('/') + 1);
+    fetchDashboard(path, true);
+}
+
 function abortRequests() {
     abortController.abort();
     for(let app of LiveAppsTimers){
@@ -260,14 +267,17 @@ function getCookie(cname) {
     return "";
 }
 
-function fetchDashboard(uid) {
-    fetch('/dashboard/' + uid).then(res => {
+function fetchDashboard(uid,  backwards) {
+    let fetchUrl = '/dashboard/' + (uid || 'Default') + '?inline=true';
+    fetch(fetchUrl).then(res => {
         if(!res.ok)
             return;
         this.abortRequests();
         return res.text();        
     }).then(html => {
         html = html.replace(/x-text=\"[^"]+\"/g, '');
+        if(!backwards)
+            history.pushState({uid:uid}, 'Fenrus', '/dashboard/' + uid);
 
         abortController = new AbortController();
         signal = abortController.signal;
@@ -275,6 +285,9 @@ function fetchDashboard(uid) {
         eleDashboard.innerHTML = html;
         if(typeof(themeInstance) !== 'undefined')
             themeInstance.init();
+
+        let name = document.getElementById('hdn-dashboard-name').value;
+        document.getElementById('dashboard-name').innerText = name === 'Default' ? '' : name;
 
         let rgx = /LiveApp\('([^']+)', '([^']+)', ([\d]+)\);/g;
         let count = 0;
