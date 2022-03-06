@@ -286,6 +286,9 @@ function fetchDashboard(uid,  backwards) {
         if(typeof(themeInstance) !== 'undefined')
             themeInstance.init();
 
+        let dashboardBackground = document.getElementById('hdn-dashboard-background')?.value || null;
+        document.body.style.backgroundImage = dashboardBackground ? `url('${dashboardBackground}')` : null;
+
         let name = document.getElementById('hdn-dashboard-name').value;
         document.getElementById('dashboard-name').innerText = name === 'Default' ? '' : name;
 

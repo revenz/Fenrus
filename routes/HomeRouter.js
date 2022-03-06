@@ -75,7 +75,7 @@ class HomeRouter {
     async renderDashboard(req, res, dashboardInstance, inline)
     {
         let settings = req.settings;
-        let dashboard = { Groups: [], Name: dashboardInstance?.Name };
+        let dashboard = { Groups: [], Name: dashboardInstance?.Name, BackgroundImage: dashboardInstance.BackgroundImage };
         for(let grp of dashboardInstance?.Groups || []){
             if(grp.Enabled === false)
                 continue;

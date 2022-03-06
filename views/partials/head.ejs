@@ -26,7 +26,13 @@
         }
     </style>
 
-    <% if(settings?.BackgroundImage) { %>
+    <% if(typeof(dashboard) !== 'undefined' && dashboard.BackgroundImage) { %>
+        <style>
+            body{        
+                background: url('<%= dashboard.BackgroundImage %>');
+            }
+        </style>
+    <% } else if(settings?.BackgroundImage) { %>
         <style>
             body{        
                 background: url('<%= settings.BackgroundImage %>');

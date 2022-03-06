@@ -1,5 +1,6 @@
 <%- include('../head.ejs') %>
 
+<% isGuest = model.dashboard.Name === 'Guest'; %>
 
 <input type="hidden" id="DashboardData" value="<%= JSON.stringify(model) %>" />
 
@@ -7,32 +8,73 @@
     <div class="top-row">
         <span class="title">
             <span class="icon-home"></span>
-            <% if(model.dashboard.Name === 'Guest') { %>
+            <% if(isGuest) { %>
                 Guest Dashboard                
             <% } else { %>
-                <span>Name:&nbsp;</span>
-                <input type="text" x-model="model.name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+                Dashboard
             <% } %>
         </span>
-        <% if(model.dashboard.Name === 'Guest') { %>
-            <span style="padding-right:1rem">Enabled:</span>
-            <span class="enable">                
-                <label for="enabled" class="toggle-switchy">
-                    <input type="checkbox" id="enabled" x-model="model.enabled" />
-                    <span class="toggle">
-                        <span class="switch"></span>
-                    </span>
-                </label>
-            </span>
-        <% } %>
         <span class="buttons">
             <button class="btn" @click="save">Save</button>
+            <% if(!isGuest) { %>
+                <button class="btn" @click="cancel">Cancel</button>
+            <% } %>
         </span>
     </div>
 
     <% if(description) { %>
         <div class="page-description"><%= description %></div>
     <% } %>
+     
+        <div class="options settings-box">
+            <% if(isGuest == false) { %>   
+                <div class="setting">
+                    <span class="label">Name</span>
+                    <span class="value">
+                        <input type="text" x-model="model.name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save"/>
+                        <span class="help-text">The Name of the dashboard</span>
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">Accent</span>
+                    <span class="value color-picker">
+                        <input type="text" x-model="model.accentColor" data-jscolor="{preset:'dark'}" @blur="blur" @input="input" @keydown.enter="save" />
+                        <span class="help-text">The accent colour of the dashboard</span>
+                    </span>
+                </div>
+            <% } else { %>
+                <div class="setting">
+                    <span class="label">Enabled</span>
+                    <span class="value">              
+                        <label for="enabled" class="toggle-switchy">
+                            <input type="checkbox" id="enabled" x-model="model.enabled" />
+                            <span class="toggle">
+                                <span class="switch"></span>
+                            </span>
+                        </label>
+                    </span>
+                </div>
+            <% } %>
+            <div class="setting">
+                <span class="label">Background</span>
+                <span class="value">
+                    <div class="background-picker">
+                        <template x-if="model.backgroundImage">
+                            <img :src="model.backgroundImage" class="image-preview">
+                        </template>
+    
+                        <div class="buttons">
+                            <button class="btn" id="file-chooser-btn" onclick="document.getElementById('file-chooser').click()">
+                                Browse...
+                            </button>
+                            <button class="btn" @click="resetBackground">Reset</button>
+                        </div>
+                        <input style="display:none" id="file-chooser" class="file-chooser" type="file" accept="image/*" @change="imageChosen">
+    
+                    </div>
+                </span>
+            </div>
+        </div>
     
     <div class="list">
         <div class="list-toolbar">
@@ -65,6 +107,8 @@
             name: data.dashboard.Name,
             items: data.dashboard.Groups,
             enabled: data.dashboard.Enabled,
+            accentColor: data.dashboard.AccentColor,
+            backgroundImage: data.dashboard.BackgroundImage,
             baseUrl: '/settings/groups',
             IsAdmin: <%= isAdmin %>
         };
@@ -85,7 +129,9 @@
                         Uid: this.model.uid,
                         Name: this.model.name,
                         Groups: this.model.items,
-                        Enabled: this.model.enabled
+                        Enabled: this.model.enabled,
+                        AccentColor: this.model.accentColor,
+                        BackgroundImage: this.model.backgroundImage
                     }),
                     headers: {
                         'Content-Type': 'application/json'
@@ -103,6 +149,10 @@
                 });
                 return true;
             }, 
+
+            cancel() {
+                this.cancelGoto('/settings/dashboards');
+            },
 
             remove(item) {
                 console.log('removing', JSON.parse(JSON.stringify(item)));
@@ -154,7 +204,29 @@
             },
             modalCancel() {
                 this.addingGroup = false;
-            }
+            },
+
+
+            
+            resetBackground() {
+                this.model.backgroundImage = '';
+            },
+            imageChosen(event){
+                this.fileToDataUrl(event, src => 
+                {
+                    this.model.backgroundImage = src;
+                    this.validate();
+                })
+            },                
+            fileToDataUrl(event, callback) {
+                if (! event.target.files.length) return;
+
+                let file = event.target.files[0];
+                let reader = new FileReader();
+
+                reader.readAsDataURL(file);
+                reader.onload = e => callback(e.target.result);
+            },
         }))
     });
 </script>

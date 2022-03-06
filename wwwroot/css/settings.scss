@@ -269,8 +269,8 @@ select {
 .background-picker 
 {
     .image-preview {
-        width:min(300px, 50vw, 50vh);
-        height:auto;
+        width:auto;
+        height:150px;
         margin-bottom:1rem;
     }
     .buttons {

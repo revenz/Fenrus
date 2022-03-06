@@ -2,6 +2,7 @@ const express = require('express');
 const Utils = require('../helpers/utils');
 const common = require('./Common');
 const System = require('../models/System');
+const ImageHelper = require('../helpers/ImageHelper');
 
 const router = express.Router();
 
@@ -42,6 +43,7 @@ router.get('/:uid', async (req, res) => {
         dashboard = {
             Uid: 'Guest',
             Name: 'Guest',
+            BackgroundImage: system.GuestDashboard?.BackgroundImage,
             Groups: system.GuestDashboard?.Groups || [],
             Enabled: system.AllowGuest
         };
@@ -69,6 +71,9 @@ router.get('/:uid', async (req, res) => {
         if(uid !== 'Guest')
             req.settings.save();
     }
+
+    if(!dashboard.AccentColor)
+        dashboard.AccentColor = req.settings.AccentColor;
     
     res.render('settings/dashboards/editor', common.getRouterArgs(req, { 
         title: 'Dashboards',
@@ -111,11 +116,15 @@ router.post('/:uid', async (req, res) => {
 
     let name = req.body.Name.trim();
     let uid = req.params.uid;
+    
+
     if(uid === 'Guest'){
         if(req.user?.IsAdmin !== true)
             return res.sendStatus(401);
         let system = System.getInstance();
 
+        let guestBackground = await new ImageHelper().saveImageIfBase64(req.body.BackgroundImage, 'backgrounds');
+        system.GuestDashboard.BackgroundImage = guestBackground;
         system.GuestDashboard.Groups = req.body.Groups || [];
         system.AllowGuest = req.body.Enabled;
         await system.save();
@@ -128,32 +137,37 @@ router.post('/:uid', async (req, res) => {
     if(dupName)
         return res.status(400).send('Duplicate name');
 
-
     // get existing 
-    let existing = settings.Dashboards.find(x => x.Uid === uid)
+    let dashboard = settings.Dashboards.find(x => x.Uid === uid)
 
-    if(!existing) {
+    if(!dashboard) {
         if(name === 'Guest' || name === 'Default')
             return res.status(400).send(`The name '${name}' is a reserved name.`);
-        let dashboard = {
+        dashboard = {
             Uid: new Utils().newGuid(),
-            Name: name,
             Enabled: true,
-            Groups: req.body.Groups || []
+            Name: name
         };
         settings.Dashboards.push(dashboard);
     }
     else
     {
-        if(existing.Name !== 'Guest' && existing.Name !== 'Default')
+        if(dashboard.Name !== 'Guest' && dashboard.Name !== 'Default')
         {
             if(name === 'Guest' || name === 'Default')
                 return res.status(400).send(`The name '${name}' is a reserved name.`);
 
-            existing.Name = name;
         }
-        existing.Groups = req.body.Groups || [];
     }
+    dashboard.Name = name;
+    dashboard.Groups = req.body.Groups || [];
+    dashboard.BackgroundImage = await new ImageHelper().saveImageIfBase64(req.body.BackgroundImage, 'backgrounds');
+
+    if(req.body.AccentColor?.toLowerCase() === req.settings.AccentColor.toLowerCase())
+        dashboard.AccentColor = '';
+    else
+        dashboard.AccentColor = req.body.AccentColor;
+        
     await settings.save();
     return res.sendStatus(200);
 });
