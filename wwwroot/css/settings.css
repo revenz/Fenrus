@@ -544,7 +544,7 @@ table .switch label {
   top: -2px;
 }
 table .controls {
-  width: 8rem;
+  width: 10rem;
   text-align: right;
 }
 table .controls [class^=icon-] {

@@ -51,23 +51,25 @@ class SystemInstance
             }  
             let guestFile = './data/configs/guest.json';
             if(fs.existsSync(guestFile) == true) {   
-                let json = fs.readFileSync(guestFile, { encoding: 'utf-8'});
-                if(json.charCodeAt(0) === 65279)
-                    json = json.substring(1);
-                let obj = JSON.parse(json);  
-                this.SystemGroups = obj.Groups || [];
-                this.GuestDashboard = {
-                    Uid: 'Guest',
-                    Name: 'Guest',
-                    Groups: obj.Groups.map(x => {
-                        return {
-                            Uid: x.Uid,
-                            Name: x.Name,
-                            Enabled: true
-                        }
-                    })
-                }
-                await this.save();       
+                let json = fs.readFileSync(guestFile, { encoding: 'utf-8'});                
+                if(json.trim() !== ''){
+                    if(json.charCodeAt(0) === 65279)
+                        json = json.substring(1);
+                    let obj = JSON.parse(json);  
+                    this.SystemGroups = obj.Groups || [];
+                    this.GuestDashboard = {
+                        Uid: 'Guest',
+                        Name: 'Guest',
+                        Groups: obj.Groups.map(x => {
+                            return {
+                                Uid: x.Uid,
+                                Name: x.Name,
+                                Enabled: true
+                            }
+                        })
+                    }
+                    await this.save();     
+                }  
                 fs.unlink(guestFile, () => {});
             }
         }

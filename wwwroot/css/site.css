@@ -1,8 +1,8 @@
 @charset "UTF-8";
 @font-face {
   font-family: "icomoon";
-  src: url("/fonts/icomoon.eot?d1vm3p");
-  src: url("/fonts/icomoon.eot?d1vm3p#iefix") format("embedded-opentype"), url("/fonts/icomoon.ttf?d1vm3p") format("truetype"), url("/fonts/icomoon.woff?d1vm3p") format("woff"), url("/fonts/icomoon.svg?d1vm3p#icomoon") format("svg");
+  src: url("/fonts/icomoon.eot?axq5b8");
+  src: url("/fonts/icomoon.eot?axq5b8#iefix") format("embedded-opentype"), url("/fonts/icomoon.ttf?axq5b8") format("truetype"), url("/fonts/icomoon.woff?axq5b8") format("woff"), url("/fonts/icomoon.svg?axq5b8#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -19,6 +19,10 @@
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-search1:before {
+  content: "";
 }
 
 .icon-user1:before {
@@ -73,6 +77,10 @@
   content: "";
 }
 
+.icon-adjust:before {
+  content: "";
+}
+
 .icon-tint:before {
   content: "";
 }
@@ -93,6 +101,42 @@
   content: "";
 }
 
+.icon-plus-circle:before {
+  content: "";
+}
+
+.icon-minus-circle:before {
+  content: "";
+}
+
+.icon-times-circle:before {
+  content: "";
+}
+
+.icon-check-circle:before {
+  content: "";
+}
+
+.icon-question-circle:before {
+  content: "";
+}
+
+.icon-info-circle:before {
+  content: "";
+}
+
+.icon-times-circle-o:before {
+  content: "";
+}
+
+.icon-check-circle-o:before {
+  content: "";
+}
+
+.icon-ban:before {
+  content: "";
+}
+
 .icon-arrow-left:before {
   content: "";
 }
@@ -101,12 +145,24 @@
   content: "";
 }
 
+.icon-arrow-up:before {
+  content: "";
+}
+
+.icon-arrow-down:before {
+  content: "";
+}
+
 .icon-expand:before {
   content: "";
 }
 
 .icon-compress:before {
   content: "";
+}
+
+.icon-folder:before {
+  content: "";
 }
 
 .icon-bar-chart:before {
@@ -137,8 +193,28 @@
   content: "";
 }
 
+.icon-arrow-circle-left:before {
+  content: "";
+}
+
+.icon-arrow-circle-right:before {
+  content: "";
+}
+
+.icon-arrow-circle-up:before {
+  content: "";
+}
+
+.icon-arrow-circle-down:before {
+  content: "";
+}
+
 .icon-globe:before {
   content: "";
+}
+
+.icon-wrench:before {
+  content: "";
 }
 
 .icon-group:before {
@@ -189,6 +265,22 @@
   content: "";
 }
 
+.icon-angle-left:before {
+  content: "";
+}
+
+.icon-angle-right:before {
+  content: "";
+}
+
+.icon-angle-up:before {
+  content: "";
+}
+
+.icon-angle-down:before {
+  content: "";
+}
+
 .icon-puzzle-piece:before {
   content: "";
 }
@@ -207,6 +299,10 @@
 
 .icon-user-circle-o:before {
   content: "";
+}
+
+.icon-microchip:before {
+  content: "";
 }
 
 .icon-plus:before {

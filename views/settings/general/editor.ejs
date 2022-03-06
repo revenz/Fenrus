@@ -2,7 +2,7 @@
 
 <input type="hidden" id="SettingsData" value="<%= settings.toJson(true) %>" />
 
-<div x-data="Settings">
+<div class="editor" x-data="Settings">
     <div class="top-row">
         <span class="title">
             <span class="icon-sliders"></span>
@@ -89,19 +89,7 @@
         let settings = JSON.parse(json)
         Alpine.data('Settings', () => ({
            model: settings, 
-           validate() {
-                let inputs = [...document.querySelectorAll(`.settings-box [data-rules]`)];
-                let valid = true;
-                inputs.map((input) => {
-                    if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
-                        valid = false;
-                        input.classList.add("invalid");
-                    }else{
-                        input.classList.remove("invalid");
-                    }
-                });
-                return valid;
-           },
+            <%- include('../generic-alpine-editor.js') %>
            save(dontReload) {
                 if(!this.validate())
                     return false;
@@ -114,6 +102,7 @@
                     }
                 }
                 fetch('/settings', options).then(()=>{
+                    this.markClean();
                     if(!dontReload)
                         window.location.reload(true);
                 });

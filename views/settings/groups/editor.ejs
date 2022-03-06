@@ -3,7 +3,7 @@
 <input type="hidden" id="GroupData" value="<%= JSON.stringify(model) %>" />
 <input type="hidden" id="Apps" value="<%= JSON.stringify(apps) %>" />
 
-<div x-data="Settings">
+<div class="editor" x-data="Settings">
     <div class="top-row">
         <span class="title">
             <span class="icon-home"></span>
@@ -43,6 +43,20 @@
                 <span class="help-text">Whether or not to show the group title.</span>
             </span>
         </div>
+        <% if(model.Uid === 'new') { %>
+            <div class="setting">
+                <span class="label">Add to <%= title === 'System Group' ? 'Guest' : 'Default' %> Dashboard</span>
+                <span class="value">
+                    <label for="AddToDashboard" class="toggle-switchy">
+                        <input type="checkbox" id="AddToDashboard" x-model="model.AddToDashboard" />
+                        <span class="toggle">
+                            <span class="switch"></span>
+                        </span>
+                    </label>
+                    <span class="help-text">Whether or not to automatically add this group to the <%= title === 'System Group' ? 'Guest' : 'Default' %> dashboard</span>
+                </span>
+            </div>
+        <% } %>
     </div>
 
 

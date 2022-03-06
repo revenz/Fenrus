@@ -1,52 +1,22 @@
 let json = document.getElementById('GroupData').value;
 let data = JSON.parse(json);
-console.log(data);
 let isSystem = data.IsSystem;
 data.ShowGroupTitle = !data.HideGroupTitle;
 let groupEditor;
 Alpine.data('Settings', () => ({
-    init(){ 
+    customInit(){ 
         groupEditor = this; 
         setTimeout(() => {
             this.updatePreview();
         }, 0);
     },
     model: data, 
-    Saved: false,
     isItemSaved: false,
     NewEdit:false,
-    blur(){
-        if(this.Saved === false)
-            return;
-        this.validate();
-    },
-    input(){
-        if(this.Saved === false)
-            return;
-        this.validate();
-    },
-    isDisabled() {
-        if(this.Saving)
-            return true;
-        return false;
-    },
-    validate() {
-        let inputs = [...document.querySelectorAll(`.settings-box [data-rules]`)];
-        let valid = true;
-        inputs.map((input) => {
-            if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
-                valid = false;
-                input.classList.add("invalid");
-            }else{
-                input.classList.remove("invalid");
-            }
-        });
-        return valid;
-    },
+    <%- include('../generic-alpine-editor.js') %>
     cancel(){
         if(this.isDisabled()) return;
-
-        window.location = '/settings/groups';
+        this.cancelGoto('/settings/groups');
     },
     save() {
         if(this.isDisabled()) return;
@@ -69,7 +39,7 @@ Alpine.data('Settings', () => ({
         fetch(url, options).then(async (res)=>{
             if(!res.ok)
                 throw await res.text();
-                
+            this.markClean();                
             window.location = isSystem ? '/settings/system/groups' : '/settings/groups';
         }).catch(err => {
             toast(err || 'Failed to save', false);

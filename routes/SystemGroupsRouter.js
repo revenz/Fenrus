@@ -126,6 +126,7 @@ class SystemGroupsRouter
             if(dupName)
                 return res.status(400).send('Duplicate name');
 
+            let addToDashboard = false;
             if(!group)
             {
                 // new group                    
@@ -134,6 +135,7 @@ class SystemGroupsRouter
                     Enabled: true
                 };
                 system.SystemGroups.push(group);
+                addToDashboard = req.body.AddToDashboard === true;  
             }
 
             // get existing 
@@ -145,6 +147,20 @@ class SystemGroupsRouter
                 group.AccentColor = '';
             else
                 group.AccentColor = req.body.AccentColor;
+
+            if(addToDashboard) {
+                if(!system.GuestDashboard)
+                    system.GuestDashboard = { Uid: 'Guest', Name: 'Name', Groups: []};
+                if(!system.GuestDashboard.Groups)
+                    system.GuestDashboard.Groups = [];
+                    
+                system.GuestDashboard.Groups.push({
+                    Uid: group.Uid,
+                    Name: group.Name,
+                    Enabled: true
+                });
+            }
+
             await system.save();
             return res.sendStatus(200);                     
         });

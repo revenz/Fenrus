@@ -6,7 +6,7 @@
 
 <input type="hidden" id="SearchEngine" value="<%= JSON.stringify(model) %>" />
 
-<div x-data="SearchEngine">
+<div class="editor" x-data="SearchEngine">
     <div class="top-row">
         <span class="title">
             <span class="icon-search"></span>
@@ -72,38 +72,7 @@
         let model = JSON.parse(json)
         Alpine.data('SearchEngine', () => ({
            model: model, 
-            Saving: false,
-            Saved: false,
-            init() {
-            },  
-            blur(){
-                if(this.Saved === false)
-                    return;
-                this.validate();
-            },
-            input(){
-                if(this.Saved === false)
-                    return;
-                this.validate();
-            },
-            isDisabled() {
-                if(this.Saving)
-                    return true;
-                return false;
-            },
-           validate() {
-                let inputs = [...document.querySelectorAll(`.settings-box [data-rules]`)];
-                let valid = true;
-                inputs.map((input) => {
-                    if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
-                        valid = false;
-                        input.classList.add("invalid");
-                    }else{
-                        input.classList.remove("invalid");
-                    }
-                });
-                return valid;
-           },
+           <%- include('../generic-alpine-editor.js') %>
            save() {
                 if(!this.validate())
                     return false;
@@ -121,6 +90,7 @@
                     if(!res.ok)
                         throw res;
                     this.Saving = false;
+                    this.markClean();
                     window.location.href = '<%= baseUrl %>';
                 }).catch(err => {
                     console.log(err);
@@ -129,7 +99,7 @@
                 });
             }, 
             cancel() {
-                window.location.href = '<%= baseUrl %>';
+                this.cancelGoto('<%= baseUrl %>');
             },
             imageChosen(event){
                 this.fileToDataUrl(event, src => 
@@ -139,7 +109,7 @@
                 })
             },                
             fileToDataUrl(event, callback) {
-                if (! event.target.files.length) return;
+                if (!event.target.files.length) return;
 
                 let file = event.target.files[0];
                 let reader = new FileReader();

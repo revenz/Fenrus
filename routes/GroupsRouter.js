@@ -124,13 +124,16 @@ class GroupsRouter{
                 return res.status(400).send('Duplicate name');
 
             // get existing 
-            let group = settings.Groups.find(x => x.Uid === uid)
+            let group = settings.Groups.find(x => x.Uid === uid);
+
+            let addToDashboard = false;
 
             if(!group) {
                 group = {
                     Uid: new Utils().newGuid(),
                     Enabled: true
                 };
+                addToDashboard = req.body.AddToDashboard === true;
                 settings.Groups.push(group);
             }
             group.Name = name;
@@ -141,6 +144,20 @@ class GroupsRouter{
                 group.AccentColor = '';
             else
                 group.AccentColor = req.body.AccentColor;
+
+            if(addToDashboard) {
+                let defaultDashboard = settings.Dashboards?.find(x => x.Name === 'Default');
+                if(defaultDashboard){
+                    if(!defaultDashboard.Groups)
+                        defaultDashboard.Groups = [];
+                    defaultDashboard.Groups.push({
+                        Uid: group.Uid,
+                        Name: group.Name,
+                        Enabled: true
+                    });
+                }
+            }
+
             await settings.save();
             return res.sendStatus(200); 
         });

@@ -140,21 +140,21 @@ Alpine.data('ItemEditor', () => ({
         this.isItemSaved = false;
         this.EditorApp.Properties = {};
         let item = groupEditor.model.Items.find(x => x.Uid === uid);
-        console.log('item', uid);
-        if(item){
-            this.EditorTitle = 'Edit Item';
-            this.model = JSON.parse(JSON.stringify(item)); // clone the object so any changes arent written directly to the model                                            
-            if(!this.model.DisplayName)
-                this.model.DisplayName = this.model.Name;
-            if(!this.model.Properties)
-                this.model.Properties = {};
-            if(!this.model.Size)
-                this.model.Size = 'medium';
-            this.NewEdit = this.model._Type === 'DashboardApp';
-            this.appChanged(this.model.AppName);
-            this.Opened = true;
-            this.focusItem();
-        }
+        if(!item)
+            return;
+        
+        this.EditorTitle = 'Edit Item';
+        this.model = JSON.parse(JSON.stringify(item)); // clone the object so any changes arent written directly to the model                                            
+        if(!this.model.DisplayName)
+            this.model.DisplayName = this.model.Name;
+        if(!this.model.Properties)
+            this.model.Properties = {};
+        if(!this.model.Size)
+            this.model.Size = 'medium';
+        this.NewEdit = this.model._Type === 'DashboardApp';
+        this.appChanged(this.model.AppName);
+        this.Opened = true;
+        this.focusItem();
     },
     close(){
         if(this.isDisabled()) return;

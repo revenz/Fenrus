@@ -29,7 +29,6 @@
 
     document.addEventListener('alpine:init', () => {
         let data = JSON.parse(document.getElementById('view-data').value);
-        console.log(data);
         let typeName = data.typeName || 'item';
         let baseUrl = data.baseUrl;
 

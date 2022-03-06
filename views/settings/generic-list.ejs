@@ -2,6 +2,8 @@
 <% 
     if(typeof(showIsDefault) === 'undefined')
         showIsDefault = false;
+    if(typeof(allowMove) === 'undefined')
+        allowMove = false;
 %> 
 
 <table class="generic-list">
@@ -50,6 +52,10 @@
                     </template>
                 </td>
                 <td class="controls">  
+                    <% if(allowMove) { %>
+                        <span title="Move Up" class="icon-arrow-up" @click="move(item, true)"></span>
+                        <span title="Move Down" class="icon-arrow-down" @click="move(item, false)"></span>
+                    <% } %>
                     <template x-if="!item.IsSystem">
                         <a title="Edit" class="icon-edit" :href="model.baseUrl + '/' + item.Uid"></a>
                     </template>

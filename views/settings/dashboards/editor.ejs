@@ -1,8 +1,9 @@
 <%- include('../head.ejs') %>
 
+
 <input type="hidden" id="DashboardData" value="<%= JSON.stringify(model) %>" />
 
-<div x-data="Settings">
+<div class="editor" x-data="Settings">
     <div class="top-row">
         <span class="title">
             <span class="icon-home"></span>
@@ -36,6 +37,9 @@
                 Add
             </span>
         </div>
+        <%     
+            allowMove = true;
+        %> 
         <%- include('../generic-list.ejs') %>
     </div>
 
@@ -61,37 +65,9 @@
             IsAdmin: <%= isAdmin %>
         };
         Alpine.data('Settings', () => ({
-            model: model, 
-            Saved: false,
-            blur(){
-                if(this.Saved === false)
-                    return;
-                this.validate();
-            },
-            input(){
-                if(this.Saved === false)
-                    return;
-                this.validate();
-            },
-            isDisabled() {
-                if(this.Saving)
-                    return true;
-                return false;
-            },
-            validate() {
-                let inputs = [...document.querySelectorAll(`.settings-box [data-rules]`)];
-                let valid = true;
-                inputs.map((input) => {
-                    if (Iodine.is(input.value, JSON.parse(input.dataset.rules)) !== true) {
-                        valid = false;
-                        input.classList.add("invalid");
-                    }else{
-                        input.classList.remove("invalid");
-                    }
-                });
-                return valid;
-           },
-           save(dontReload) {
+            model: model,
+            <%- include('../generic-alpine-editor.js') %>
+            save(dontReload) {
                 if(this.isDisabled()) return;
                 
                 this.Saved = true;
@@ -114,8 +90,9 @@
                 fetch(`/settings/dashboards/${this.model.uid}`, options).then(async (res)=>{
                     if(!res.ok)
                         throw await res.text();
+                    this.markClean();
                     <% if(model.dashboard.Name !== 'Guest') { %>
-                        window.location = '/settings/dashboards';
+                        window.location = '/settings/dashboards';                                            
                     <% } %>
                 }).catch(err => {
                     toast(err || 'Failed to save', false);
@@ -129,6 +106,17 @@
                 {
                     this.model.items = this.model.items.filter(x => x.Uid !== item.Uid);
                 }).catch(err => {});
+            },
+            move(item, up) {
+                let index = this.model.items.indexOf(item);
+                if(up && index < 1)
+                    return;
+                if(!up && index >= this.model.items.length - 1)
+                    return;
+                let dest = index + (up ? -1 : 1);
+                let temp = this.model.items[index];
+                this.model.items[index] = this.model.items[dest];
+                this.model.items[dest] = temp;
             },
 
             addingGroup: false,
