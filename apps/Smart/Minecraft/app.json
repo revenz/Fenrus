@@ -1,0 +1,21 @@
+﻿{
+  "Name": "Minecraft (External)",
+  "Interval":180,
+  "Icon": "Icon.png",
+  "TestFunction": true,
+  "Properties": [
+	{
+      "Name": "(Optional) Server IP/Host",
+      "Id": "hostname",
+      "Type": "string",
+      "Default":""
+    },
+    {
+      "Name": "Port",
+      "Id": "port",
+      "Type": "string",
+      "Default":"25565"
+    }
+  ]
+}
+
