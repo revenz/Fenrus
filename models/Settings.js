@@ -88,6 +88,7 @@ class SettingsInstance {
                         self.Dashboards = [ {
                             Uid: new Utils().newGuid(),
                             Name: 'Default',
+                            Enabed: true,
                             Groups: self.Groups.map(x => { return {
                                 Uid: x.Uid,
                                 Name: x.Name,
