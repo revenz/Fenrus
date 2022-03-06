@@ -59,14 +59,29 @@ class SettingsInstance {
                     });         
                     if(self.Groups?.length) {
                         for(let grp of self.Groups) {
+                            if(grp.Enabled === undefined){
+                                grp.Enabled = true;
+                                save = true;
+                            }
                             if(!grp?.Items?.length)
-                                continue;
+                                continue;                                
                             for(let item of grp.Items){
-                                if(item.Enabled === undefined)
+                                if(item.Enabled === undefined){
                                     item.Enabled = true;
+                                    save = true;
+                                }
+                            }
+                        }
+                    }    
+                    if(self.SearchEngines?.length) {
+                        for(let se of self.SearchEngines) {
+                            if(se.Enabled === undefined){
+                                se.Enabled = true;
+                                save = true;
                             }
                         }
                     }
+
 
                     if(!self.Dashboards?.length) {
                         save = true;
