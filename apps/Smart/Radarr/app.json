@@ -7,6 +7,30 @@
       "Name": "API Key",
       "Id": "apikey",
       "Type": "string"
+    },
+	{
+      "Name": "Filter to apply to 'Missing' entries",
+      "Id": "filters",
+      "Type": "select",
+      "Options":
+      [
+        { 
+            "Label": "Show all missing",
+            "Value":"none"
+        },
+		{ 
+            "Label": "Missing only if entry is also marked as 'Monitored'",
+            "Value":"monitored"
+        },
+        { 
+            "Label": "Missing only if entry is also marked as 'Available'",
+            "Value":"available"
+        },
+        { 
+            "Label": "'Monitored' And 'Available'",
+            "Value":"both"
+        }
+      ]
     }
   ]
 }
