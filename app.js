@@ -60,8 +60,8 @@ if(fs.existsSync('./data/certificate.crt') && fs.existsSync('./data/privatekey.k
 {
     // setup https
     console.log('#### SETTING UP HTTPS');
-    var privateKey  = fs.readFileSync('./data/certificate.crt', 'utf8');
-    var certificate = fs.readFileSync('./data/privatekey.key', 'utf8');
+    var privateKey  = fs.readFileSync('./data/privatekey.key', 'utf8');
+    var certificate = fs.readFileSync('./data/certificate.crt', 'utf8');
     var credentials = {key: privateKey, cert: certificate};
     https.createServer(app).listen(3001);
 
