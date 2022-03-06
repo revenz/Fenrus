@@ -69,7 +69,7 @@ if(fs.existsSync('./data/certificate.crt') && fs.existsSync('./data/privatekey.k
     var httpsServer = https.createServer(credentials, app);
 
     httpServer.listen(3000);
-    httpsServer.listen(3001);
+    httpsServer.listen(4000);
 }
 else 
 {
