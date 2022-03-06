@@ -112,8 +112,6 @@ class GroupsRouter{
             dashboards.sort((a,b) => {
                 a.Name.localeCompare(b.Name);
             })
-
-            console.log('dashboards', dashboards);
             
             let apps = AppHelper.getInstance().getList();
             res.render('settings/groups/editor', common.getRouterArgs(req, { 
