@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const Globals = require('./Globals');
+const https = require("https");
 
 // middleware
 const morgan = require('morgan');
@@ -51,13 +52,29 @@ if(fs.existsSync('./data/configs') == false){
 // express app
 const app = express();
 
-
-
 // register view engine
 app.set('view engine', 'ejs');
 
-// listen on port 
-app.listen(3000);
+if(fs.existsSync('./data/configs/certificate.crt') && fs.existsSync('./data/configs/privatekey.key'))
+{
+    // setup https
+    console.log('#### SETTING UP HTTPS');
+    var privateKey  = fs.readFileSync('./data/configs/certificate.crt', 'utf8');
+    var certificate = fs.readFileSync('./data/configs/privatekey.key', 'utf8');
+    var credentials = {key: privateKey, cert: certificate};
+    https.createServer(app).listen(3001);
+
+    var httpServer = http.createServer(app);
+    var httpsServer = https.createServer(credentials, app);
+
+    httpServer.listen(3000);
+    httpsServer.listen(3001);
+}
+else 
+{
+    console.log('#### SETTING UP HTTP');
+    app.listen(3000);
+}
 
 // Calling the express.json() method for parsing
 app.use(bodyParser.json({ limit: '50mb' }));
