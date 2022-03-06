@@ -236,6 +236,20 @@
   right: -0.5rem;
 }
 
+.setting .db-item.medium .inner, .setting .db-item.medium .icon {
+  max-height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+.setting .db-item.medium .content {
+  display: none;
+}
+.setting .db-item.medium img {
+  object-fit: contain;
+  max-height: 100%;
+  max-width: 100%;
+}
+
 .db-item.chart .inner > .icon {
   display: none;
 }

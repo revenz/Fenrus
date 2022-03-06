@@ -283,6 +283,22 @@ $margin:0;
     }
 }
 
+.setting .db-item.medium {
+    .inner, .icon {
+        max-height:100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+    .content {
+        display:none;
+    }
+    img {        
+        object-fit: contain;
+        max-height: 100%;
+        max-width: 100%;
+    }
+}
+
 .db-item.chart {
     .inner {
         > .icon {
@@ -364,3 +380,4 @@ $margin:0;
 
     }
 }
+
