@@ -3,16 +3,22 @@ const UserManager = require('../helpers/UserManager');
 const Utils = require('../helpers/utils');
 const Settings = require('../models/Settings');
 const System = require('../models/System');
+const Globals = require('../Globals');
 
 class OAuthStrategy {
 
     async saveInitialConfig(settings){
         let system = System.getInstance();
+        let logoutIdp = true;
+        if(settings.issuerBaseUrl === 'https://accounts.google.com/')
+            logoutIdp = false;
+
         system.setProperty('OAuth', {            
             IssuerBaseUrl: settings.IssuerBaseUrl,
             ClientId: settings.ClientId,
             BaseUrl: settings.BaseUrl,
-            Secret: settings.Secret
+            Secret: settings.Secret,
+            LogoutIdp: logoutIdp
         });
         return true;
     }
@@ -21,16 +27,33 @@ class OAuthStrategy {
     {
         let system = System.getInstance();
         let oauth = system.getProperty('OAuth');
+        let authOptions = {
+            authRequired: true,
+            issuerBaseURL: oauth.IssuerBaseUrl,
+            clientID: oauth.ClientId,
+            baseURL: oauth.BaseUrl,
+            secret: oauth.Secret,
+            enableTelemetry: false,
+            idpLogout: !!oauth.LogoutIdp, 
+            routes: {
+                postLogoutRedirect:'/logged-out'
+            }
+        };
+
+        app.get('/logged-out', (req, res) => {    
+            let fullyLoggedOut = system.getProperty('OAuth').LogoutIdp;
+            if(system.AllowGuest && fullyLoggedOut)
+                return res.redirect('/');
+
+            res.render('logged-out', 
+            { 
+                title: 'Logged Out',
+                version: Globals.Version
+            });
+        });
+
         app.use(
-            auth({
-                authRequired: false,
-                issuerBaseURL: oauth.IssuerBaseUrl,
-                clientID: oauth.ClientId,
-                baseURL: oauth.BaseUrl,
-                secret: oauth.Secret,
-                enableTelemetry: false,
-                idpLogout: true
-            })
+            auth(authOptions)
         );
 
         app.use(async (req, res, next) =>{
