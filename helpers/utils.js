@@ -15,6 +15,19 @@ class Utils {
         return Buffer.from(base64, 'base64').toString('binary');
     }
 
+    base64Encode(string) 
+    {
+        if(!string) return '';
+        const buff = Buffer.from(string, 'utf-8');
+        return buff.toString('base64');
+    }
+    base64Decode(string) 
+    {        
+        if(!string) return '';
+        const buff = Buffer.from(string, 'base64');
+        return buff.toString('utf-8');
+    }
+
     htmlEncode(text) {
         if(text === undefined) 
             return '';

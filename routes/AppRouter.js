@@ -83,6 +83,9 @@ function getAppArgs(appInstance, settings){
         appIcon: appInstance.Icon,
         size: appInstance.Size,
         chart: chartHelper,
+        proxy: (url) => {
+            return '/proxy/' + utils.base64Encode(url).replace(/\//g, '-');
+        },
         liveStats: (items) => {            
             let html = '<ul class="livestats">';
             for (let item of items) {

@@ -22,6 +22,7 @@ const AppHelper = require('./helpers/appHelper');
 const UserManager = require('./helpers/UserManager');
 const System = require('./models/System');
 const InitialConfigRouter = require('./routes/InitialConfigRouter');
+const ProxyRouter = require('./routes/ProxyRouter');
 
 // load static configs
 AppHelper.getInstance().load();
@@ -125,6 +126,7 @@ app.use('/', ((req, res, next) => {
 
 app.use('/401', new Four01Router().get());
 
+app.use('/proxy', new ProxyRouter().get());
 
 function configureRoutes(app, authStrategy)
 {
