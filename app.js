@@ -85,7 +85,7 @@ app.use(cookieParser());
 
 // set cache control for files
 app.use(function (req, res, next) {
-    if (req.url.match(/(css|js|img|images|background|font)/)) {
+    if (req.url.match(/((\.(woff|eot|ttf|css|js|svg|ico|jp(e)?(g)?|gif|png)$)|img|images|background|font)/)) {
         res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
     }
     next();
