@@ -5,6 +5,8 @@
     }
     
     async status(args) {
+        if(!args.properties['token'])
+            return;
         let data = await this.doFetch(args, 'buildQueue');
         let queue = data?.count ?? 0;
 

@@ -11,6 +11,13 @@ class DefaultTheme
             this.oneRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
             this.oneUnit = this.oneRem * this.unit;
 
+            for(let i=1;i<=3;i++){
+                let div = document.createElement('div')
+                div.classList.add('bg');
+                div.classList.add('bg' + i);
+                document.body.insertAdjacentElement("afterbegin", div);
+            }
+
 
             let json = document.getElementById('theme-settings').value;            
             this.settings = json ? JSON.parse(json) : {};

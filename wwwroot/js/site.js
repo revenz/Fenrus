@@ -293,6 +293,9 @@ function fetchDashboard(uid,  backwards) {
 
         let dashboardBackground = document.getElementById('hdn-dashboard-background')?.value || null;
         document.body.style.backgroundImage = dashboardBackground ? `url('${dashboardBackground}')` : null;
+        document.body.classList.remove('custom-background');
+        document.body.classList.remove('no-custom-background');
+        document.body.classList.add((!dashboardBackground ? 'no-' : '') + 'custom-background');
 
         let name = document.getElementById('hdn-dashboard-name').value;
         document.getElementById('dashboard-name').innerText = name === 'Default' ? '' : name;

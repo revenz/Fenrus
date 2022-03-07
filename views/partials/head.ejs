@@ -26,13 +26,19 @@
         }
     </style>
 
-    <% if(typeof(dashboard) !== 'undefined' && dashboard.BackgroundImage) { %>
+    <% 
+        let customBackground = false;
+        if(typeof(dashboard) !== 'undefined' && dashboard.BackgroundImage) { 
+            customBackground = true;  
+        %>
         <style>
             body{        
                 background: url('<%= dashboard.BackgroundImage %>');
             }
         </style>
-    <% } else if(settings?.BackgroundImage) { %>
+    <% } else if(settings?.BackgroundImage) {
+        customBackground = true;          
+     %>
         <style>
             body{        
                 background: url('<%= settings.BackgroundImage %>');
@@ -41,7 +47,7 @@
     <% } %> 
 </head>
 
-<body class="<%= isHome ? 'home' : '' %> <%= themeVariables?.BodyClassName %>">  
+<body class="<%= isHome ? 'home' : '' %> <%= customBackground ? 'custom-background' : 'no-custom-background' %> <%= themeVariables?.BodyClassName %>">  
     <ul class="main-menu">
         <li><a title="Home" href="/"><span class="icon-home1"></span></a></li>
         <% if(isGuest !== true) { %>
