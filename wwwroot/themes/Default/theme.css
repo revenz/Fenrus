@@ -365,6 +365,11 @@ body {
 .preview-dashboard .db-group .title {
   position: unset;
 }
+.preview-dashboard .db-item.small .actions {
+  flex-flow: unset !important;
+  width: 11.5rem;
+  transform: translateX(calc(-50% + 2rem));
+}
 
 .dashboard {
   visibility: hidden;
