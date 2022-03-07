@@ -105,12 +105,17 @@ class SystemGroupsRouter
             if(!group.AccentColor)
                 group.AccentColor = req.settings.AccentColor || '#ff0090';
             
+            let systemGroups = system.SystemGroups.filter(x => x.Uid != group.Uid);
+            let groups = req.settings.Groups.filter(x => x.Uid != group.Uid);
+            
             group.IsSystem = true;
             let apps = AppHelper.getInstance().getList();
             res.render('settings/groups/editor', common.getRouterArgs(req, { 
                 title: 'System Group',
                 apps: apps,
-                model:group
+                model:group,
+                systemGroups: systemGroups,
+                groups: groups
             }));   
         });
         
