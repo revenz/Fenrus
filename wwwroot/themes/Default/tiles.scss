@@ -194,6 +194,12 @@ $margin:0;
 {
     &.medium, &.x-large, &.xx-large
     {
+        &:not(.db-smart) .content {            
+            display: flex !important;
+            padding-top: 0.5rem;
+            text-align: -webkit-center;            
+        }
+
         .icon {
             width:100%;
             height:100%;

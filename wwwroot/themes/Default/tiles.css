@@ -165,6 +165,11 @@
   /* Position the front and back side */
   /* Style the back side */
 }
+.db-item.db-basic.medium:not(.db-smart) .content, .db-item.db-basic.x-large:not(.db-smart) .content, .db-item.db-basic.xx-large:not(.db-smart) .content {
+  display: flex !important;
+  padding-top: 0.5rem;
+  text-align: -webkit-center;
+}
 .db-item.db-basic.medium .icon, .db-item.db-basic.x-large .icon, .db-item.db-basic.xx-large .icon {
   width: 100%;
   height: 100%;
