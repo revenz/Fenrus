@@ -41,6 +41,7 @@ class SettingsInstance {
                 self.Dashboards[0].Name = 'Default';
                 console.log('###################', guest.Dashboards[0].Name, self.Dashboards[0].Name);
                 self.Dashboards[0].Uid = new Utils().newGuid();
+                self.Dashboards[0].Enabled = true;
                 self.Dashboards[0].BackgroundImage = '';
                 self.BackgroundImage = guest.Dashboards[0].BackgroundImage;
                 self.Theme = 'Default';
