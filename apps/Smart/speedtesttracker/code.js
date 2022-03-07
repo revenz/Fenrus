@@ -10,13 +10,11 @@ class SpeedtestTracker {
     async status(args) {
         let mode = args.properties['mode'];
 
-        if (mode === 'graph')
+        if (mode === 'graph') {
             return await this.chartDownAndUp(args);
-        if (mode === 'average')
+        } else {
             return await this.liveStats(args, mode);
-        if (mode === 'latest')
-            return await this.liveStats(args, mode);
-        return;
+        }
     }
 
     async chartDownAndUp(args) {
@@ -60,10 +58,22 @@ class SpeedtestTracker {
             ping = stats?.data?.ping;
             download = stats?.data?.download;
             upload = stats?.data?.upload;
+
         } else if (mode == 'average') {
             ping = stats?.average?.ping;
             download = stats?.average?.download;
             upload = stats?.average?.upload;
+
+        } else if (mode == 'max') {
+            ping = stats?.maximum?.ping;
+            download = stats?.maximum?.download;
+            upload = stats?.maximum?.upload;
+
+        } else if (mode == 'lowest') {
+            ping = stats?.minimum?.ping;
+            download = stats?.minimum?.download;
+            upload = stats?.minimum?.upload;
+
         } else {
             return;
         }
