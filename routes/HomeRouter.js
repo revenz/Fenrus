@@ -77,7 +77,12 @@ class HomeRouter {
     {
         let system = System.getInstance();
         let settings = req.settings;
-        let dashboard = { Groups: [], Name: dashboardInstance?.Name, BackgroundImage: dashboardInstance.BackgroundImage };
+        let dashboard = { 
+            Name: dashboardInstance?.Name, 
+            AccentColor: dashboardInstance.AccentColor,
+            BackgroundImage: dashboardInstance.BackgroundImage,
+            Groups: [], 
+        };
         for(let grp of dashboardInstance?.Groups || []){
             if(grp.Enabled === false)
                 continue;
