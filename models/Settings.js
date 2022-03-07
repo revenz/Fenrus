@@ -188,7 +188,7 @@ class SettingsInstance {
 
     
     findAppInstance(uid) {
-        return SettingsInstance.findAppInstanceActual(this.groups, uid);
+        return SettingsInstance.findAppInstanceActual(this.Groups, uid);
     }
 
     static findAppInstanceActual(groups, uid) {
