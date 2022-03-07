@@ -64,6 +64,9 @@ function getDashboardInstanceUid()
 
 function LiveApp(name, instanceUid, interval) 
 {    
+    if(typeof(name) !== 'string')
+        throw 'Name is not a string';
+
     let dashboardInstanceUid = getDashboardInstanceUid();
     let args =  {
         name: name,
@@ -77,6 +80,8 @@ function LiveApp(name, instanceUid, interval)
 
 function LiveAppActual(args, subsequent)
 {
+    if(typeof(args.name) !== 'string')
+        throw 'name is not a string';
     let name = args.name;
     let instanceUid = args.instanceUid;
     let interval = args.interval;
@@ -169,7 +174,7 @@ function appSetStatus(args, content, subsequent){
         ele.innerHTML = content;
     }
     if((subsequent && interval === -1) === false)
-        setTimeout(() => LiveApp(args, true), interval + Math.random() + 5);
+        setTimeout(() => LiveAppActual(args, true), interval + Math.random() + 5);
 }
 
 function setItemClass(item, className) {
