@@ -51,7 +51,7 @@ Alpine.data('Settings', () => ({
         confirmPrompt(`Are you sure you want to delete the item "${item.Name}"?`).then(() => 
         {
             this.model.Items = this.model.Items.filter(x => x.Uid !== item.Uid);
-            updatePreview();
+            this.updatePreview();
         }).catch(err => {});
     },
 
