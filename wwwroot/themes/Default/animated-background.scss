@@ -1,0 +1,61 @@
+body.no-custom-background {
+    
+	background: linear-gradient(-45deg, #6c0d91, #0c475c, #113d14) !important;
+	background-size: 1000% 1000% !important;
+    background-position: center;
+	animation: gradient 10s ease infinite;
+}
+
+@mixin dots($count) {
+  $text-shadow: ();
+  @for $i from 0 through $count {
+    $text-shadow: $text-shadow,
+                 (-.5+(random()) * 3) + em
+                 (-.5+(random()) * 3) + em
+                 12px
+                 hsla(random() * 360, 100%, 50%,.9);
+  }
+  text-shadow: $text-shadow;
+}
+
+
+body.no-custom-background::before {
+    font-size: 52px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 3em;
+  height: 3em;
+  content: '.';
+  mix-blend-mode: screen;
+  animation: 44s -27s move infinite ease-in-out alternate;
+  z-index:0;
+}
+
+
+body.no-custom-background::before {
+  @include dots(40);
+  animation-duration: 44s;
+  animation-delay: -27s;
+}
+@keyframes move {
+  from {
+    transform: rotate(0deg) scale(12) translateX(-20px);
+  }
+  to {
+    transform: rotate(360deg) scale(18) translateX(20px);
+  }
+}
+
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}

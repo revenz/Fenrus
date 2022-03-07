@@ -143,6 +143,8 @@
                     this.markClean();
                     <% if(model.dashboard.Name !== 'Guest') { %>
                         window.location = '/settings/dashboards';                                            
+                    <% } else { %>
+                        toast('Dashboard saved', true);
                     <% } %>
                 }).catch(err => {
                     toast(err || 'Failed to save', false);

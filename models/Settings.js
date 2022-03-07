@@ -188,16 +188,21 @@ class SettingsInstance {
 
     
     findAppInstance(uid) {
-        for(let group of this.Groups)
+        return SettingsInstance.findAppInstanceActual(this.groups, uid);
+    }
+
+    static findAppInstanceActual(groups, uid) {
+        for(let group of groups)
         {
-            let item = this.findAppInstanceInGroup(group.Items, uid);
+            let item = SettingsInstance.findAppInstanceInGroup(group.Items, uid);
             if(item)
                 return item;
         }
         return null;
     }
 
-    findAppInstanceInGroup(items, uid){
+
+    static findAppInstanceInGroup(items, uid){
         if(!items) return null;
         for(let item of items){
             if(item._Type === 'DashboardApp')
@@ -208,7 +213,7 @@ class SettingsInstance {
             else if(item._Type === 'DashboardGroup'){
                 if(item.Items?.length)
                 {
-                    let item = this.findAppInstanceInGroup(item.Items, uid);
+                    let item = SettingsInstance.findAppInstanceInGroup(item.Items, uid);
                     if(item)
                         return item;
                 }
@@ -236,8 +241,15 @@ class Settings {
         return instance;
     }
 
+
+
     static async getForGuest() 
     {
+        SettingsInstance.instances = SettingsInstance.instances || {};
+
+        if(SettingsInstance.instances['GUEST'])
+            return SettingsInstance.instances['GUEST'];
+
         let system = System.getInstance();
         let settings = {};
         settings.Dashboards = [
@@ -246,6 +258,10 @@ class Settings {
         settings.Theme = 'Default';
         settings.Groups = system.SystemGroups.filter(x => x.Enabled !== false);
         settings.AccentColor = '#ff0090';
+        settings.findAppInstance = (uid) => {
+            return SettingsInstance.findAppInstanceActual(settings.Groups, uid);
+        };
+        SettingsInstance.instances['GUEST'] = settings;
         return settings;
     }
 

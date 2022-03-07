@@ -60,7 +60,7 @@ router.get('/:uid', async (req, res) => {
         return res.sendStatus(404);
     }
 
-    let groups = getGroups(req.settings, system);
+    let groups = getGroups(req.settings, system, uid === 'Guest');
 
     // filter out any missing groups, incase they have been deleted
     let groupUids = groups.map(x => x.Uid);
@@ -85,15 +85,16 @@ router.get('/:uid', async (req, res) => {
     }));  
 });
 
-function getGroups(settings, system){
+function getGroups(settings, system, isGuest){
     
-    let groups = settings.Groups?.filter(x => x.Enabled)?.map(x => {
+    let groups = isGuest ? [] : settings.Groups?.filter(x => x.Enabled)?.map(x => {
         return { 
             Uid: x.Uid,
             Name: x.Name,
             IsSystem:false
         }
     }) || [];
+    console.log('system?.SystemGroups', system?.SystemGroups);
     groups = groups.concat(system?.SystemGroups?.filter(x => x.Enabled)?.map(x => {
         return { 
             Uid: x.Uid,

@@ -16,7 +16,11 @@ Alpine.data('Settings', () => ({
     <%- include('../generic-alpine-editor.js') %>
     cancel(){
         if(this.isDisabled()) return;
-        this.cancelGoto('/settings/groups');
+        <% if(isSystem) { %>
+            this.cancelGoto('/settings/system/groups');
+        <% } else { %>
+            this.cancelGoto('/settings/groups');
+        <% } %>
     },
     save() {
         if(this.isDisabled()) return;

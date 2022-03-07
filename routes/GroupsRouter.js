@@ -136,6 +136,7 @@ class GroupsRouter{
         let apps = AppHelper.getInstance().getList();
         res.render('settings/groups/editor', common.getRouterArgs(req, { 
             title: 'Group',
+            isSystem:true,
             apps: apps,
             dashboards: dashboards,
             model:group,
