@@ -132,6 +132,7 @@ option {
     text-align: center;
     margin:1rem;
     .search-inner {
+        border:solid 1px rgba(255,255,255,.15);
         height:3rem;
         display:flex;
         flex-direction: row;
@@ -160,8 +161,8 @@ option {
             max-width: calc(100% - 9.5rem);
         }
         button {
-            margin-left:1px;
             border:none;
+            border-left:solid 1px rgba(255,255,255,.15);
             font-size:1.3rem;
             text-transform: uppercase;
             padding:0 1rem;

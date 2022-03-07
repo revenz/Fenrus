@@ -1,4 +1,5 @@
 {
   "Name": "Reddit",
-  "Icon": "icon.png"
+  "Icon": "icon.png",
+  "DefaultUrl":"https://reddit.com/r/fenrus"
 }
