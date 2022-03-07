@@ -70,7 +70,6 @@ function barInfo(args, items)
 
 function getAppArgs(appInstance, settings){
     let url = appInstance.ApiUrl || appInstance.Url;
-    console.log(appInstance.Name + ', url: ' + url);
     let utils = new Utils();
 
     let chartHelper = getChartHelper(appInstance);
@@ -171,8 +170,10 @@ router.post('/:appName/test', async (req, res) => {
     let appInstance = req.body.AppInstance;   
     
     let instance = getInstance(app, appInstance);
-    
-    let funcArgs = getAppArgs(appInstance, req.settings);
+    if(!instance.funcArgs)
+        instance.funcArgs = getAppArgs(appInstance, req.settings);
+    let funcArgs = instance.funcArgs;
+
     let msg = '';
     try
     {
@@ -204,8 +205,10 @@ router.get('/:appName/:uid/status', async (req, res) => {
     let appInstance = req.appInstance;   
 
     let instance = getInstance(app, appInstance);
+    if(!instance.funcArgs)
+        instance.funcArgs = getAppArgs(appInstance, req.settings);
+    let funcArgs = instance.funcArgs;
 
-    let funcArgs = getAppArgs(appInstance, req.settings);
     try
     {
         let result = await instance.status(funcArgs);    
