@@ -21,6 +21,14 @@
 		{ 
             "Label": "Average Result Stats",
             "Value":"average"
+        },
+        { 
+            "Label": "Highest Result Stats",
+            "Value":"max"
+        },
+		{ 
+            "Label": "Lowest Result Stats",
+            "Value":"lowest"
         }
       ]
     },
@@ -31,5 +39,5 @@
       "Default": "1000",
       "IfValue": { "mode" : "graph" }
     }
-	]
+    ]
 }
