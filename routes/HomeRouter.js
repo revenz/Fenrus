@@ -35,13 +35,14 @@ class HomeRouter {
     {
         res.render('about', common.getRouterArgs(req, { 
             title: 'About', 
-            version: Globals.Version,
+            version: Globals.getVersion(),
         }));  
     }
 
     async home(req, res) 
     {        
         let dashboardInstance = this.getDefaultDashboard(req, res);
+        console.log('dashboardInstance', dashboardInstance);
         return this.renderDashboard(req, res, dashboardInstance, false);
     }
 
@@ -74,6 +75,7 @@ class HomeRouter {
 
     async renderDashboard(req, res, dashboardInstance, inline)
     {
+        let system = System.getInstance();
         let settings = req.settings;
         let dashboard = { Groups: [], Name: dashboardInstance?.Name, BackgroundImage: dashboardInstance.BackgroundImage };
         for(let grp of dashboardInstance?.Groups || []){
@@ -81,13 +83,17 @@ class HomeRouter {
                 continue;
 
             let actualGroup = settings.Groups.find(x => x.Uid === grp.Uid);
+            if(!actualGroup)
+            {
+                // check for a system group
+                actualGroup = system.SystemGroups.find(x => x.Uid == grp.Uid);
+            }
             if(!actualGroup || actualGroup.Enabled === false)
                 continue;
             dashboard.Groups.push(actualGroup);
         }
 
         let searchEngines = req.isGuest ? [] : req.settings.SearchEngines.filter(x => x.Enabled != false) || [];
-        let system = System.getInstance();
         if(system.SearchEngines?.length)
             searchEngines = searchEngines.concat(system.SearchEngines.filter(x => x.Enabled != false));
 

@@ -10,6 +10,12 @@ class Globals
     constructor(){
         console.log('new globals instance!');
     }
+
+    getVersion(){
+        if(!this.Version)
+            this.Version = `${this.MajorVersion}.${this.MinorVersion}.${this.Revision}.${this.Build}`;
+        return this.Version;
+    }
 }
 
 

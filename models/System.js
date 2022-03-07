@@ -1,7 +1,9 @@
 const fs = require('fs');
+const Globals = require('../Globals');
 
 class SystemInstance 
 {
+    Version;
     AllowRegister = true;
     AllowGuest = true;
     _File = './data/system.json';
@@ -49,14 +51,33 @@ class SystemInstance
                     self[k] = obj[k];
                 });         
             }  
-            let guestFile = './data/configs/guest.json';
-            if(fs.existsSync(guestFile) == true) {   
-                let json = fs.readFileSync(guestFile, { encoding: 'utf-8'});                
-                if(json.trim() !== ''){
-                    if(json.charCodeAt(0) === 65279)
-                        json = json.substring(1);
-                    let obj = JSON.parse(json);  
+            if(!this.Version || !this.GuestDashboard?.Name){
+                await this.initDefaultConfig();
+            }
+        }
+        catch(err)
+        {
+            console.log('error loading system settings', err);
+        }
+    }
+
+    async initDefaultConfig(){        
+        let defaultConfigFile = './defaultconfig.json';
+        if(fs.existsSync(defaultConfigFile) == true) {   
+            let json = fs.readFileSync(defaultConfigFile, { encoding: 'utf-8'});     
+
+            if(json.trim() !== ''){
+                if(json.charCodeAt(0) === 65279)
+                    json = json.substring(1);
+                let obj = JSON.parse(json);  
+
+                if(!this.SearchEngines?.length)                
+                    this.SearchEngines = obj.SearchEngines || [];
+
+                if(!this.SystemGroups)
                     this.SystemGroups = obj.Groups || [];
+                
+                if(!this.GuestDashboard?.Name){
                     this.GuestDashboard = {
                         Uid: 'Guest',
                         Name: 'Guest',
@@ -68,14 +89,9 @@ class SystemInstance
                             }
                         })
                     }
-                    await this.save();     
-                }  
-                fs.unlink(guestFile, () => {});
-            }
-        }
-        catch(err)
-        {
-            console.log('error loading system settings', err);
+                }
+                await this.save();     
+            }  
         }
     }
 
@@ -112,7 +128,9 @@ class SystemInstance
                 AllowGuest: this.AllowGuest
             });
         }
-        return JSON.stringify({                
+        this.Version = Globals.getVersion();
+        return JSON.stringify({             
+            Version: this.Version,   
             AuthStrategy: this.AuthStrategy,
             AllowRegister: this.AllowRegister,
             AllowGuest: this.AllowGuest,

@@ -48,7 +48,7 @@ class OAuthStrategy {
             res.render('logged-out', 
             { 
                 title: 'Logged Out',
-                version: Globals.Version
+                version: Globals.getVersion()
             });
         });
 

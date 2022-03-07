@@ -20,7 +20,6 @@ class Common
             themeSettings = req.settings.ThemeSettings[req.theme.Name];
         else if(req.theme?.Settings?.length){
             // need to get default settings
-            console.log(';theme.Settings', req.theme.Settings);
             for(let setting of req.theme.Settings){
                 if(setting.Default)
                     themeSettings[setting.Name] = setting.Default;
@@ -45,7 +44,7 @@ class Common
             themeVariables: themeVariables,
             themeSettings: themeSettings,
             Utils: new Utils(),
-            version: Globals.Version,
+            version: Globals.getVersion(),
             AppHelper: AppHelper.getInstance()
         }
 

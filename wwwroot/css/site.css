@@ -1058,6 +1058,7 @@ body {
 }
 
 .no-dashboard {
+  text-transform: lowercase;
   padding: 2rem;
   background: rgba(0, 0, 0, 0.4);
   color: white;

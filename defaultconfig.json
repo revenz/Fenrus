@@ -1,18 +1,24 @@
 {
-  "Revision": 1,
-  "LinkTarget": "_self",
-  "Theme": "Default",
-  "AccentColor": "#FF0090",
-  "ShowGroupTitles": true,
-  "CollapseMenu": false,
-  "BackgroundImage": "",
-  "ThemeSettings": {
-    "Default": {
-      "Placement": "center",
-      "MaxHeight": 8,
-      "Horizontal": false
+  "SearchEngines": [
+    {
+      "Uid": "ea08b5b9-f902-4330-8cd3-b5fd360408a0",
+      "Name": "DuckDuckGo",
+      "Url": "https://duckduckgo.com/?q=%s",
+      "Shortcut": "ddg",
+      "Icon": "/search-engines/duckduckgo.jpg",
+      "Enabled": true,
+      "IsDefault": true
+    },
+    {
+      "Uid": "6c3ad312-ac73-4de8-b171-276342512c38",
+      "Name": "Google",
+      "Url": "https://www.google.com/search?q=%s",
+      "Shortcut": "g",
+      "Icon": "/search-engines/google.png",
+      "Enabled": true,
+      "IsDefault": false
     }
-  },
+  ],
   "Groups": [
     {
       "Uid": "aa163b32-b9d7-4a1f-8737-e170091723e5",

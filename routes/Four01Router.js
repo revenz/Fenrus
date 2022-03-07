@@ -45,7 +45,7 @@ class Four01Router{
             
             res.render('401', {
                 message: msg,
-                version: Globals.Version,
+                version: Globals.getVersion(),
                 redirectUrl: redirectUrl,
                 loginUrl: loginUrl
             });

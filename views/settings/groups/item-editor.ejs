@@ -1,3 +1,8 @@
+<% 
+    if(typeof(dashboards) === 'undefined' || !dashboards)
+        dashboards = [];
+%> 
+
 <div x-data="ItemEditor">
     <template x-if="Opened">
         <div>
@@ -45,7 +50,7 @@
                         <div class="setting">
                             <span class="label">Dashboard</span>
                             <span class="value">                                
-                                <select :disabled="isDisabled()" x-model="model.Url" @keydown.enter="saveEditor">
+                                <select :disabled="isDisabled()" x-model="model.Url" @keydown.enter="saveEditor" data-rules='["required"]'>
                                     <% for(let dashboard of dashboards) { %>
                                         <option value="<%= dashboard.Uid %>"><%= dashboard.Name %></option>
                                     <% } %>

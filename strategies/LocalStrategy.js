@@ -68,7 +68,7 @@ class LocalStrategy
             res.render('login', 
             { 
                 title: 'Login',
-                version: Globals.Version,
+                version: Globals.getVersion(),
                 allowRegister: system.AllowRegister,
                 allowGuest: system.AllowGuest,
             });

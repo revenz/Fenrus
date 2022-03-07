@@ -30,19 +30,25 @@ class SettingsInstance {
     load() {        
         console.log('loading!');
         let self = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let file = self._File;
             let save = false;
             console.log('checking for file: ' + file);
             if(fs.existsSync(file) == false) {
-                file = self._DefaultFile;
-                console.log('checking for file: ' + file);
-                if(fs.existsSync(file) == false) {
-                    console.log('no config files found');
-                    self.save();
-                    return;
-                }
-                save = true;
+                // use default config
+                let guest = await Settings.getForGuest();
+                self.Dashboards = [ {...guest.Dashboards[0] }];
+                self.Dashboards[0].Name = 'Default';
+                console.log('###################', guest.Dashboards[0].Name, self.Dashboards[0].Name);
+                self.Dashboards[0].Uid = new Utils().newGuid();
+                self.Dashboards[0].BackgroundImage = '';
+                self.BackgroundImage = guest.Dashboards[0].BackgroundImage;
+                self.Theme = 'Default';
+                self.AccentColor = guest.AccentColor;
+                
+                await self.save();
+                resolve(self);
+                return;
             }
             console.log('using config file: ' + file);
             
@@ -239,7 +245,6 @@ class Settings {
         settings.Theme = 'Default';
         settings.Groups = system.SystemGroups.filter(x => x.Enabled !== false);
         settings.AccentColor = '#ff0090';
-        console.log(settings);
         return settings;
     }
 

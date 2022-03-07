@@ -39,7 +39,7 @@ router.get('/:uid', async (req, res) => {
     if(uid === 'Guest'){
         if(req.user?.IsAdmin !== true)
             return res.sendStatus(401);
-        description = 'This page lets you configure the Guest dashboard, the dashboard that will be shown to users if they have not signed in.\n\nYou can disable this dashboard if you wish for users to login before using Fenrus.';
+        description = 'This page lets you configure the Guest dashboard, the dashboard that will be shown to users if they have not signed in.\n\nYou can disable this dashboard if you wish for users to login before using Fenrus.\n\nThis is also the default dashboard set for new users.';
         dashboard = {
             Uid: 'Guest',
             Name: 'Guest',

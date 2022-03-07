@@ -33,9 +33,8 @@ UserManager.getInstance().load();
 if(fs.existsSync('./buildnum.txt')){            
     let build = fs.readFileSync('./buildnum.txt', { encoding: 'utf-8'});
     if(build){
-        build = build.trim();
-        Globals.Version = `${Globals.MajorVersion}.${Globals.MinorVersion}.${Globals.Revision}.${build}`;
-        console.log('Version: ', Globals.Version);
+        Globals.Build = build.trim();        
+        console.log('Version: ', Globals.getVersion());
     }
 }
 
