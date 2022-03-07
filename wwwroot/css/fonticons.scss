@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('/fonts/icomoon.eot?axq5b8');
-  src:  url('/fonts/icomoon.eot?axq5b8#iefix') format('embedded-opentype'),
-    url('/fonts/icomoon.ttf?axq5b8') format('truetype'),
-    url('/fonts/icomoon.woff?axq5b8') format('woff'),
-    url('/fonts/icomoon.svg?axq5b8#icomoon') format('svg');
+  src:  url('/fonts/icomoon.eot?52zopp');
+  src:  url('/fonts/icomoon.eot?52zopp#iefix') format('embedded-opentype'),
+    url('/fonts/icomoon.ttf?52zopp') format('truetype'),
+    url('/fonts/icomoon.woff?52zopp') format('woff'),
+    url('/fonts/icomoon.svg?52zopp#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -178,6 +178,18 @@
 .icon-users:before {
   content: "\f0c0";
 }
+.icon-cut:before {
+  content: "\f0c4";
+}
+.icon-scissors:before {
+  content: "\f0c4";
+}
+.icon-copy:before {
+  content: "\f0c5";
+}
+.icon-files-o:before {
+  content: "\f0c5";
+}
 .icon-bars:before {
   content: "\f0c9";
 }
@@ -186,6 +198,9 @@
 }
 .icon-reorder:before {
   content: "\f0c9";
+}
+.icon-table:before {
+  content: "\f0ce";
 }
 .icon-caret-left:before {
   content: "\f0d9";

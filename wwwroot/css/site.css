@@ -1,8 +1,8 @@
 @charset "UTF-8";
 @font-face {
   font-family: "icomoon";
-  src: url("/fonts/icomoon.eot?axq5b8");
-  src: url("/fonts/icomoon.eot?axq5b8#iefix") format("embedded-opentype"), url("/fonts/icomoon.ttf?axq5b8") format("truetype"), url("/fonts/icomoon.woff?axq5b8") format("woff"), url("/fonts/icomoon.svg?axq5b8#icomoon") format("svg");
+  src: url("/fonts/icomoon.eot?52zopp");
+  src: url("/fonts/icomoon.eot?52zopp#iefix") format("embedded-opentype"), url("/fonts/icomoon.ttf?52zopp") format("truetype"), url("/fonts/icomoon.woff?52zopp") format("woff"), url("/fonts/icomoon.svg?52zopp#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -225,6 +225,22 @@
   content: "";
 }
 
+.icon-cut:before {
+  content: "";
+}
+
+.icon-scissors:before {
+  content: "";
+}
+
+.icon-copy:before {
+  content: "";
+}
+
+.icon-files-o:before {
+  content: "";
+}
+
 .icon-bars:before {
   content: "";
 }
@@ -235,6 +251,10 @@
 
 .icon-reorder:before {
   content: "";
+}
+
+.icon-table:before {
+  content: "";
 }
 
 .icon-caret-left:before {
@@ -1037,7 +1057,7 @@ body {
   background-attachment: fixed !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
-  
+  background-position: center;
 }
 
 .main-content {

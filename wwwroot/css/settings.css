@@ -636,7 +636,7 @@ table .controls [class^=icon-]:hover {
   background: rgba(0, 0, 0, 0.7);
 }
 .preview-dashboard .db-item .actions span {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   cursor: pointer;
   padding: 3px;
 }

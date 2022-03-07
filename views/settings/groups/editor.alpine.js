@@ -85,5 +85,36 @@ Alpine.data('Settings', () => ({
         if(this.isDisabled()) return;
         
         itemEditor.editItem(item.Uid);
-    }
+    },
+
+
+    // copy item stuff
+    copyItem: null,
+    modalGroup: null,
+    copy(item) {
+        this.modalGroup = null;
+        this.copyItem = item;
+    },
+    modalCopy(){
+        if(!this.modalGroup)
+            return; // they need to pick one
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(this.copyItem),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        fetch(`/settings/groups/copy-item/${this.modalGroup}`, options).then(async (res) => {
+            if(!res.ok)
+                throw await res.text();
+            toast('Copied item', true);
+            this.copyItem = null;   
+        }).catch(err => {
+            toast(err || 'Failed to copy', false);
+        });
+    },
+    modalCancel() {
+        this.copyItem = null;
+    },
 }))

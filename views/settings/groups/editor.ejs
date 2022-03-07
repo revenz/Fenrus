@@ -84,10 +84,13 @@
                                     <span class="icon-arrow-up"></span>
                                 </span>
                                 <span title="Move Down" class="edit" @click="move(item, false)">
-                                    <span class="icon-arrow-up"></span>
+                                    <span class="icon-arrow-down"></span>
                                 </span>
                                 <span title="Edit" class="edit" @click="editItem(item)">
                                     <span class="icon-edit"></span>
+                                </span>
+                                <span title="Copy" class="copy" @click="copy(item)">
+                                    <span class="icon-copy"></span>
                                 </span>
                                 <span title="Delete" class="delete" @click="remove(item)">
                                     <span class="icon-trash"></span>
@@ -101,6 +104,7 @@
             
     </div>
     <%- include('./item-editor.ejs') %>
+    <%- include('./copy-dialog.ejs') %>
 
 </div>
 
