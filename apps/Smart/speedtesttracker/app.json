@@ -23,6 +23,13 @@
             "Value":"average"
         }
       ]
+    },
+    {
+      "Name": "Max download/upload (Mb/s)",
+      "Id": "maxY",
+      "Type": "string",
+      "Default": "1000",
+      "IfValue": { "mode" : "graph" }
     }
 	]
 }
