@@ -11,7 +11,7 @@ class DefaultTheme
             this.oneRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
             this.oneUnit = this.oneRem * this.unit;
 
-            for(let i=1;i<=3;i++){
+            for(let i=3;i>=1;i--){
                 let div = document.createElement('div')
                 div.classList.add('bg');
                 div.classList.add('bg' + i);
@@ -55,6 +55,12 @@ class DefaultTheme
         className += this.settings.Horizontal ? ' horizontal' : ' vertical';
         eleDashboard.className = className;
 
+        let animateBackground = this.settings.AnimatedBackground !== false;
+        console.log('animateBackground', animateBackground);
+        document.body.classList.remove('animate-background');
+        document.body.classList.remove('no-animate-background');
+        document.body.classList.add((animateBackground ? '' : 'no-') + 'animate-background');
+
         this.shrinkGroups();
 
         document.body.classList.remove('horizontal');
@@ -71,6 +77,8 @@ class DefaultTheme
         let classes = [];
         let bodyClasses = [];
         classes.push(args?.Placement || 'bottom-left');
+        let animateBackground = args.AnimatedBackground !== false;
+        bodyClasses.push((animateBackground ? '' : 'no-') + 'animate-background');
         
         if(args?.Horizontal){
             classes.push('horizontal');

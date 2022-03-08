@@ -1,8 +1,10 @@
-body.no-custom-background {
-    
-	background: linear-gradient(-45deg, #6c0d91, #0c475c, #113d14) !important;
+body.no-custom-background 
+{    
+  background: linear-gradient(-45deg, #6c0d91, #0c475c, #113d14) !important;
 	background-size: 1000% 1000% !important;
-    background-position: center;
+  background-position: center;
+}
+body.no-custom-background.animate-background {
 	animation: gradient 10s ease infinite;
 }
 

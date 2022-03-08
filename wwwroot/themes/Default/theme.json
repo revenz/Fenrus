@@ -55,6 +55,12 @@
         {
             "Name":"Horizontal",
             "Type":"Boolean"
+        },
+        {
+            "Name":"AnimatedBackground",
+            "Label":"Animated Background",
+            "Type":"Boolean",
+            "Default":true
         }
     ]
 }

@@ -863,7 +863,9 @@ a.btn {
   align-items: center;
 }
 .main-menu li:hover .panel .setting .label, .main-menu li.force-hover .panel .setting .label {
-  width: 8rem;
+  width: 10rem;
+  text-align: right;
+  margin-right: 1rem;
 }
 .main-menu li:hover .panel .setting + .setting, .main-menu li.force-hover .panel .setting + .setting {
   margin-top: 1rem;

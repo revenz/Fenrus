@@ -16,12 +16,19 @@ class Common
             }
         }
         let themeSettings = {};
-        if(req.settings?.ThemeSettings && req.settings.ThemeSettings[req.theme.Name])
+        if(req.settings?.ThemeSettings && req.settings.ThemeSettings[req.theme.Name]){
             themeSettings = req.settings.ThemeSettings[req.theme.Name];
+            // incase a new theme setting has been added
+            for(let setting of req.theme.Settings)
+            {
+                if(themeSettings[setting.Name] === undefined)
+                    themeSettings[setting.Name] = setting.Default;
+            }
+        }
         else if(req.theme?.Settings?.length){
             // need to get default settings
             for(let setting of req.theme.Settings){
-                if(setting.Default)
+                if(setting.Default !== null && setting.Default !== undefined)
                     themeSettings[setting.Name] = setting.Default;
                 else if(setting.Type === 'Integer')
                     themeSettings[setting.Name] = 0;

@@ -42,7 +42,6 @@ class HomeRouter {
     async home(req, res) 
     {        
         let dashboardInstance = this.getDefaultDashboard(req, res);
-        console.log('dashboardInstance', dashboardInstance);
         return this.renderDashboard(req, res, dashboardInstance, false);
     }
 
