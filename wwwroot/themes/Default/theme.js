@@ -81,7 +81,7 @@ class DefaultTheme
         let classes = [];
         let bodyClasses = [];
         classes.push(args?.Placement || 'bottom-left');
-        let animateBackground = args.AnimatedBackground !== false;
+        let animateBackground = args?.AnimatedBackground !== false;
         bodyClasses.push((animateBackground ? '' : 'no-') + 'animate-background');
         
         if(args?.Horizontal){
