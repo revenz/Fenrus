@@ -26,14 +26,9 @@ class DefaultTheme
             if(!eleDashboard)
                 return;
 
-            window.addEventListener('load', (event) => {
-                this.shrinkGroups();
-                eleDashboard.style.visibility = 'unset';
-            });
-            setTimeout(() => {
-                // incase something is prevent the page from firing the load event, eg a script is hanging
-                eleDashboard.style.visibility = 'unset'; 
-            }, 250);
+            window.addEventListener('load', (event) => { this.load()});
+            setTimeout(() => { this.load() }, 250); // incase something is prevent the page from firing the load event, eg a script is hanging
+
             window.addEventListener('resize', (event) => {
                 this.shrinkGroups();
             });         
@@ -49,6 +44,11 @@ class DefaultTheme
                 });
             }
         }
+    }
+
+    load() {
+        this.shrinkGroups();
+        eleDashboard.style.visibility = 'unset'; 
     }
 
     init(){
