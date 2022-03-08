@@ -4,8 +4,8 @@
         "theme.min.css"
     ],
     "Scripts":[
-        "theme.js",
-        "packer.growing.min.js"
+        "packer.growing.min.js",
+        "theme.js"
     ],
     "Settings":[        
         {

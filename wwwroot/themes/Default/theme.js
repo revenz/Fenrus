@@ -44,6 +44,9 @@ class DefaultTheme
 
     load() 
     {        
+        if(typeof(GrowingPacker) === 'undefined')
+            return setTimeout(()=> this.load(), 50);
+
         let eleDashboard = document.querySelector('.dashboard');
         if(!eleDashboard)
             return;
