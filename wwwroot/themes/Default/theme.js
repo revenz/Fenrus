@@ -22,10 +22,6 @@ class DefaultTheme
             let json = document.getElementById('theme-settings').value;            
             this.settings = json ? JSON.parse(json) : {};
 
-            let eleDashboard = document.querySelector('.dashboard');
-            if(!eleDashboard)
-                return;
-
             window.addEventListener('load', (event) => { this.load()});
             setTimeout(() => { this.load() }, 250); // incase something is prevent the page from firing the load event, eg a script is hanging
 
@@ -46,8 +42,13 @@ class DefaultTheme
         }
     }
 
-    load() {
-        this.shrinkGroups();
+    load() 
+    {        
+        let eleDashboard = document.querySelector('.dashboard');
+        if(!eleDashboard)
+            return;
+
+        this.shrinkGroups();            
         eleDashboard.style.visibility = 'unset'; 
     }
 
