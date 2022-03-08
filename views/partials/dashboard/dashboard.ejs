@@ -10,7 +10,7 @@
 <a class="db-item db-dashboard db-basic <%= model.Size || 'medium' %>" onclick="fetchDashboard('<%= model.Url %>')" title="<%= model.Name %>">
     <div class="inner">
         <div class="icon">
-        <img src="<%= model.Icon || '/favicon.svg' %>" />
+        <img src="(<%= model.Icon || '/favicon.svg' %>) + '?version=<%= version %>'" />
         </div>
         <div class="content">
             <div class="title">Dashboard: <%= dashboard.Name %></div>

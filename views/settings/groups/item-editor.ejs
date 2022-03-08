@@ -97,7 +97,7 @@
                                     'x-large': model.Size === 'x-large', 'xx-large': model.Size === 'xx-large', 'carousel': EditorApp.Carousel && model.Size.indexOf('large') >= 0}" >
                                         <div class="inner">
                                             <div class="icon">
-                                                <img :src="model.Icon" class="icon-pick">
+                                                <img :src="model.Icon + '?version=<%= version %>'" class="icon-pick">
                                             </div>
                                             <div class="content">
                                                 <div class="title" x-text="model.Name"></div>
@@ -116,7 +116,7 @@
                                                                 <div class="fill" style="background:#333">
                                                                     <div class="name tr">Sample item</div>
                                                                     <div class="br">2010</div>
-                                                                    <a class="app-icon"><img :src="model.Icon"></a>
+                                                                    <a class="app-icon"><img :src="model.Icon + '?version=<%= version %>'"></a>
                                                                 </div>
                                                             </div>
                                                             <div class="controls">

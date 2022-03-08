@@ -6,6 +6,7 @@ let AppHelper = require('../helpers/appHelper');
 const path = require('path');
 const ChartHelper = require('../helpers/ChartHelper');
 const fsExists = require('fs.promises.exists');
+const Globals = require('../Globals');
 
 const router = express.Router();
 
@@ -76,6 +77,7 @@ function getAppArgs(appInstance, settings){
 
     let funcArgs = {
         url: url,
+        version: Globals.getVersion(),
         properties: appInstance.Properties,
         Utils: utils,
         linkTarget: settings.LinkTarget,
@@ -160,7 +162,7 @@ function getAppArgs(appInstance, settings){
 router.get('/:appName/app.css', (req, res) => {    
     let app = req.app;
     let file = `../apps/${app.Directory}/app.css`;
-    res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
+    res.setHeader('Cache-Control', 'public, max-age=' + (31 * 24 * 60 * 60)); // cache header
     res.sendFile(path.resolve(__dirname, file));
 });
 
@@ -236,7 +238,7 @@ router.get('/:appName/:uid/status', async (req, res) => {
 router.get('/:appName/:icon', (req, res) => {    
     let app = req.app;
     let file = `../apps/${app.Directory}/${app.Icon}`;
-    res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
+    res.setHeader('Cache-Control', 'public, max-age=' + (31 * 24 * 60 * 60)); // cache header
     res.sendFile(path.resolve(__dirname, file));
 });
 

@@ -85,8 +85,15 @@ app.use(cookieParser());
 
 // set cache control for files
 app.use(function (req, res, next) {
-    if (req.url.match(/((\.(woff|eot|ttf|css|js|svg|ico|jp(e)?(g)?|gif|png)$)|img|images|background|font|(version=([\d]+\.){3}[\d]+))/)) {
-        res.setHeader('Cache-Control', 'public, max-age=3600'); // cache header
+    console.log('req.url', req.url);
+    if (/version=([\d]+\.){3}[\d]+/.test(req.url) || /\/fonts\//.test(req.url)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable'); // forever if have version on it
+    }
+    else if (/favicon\.svg/.test(req.url)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable'); // unlikely to change, if i do change it, have to change this
+    }
+    else if (/(\.(woff|eot|ttf|css|js|svg|ico|jp(e)?(g)?|gif|png)$)|img|images|background|font/.test(req.url)) {
+        res.setHeader('Cache-Control', 'public, max-age=' + (24 * 60 * 60)); // one day
     }
     next();
 });

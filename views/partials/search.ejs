@@ -1,6 +1,6 @@
 <div class="search" x-data="SearchSettings">
     <div class="search-inner">
-        <img :src="model.SearchEngine?.Icon || model.DefaultEngine?.Icon">
+        <img :src="(model.SearchEngine?.Icon || model.DefaultEngine?.Icon) + '?version=<%= version %>'">
         <input id="search-text" @input="onInput" @keydown.enter="search" x-model="model.SearchText" autofocus autocomplete="off" />
         <button @click="search">Search</button>
     </div>

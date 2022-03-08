@@ -48,7 +48,7 @@ class ProxyRouter{
                 });
 
                 // cache it
-                res.setHeader('Cache-Control', 'public, max-age=3600');
+                res.setHeader('Cache-Control', 'public, max-age=' + (31 * 24 * 60 * 60));
          
                 //Pipe data to response stream
                 data.pipe(res);         

@@ -121,7 +121,7 @@
     <div class="name tr">${title}</div>
     ${item.date ? `<div class="br">${item.date}</div>` : ''}
     <a class="cover-link" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}" />
-    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon || '/apps/Emby/icon.png'}" /></a>
+    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon || '/apps/Emby/icon.png'}?version=${args.version}" /></a>
 </div>
 `;
     }

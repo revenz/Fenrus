@@ -56,7 +56,7 @@ class Steam {
         ${item.discount}
     </div>
     <a class="cover-link" target="${args.linkTarget}" href="${item.link}" />
-    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon || '/apps/Steam/icon.png'}" /></a>
+    <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon || '/apps/Steam/icon.png'}?version=${args.version}" /></a>
 </div>
 `;
     }

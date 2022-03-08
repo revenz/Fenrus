@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.svg?version=<%= version %>">
     <% if(title) { %>
         <title>Fenrus - <%= title %></title>
     <% } else { %>
@@ -82,8 +82,8 @@
     </div>
 
     <script src="/js/site.js?version=<%= version %>" asp-append-version="true"></script>
-    <script src="/js/alpinejs-3.8.1.min.js" defer></script>
-    <script src="/js/iodine.min.js" defer></script>
+    <script src="/js/alpinejs-3.8.1.min.js?version=<%= version %>" defer></script>
+    <script src="/js/iodine.min.js?version=<%= version %>" defer></script>
 
     <script>
 

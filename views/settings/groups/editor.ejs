@@ -72,7 +72,7 @@
                     <a :class="(item.Size || 'medium') + ' db-' + item._Type.substring(9).toLowerCase() + ' db-item db-basic'" :title="item.Name">
                         <div class="inner">
                             <div class="icon">
-                                <img :src="item.Icon || (item.AppName ? `/apps/${encodeURIComponent(item.AppName)}/app.png` : '/favicon.svg')" />
+                                <img :src="(item.Icon || (item.AppName ? `/apps/${encodeURIComponent(item.AppName)}/app.png` : '/favicon.svg')) + '?version=<%= version %>'" />
                             </div>
                             <div class="content">
                                 <div class="title" x-text="item.Name"></div>
