@@ -117,7 +117,7 @@ function getAppArgs(appInstance, settings){
                 html += `<div class="item ${count === 0 ? 'visible initial' : ''}" id="${id}-${count}">`;
                 html += item
                 html += '</div>';
-                controls += `<a href="#${itemId}" class="${count === 0 ? 'selected' : ''}" onclick="carouselItem(event, '${id}', ${count})"></a>`;
+                controls += `<a href="#${itemId}" class="${count === 0 ? 'selected' : ''}"></a>`;
                 ++count;
             }
             controls += '</div>';
