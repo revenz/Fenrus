@@ -33,7 +33,7 @@ class SmartApp
 
         if(!result)
             return; // nothing more to do
-        if(this.interval === 0)
+        if(this.interval <= 0)
             return; // nothing more to do
         
         setTimeout(()=> this.trigger(), this.interval);
@@ -92,7 +92,7 @@ class SmartApp
             this.controller?.abort();
 
             this.controller = new AbortController();
-            let timeoutId = setTimeout(() => this.controller.abort(), Math.min(this.interval, 5000));
+            let timeoutId = setTimeout(() => this.controller.abort(), Math.min(Math.max(this.interval, 3000), 5000));
 
             let success = true;
             let url = `/apps/${encodeURIComponent(this.name)}/${encodeURIComponent(this.uid)}/status?name=` + encodeURIComponent(this.name) + '&t=' + new Date().getTime();
@@ -198,6 +198,7 @@ class SmartApp
         if (ele && content) {
             this.setInLocalStorage(content);        
             if(/^:carousel:/.test(content)){
+                console.log('content', content);
                 content = content.substring(10);
                 let index = content.indexOf(':');
                 let carouselId = content.substring(0, index);
