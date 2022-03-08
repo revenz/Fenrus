@@ -117,9 +117,7 @@ class SmartApp
                     success = false;
                     window.location.href = '/login';
                 }
-                console.log('headers', res.headers);
                 let xIcon = res.headers.get('x-icon');
-                console.log('xIcon', xIcon);
                 if(xIcon){
                     this.changeIcon(atob(xIcon));
                 }
