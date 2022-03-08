@@ -30,6 +30,10 @@ class DefaultTheme
                 this.shrinkGroups();
                 eleDashboard.style.visibility = 'unset';
             });
+            setTimeout(() => {
+                // incase something is prevent the page from firing the load event, eg a script is hanging
+                eleDashboard.style.visibility = 'unset'; 
+            }, 250);
             window.addEventListener('resize', (event) => {
                 this.shrinkGroups();
             });         
