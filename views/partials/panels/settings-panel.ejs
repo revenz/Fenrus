@@ -1,16 +1,6 @@
 <input type="hidden" id="SettingsData" value="<%= settings.toJson(true) %>" />
 
 <div class="settings panel" x-data="Settings">
-    <div class="setting">
-        <span class="label">Theme</span>
-        <span class="value">
-            <select x-model="model.Theme" @change="update">
-                <% for(let theme of themes) { %>
-                    <option><%= theme %></option>
-                <% } %>    
-            </select>
-        </span>
-    </div>
     <% if(dashboards?.length > 1) { %>
         <div class="setting">
             <span class="label">Dashboard</span>
@@ -22,6 +12,18 @@
                 </select>
             </span>
         </div>
+    <% } %>
+    <% if(typeof(dashboardTheme) === 'undefined' || !dashboardTheme) { %>
+    <div class="setting">
+        <span class="label">Theme</span>
+        <span class="value">
+            <select x-model="model.Theme" @change="update">
+                <% for(let theme of themes) { %>
+                    <option><%= theme %></option>
+                <% } %>    
+            </select>
+        </span>
+    </div>
     <% } %>
     <div class="setting">
         <span class="label">Link Target</span>

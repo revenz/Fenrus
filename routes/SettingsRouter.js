@@ -6,20 +6,10 @@ const GroupsRouter = require('./GroupsRouter');
 const SystemGroupsRouter = require('./SystemGroupsRouter');
 const SearchEngineRouter = require('./SearchEngineRouter');
 const UsersRouter = require('./UsersRouter');
-const User = require('../models/User');
 const AdminMiddleware = require('../middleware/AdminMiddleware');
 
 const router = express.Router();
 
-// router.get('/', async (req, res) => {
-
-//     let themes = await FileHelper.getDirectories('./wwwroot/themes');
-
-//     res.render('settings', common.getRouterArgs(req, { 
-//         title: 'Settings',
-//         themes: themes
-//     }));    
-// });
   
 router.get('/', async (req, res) => {
 

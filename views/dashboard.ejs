@@ -1,6 +1,7 @@
 <input type="hidden" id="dashboard-instance" value="<%= dashboardInstanceUid %>" />
 <input type="hidden" id="hdn-dashboard-name" value="<%= dashboard.Name %>" />
 <input type="hidden" id="hdn-dashboard-background" value="<%= dashboard.BackgroundImage || settings?.BackgroundImage %>" />
+<input type="hidden" id="hdn-dashboard-theme" value="<%= dashboard.Theme || settings?.Theme || 'Default' %>" />
 
 
 <% if(dashboard.AccentColor) {  

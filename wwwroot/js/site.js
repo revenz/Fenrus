@@ -272,7 +272,12 @@ function getCookie(cname) {
     return "";
 }
 
+function changeTheme(name){
+    window.location.reload();
+}
+
 function fetchDashboard(uid,  backwards) {
+    let currentTheme = document.getElementById('hdn-dashboard-theme')?.value || 'Default';
     let fetchUrl = '/dashboard/' + (uid || 'Default') + '?inline=true';
     fetch(fetchUrl).then(res => {
         if(!res.ok)
@@ -296,6 +301,11 @@ function fetchDashboard(uid,  backwards) {
         document.body.classList.remove('custom-background');
         document.body.classList.remove('no-custom-background');
         document.body.classList.add((!dashboardBackground ? 'no-' : '') + 'custom-background');
+
+        let dashboardTheme = document.getElementById('hdn-dashboard-theme')?.value || 'Default';
+        if(currentTheme != dashboardTheme)
+            changeTheme(dashboardTheme);
+
 
         let name = document.getElementById('hdn-dashboard-name').value;
         document.getElementById('dashboard-name').innerText = name === 'Default' ? '' : name;

@@ -42,7 +42,23 @@
                         <span class="help-text">The accent colour of the dashboard</span>
                     </span>
                 </div>
-            <% } else { %>
+            <% } %>
+            <div class="setting">
+                <span class="label">Theme</span>
+                <span class="value">
+                    <select x-model="model.theme">
+                        <% if(isGuest === false) { %>   
+                            <option value="">None</option>
+                        <% } %>
+                        <% for(let theme of themes) { %>
+                            <option><%= theme %></option>
+                        <% } %>    
+                    </select>
+                    <span class="help-text">
+                        The theme to use on this dashboard.  <%= isGuest ? '' : "Select 'None' to use your default theme." %></span>
+                </span>
+            </div>   
+            <% if(isGuest) { %>   
                 <div class="setting">
                     <span class="label">Enabled</span>
                     <span class="value">              
@@ -109,6 +125,7 @@
             enabled: data.dashboard.Enabled,
             accentColor: data.dashboard.AccentColor,
             backgroundImage: data.dashboard.BackgroundImage,
+            theme: data.dashboard.Theme,
             baseUrl: '/settings/groups',
             IsAdmin: <%= isAdmin %>
         };
@@ -131,6 +148,7 @@
                         Groups: this.model.items,
                         Enabled: this.model.enabled,
                         AccentColor: this.model.accentColor,
+                        Theme: this.model.theme,
                         BackgroundImage: this.model.backgroundImage
                     }),
                     headers: {

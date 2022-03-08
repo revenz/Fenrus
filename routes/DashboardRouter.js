@@ -3,6 +3,7 @@ const Utils = require('../helpers/utils');
 const common = require('./Common');
 const System = require('../models/System');
 const ImageHelper = require('../helpers/ImageHelper');
+const FileHelper = require('../helpers/FileHelper');
 
 const router = express.Router();
 
@@ -43,6 +44,7 @@ router.get('/:uid', async (req, res) => {
         dashboard = {
             Uid: 'Guest',
             Name: 'Guest',
+            Theme: system.GuestDashboard?.Theme || 'Default',
             BackgroundImage: system.GuestDashboard?.BackgroundImage,
             Groups: system.GuestDashboard?.Groups || [],
             Enabled: system.AllowGuest
@@ -61,6 +63,7 @@ router.get('/:uid', async (req, res) => {
     }
 
     let groups = getGroups(req.settings, system, uid === 'Guest');
+    let themes = await FileHelper.getDirectories('./wwwroot/themes');
 
     // filter out any missing groups, incase they have been deleted
     let groupUids = groups.map(x => x.Uid);
@@ -78,6 +81,7 @@ router.get('/:uid', async (req, res) => {
     res.render('settings/dashboards/editor', common.getRouterArgs(req, { 
         title: 'Dashboards',
         description: description,
+        themes: themes,
         model: {
             dashboard: dashboard,
             groups: groups
@@ -94,7 +98,6 @@ function getGroups(settings, system, isGuest){
             IsSystem:false
         }
     }) || [];
-    console.log('system?.SystemGroups', system?.SystemGroups);
     groups = groups.concat(system?.SystemGroups?.filter(x => x.Enabled)?.map(x => {
         return { 
             Uid: x.Uid,
@@ -126,6 +129,7 @@ router.post('/:uid', async (req, res) => {
 
         let guestBackground = await new ImageHelper().saveImageIfBase64(req.body.BackgroundImage, 'backgrounds');
         system.GuestDashboard.BackgroundImage = guestBackground;
+        system.GuestDashboard.Theme = req.body.Theme || 'Default';
         system.GuestDashboard.Groups = req.body.Groups || [];
         system.AllowGuest = req.body.Enabled;
         await system.save();
@@ -161,6 +165,7 @@ router.post('/:uid', async (req, res) => {
         }
     }
     dashboard.Name = name;
+    dashboard.Theme = req.body.Theme;
     dashboard.Groups = req.body.Groups || [];
     dashboard.BackgroundImage = await new ImageHelper().saveImageIfBase64(req.body.BackgroundImage, 'backgrounds');
 

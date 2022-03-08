@@ -2,12 +2,17 @@
 let Utils = require('../helpers/utils');
 let AppHelper = require('../helpers/appHelper');
 let Globals = require("../Globals");
+const Theme = require('../models/Theme');
+const HomeRouter = require('./HomeRouter');
 
 class Common
 {
     getRouterArgs(req, customArgs)
     {
-
+        console.log('customArgs.dashboard?.Theme', customArgs.dashboard?.Theme);
+        if(customArgs.dashboard?.Theme) {
+            req.theme = Theme.getTheme(customArgs.dashboard?.Theme);
+        }
         let themeVariables = {};
         if(req.theme?.loadScript) {
             let instance = req.theme.loadScript();
@@ -40,11 +45,12 @@ class Common
         }
 
         let args = {         
-            isHome:req.originalUrl === '/' || !req.originalUrl,
+            isHome:req.originalUrl === '/' || !req.originalUrl || req.originalUrl.startsWith('/dashboard'),
             pageUrl: req.originalUrl,
             isGuest: req.isGuest,
             isAdmin: req.user?.IsAdmin === true,
             theme: req.theme,
+            dashboardTheme: customArgs.dashboard?.Theme,
             themeVariables: {},
             user: req.user, 
             settings: req.settings,

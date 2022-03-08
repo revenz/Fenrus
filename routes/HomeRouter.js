@@ -77,7 +77,8 @@ class HomeRouter {
         let system = System.getInstance();
         let settings = req.settings;
         let dashboard = { 
-            Name: dashboardInstance?.Name, 
+            Name: dashboardInstance.Name, 
+            Theme: dashboardInstance.Theme,
             AccentColor: dashboardInstance.AccentColor,
             BackgroundImage: dashboardInstance.BackgroundImage,
             Groups: [], 
@@ -111,7 +112,7 @@ class HomeRouter {
         dashboards.sort((a, b) => {
             return a.Name.localeCompare(b.Name);
         })
-        
+    
         res.render(inline ? 'dashboard' : 'home', common.getRouterArgs(req, { 
             title: '', 
             dashboardInstanceUid: new Utils().newGuid(),            
