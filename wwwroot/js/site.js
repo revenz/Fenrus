@@ -74,6 +74,7 @@ function changeTheme(name){
     window.location.reload();
 }
 
+
 function fetchDashboard(uid,  backwards) {
     let currentTheme = document.getElementById('hdn-dashboard-theme')?.value || 'Default';
     let fetchUrl = '/dashboard/' + (uid || 'Default') + '?inline=true';

@@ -7,12 +7,14 @@ class SmartApp
     renderCount = 0;
     controller;
     timerCarousel;
+    icon;
 
     constructor(args)
     {
         this.uid = args.uid || args.instanceUid;
         this.name = args.name;
         this.interval = args.interval;
+        this.icon = document.getElementById(this.uid).querySelector('.icon img')?.getAttribute('src');
         if(this.interval === 0)
             this.interval = 3000;
         this.dashboardIntanceUid = this.getDashboardInstanceUid();
@@ -83,7 +85,6 @@ class SmartApp
 
         return await this.refresh();
     }
-
     refresh()
     {        
         return new Promise((resolve, reject) =>
@@ -116,6 +117,12 @@ class SmartApp
                     success = false;
                     window.location.href = '/login';
                 }
+                console.log('headers', res.headers);
+                let xIcon = res.headers.get('x-icon');
+                console.log('xIcon', xIcon);
+                if(xIcon){
+                    this.changeIcon(atob(xIcon));
+                }
                 return res.text();
             })
             .then(html => {
@@ -135,6 +142,13 @@ class SmartApp
                 resolve(success);
             });
         });
+    }
+
+    changeIcon(icon) {
+        icon = icon || this.icon;        
+        let imgIcon = document.getElementById(this.uid).querySelector('.icon img');
+        if(imgIcon)
+            imgIcon.setAttribute('src', icon);
     }
 
     getItemSize()
@@ -195,10 +209,8 @@ class SmartApp
                 this.setItemClass(eleItem, 'carousel');
                 ele.innerHTML = content;
                 let indexes = ele.querySelectorAll('.controls a');
-                console.log(indexes);
                 for(let i=0;i<indexes.length;i++)
                 {
-                    console.log(indexes[i]);
                     indexes[i].addEventListener('click', (event) => {
                         event.stopImmediatePropagation();
                         event.preventDefault();

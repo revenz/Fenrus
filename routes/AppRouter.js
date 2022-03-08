@@ -81,7 +81,7 @@ function getAppArgs(appInstance, settings){
         linkTarget: settings.LinkTarget,
         appIcon: appInstance.Icon,
         size: appInstance.Size,
-        chart: chartHelper,
+        chart: chartHelper,        
         proxy: (url) => {
             return '/proxy/' + utils.base64Encode(url).replace(/\//g, '-');
         },
@@ -208,6 +208,9 @@ router.get('/:appName/:uid/status', async (req, res) => {
     if(!instance.funcArgs)
         instance.funcArgs = getAppArgs(appInstance, req.settings);
     let funcArgs = instance.funcArgs;
+    funcArgs.changeIcon = (icon) => {
+        res.setHeader('x-icon', funcArgs.Utils.base64Encode(icon));
+    };
 
     try
     {
