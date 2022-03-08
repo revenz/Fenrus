@@ -41,6 +41,14 @@ class HomeRouter {
 
     async home(req, res) 
     {        
+        if(req.isGuest)
+        {
+            let system = System.getInstance();
+            res.setHeader('ETag', 'guest-' + system.Revision);
+        }else {
+            res.setHeader('ETag', req.settings.uid + '-' + req.settings.Revision);
+        }
+        //res.setHeader('ETag', settings.Uid + '-' + settings.Revision);
         let dashboardInstance = this.getDefaultDashboard(req, res);
         return this.renderDashboard(req, res, dashboardInstance, false);
     }

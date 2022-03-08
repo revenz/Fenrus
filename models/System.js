@@ -4,6 +4,7 @@ const Globals = require('../Globals');
 class SystemInstance 
 {
     Version;
+    Revision;
     AllowRegister = true;
     AllowGuest = true;
     _File = './data/system.json';
@@ -96,6 +97,11 @@ class SystemInstance
     }
 
     async save() {
+        if(!this.Revision)
+            this.Revision = 1;
+        else
+            ++this.Revision;
+            
         let json = this.toJson();
         let self = this;
         return new Promise(function (resolve, reject) {
@@ -131,6 +137,7 @@ class SystemInstance
         this.Version = Globals.getVersion();
         return JSON.stringify({             
             Version: this.Version,   
+            Revision: this.Revision,
             AuthStrategy: this.AuthStrategy,
             AllowRegister: this.AllowRegister,
             AllowGuest: this.AllowGuest,
