@@ -4,6 +4,7 @@ const Settings = require('../models/Settings');
 const AppHelper = require('../helpers/appHelper');
 const System = require('../models/System');
 const Utils = require('../helpers/utils');
+const ImageHelper = require('../helpers/ImageHelper');
 
 class GroupsRouter{
     
@@ -174,6 +175,11 @@ class GroupsRouter{
         group._Type = 'DashboardGroup';
         group.HideGroupTitle = req.body.HideGroupTitle;
         group.Items = req.body.Items || [];
+
+        for(let item of group.Items){
+            item.Icon = await new ImageHelper().saveImageIfBase64(item.Icon, 'icons', item.Uid);
+        }
+
         if(req.body.AccentColor.toLowerCase() === settings.AccentColor.toLowerCase())
             group.AccentColor = '';
         else

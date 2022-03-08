@@ -198,7 +198,6 @@ class SmartApp
         if (ele && content) {
             this.setInLocalStorage(content);        
             if(/^:carousel:/.test(content)){
-                console.log('content', content);
                 content = content.substring(10);
                 let index = content.indexOf(':');
                 let carouselId = content.substring(0, index);
