@@ -44,37 +44,31 @@ class DefaultTheme
 
     load() 
     {        
-        if(typeof(GrowingPacker) === 'undefined')
+        if(typeof(GrowingPacker) === 'undefined' || !this.settings)
             return setTimeout(()=> this.load(), 50);
 
-        let eleDashboard = document.querySelector('.dashboard');
-        if(!eleDashboard)
-            return;
-
-        this.shrinkGroups();            
-        eleDashboard.style.visibility = 'unset'; 
-    }
-
-    init(){
         let eleDashboard = document.querySelector('.dashboard');
         if(!eleDashboard)
             return;
         let className = 'dashboard ' + this.settings.Placement;
         className += this.settings.Horizontal ? ' horizontal' : ' vertical';
         eleDashboard.className = className;
-
+    
         let animateBackground = this.settings.AnimatedBackground !== false;
-        console.log('animateBackground', animateBackground);
         document.body.classList.remove('animate-background');
         document.body.classList.remove('no-animate-background');
         document.body.classList.add((animateBackground ? '' : 'no-') + 'animate-background');
 
-        this.shrinkGroups();
+        this.shrinkGroups();            
 
         document.body.classList.remove('horizontal');
         document.body.classList.remove('vertical');
         document.body.classList.add(this.settings.Horizontal ? 'horizontal' : 'vertical');
         eleDashboard.style.visibility = 'unset';
+    }
+
+    init(){
+        this.load();
     }
 
     initPreview() {
