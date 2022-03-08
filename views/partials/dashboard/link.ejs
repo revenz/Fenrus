@@ -5,7 +5,7 @@
 <a class="db-item db-link db-basic <%= model.Size || 'medium' %>" href="<%= model.Url%>" title="<%= model.Name %>" onclick="abortRequests()" target="<%= target %>">
     <div class="inner">
         <div class="icon">
-        <img src="(<%= model.Icon || '/favicon.svg' %>) + '?version=<%= version %>'" />
+        <img src="<%= model.Icon || '/favicon.svg' %>?version=<%= version %>" />
         </div>
         <div class="content">
             <div class="title"><%= model.Name %></div>
