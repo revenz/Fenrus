@@ -40,18 +40,21 @@ Alpine.data('Settings', () => ({
             }
         }
         let url = (isSystem ? '/settings/system/groups/' : '/settings/groups/') + this.model.Uid;
+        this.setSaving(true);
         fetch(url, options).then(async (res)=>{
             if(!res.ok)
                 throw await res.text();
             this.markClean();                
             window.location = isSystem ? '/settings/system/groups' : '/settings/groups';
         }).catch(err => {
+            this.setSaving(false);
             toast(err || 'Failed to save', false);
         });
         return true;
     }, 
 
     remove(item) {
+        if(this.isDisabled()) return;
         confirmPrompt(`Are you sure you want to delete the item "${item.Name}"?`).then(() => 
         {
             this.model.Items = this.model.Items.filter(x => x.Uid !== item.Uid);
@@ -66,6 +69,7 @@ Alpine.data('Settings', () => ({
         }
     },
     move(item, up) {
+        if(this.isDisabled()) return;
         let index = this.model.Items.indexOf(item);
         if(up && index < 1)
             return;
@@ -83,9 +87,11 @@ Alpine.data('Settings', () => ({
         setTimeout(()=> { document.querySelector('.group-item-editor .content').querySelector('input, select').focus();}, 250);
     },
     addItem() {
+        if(this.isDisabled()) return;
         itemEditor.addItem();
     },
     editItem(item) {
+        if(this.isDisabled()) return;
         if(this.isDisabled()) return;
         
         itemEditor.editItem(item.Uid);

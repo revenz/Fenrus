@@ -13,8 +13,8 @@
             Search Engine
         </span>
         <span class="buttons">
-            <button class="btn" @click="save">Save</button>
-            <button class="btn" @click="cancel">Cancel</button>
+            <button :disabled="isDisabled()" class="btn" @click="save">Save</button>
+            <button :disabled="isDisabled()" class="btn" @click="cancel">Cancel</button>
         </span>
     </div>
 
@@ -50,7 +50,7 @@
                         <div class="no-image"></div>
                     </template>
 
-                    <button class="btn" id="file-chooser-btn" onclick="document.getElementById('file-chooser').click()">
+                    <button :disabled="isDisabled()" class="btn" id="file-chooser-btn" onclick="document.getElementById('file-chooser').click()">
                         Browse...
                     </button>
                     <input style="display:none" id="file-chooser" class="file-chooser" type="file" accept="image/*" @change="imageChosen">
@@ -74,9 +74,11 @@
            model: model, 
            <%- include('../generic-alpine-editor.js') %>
            save() {
+                if(this.isDisabled()) return;
+
+                this.Saved = true;
                 if(!this.validate())
                     return false;
-                this.Saved = true;
                     
                 const options = {
                     method: 'POST',
@@ -85,17 +87,17 @@
                         'Content-Type': 'application/json'
                     }
                 }
-                this.Saving = true;
+                this.setSaving(true);
                 fetch('<%= baseUrl %>/' + encodeURIComponent(this.model.Uid), options).then(res => {
                     if(!res.ok)
                         throw res;
-                    this.Saving = false;
+                    
                     this.markClean();
                     window.location.href = '<%= baseUrl %>';
                 }).catch(err => {
                     console.log(err);
                     toast('Failed to save', false);
-                    this.Saving = false;
+                    this.setSaving(false);
                 });
             }, 
             cancel() {

@@ -15,9 +15,9 @@
             <% } %>
         </span>
         <span class="buttons">
-            <button class="btn" @click="save">Save</button>
+            <button :disabled="isDisabled()" class="btn" @click="save">Save</button>
             <% if(!isGuest) { %>
-                <button class="btn" @click="cancel">Cancel</button>
+                <button :disabled="isDisabled()" class="btn" @click="cancel">Cancel</button>
             <% } %>
         </span>
     </div>
@@ -31,14 +31,14 @@
                 <div class="setting">
                     <span class="label">Name</span>
                     <span class="value">
-                        <input type="text" x-model="model.name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save"/>
+                        <input :disabled="isDisabled()" type="text" x-model="model.name" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save"/>
                         <span class="help-text">The Name of the dashboard</span>
                     </span>
                 </div>
                 <div class="setting">
                     <span class="label">Accent</span>
                     <span class="value color-picker">
-                        <input type="text" x-model="model.accentColor" data-jscolor="{preset:'dark'}" @blur="blur" @input="input" @keydown.enter="save" />
+                        <input :disabled="isDisabled()" type="text" x-model="model.accentColor" data-jscolor="{preset:'dark'}" @blur="blur" @input="input" @keydown.enter="save" />
                         <span class="help-text">The accent colour of the dashboard</span>
                     </span>
                 </div>
@@ -46,7 +46,7 @@
             <div class="setting">
                 <span class="label">Theme</span>
                 <span class="value">
-                    <select x-model="model.theme">
+                    <select :disabled="isDisabled()" x-model="model.theme">
                         <% if(isGuest === false) { %>   
                             <option value="">None</option>
                         <% } %>
@@ -63,7 +63,7 @@
                     <span class="label">Enabled</span>
                     <span class="value">              
                         <label for="enabled" class="toggle-switchy">
-                            <input type="checkbox" id="enabled" x-model="model.enabled" />
+                            <input :disabled="isDisabled()" type="checkbox" id="enabled" x-model="model.enabled" />
                             <span class="toggle">
                                 <span class="switch"></span>
                             </span>
@@ -80,12 +80,12 @@
                         </template>
     
                         <div class="buttons">
-                            <button class="btn" id="file-chooser-btn" onclick="document.getElementById('file-chooser').click()">
+                            <button :disabled="isDisabled()" class="btn" id="file-chooser-btn" onclick="document.getElementById('file-chooser').click()">
                                 Browse...
                             </button>
-                            <button class="btn" @click="resetBackground">Reset</button>
+                            <button :disabled="isDisabled()" class="btn" @click="resetBackground">Reset</button>
                         </div>
-                        <input style="display:none" id="file-chooser" class="file-chooser" type="file" accept="image/*" @change="imageChosen">
+                        <input :disabled="isDisabled()" style="display:none" id="file-chooser" class="file-chooser" type="file" accept="image/*" @change="imageChosen">
     
                     </div>
                 </span>
@@ -155,6 +155,7 @@
                         'Content-Type': 'application/json'
                     }
                 }
+                this.setSaving(true);
                 fetch(`/settings/dashboards/${this.model.uid}`, options).then(async (res)=>{
                     if(!res.ok)
                         throw await res.text();
@@ -162,9 +163,11 @@
                     <% if(model.dashboard.Name !== 'Guest') { %>
                         window.location = '/settings/dashboards';                                            
                     <% } else { %>
+                        this.setSaving(false);
                         toast('Dashboard saved', true);
                     <% } %>
                 }).catch(err => {
+                    this.setSaving(false);
                     toast(err || 'Failed to save', false);
                 });
                 return true;
@@ -199,6 +202,7 @@
             hasNonSystemGroups: false,
             modalGroup: null,
             addGroup() {
+                if(this.isDisabled()) return;
                 this.modalGroup = null;
                 let unavailable = this.model.items.map(x => x.Uid);                
                 this.modalGroups = data.groups.filter(x => unavailable.indexOf(x.Uid) === -1);
@@ -210,7 +214,6 @@
             modalAdd(){
                 if(!this.modalGroup)
                     return; // they need to pick one
-                console.log('modalGroup', this.modalGroup);
                 let group = data.groups.find(x => x.Uid == this.modalGroup);
                 if(!group)
                     return;

@@ -40,6 +40,9 @@ isDisabled() {
         return true;
     return false;
 },
+setSaving(saving) {
+    this.Saving = saving;
+},
 validate() {
     let inputs = [...document.querySelectorAll(`.editor [data-rules]`)];
     let valid = true;

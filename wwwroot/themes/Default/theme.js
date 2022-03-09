@@ -31,7 +31,7 @@ class DefaultTheme
 
             if(this.settings.Horizontal){                
                 let dashboard = document.querySelector('.dashboard');
-                dashboard.addEventListener('wheel', (evt) => {
+                dashboard?.addEventListener('wheel', (evt) => {
                     evt.preventDefault();
                     let scroll = dashboard.scrollLeft + (evt.deltaY * 3);
                     dashboard.scrollTo({
