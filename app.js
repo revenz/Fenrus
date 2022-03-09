@@ -26,9 +26,20 @@ const ProxyRouter = require('./routes/ProxyRouter');
 
 const consoleLogger = console.log;
 
+function timeString() {
+    let date = new Date();
+    let hour = date.getHours();
+    let min = date.getMinutes();
+    let sec = date.getSeconds();
+    let ms = date.getMilliseconds();
+    return String(hour).padStart(2, '0')  + ':' +
+           String(min).padStart(2, '0')  + ':' +
+           String(sec).padStart(2, '0')  + '.' +
+           String(ms).padStart(3, '0');
+}
+
 console.log = (...args) => {
-    let time = new Date().toLocaleTimeString();
-    consoleLogger(time, ...args);
+    consoleLogger(timeString(), ...args);
 }
 
 // load static configs
@@ -118,7 +129,7 @@ app.use(express.static(__dirname + '/wwwroot'));
 
 
 // morgan logs every request coming into the system 
-morgan.token('date', (req, res, tz) => { return new Date().toLocaleTimeString(); })
+morgan.token('date', (req, res, tz) => { return timeString(); })
 morgan.format('myformat', ':date [:method] [:response-time ms] => :url');
 app.use(morgan('myformat'));
 
