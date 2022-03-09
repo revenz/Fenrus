@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const path = require('path');
 const Globals = require('./Globals');
 const http = require('http');
 const https = require("https");
@@ -23,6 +24,7 @@ const UserManager = require('./helpers/UserManager');
 const System = require('./models/System');
 const InitialConfigRouter = require('./routes/InitialConfigRouter');
 const ProxyRouter = require('./routes/ProxyRouter');
+const fsExists = require('fs.promises.exists');
 
 // load static configs
 AppHelper.getInstance().load();
@@ -41,15 +43,12 @@ if(fs.existsSync('./buildnum.txt')){
 
 
 // create default directories
-if(fs.existsSync('./wwwroot/images/icons') == false){
-    fs.mkdirSync('./wwwroot/images/icons', {recursive: true});
+for(let dir of ['./wwwroot/images/icons', './wwwroot/images/backgrounds', './data/configs', './data/temp'])
+{
+    if(fs.existsSync(dir) == false)
+        fs.mkdirSync(dir, {recursive: true});
 }
-if(fs.existsSync('./wwwroot/images/backgrounds') == false){
-    fs.mkdirSync('./wwwroot/images/backgrounds', {recursive: true});
-}
-if(fs.existsSync('./data/configs') == false){
-    fs.mkdirSync('./data/configs', {recursive: true});
-}
+
 // express app
 const app = express();
 
@@ -85,7 +84,6 @@ app.use(cookieParser());
 
 // set cache control for files
 app.use(function (req, res, next) {
-    console.log('req.url', req.url);
     if (/version=([\d]+\.){3}[\d]+/.test(req.url) || /\/fonts\//.test(req.url)) {
         res.setHeader('Cache-Control', 'public, max-age=31536000, immutable'); // forever if have version on it
     }
@@ -120,7 +118,7 @@ else
     configureRoutes(app, authStrategy);
 }
 
-app.use('/', ((req, res, next) => {
+app.use('/', (async (req, res, next) => {
     console.log('checking is configured');
     var system = System.getInstance();
     if(system.getIsConfigured() === false)
@@ -128,6 +126,17 @@ app.use('/', ((req, res, next) => {
         res.redirect('/initial-config');
         return;
     }
+            
+    // look for cached dashboard here
+    let filename = req.isGuest ? 'guest-' + system.Revision : req.settings.uid + '-' + req.settings.Revision;
+    filename = path.join(__dirname, 'data/temp/' + filename);
+    console.log('cached file: ' + filename);
+    if(await fsExists(filename)){
+        console.log('cached file exists: ' + filename);
+        return res.sendFile(filename);
+    }
+    
+
     next();
 }));
 
@@ -147,7 +156,7 @@ function configureRoutes(app, authStrategy)
 
     app.use(themeMiddleware);
 
-    app.use('/', new HomeRouter().get());
+    app.use('/', new HomeRouter(app).get());
 
     app.use('/apps', routerApp);
 
