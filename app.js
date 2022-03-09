@@ -128,13 +128,16 @@ app.use('/', (async (req, res, next) => {
     }
             
     // look for cached dashboard here
-    let filename = req.isGuest ? 'guest-' + system.Revision : req.settings.uid + '-' + req.settings.Revision;
-    filename = path.join(__dirname, 'data/temp/' + filename);
-    console.log('cached file: ' + filename);
-    if(await fsExists(filename)){
-        console.log('cached file exists: ' + filename);
-        res.setHeader('ETag', req.isGuest ? 'guest-' + system.Revision : req.settings.uid + '-' + req.settings.Revision);
-        return res.sendFile(filename);
+    if(!req.isGuest || system.AllowGuest)
+    {
+        let filename = req.isGuest ? 'guest-' + system.Revision : req.settings.uid + '-' + req.settings.Revision;
+        filename = path.join(__dirname, 'data/temp/' + filename);
+        console.log('cached file: ' + filename);
+        if(await fsExists(filename)){
+            console.log('cached file exists: ' + filename);
+            res.setHeader('ETag', req.isGuest ? 'guest-' + system.Revision : req.settings.uid + '-' + req.settings.Revision);
+            return res.sendFile(filename);
+        }
     }
     
 
