@@ -102,12 +102,6 @@ app.use((err, req, res, next) => {
     res.send('500: Internal server error');
 });
 
-// Calling the express.json() method for parsing
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-app.use(cookieParser());
-
-
 // set cache control for files
 app.use(function (req, res, next) {
     if (/version=([\d]+\.){3}[\d]+/.test(req.url) || /\/fonts\//.test(req.url)) {
@@ -132,6 +126,12 @@ app.use(express.static(__dirname + '/wwwroot'));
 morgan.token('date', (req, res, tz) => { return timeString(); })
 morgan.format('myformat', ':date [:method] [:response-time ms] => :url');
 app.use(morgan('myformat'));
+
+// Calling the express.json() method for parsing
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(cookieParser());
+
 
 if(system.getIsConfigured() === false){
     // not yet configured, we have to add a special /initial-config route

@@ -5,6 +5,9 @@
             throw 'No API Key';
 
         let data = await args.fetch({ url: 'api/v1/request/count', headers: { 'X-Api-Key': args.properties['apikey']} });
+        if(!data)
+            return;
+
         return args.liveStats([
             ['Pending', data.pending],
             ['Processing', data.processing ]
