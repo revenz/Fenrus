@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="/favicon.svg?version=<%= version %>">
-    <title>Fenrus</title>
+    <title>Fenrus - Error</title>
     <link rel="stylesheet" href="/css/site.min.css?version=<%= version %>" />
     <link id="theme-style" rel="stylesheet" href="/themes/Default/theme.min.css?version=<%= version %>" />
     <link rel="stylesheet" href="/css/login.css?version=<%= version %>" />
@@ -31,7 +31,7 @@
     </style>
 </head>
 
-<body class="logged-out no-custom-background animate-background">
+<body class="error-page no-custom-background animate-background ">
     <div class="bg bg1"></div>
     <div class="bg bg2"></div>
     <div class="bg bg3"></div>
@@ -46,12 +46,12 @@
                 <span class="title">Fenrus</span>
             </div>
             <div class="message-wrapper">
-                <div class="message">
-                    You have been logged out.
+                <div class="message error">
+                    <%= error || 'An unexpected error occurred' %>
                 </div>
         
                 <div class="link">
-                    <a href="/login">Login</a>
+                    <a href="/">Home</a>
                 </div>
             </div>
         </div>

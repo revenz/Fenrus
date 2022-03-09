@@ -4,14 +4,18 @@ const Globals = require('../Globals');
 const FileHelper = require('../helpers/FileHelper');
 const System = require('../models/System');
 const Utils = require('../helpers/utils');
+const ErrorHandler = require('./ErrorHandler');
+const FenrusRouter = require('./FenrusRouter');
 
-class HomeRouter {
+class HomeRouter extends FenrusRouter {
 
     router;
     themes;
 
     constructor()
     {
+        super();
+
         this.router = express.Router();
         this.themes = FileHelper.getDirectoriesSync('./wwwroot/themes') 
         this.init();
@@ -24,11 +28,11 @@ class HomeRouter {
 
     init()
     {
-        this.router.get('/', async(req, res) => await this.home(req, res));
+        this.router.get('/', async(req, res) => await this.safeAsync('home', req, res));
 
-        this.router.get('/dashboard/:uid', async(req, res) => await this.dashboard(req, res));
+        this.router.get('/dashboard/:uid', async(req, res) => await this.safeAsync('dashboard', req, res));
 
-        this.router.get('/about', async(req, res) => await this.about(req, res));
+        this.router.get('/about', async(req, res) => await this.safeAsync('about', req, res));
     }
 
     async about(req, res) 
@@ -53,7 +57,8 @@ class HomeRouter {
         return this.renderDashboard(req, res, dashboardInstance, false);
     }
 
-    getDefaultDashboard(req, res){
+    getDefaultDashboard(req, res)
+    {
         let settings = req.settings;
         let dashboardUid = req.isGuest ? 'Guest' : req.cookies?.dashboard || 'Default';
         let dashboardInstance = settings.Dashboards?.find(x => x.Uid === dashboardUid && x.Enabled !== false);

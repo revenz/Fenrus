@@ -92,16 +92,6 @@ else
     app.listen(3000);
 }
 
-// Handle errors
-app.use((err, req, res, next) => {
-    if (! err) {
-        return next();
-    }
-    console.log('unhandled error', err);
-    res.status(500);
-    res.send('500: Internal server error');
-});
-
 // set cache control for files
 app.use(function (req, res, next) {
     if (/version=([\d]+\.){3}[\d]+/.test(req.url) || /\/fonts\//.test(req.url)) {
@@ -179,7 +169,28 @@ function configureRoutes(app, authStrategy)
     app.use('/settings', routerSettings);
     app.use('/theme-settings', routerTheme);
 
+
     if(authStrategy.errorHandler)
-        app.use(authStrategy.errorHandler);    
+        app.use(authStrategy.errorHandler);  
+
+    errorHandler();
 }
 
+//errorHandler();
+
+function errorHandler(){
+    // Handle errors
+    app.use((err, req, res, next) => {
+        if (! err) {
+            return next();
+        }
+        console.error(timeString() + ' Error:', err.stack);
+
+        res.status(500).send('500: Internal server error');
+    });
+    process.on('uncaughtException', function (err) {
+        console.error(timeString() + ' Uncaught Exception:', err.message)
+        console.error(err.stack)
+        process.exit(1);
+    });
+}

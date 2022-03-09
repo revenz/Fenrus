@@ -1,10 +1,10 @@
 body.no-custom-background {
   background-image: none;
   --bg-base: rgb(10,10,10);
-  background: var(--bg-base);
+  background: var(--bg-base, #0a0a0a);
 }
 body.no-custom-background .bg {
-  background-image: linear-gradient(-60deg, var(--accent) 50%, var(--bg-base) 50%);
+  background-image: linear-gradient(-60deg, var(--accent, #ff0090) 50%, var(--bg-base, #0a0a0a) 50%);
   bottom: 0;
   left: -50%;
   opacity: 0.5;
