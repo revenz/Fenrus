@@ -358,7 +358,6 @@ body.no-custom-background.animate-background .bg3 {
 }
 
 body {
-  background: url("background.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }
