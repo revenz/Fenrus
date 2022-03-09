@@ -133,6 +133,7 @@ app.use('/', (async (req, res, next) => {
     console.log('cached file: ' + filename);
     if(await fsExists(filename)){
         console.log('cached file exists: ' + filename);
+        res.setHeader('ETag', req.isGuest ? 'guest-' + system.Revision : req.settings.uid + '-' + req.settings.Revision);
         return res.sendFile(filename);
     }
     
