@@ -19,6 +19,9 @@ input[type=text], input[type=password], input[type=number], select {
     &:focus {
         outline: solid 1px var(--accent);
     }
+    &:disabled {
+        opacity: 0.5;
+    }
 }
 
 select {

@@ -62,6 +62,9 @@ input[type=text], input[type=password], input[type=number], select {
 input[type=text]:focus, input[type=password]:focus, input[type=number]:focus, select:focus {
   outline: solid 1px var(--accent);
 }
+input[type=text]:disabled, input[type=password]:disabled, input[type=number]:disabled, select:disabled {
+  opacity: 0.5;
+}
 
 select {
   width: 100%;

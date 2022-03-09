@@ -24,6 +24,13 @@ const System = require('./models/System');
 const InitialConfigRouter = require('./routes/InitialConfigRouter');
 const ProxyRouter = require('./routes/ProxyRouter');
 
+const consoleLogger = console.log;
+
+console.log = (...args) => {
+    let time = new Date().toLocaleTimeString();
+    consoleLogger(time, ...args);
+}
+
 // load static configs
 AppHelper.getInstance().load();
 let system = System.getInstance();
@@ -74,6 +81,16 @@ else
     app.listen(3000);
 }
 
+// Handle errors
+app.use((err, req, res, next) => {
+    if (! err) {
+        return next();
+    }
+    console.log('unhandled error', err);
+    res.status(500);
+    res.send('500: Internal server error');
+});
+
 // Calling the express.json() method for parsing
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
@@ -101,7 +118,9 @@ app.use(express.static(__dirname + '/wwwroot'));
 
 
 // morgan logs every request coming into the system 
-app.use(morgan('dev'));
+morgan.token('date', (req, res, tz) => { return new Date().toLocaleTimeString(); })
+morgan.format('myformat', ':date [:method] [:response-time ms] => :url');
+app.use(morgan('myformat'));
 
 if(system.getIsConfigured() === false){
     // not yet configured, we have to add a special /initial-config route

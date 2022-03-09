@@ -141,7 +141,7 @@ function getAppArgs(appInstance, settings){
                 args.headers = { 'Accept': 'application/json' };
             else if (!args.headers['Accept'])
                 args.headers['Accept'] = 'application/json';
-            console.log(`REQUEST [${args.method || 'GET'}]: ${args.url}`);
+            console.log(`[${args.method || 'GET'}] => ${args.url}`);
             return fetch(args.url, {
                 headers: args.headers,
                 method: args.method,
