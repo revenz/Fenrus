@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const path = require('path');
 const Globals = require('./Globals');
 const http = require('http');
 const https = require("https");
@@ -24,7 +23,6 @@ const UserManager = require('./helpers/UserManager');
 const System = require('./models/System');
 const InitialConfigRouter = require('./routes/InitialConfigRouter');
 const ProxyRouter = require('./routes/ProxyRouter');
-const fsExists = require('fs.promises.exists');
 
 // load static configs
 AppHelper.getInstance().load();
@@ -118,29 +116,13 @@ else
     configureRoutes(app, authStrategy);
 }
 
-app.use('/', (async (req, res, next) => {
-    console.log('checking is configured');
+app.use('/', ((req, res, next) => {
     var system = System.getInstance();
     if(system.getIsConfigured() === false)
     {
         res.redirect('/initial-config');
         return;
     }
-            
-    // look for cached dashboard here
-    if(!req.isGuest || system.AllowGuest)
-    {
-        let filename = req.isGuest ? 'guest-' + system.Revision : req.settings.uid + '-' + req.settings.Revision;
-        filename = path.join(__dirname, 'data/temp/' + filename);
-        console.log('cached file: ' + filename);
-        if(await fsExists(filename)){
-            console.log('cached file exists: ' + filename);
-            res.setHeader('ETag', req.isGuest ? 'guest-' + system.Revision : req.settings.uid + '-' + req.settings.Revision);
-            return res.sendFile(filename);
-        }
-    }
-    
-
     next();
 }));
 

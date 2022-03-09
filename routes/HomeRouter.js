@@ -4,18 +4,14 @@ const Globals = require('../Globals');
 const FileHelper = require('../helpers/FileHelper');
 const System = require('../models/System');
 const Utils = require('../helpers/utils');
-const fs = require('fs');
-const path = require('path');
 
 class HomeRouter {
 
     router;
     themes;
-    app;
 
-    constructor(app)
+    constructor()
     {
-        this.app = app;
         this.router = express.Router();
         this.themes = FileHelper.getDirectoriesSync('./wwwroot/themes') 
         this.init();
@@ -123,32 +119,16 @@ class HomeRouter {
 
         dashboards.sort((a, b) => {
             return a.Name.localeCompare(b.Name);
-        });
-
-        let renderArgs =  common.getRouterArgs(req, { 
+        })
+    
+        res.render(inline ? 'dashboard' : 'home', common.getRouterArgs(req, { 
             title: '', 
             dashboardInstanceUid: new Utils().newGuid(),            
             dashboard: dashboard,
             themes:this.themes,
             dashboards: dashboards,
             searchEngines: searchEngines
-        });
-
-        if(inline)
-            return res.render('dashboard', renderArgs);
-    
-        this.app.render('home', renderArgs, function(err, html) {
-            if(err){
-                res.status(500).send('An unexpected error occurred.');
-                console.log('err', err);
-                return;
-            }
-            let filename = req.isGuest ? 'guest-' + system.Revision : settings.uid + '-' + settings.Revision;
-            filename = path.join(__dirname, '../data/temp/' + filename);
-            console.log('cache file: '+ filename);
-            fs.writeFile(filename, html, (err, data) => {   });
-            res.send(html);
-        });    
+        }));    
 
     }
 }
