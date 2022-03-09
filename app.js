@@ -41,7 +41,7 @@ if(fs.existsSync('./buildnum.txt')){
 
 
 // create default directories
-for(let dir of ['./wwwroot/images/icons', './wwwroot/images/backgrounds', './data/configs', './data/temp'])
+for(let dir of ['./wwwroot/images/icons', './wwwroot/images/backgrounds', './data/configs'])
 {
     if(fs.existsSync(dir) == false)
         fs.mkdirSync(dir, {recursive: true});
