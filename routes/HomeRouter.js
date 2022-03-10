@@ -4,7 +4,6 @@ const Globals = require('../Globals');
 const FileHelper = require('../helpers/FileHelper');
 const System = require('../models/System');
 const Utils = require('../helpers/utils');
-const ErrorHandler = require('./ErrorHandler');
 const FenrusRouter = require('./FenrusRouter');
 
 class HomeRouter extends FenrusRouter {

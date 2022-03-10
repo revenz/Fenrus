@@ -13,9 +13,9 @@ const cookieParser = require('cookie-parser');
 
 // routers
 const HomeRouter = require('./routes/HomeRouter');
-const routerApp = require('./routes/AppRouter');
-const routerSettings = require('./routes/SettingsRouter');
-const routerTheme = require('./routes/ThemeRouter');
+const AppRouter = require('./routes/AppRouter');
+const SettingsRouter = require('./routes/SettingsRouter');
+const ThemeRouter = require('./routes/ThemeRouter');
 const Four01Router = require('./routes/Four01Router');
 
 const AppHelper = require('./helpers/appHelper');
@@ -155,8 +155,6 @@ function configureRoutes(app, authStrategy)
     app.system = system;
     authStrategy.init(app);
 
-    // anything past this point will now need to be authenticated against the JWT middleware
-    //app.use(jwtAuthMiddleware);
     if(authStrategy.authMiddleware)
         app.use(authStrategy.authMiddleware);
 
@@ -164,10 +162,10 @@ function configureRoutes(app, authStrategy)
 
     app.use('/', new HomeRouter(app).get());
 
-    app.use('/apps', routerApp);
+    app.use('/apps', new AppRouter().get());
 
-    app.use('/settings', routerSettings);
-    app.use('/theme-settings', routerTheme);
+    app.use('/settings', new SettingsRouter().get());
+    app.use('/theme-settings', new ThemeRouter().get());
 
 
     if(authStrategy.errorHandler)
@@ -175,8 +173,6 @@ function configureRoutes(app, authStrategy)
 
     errorHandler();
 }
-
-//errorHandler();
 
 function errorHandler(){
     // Handle errors

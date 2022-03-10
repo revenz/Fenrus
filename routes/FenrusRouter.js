@@ -1,3 +1,4 @@
+const req = require('express/lib/request');
 const Globals = require('../Globals');
 
 class FenrusRouter {
@@ -7,6 +8,18 @@ class FenrusRouter {
             throw new Error("Abstract classes can't be instantiated.");
     }
 
+    async safe(funcName, req, res)
+    {        
+        try
+        {
+            this[funcName](req, res);
+        }
+        catch(err) 
+        {
+            console.error(this.timeString(), err);
+            this.renderError(res, err);
+        }
+    }
     
     async safeAsync(funcName, req, res)
     {        
@@ -17,11 +30,22 @@ class FenrusRouter {
         catch(err) 
         {
             console.error(this.timeString(), err);
-            res.render('error', {
-                version: Globals.getVersion(),
-                error: err
-            });
+            this.renderError(res, err);
         }
+    }
+
+    renderError(res, err) 
+    {
+        res.render('error', {
+            version: Globals.getVersion(),
+            error: err
+        });
+    }
+    
+    handleError(res, err)
+    {
+        console.error(this.timeString(), err);
+        this.renderError(res, err);
     }
     
     timeString() {

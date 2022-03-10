@@ -2,46 +2,68 @@ const express = require('express');
 const common = require('./Common');
 const Theme = require('../models/Theme')
 
-const router = express.Router();
+const FenrusRouter = require('./FenrusRouter');
 
-router.get('/', async (req, res) => {
+class ThemeRouter extends FenrusRouter 
+{
+    router;
 
-    let theme = await Theme.getTheme(req.theme.Name);
-    if(!theme || !theme.Settings?.length)
+    constructor()
     {
-        res.status(404).redirect('/');
-        return;
+        super();
+        this.router = express.Router();
+        this.init();
     }
 
-    let themeModel = {};
-    if(req.settings.ThemeSettings && req.settings.ThemeSettings[theme.Name])
-        themeModel = req.settings.ThemeSettings[theme.Name];
-
-    res.render('theme', common.getRouterArgs(req, { 
-        title: 'Theme',
-        model: theme,
-        themeModel: themeModel
-    }));    
-});
-  
-
-router.post('/', async (req, res) => {
-
-    let model = req.body;
-    if(!model){
-        res.status(400).send('Invalid data').end();
-        return;
+    get()
+    {
+        return this.router;
     }
 
-    if(!req.settings.ThemeSettings)
-        req.settings.ThemeSettings = {};
+    init() 
+    {  
+        this.router.get('/', async(req, res) => await this.safeAsync('index', req, res));
+        
+        this.router.post('/', async (req, res) => await this.safeAsync('save', req, res));
+    }
 
-    req.settings.ThemeSettings[req.settings.Theme] = model;
-    await req.settings.save();
+    async index(req, res) 
+    {
+        let theme = await Theme.getTheme(req.theme.Name);
+        if(!theme || !theme.Settings?.length)
+        {
+            res.status(404).redirect('/');
+            return;
+        }
 
+        let themeModel = {};
+        if(req.settings.ThemeSettings && req.settings.ThemeSettings[theme.Name])
+            themeModel = req.settings.ThemeSettings[theme.Name];
+
+        res.render('theme', common.getRouterArgs(req, { 
+            title: 'Theme',
+            model: theme,
+            themeModel: themeModel
+        }));  
+    }
+
+    async save(req, res) 
+    { 
+        let model = req.body;
+        if(!model){
+            res.status(400).send('Invalid data').end();
+            return;
+        }
+
+        if(!req.settings.ThemeSettings)
+            req.settings.ThemeSettings = {};
+
+        req.settings.ThemeSettings[req.settings.Theme] = model;
+        await req.settings.save();
+        
+        res.status(200).send('').end();
+    }
+}
     
-    res.status(200).send('').end();
-});
-  
 
-module.exports = router;
+module.exports = ThemeRouter;
