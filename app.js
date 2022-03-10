@@ -78,18 +78,32 @@ if(fs.existsSync('./data/certificate.crt') && fs.existsSync('./data/privatekey.k
     var privateKey  = fs.readFileSync('./data/privatekey.key', 'utf8');
     var certificate = fs.readFileSync('./data/certificate.crt', 'utf8');
     var credentials = {key: privateKey, cert: certificate};
-    https.createServer(app).listen(3001);
 
     var httpServer = http.createServer(app);
     var httpsServer = https.createServer(credentials, app);
 
     httpServer.listen(3000);
     httpsServer.listen(4000);
+
+    setInterval(() => {
+        httpsServer.getConnections((error, count) => {
+            console.log('### Number of HTTPS connections: ' + count);
+        });
+        httpServer.getConnections((error, count) => {
+            console.log('### Number of HTTP connections: ' + count);
+        });
+    }, 2000);
 }
 else 
 {
     console.log('#### SETTING UP HTTP');
-    app.listen(3000);
+    var httpServer = http.createServer(app);
+    httpServer.listen(3000);
+    setInterval(() => {
+        httpServer.getConnections((error, count) => {
+            console.log('### Number of connections: ' + count);
+        });
+    }, 2000);
 }
 
 // set cache control for files

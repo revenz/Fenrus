@@ -63,8 +63,8 @@ class OAuthStrategy {
                 return;
             }
             if(req.oidc.isAuthenticated()){
-                if(!req.user){
-                    console.log('user: ', req.oidc.user);
+                if(!req.user)
+                {
                     let userManager = UserManager.getInstance();
                     let username = req.oidc.user.email || req.oidc.user.username || req.oidc.user.name;
                     req.user = userManager.getUser(username);
