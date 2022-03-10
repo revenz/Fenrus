@@ -63,19 +63,36 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('Users', () => ({
             adminChange(event, uid) {        
-                fetch(`/settings/users/${uid}/set-admin/${event.target.checked}`);
+                fetch(`/settings/users/${uid}/set-admin/${event.target.checked}`).then(async (res) =>{
+                    if(!res.ok)
+                        throw await res.text();
+                    toast(`Successfully updated user`, true);
+                }).catch(err => {
+                    toast(err || 'Failed to update user', false);
+                });
             },
 
             allowRegisterChange(event) {        
-                fetch(`/settings/users/set-allow-register/${event.target.checked}`);
+                fetch(`/settings/users/set-allow-register/${event.target.checked}`).then(async (res) =>{
+                    if(!res.ok)
+                        throw await res.text();
+                    toast(`Updated Successfully`, true);
+                }).catch(err => {
+                    toast(err || 'Failed to update', false);
+                });
             },
             
             deleteUser(uid, name) {
                 console.log('deleting', uid, name);
                 confirmPrompt(`Are you sure you want to delete the user "${name}"?`).then(() => 
                 {
-                    fetch(`/settings/users/${uid}`, { method: 'DELETE'}).then(()=>{
+                    fetch(`/settings/users/${uid}`, { method: 'DELETE'}).then(async (res) =>{
+                        if(!res.ok)
+                            throw await res.text();
                         document.getElementById(uid).remove(); 
+                        toast(`Successfully deleted user`, true);
+                    }).catch(err => {
+                        toast(err || 'Failed to delete user', false);
                     });
                 }).catch(err => {
 

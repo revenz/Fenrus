@@ -46,6 +46,7 @@
                         if(!res.ok)
                             throw await res.text();
                         document.getElementById(item.Uid).remove(); 
+                        toast(`Successfully deleted item`, true);
                     }).catch(err => {
                         toast(err || 'Failed to delete', false);
                     });
@@ -53,66 +54,35 @@
             },
             setStatus(uid, enabled)
             {
-                fetch(`${baseUrl}/${encodeURIComponent(uid)}/status/${(enabled === true)}`, { method: 'POST'});
+                fetch(`${baseUrl}/${encodeURIComponent(uid)}/status/${(enabled === true)}`, { method: 'POST'}).then(async (res) =>{
+                    if(!res.ok)
+                        throw await res.text();
+                    toast(`Successfully ${enabled ? 'enable' : 'disable'} item`, true);
+                }).catch(err => {
+                    toast(err || `Failed to ${enabled ? 'enable' : 'disable'} item`, false);
+                });
             },
             setDefault(uid, checked){
                 // unselect any other defaults
                 for(let tr of document.querySelectorAll('.generic-list tr')){
                     if(tr.getAttribute('id') === uid)
                         continue;
-                    let eleIsDefault = tr.querySelector('.is-default');
+                    let eleIsDefault = tr.querySelector('.default.switch input');
                     if(!eleIsDefault)
                         continue;
                     eleIsDefault.checked = false;
                 }
-                fetch(`${baseUrl}/${encodeURIComponent(uid)}/default/${checked === true}`, { method: 'POST'});
-            }
-            
-            // dragSrcEl:null,
-            // dragStart(e){                    
-            //     e.target.style.opacity = '0.4';
-            //     this.dragSrcEl = e.target;
-            //     e.dataTransfer.effectAllowed = 'move';
-            // },
-            // dragEnter(e){
-            //     e.target.classList.add('over');
-            // },
-            // dragLeave(e){
-            //     e.target.classList.remove('over');
-            // },
-            // dragOver(e){
-            //     e.dataTransfer.dropEffect = 'move';
-            // },
-            // dragEnd(e){
-            //     e.target.style.opacity = '1';
-            //     document.querySelectorAll('.group-list li').forEach(function (item) {
-            //         item.classList.remove('over');
-            //     });
-            // },
-            // dragDrop(e){
-            //     if (this.dragSrcEl != e.target) {
-            //         // this is the target, where we are adding it
-            //         // dragSrcEl is the item being dragged
-            //         try{         
-            //             e.target.parentNode.insertBefore(this.dragSrcEl, e.target);
-            //             this.saveLayout();
-            //         }catch(err){}
-            //     }
-            //     return false;
-            // },            
-            // saveLayout() {
-            //     let uids = Array.from(document.querySelectorAll('.group-list li')).map(x => x.getAttribute('id'));
-
-            //     const options = {
-            //         method: 'POST',
-            //         body: JSON.stringify({ uids: uids}),
-            //         headers: {
-            //             'Content-Type': 'application/json'
-            //         }
-            //     }
-
-            //     return fetch(`${baseUrl}/order`, options);
-            // }
+                fetch(`${baseUrl}/${encodeURIComponent(uid)}/default/${checked === true}`, { method: 'POST'}).then(async (res) =>{
+                    if(!res.ok)
+                        throw await res.text();
+                    if(checked === true)
+                        toast(`Successfully set item as default`, true);
+                    else
+                        toast(`Successfully unset item as default`, true);
+                }).catch(err => {
+                    toast(err || `Failed to update item`, false);
+                });
+            }            
         }))
     });
 </script>
