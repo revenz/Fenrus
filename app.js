@@ -80,6 +80,7 @@ if(fs.existsSync('./data/certificate.crt') && fs.existsSync('./data/privatekey.k
     var credentials = {key: privateKey, cert: certificate};
 
     var httpServer = http.createServer(app);
+    
     var httpsServer = https.createServer(credentials, app);
 
     httpServer.listen(3000);
@@ -93,17 +94,42 @@ if(fs.existsSync('./data/certificate.crt') && fs.existsSync('./data/privatekey.k
             console.log('### Number of HTTP connections: ' + count);
         });
     }, 2000);
+    httpServer.on('connection', connectionSocket);
+    httpsServer.on('connection', connectionSocket);
 }
 else 
 {
     console.log('#### SETTING UP HTTP');
     var httpServer = http.createServer(app);
+    httpServer.maxConnections = 1000;
     httpServer.listen(3000);
     setInterval(() => {
         httpServer.getConnections((error, count) => {
             console.log('### Number of connections: ' + count);
         });
     }, 2000);
+    httpServer.on('connection', connectionSocket);
+}
+
+function connectionSocket(socket){
+    let address = JSON.stringify(socket.address())
+    console.log('SOCKET OPENED' + address);
+    socket.setTimeout(3000);
+    socket.on('end', function() { 
+        console.log('SOCKET END: other end of the socket sends a FIN packet');
+    });
+
+    socket.on('timeout', function() { 
+        console.log('SOCKET TIMEOUT', address);
+    });
+
+    socket.on('error', function(error) { 
+        console.log('SOCKET ERROR: ' + JSON.stringify(error));
+    });
+
+    socket.on('close', function(had_error) { 
+        console.log('SOCKET CLOSED. IT WAS ERROR: ' + had_error);
+    });
 }
 
 // set cache control for files
