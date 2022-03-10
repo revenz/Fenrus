@@ -59,8 +59,8 @@ class Jeedom {
 		
 	async test(args) {
 		const data = await args.fetch(`${args.url}/core/api/jeeApi.php`);
-		console.error(data.id);
+		console.log(data.id);
 		return data.id == '99999';
 	}
 }
-		
+module.exports = Jeedom;		
