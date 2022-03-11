@@ -40,7 +40,7 @@ class ProxyRouter extends FenrusRouter {
         let isHttps = url.toLowerCase().startsWith('https:');
         var q = urlParse(url, true);
         let options = {
-            host: q.host,
+            host: q.hostname,
             port: q.port || (isHttps ? 443 : 80),
             path:  q.path,
             timeout: 5000

@@ -216,7 +216,6 @@ class AppRouter extends FenrusRouter {
     getAppArgs(appInstance, settings){
         let url = appInstance.ApiUrl || appInstance.Url;
 
-        console.log('url', url);
         let utils = new Utils();
 
         let chartHelper = this.getChartHelper(appInstance);
@@ -276,12 +275,11 @@ class AppRouter extends FenrusRouter {
             fetch: (args) => {
                 if(typeof(args) === 'string')
                     args = { url: args };
-                
                 if (!args.url.startsWith('http')) {
                     if (url.endsWith('/') == false)
-                        args.url = url + '/' + args.url;
+                        args.url = funcArgs.url + '/' + args.url;
                     else
-                        args.url = url + args.url;
+                        args.url = funcArgs.url + args.url;
                 }
                 if (!args.headers)
                     args.headers = { 'Accept': 'application/json' };
