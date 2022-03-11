@@ -67,9 +67,9 @@ class AppRouter extends FenrusRouter {
         let app = req.app;
         let appInstance = req.body.AppInstance;   
         
-        let instance = getInstance(app, appInstance);
+        let instance = this.getInstance(app, appInstance);
         if(!instance.funcArgs)
-            instance.funcArgs = getAppArgs(appInstance, req.settings);
+            instance.funcArgs = this.getAppArgs(appInstance, req.settings);
         let funcArgs = instance.funcArgs;
 
         let msg = '';
