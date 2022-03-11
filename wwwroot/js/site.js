@@ -127,3 +127,14 @@ function fetchDashboard(uid,  backwards) {
         }
     });
 }
+
+function launch(uid) {
+    abortRequests();
+    let divLaunchingApp = document.getElementById('launching-app');
+    let eleApp = document.getElementById(uid);
+    if(eleApp && divLaunchingApp){
+        divLaunchingApp.querySelector('.title').textContent = 'Launching ' + eleApp.querySelector('.content .title').textContent;
+        divLaunchingApp.querySelector('img').src = eleApp.querySelector('.icon img').src;
+        divLaunchingApp.style.display = 'unset';
+    }
+}

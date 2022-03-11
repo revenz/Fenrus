@@ -198,3 +198,30 @@ option {
     font-size: 1.5rem;
     text-transform: uppercase;
 }
+#launching-app {
+    display:none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 10;
+    .inner {
+        background:rgba(0,0,0,0.5);
+        padding: 3rem;
+        font-size: 2rem;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        margin: auto;
+        display: flex;
+        place-items: center;
+        text-align: center;
+        left: 50%;
+    }
+    img {
+        height:5rem;
+        margin-right:2rem;
+    }
+}
