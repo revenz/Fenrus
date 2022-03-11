@@ -46,6 +46,7 @@ class Common
 
         let args = {         
             isHome:req.originalUrl === '/' || !req.originalUrl || req.originalUrl.startsWith('/dashboard'),
+            isSettings: req?.originalUrl?.startsWith('/settings'),
             pageUrl: req.originalUrl,
             isGuest: req.isGuest,
             isAdmin: req.user?.IsAdmin === true,

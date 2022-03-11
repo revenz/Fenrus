@@ -47,7 +47,7 @@
     <% } %> 
 </head>
 
-<body class="<%= isHome ? 'home' : 'not-home' %> <%= customBackground ? 'custom-background' : 'no-custom-background' %> <%= themeVariables?.BodyClassName %>">  
+<body class="<%= isHome ? 'home' : 'not-home' %> <%= isSettings? 'settings' : 'not-settings' %> <%= customBackground ? 'custom-background' : 'no-custom-background' %> <%= themeVariables?.BodyClassName %>">  
     <ul class="main-menu">
         <li><a title="Home" href="/"><span class="icon-home1"></span></a></li>
         <% if(isGuest !== true) { %>

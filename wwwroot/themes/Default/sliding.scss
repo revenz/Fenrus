@@ -1,5 +1,5 @@
 
-body.home.no-custom-background
+body.no-custom-background:not(.settings)
 {
     background-image: none;
     --bg-base: rgb(10,10,10);
