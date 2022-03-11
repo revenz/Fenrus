@@ -22,6 +22,7 @@
   "Groups": [
     {
       "Uid": "aa163b32-b9d7-4a1f-8737-e170091723e5",
+      "Enabled": true,
       "Items": [
         {
           "_Type": "DashboardApp",
@@ -73,8 +74,7 @@
     {
       "_Type": "DashboardGroup",
       "Name": "FileFlows",
-      "Height": "1",
-      "Width": "0",
+      "Enabled": true,
       "Items": [
         {
           "_Type": "DashboardLink",
