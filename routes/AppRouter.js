@@ -293,7 +293,7 @@ class AppRouter extends FenrusRouter {
                 let timeoutId = setTimeout(() => {
                     controller.abort();
                     console.log('Aborted call as it exceeded timeout: ' + args.url);
-                }, Math.min(Math.max(args.timeout || 3000, 3000), 5000));
+                }, Math.min(Math.max(args.timeout || 3000, 3000), 10000));
 
                 return fetch(args.url, {
                     headers: args.headers,
