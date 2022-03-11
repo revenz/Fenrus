@@ -15,10 +15,15 @@
         //let total = data?.ocs?.data?.quota?.total ?? 0;
         let used = data?.ocs?.data?.quota?.used ?? 0;
 
-        return args.liveStats([
-            ['Used', args.Utils.formatBytes(used)],
-            ['Free', args.Utils.formatBytes(free)]
-        ]);
+		
+		if(args.properties['mode'] == 'bar'){
+			return args.barInfo([{label:'Total Space', percent: Math.round((used / (free + used)) * 10000)/100  || 0, icon: '/apps/Glances/www/hdd.svg'}]);
+        } else {
+			return args.liveStats([
+				['Used', args.Utils.formatBytes(used)],
+				['Free', args.Utils.formatBytes(free)]
+			]);
+		}
     }
     
     async test(args) {
