@@ -62,7 +62,8 @@ class SystemInstance
         }
     }
 
-    async initDefaultConfig(){        
+    async initDefaultConfig()
+    {        
         let defaultConfigFile = './defaultconfig.json';
         if(fs.existsSync(defaultConfigFile) == true) {   
             let json = fs.readFileSync(defaultConfigFile, { encoding: 'utf-8'});     

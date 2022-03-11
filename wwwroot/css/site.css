@@ -1232,3 +1232,7 @@ option {
   height: 5rem;
   margin-right: 2rem;
 }
+
+body.not-home {
+  background: #181a1c;
+}

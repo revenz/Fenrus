@@ -89,7 +89,7 @@
                     range.style.backgroundSize = percent + '% 100%';
                 } 
                 <% if(isGuest) { %>                       
-                    if(themeInstance.init){                               
+                    if(typeof(themeInstance) !== 'undefined' && themeInstance.init){                               
                         Object.keys(this.model).forEach(x => {
                             themeInstance.settings[x] = this.model[x];
                         })  
