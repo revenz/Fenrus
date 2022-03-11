@@ -71,6 +71,8 @@ class AppRouter extends FenrusRouter {
         if(!instance.funcArgs)
             instance.funcArgs = this.getAppArgs(appInstance, req.settings);
         let funcArgs = instance.funcArgs;
+        funcArgs.url = appInstance.ApiUrl || appInstance.Url;
+        funcArgs.properties = appInstance.Properties;
 
         let msg = '';
         try
@@ -130,6 +132,8 @@ class AppRouter extends FenrusRouter {
             if(!instance.funcArgs)
                 instance.funcArgs = this.getAppArgs(appInstance, req.settings);
             let funcArgs = instance.funcArgs;
+            funcArgs.url = appInstance.ApiUrl || appInstance.Url;
+            funcArgs.properties = appInstance.Properties;
             funcArgs.changeIcon = (icon) => {
                 res.setHeader('x-icon', funcArgs.Utils.base64Encode(icon));
             };
@@ -211,6 +215,8 @@ class AppRouter extends FenrusRouter {
 
     getAppArgs(appInstance, settings){
         let url = appInstance.ApiUrl || appInstance.Url;
+
+        console.log('url', url);
         let utils = new Utils();
 
         let chartHelper = this.getChartHelper(appInstance);
