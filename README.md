@@ -10,7 +10,8 @@ It allows you to have a custom home page/new tab page with quick access to your 
 For support use our [Discord Server](https://discord.gg/xbYK8wFMeU)
 
 ---
-![image](https://user-images.githubusercontent.com/958400/155836968-6f85270a-fba3-4613-89d8-9f4afac2de34.png)
+![image](https://user-images.githubusercontent.com/958400/157801403-64cc7b99-f81d-41b6-85f7-47546bd904a9.png)
+
 
 ---
 
@@ -54,7 +55,7 @@ Also, it will store custom images under /app/wwwroot/images, so map this folder 
 
 First, you need to register a user, you can do this on the login page by entering a username and password and clicking "Register" if no user with that username exists, a new one will be created.  
 
-![fenrus_login](https://user-images.githubusercontent.com/958400/154829712-5b7dde64-eb4b-4e1d-9991-29d160d4b057.png)
+![image](https://user-images.githubusercontent.com/958400/157801936-24eca81b-1ee1-4f28-976c-c9e1ae54f1af.png)
 
 
 ### Admin
@@ -66,12 +67,12 @@ This role allows the user to manage other users.
 ## Configuration
 
 ### Groups
-Groups contain applications and links.  The Width/Height settings are used by some Themes.   The "Default" theme will use a unit of 1 for the height.   This unit of 1 is the size of a "Small" dashboard item.   So in the "Media" group shown below, the height is set to 4, as it is 4x small items high.  Width is not used in the default theme, it is however used as the basic theme.
+Groups contain applications, links and other dashboards.   
 
-![fenrus_media](https://user-images.githubusercontent.com/958400/154829815-bcb20f43-35bb-4550-a955-319d9216f2be.png)
+![image](https://user-images.githubusercontent.com/958400/157801996-e94c3406-ff6b-43a2-acfe-7fb6a174b822.png)
 
 ### Group Items
-Shortcuts are broken down into 3 types
+Shortcuts are broken down into 4 types
 
 #### Links
 These are basic links to websites, either internal or external, and show no extra information.  You can configure an icon for these links, or if left blank Fenrus will try to magically download the favicon for the site.
@@ -83,6 +84,11 @@ These are a step above links, they are known to Fenrus, and will have a high-res
 This is where the magic really happens.  These smart apps, or spell casts if you will, have extra information that Fenrus can download and query to display more information about the app.
 This could be as simple as some basic information, or it could be a feature-rich magical experience.
 
+#### Dashboards
+These link to other dashboards.   You can add a dashboard link to a group or they are also available through the drop down menu at the top of the page.
+![image](https://user-images.githubusercontent.com/958400/157802115-e1eed5f1-ef39-46f5-a719-69e01e0c6df3.png)
+
+
 ---
 
 ### Search Engines
@@ -92,7 +98,7 @@ URL: The URL for the search query with %s being repalced by the search term
 Shortcut: The shortcut to type to use this search engine (if not the default)
 Icon: The icon to show when using this search engine
 ```
-![image](https://user-images.githubusercontent.com/958400/155925011-d62067df-687a-4d04-af03-6e82890f9398.png)
+![image](https://user-images.githubusercontent.com/958400/157802216-44e9f2cf-e874-493c-9d46-3124f771e2af.png)
 
 
 ## FAQ
