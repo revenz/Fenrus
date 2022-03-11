@@ -12,12 +12,11 @@
     async status(args) {
         let data = await this.doFetch(args);
         let free = data?.ocs?.data?.quota?.free ?? 0;
-        //let total = data?.ocs?.data?.quota?.total ?? 0;
         let used = data?.ocs?.data?.quota?.used ?? 0;
 
 		
 		if(args.properties['mode'] == 'bar'){
-			return args.barInfo([{label:'Total Space', percent: Math.round((used / (free + used)) * 10000)/100  || 0, icon: '/apps/Glances/www/hdd.svg'}]);
+			return args.barInfo([{label:'Storage', percent: Math.round((used / (free + used)) * 10000)/100  || 0, icon: '/common/hdd.svg'}]);
         } else {
 			return args.liveStats([
 				['Used', args.Utils.formatBytes(used)],

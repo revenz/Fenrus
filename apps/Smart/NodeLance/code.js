@@ -38,16 +38,16 @@ class NodeLance {
         // cpu 
         // {"interrupts": 861015, "system": 1.6, "time_since_update": 33.861000061035156, "idle": 90.8, "dpc": 0.1, "user": 7.4, 
         // "syscalls": 1358165, "interrupt": 0.1, "cpucore": 16, "total": 9.2, "soft_interrupts": 0, "ctx_switches": 921648}        
-        items.push({label:'CPU', percent: cpu?.total || 0, icon: '/apps/Glances/www/cpu.svg'});
+        items.push({label:'CPU', percent: cpu?.total || 0, icon: '/common/cpu.svg'});
         // ram
         // {"available": 31510020096, "total": 68659789824, "percent": 54.1, "free": 31510020096, "used": 37149769728}
         if(!memory?.total)
             return;
-        items.push({label:'RAM', percent:memory.percent, icon: '/apps/NodeLance/www/ram.svg'});
+        items.push({label:'RAM', percent:memory.percent, icon: '/common/ram.svg'});
 
         console.log('gpu', gpu);
         if(gpu?.percent != null){
-            items.push({label:'GPU', percent:gpu.percent, icon: '/apps/NodeLance/www/gpu.svg'});
+            items.push({label:'GPU', percent:gpu.percent, icon: '/common/gpu.svg'});
         }
 
         if(fileSystem?.length){
@@ -55,7 +55,7 @@ class NodeLance {
                 items.push({
                     label: fs.mnt_point,
                     percent: fs.percent,
-                    icon: '/apps/NodeLance/www/hdd.svg'
+                    icon: '/common/hdd.svg'
                 });
             }
         }
