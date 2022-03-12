@@ -441,10 +441,10 @@ a.subpage{
     display: flex;
     flex-direction: column;
     flex-grow:1;
+    min-height:100vh;
     > div {
         display:flex;
         flex-direction: column;
-        height: 100vh;
     }
     .page-description {
         height:unset;
