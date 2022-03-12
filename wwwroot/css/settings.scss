@@ -637,6 +637,9 @@ table {
     background: var(--base-darker);
     z-index:5;
     padding:2px 0.5rem;
+    .content {
+        overflow:auto;
+    }
 }
 
 .preview-dashboard {

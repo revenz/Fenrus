@@ -623,6 +623,9 @@ table .controls [class^=icon-]:hover {
   z-index: 5;
   padding: 2px 0.5rem;
 }
+.side-editor .content {
+  overflow: auto;
+}
 
 .preview-dashboard {
   overflow: auto;

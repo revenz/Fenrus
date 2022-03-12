@@ -40,7 +40,7 @@ class ChartHelper
                     color:'white',
                     align:'end',
                     position:'top',
-                    text: '   ' + title + '   ',
+                    text: title.indexOf('\n') > 0 ? title : ('   ' + title + '   '),
                 },
                 legend: {
                     display:false

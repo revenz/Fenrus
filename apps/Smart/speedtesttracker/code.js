@@ -37,9 +37,8 @@ class SpeedtestTracker {
             //reverse as first entry is latest
             data[i].reverse()
         }
-        console.log("data", data);
-
-        let title = 'Speedtest Mb/s';
+        let title = Math.round(+stats.data.data[0].download) + ' Mbit/s     \n' + Math.round(+stats.data.data[0].upload) + ' Mbit/s';
+        //let title = 'Speedtest Mb/s';
 
         return await args.chart.line({
             title,
