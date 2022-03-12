@@ -157,8 +157,8 @@
                         <div class="setting">
                             <span class="label">API URL</span>
                             <span class="value">
-                                <input :disabled="isDisabled()" type="text" x-model="model.ApiUrl" data-rules='["regexMatch:^($|((http(s)?)|(HTTP(S)?))://.)"]' @blur="blur" @input="input"  @keydown.enter="saveEditor" />
-                                <span class="help-text">Optional URL to use to contact the API.<br/>The main URL will be where the user is taken when the item is clicked.</span>
+                                <input :disabled="isDisabled()" type="text" x-model="model.ApiUrl" data-rules='["regexMatch:^($|((http(s)?)|(HTTP(S)?))://.)"]' @blur="blur" @input="input"  @keydown.enter="saveEditor" :placeholder="model.Url" />
+                                <span class="help-text">Optional URL to use to contact the API if different that the URL above.<br/>The main URL will be where the user is taken when the item is clicked.</span>
                             </span>
                         </div> 
                     </template>
