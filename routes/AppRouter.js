@@ -205,7 +205,7 @@ class AppRouter extends FenrusRouter {
                             `<div class="fill" style="width:${item.percent}%"></div>` +
                             '<div class="labels">' +
                                 `<span class="info-label">${args.Utils.htmlEncode(item.label)}</span>` +
-                                `<span class="fill-label">${item.percent} %</span>` +
+                                `<span class="fill-label">${item.percent.toFixed(1)} %</span>` +
                             '</div>' + 
                         '</div>' + 
                     '</div>';
