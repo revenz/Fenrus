@@ -33,6 +33,13 @@
       ]
     },
     {
+      "Name": "Group Drives",
+      "Id": "groupDrives",
+      "Type": "bool",
+      "Default": false,
+      "IfValue": { "mode" : "overview" }
+    },
+    {
       "Name": "1st stat title",
       "Id": "firstStatTitle",
       "Type": "string",

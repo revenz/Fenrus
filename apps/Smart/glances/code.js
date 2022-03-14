@@ -48,15 +48,37 @@ class Glances {
         {
             for(let g of gpu)
             {
-                items.push({label: 'GPU', percent: g.mem, icon: '/common/gpu.svg' });
+                items.push({label: g.name, percent: g.mem, icon: '/common/gpu.svg' });
             }
         }
 
         if(fileSystem?.length){
+            let keys = [];
+            let drives = [];
             for(let fs of fileSystem){
+                let key = fs.size + '|' + fs.used + '|' + fs.free;
+                if(keys.indexOf(key) >= 0)
+                    continue;
+                keys.push(key);
+
+                if(args.properties['groupDrives'])
+                {
+                    if(!drives.length)
+                        drives.push({ mnt_point: 'Storage', free: 0, size: 0, percent: 0});
+                    drives[0].free += (fs.free / (1024 * 1024));
+                    drives[0].size += (fs.size / (1024 * 1024));
+                    drives[0].percent = ((drives[0].free / drives[0].size) * 100);
+                }
+                else
+                {
+                    drives.push(fs);
+                }
+            }
+
+            for(let drive of drives){
                 items.push({
-                    label: fs.mnt_point,
-                    percent: fs.percent,
+                    label: drive.mnt_point,
+                    percent: drive.percent,
                     icon: '/common/hdd.svg'
                 });
             }
