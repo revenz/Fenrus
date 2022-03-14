@@ -25,16 +25,16 @@ class Glances {
     }
 
     async systemInfo(args){
-        const [ cpu, memory, fileSystem ] = await Promise.all([
+        const [ cpu, memory, fileSystem, gpu ] = await Promise.all([
           await this.doFetch(args, 'cpu'),
           await this.doFetch(args, 'mem'),
           await this.doFetch(args, 'fs'),
+          await this.doFetch(args, 'gpu'),
         ]);
 
         let items = [];
 
-      
-        // cpu 
+              // cpu 
         // {"interrupts": 861015, "system": 1.6, "time_since_update": 33.861000061035156, "idle": 90.8, "dpc": 0.1, "user": 7.4, 
         // "syscalls": 1358165, "interrupt": 0.1, "cpucore": 16, "total": 9.2, "soft_interrupts": 0, "ctx_switches": 921648}        
         items.push({label:'CPU', percent: cpu?.total || 0, icon: '/common/cpu.svg'});
@@ -43,6 +43,10 @@ class Glances {
         if(!memory?.total)
             return;
         items.push({label:'RAM', percent:memory.percent, icon: '/common/ram.svg'});
+
+        if(gpu?.length){
+            items.push({label: 'GPU', percent: gpu.mem, icon: '/common/gpu.svg' });
+        }
 
         if(fileSystem?.length){
             for(let fs of fileSystem){
