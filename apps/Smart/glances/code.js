@@ -44,8 +44,12 @@ class Glances {
             return;
         items.push({label:'RAM', percent:memory.percent, icon: '/common/ram.svg'});
 
-        if(gpu?.length){
-            items.push({label: 'GPU', percent: gpu.mem, icon: '/common/gpu.svg' });
+        if(gpu?.length)
+        {
+            for(let g of gpu)
+            {
+                items.push({label: 'GPU', percent: g.mem, icon: '/common/gpu.svg' });
+            }
         }
 
         if(fileSystem?.length){
