@@ -55,7 +55,14 @@ class Glances {
         if(fileSystem?.length){
             let keys = [];
             let drives = [];
-            for(let fs of fileSystem){
+            let filter = args.properties['driveFilter'];
+            filter = new RegExp(filter ?? '.*', 'i'); 
+
+            for(let fs of fileSystem)
+            {
+                if(filter.test(fs.mnt_point) === false)
+                    continue;
+
                 let key = fs.size + '|' + fs.used + '|' + fs.free;
                 if(keys.indexOf(key) >= 0)
                     continue;

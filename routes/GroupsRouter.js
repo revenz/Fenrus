@@ -55,6 +55,10 @@ class GroupsRouter{
                 IsSystem: false
             }
         });
+        
+        groups.sort((a,b) => {
+            return a.Name.localeCompare(b.Name);
+        });
 
         args.data = {
             typeName: 'Group',

@@ -40,6 +40,14 @@
       "IfValue": { "mode" : "overview" }
     },
     {
+      "Name": "Drive Filter",
+      "Id": "driveFilter",
+      "Type": "string",
+      "Default": "",
+      "Help":"A regular expression used to match drive names",
+      "IfValue": { "mode" : "overview" }
+    },
+    {
       "Name": "1st stat title",
       "Id": "firstStatTitle",
       "Type": "string",
