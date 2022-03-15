@@ -8,8 +8,10 @@
     }
 
     async status(args) {
-        let indexer = await this.doFetch(args, "indexer");
-        let indexerStatus = await this.doFetch(args, "indexerstatus");
+        const [ indexer, indexerStatus ] = await Promise.all([
+			await this.doFetch(args, "indexer"),
+			await this.doFetch(args, "indexerstatus")
+		]);
         let indexerEnabled = indexer?.filter((x, index, arr) => {
             return x.enable == true;
         });
