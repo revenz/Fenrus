@@ -1,5 +1,5 @@
 ﻿{
-  "Name": "octoprint",
+  "Name": "OctoPrint",
   "TestFunction": true,
   "Interval":5,
   "Properties": [
