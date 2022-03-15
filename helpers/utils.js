@@ -75,31 +75,44 @@ class Utils {
         }
         return hour + ':' + minute + ' ' + meridian;
     }
-    
-    formatTime(date, showSeconds) {
-        let minute = date.getMinutes();
-        if (minute < 10)
-            minute = '0' + minute;
-        let hour = date.getHours();
-        let meridian = 'am';
-        if (hour >= 12) {
-            meridian = 'pm';
-            hour -= hour == 12 ? 0 : 12;
-        }
-        if (hour == 0)
-            hour = 12;
+	
+	formatMilliTimeToWords(milliTime, showSeconds) {
 
-        if (showSeconds) {
-            let seconds = date.getSeconds();
-            if (seconds < 10)
-                seconds = '0' + seconds;
-            return hour + ':' + minute + ':' + seconds + ' ' + meridian;
-            
+		let days = Math.floor(milliTime/1000/60/60/24)
+		milliTime -= days*1000*60*60*24;
+		let hour = Math.floor(milliTime/1000/60/60); 
+		milliTime -= hour*1000*60*60;
+        let minute = Math.floor(milliTime/1000/60)
+        milliTime -= minute*1000*60;
+		let seconds = Math.floor(milliTime/1000);
+		
+		
+		let returnText = '';
+		
+		if(hour == 1) {
+			returnText = returnText + hour + " hour ";
+		} else if (hour > 1 ) {
+			returnText = returnText + hour + " hours ";
+		}
+		
+		
+		if(minute == 1) {
+			returnText = returnText + minute + " minute ";
+		} else if (minute > 1 ) {
+			returnText = returnText + minute + " minutes ";
+		}
+		
+        if (showSeconds) { 
+            if(seconds == 1) {
+				return returnText + seconds + " second ";
+			} else if (seconds > 1 ) {
+				return returnText + seconds + " seconds ";
+			}
         }
-        return hour + ':' + minute + ' ' + meridian;
+        return returnText;
     }
-
-
+	
+    
     formatDate(date) {
         if (!date)
             return '';
