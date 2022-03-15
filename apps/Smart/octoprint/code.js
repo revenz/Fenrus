@@ -17,7 +17,7 @@ class octoprint {
         let percentProgress = data?.progress?.completion;
         let printTimeLeftSecs = data?.progress?.printTimeLeft;
         let state = data?.state ?? 'Unknown';
-        if (percentProgress == null || state == 'Unknown' || state == "Offline") {
+        if (percentProgress == null || state == 'Unknown' || state == "Offline" || state == "Operational") {
             //assume no print running so just show state
             return args.liveStats([
                 ['State', state]
@@ -31,6 +31,8 @@ class octoprint {
 
         if (printTimeLeftSecs == null) {
             printTimeLeftSecs = "Unknown";
+        } else if(printTimeLeftSecs == 0) {
+            printTimeLeftSecs = "Finished"
         } else {
             printTimeLeftSecs = args.Utils.formatMilliTimeToWords(printTimeLeftSecs * 1000, printTimeLeftSecs < 60);
         }
