@@ -1,0 +1,13 @@
+{
+  "Name": "Deluge",
+  "Icon": "icon.png",
+  "TestFunction": true,
+  "Interval":30,
+  "Properties": [
+    {
+      "Name": "Password",
+      "Id": "password",
+      "Type": "password"
+    }
+  ]
+}

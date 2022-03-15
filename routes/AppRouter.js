@@ -272,7 +272,7 @@ class AppRouter extends FenrusRouter {
                 html += '</div>';
                 return html;
             },
-            fetch: (args) => {
+            prepareFetch: (args) => {
                 if(typeof(args) === 'string')
                     args = { url: args };
                 if (!args.url.startsWith('http')) {
@@ -286,6 +286,30 @@ class AppRouter extends FenrusRouter {
                 else if (!args.headers['Accept'])
                     args.headers['Accept'] = 'application/json';
                 console.log(`[${args.method || 'GET'}] => ${args.url}`);
+            },
+            fetchResponse: (args) => {
+                funcArgs.prepareFetch(args);
+
+                let controller = new AbortController();
+                let timeoutId = setTimeout(() => {
+                    controller.abort();
+                    console.log('Aborted call as it exceeded timeout: ' + args.url);
+                }, Math.min(Math.max(args.timeout || 3000, 3000), 10000));
+
+                return fetch(args.url, {
+                    headers: args.headers,
+                    method: args.method,
+                    body: args.body,                    
+                    signal: controller.signal
+                }).catch(error => {
+                    if(timeoutId)
+                        clearTimeout(timeoutId);
+                    timeoutId = null;
+                    console.log('error: ' + error);
+                });
+            },
+            fetch: (args) => {
+                funcArgs.prepareFetch(args);
 
                 let controller = new AbortController();
                 let timeoutId = setTimeout(() => {
