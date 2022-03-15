@@ -286,9 +286,10 @@ class AppRouter extends FenrusRouter {
                 else if (!args.headers['Accept'])
                     args.headers['Accept'] = 'application/json';
                 console.log(`[${args.method || 'GET'}] => ${args.url}`);
+                return args;
             },
             fetchResponse: (args) => {
-                funcArgs.prepareFetch(args);
+                args = funcArgs.prepareFetch(args);
 
                 let controller = new AbortController();
                 let timeoutId = setTimeout(() => {
@@ -309,7 +310,7 @@ class AppRouter extends FenrusRouter {
                 });
             },
             fetch: (args) => {
-                funcArgs.prepareFetch(args);
+                args = funcArgs.prepareFetch(args);
 
                 let controller = new AbortController();
                 let timeoutId = setTimeout(() => {
@@ -327,6 +328,8 @@ class AppRouter extends FenrusRouter {
                     timeoutId = null;
                     if(args.headers['Accept'].includes('json'))
                         return res.json();
+                    else if(args.headers['Accept'].includes('text'))
+                        return res.text();
                     else
                         return res;
                 }).catch(error => {

@@ -1,0 +1,6 @@
+{
+  "Name": "HDHomeRun",
+  "Icon": "icon.png",
+  "TestFunction": true,
+  "Interval": 10
+}

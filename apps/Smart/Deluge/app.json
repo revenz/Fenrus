@@ -2,7 +2,7 @@
   "Name": "Deluge",
   "Icon": "icon.png",
   "TestFunction": true,
-  "Interval":30,
+  "Interval":5,
   "Properties": [
     {
       "Name": "Password",
