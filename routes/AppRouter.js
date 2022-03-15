@@ -199,7 +199,7 @@ class AppRouter extends FenrusRouter {
     {    
         let html = ':bar-info:';
         for(let item of items){
-            html += '<div class="bar-info">' +
+            html += `<div class="bar-info" ${ item.tooltip ? ('title="' + args.Utils.htmlEncode(item.tooltip) + '"') : '' }>` +
                         (item.icon ? `<div class="bar-icon"><img src="${item.icon}" /></div>` : '') +
                         '<div class="bar">' +
                             `<div class="fill" style="width:${item.percent}%"></div>` +

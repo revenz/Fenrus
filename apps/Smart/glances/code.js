@@ -37,18 +37,33 @@ class Glances {
               // cpu 
         // {"interrupts": 861015, "system": 1.6, "time_since_update": 33.861000061035156, "idle": 90.8, "dpc": 0.1, "user": 7.4, 
         // "syscalls": 1358165, "interrupt": 0.1, "cpucore": 16, "total": 9.2, "soft_interrupts": 0, "ctx_switches": 921648}        
-        items.push({label:'CPU', percent: cpu?.total || 0, icon: '/common/cpu.svg'});
+        items.push({
+            label:'CPU', 
+            percent: cpu?.total || 0, 
+            tooltip: (cpu?.total || 0) + '% CPU Used',
+            icon: '/common/cpu.svg'
+        });
         // ram
         // {"available": 31510020096, "total": 68659789824, "percent": 54.1, "free": 31510020096, "used": 37149769728}
         if(!memory?.total)
             return;
-        items.push({label:'RAM', percent:memory.percent, icon: '/common/ram.svg'});
+        items.push({
+            label:'RAM', 
+            percent:memory.percent,             
+            tooltip: memory.percent + '% Memory Used',
+            icon: '/common/ram.svg'
+        });
 
         if(gpu?.length)
         {
             for(let g of gpu)
             {
-                items.push({label: g.name, percent: g.mem, icon: '/common/gpu.svg' });
+                items.push({
+                    label: g.name, 
+                    percent: g.mem, 
+                    tooltip: g.mem.toFixed(1) + '% Memory Used',
+                    icon: '/common/gpu.svg'
+                 });
             }
         }
 
@@ -72,8 +87,8 @@ class Glances {
                 {
                     if(!drives.length)
                         drives.push({ mnt_point: 'Storage', free: 0, size: 0, percent: 0});
-                    drives[0].free += (fs.free / (1024 * 1024));
-                    drives[0].size += (fs.size / (1024 * 1024));
+                    drives[0].free += fs.free;
+                    drives[0].size += fs.size;
                     drives[0].percent = ((drives[0].free / drives[0].size) * 100);
                 }
                 else
@@ -86,6 +101,7 @@ class Glances {
                 items.push({
                     label: drive.mnt_point,
                     percent: drive.percent,
+                    tooltip: args.Utils.formatBytes(drives[0].free) + ' Free',
                     icon: '/common/hdd.svg'
                 });
             }
