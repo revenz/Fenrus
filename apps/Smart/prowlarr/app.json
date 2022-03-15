@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Prowlarr",
+  "TestFunction": true,
+  "Interval": 10,
+  "Properties": [
+	{
+      "Name": "apikey",
+      "Id": "apikey",
+      "Type": "password"
+    }
+  ]
+}
