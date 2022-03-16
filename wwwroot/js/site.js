@@ -141,3 +141,9 @@ function launch(uid) {
         }
     }
 }
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    let divLaunchingApp = document.getElementById('launching-app');
+    if(divLaunchingApp)
+        divLaunchingApp.style.display = 'none';
+});
