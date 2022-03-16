@@ -2,6 +2,10 @@
   "Name": "Transmission",
   "TestFunction": true,
   "Interval":5,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://transmissionbt.com/"
+  },
   "Properties": [
     {
       "Name": "Username",

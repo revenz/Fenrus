@@ -3,6 +3,10 @@
   "Icon": "icon.png",
   "TestFunction": true,
   "Interval": 20,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://www.jenkins.io/"
+  },
   "Properties": [
     {
       "Name": "Username",
@@ -10,7 +14,7 @@
       "Type": "string"
     },
     {
-      "Name": "Password/ApiKey",
+      "Name": "Password/API-Key",
       "Id": "password",
       "Type": "password"
     }

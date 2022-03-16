@@ -3,11 +3,16 @@
   "TestFunction": true,
   "Interval":10,
   "Icon": "icon.png",
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://tautulli.com/"
+  },
   "Properties": [
     {
       "Name": "API Key",
       "Id": "apikey",
-      "Type": "password"
+      "Type": "password",
+      "Help" : "Found at Tautulli Settings -> Web Interface -> API Key"
     }
   ]
 }

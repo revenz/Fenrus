@@ -3,6 +3,10 @@
   "Icon": "icon.png",
   "TestFunction": true,
   "Interval": 60,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://github.com/henrywhitaker3/Speedtest-Tracker"
+  },
   "Properties": [
     {
       "Name": "Mode",
