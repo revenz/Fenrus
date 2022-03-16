@@ -1,4 +1,4 @@
-﻿class prowlarr {
+﻿class Prowlarr {
     doFetch(args, endpoint) {
         var data = args.fetch({
             url: 'api/v1/' + endpoint + '?apikey=' + args.properties['apikey'],
@@ -32,4 +32,4 @@
     }
 }
 
-module.exports = prowlarr;
+module.exports = Prowlarr;
