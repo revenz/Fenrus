@@ -28,7 +28,7 @@
     async test(args) {
         let status = await this.doFetch(args, "system/status");
         console.log("status", status);
-        return status?.status != null;
+        return status?.appName != null;
     }
 }
 
