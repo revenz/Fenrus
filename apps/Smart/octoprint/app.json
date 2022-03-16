@@ -1,0 +1,12 @@
+﻿{
+  "Name": "OctoPrint",
+  "TestFunction": true,
+  "Interval":5,
+  "Properties": [
+    {
+      "Name": "API Key",
+      "Id": "apikey",
+      "Type": "password"
+    }
+  ]
+}
