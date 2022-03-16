@@ -1,4 +1,4 @@
-class octoprint {
+class OctoPrint {
 
     doFetch(args, endpoint) {
         var data = args.fetch({
@@ -53,4 +53,4 @@ class octoprint {
     }
 }
 
-module.exports = octoprint;
+module.exports = OctoPrint;
