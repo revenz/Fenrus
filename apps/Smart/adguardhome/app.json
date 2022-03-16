@@ -2,6 +2,10 @@
   "Name": "AdGuard Home",
   "TestFunction": true,
   "Interval":30,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://adguard.com/en/adguard-home/overview.html"
+  },
   "Properties": [
     {
       "Name": "Username",

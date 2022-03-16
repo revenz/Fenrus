@@ -3,6 +3,10 @@
   "Interval":180,
   "Icon": "Icon.png",
   "TestFunction": true,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://mcapi.us/"
+  },
   "Properties": [
 	{
       "Name": "(Optional) Server IP/Host",

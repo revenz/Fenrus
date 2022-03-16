@@ -3,6 +3,10 @@
   "Icon": "icon.png",
   "TestFunction": true,
   "Interval":10,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://www.home-assistant.io/"
+  },
   "Properties": [
     {
       "Name": "API Key",
@@ -17,6 +21,7 @@
       "Name": "1st stat template",
       "Id": "firstStatTemplate",
       "Type": "string",
+      "Help" : "For help please look at wiki https://github.com/revenz/Fenrus/wiki/Using-Home-Assistant-smart-app",
       "Default":"{{ ((states.light | list) + (states.switch | list)) | selectattr('state','equalto','on') | list | count }}"
     },{
       "Name": "2nd stat title",
@@ -27,6 +32,7 @@
       "Name": "2nd stat template",
       "Id": "secStatTemplate",
       "Type": "string",
+      "Help" : "For help please look at wiki https://github.com/revenz/Fenrus/wiki/Using-Home-Assistant-smart-app",
       "Default":"{{ states.window | selectattr('state','equalto','on') | list | count }}"
     }      
   ]
