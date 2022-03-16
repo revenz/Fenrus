@@ -3,6 +3,10 @@
   "Icon": "icon.png",
   "TestFunction": true,
   "Interval": 3,
+  "Info":{
+    "Authors": ["Froodle", "John Andrews"],
+    "AppUrl":"https://github.com/nicolargo/glances"
+  },
   "Properties": [
     {
       "Name": "Mode",
