@@ -3,11 +3,16 @@
   "Icon": "icon.png",
   "TestFunction": true,
   "Interval":5,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://www.deluge-torrent.org"
+  },
   "Properties": [
     {
       "Name": "Password",
       "Id": "password",
-      "Type": "password"
+      "Type": "password",
+      "Help":"The password you use to access Deluge"
     }
   ]
 }

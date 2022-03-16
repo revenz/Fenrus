@@ -5,6 +5,10 @@
   "Interval": 60,
   "DefaultSize":"x-large",
   "Carousel": true,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://emby.media"
+  },
   "Properties": [
     {
       "Name": "Username",

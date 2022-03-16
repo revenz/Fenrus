@@ -2,6 +2,10 @@
   "Name": "SABnzbd",
   "TestFunction": true,
   "Interval":5,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://sabnzbd.org"
+  },
   "Properties": [
     {
       "Name": "API Key",

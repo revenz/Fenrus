@@ -2,6 +2,10 @@
   "Name": "Radarr",
   "TestFunction":true,
   "Interval":10,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://radarr.video"
+  },
   "Properties": [
     {
       "Name": "API Key",

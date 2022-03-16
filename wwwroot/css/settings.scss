@@ -674,3 +674,19 @@ table {
     background:rgba(0,0,0, 0.8);    
     width: min(70vw, 700px);
 }
+
+.app-info-item {
+    display:flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    .label {
+        width:10rem;
+        min-width: 10rem;
+    }
+    .value {
+
+    }
+    a{
+        color:var(--accent);
+    }    
+}

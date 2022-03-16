@@ -11,6 +11,9 @@
                 <div class="header">
                     <span class="title" x-text="EditorTitle"></span>
                     <div class="buttons">
+                        <template x-if="EditorApp.Info">
+                            <button :disabled="isDisabled()" class="btn" @click="showInfo">Info</button>
+                        </template>
                         <button :disabled="isDisabled()" class="btn" @click="save">Save</button>
                         <button :disabled="isDisabled()" class="btn" @click="close">Cancel</button>
                     </div>
@@ -212,4 +215,5 @@
             </div>
         </div>
     </template>
+    <%- include('./info-dialog.ejs') %>
 </div>

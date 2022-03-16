@@ -5,6 +5,10 @@
   "DefaultSize":"xx-large",
   "Classes": "widget",
   "Carousel": true,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://epicgames.com/"
+  },
   "Properties": [
     {
       "Name": "Country",

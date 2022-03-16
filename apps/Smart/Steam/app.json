@@ -6,6 +6,10 @@
   "DefaultSize":"xx-large",
   "Classes": "widget",
   "Carousel": true,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://steampowered.com/"
+  },
   "Properties": [
     {
       "Name": "Currency Symbol",

@@ -1,0 +1,27 @@
+<template x-if="info != null">
+    <div :class="{'modal-wrapper': true, 'visible': info != null}">
+        <div :class="{'modal-box': true, 'visible': info != null}">
+            <div class="modal-title" x-text="EditorApp?.Name">            
+            </div>
+            <div class="modal-body">
+                <template x-if="info?.Authors">
+                    <div class="app-info-item">
+                        <span class="label" x-text="info?.Authors && info?.Authors?.length === 1 ? 'Author' : 'Authors'"></span>
+                        <span class="value" x-text="info?.Authors?.join(', ')"></span>
+                    </div>
+                </template>
+                <template x-if="info?.AppUrl">
+                    <div class="app-info-item">
+                        <span class="label">Application URL</span>
+                        <span class="value">
+                            <a :href="info?.AppUrl" x-text="info?.AppUrl" target="_blank"></a>
+                        </span>
+                    </div>
+                </template>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn" @click="closeInfo">Close</button>
+            </div>
+        </div>
+    </div>
+</template>

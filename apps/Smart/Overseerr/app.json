@@ -2,6 +2,10 @@
   "Name": "Overseerr",
   "TestFunction": true,
   "Interval": 3,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://overseerr.dev"
+  },
   "Properties": [
     {
       "Name": "API Key",

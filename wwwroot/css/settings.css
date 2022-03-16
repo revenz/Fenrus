@@ -655,3 +655,16 @@ table .controls [class^=icon-]:hover {
   background: rgba(0, 0, 0, 0.8);
   width: min(70vw, 700px);
 }
+
+.app-info-item {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
+}
+.app-info-item .label {
+  width: 10rem;
+  min-width: 10rem;
+}
+.app-info-item a {
+  color: var(--accent);
+}

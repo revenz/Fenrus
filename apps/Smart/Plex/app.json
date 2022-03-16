@@ -3,6 +3,10 @@
   "TestFunction": true,
   "Interval": 60,
   "Carousel":true,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://plex.tv"
+  },
   "Properties": [
     {
       "Name": "Token",

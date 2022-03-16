@@ -1,5 +1,9 @@
 ﻿{
   "Name": "FileFlows",
   "TestFunction": true,
-  "Interval":2
+  "Interval":2,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://fileflows.com/"
+  }
 }

@@ -2,6 +2,10 @@
   "Name": "GitHub",
   "Interval": 300,
   "DefaultUrl":"https://github.com/revenz/Fenrus/",
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://github.com/"
+  },
   "Properties": [
     {
       "Name": "Branch",

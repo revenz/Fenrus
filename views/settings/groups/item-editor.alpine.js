@@ -10,6 +10,7 @@ Alpine.data('ItemEditor', () => ({
     EditorApp:{},
     isItemSaved: false,
     NewEdit:false,
+    info: null,
     blur(){
         if(this.Saved === false)
             return;
@@ -155,6 +156,12 @@ Alpine.data('ItemEditor', () => ({
         this.appChanged(this.model.AppName);
         this.Opened = true;
         this.focusItem();
+    },
+    showInfo(){
+        this.info = this.EditorApp.Info;
+    },
+    closeInfo(){
+        this.info = null;
     },
     close(){
         if(this.isDisabled()) return;

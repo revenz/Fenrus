@@ -5,6 +5,10 @@
   "DefaultSize":"large",
   "Classes": "widget",
   "Carousel": true,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://gog.com"
+  },
   "Properties": [
     {
       "Name": "Currency Symbol",

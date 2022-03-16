@@ -1,5 +1,9 @@
 ﻿{
   "Name": "Pi-hole",
   "TestFunction": true,
-  "Interval": 10
+  "Interval": 10,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://pi-hole.net"
+  }
 }

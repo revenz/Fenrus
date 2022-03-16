@@ -2,6 +2,10 @@
   "Name": "Lidarr",
   "TestFunction": true,
   "Interval":10,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://lidarr.audio"
+  },
   "Properties": [
     {
       "Name": "API Key",
