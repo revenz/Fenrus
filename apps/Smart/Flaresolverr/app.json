@@ -1,5 +1,8 @@
 {
   "Name": "Flaresolverr",
   "TestFunction": true,
-  "Interval": 10
+  "Interval": 10,
+  "Info":{
+        "Authors": ["Damda58", "John Andrewq"]
+        },
 }
