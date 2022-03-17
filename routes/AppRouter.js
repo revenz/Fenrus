@@ -199,16 +199,26 @@ class AppRouter extends FenrusRouter {
     {    
         let html = ':bar-info:';
         for(let item of items){
-            html += `<div class="bar-info" ${ item.tooltip ? ('title="' + args.Utils.htmlEncode(item.tooltip) + '"') : '' }>` +
-                        (item.icon ? `<div class="bar-icon"><img src="${item.icon}" /></div>` : '') +
-                        '<div class="bar">' +
-                            `<div class="fill" style="width:${item.percent}%"></div>` +
-                            '<div class="labels">' +
-                                `<span class="info-label">${args.Utils.htmlEncode(item.label)}</span>` +
-                                `<span class="fill-label">${item.percent.toFixed(1)} %</span>` +
+            if(isNaN(item.percent) === false)
+            {
+                html += `<div class="bar-info" ${ item.tooltip ? ('title="' + args.Utils.htmlEncode(item.tooltip) + '"') : '' }>` +
+                            (item.icon ? `<div class="bar-icon"><img src="${item.icon}" /></div>` : '') +
+                            '<div class="bar">' +
+                                `<div class="fill" style="width:${item.percent}%"></div>` +
+                                '<div class="labels">' +
+                                    `<span class="info-label">${args.Utils.htmlEncode(item.label)}</span>` +
+                                    `<span class="fill-label">${item.percent.toFixed(1)} %</span>` +
+                                '</div>' + 
                             '</div>' + 
-                        '</div>' + 
-                    '</div>';
+                        '</div>';
+            }
+            else if(item.value)
+            {
+                html += '<div class="bar-info-label-value">' +                         
+                        `<span class="label">${item.label}</span>` +
+                        `<span class="value">${item.value}</span>` +
+                        '</div>';
+            }
         }        
         return html;
     }
@@ -245,7 +255,7 @@ class AppRouter extends FenrusRouter {
                     if(item.length ===  1)
                     {
                         // special case, this is doing a span
-                        html += `<li><span class="title span">${item[0]}</span</li>`;
+                        html += `<li><span class="title span">${item[0]}</span></li>`;
                     } else {
                         html += `<li><span class="title">${item[0]}</span><span class="value">${item[1]}</span></li>`;
                     }

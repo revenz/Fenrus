@@ -25,14 +25,19 @@ class Glances {
     }
 
     async systemInfo(args){
-        const [ cpu, memory, fileSystem, gpu ] = await Promise.all([
+        const [ cpu, memory, fileSystem, gpu, uptime ] = await Promise.all([
           await this.doFetch(args, 'cpu'),
           await this.doFetch(args, 'mem'),
           await this.doFetch(args, 'fs'),
           await this.doFetch(args, 'gpu'),
+          await this.doFetch(args, 'uptime'),
         ]);
 
         let items = [];
+
+        items.push({
+            label:'Up Time', value: uptime
+        });
 
               // cpu 
         // {"interrupts": 861015, "system": 1.6, "time_since_update": 33.861000061035156, "idle": 90.8, "dpc": 0.1, "user": 7.4, 
