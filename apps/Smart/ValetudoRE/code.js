@@ -10,6 +10,10 @@ class ValetudoRE {
 
 		return args.barInfo([
 			{
+				label:'Status',
+				value:state.human_state,
+			},
+			{
 				label:'Main brush',
 				percent: Math.round(100-((consumable.consumables.main_brush_work_time*100)/1080000))  || 0,
 			},
@@ -25,8 +29,7 @@ class ValetudoRE {
 				label:'Sensor',
 				percent: Math.round(100-((consumable.consumables.sensor_dirty_time*100)/108000)) || 0,
 			},
-		]) + args.liveStats([['Status',state.human_state]]);
-		//      return args.liveStats([['Status',state.human_state]]);
+		]);
 	}
 
 	async test(args) {
