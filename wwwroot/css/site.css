@@ -1236,3 +1236,16 @@ option {
 body.not-home {
   background: #181a1c;
 }
+
+.bar-info-label-value {
+  display: flex;
+  flex-direction: row;
+  padding-left: 2.7rem;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+.bar-info-label-value .label {
+  width: 7rem;
+  min-width: 7rem;
+  color: var(--accent);
+}
