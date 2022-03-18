@@ -1,0 +1,28 @@
+﻿{
+  "Name": "Readarr",
+  "TestFunction":true,
+  "Interval":10,
+  "Properties": [
+    {
+      "Name": "API Key",
+      "Id": "apikey",
+      "Type": "string"
+    },
+	{
+      "Name": "Filter to apply to 'Missing' entries",
+      "Id": "filters",
+      "Type": "select",
+      "Options":
+      [
+        { 
+            "Label": "Show all missing",
+            "Value":"none"
+        },
+		{ 
+            "Label": "Missing only if entry is also marked as 'Monitored'",
+            "Value":"monitored"
+        }
+      ]
+    }
+  ]
+}
