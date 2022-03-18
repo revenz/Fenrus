@@ -1242,7 +1242,7 @@ body.not-home {
   flex-direction: row;
   padding-left: 2.7rem;
   font-size: 0.8rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
 }
 .bar-info-label-value .label {
   width: 7rem;
