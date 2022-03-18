@@ -180,8 +180,16 @@ class GroupsRouter{
         group.HideGroupTitle = req.body.HideGroupTitle;
         group.Items = req.body.Items || [];
 
-        for(let item of group.Items){
-            item.Icon = await new ImageHelper().saveImageIfBase64(item.Icon, 'icons', item.Uid);
+        for(let item of group.Items)
+        {
+            if(!item.Icon && item._Type === 'DashboardLink')
+            {
+                item.Icon = await new ImageHelper().downloadFavIcon(item.Url, item.Uid);
+            }
+            else
+            {
+                item.Icon = await new ImageHelper().saveImageIfBase64(item.Icon, 'icons', item.Uid);
+            }
         }
 
         if(req.body.AccentColor.toLowerCase() === settings.AccentColor.toLowerCase())
