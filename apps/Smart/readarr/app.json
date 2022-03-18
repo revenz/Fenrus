@@ -2,6 +2,10 @@
   "Name": "Readarr",
   "TestFunction":true,
   "Interval":10,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://readarr.com/"
+  },
   "Properties": [
     {
       "Name": "API Key",
