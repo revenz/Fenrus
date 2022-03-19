@@ -37,6 +37,13 @@
       ]
     },
     {
+      "Name": "Show Up Time",
+      "Id": "showUpTime",
+      "Type": "bool",
+      "Default": true,
+      "IfValue": { "mode" : "overview" }
+    },
+    {
       "Name": "Group Drives",
       "Id": "groupDrives",
       "Type": "bool",

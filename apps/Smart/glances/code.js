@@ -35,9 +35,12 @@ class Glances {
 
         let items = [];
 
-        items.push({
-            label:'Up Time', value: uptime
-        });
+        if(args.properties['showUpTime'] !== false)
+        {
+            items.push({
+                label:'Up Time', value: uptime
+            });
+        }
 
               // cpu 
         // {"interrupts": 861015, "system": 1.6, "time_since_update": 33.861000061035156, "idle": 90.8, "dpc": 0.1, "user": 7.4, 
