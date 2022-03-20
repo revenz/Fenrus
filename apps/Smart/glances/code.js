@@ -97,7 +97,7 @@ class Glances {
                         drives.push({ mnt_point: 'Storage', free: 0, size: 0, percent: 0});
                     drives[0].free += fs.free;
                     drives[0].size += fs.size;
-                    drives[0].percent = ((drives[0].free / drives[0].size) * 100);
+                    drives[0].percent = (((drives[0].size - drives[0].free) / drives[0].size) * 100);
                 }
                 else
                 {
