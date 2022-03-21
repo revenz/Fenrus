@@ -2,7 +2,13 @@
 {
     async status(args)
     {
-        let data = await args.fetch('api/status');
+        const [ data, updateAvailable ] = await Promise.all([
+            await args.fetch('api/status'),
+            await this.updateAvailable(args)
+        ]);
+
+        args.setStatusIndicator(updateAvailable ? 'update' : '');
+
         if (!data || isNaN(data.queue))
             throw 'no data';            
         let secondlbl = 'Time';
@@ -23,6 +29,17 @@
             ['Queue', data.queue],
             [secondlbl, secondValue]
         ]);        
+    }
+
+    async updateAvailable(args){
+        let data = await args.fetch('api/status/update-available');
+        return data?.UpdateAvailable === true;
+    }
+
+    async getStatusIndicator(args){
+        if(await this.updateAvailable(args))
+            return 'update';
+        return 'recording';
     }
 
     async test(args){

@@ -15,7 +15,10 @@
 <a id="<%= model.Uid %>" title="<%= model.Name %>" class="db-item db-app db-basic <%= smartApp ? 'db-smart' : '' %> <%= model.Size || 'medium' %> <%= app.Classes %> <%= app.Carousel && model.Size.indexOf('large') >= 0 ? 'carousel' : '' %>" href="<%= model.Url%>" onclick="launch('<%= model.Uid %>')" target="<%= target %>">
     <div class="inner">
         <div class="icon">
-        <img src="<%= model.Icon ? model.Icon : app.Icon ? `/apps/${encodeURIComponent(app.Name)}/${app.Icon}` : '/favicon.svg'%>?version=<%= version %>" />
+            <img src="<%= model.Icon ? model.Icon : app.Icon ? `/apps/${encodeURIComponent(app.Name)}/${app.Icon}` : '/favicon.svg'%>?version=<%= version %>" />
+            <% if(settings.ShowStatusIndicators !== false) { %> 
+            <div class="status-indicator"></div>
+            <% } %>
         </div>
         <div class="content">
             <div class="title"><%= title %></div>

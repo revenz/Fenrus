@@ -386,3 +386,15 @@ $margin:0;
     }
 }
 
+
+.db-item 
+{
+    .status-indicator {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 2rem;
+        width: 2rem;
+        background-size: cover;
+    }
+}

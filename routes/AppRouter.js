@@ -137,6 +137,19 @@ class AppRouter extends FenrusRouter {
             funcArgs.changeIcon = (icon) => {
                 res.setHeader('x-icon', funcArgs.Utils.base64Encode(icon));
             };
+            funcArgs.setStatusIndicator = (indicator) => {
+                indicator = (indicator || '').toLowerCase();
+                if(indicator.startsWith('pause'))
+                    indicator = '/common/status-icons/paused.png';
+                else if(indicator.startsWith('record'))
+                    indicator = '/common/status-icons/recording.png';
+                else if(indicator.startsWith('stop'))
+                    indicator = '/common/status-icons/stop.png';
+                else if(indicator.startsWith('update'))
+                    indicator = '/common/status-icons/update.png';
+
+                res.setHeader('x-status-indicator', indicator === '' ? indicator : funcArgs.Utils.base64Encode(indicator));
+            };
 
             let result = await instance.status(funcArgs);    
             if(!result || typeof(result) === 'string')

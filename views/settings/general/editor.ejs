@@ -56,6 +56,18 @@
             </span>
         </div>
         <div class="setting">
+            <span class="label">Status Indicators</span>
+            <span class="value">
+                <label for="ShowStatusIndicators" class="toggle-switchy">
+                    <input :disabled="isDisabled()" type="checkbox" id="ShowStatusIndicators" x-model="model.ShowStatusIndicators" />
+                    <span class="toggle">
+                        <span class="switch"></span>
+                    </span>
+                </label>
+                <span class="help-text">If status indicators should be shown on the applications if available.  For example 'Update Available' etc.</span>
+            </span>
+        </div>
+        <div class="setting">
             <span class="label">Background</span>
             <span class="value">
                 <div class="background-picker">

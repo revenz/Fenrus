@@ -313,3 +313,12 @@
 .db-item.bar-info.large .bar-info:nth-child(n+3) {
   display: none;
 }
+
+.db-item .status-indicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 2rem;
+  width: 2rem;
+  background-size: cover;
+}

@@ -16,6 +16,7 @@ class SettingsInstance {
     ThemeSettings = {};
     ShowSearch = false;
     SearchEngines = [];    
+    ShowStatusIndicators = true;
 
     _File = './data/config.json';
     _DefaultFile = './defaultconfig.json';
@@ -148,7 +149,8 @@ class SettingsInstance {
                 ShowGroupTitles: this.ShowGroupTitles,
                 CollapseMenu: this.CollapseMenu,
                 BackgroundImage: this.BackgroundImage,
-                ThemeSettings: this.ThemeSettings
+                ThemeSettings: this.ThemeSettings,
+                ShowStatusIndicators: this.ShowStatusIndicators
             });
         }
         return JSON.stringify({                
@@ -160,6 +162,7 @@ class SettingsInstance {
             CollapseMenu: this.CollapseMenu,
             BackgroundImage: this.BackgroundImage,
             ThemeSettings: this.ThemeSettings,
+            ShowStatusIndicators: this.ShowStatusIndicators,
             SearchEngines: this.SearchEngines,
             Dashboards: this.Dashboards,
             Groups: this.Groups

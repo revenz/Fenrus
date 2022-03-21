@@ -121,6 +121,10 @@ class SmartApp
                 if(xIcon){
                     this.changeIcon(atob(xIcon));
                 }
+                let xStatusIndicator = res.headers.get('x-status-indicator');
+                if(xStatusIndicator !== undefined && xStatusIndicator !== null){
+                    this.setStatusIndicator(atob(xStatusIndicator));
+                }
                 return res.text();
             })
             .then(html => {
@@ -147,6 +151,22 @@ class SmartApp
         let imgIcon = document.getElementById(this.uid).querySelector('.icon img');
         if(imgIcon)
             imgIcon.setAttribute('src', icon);
+    }
+
+    setStatusIndicator(icon) 
+    {        
+        console.log('status icon', icon);
+        let imgIcon = document.getElementById(this.uid).querySelector('.status-indicator');
+        if(imgIcon)
+        {
+            if(icon){
+                imgIcon.style.display = 'block';
+                imgIcon.style.backgroundImage = `url('${icon}')`;
+            }
+            else{
+                imgIcon.style.display = 'none';
+            }
+        }
     }
 
     getItemSize()
