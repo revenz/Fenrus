@@ -268,4 +268,20 @@ Alpine.data('ItemEditor', () => ({
             return;
         this.model.Properties[prop.Id] = prop.Options[0].Value;
     },
+
+
+    getHtml(text) {
+        let html = htmlEncode(text);
+        let match;
+        let count = 0;
+        while((match = /([\s]|^)((https?:\/\/)([^:^/]*)(:\\d*)?(.*)?)/.exec(html)) != null){
+            let url = match[2];
+            if(!url)
+                break;
+            html = html.replace(url, `<a href="${url}" target="_blank">${url}</a>`);
+            if(++count > 10)
+                break; // prevent infinite loop
+        }
+        return html;
+    }
 }))

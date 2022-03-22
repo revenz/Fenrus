@@ -196,7 +196,7 @@
                                         </label>
                                     </template>
                                     <template x-if="prop.Help">
-                                        <span class="help-text" x-text="prop.Help"></span>
+                                        <span class="help-text" x-html="getHtml(prop.Help)"></span>
                                     </template>
                                 </span>
                             </div> 

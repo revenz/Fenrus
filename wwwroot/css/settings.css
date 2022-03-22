@@ -352,6 +352,7 @@ a.subpage span {
   font-style: italic;
   color: var(--color-darkest);
   font-size: 0.9rem;
+  white-space: pre-wrap;
 }
 
 .settings-outer {
