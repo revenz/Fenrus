@@ -11,7 +11,8 @@
     {
       "Name": "Token",
       "Id": "token",
-      "Type": "string"
+      "Type": "string",
+      "Help" : "Follow the instructions to retrieve your token \nhttps://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token"
     }
   ]
 }
