@@ -3,8 +3,9 @@
 	"TestFunction":true,
 	"Interval":10,
 	"Info":{
-        "Authors": ["Damda58", "John Andrewq"]
-        },
+        "Authors": ["Damda58"],
+		"AppUrl": "https://www.jeedom.com/"
+	},
 	"Properties": [
 		{
 			"Name": "API Key",

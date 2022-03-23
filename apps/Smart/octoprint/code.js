@@ -17,6 +17,15 @@ class OctoPrint {
         let percentProgress = data?.progress?.completion;
         let printTimeLeftSecs = data?.progress?.printTimeLeft;
         let state = data?.state ?? 'Unknown';
+
+        if(args.properties['webcam'])
+        {
+            let url = args.url;
+            if(url.endsWith('/') === false)
+                url += '/';
+            args.changeIcon(url + '?action=snapshot&_ts=' + new Date().getTime());
+        }
+
         if (percentProgress == null || state == 'Unknown' || state == "Offline" || state == "Operational") {
             //assume no print running so just show state
             return args.liveStats([
@@ -36,6 +45,7 @@ class OctoPrint {
         } else {
             printTimeLeftSecs = args.Utils.formatMilliTimeToWords(printTimeLeftSecs * 1000, printTimeLeftSecs < 60);
         }
+
         return args.liveStats([
 
             ['Progress: ', percentProgress + '%'],

@@ -3,6 +3,7 @@
 	"TestFunction":true,
 	"Interval":10,
 	"Info":{
-        "Authors": ["Damda58"]
-        }
+        "Authors": ["Damda58"],
+		"AppUrl": "https://github.com/Hypfer/Valetudo"
+	}
 }
