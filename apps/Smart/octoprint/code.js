@@ -23,7 +23,7 @@ class OctoPrint {
             let url = args.url;
             if(url.endsWith('/') === false)
                 url += '/';
-            args.changeIcon(url + '?action=snapshot&_ts=' + new Date().getTime());
+            args.changeIcon(url + 'webcam/?action=snapshot&_ts=' + new Date().getTime());
         }
 
         if (percentProgress == null || state == 'Unknown' || state == "Offline" || state == "Operational") {
