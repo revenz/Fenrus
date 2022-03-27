@@ -5,6 +5,10 @@
     }
     
     async status(args) {
+        if(!args.properties){
+            console.log('Error in plex app, no properties set');
+            return;
+        }
         let data = await args.fetch(this.getUrl('recentlyAdded', args));
 
         if(!data.MediaContainer)
@@ -67,6 +71,8 @@
     }
 
     async test(args) {
+        if(!args.properties)
+            return false;
         let url = this.getUrl('recentlyAdded', args);
         let data = await args.fetch(url);
         return isNaN(data.MediaContainer?.size) === false;
