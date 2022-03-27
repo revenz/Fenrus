@@ -49,10 +49,9 @@ class EpicGames {
     async getOnSale(args){
         let data = await args.fetch('https://store-site-backend-static-ipv4.ak.epicgames.com/storefrontLayout?country=' + this.getCountryCode(args));
         
-        let onSale = data?.data?.Storefront?.storefrontModules?.filter(x => x.id === 'games-on-sale');
+        let onSale = data?.data?.Storefront?.storefrontModules?.find(x => x.id?.indexOf('sale') >= 0);
         if(!onSale)
             return;
-        onSale = onSale[0];
         let results = [];
         for(let offer of onSale.offers)
         {
