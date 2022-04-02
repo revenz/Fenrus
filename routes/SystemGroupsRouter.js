@@ -4,6 +4,7 @@ const AppHelper = require('../helpers/appHelper');
 const System = require('../models/System');
 const Utils = require('../helpers/utils');
 const adminMiddleware = require('../middleware/AdminMiddleware');
+const ImageHelper = require('../helpers/ImageHelper');
 
 class SystemGroupsRouter
 {    
@@ -150,6 +151,14 @@ class SystemGroupsRouter
             group._Type = 'DashboardGroup';
             group.HideGroupTitle = req.body.HideGroupTitle;
             group.Items = req.body.Items || [];
+            for(let item of group.Items)
+            {
+                if(!item.Icon && item._Type === 'DashboardLink')
+                    item.Icon = await new ImageHelper().downloadFavIcon(item.Url, item.Uid);
+                else
+                    item.Icon = await new ImageHelper().saveImageIfBase64(item.Icon, 'icons', item.Uid);
+            }
+
             if(req.body.AccentColor.toLowerCase() === req.settings.AccentColor.toLowerCase())
                 group.AccentColor = '';
             else
