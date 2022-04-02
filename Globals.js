@@ -2,7 +2,7 @@ class Globals
 {
     MajorVersion = 0;
     MinorVersion = 4;
-    Revision = 0;
+    Revision = 1;
     Build = 0;
 
     Version;

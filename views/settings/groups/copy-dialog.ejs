@@ -7,6 +7,8 @@
             <span>Select a group to copy this item to</span>
             <select x-model="modalGroup">
                 <option selected>Pick one</option>
+                <optgroup label="This Group"></optgroup>
+                <option value="THIS_GROUP" x-text="model.Name"></option>
                 <% if(systemGroups.length) { %>
                     <optgroup label="System"></optgroup>
                     <% for(let grp of systemGroups) { %>

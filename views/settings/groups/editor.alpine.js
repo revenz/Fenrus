@@ -108,6 +108,16 @@ Alpine.data('Settings', () => ({
     modalCopy(){
         if(!this.modalGroup)
             return; // they need to pick one
+
+        if(this.modalGroup === 'THIS_GROUP'){
+            // special case, copying to this group
+            let newItem = JSON.parse(JSON.stringify(this.copyItem));
+            this.model.Items.push(newItem);
+            this.updatePreview();
+            toast('Copied item', true);
+            this.copyItem = null;   
+            return;
+        }
         const options = {
             method: 'POST',
             body: JSON.stringify(this.copyItem),
