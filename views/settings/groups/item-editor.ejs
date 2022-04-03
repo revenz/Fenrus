@@ -11,6 +11,17 @@
                 <div class="header">
                     <span class="title" x-text="EditorTitle"></span>
                     <div class="buttons">
+                        <template x-if="AddingItem">
+                            <div class="keep-open">
+                                <span>Keep Open</span>
+                                <label x:for="KeepOpen" class="toggle-switchy">
+                                    <input @change="itemChange" :disabled="isDisabled()" type="checkbox" :id="KeepOpen" x-model="KeepOpen"  @keydown.enter="saveEditor" />
+                                    <span class="toggle">
+                                        <span class="switch"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </template>
                         <template x-if="EditorApp.Info">
                             <button :disabled="isDisabled()" class="btn" @click="showInfo">Info</button>
                         </template>

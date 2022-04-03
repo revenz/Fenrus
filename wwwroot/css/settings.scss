@@ -104,6 +104,12 @@ select {
             * + * {
                 margin-left: 0.25rem;
             }
+
+            .keep-open {
+                display:inline-block;
+                margin-right:1rem;
+                place-self: center;
+            }
         }
     }
 

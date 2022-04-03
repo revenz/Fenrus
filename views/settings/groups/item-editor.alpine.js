@@ -10,6 +10,8 @@ Alpine.data('ItemEditor', () => ({
     EditorApp:{},
     isItemSaved: false,
     NewEdit:false,
+    AddingItem: false,
+    KeepOpen:false,
     info: null,
     blur(){
         if(this.Saved === false)
@@ -121,6 +123,7 @@ Alpine.data('ItemEditor', () => ({
 
         this.isItemSaved = false;
         this.EditorApp.Properties = {};
+        this.AddingItem = true;
         this.model = 
         {
             _Type: 'DashboardApp',
@@ -139,6 +142,7 @@ Alpine.data('ItemEditor', () => ({
         if(this.isDisabled()) return;
 
         this.isItemSaved = false;
+        this.AddingItem = false;
         this.EditorApp.Properties = {};
         let item = groupEditor.model.Items.find(x => x.Uid === uid);
         if(!item)
@@ -194,6 +198,16 @@ Alpine.data('ItemEditor', () => ({
             group.Items.push(item);
         }
         groupEditor.updatePreview();
+
+        
+        toast(`Item ${item.Name} added`, true);
+
+        if(this.AddingItem && this.KeepOpen)
+        {
+            this.addItem();
+            return;
+        }
+
         this.Opened = false;
     },
     imageChosen(event){

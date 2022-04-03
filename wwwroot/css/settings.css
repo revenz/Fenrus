@@ -136,6 +136,11 @@ select {
 .settings-box .header .buttons * + * {
   margin-left: 0.25rem;
 }
+.settings-box .header .buttons .keep-open {
+  display: inline-block;
+  margin-right: 1rem;
+  place-self: center;
+}
 .settings-box td {
   padding: 0.5rem;
 }
