@@ -19,15 +19,27 @@
         let item = data.queue?.slots?.find(x => x?.status === 'Downloading');
 
         if(item?.filename){
-            let mb = parseFloat(item.mb, 10);
-            let mbleft = parseFloat(item.mbleft, 10);
-            let percent = (mb - mbleft) / mb * 100;
-            return args.liveStats([
-                [item.filename],
-                ['Time Left', item.timeleft],
-                ['Speed', kbpersec ],
-                ['Percent', percent.toFixed(2) + '%']
-            ]);
+			let display = args.properties['displayType'];
+			if(display && display == 'overview'){
+				return args.liveStats([
+					[item.filename],
+					['Current DL Speed', kbpersec ],
+					['Total Queue Size', data.queue.sizeleft ?? 0],
+					['Total Time Left', data.queue.timeleft ?? 0]
+					
+				]);
+			} else {
+				let mb = parseFloat(item.mb, 10);
+				let mbleft = parseFloat(item.mbleft, 10);
+				let percent = (mb - mbleft) / mb * 100;
+				return args.liveStats([
+					[item.filename],
+					['Time Left', item.timeleft],
+					['Speed', kbpersec ],
+					['Percent', percent.toFixed(2) + '%']
+				]);
+			}
+            
 
         }
 
