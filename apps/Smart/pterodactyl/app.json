@@ -1,0 +1,24 @@
+{
+  "Name": "Pterodactyl",
+  "Icon": "icon.png",
+  "TestFunction": true,
+  "Interval": 10,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://pterodactyl.io/"
+  },
+  "Properties": [
+    {
+      "Name": "ApiKey",
+      "Id": "apiKey",
+      "Type": "password",
+	  "Help": "Please go to Your-Pterodactyl-Server/account/api to get API Key"
+    },
+	{
+      "Name": "Server ID",
+      "Id": "serverKey",
+      "Type": "password",
+	  "Help": "ID is shown in URL bar when viewing your server in Pterodactyl, eg Code would be 51e2ea88 for url Your-Pterodactyl-Server/server/51e2ea88/files"
+    }
+  ]
+}
