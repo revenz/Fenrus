@@ -11,6 +11,22 @@
       "Name": "API Key",
       "Id": "apikey",
       "Type": "string"
+    },
+	{
+      "Name": "Content to display",
+      "Id": "displayType",
+      "Type": "select",
+      "Options":
+      [
+        { 
+            "Label": "Show info on current file",
+            "Value":"file"
+        },
+		{ 
+            "Label": "Show info on overall queue",
+            "Value":"overview"
+        }
+      ]
     }
   ]
 }
