@@ -1,0 +1,9 @@
+﻿{
+  "Name": "Cleanarr",
+  "TestFunction": true,
+  "Interval":43200,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://github.com/se1exin/Cleanarr"
+  }
+}
