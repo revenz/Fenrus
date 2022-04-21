@@ -6,7 +6,10 @@
     async status(args) {
         let filter = args.properties['filters'];
 
-        let data = await args.fetch(this.getUrl(args, 'movie'));
+        let data = await args.fetch({
+            url: this.getUrl(args, 'movie'), 
+			timeout: 10000
+        });
         let filteredData = data?.filter((x, index, arr) => {
             let validEntry = x.hasFile == false;
             if (validEntry && (filter == 'both' || filter == 'available')) {
