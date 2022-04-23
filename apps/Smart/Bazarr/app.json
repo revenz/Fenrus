@@ -9,9 +9,10 @@
   },
   "Properties": [
     {
-      "Name": "API-Key",
+      "Name": "API Key",
       "Id": "apiKey",
-      "Type": "password"
+      "Type": "password",
+      "Help" : "Found at Bazarr Settings -> General -> API Key (Under Security)"
     }
   ]
 }
