@@ -11,7 +11,8 @@
     {
       "Name": "API Key",
       "Id": "apikey",
-      "Type": "string"
+      "Type": "string",
+	  "Help" : "Found at Sonarr Settings -> General -> API Key (Under Security)"
     }
   ]
 }

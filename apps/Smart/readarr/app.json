@@ -10,7 +10,8 @@
     {
       "Name": "API Key",
       "Id": "apikey",
-      "Type": "string"
+      "Type": "string",
+	  "Help" : "Found at Readarr Settings -> General -> API Key (Under Security)"
     },
 	{
       "Name": "Filter to apply to 'Missing' entries",
