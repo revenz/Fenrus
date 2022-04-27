@@ -2,7 +2,7 @@
     let target = settings.LinkTarget ?? '_self';
 %>
 
-<a class="db-item db-link db-basic <%= model.Size || 'medium' %>" href="<%= model.Url%>" title="<%= model.Name %>" onclick="launch('<%= model.Uid %>')" target="<%= target %>">
+<a class="db-item db-link db-basic <%= model.Size || 'medium' %>" href="<%= model.Url%>" title="<%= model.Name %>" onclick="launch(event, '<%= model.Uid %>')" target="<%= target %>">
     <div class="inner">
         <div class="icon">
         <img src="<%= model.Icon || '/favicon.svg' %>?version=<%= version %>" />

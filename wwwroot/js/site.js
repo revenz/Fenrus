@@ -128,8 +128,10 @@ function fetchDashboard(uid,  backwards) {
     });
 }
 
-function launch(uid) {
+function launch(event, uid) {
     abortRequests();
+    if(event && event.ctrlKey)
+        return;
     let divLaunchingApp = document.getElementById('launching-app');
     let eleApp = document.getElementById(uid);    
     if(eleApp && divLaunchingApp){
