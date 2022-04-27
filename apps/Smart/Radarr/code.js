@@ -1,9 +1,11 @@
-﻿class Radarr {
+class Radarr {
     getUrl(args, endpoint) {
         return `api/v3/${endpoint}?apikey=${args.properties['apikey']}`;
     }
 
     async status(args) {
+		let updateAvailable = await this.getStatusIndicator(args);
+		args.setStatusIndicator(updateAvailable ? 'Update' : '');
         let filter = args.properties['filters'];
 
         let data = []
@@ -65,6 +67,13 @@
 
     }
 
+	async getStatusIndicator(args){
+        let data = await args.fetch(this.getUrl(args, 'update'));
+        if(data?.length > 0 && data[0].installed === false && data[0].latest === true)
+		    return 'update';
+    	return '';
+	}
+	
     async test(args) {
         let data = await args.fetch(this.getUrl(args, 'queue'));
         return isNaN(data?.records?.length) === false;
