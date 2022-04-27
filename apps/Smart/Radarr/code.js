@@ -31,14 +31,13 @@
             ['Queue', queue]
         ]);
     }
+
     async getStatusIndicator(args){
         let data = await args.fetch(this.getUrl(args, 'update'));
 		
-        if(data[0].installed ==false && data[0].latest == true){
-			return 'update';
-			} else {
-			return '';
-		}
+        if(data?.length > 0 && data[0].installed === false && data[0].latest === true)
+		    return 'update';
+    	return '';
 	}
 
     async test(args) {
