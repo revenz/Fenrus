@@ -4,6 +4,8 @@
     }
 
     async status(args) {
+	let updateAvailable = await this.getStatusIndicator(args);
+	args.setStatusIndicator(updateAvailable ? 'Update' : '');
         let filter = args.properties['filters'];
 
         let data = await args.fetch({
@@ -29,6 +31,15 @@
             ['Queue', queue]
         ]);
     }
+    async getStatusIndicator(args){
+        let data = await args.fetch(this.getUrl(args, 'update'));
+		
+        if(data[0].installed ==false && data[0].latest == true){
+			return 'update';
+			} else {
+			return '';
+		}
+	}
 
     async test(args) {
         let data = await args.fetch(this.getUrl(args, 'queue'));
