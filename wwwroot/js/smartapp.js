@@ -297,6 +297,10 @@ class SmartApp
             let carousel = document.getElementById(id);
             if(!carousel)
                 return; // happens if the carousel was replaced with newer html
+
+            let hover = !!carousel.querySelector('.cover-link:hover');
+            if(hover)
+                return; // if hovering dont move the carousel
             
             let visible = carousel.querySelector('.item.visible');
             let index = parseInt(visible.id.substring(visible.id.indexOf('-') + 1), 10);
