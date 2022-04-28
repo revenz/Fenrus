@@ -1,4 +1,4 @@
-﻿class HomeAssistant {
+class HomeAssistant {
     doFetch(args, template, isTest) {
         if (isTest) {
             return args.fetch({
@@ -27,15 +27,12 @@
         let firstTemplate = args.properties['firstStatTemplate'];
         let secondTemplate = args.properties['secStatTemplate'];
 
-        let firstTemplateResp = await this.doFetch(args, firstTemplate, false);
-        let secondTemplateResp = await this.doFetch(args, secondTemplate, false);
+        let firstTemplateRespText = await this.doFetch(args, firstTemplate, false);
+        let secondTemplateRespText = await this.doFetch(args, secondTemplate, false);
 
         let firstTitle = args.properties['firstStatTitle'];
         let secondTitle = args.properties['secStatTitle'];
-
-        let firstTemplateRespText = await firstTemplateResp?.text()
-        let secondTemplateRespText = await secondTemplateResp?.text()
-
+		
         return args.liveStats([
             [firstTitle, firstTemplateRespText],
             [secondTitle, secondTemplateRespText]
