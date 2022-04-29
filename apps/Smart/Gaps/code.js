@@ -28,8 +28,8 @@
 
 		if(args.properties['group'] != "group") {
 			let lib1Name = args.properties['lib1Name'] ?? defaultLib1Name;
-			let lib2Name = args.properties['lib1Name'] ?? defaultLib2Name;
-			let lib3Name = args.properties['lib1Name'] ?? defaultLib3Name;
+			let lib2Name = args.properties['lib2Name'] ?? defaultLib2Name;
+			let lib3Name = args.properties['lib3Name'] ?? defaultLib3Name;
 			
 			(rssData1 != null ) && totalData.push([lib1Name.length > 1 ? lib1Name : defaultLib1Name + ' Missing:', rssData1.length]); 
 			(rssData2 != null ) && totalData.push([lib2Name.length > 1 ? lib2Name : defaultLib2Name + ' Missing:', rssData2.length]); 
