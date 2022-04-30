@@ -11,8 +11,7 @@ class Jenkins {
     }
 
     async status(args) {
-        let data = await this.doFetch(args);
-        let xmlStr = await data.text();
+        let xmlStr = await this.doFetch(args);
         var count = (xmlStr.match(/<\/url>/g) || []).length;
         return args.liveStats([
             ['Active jobs', count]
@@ -20,8 +19,7 @@ class Jenkins {
     }
 
     async test(args) {
-        let data = await this.doFetch(args);
-        let xmlStr = await data.text();
+        let xmlStr = await this.doFetch(args);
         console.log("xmlStr", xmlStr);
         return xmlStr.includes('<buildUrls');
     }
