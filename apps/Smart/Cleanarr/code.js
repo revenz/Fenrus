@@ -15,8 +15,6 @@
         for (const fileData of data) {
             totalSizeOfDups += fileData.media[1].parts[0].size;
         }
-        console.log('Duplicate Count', count);
-        console.log('Size of Duplicates', args.Utils.formatBytes(totalSizeOfDups));
         return args.liveStats([
             ['Duplicate Count', count],
             ['Size of Duplicates', args.Utils.formatBytes(totalSizeOfDups)]
