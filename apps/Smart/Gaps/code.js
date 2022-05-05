@@ -27,11 +27,9 @@
 			if(rss == null){
 				return;
 			}
-			if(args.properties['showReleasedFutureYears'] != 'yes'){
-				rss = rss?.filter((x, index, arr) => {
-					return x.release_date <= currentYear;
-				})
-			}
+			rss = rss?.filter((x, index, arr) => {
+				return x.release_date <= currentYear;
+			})
 
 			if(!groupStats) {
 				let libName = args.properties['lib' + (i+1) +'Name'] ?? defaultLibName[i];

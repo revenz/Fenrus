@@ -27,22 +27,6 @@
 	  "Help" : "Full RSS ID from Gaps, Example rss/3953866d8320566a03b664674d95bac66ddb7938/6"
     },
 	{
-      "Name": "Show Missing for Movies released in future years",
-      "Id": "showReleasedFutureYears",
-      "Type": "select",
-      "Options":
-      [
-        { 
-            "Label": "no",
-            "Value":"no"
-        },
-		{ 
-            "Label": "yes",
-            "Value":"yes"
-        }
-      ]
-    },
-	{
       "Name": "Group/Seperate Missing",
       "Id": "group",
       "Type": "select",
