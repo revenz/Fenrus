@@ -1,9 +1,13 @@
 ﻿class DailyReminder
 {
     async status(args) {
+		if(args.properties['startDate'] == null || args.properties['startDate'].length <= 0)
+		{
+			return;	
+		}
 		let startDate = new Date(args.properties['startDate']);
-		let reminderType = args.properties['reminderType'];
-		let typeIncrement = parseInt(args.properties['typeIncrement']);
+		let reminderType = args.properties['reminderType'] ?? 'days';
+		let typeIncrement = parseInt(args.properties['typeIncrement'] ?? 1);
 		let dayOffset = parseInt(args.properties['dayOffset'] ?? 0);
 		let todayIcon = args.properties['todayIcon'];
 		let notTodayIcon = args.properties['notTodayIcon'];
