@@ -41,7 +41,7 @@
             "Value":"seperate"
         }
       ]
-    },
+    },	
 	{
       "Name": "(Optional) Library 1 Name",
       "Id": "lib1Name",
