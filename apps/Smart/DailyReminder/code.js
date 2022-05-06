@@ -1,37 +1,52 @@
-﻿class DailyReminder
+﻿﻿class DailyReminder
 {
     async status(args) {
-		if(args.properties['startDate'] == null || args.properties['startDate'].length <= 0)
-		{
-			return;	
-		}
-		let startDate = new Date(args.properties['startDate']);
 		let reminderType = args.properties['reminderType'] ?? 'days';
 		let typeIncrement = parseInt(args.properties['typeIncrement'] ?? 1);
 		let dayOffset = parseInt(args.properties['dayOffset'] ?? 0);
 		let todayIcon = args.properties['todayIcon'];
 		let notTodayIcon = args.properties['notTodayIcon'];
 		let test = args.properties['test'] ?? false;
-		let today = new Date();
-		
-		startDate.setDate(startDate.getDate()+dayOffset);
-		
-		let resultantNextDay; 
-		if(reminderType == "months") {
-			resultantNextDay = this.xmonths(today, startDate, typeIncrement);
-		} else if(reminderType == "weeks") {
-			resultantNextDay = this.xdays(today, startDate, typeIncrement*7);
-		} else {
-			resultantNextDay = this.xdays(today, startDate, typeIncrement);
-		}
 		let displayText = args.properties['displayText'] ?? 'in {days} days';
 		
-		let daysDifference = this.getDaysBetween(today, resultantNextDay);
-		if(isNaN(daysDifference)){
-			return;
+		let today = new Date();
+		
+		let loopCount = 1;
+		let startDateParamName = "startDate" + loopCount;
+		let startDateParam;
+		let closestDayDifference;
+		
+		while((startDateParam = args.properties[startDateParamName]) != null && startDateParam.length > 0) {
+			
+			let startDate = new Date(startDateParam);
+			startDate.setDate(startDate.getDate()+dayOffset);
+			console.log("startDate",startDate);
+			let resultantNextDay; 
+			if(reminderType == "months") {
+				resultantNextDay = this.xmonths(today, startDate, typeIncrement);
+			} else if(reminderType == "weeks") {
+				resultantNextDay = this.xdays(today, startDate, typeIncrement*7);
+			} else {
+				resultantNextDay = this.xdays(today, startDate, typeIncrement);
+			}
+			console.log("resultantNextDay",resultantNextDay);
+			let daysDifference = this.getDaysBetween(today, resultantNextDay);
+			console.log("daysDifference",daysDifference);
+			if(isNaN(daysDifference)){
+				continue;
+			}
+			
+			if(closestDayDifference == null || (closestDayDifference > daysDifference)) {
+				
+				closestDayDifference = daysDifference;
+				console.log("closestDayDifference",closestDayDifference);
+			}
+			console.log("closestDayDifference2",closestDayDifference);
+			startDateParamName = "startDate" + ++loopCount;
 		}
 		
-		if(daysDifference == 0) {
+		
+		if(closestDayDifference == 0) {
 			if(todayIcon != null && todayIcon.length > 0 && !test){
 				args.changeIcon(todayIcon);
 			}
@@ -42,13 +57,13 @@
 			if(notTodayIcon != null && notTodayIcon.length > 0 && !test){
 				args.changeIcon(notTodayIcon);
 			}
-			if (daysDifference == 1) {
+			if (closestDayDifference == 1) {
 				return args.liveStats([
 					['Tomorrow']
 				]);
 			} else {
 				return args.liveStats([
-					[displayText.replace("{days}",daysDifference)]
+					[displayText.replace("{days}",closestDayDifference ?? 'Unknown')]
 				]);
 			}
 		}
