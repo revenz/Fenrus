@@ -9,10 +9,17 @@
   "Properties": [
     {
       "Name": "Start Date",
-      "Id": "startDate",
+      "Id": "startDate1",
       "Type": "string",
 	  "Default": "2022-01-30",
-	  "Help" : "format YYYY-MM-DD ie 2022-03-25"
+	  "Help" : "Format YYYY-MM-DD ie 2022-03-25"
+    },
+	{
+      "Name": "(Optional) Secondary Start Date",
+      "Id": "startDate2",
+      "Type": "string",
+	  "Default": "",
+	  "Help" : "Second start date for when you have a event that may happen twice a week/month etc. \nFormat YYYY-MM-DD ie 2022-03-25"
     },
 	{
       "Name": "Reminder Type",
