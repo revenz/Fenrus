@@ -1,4 +1,4 @@
-﻿﻿class DailyReminder
+﻿class DailyReminder
 {
     async status(args) {
 		let reminderType = args.properties['reminderType'] ?? 'days';
@@ -20,7 +20,6 @@
 			
 			let startDate = new Date(startDateParam);
 			startDate.setDate(startDate.getDate()+dayOffset);
-			console.log("startDate",startDate);
 			let resultantNextDay; 
 			if(reminderType == "months") {
 				resultantNextDay = this.xmonths(today, startDate, typeIncrement);
@@ -29,19 +28,15 @@
 			} else {
 				resultantNextDay = this.xdays(today, startDate, typeIncrement);
 			}
-			console.log("resultantNextDay",resultantNextDay);
 			let daysDifference = this.getDaysBetween(today, resultantNextDay);
-			console.log("daysDifference",daysDifference);
 			if(isNaN(daysDifference)){
 				continue;
 			}
 			
 			if(closestDayDifference == null || (closestDayDifference > daysDifference)) {
-				
 				closestDayDifference = daysDifference;
-				console.log("closestDayDifference",closestDayDifference);
 			}
-			console.log("closestDayDifference2",closestDayDifference);
+			
 			startDateParamName = "startDate" + ++loopCount;
 		}
 		
