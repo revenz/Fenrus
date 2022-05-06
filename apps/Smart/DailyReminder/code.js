@@ -30,7 +30,7 @@
 			}
 			let daysDifference = this.getDaysBetween(today, resultantNextDay);
 			if(isNaN(daysDifference)){
-				continue;
+				return;
 			}
 			
 			if(closestDayDifference == null || (closestDayDifference > daysDifference)) {
