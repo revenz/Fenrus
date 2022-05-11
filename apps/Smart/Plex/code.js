@@ -32,7 +32,7 @@
                 title: md.title,
                 parentTitle: md.parentTitle,
                 year: md.parentYear || md.year,
-                image: args.proxy(url + md.art + '?X-Plex-Token='  + args.properties['token'])
+                image: md.art?.length > 2 ? args.proxy(url + md.art + '?X-Plex-Token='  + args.properties['token']) : null
             })
         }
         let max = args.size === 'x-large' ? 7 : 10;
