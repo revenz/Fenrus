@@ -84,7 +84,7 @@
                         <div class="setting">
                             <span class="label">URL</span>
                             <span class="value">
-                                <input :disabled="isDisabled()" type="text" x-model="model.Url" data-rules='["required", "regexMatch:^((http(s)?)|(HTTP(S)?))://."]' @blur="blur" @input="input"  @keydown.enter="saveEditor" />
+                                <input :disabled="isDisabled()" type="text" x-model="model.Url" data-rules='["required", "regexMatch:^[^:]+://."]' @blur="blur" @input="input"  @keydown.enter="saveEditor" />
                             </span>
                         </div> 
                     </template>

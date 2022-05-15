@@ -25,7 +25,7 @@
                 break;
             match = match[0];
             ++total;
-            if(match.indexOf('<td>none</td>') < 0)
+            if(match.indexOf('<td>none</td>') < 0 && match.indexOf('not in use') < 0)
                 ++inUse;
         }
         return { total, inUse };
