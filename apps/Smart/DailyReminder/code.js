@@ -4,6 +4,7 @@
 		let reminderType = args.properties['reminderType'] ?? 'days';
 		let typeIncrement = parseInt(args.properties['typeIncrement'] ?? 1);
 		let dayOffset = parseInt(args.properties['dayOffset'] ?? 0);
+		let hourOffset = parseInt(args.properties['hourOffset'] ?? 0);
 		let todayIcon = args.properties['todayIcon'];
 		let notTodayIcon = args.properties['notTodayIcon'];
 		let test = args.properties['test'] ?? false;
@@ -20,6 +21,7 @@
 			
 			let startDate = new Date(startDateParam);
 			startDate.setDate(startDate.getDate()+dayOffset);
+			startDate.setTime(startDate.getTime() + (hourOffset * 60 * 60 * 1000));
 			let resultantNextDay; 
 			if(reminderType == "months") {
 				resultantNextDay = this.xmonths(today, startDate, typeIncrement);
