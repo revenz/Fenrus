@@ -4,6 +4,7 @@
 		let reminderType = args.properties['reminderType'] ?? 'days';
 		let typeIncrement = parseInt(args.properties['typeIncrement'] ?? 1);
 		let dayOffset = parseInt(args.properties['dayOffset'] ?? 0);
+		let hourOffset = parseInt(args.properties['hourOffset'] ?? 0);
 		let todayIcon = args.properties['todayIcon'];
 		let notTodayIcon = args.properties['notTodayIcon'];
 		let test = args.properties['test'] ?? false;
@@ -20,6 +21,7 @@
 			
 			let startDate = new Date(startDateParam);
 			startDate.setDate(startDate.getDate()+dayOffset);
+			startDate.setTime(startDate.getTime() + (hourOffset * 60 * 60 * 1000));
 			let resultantNextDay; 
 			if(reminderType == "months") {
 				resultantNextDay = this.xmonths(today, startDate, typeIncrement);
@@ -84,15 +86,7 @@
 		let timeDif = date2.getTime() - date1.getTime();
 		return Math.ceil(timeDif / (1000 * 3600 * 24));
 	}
-	
-	
-    async test(args) {
-		//set a flag for test as changeIcon does not support being called from test func
-		args.properties['test'] = true;
-        let mainStatus = await this.status(args);
-		console.log("mainStatus",mainStatus);
-        return mainStatus != null;
-    }
+ 
 }
 
 module.exports = DailyReminder;
