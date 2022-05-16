@@ -63,6 +63,13 @@
       "Type": "string"
     },
 	{
+      "Name": "Hour offset",
+      "Id": "hourOffset",
+	  "Default": "0",
+	  "Help": "Offset to add/remove hours.\nUseful for if you wish to have the 'new day' start at 3am by entering '3' also accepts minus values",
+      "Type": "string"
+    },
+	{
       "Name": "Custom Icon URL when day is \"Today\"",
       "Id": "todayIcon",
 	  "Help": "Overrides current icon with whatever icon is specified by url here.\nThis will only apply when the date is \"Today\"",
