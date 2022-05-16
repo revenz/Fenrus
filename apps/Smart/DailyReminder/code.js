@@ -86,15 +86,7 @@
 		let timeDif = date2.getTime() - date1.getTime();
 		return Math.ceil(timeDif / (1000 * 3600 * 24));
 	}
-	
-	
-    async test(args) {
-		//set a flag for test as changeIcon does not support being called from test func
-		args.properties['test'] = true;
-        let mainStatus = await this.status(args);
-		console.log("mainStatus",mainStatus);
-        return mainStatus != null;
-    }
+ 
 }
 
 module.exports = DailyReminder;
