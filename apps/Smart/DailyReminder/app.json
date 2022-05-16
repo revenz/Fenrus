@@ -1,6 +1,6 @@
 ﻿{
   "Name": "DailyReminder",
-  "TestFunction": true,
+  "TestFunction": false,
   "Interval": 600,
   "Icon": "icon.png",
   "Info":{
