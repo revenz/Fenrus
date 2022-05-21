@@ -1,6 +1,6 @@
 ﻿{
   "Name": "DailyReminder",
-  "TestFunction": true,
+  "TestFunction": false,
   "Interval": 600,
   "Icon": "icon.png",
   "Info":{
@@ -60,6 +60,13 @@
       "Id": "dayOffset",
 	  "Default": "0",
 	  "Help": "Offset to add/remove from day.\nUseful for if you wish to have \"today\" be the day before the actual day\n(by specifying -1)",
+      "Type": "string"
+    },
+	{
+      "Name": "Hour offset",
+      "Id": "hourOffset",
+	  "Default": "0",
+	  "Help": "Offset to add/remove hours.\nUseful for if you wish to have the 'new day' start at 3am by entering '3' also accepts minus values",
       "Type": "string"
     },
 	{
