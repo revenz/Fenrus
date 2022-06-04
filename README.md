@@ -20,8 +20,16 @@ For support use our [Discord Server](https://discord.gg/xbYK8wFMeU)
 ## Installation
 
 ### Node
-Fenrus is a Node application and requires NodeJS to run.  Once NodeJS is installed you can run Fenrus 
-> node app.js
+Fenrus is a Node application and requires NodeJS to run.  
+Once NodeJS is installed you need to download the packages Fenrus uses
+```
+npm install
+```
+
+Then you can run Fenrus 
+```
+node app.js
+```
 
 ### Docker
 Docker is the preferred method of installing Fenrus
