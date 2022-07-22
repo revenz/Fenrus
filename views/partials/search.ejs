@@ -59,8 +59,18 @@
                     return;
                 }
                 if(/^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$/.test(searchText)){
-                    // donamename 
+                    // domainname 
                     window.location = 'http://' + searchText;
+                    return;
+                }
+                if(/^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})(\/.*)$/.test(searchText)){
+                    // domainname with path 
+                    window.location = 'http://' + searchText;
+                    return;
+                }
+                if(/^(http:\/\/|https:\/\/).*$/.test(searchText)){
+                    // full url
+                    window.location = searchText;
                     return;
                 }
 
