@@ -21,11 +21,18 @@ class AgentDVR {
 		let cameraIds = args.properties['cameraIds'] ?? 1;
 		let dontScale = !args.properties['scale'] ?? true;
 		let rgb = args.properties['rgb'] ?? '0,0,0';
-
+		let snapshotMode = args.properties['snapshotMode'] ?? false;
+		
+		let endpoint = "";
+		if(snapshotMode){
+			endpoint = "grab.jpg";
+		} else {
+			endpoint = "video.mjpg";
+		}
 		let url = args.url;
 		if(url.endsWith('/') === false)
 			url += '/';
-		args.changeIcon(url + 'grab.jpg?oids=' + cameraIds + '&size=' + resolution + '&maintainAR=' + dontScale.toString() + '&backColor=' + rgb);
+		args.changeIcon(url + endpoint + '?oids=' + cameraIds + '&size=' + resolution + '&maintainAR=' + dontScale.toString() + '&backColor=' + rgb);
 
         return;
 
