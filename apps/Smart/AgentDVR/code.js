@@ -21,9 +21,7 @@ class AgentDVR {
 		let cameraIds = args.properties['cameraIds'] ?? 1;
 		let dontScale = !args.properties['scale'] ?? true;
 		let rgb = args.properties['rgb'] ?? '0,0,0';
-		
-		console.log('args.size ', args.size );
-		console.log('resolution', resolution );
+
 		let url = args.url;
 		if(url.endsWith('/') === false)
 			url += '/';
