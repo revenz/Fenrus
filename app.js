@@ -4,6 +4,8 @@ const fs = require('fs');
 const Globals = require('./Globals');
 const http = require('http');
 const https = require("https");
+const cron = require('node-cron');
+const UpTimeService = require('./services/UpTimeService');
 
 // middleware
 const morgan = require('morgan');
@@ -205,3 +207,8 @@ function errorHandler(){
         process.exit(1);
     });
 }
+
+const upTimeService = new UpTimeService();
+cron.schedule("* * * * *", () => {
+    upTimeService.check();
+});
