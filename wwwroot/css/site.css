@@ -1284,3 +1284,70 @@ body.not-home {
 .dashboard-dropdown:hover > div {
   display: block;
 }
+
+.iframe-content {
+  position: fixed;
+  top: 4rem;
+  left: 1rem;
+  bottom: 1rem;
+  right: 1rem;
+  animation: iframe-animate 0.3s linear;
+  display: flex;
+  flex-direction: row-reverse;
+  z-index: 10;
+}
+.iframe-content.closing {
+  animation: iframe-animate-close 0.6s linear;
+}
+.iframe-content .side {
+  width: 5rem;
+  background: rgba(0, 0, 0, 0.5);
+  margin-left: 0.75rem;
+}
+.iframe-content .side .db-item {
+  width: 4rem !important;
+  height: 4rem !important;
+}
+.iframe-content .side .db-item img {
+  width: 100%;
+  height: 100%;
+}
+.iframe-content .side .db-item i {
+  font-size: 4rem;
+  text-align: center;
+  color: var(--error);
+}
+.iframe-content .side .db-item .title {
+  font-size: 0.9rem;
+}
+.iframe-content iframe {
+  background: rgba(0, 0, 0, 0.5);
+  flex-grow: 1;
+}
+
+@keyframes iframe-animate {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes iframe-animate-close {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0);
+    opacity: 0;
+    display: none;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+    display: none;
+  }
+}

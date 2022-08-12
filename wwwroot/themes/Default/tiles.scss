@@ -192,6 +192,7 @@ $margin:0;
 
 .db-item.db-basic
 {
+    cursor:pointer;
     &.medium, &.x-large, &.xx-large
     {
         &:not(.db-smart) .content {            
@@ -264,26 +265,30 @@ $margin:0;
         }
     }
 }
-.dashboard .db-item.db-basic {
-    &.medium, &.x-large, &.xx-large
+.dashboard, .side
+{ 
+    .db-item.db-basic 
     {
-        &:hover {           
-            .icon::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.7);
-            }
-            .content {
-                display: unset;
-            }
-            .inner {
-                transform: rotateY(180deg);
-                top: -0.5rem;
-                right: -0.5rem;
+        &.medium, &.x-large, &.xx-large
+        {
+            &:hover {           
+                .icon::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0,0,0,0.7);
+                }
+                .content {
+                    display: unset;
+                }
+                .inner {
+                    transform: rotateY(180deg);
+                    top: -0.5rem;
+                    right: -0.5rem;
+                }
             }
         }
     }
@@ -342,7 +347,7 @@ $margin:0;
             height:4rem;
             min-height:4rem;
             max-height:4rem;
-            > img 
+            > img, i 
             {
                 position: absolute;
                 left:1rem;

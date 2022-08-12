@@ -2,6 +2,7 @@
 
 @use 'sliding';
 
+
 body {    
     background-size:cover;
     background-repeat: no-repeat;
@@ -82,6 +83,7 @@ body {
         justify-content: center !important;
     }
 }
+
 
 @media screen and (min-width:720.001px) {    
     body.horizontal {

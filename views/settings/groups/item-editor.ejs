@@ -80,6 +80,17 @@
                             </span>
                         </div>
                     </template>
+                    <template x-if="model._Type != 'Dashboard'">                    
+                        <div class="setting">
+                            <span class="label">Target</span>
+                            <span class="value">
+                                <select :disabled="isDisabled()" x-model="model.Target" @keydown.enter="saveEditor">
+                                    <option value="">Default</option>
+                                    <option value="IFrame">IFrame</option>
+                                </select>
+                            </span>
+                        </div> 
+                    </template>
                     <template x-if="model._Type != 'Dashboard'">
                         <div class="setting">
                             <span class="label">URL</span>

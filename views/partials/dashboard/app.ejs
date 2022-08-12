@@ -2,7 +2,7 @@
     let app = AppHelper.get(model.AppName);
     if(!app)
         return; // can happen if the app has been deleted/renamed
-    let target = settings.LinkTarget ?? '_self';
+    let target = model.Target ?? settings.LinkTarget ?? '_self';
     let title = model.Name ?? model.AppName;
     let interval = app.Interval === -1 ? -1 : (app.Interval ?? 0) * 1000;
     let smartApp = interval > 0 || interval === -1;
@@ -12,7 +12,17 @@
     <link rel="stylesheet" href="<%= app.Css %>" />    
 <% } %>
 
-<a id="<%= model.Uid %>" title="<%= model.Name %>" class="db-item db-app db-basic <%= smartApp ? 'db-smart' : '' %> <%= model.Size || 'medium' %> <%= app.Classes %> <%= app.Carousel && model.Size.indexOf('large') >= 0 ? 'carousel' : '' %>" href="<%= model.Url%>" onclick="launch(event, '<%= model.Uid %>')" target="<%= target %>">
+<a id="<%= model.Uid %>" title="<%= model.Name %>" class="db-item db-app db-basic 
+    <%= smartApp ? 'db-smart' : '' %> <%= model.Size || 'medium' %>
+     <%= app.Classes %> <%= app.Carousel && model.Size.indexOf('large') >= 0 ? 'carousel' : '' %>
+     <%= target === 'IFrame' ? 'iframe' : '' %>" 
+    href="<%= model.Url%>" 
+    <% if(target !== 'IFrame') { %>
+    onclick="launch(event, '<%= model.Uid %>')" target="<%= target %>"
+    <% } else { %> 
+        onclick="openIframe(event, '<%= JSON.stringify(model) %>'); return false;"
+    <% } %>
+    >
     <div class="inner">
         <div class="icon">
             <img src="<%= model.Icon ? model.Icon : app.Icon ? `/apps/${encodeURIComponent(app.Name)}/${app.Icon}` : '/favicon.svg'%>?version=<%= version %>" />

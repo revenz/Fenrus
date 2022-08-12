@@ -282,3 +282,70 @@ body.not-home {
         > div  {display: block;}
     }
 }
+
+.iframe-content {
+    position:fixed;
+    top:4rem;
+    left:1rem;
+    bottom:1rem;
+    right:1rem;
+	animation: iframe-animate .3s linear;
+    display:flex;
+    flex-direction: row-reverse;
+    z-index:10;
+    &.closing {
+        animation: iframe-animate-close .6s linear;
+    }
+    .side {
+        width:5rem;
+        background:rgba(0,0,0,.5);
+        margin-left: 0.75rem;
+        .db-item {
+            width:4rem !important;
+            height:4rem !important;
+            img {
+                width:100%;
+                height:100%;
+            }
+            i 
+            {                
+                font-size: 4rem;
+                text-align: center;
+                color:var(--error);
+            }
+            .title {
+                font-size:0.9rem;
+            }
+        }
+    }
+    iframe {
+        background:rgba(0,0,0,.5);
+        flex-grow:1;
+    }
+}
+@keyframes iframe-animate {
+	from {
+		transform: scale(0);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;	
+	}
+}
+@keyframes iframe-animate-close {
+	0%{
+		transform: scale(1);
+		opacity: 1;
+	}
+    50% {
+		transform: scale(0);
+        opacity: 0;
+        display:none;
+	}
+    100% {
+		transform: scale(0);
+        opacity: 0;
+        display:none;
+	}
+}
