@@ -197,6 +197,7 @@ option {
     left: 2rem;
     font-size: 1.5rem;
     text-transform: uppercase;
+    z-index:100;
 }
 #launching-app {
     display:none;
@@ -241,4 +242,43 @@ body.not-home {
         color:var(--accent);
     }
     margin:1rem 0;
+}
+
+
+/* Dropdown Button */
+.dashboard-dropdown {
+    position: relative;
+    display: inline-block;
+    > button 
+    {
+        border: none;      
+        background: transparent;
+        color: var(--color);
+        text-transform: uppercase;  
+        font-size:1.5rem;
+    }
+    > div 
+    {
+        display: none;
+        position: absolute;
+        background-color: var(--base);
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        font-size:1rem;
+    }
+    a
+    {
+        color:var(--color);
+        padding: 0.5rem;
+        text-decoration: none;
+        display: block;
+        &:hover { 
+            background-color: var(--accent); 
+        }
+    }
+    &:hover 
+    {
+        > div  {display: block;}
+    }
 }

@@ -1203,6 +1203,7 @@ option {
   left: 2rem;
   font-size: 1.5rem;
   text-transform: uppercase;
+  z-index: 100;
 }
 
 #launching-app {
@@ -1248,4 +1249,38 @@ body.not-home {
   width: 7rem;
   min-width: 7rem;
   color: var(--accent);
+}
+
+/* Dropdown Button */
+.dashboard-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dashboard-dropdown > button {
+  border: none;
+  background: transparent;
+  color: var(--color);
+  text-transform: uppercase;
+  font-size: 1.5rem;
+}
+.dashboard-dropdown > div {
+  display: none;
+  position: absolute;
+  background-color: var(--base);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  font-size: 1rem;
+}
+.dashboard-dropdown a {
+  color: var(--color);
+  padding: 0.5rem;
+  text-decoration: none;
+  display: block;
+}
+.dashboard-dropdown a:hover {
+  background-color: var(--accent);
+}
+.dashboard-dropdown:hover > div {
+  display: block;
 }

@@ -149,3 +149,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if(divLaunchingApp)
         divLaunchingApp.style.display = 'none';
 });
+
+function changeDashboard(uid){    
+    document.cookie = 'dashboard=' + uid;
+    window.location.reload(true);
+}

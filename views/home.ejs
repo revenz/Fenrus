@@ -6,7 +6,23 @@
 <%- include(themeHead) %>
 <% } %>
 
-<div id="dashboard-name"><%= dashboard.Name === 'Default' ? '' : dashboard.Name %></div>
+<div id="dashboard-name">
+    <% if(isGuest) { %>
+        <%= dashboard.Name === 'Default' ? '' : dashboard.Name %>
+    <% } else { %> 
+    <div class="dashboard-dropdown">
+        <button><%= dashboard.Name %></button>
+        <div>
+            <% 
+            let dbs = settings.Dashboards.filter(x => x.Name != dashboard.Name);
+            dbs.sort((a, b) => a.Name.localeCompare(b.Name));
+            for(let db of dbs) { %>
+                    <a href="#" onclick="changeDashboard('<%= db.Uid %>');return false;"><%= db.Name %></a>
+            <% } %>
+        </div>
+    </div>
+    <% } %>
+</div>
 
 <div class="dashboard <%= themeVariables?.ClassName %> <%= settings.ShowGroupTitles === false ? 'hide-group-titles' : '' %>">    
     <%- include('dashboard.ejs') %>
