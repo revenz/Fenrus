@@ -949,6 +949,104 @@ a.btn {
   filter: grayscale(1) brightness(12);
 }
 
+/* Context Menu */
+.contextMenu {
+  --menu-border: rgba(255, 255, 255, 0.08);
+  --menu-bg: linear-gradient(
+    45deg,
+    rgba(10, 20, 28, 0.2) 0%,
+    rgba(10, 20, 28, 0.7) 100%
+  );
+  --item-border: rgba(255, 255, 255, 0.1);
+  --item-color: #fff;
+  --item-bg-hover: rgba(255, 255, 255, 0.1);
+  height: 0;
+  overflow: hidden;
+  background: var(--menu-bg);
+  backdrop-filter: blur(5px);
+  position: fixed;
+  top: var(--top);
+  left: var(--left);
+  animation: menuAnimation 0.2s 0s both;
+  transform-origin: left;
+  list-style: none;
+  margin: 4px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 999999999;
+  box-shadow: 0 0 0 1px var(--menu-border), 0 2px 2px rgba(0, 0, 0, 0.03), 0 4px 4px rgba(0, 0, 0, 0.04), 0 10px 8px rgba(0, 0, 0, 0.05), 0 15px 15px rgba(0, 0, 0, 0.06), 0 30px 30px rgba(0, 0, 0, 0.07), 0 70px 65px rgba(0, 0, 0, 0.09);
+}
+.contextMenu-item {
+  padding: 4px;
+}
+.contextMenu-item[data-divider=top] {
+  border-top: 1px solid;
+}
+.contextMenu-item[data-divider=bottom] {
+  border-bottom: 1px solid;
+}
+.contextMenu-item[data-divider=top-bottom] {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+.contextMenu-item[data-divider] {
+  border-color: var(--item-border);
+}
+.contextMenu-button {
+  color: var(--item-color);
+  background: 0;
+  border: 0;
+  white-space: nowrap;
+  width: 100%;
+  border-radius: 4px;
+  padding: 6px 24px 6px 7px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  width: 100%;
+  animation: menuItemAnimation 0.2s 0s both;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+}
+.contextMenu-button:hover {
+  background-color: var(--item-bg-hover);
+}
+.contextMenu[data-theme=light] {
+  --menu-bg: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.85) 100%
+  );
+  --menu-border: rgba(0, 0, 0, 0.08);
+  --item-border: rgba(0, 0, 0, 0.1);
+  --item-color: rgb(10, 20, 28);
+  --item-bg-hover: rgba(10, 20, 28, 0.09);
+}
+
+@keyframes menuAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    height: var(--height);
+    opacity: 1;
+    border-radius: 8px;
+    transform: scale(1);
+  }
+}
+@keyframes menuItemAnimation {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 ::-webkit-scrollbar {
   width: 16px;
 }
@@ -1214,7 +1312,7 @@ option {
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.65);
-  z-index: 10;
+  z-index: 1000000;
 }
 #launching-app .inner {
   background: rgba(0, 0, 0, 0.5);
@@ -1350,4 +1448,67 @@ body.not-home {
     opacity: 0;
     display: none;
   }
+}
+.side-editor-background {
+  position: fixed;
+  z-index: 4;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba(var(--base-rgb), 0.8);
+}
+
+.side-editor {
+  position: fixed !important;
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: min(700px, 70vw);
+  background: var(--base-darker);
+  z-index: 5;
+  padding: 2px 0.5rem;
+}
+.side-editor .content {
+  overflow: auto;
+  flex-grow: 1;
+}
+.side-editor h2 {
+  margin: 0;
+}
+.side-editor .header {
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem;
+}
+.side-editor .header + * {
+  border-top: solid 1px var(--border-color);
+}
+.side-editor .header .title {
+  font-size: 1.5rem;
+  flex-grow: 1;
+  margin: auto;
+}
+.side-editor .header .buttons {
+  display: flex;
+  flex-direction: row;
+  text-align: right;
+}
+.side-editor .header .buttons * + * {
+  margin-left: 0.25rem;
+}
+.side-editor .header .buttons .keep-open {
+  display: inline-block;
+  margin-right: 1rem;
+  place-self: center;
+}
+
+#up-time-wrapper {
+  display: none;
+  z-index: 100;
+}
+#up-time-wrapper .no-data {
+  padding: 1rem;
 }

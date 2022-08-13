@@ -1,0 +1,21 @@
+<div>
+    <template x-if="Opened">
+        <div>
+            <div class="side-editor-background"></div>
+            <div class="settings-box side-editor">
+                <div class="header">
+                    <span class="title" x-text="EditorTitle"></span>
+                    <div class="buttons">
+                        <button class="btn" @click="close">Close</button>
+                    </div>
+                </div>
+                <div class="content">
+                    <template x-if="LoadingData">
+                        <span>Loading data</span>
+                    </template>
+                    <div :id="ChartUid"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>

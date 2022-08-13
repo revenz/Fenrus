@@ -89,6 +89,7 @@ class HomeRouter extends FenrusRouter {
         let system = System.getInstance();
         let settings = req.settings;
         let dashboard = { 
+            Uid: dashboardInstance.Uid, 
             Name: dashboardInstance.Name, 
             Theme: dashboardInstance.Theme,
             AccentColor: dashboardInstance.AccentColor,
@@ -123,7 +124,7 @@ class HomeRouter extends FenrusRouter {
 
         dashboards.sort((a, b) => {
             return a.Name.localeCompare(b.Name);
-        })
+        });
     
         res.render(inline ? 'dashboard' : 'home', common.getRouterArgs(req, { 
             title: '', 

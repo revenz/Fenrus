@@ -112,35 +112,6 @@ select {
 .settings-box .setting .value ul:not(.livestats) li + li {
   margin-top: 0.75rem;
 }
-.settings-box h2 {
-  margin: 0;
-}
-.settings-box .header {
-  display: flex;
-  flex-direction: row;
-  padding: 0.5rem;
-}
-.settings-box .header + * {
-  border-top: solid 1px var(--border-color);
-}
-.settings-box .header .title {
-  font-size: 1.5rem;
-  flex-grow: 1;
-  margin: auto;
-}
-.settings-box .header .buttons {
-  display: flex;
-  flex-direction: row;
-  text-align: right;
-}
-.settings-box .header .buttons * + * {
-  margin-left: 0.25rem;
-}
-.settings-box .header .buttons .keep-open {
-  display: inline-block;
-  margin-right: 1rem;
-  place-self: center;
-}
 .settings-box td {
   padding: 0.5rem;
 }
@@ -606,31 +577,6 @@ table .controls [class^=icon-]:hover {
   right: 3rem;
   transform: scale(1.5);
   z-index: 3;
-}
-
-.side-edior-background {
-  position: fixed;
-  z-index: 4;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background: rgba(var(--base-rgb), 0.8);
-}
-
-.side-editor {
-  position: fixed;
-  display: flex;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: min(700px, 70vw);
-  background: var(--base-darker);
-  z-index: 5;
-  padding: 2px 0.5rem;
-}
-.side-editor .content {
-  overflow: auto;
 }
 
 .preview-dashboard {

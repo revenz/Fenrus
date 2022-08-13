@@ -8,6 +8,7 @@
         <% } else { %> 
             onclick="openIframe(event, '<%= JSON.stringify(model) %>'); return false;"
         <% } %>
+        oncontextmenu="openContextMenu(event, '<%= JSON.stringify(model) %>'); return false;"
     >
     <div class="inner">
         <div class="icon">

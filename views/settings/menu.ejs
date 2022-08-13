@@ -40,6 +40,12 @@
                <span class="title">Search Engines</span>
             </a>
         </li>
+        <li <%= /^\/settings\/up-time$/.test(pageUrl) ? 'class=active' : '' %>>
+           <a href="/settings/up-time">
+               <span class="icon-search"></span>
+               <span class="title">Up-Time</span>
+            </a>
+        </li>
 
         <% if(isAdmin) { %>
         <li class="group">

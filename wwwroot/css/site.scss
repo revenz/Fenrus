@@ -3,6 +3,7 @@
 @use 'toggle-switchy';
 @use 'button';
 @use 'main-menu';
+@use 'contextmenu';
 @use 'scroller';
 @use 'apps';
 
@@ -12,6 +13,7 @@ html {
     position: relative;
     min-height: 100%;
 }
+
 @font-face {
   font-family: "Source Sans Pro";
   src: url("/fonts/SourceSansPro-Regular.woff") format("woff");
@@ -207,7 +209,7 @@ option {
     left: 0;
     right: 0;
     background: rgba(0,0,0,0.65);
-    z-index: 10;
+    z-index: 1000000;
     .inner {
         background:rgba(0,0,0,0.5);
         padding: 3rem;
@@ -348,4 +350,77 @@ body.not-home {
         opacity: 0;
         display:none;
 	}
+}
+
+.side-editor-background {
+    position:fixed;
+    z-index:4;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    background:rgba(var(--base-rgb), 0.8);
+}
+
+.side-editor {
+    position:fixed !important;
+    display: flex;
+    flex-direction: column;
+    top:0;
+    bottom:0;
+    right:0;
+    width:min(700px, 70vw);
+    background: var(--base-darker);
+    z-index:5;
+    padding:2px 0.5rem;
+    .content {
+        overflow:auto;
+        flex-grow:1;
+    }
+
+    
+    h2 {
+        margin: 0;
+    }
+
+    .header {
+        display: flex;
+        flex-direction: row;
+        padding: 0.5rem;
+
+        + * {
+            border-top: solid 1px var(--border-color);
+        }
+
+        .title {
+            font-size: 1.5rem;
+            flex-grow: 1;
+            margin: auto;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            text-align: right;
+
+            * + * {
+                margin-left: 0.25rem;
+            }
+
+            .keep-open {
+                display:inline-block;
+                margin-right:1rem;
+                place-self: center;
+            }
+        }
+    }
+}
+
+
+#up-time-wrapper {
+    display:none;
+    z-index:100;
+    .no-data {
+        padding:1rem;
+    }
 }

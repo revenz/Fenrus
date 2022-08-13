@@ -1,11 +1,15 @@
 const UserManager = require('../helpers/UserManager');
 const Settings = require('../models/Settings');
 const isReachable = require('is-reachable');
+const fsExists = require('fs.promises.exists');
+const fsPromises = require('fs.promises');
 
 class UpTimeService 
 {
     checking = false;
     checkedUrls = {};
+
+    static UserApps = {};
 
     constructor(){        
     }
@@ -51,40 +55,100 @@ class UpTimeService
         return UserManager.getInstance().listUsers();
     }
 
-    async checkUser(user){
-        let config = await Settings.getForUser(user.Uid);
+    async getAppsForUser(userUid) {        
+        let config = await Settings.getForUser(userUid);
         if(!config?.Groups?.length)
-            return;
+            return [];
 
-        let toCheck = [];
+        let apps = [];
         for(let grp of config.Groups)
         {
             for(let item of grp.Items){
                 if(item._Type !== 'DashboardApp')
                     continue;
                 console.log('will check: ' +  item.Url);
-                toCheck.push({
+                apps.push({
+                    Name: item.Name,
                     Url: item.Url,
                     Uid: item.Uid
                 });
             }
         }
-        console.log('Items to check', toCheck);
+        return apps;
+    }
+
+    getLastIsUp(userUid, url) {
+        let apps = UpTimeService.UserApps[userUid];
+        if(!apps)
+            return 2; // unknown
+        let result = apps[url];
+        if(result === true || result === false)
+            return result;
+        return 2; // unknown
+    }
+
+    async checkUser(user){
+        let config = await Settings.getForUser(user.Uid);
+        if(!config?.Groups?.length)
+            return;
+
+        let toCheck = await this.getAppsForUser(user.Uid);
+        console.log('Items to check', toCheck.length);
         let tasks = [];
+        let date = Date.now();
+        if(!UpTimeService.UserApps[user.Uid])
+            UpTimeService.UserApps[user.Uid] = {};
         for(let item of toCheck){
             this.log('about to check: ' + item.Url); 
             tasks.push(new Promise(async (resolve, reject) =>
             {
                 this.log('Checking: ' + item.Url);
-                item.Reachable = await isReachable(item.Url, {
-                    timeout: 5000
-                });
-                this.log(item.Url + ': ' + item.Reachable);
+                try
+                {
+                    let isUp = await isReachable(item.Url, {
+                        timeout: 5000
+                    });
+                    
+                    UpTimeService.UserApps[user.Uid][item.Url] = isUp;
+                    this.log(item.Url + ': ' + isUp);                
+                    await this.recordUpTime(user.Uid, item.Uid, date, isUp)
+                }catch(err) {
+                    this.log('error in checking uptime: ' + err);
+                }
                 resolve();
             }));
         }
         await Promise.all(tasks);
-        this.log('Items to check222', toCheck);
+    }
+
+    async recordUpTime(userUid, appUid, date, isUp){
+        let dir = `./data/uptime/${userUid}`;
+        if(await fsExists(dir) == false)
+            await fsPromises.mkdir(dir, {recursive: true});
+            
+        let file = `${dir}/${appUid}.json`;
+        let uptimes = [];
+        if(await fsExists(file))
+        {
+            try
+            {
+                uptimes = JSON.parse(await fsPromises.readFile(file));
+                if(Array.isArray(uptimes) !== true)
+                    uptimes = [];
+            }
+            catch(err) {
+                uptimes = [];
+            }
+        }
+        uptimes.unshift({
+            date: date,
+            up: isUp
+        });
+        if(uptimes.length > 5000)
+            uptimes.length = 5000;
+
+        let json = JSON.stringify(uptimes, null, '\t');
+        await fsPromises.writeFile(file, json);
     }
 }
 

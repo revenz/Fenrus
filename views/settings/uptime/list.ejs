@@ -1,0 +1,138 @@
+<%- include('../head.ejs') %>
+
+<input id="view-data" type="hidden" value="<%= JSON.stringify(data.items) %>" />
+
+<div class="top-row">
+    <span class="title">
+        <span class="<%= data.icon %>"></span>
+        <%= data.title %>
+    </span>
+</div>
+
+<% if( data.description) { %>
+<div class="page-description"><%= data.description %></div>
+<% } %>
+
+<div class="up-time-wrapper" x-data="UpTime">
+    <div class="list">
+        <table class="uptime-list">
+            <thead>
+                <tr>
+                    <th class="name">Name</th>
+                    <th class="up">Is Up</th>
+                    <th class="controls"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <template x-for="item in list">
+                    <tr :id="item.Uid">
+                        <td class="name"><span x-text="item.Name"></span></td>
+                        <td class="is-up"><span x-text="item.IsUp"></span></td>
+                        <td class="controls">
+                            <a title="Edit" class="icon-edit" @click="info(item)"></a>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+
+    <%- include('./item.ejs') %>
+</div>
+
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        let data = JSON.parse(document.getElementById('view-data').value);
+        let typeName = data.typeName || 'item';
+        let baseUrl = data.baseUrl;
+
+        Alpine.data('UpTime', () => ({
+            list: data,
+            Opened: false,
+            EditorTitle: '',
+            ChartUid: '',
+            info(item) {
+                console.log('info', item);
+                this.ChartUid = 'chart-' + item.Uid;
+                this.EditorTitle = item.Name;
+                this.Opened = true;
+                this.LoadingData = true;
+                fetch('/settings/up-time/' + item.Uid)
+                    .then((response) => response.json())
+                    .then((rdata) => {
+                        this.LoadingData = false;
+                        this.updateChart(item, rdata);
+                    });
+            },
+            close() {
+                this.Opened = false;
+            },
+            updateChart(item, data) {
+                const ctx = document.getElementById(this.ChartUid);
+                data = data.map(x => ({
+                     x: x.date, //new Date(x.date),
+                     y: x.up === true ? 1 : 0
+                }));
+                console.log('data', data);
+                var options = {
+                    chart: {
+                        height: 400,
+                        width:'100%',
+                        type: "line",
+                        stacked: false,
+                        toolbar: {
+                            show: false
+                        },
+                        zoom: {
+                            enabled: false
+                        }
+                    },
+                    series: [
+                    {
+                        data: data
+                    }],
+                    stroke: {
+                        curve: 'stepline',
+                    },
+                    tooltip: {
+                        theme: 'dark',
+                        x: {
+                            show: false
+                        },
+                        y: {
+                            title: {
+                                formatter: function formatter(val, o) {
+                                    let item = data[o.dataPointIndex];
+                                    let dt = new Date(item.x);
+                                    return dt.toLocaleTimeString();
+                                }
+                            },
+                            formatter: function(){
+                                return '';
+                            }
+                        }
+                    },
+                    xaxis: {
+                        type: 'datetime',
+                        labels: {
+                            show: true,
+                            style: {
+                                colors: 'var(--color)'
+                            },
+                        }
+                    },
+                    yaxis: {
+                        show: false
+                    }  
+                };
+
+                console.log('options', options);
+                var chart = new ApexCharts(ctx, options);
+                chart.render();
+            }
+        }))
+    });
+</script>
+
+<%- include('../foot.ejs') %>
