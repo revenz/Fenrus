@@ -507,7 +507,7 @@ function openTerminal(){
         });
 
         const connect = function(args){
-            socket = io(null,  {
+            socket = io({
                 transports:['websocket']
             });
             socket.emit('ssh', args);
