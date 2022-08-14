@@ -507,7 +507,9 @@ function openTerminal(){
         });
 
         const connect = function(args){
-            socket = io();
+            socket = io(null,  {
+                transports:['websocket']
+            });
             socket.emit('ssh', args);
             socket.on('connect', function() {
                 term.write('\r\n*** Connected to backend ***\r\n');
