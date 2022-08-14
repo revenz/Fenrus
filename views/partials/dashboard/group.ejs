@@ -9,7 +9,7 @@
             if (item) { 
                 let type = item._Type === 'Dashboard' ? item._Type : item._Type.substring(9);
                 let partialFile = `${type.toLowerCase()}.ejs`;
-                let itemModel = { model: item, settings: settings, Utils: Utils};
+                let itemModel = { model: item, settings: settings, Utils: Utils, IsUp: IsUp[model.Uid]};
                 if(item.Enabled === false)
                     continue;
             %>

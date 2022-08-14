@@ -209,6 +209,7 @@ function errorHandler(){
 }
 
 const upTimeService = new UpTimeService();
-cron.schedule("* * * * *", () => {
+upTimeService.check();
+cron.schedule("*/5 * * * *", () => {
     upTimeService.check();
 });

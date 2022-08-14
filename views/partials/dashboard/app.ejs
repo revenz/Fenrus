@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="<%= app.Css %>" />    
 <% } %>
 
-<a id="<%= model.Uid %>" title="<%= model.Name %>" class="db-item db-app db-basic 
+<a id="<%= model.Uid %>" title="<%= model.Name %>" class="db-item db-app db-basic is-up-<%= isUp[model.Uid] %>
     <%= smartApp ? 'db-smart' : '' %> <%= model.Size || 'medium' %>
      <%= app.Classes %> <%= app.Carousel && model.Size.indexOf('large') >= 0 ? 'carousel' : '' %>
      <%= target === 'IFrame' ? 'iframe' : '' %>" 

@@ -102,18 +102,5 @@ class ContextMenu {
 
       document.addEventListener("click", () => this.closeMenu());
       window.addEventListener("blur", () => this.closeMenu());
-    //   document.addEventListener("contextmenu", (e) => {
-    //     this.targetNode.forEach((target) => {
-    //       if (!e.target.contains(target)) {
-    //         contextMenu.remove();
-    //       }
-    //     });
-    //   });
-  
-    //   this.targetNode.forEach((target) => {
-    //     target.addEventListener("contextmenu", (e) => {
-    //         this.open();
-    //     });
-    //   });
     }
   }

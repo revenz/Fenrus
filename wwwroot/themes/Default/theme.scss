@@ -115,3 +115,19 @@ body {
         }
     }
 }
+
+
+.db-item:not(:hover){
+    &.is-up-false::after {
+        content: "DOWN";
+        position: absolute;
+        top: 0;
+        right: 0;
+        left:0;
+        bottom:0;
+        color:transparent;
+        text-indent: 10000px;
+        overflow: hidden;
+        background:rgba(var(--accent-rgb), 0.5);
+    }
+}

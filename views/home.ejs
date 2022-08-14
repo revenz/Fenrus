@@ -27,6 +27,7 @@
 <div x-uid="<%= dashboard.Uid %>" class="dashboard <%= themeVariables?.ClassName %> <%= settings.ShowGroupTitles === false ? 'hide-group-titles' : '' %>"
     oncontextmenu="openDefaultContextMenu(event); return false">    
     <%- include('dashboard.ejs') %>
+    
 </div>
 <%- include('./partials/up-time.ejs') %>
 <div id="launching-app">

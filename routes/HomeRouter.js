@@ -5,6 +5,7 @@ const FileHelper = require('../helpers/FileHelper');
 const System = require('../models/System');
 const Utils = require('../helpers/utils');
 const FenrusRouter = require('./FenrusRouter');
+const UpTimeService = require('../services/UpTimeService');
 
 class HomeRouter extends FenrusRouter {
 
@@ -96,6 +97,8 @@ class HomeRouter extends FenrusRouter {
             BackgroundImage: dashboardInstance.BackgroundImage,
             Groups: [], 
         };
+        let upService = new UpTimeService();
+        let areUps = {};
         for(let grp of dashboardInstance?.Groups || []){
             if(grp.Enabled === false)
                 continue;
@@ -108,6 +111,13 @@ class HomeRouter extends FenrusRouter {
             }
             if(!actualGroup || actualGroup.Enabled === false)
                 continue;
+            for(let item of actualGroup.Items)
+            {
+                if(item?_Type !== 'DashboardApp' && item?_Type !== 'DashboardLink')
+                    continue;
+                let lastUp = upService.getLastIsUp(req.user.Uid, item.Url);
+                areUps[item.Uid] = lastUp;
+            }
             dashboard.Groups.push(actualGroup);
         }
 
@@ -132,7 +142,8 @@ class HomeRouter extends FenrusRouter {
             dashboard: dashboard,
             themes:this.themes,
             dashboards: dashboards,
-            searchEngines: searchEngines
+            searchEngines: searchEngines,
+            isUp: areUps
         }));    
 
     }

@@ -64,7 +64,7 @@ class UpTimeService
         for(let grp of config.Groups)
         {
             for(let item of grp.Items){
-                if(item._Type !== 'DashboardApp')
+                if(item._Type !== 'DashboardApp' && item._Type !== 'DashboardLink')
                     continue;
                 console.log('will check: ' +  item.Url);
                 apps.push({
@@ -144,8 +144,9 @@ class UpTimeService
             date: date,
             up: isUp
         });
-        if(uptimes.length > 5000)
-            uptimes.length = 5000;
+        const maxItems = (60 / 5) * 24 * 7; // 60 / 5 == number of 5mins in an hour, * 24 == in a day, * 7 in a week
+        if(uptimes.length > maxItems)
+            uptimes.length = maxItems;
 
         let json = JSON.stringify(uptimes, null, '\t');
         await fsPromises.writeFile(file, json);

@@ -2,7 +2,7 @@
     let target = model.Target ?? settings.LinkTarget ?? '_self';
 %>
 
-<a class="db-item db-link db-basic <%= model.Size || 'medium' %> <%= target === 'IFrame' ? 'iframe' : '' %>" href="<%= model.Url%>" title="<%= model.Name %>"    
+<a class="db-item db-link db-basic is-up-<%= model.IsUp %> <%= model.Size || 'medium' %> <%= target === 'IFrame' ? 'iframe' : '' %> is-up-<%= isUp[model.Uid]%>" href="<%= model.Url%>" title="<%= model.Name %>"    
     <% if(target !== 'IFrame') { %>
         onclick="launch(event, '<%= model.Uid %>')" target="<%= target %>"
         <% } else { %> 

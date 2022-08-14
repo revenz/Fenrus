@@ -286,6 +286,9 @@ function openUpTime(app) {
                 },
                 zoom: {
                     enabled: false
+                },
+                animations: {
+                    enabled: false
                 }
             },
             series: [
