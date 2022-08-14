@@ -290,19 +290,22 @@ body.not-home {
     }
 }
 
-.iframe-content {
+.iframe-content, #terminal {
     position:fixed;
     top:4rem;
     left:1rem;
     bottom:1rem;
     right:1rem;
 	animation: iframe-animate .3s linear;
-    display:flex;
-    flex-direction: row-reverse;
     z-index:10;
     &.closing {
         animation: iframe-animate-close .6s linear;
     }
+}
+
+.iframe-content {
+    display:flex;
+    flex-direction: row-reverse;
     .side {
         width:5rem;
         background:rgba(0,0,0,.5);
@@ -427,5 +430,13 @@ body.not-home {
     z-index:100;
     .no-data {
         padding:1rem;
+    }
+}
+
+#terminal {
+    background:rgba(0,0,0,0.8);
+    .xterm {
+        width:100%;
+        height:100%;
     }
 }

@@ -73,6 +73,7 @@ const app = express();
 // register view engine
 app.set('view engine', 'ejs');
 
+let server;
 if(fs.existsSync('./data/certificate.crt') && fs.existsSync('./data/privatekey.key'))
 {
     // setup https
@@ -84,6 +85,7 @@ if(fs.existsSync('./data/certificate.crt') && fs.existsSync('./data/privatekey.k
     var httpServer = http.createServer(app);
     
     var httpsServer = https.createServer(credentials, app);
+    server = httpsServer;
 
     httpServer.listen(3000);
     httpsServer.listen(4000);
@@ -101,6 +103,7 @@ else
 {
     console.log('#### SETTING UP HTTP');
     var httpServer = http.createServer(app);
+    server = httpServer;
     httpServer.listen(3000);
     setInterval(() => {
         httpServer.getConnections((error, count) => {
@@ -108,6 +111,9 @@ else
         });
     }, 2000);
 }
+
+var io = require('socket.io')(server);
+var SSHClient = require('ssh2').Client;
 
 // set cache control for files
 app.use(function (req, res, next) {
@@ -213,3 +219,39 @@ upTimeService.check();
 cron.schedule("*/5 * * * *", () => {
     upTimeService.check();
 });
+
+
+io.on('connection', function(socket) {
+    socket.on('ssh', function(args){
+        let server = args[0];
+        let username = args[1];
+        let password = args[2];
+        var conn = new SSHClient();
+        conn.on('ready', function() {
+          socket.emit('data', '\r\n*** SSH CONNECTION ESTABLISHED ***\r\n');
+          conn.shell(function(err, stream) {
+            if (err)
+              return socket.emit('data', '\r\n*** SSH SHELL ERROR: ' + err.message + ' ***\r\n');
+            socket.on('data', function(data) {
+              stream.write(data);
+            });
+            stream.on('data', function(d) {
+              socket.emit('data', d.toString('binary'));
+            }).on('close', function() {
+              conn.end();
+            });
+          });
+        }).on('close', function() {
+          socket.emit('data', '\r\n*** SSH CONNECTION CLOSED ***\r\n');
+          socket.emit('ssh-closed', '');
+          conn.end();
+        }).on('error', function(err) {
+          socket.emit('data', '\r\n*** SSH CONNECTION ERROR: ' + err.message + ' ***\r\n');
+        }).connect({
+          host: server,
+          port: 22,
+          username: username,
+          password: password
+        });
+    });
+  });

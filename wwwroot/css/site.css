@@ -1387,19 +1387,22 @@ body.not-home {
   display: block;
 }
 
-.iframe-content {
+.iframe-content, #terminal {
   position: fixed;
   top: 4rem;
   left: 1rem;
   bottom: 1rem;
   right: 1rem;
   animation: iframe-animate 0.3s linear;
-  display: flex;
-  flex-direction: row-reverse;
   z-index: 10;
 }
-.iframe-content.closing {
+.iframe-content.closing, #terminal.closing {
   animation: iframe-animate-close 0.6s linear;
+}
+
+.iframe-content {
+  display: flex;
+  flex-direction: row-reverse;
 }
 .iframe-content .side {
   width: 5rem;
@@ -1515,4 +1518,12 @@ body.not-home {
 }
 #up-time-wrapper .no-data {
   padding: 1rem;
+}
+
+#terminal {
+  background: rgba(0, 0, 0, 0.8);
+}
+#terminal .xterm {
+  width: 100%;
+  height: 100%;
 }

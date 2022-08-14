@@ -165,6 +165,7 @@ const infoIcon = `<span class="icon icon-info-circle" style="padding-right:0.5re
 const addIcon = `<span class="icon icon-plus" style="padding-right:0.5rem"></span>`;
 const editIcon = `<span class="icon icon-edit" style="padding-right:0.5rem"></span>`;
 const dashboardIcon = `<span class="icon icon-home" style="padding-right:0.5rem"></span>`;
+const terminalIcon = `<span class="icon icon-globe" style="padding-right:0.5rem"></span>`;
 
 function openDefaultContextMenu(event) {
     event?.preventDefault();
@@ -181,7 +182,14 @@ function openDefaultContextMenu(event) {
                         document.location = '/settings/dashboards/' + dashboardUid                
                     }
                 }
+            },
+            {
+                content: `${terminalIcon}Terminal`,
+                events: {
+                    click: (e) => openTerminal()
+                }
             }
+
             ];
             
             let menu = new ContextMenu({
@@ -234,6 +242,13 @@ function openContextMenu(event, app){
                 click: (e) => {
                     document.location = '/settings/dashboards/' + dashboardUid                
                 }
+            }
+        },
+        {
+            divider: "top",
+            content: `${terminalIcon}Terminal`,
+            events: {
+                click: (e) => openTerminal()
             }
         }
         ];
@@ -426,4 +441,99 @@ function openIframe(event, app){
     div.appendChild(iframe);
 
     document.body.appendChild(div);
+}
+
+
+function openTerminal(){
+    let div = document.createElement('div');
+    div.setAttribute('id', 'terminal');
+    document.body.appendChild(div);
+    setTimeout(() => {
+
+        const fitAddon = new FitAddon.FitAddon();
+        console.log('fitAddon', fitAddon);
+        var term = new Terminal({ cursorBlink: true, fontFamily: 'Courier New', fontSize: 16 });
+        term.loadAddon(fitAddon);
+        term.open(div); 
+        fitAddon.fit();
+        
+        term.write('Welcome to the Fenrus Terminal\r\n');   
+        term.write('Server: ');
+        term.focus();
+        let mode = 0; // 0 = server, 1 = username, 2 = password, 3 = ssh
+        var socket;
+        
+        let line = '';
+        let server, username, password;
+        term.onKey(function (ev) {
+            let key = ev.key;
+            if(mode < 3){
+                if (key.charCodeAt(0) === 13)
+                {
+                    // enter
+                    if(mode === 0 || mode === 1){
+                        if(mode === 0)
+                            server = line;
+                        else
+                            username = line;
+                        line = '';
+                        term.write(`\r\n${mode === 0 ? 'Username' : 'Password'}: `);
+                        ++mode;
+                        return;
+                    }
+                    password = line;
+                    line = '';
+                    ++mode;
+                    connect([server, username, password]);
+                    return;
+                }
+                else if(key.charCodeAt(0) === 127){
+                    if(line.length > 0){
+                        line = line.substring(0, line.length - 1);
+                        term.write("\b \b");
+                    }
+                }
+                else 
+                {
+                    line += key;
+                    if(mode !== 2)
+                        term.write(key);
+                }
+            }
+            else
+            {
+                socket.emit('data', key);
+            }
+        });
+
+        const connect = function(args){
+            socket = io();
+            socket.emit('ssh', args);
+            socket.on('connect', function() {
+                term.write('\r\n*** Connected to backend ***\r\n');
+            });
+
+            // Backend -> Browser
+            socket.on('data', function(data) {
+                term.write(data);
+            });
+            socket.on('ssh-closed', () => {
+                term.write('\r\nssh-close\r\n');
+                socket.close();
+                closeTerminal();
+            });
+
+            socket.on('disconnect', function() {
+                term.write('\r\n*** Disconnected from backend ***\r\n');
+            });
+        }
+
+        const closeTerminal = function() {
+            div.className = 'closing';
+            setTimeout(() => {
+                div.remove();
+            }, 500);
+        }
+
+    }, 750);
 }
