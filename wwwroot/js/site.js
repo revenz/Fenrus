@@ -539,7 +539,8 @@ function openTerminal(){
 
         const connect = function(args){
             term.write('\r\nConnecting...\r\n');
-            socket = io('ws://' + document.location.host, {
+            let https = document.location.protocol === 'https:';
+            socket = io((https ? 'wss' : 'ws') + '://' + document.location.host, {
                 rejectUnauthorized: false,
                 transports:['websocket']
             });
