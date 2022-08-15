@@ -490,7 +490,8 @@ function openTerminal(){
                 else if(key.charCodeAt(0) === 127){
                     if(line.length > 0){
                         line = line.substring(0, line.length - 1);
-                        term.write("\b \b");
+                        if(mode !== 2)
+                            term.write("\b \b");
                     }
                 }
                 else 
@@ -507,26 +508,42 @@ function openTerminal(){
         });
 
         const connect = function(args){
-            socket = io({
+            term.write('\r\nConnecting...\r\n');
+            socket = io('ws://' + document.location.host, {
+                rejectUnauthorized: false,
                 transports:['websocket']
+            });
+            socket.on("connect_error", (err) => {
+                socket.close();
+                console.log('connect_failed');
+                term.write(`\r\nFailed to connect to server\r\n${err}\r\n`);
+                mode = 0;
+                term.write('Server: ');
+            });
+            socket.on('connect_failed', function(){
+                console.log('connect_failed');
             });
             socket.emit('ssh', args);
             socket.on('connect', function() {
-                term.write('\r\n*** Connected to backend ***\r\n');
+                if(mode === 3)
+                    term.write('\r\n*** Connected to backend ***\r\n');
             });
 
             // Backend -> Browser
             socket.on('data', function(data) {
-                term.write(data);
+                if(mode === 3)
+                    term.write(data);
             });
             socket.on('ssh-closed', () => {
-                term.write('\r\nssh-close\r\n');
+                if(mode === 3)
+                    term.write('\r\nssh-close\r\n');
                 socket.close();
                 closeTerminal();
             });
 
             socket.on('disconnect', function() {
-                term.write('\r\n*** Disconnected from backend ***\r\n');
+                if(mode === 3)
+                    term.write('\r\n*** Disconnected from backend ***\r\n');
             });
         }
 
