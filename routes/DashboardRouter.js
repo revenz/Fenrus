@@ -212,6 +212,53 @@ router.post('/:uid/status/:enabled', async (req, res) => {
     await settings.save();
     res.sendStatus(200);
 });
-  
+
+router.post('/:uid/move-group/:groupUid/:up', async (req, res) => {
+    let dashboardUid = req.params.uid;
+    let groupUid = req.params.groupUid;
+    let up = req.params.up === 'true';
+
+    let settings = req.settings;
+    let dashboard = settings.Dashboards.find(x => x.Uid === dashboardUid);
+    if(!dashboard)
+        return res.sendStatus(200); // silent fail
+
+    let index = dashboard.Groups.findIndex(x => x.Uid === groupUid);
+
+    if(up === false && index >= dashboard.Groups.length - 1)
+        return res.sendStatus(200); // already at bottom
+    if(up  && index <= 0)
+        return res.sendStatus(200); // already at top
+
+    // moving up means actually move lower in the index where topmost is 0
+    let dest = index + (up ? -1 : 1);
+
+    // swap the items
+    var a = dashboard.Groups[index];
+    dashboard.Groups[index] = dashboard.Groups[dest];
+    dashboard.Groups[dest] = a;
+
+    await settings.save();
+    res.sendStatus(200);
+});  
+
+
+router.post('/:uid/remove-group/:groupUid', async (req, res) => {
+    let dashboardUid = req.params.uid;
+    let groupUid = req.params.groupUid;
+
+    let settings = req.settings;
+    let dashboard = settings.Dashboards.find(x => x.Uid === dashboardUid);
+    if(!dashboard)
+        return res.sendStatus(200); // silent fail
+
+    let index = dashboard.Groups.findIndex(x => x.Uid === groupUid);
+
+    if(index < 0)
+        return res.sendStatus(200); // silent fail
+    dashboard.Groups.splice(index, 1);
+    await settings.save();
+    res.sendStatus(200);
+});  
 
 module.exports = router;

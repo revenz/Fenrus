@@ -423,11 +423,12 @@ body {
   position: relative;
 }
 .db-group > .title {
-  text-align: center;
+  text-align: left;
   text-transform: uppercase;
   position: absolute;
   left: 0.5rem;
   top: -1.5rem;
+  right: 0.5rem;
 }
 .db-group > .title span {
   padding: 0.5rem 0.5rem 0.5rem;

@@ -19,13 +19,14 @@
 
 <% if(dashboard.Groups?.length) {
         
+    let groupIndex = 0;
     for(let item of dashboard.Groups)
     {
         if (item && item.Enabled !== false){ 
             let type = item._Type === 'Dashboard' ? item._Type : item._Type.substring(9);
             
             let partialFile = '';
-            let itemModel = { model: item, settings: settings, Utils: Utils, IsUp: isUp};
+            let itemModel = { model: item, settings: settings, Utils: Utils, IsUp: isUp, GroupIndex: groupIndex};
             if(theme && theme.Templates[type]){
                 partialFile = `${theme.Directory}/${theme.Templates[type]}`;
                 itemModel.partialDir = '../../../views/partials/dashboard'; // so theme templates can just refer to partialDir for the dir
@@ -35,6 +36,7 @@
             %>
             <%- include(partialFile, itemModel ) %>
             <%
+            ++groupIndex;
         }
     }
 

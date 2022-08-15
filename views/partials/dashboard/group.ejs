@@ -1,7 +1,14 @@
 <% if(model?.Items?.length) { %>    
 <div id="<%= model.Uid %>" class="db-group <%= model.HideLabels ? 'hide-labels' : '' %>">
     <% if(!model.HideGroupTitle) { %>
-        <div class="title"><span x-text="model.Name"><%= model.Name %></span></div>
+        <div class="title">
+            <span x-text="model.Name"><%= model.Name %></span>
+            <div class="group-controls">
+                <span class="move-up icon-angle-up" title="Move Up" onclick="moveGroup('<%= model.Uid %>', true)"></span>
+                <span class="move-down icon-angle-down" title="Move Down" onclick="moveGroup('<%= model.Uid %>', false)"></span>
+                <span class="remove-group icon-trash" title="Remove Group" onclick="removeGroup('<%= model.Uid %>', '<%= model.Name %>')"></span>
+            </div>
+        </div>
     <% } %>
     
     <div class="items">

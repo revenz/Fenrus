@@ -440,3 +440,27 @@ body.not-home {
         height:100%;
     }
 }
+
+.db-group > .title {
+    .group-controls{
+        display:none;
+        span {
+            cursor:pointer;
+            color:rgba(var(--color-rgb), 0.5);
+            &:hover {
+                color:var(--color);
+            }
+        }
+    }
+    &:hover {
+        .group-controls{
+            display:unset;
+        }
+    }
+}
+.db-group:first-of-type .group-controls .move-up {
+    display: none;
+}
+.db-group:last-of-type .group-controls .move-down {
+    display: none;
+}
