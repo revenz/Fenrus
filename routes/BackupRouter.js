@@ -1,5 +1,6 @@
 const express = require('express');
 const common = require('./Common');
+const fsPromises = require("fs/promises");
 
 class BackupRouter{
     
@@ -47,8 +48,35 @@ class BackupRouter{
     async export(req, res) {
         let settings = await this.getSettings(req);
         let json = settings.toJson();
+        let cloned = JSON.parse(json);
+        if(cloned.BackgroundImage){            
+            cloned.BackgroundImage = fsPromises.readFile('../wwwroot/images/background/' + cloned.BackgroundImage, {encoding: 'base64'});
+        }
+        if(cloned.Groups?.length)
+        {
+            for(let grp in cloned.Groups)
+            {
+                if(!grp.Items?.length)
+                    continue;
+                for(let item in grp.Items){
+                    if(item.Icon){
+                        item.Icon = fsPromises.readFile('../wwwroot/images/icons/' + item.Icon, {encoding: 'base64'});
+                    }
+                }
+            }
+        }
+        if(cloned.SearchEngines?.length)
+        {
+            for(let item in cloned.SearchEngines)
+            {
+                if(item.Icon){
+                    item.Icon = fsPromises.readFile('../wwwroot/images/icons/' + item.Icon, {encoding: 'base64'});
+                }
+            }
+        }
+        json = JSON.stringify(cloned);
         res.writeHead(200, {
-          'Content-Disposition': `attachment; filename="Fenrus.json"`,
+          'Content-Disposition': `attachment; filename="Fenrus-${new Date().toLocaleDateString()}.json"`,
           'Content-Type': 'application/json',
         })
         res.write(json);
