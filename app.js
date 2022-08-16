@@ -28,6 +28,9 @@ const ProxyRouter = require('./routes/ProxyRouter');
 
 const consoleLogger = console.log;
 
+let httpPort = process.env.HTTP_PORT || 3000;
+let httpsPort = process.env.HTTPS_PORT || 4000;
+
 function timeString() {
     let date = new Date();
     let hour = date.getHours();
@@ -87,8 +90,8 @@ if(fs.existsSync('./data/certificate.crt') && fs.existsSync('./data/privatekey.k
     var httpsServer = https.createServer(credentials, app);
     server = httpsServer;
 
-    httpServer.listen(3000);
-    httpsServer.listen(4000);
+    httpServer.listen(httpPort);
+    httpsServer.listen(httpsPort);
 
     setInterval(() => {
         httpsServer.getConnections((error, count) => {
@@ -104,7 +107,7 @@ else
     console.log('#### SETTING UP HTTP');
     var httpServer = http.createServer(app);
     server = httpServer;
-    httpServer.listen(3000);
+    httpServer.listen(httpPort);
     setInterval(() => {
         httpServer.getConnections((error, count) => {
             console.log('### Number of connections: ' + count);
