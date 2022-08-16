@@ -117,7 +117,7 @@ class HomeRouter extends FenrusRouter {
                 {
                     if(item?._Type !== 'DashboardApp' && item?._Type !== 'DashboardLink')
                         continue;
-                    let lastUp = upService.getLastIsUp(req.user.Uid, item.Url);
+                    let lastUp = upService.getLastIsUp(req.user.Uid, item.ApiUrl || item.Url);
                     areUps[item.Uid] = lastUp;
                 }
                 dashboard.Groups.push(actualGroup);

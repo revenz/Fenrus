@@ -233,6 +233,41 @@
                             </span>
                         </div>
                     </template>
+
+                    
+
+                    <template x-if="EditorApp.Properties?.length > 0">
+                        <div class="header">
+                            <span class="title">SSH</span>
+                        </div>
+                    </template>
+                    <template x-if="EditorApp?.Interval || EditorApp?.Interval === -1">                
+                        <div class="setting">
+                            <span class="label">Address</span>
+                            <span class="value">
+                                <input :disabled="isDisabled()" type="text" x-model="model.SshServer" @blur="blur" @input="input"  @keydown.enter="saveEditor" placeholder="1.2.3.4" />
+                                <span class="help-text">Optional address for connecting to a SSH terminal.</span>
+                            </span>
+                        </div> 
+                    </template>
+                    <template x-if="EditorApp?.Interval || EditorApp?.Interval === -1">                
+                        <div class="setting">
+                            <span class="label">Username</span>
+                            <span class="value">
+                                <input :disabled="isDisabled()" type="text" x-model="model.SshUsername" @blur="blur" @input="input"  @keydown.enter="saveEditor" placeholder="username" />
+                                <span class="help-text">Optional Username for connecting to a SSH terminal.</span>
+                            </span>
+                        </div> 
+                    </template>
+                    <template x-if="EditorApp?.Interval || EditorApp?.Interval === -1">                
+                        <div class="setting">
+                            <span class="label">Password</span>
+                            <span class="value">
+                                <input :disabled="isDisabled()" type="password" x-model="model.SshPassword" @blur="blur" @input="input"  @keydown.enter="saveEditor" placeholder="password" />
+                                <span class="help-text">Optional Password for connecting to a SSH terminal.</span>
+                            </span>
+                        </div> 
+                    </template>
                 </div>
             </div>
         </div>

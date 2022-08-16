@@ -6,6 +6,7 @@
     let title = model.Name ?? model.AppName;
     let interval = app.Interval === -1 ? -1 : (app.Interval ?? 0) * 1000;
     let smartApp = interval > 0 || interval === -1;
+    let ssh = !!model.SshServer;
 %>
 
 <% if(app.Css) { %>
@@ -15,7 +16,9 @@
 <a id="<%= model.Uid %>" title="<%= model.Name %>" class="db-item db-app db-basic is-up-<%= isUp[model.Uid] %>
     <%= smartApp ? 'db-smart' : '' %> <%= model.Size || 'medium' %>
      <%= app.Classes %> <%= app.Carousel && model.Size.indexOf('large') >= 0 ? 'carousel' : '' %>
-     <%= target === 'IFrame' ? 'iframe' : '' %>" 
+     <%= target === 'IFrame' ? 'iframe' : '' %>
+     <%= ssh ? 'ssh' : '' %>" 
+     <%= ssh ? 'x-ssh=1' : '' %>
     href="<%= model.Url%>" 
     <% if(target !== 'IFrame') { %>
     onclick="launch(event, '<%= model.Uid %>')" target="<%= target %>"

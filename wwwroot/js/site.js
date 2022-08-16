@@ -245,6 +245,7 @@ function openContextMenu(event, app){
     let ele = document.getElementById(uid);
     let groupUid = ele.closest('.db-group').getAttribute('id');
     let dashboardUid = ele.closest('.dashboard').getAttribute('x-uid');
+    let ssh = ele.getAttribute('x-ssh') === '1';
     if(!contextMenus[uid])
     {
         const menuItems = [
@@ -273,15 +274,18 @@ function openContextMenu(event, app){
                     document.location = '/settings/dashboards/' + dashboardUid                
                 }
             }
-        },
-        {
-            divider: "top",
-            content: `${terminalIcon}Terminal`,
-            events: {
-                click: (e) => openTerminal()
-            }
         }
         ];
+        if(ssh){
+            menuItems.push(
+            {
+                divider: "top",
+                content: `${terminalIcon}Terminal`,
+                events: {
+                    click: (e) => openTerminal(uid)
+                }
+            });
+        }
         
         let menu = new ContextMenu({
             menuItems
@@ -474,7 +478,7 @@ function openIframe(event, app){
 }
 
 
-function openTerminal(){
+function openTerminal(uid){
     let div = document.createElement('div');
     div.setAttribute('id', 'terminal');
     document.body.appendChild(div);
@@ -490,7 +494,7 @@ function openTerminal(){
         term.write('Welcome to the Fenrus Terminal\r\n');   
         term.write('Server: ');
         term.focus();
-        let mode = 0; // 0 = server, 1 = username, 2 = password, 3 = ssh
+        let mode = !!uid ? 3 : 0; // 0 = server, 1 = username, 2 = password, 3 = ssh
         var socket;
         
         let line = '';
@@ -584,6 +588,9 @@ function openTerminal(){
                 div.remove();
             }, 500);
         }
+
+        if(uid)        
+            connect([uid]);
 
     }, 750);
 }

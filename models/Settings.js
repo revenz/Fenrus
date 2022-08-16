@@ -27,89 +27,90 @@ class SettingsInstance {
         this.uid = uid;
         this._File = `./data/configs/${uid}.json`;
     }
-    
     load() {        
         console.log('loading!');
         let self = this;
         return new Promise(async (resolve, reject) => {
-            let file = self._File;
-            let save = false;
-            console.log('checking for file: ' + file);
-            if(fs.existsSync(file) == false) {
-                // use default config
-                let guest = await Settings.getForGuest();
-                self.Dashboards = [ {...guest.Dashboards[0] }];
-                self.Dashboards[0].Name = 'Default';
-                console.log('###################', guest.Dashboards[0].Name, self.Dashboards[0].Name);
-                self.Dashboards[0].Uid = new Utils().newGuid();
-                self.Dashboards[0].Enabled = true;
-                self.Dashboards[0].BackgroundImage = '';
-                self.BackgroundImage = guest.Dashboards[0].BackgroundImage;
-                self.Theme = 'Default';
-                self.AccentColor = guest.AccentColor;
-                
-                await self.save();
-                resolve(self);
-                return;
-            }
-            console.log('using config file: ' + file);
-            
-            fs.readFile(file, (err, data) => {
-                if(err) {
-                    console.log(err);
-                    reject(err);
-                }
-                else             
-                {
-                    let obj = JSON.parse(data);    
-                    Object.keys(obj).forEach(k => {
-                        self[k] = obj[k];
-                    });         
-                    if(self.Groups?.length) {
-                        for(let grp of self.Groups) {
-                            if(grp.Enabled === undefined){
-                                grp.Enabled = true;
-                                save = true;
-                            }
-                            if(!grp?.Items?.length)
-                                continue;                                
-                            for(let item of grp.Items){
-                                if(item.Enabled === undefined){
-                                    item.Enabled = true;
-                                    save = true;
-                                }
-                            }
-                        }
-                    }    
-                    if(self.SearchEngines?.length) {
-                        for(let se of self.SearchEngines) {
-                            if(se.Enabled === undefined){
-                                se.Enabled = true;
-                                save = true;
-                            }
-                        }
-                    }
-
-
-                    if(!self.Dashboards?.length) {
-                        save = true;
-                        self.Dashboards = [ {
-                            Uid: new Utils().newGuid(),
-                            Name: 'Default',
-                            Enabed: true,
-                            Groups: self.Groups.map(x => { return {
-                                Uid: x.Uid,
-                                Name: x.Name,
-                                Enabled: true
-                            }})
-                        }];                     
-                    }
-                    if(save)
-                        self.save();
-                    resolve(self);                   
-                }
-            });
+            try{
+                if(this.loadSync())
+                    resolve(self);                
+            }catch(err) {}
+            reject();
         });
+    }
+    
+    loadSync() {        
+        console.log('loading!');
+        let self = this;
+        let file = self._File;
+        let save = false;
+        console.log('checking for file: ' + file);
+        if(fs.existsSync(file) == false) {
+            // use default config
+            let guest = Settings.getForGuest();
+            self.Dashboards = [ {...guest.Dashboards[0] }];
+            self.Dashboards[0].Name = 'Default';
+            console.log('###################', guest.Dashboards[0].Name, self.Dashboards[0].Name);
+            self.Dashboards[0].Uid = new Utils().newGuid();
+            self.Dashboards[0].Enabled = true;
+            self.Dashboards[0].BackgroundImage = '';
+            self.BackgroundImage = guest.Dashboards[0].BackgroundImage;
+            self.Theme = 'Default';
+            self.AccentColor = guest.AccentColor;
+            
+            self.save();
+            return true;
+        }
+        console.log('using config file: ' + file);
+        
+        const data = fs.readFileSync(file);
+    
+        let obj = JSON.parse(data);    
+        Object.keys(obj).forEach(k => {
+            self[k] = obj[k];
+        });         
+        if(self.Groups?.length) {
+            for(let grp of self.Groups) {
+                if(grp.Enabled === undefined){
+                    grp.Enabled = true;
+                    save = true;
+                }
+                if(!grp?.Items?.length)
+                    continue;                                
+                for(let item of grp.Items){
+                    if(item.Enabled === undefined){
+                        item.Enabled = true;
+                        save = true;
+                    }
+                }
+            }
+        }    
+        if(self.SearchEngines?.length) {
+            for(let se of self.SearchEngines) {
+                if(se.Enabled === undefined){
+                    se.Enabled = true;
+                    save = true;
+                }
+            }
+        }
+
+
+        if(!self.Dashboards?.length) {
+            save = true;
+            self.Dashboards = [ {
+                Uid: new Utils().newGuid(),
+                Name: 'Default',
+                Enabled: true,
+                Groups: self.Groups.map(x => { return {
+                    Uid: x.Uid,
+                    Name: x.Name,
+                    Enabled: true
+                }})
+            }];                     
+        }
+        if(save)
+            self.save();
+        return true;
     }
 
     async save() {
@@ -244,9 +245,22 @@ class Settings {
         return instance;
     }
 
+    static getForUserSync(uid) 
+    {
+        SettingsInstance.instances = SettingsInstance.instances || {};
+
+        if(SettingsInstance.instances[uid])
+            return SettingsInstance.instances[uid];
+
+        let instance = new SettingsInstance(uid);
+        instance.loadSync();
+        SettingsInstance.instances[uid] = instance;
+        return instance;
+    }
 
 
-    static async getForGuest() 
+
+    static getForGuest() 
     {
         SettingsInstance.instances = SettingsInstance.instances || {};
 

@@ -3,6 +3,12 @@ const Settings = require('../models/Settings');
 const isReachable = require('is-reachable');
 const fsExists = require('fs.promises.exists');
 const fsPromises = require('fs.promises');
+const dns = require('dns');
+const net = require('net');
+const fetch = require("node-fetch");
+const {promisify} = require('util');
+
+const dnsLookupP = promisify(dns.lookup);
 
 class UpTimeService 
 {
@@ -67,7 +73,7 @@ class UpTimeService
                     continue;
                 apps.push({
                     Name: item.Name,
-                    Url: item.Url,
+                    Url: item.ApiUrl || item.Url,
                     Uid: item.Uid
                 });
             }
@@ -100,9 +106,7 @@ class UpTimeService
             {
                 try
                 {
-                    let isUp = await isReachable(item.Url, {
-                        timeout: 5000
-                    });
+                    let isUp = this.isReachable(item.Url);
                     
                     UpTimeService.UserApps[user.Uid][item.Url] = isUp;
                     await this.recordUpTime(user.Uid, item.Uid, date, isUp)
@@ -144,6 +148,70 @@ class UpTimeService
 
         let json = JSON.stringify(uptimes, null, '\t');
         await fsPromises.writeFile(file, json);
+    }
+
+    async isReachable(url)
+    {
+        try{
+            const req = await fetch(url);
+            let status = req.status; // 200
+            return true;
+        }
+        catch(err) {
+            return false;
+        }
+    }
+
+    async isReachableOld(url)
+    {
+        let hostname = url.replace(/http(s)?:\/\//i, '');
+        let slashIndex = hostname.indexOf('/');
+        if(hostname.indexOf('/') > 0)
+            hostname = hostname.substring(0, slashIndex);
+        let port = url.toLowerCase().startsWith('https') ? 443 : 80;
+        let portIndex = hostname.indexOf(':');
+        if(portIndex > 0)
+        {
+            let nPort = parseInt(hostname.substring(portIndex + 1), 10);
+            if(isNaN(nPort) === false)
+                port = nPort;
+            hostname = hostname.substring(0, portIndex);
+        }
+
+        let address = await this.getAddress(hostname);
+        console.log('######## address: ', address);
+        let reachable = await this.isPortReachable(address, port);
+        console.log('######## reachable: ', address, port, reachable);
+        return reachable;
+    }
+
+    async getAddress(hostname)
+    {
+        return net.isIP(hostname) ? hostname : (await dnsLookupP(hostname)).address;
+    } 
+
+    async isPortReachable(host, port, timeout){
+        const socket = new net.Socket();
+
+
+        let result = true;
+		const onError = (err) => {
+            console.log('### onError', err);
+			socket.destroy();
+			result = false;
+		};
+
+		socket.setTimeout(timeout || 5000);
+		socket.once('error', onError);
+		socket.once('timeout', onError);
+        try{
+            await socket.connect(port, host);
+            socket.end();
+        }catch(err){
+            console.log('### errrrr', err);
+            result = false;
+        }
+        return result;
     }
 }
 

@@ -6,12 +6,15 @@ const http = require('http');
 const https = require("https");
 const cron = require('node-cron');
 const UpTimeService = require('./services/UpTimeService');
+const JwtVerifier = require('./helpers/JwtVerifier');
+const Settings= require('./models/Settings');
 
 // middleware
 const morgan = require('morgan');
 const themeMiddleware = require('./middleware/ThemeMiddleware');
 const fileBlockerMiddleware = require('./middleware/FileBlockerMiddleware');
 const cookieParser = require('cookie-parser');
+const cookie = require('cookie');
 
 // routers
 const HomeRouter = require('./routes/HomeRouter');
@@ -25,6 +28,7 @@ const UserManager = require('./helpers/UserManager');
 const System = require('./models/System');
 const InitialConfigRouter = require('./routes/InitialConfigRouter');
 const ProxyRouter = require('./routes/ProxyRouter');
+const req = require('express/lib/request');
 
 const consoleLogger = console.log;
 
@@ -92,6 +96,8 @@ if(fs.existsSync('./data/certificate.crt') && fs.existsSync('./data/privatekey.k
 
     httpServer.listen(httpPort);
     httpsServer.listen(httpsPort);
+    console.log(`listening on HTTP port: ${httpPort}`);
+    console.log(`listening on HTTPS port: ${httpsPort}`);
 
     setInterval(() => {
         httpsServer.getConnections((error, count) => {
@@ -108,6 +114,7 @@ else
     var httpServer = http.createServer(app);
     server = httpServer;
     httpServer.listen(httpPort);
+    console.log(`listening on HTTP port: ${httpPort}`);
     setInterval(() => {
         httpServer.getConnections((error, count) => {
             console.log('### Number of connections: ' + count);
@@ -225,10 +232,31 @@ cron.schedule("*/5 * * * *", () => {
 
 
 io.on('connection', function(socket) {
-    socket.on('ssh', function(args){
-        let server = args[0];
-        let username = args[1];
-        let password = args[2];
+    var cookies = cookie.parse(socket.handshake.headers.cookie);  
+    let user = new JwtVerifier().verify(cookies.jwt_auth);
+    if(!user)
+        return;
+
+    socket.on('ssh', (args) => {
+        let server, username, password;
+        if(args.length === 1)
+        {
+            let settings = Settings.getForUserSync(user.Uid);
+            let app = settings.findAppInstance(args[0]);
+            if(!app?.SshServer){
+                socket.emit('data', '\r\n*** SSH NOT CONFIGURED FOR THIS APPLICATION  ***\r\n');
+                return;
+            }
+            server = app.SshServer;
+            username = app.SshUsername;
+            password = app.SshPassword;
+        }
+        else
+        {
+            server = args[0];
+            username = args[1];
+            password = args[2];
+        }
         var conn = new SSHClient();
         conn.on('ready', function() {
           socket.emit('data', '\r\n*** SSH CONNECTION ESTABLISHED ***\r\n');
