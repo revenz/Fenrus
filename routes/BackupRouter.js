@@ -1,6 +1,7 @@
 const express = require('express');
 const common = require('./Common');
 const fsPromises = require("fs/promises");
+const ImageHelper = require('../helpers/ImageHelper');
 
 class BackupRouter{
     
@@ -46,35 +47,38 @@ class BackupRouter{
     }
 
     async export(req, res) {
+        console.log('##### exporting !!!!');
         let settings = await this.getSettings(req);
         let json = settings.toJson();
         let cloned = JSON.parse(json);
-        if(cloned.BackgroundImage){            
-            cloned.BackgroundImage = fsPromises.readFile('../wwwroot/images/background/' + cloned.BackgroundImage, {encoding: 'base64'});
+        if(cloned.BackgroundImage)
+        {     
+            console.log('#### BACKGROUND IMAGE: ' + cloned.BackgroundImage)
+            cloned.BackgroundImageBase64 = await fsPromises.readFile('./wwwroot/' + cloned.BackgroundImage, {encoding: 'base64'});
         }
         if(cloned.Groups?.length)
         {
-            for(let grp in cloned.Groups)
+            for(let grp of cloned.Groups)
             {
                 if(!grp.Items?.length)
                     continue;
-                for(let item in grp.Items){
-                    if(item.Icon){
-                        item.Icon = fsPromises.readFile('../wwwroot/images/icons/' + item.Icon, {encoding: 'base64'});
+                for(let item of grp.Items){
+                    if(item.Icon && item.Icon.indexOf('apps') < 0){
+                        item.IconBase64 = await fsPromises.readFile('./wwwroot/' + item.Icon, {encoding: 'base64'});
                     }
                 }
             }
         }
         if(cloned.SearchEngines?.length)
         {
-            for(let item in cloned.SearchEngines)
+            for(let item of cloned.SearchEngines)
             {
                 if(item.Icon){
-                    item.Icon = fsPromises.readFile('../wwwroot/images/icons/' + item.Icon, {encoding: 'base64'});
+                    item.IconBase64 = await fsPromises.readFile('./wwwroot/' + item.Icon, {encoding: 'base64'});
                 }
             }
         }
-        json = JSON.stringify(cloned);
+        json = JSON.stringify(cloned, null, 2);
         res.writeHead(200, {
           'Content-Disposition': `attachment; filename="Fenrus-${new Date().toLocaleDateString()}.json"`,
           'Content-Type': 'application/json',
@@ -92,12 +96,43 @@ class BackupRouter{
             return;
         }
 
+        let imageHelper = new ImageHelper();
+
+        if(model.BackgroundImageBase64)
+            settings.BackgroundImage = await imageHelper.saveImageIfBase64(model.BackgroundImageBase64, 'backgrounds');
+
+        if(model?.Groups?.length)
+        {
+            for(let grp of model.Groups)
+            {
+                if(!grp?.Items?.length)
+                    continue;
+                for(let item of grp.Items)
+                {
+                    if(item.IconBase64){
+                        item.Icon = await imageHelper.saveImageIfBase64(item.IconBase64, 'icons');
+                        delete item.IconBase64;
+                    }
+                }
+            }
+        }
+
+        if(model?.SearchEngines?.length)
+        {
+            for(let item of model.SearchEngines)
+            {
+                if(item.IconBase64){
+                    item.Icon = await imageHelper.saveImageIfBase64(item.IconBase64, 'icons');
+                    delete item.IconBase64;
+                }
+            }
+        }
+        
         settings.AccentColor = model.AccentColor;
         settings.Theme = model.Theme;
         settings.LinkTarget = model.LinkTarget;
         settings.ShowGroupTitles = model.ShowGroupTitles;
         settings.CollapseMenu = model.CollapseMenu;
-        settings.BackgroundImage = model.BackgroundImage;
         settings.Groups = model.Groups;
         settings.Dashboards = model.Dashboards;
         settings.ThemeSettings = model.ThemeSettings;

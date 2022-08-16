@@ -85,7 +85,7 @@
             },
             exportConfig(){
                 const link = document.createElement('a');
-                link.href = '/settings/backup/export';
+                link.href = '/settings/backup/export?ts=' + new Date().getTime();
                 link.download = 'Fenrus-' + new Date().toLocaleDateString() + '.json';
                 document.body.appendChild(link)
                 link.click()
