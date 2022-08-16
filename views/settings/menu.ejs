@@ -46,6 +46,12 @@
                <span class="title">Up-Time</span>
             </a>
         </li>
+        <li <%= /^\/settings\/backup$/.test(pageUrl) ? 'class=active' : '' %>>
+           <a href="/settings/backup">
+               <span class="icon-files-o"></span>
+               <span class="title">Backup</span>
+            </a>
+        </li>
 
         <% if(isAdmin) { %>
         <li class="group">

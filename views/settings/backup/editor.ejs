@@ -1,0 +1,98 @@
+<%- include('../head.ejs') %>
+
+<input type="hidden" id="BackupData" value="<%= settings.toJson(true) %>" />
+
+<div class="editor" x-data="Backup">
+    <div class="top-row">
+        <span class="title">
+            <span class="icon-files-o"></span>
+            Backup
+        </span>
+        <span class="buttons">
+            <button :disabled="isDisabled()" class="btn" @click="save">Save</button>
+            <button :disabled="isDisabled()" class="btn" onclick="document.getElementById('file-chooser').click()">Import</button>
+            <button :disabled="isDisabled()" class="btn" @click="exportConfig">Export</button>
+        </span>
+    </div>
+    <input :disabled="isDisabled()" style="display:none" id="file-chooser" class="file-chooser" type="file" accept="application/json" @change="importConfig">
+
+    <div class="general settings-box">
+        <div class="setting">
+            <span class="label">Days</span>
+            <span class="value">
+                <input type="number" :disabled="isDisabled()" x-model="model.Theme" />
+                <span class="help-text">How many days between automatic backups.</span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<script src="/js/settings.js?version=<%= version %>"></script>
+
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        let json = document.getElementById('BackupData').value;
+        let model = JSON.parse(json)
+        Alpine.data('Backup', () => ({
+           model: model, 
+            <%- include('../generic-alpine-editor.js') %>
+           save() {
+                if(this.isDisabled()) return;
+
+                this.Saved = true;
+                if(!this.validate())
+                    return false;
+                    
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify(this.model),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                this.setSaving(true);
+                fetch('/backup', options).then(async (res) =>{
+                    if(!res.ok)
+                        throw await res.text();
+                    this.markClean();
+                    this.setSaving(false);
+                    toast('Backup Settings Saved', true);
+                }).catch(err => {
+                    this.setSaving(false);
+                    toast(err || 'Failed to save', false);
+                });
+                return true;
+            }, 
+            importConfig(event){
+                let files = event.target.files;
+                if (files.length === 0) {
+                    console.log('No file is selected');
+                    return;
+                }
+
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    let json = event.target.result;
+                    fetch('/settings/backup/import', {
+                        method: 'POST',                         
+                        body: json
+                    }).then(() => {
+                        toast('Backup imported', true);
+                    });
+                };
+                reader.readAsText(files[0]);
+            },
+            exportConfig(){
+                const link = document.createElement('a');
+                link.href = '/settings/backup/export';
+                link.download = 'Fenrus-' + new Date().toLocaleDateString() + '.json';
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+            }
+        }))
+    });
+</script>
+
+<%- include('../foot.ejs') %>

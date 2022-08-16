@@ -9,6 +9,7 @@ const UsersRouter = require('./UsersRouter');
 const AdminMiddleware = require('../middleware/AdminMiddleware');
 const FenrusRouter = require('./FenrusRouter');
 const UpTimeRouter = require('./UpTimeRouter');
+const BackupRouter = require('./BackupRouter');
 
 class SettingsRouter extends FenrusRouter 
 {
@@ -36,6 +37,7 @@ class SettingsRouter extends FenrusRouter
         this.router.use('/groups', new GroupsRouter().get());
         this.router.use('/search-engines', new SearchEngineRouter().get());
         this.router.use('/up-time', new UpTimeRouter().get());
+        this.router.use('/backup', new BackupRouter().get());
 
         this.router.use(AdminMiddleware);
         this.router.use('/system/groups', new SystemGroupsRouter().get());
