@@ -25,6 +25,7 @@ class BackupRouter{
     init() {        
         this.router.get('/', async (req, res) => await this.index(req, res));
         this.router.get('/export', async (req, res) => await this.export(req, res));
+        this.router.post('/import', async (req, res) => await this.import(req, res));
     }
 
     async index(req, res) 
@@ -88,6 +89,7 @@ class BackupRouter{
     }
 
     async import(req, res) {
+        console.log('###### IMPORTING2!');
         let settings = await this.getSettings(req);        
         let model = req.body;
         if(!model.Revision)
@@ -99,7 +101,10 @@ class BackupRouter{
         let imageHelper = new ImageHelper();
 
         if(model.BackgroundImageBase64)
-            settings.BackgroundImage = await imageHelper.saveImageIfBase64(model.BackgroundImageBase64, 'backgrounds');
+        {
+            console.log('#### IMPORT CUSTOM BACKGROUND');
+            await fsPromises.writeFile('./wwwroot' + item.BackgroundImage, item.BackgroundImageBase64, { encoding: 'base64'});    
+        }
 
         if(model?.Groups?.length)
         {
@@ -110,7 +115,8 @@ class BackupRouter{
                 for(let item of grp.Items)
                 {
                     if(item.IconBase64){
-                        item.Icon = await imageHelper.saveImageIfBase64(item.IconBase64, 'icons');
+                        console.log('#### IMPORT CUSTOM ICON: ' + item.Name);
+                        await fsPromises.writeFile('./wwwroot' + item.Icon, item.IconBase64, { encoding: 'base64'});    
                         delete item.IconBase64;
                     }
                 }
@@ -122,12 +128,16 @@ class BackupRouter{
             for(let item of model.SearchEngines)
             {
                 if(item.IconBase64){
-                    item.Icon = await imageHelper.saveImageIfBase64(item.IconBase64, 'icons');
+                    console.log('#### IMPORT CUSTOM ICON: ' + item.Name);
+                    await fsPromises.writeFile('./wwwroot' + item.Icon, item.IconBase64, { encoding: 'base64'});                    
                     delete item.IconBase64;
                 }
             }
         }
-        
+
+        console.log('#### IMPORT groups: ' + model.Groups?.length);
+        console.log('#### IMPORT SearchEngines: ' + model.SearchEngines?.length);
+        console.log('#### IMPORT Dashboards: ' + model.Dashboards?.length);
         settings.AccentColor = model.AccentColor;
         settings.Theme = model.Theme;
         settings.LinkTarget = model.LinkTarget;
@@ -142,7 +152,6 @@ class BackupRouter{
         await settings.save();
         res.status(200).send('').end();
     }
-
 }
   
 

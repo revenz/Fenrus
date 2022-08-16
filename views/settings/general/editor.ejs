@@ -10,8 +10,12 @@
         </span>
         <span class="buttons">
             <button :disabled="isDisabled()" class="btn" @click="save">Save</button>
+            <button :disabled="isDisabled()" class="btn" onclick="document.getElementById('file-chooser').click()">Import</button>
+            <button :disabled="isDisabled()" class="btn" @click="exportConfig">Export</button>
         </span>
     </div>
+
+    <input :disabled="isDisabled()" style="display:none" id="file-chooser" class="file-chooser" type="file" accept="application/json" @change="importConfig">
 
     <div class="general settings-box">
         <div class="setting">
@@ -99,6 +103,13 @@
     document.addEventListener('alpine:init', () => {
         let json = document.getElementById('SettingsData').value;
         let settings = JSON.parse(json)
+
+        let lsToast = localStorage.getItem('toast_success');
+        if(lsToast){
+            toast(lsToast, true);
+            localStorage.removeItem('toast_success');
+        }
+
         Alpine.data('Settings', () => ({
            model: settings, 
             <%- include('../generic-alpine-editor.js') %>
@@ -148,6 +159,37 @@
                 reader.readAsDataURL(file);
                 reader.onload = e => callback(e.target.result);
             },
+            importConfig(event){
+                let files = event.target.files;
+                if (files.length === 0) {
+                    console.log('No file is selected');
+                    return;
+                }
+
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    let json = event.target.result;
+                    fetch('/settings/backup/import', {
+                        method: 'POST',     
+                        headers: {
+                            'content-type': 'application/json'
+                        },                    
+                        body: json
+                    }).then(() => {
+                        localStorage.setItem('toast_success', 'Backup restore');
+                        location.reload(true);
+                    });
+                };
+                reader.readAsText(files[0]);
+            },
+            exportConfig(){
+                const link = document.createElement('a');
+                link.href = '/settings/backup/export?ts=' + new Date().getTime();
+                link.download = 'Fenrus-' + new Date().toLocaleDateString() + '.json';
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+            }
         }))
     });
 </script>

@@ -99,26 +99,29 @@ class HomeRouter extends FenrusRouter {
         };
         let upService = new UpTimeService();
         let areUps = {};
-        for(let grp of dashboardInstance?.Groups || []){
-            if(grp.Enabled === false)
-                continue;
-
-            let actualGroup = settings.Groups.find(x => x.Uid === grp.Uid);
-            if(!actualGroup)
-            {
-                // check for a system group
-                actualGroup = system.SystemGroups.find(x => x.Uid == grp.Uid);
-            }
-            if(!actualGroup || actualGroup.Enabled === false)
-                continue;
-            for(let item of actualGroup.Items)
-            {
-                if(item?._Type !== 'DashboardApp' && item?._Type !== 'DashboardLink')
+        if(req.user)
+        {
+            for(let grp of dashboardInstance?.Groups || []){
+                if(grp.Enabled === false)
                     continue;
-                let lastUp = upService.getLastIsUp(req.user.Uid, item.Url);
-                areUps[item.Uid] = lastUp;
+
+                let actualGroup = settings.Groups.find(x => x.Uid === grp.Uid);
+                if(!actualGroup)
+                {
+                    // check for a system group
+                    actualGroup = system.SystemGroups.find(x => x.Uid == grp.Uid);
+                }
+                if(!actualGroup || actualGroup.Enabled === false)
+                    continue;
+                for(let item of actualGroup.Items)
+                {
+                    if(item?._Type !== 'DashboardApp' && item?._Type !== 'DashboardLink')
+                        continue;
+                    let lastUp = upService.getLastIsUp(req.user.Uid, item.Url);
+                    areUps[item.Uid] = lastUp;
+                }
+                dashboard.Groups.push(actualGroup);
             }
-            dashboard.Groups.push(actualGroup);
         }
 
         let searchEngines = req.isGuest ? [] : req.settings.SearchEngines.filter(x => x.Enabled != false) || [];

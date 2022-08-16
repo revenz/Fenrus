@@ -75,7 +75,10 @@
                 reader.onload = function(event) {
                     let json = event.target.result;
                     fetch('/settings/backup/import', {
-                        method: 'POST',                         
+                        method: 'POST',     
+                        headers: {
+                            'content-type': 'application/json'
+                        },                    
                         body: json
                     }).then(() => {
                         toast('Backup imported', true);

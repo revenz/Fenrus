@@ -36,7 +36,6 @@ class UpTimeService
             let users = this.getUsers();
             for(let user of users)
             {
-                this.log('checking user', user);
                 await this.checkUser(user);
             }
         }
@@ -66,7 +65,6 @@ class UpTimeService
             for(let item of grp.Items){
                 if(item._Type !== 'DashboardApp' && item._Type !== 'DashboardLink')
                     continue;
-                console.log('will check: ' +  item.Url);
                 apps.push({
                     Name: item.Name,
                     Url: item.Url,
@@ -93,16 +91,13 @@ class UpTimeService
             return;
 
         let toCheck = await this.getAppsForUser(user.Uid);
-        console.log('Items to check', toCheck.length);
         let tasks = [];
         let date = Date.now();
         if(!UpTimeService.UserApps[user.Uid])
             UpTimeService.UserApps[user.Uid] = {};
         for(let item of toCheck){
-            this.log('about to check: ' + item.Url); 
             tasks.push(new Promise(async (resolve, reject) =>
             {
-                this.log('Checking: ' + item.Url);
                 try
                 {
                     let isUp = await isReachable(item.Url, {
@@ -110,7 +105,6 @@ class UpTimeService
                     });
                     
                     UpTimeService.UserApps[user.Uid][item.Url] = isUp;
-                    this.log(item.Url + ': ' + isUp);                
                     await this.recordUpTime(user.Uid, item.Uid, date, isUp)
                 }catch(err) {
                     this.log('error in checking uptime: ' + err);
