@@ -128,12 +128,19 @@ class GroupsRouter{
         });
         dashboards.sort((a,b) => {
             a.Name.localeCompare(b.Name);
-        })
+        });
+
+        let system = System.getInstance();
+        let docker = (system.Docker || []);
+        docker.sort((a, b) => {
+            if(!a.Address)
+                return -10000000;
+            return a.Name.localeCompare(b.Name);
+        });
 
         let systemGroups = [];
         if(req.user.IsAdmin)
         {
-            let system = System.getInstance();
             systemGroups = system.SystemGroups.filter(x => x.Uid != group.Uid);
         }
         let groups = req.settings.Groups.filter(x => x.Uid != group.Uid);
@@ -146,7 +153,8 @@ class GroupsRouter{
             dashboards: dashboards,
             model:group,
             systemGroups: systemGroups,
-            groups: groups
+            groups: groups,
+            docker: docker
         }));  
     }
 

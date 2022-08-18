@@ -29,6 +29,8 @@ const System = require('./models/System');
 const InitialConfigRouter = require('./routes/InitialConfigRouter');
 const ProxyRouter = require('./routes/ProxyRouter');
 const req = require('express/lib/request');
+const SshService = require('./services/SshService');
+const DockerService = require('./services/DockerService');
 
 const consoleLogger = console.log;
 
@@ -123,7 +125,6 @@ else
 }
 
 var io = require('socket.io')(server);
-var SSHClient = require('ssh2').Client;
 
 // set cache control for files
 app.use(function (req, res, next) {
@@ -237,52 +238,29 @@ io.on('connection', function(socket) {
     if(!user)
         return;
 
+    const cleanArgs = (args) => {
+        if(!args?.length)
+            return args;
+        // remove quotes surrounding an argument
+        for(let i=0;i<args.length;i++)
+        {
+            if(/^"(.*?)"$/.test(args[i]))
+                args[i] = /^"(.*?)"$/.exec(args[i])[1];
+        }
+        return args;
+    }
+    let settings = Settings.getForUserSync(user.Uid);
+
     socket.on('ssh', (args) => {
-        let server, username, password;
-        if(args.length === 1)
-        {
-            let settings = Settings.getForUserSync(user.Uid);
-            let app = settings.findAppInstance(args[0]);
-            if(!app?.SshServer){
-                socket.emit('data', '\r\n*** SSH NOT CONFIGURED FOR THIS APPLICATION  ***\r\n');
-                return;
-            }
-            server = app.SshServer;
-            username = app.SshUsername;
-            password = app.SshPassword;
-        }
-        else
-        {
-            server = args[0];
-            username = args[1];
-            password = args[2];
-        }
-        var conn = new SSHClient();
-        conn.on('ready', function() {
-          socket.emit('data', '\r\n*** SSH CONNECTION ESTABLISHED ***\r\n');
-          conn.shell(function(err, stream) {
-            if (err)
-              return socket.emit('data', '\r\n*** SSH SHELL ERROR: ' + err.message + ' ***\r\n');
-            socket.on('data', function(data) {
-              stream.write(data);
-            });
-            stream.on('data', function(d) {
-              socket.emit('data', d.toString('binary'));
-            }).on('close', function() {
-              conn.end();
-            });
-          });
-        }).on('close', function() {
-          socket.emit('data', '\r\n*** SSH CONNECTION CLOSED ***\r\n');
-          socket.emit('ssh-closed', '');
-          conn.end();
-        }).on('error', function(err) {
-          socket.emit('data', '\r\n*** SSH CONNECTION ERROR: ' + err.message + ' ***\r\n');
-        }).connect({
-          host: server,
-          port: 22,
-          username: username,
-          password: password
-        });
+        args = cleanArgs(args);
+        let app = settings.findAppInstance(args[0]);
+        new SshService(socket).init(app);
     });
+    
+    socket.on('docker', (args) => {
+        args = cleanArgs(args);
+        let app = settings.findAppInstance(args[0]);
+        new DockerService(socket, app, system).init();
+    });
+
   });

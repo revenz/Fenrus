@@ -200,9 +200,13 @@ select {
 .settings-box .item-icon-picker .db-item {
   margin-bottom: 1rem;
 }
+.settings-box p {
+  margin: 1rem;
+}
 
 #file-chooser-btn {
   display: block;
+  white-space: pre-line;
 }
 
 .modal-background {
@@ -619,4 +623,36 @@ table .controls [class^=icon-]:hover {
 }
 .app-info-item a {
   color: var(--accent);
+}
+
+.content > .tabs {
+  margin-top: 1rem;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+}
+.tabs .tab-buttons {
+  display: flex;
+  flex-direction: row;
+  border-bottom: solid 1px var(--accent, #ff0090);
+  padding-left: 1rem;
+}
+.tabs .tab-buttons button {
+  border: 1px solid var(--border-color);
+  position: relative;
+  bottom: -2px;
+}
+.tabs .tab-buttons button.active {
+  border-color: var(--accent, #ff0090);
+  border-bottom: 2px solid var(--base);
+}
+.tabs .tabpage {
+  margin-top: 1rem;
+  display: none;
+  flex-grow: 1;
+}
+.tabs .tabpage.active {
+  display: unset;
 }

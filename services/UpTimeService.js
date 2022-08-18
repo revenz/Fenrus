@@ -106,8 +106,7 @@ class UpTimeService
             {
                 try
                 {
-                    let isUp = this.isReachable(item.Url);
-                    
+                    let isUp = await this.isReachable(item.Url);
                     UpTimeService.UserApps[user.Uid][item.Url] = isUp;
                     await this.recordUpTime(user.Uid, item.Uid, date, isUp)
                 }catch(err) {

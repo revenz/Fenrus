@@ -13,7 +13,9 @@
             <% if(showIsDefault) { %>
                 <th class="default switch">Default</th>
             <% } %>
+            <% if(data.noEnabled !== true) { %>
             <th class="enabled switch">Enabled</th>
+            <% } %>
             <th class="controls"></th>
         </tr>
     </thead>
@@ -41,6 +43,8 @@
                         </label>
                     </td>
                 <% } %>
+                
+                <% if(data.noEnabled !== true) { %>
                 <td class="enabled switch">      
                     <template x-if="item.Uid !== 'Guest'">
                         <label :for="item.Uid + '-enabled'" class="toggle-switchy">
@@ -51,6 +55,7 @@
                         </label>
                     </template>
                 </td>
+                <% } %>
                 <td class="controls">  
                     <% if(allowMove) { %>
                         <span title="Move Up" class="icon-arrow-up" @click="move(item, true)"></span>

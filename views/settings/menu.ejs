@@ -81,6 +81,12 @@
                <span class="title">Users</span>
             </a>
         </li>
+        <li <%= pageUrl == '/settings/docker' ? 'class=active' : '' %>>
+           <a href="/settings/system/docker">
+                <span class="icon-microchip"></span>
+               <span class="title">Docker</span>
+            </a>
+        </li>
         <% } %>
         <li <%= pageUrl == '/settings/about' ? 'class=active' : '' %>>
            <a href="/settings/about">

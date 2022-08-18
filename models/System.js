@@ -13,6 +13,7 @@ class SystemInstance
     AuthStrategy;
     GuestDashboard;
     SystemGroups;
+    Docker;
 
     constructor(){
     }    
@@ -142,6 +143,7 @@ class SystemInstance
             AuthStrategy: this.AuthStrategy,
             AllowRegister: this.AllowRegister,
             AllowGuest: this.AllowGuest,
+            Docker: this.Docker,
             SearchEngines: this.SearchEngines,
             Properties: this.Properties,
             GuestDashboard: this.GuestDashboard,

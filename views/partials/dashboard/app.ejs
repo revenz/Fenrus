@@ -7,6 +7,7 @@
     let interval = app.Interval === -1 ? -1 : (app.Interval ?? 0) * 1000;
     let smartApp = interval > 0 || interval === -1;
     let ssh = !!model.SshServer;
+    let docker = !!model.DockerUid;
 %>
 
 <% if(app.Css) { %>
@@ -19,6 +20,8 @@
      <%= target === 'IFrame' ? 'iframe' : '' %>
      <%= ssh ? 'ssh' : '' %>" 
      <%= ssh ? 'x-ssh=1' : '' %>
+     <%= docker ? 'docker' : '' %>
+     <%= docker ? `x-docker="1"` : '' %>
     href="<%= model.Url%>" 
     <% if(target !== 'IFrame') { %>
     onclick="launch(event, '<%= model.Uid %>')" target="<%= target %>"

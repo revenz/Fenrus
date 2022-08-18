@@ -1,5 +1,4 @@
 ﻿window.onpopstate = function(event) {
-    console.log('document.location', document.location, event);
     let path = document.location.pathname;
     path = path.substring(path.lastIndexOf('/') + 1);
     fetchDashboard(path, true);
@@ -246,6 +245,7 @@ function openContextMenu(event, app){
     let groupUid = ele.closest('.db-group').getAttribute('id');
     let dashboardUid = ele.closest('.dashboard').getAttribute('x-uid');
     let ssh = ele.getAttribute('x-ssh') === '1';
+    let docker = ele.getAttribute('x-docker');
     if(!contextMenus[uid])
     {
         const menuItems = [
@@ -282,7 +282,17 @@ function openContextMenu(event, app){
                 divider: "top",
                 content: `${terminalIcon}Terminal`,
                 events: {
-                    click: (e) => openTerminal(uid)
+                    click: (e) => openTerminal(1, uid)
+                }
+            });
+        }
+        else if(docker){
+            menuItems.push(
+            {
+                divider: "top",
+                content: `${terminalIcon}Terminal`,
+                events: {
+                    click: (e) => openTerminal(2, uid)
                 }
             });
         }
@@ -379,7 +389,6 @@ function openUpTime(app) {
             }  
         };
 
-        console.log('options', options);
         var chart = new ApexCharts(ctx, options);
         chart.render();
     });
@@ -396,9 +405,7 @@ function openIframe(event, app){
     if(!appItem)
         return;
     let group = appItem.parentNode;
-    console.log('group', group);
 
-    console.log('open iframe', app);
     let div = document.createElement('div');
     div.className = 'iframe-content';
 
@@ -478,14 +485,13 @@ function openIframe(event, app){
 }
 
 
-function openTerminal(uid){
+function openTerminal(type, uid){
     let div = document.createElement('div');
     div.setAttribute('id', 'terminal');
     document.body.appendChild(div);
     setTimeout(() => {
 
         const fitAddon = new FitAddon.FitAddon();
-        console.log('fitAddon', fitAddon);
         var term = new Terminal({ cursorBlink: true, fontFamily: 'Courier New', fontSize: 16 });
         term.loadAddon(fitAddon);
         term.open(div); 
@@ -494,7 +500,7 @@ function openTerminal(uid){
         term.write('Welcome to the Fenrus Terminal\r\n');   
         term.write('Server: ');
         term.focus();
-        let mode = !!uid ? 3 : 0; // 0 = server, 1 = username, 2 = password, 3 = ssh
+        let mode = !!type ? 3 : 0; // 0 = server, 1 = username, 2 = password, 3 = ssh
         var socket;
         
         let line = '';
@@ -558,7 +564,10 @@ function openTerminal(uid){
             socket.on('connect_failed', function(){
                 console.log('connect_failed');
             });
-            socket.emit('ssh', args);
+            if(type == 2)
+                socket.emit('docker', args);
+            else
+                socket.emit('ssh', args);
             socket.on('connect', function() {
                 if(mode === 3)
                     term.write('\r\n*** Connected to backend ***\r\n');

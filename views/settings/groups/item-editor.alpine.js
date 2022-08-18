@@ -13,10 +13,15 @@ Alpine.data('ItemEditor', () => ({
     AddingItem: false,
     KeepOpen:false,
     info: null,
+    activeTab: 'General',
     blur(){
         if(this.Saved === false)
             return;
         this.validate();
+    },
+    changeTab(event) {
+        console.log('chagning tabs', event);
+        this.activeTab = event.target.getAttribute('x-tab');
     },
     input(){
         if(this.Saved === false)
@@ -141,6 +146,7 @@ Alpine.data('ItemEditor', () => ({
     editItem(uid) {
         if(this.isDisabled()) return;
 
+        this.activeTab = 'General';
         this.isItemSaved = false;
         this.AddingItem = false;
         this.EditorApp.Properties = {};

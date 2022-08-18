@@ -13,6 +13,7 @@
     "chartjs-node-canvas": "^4.1.6",
     "cookie": "^0.5.0",
     "cookie-parser": "^1.4.6",
+    "dockerode": "^3.3.3",
     "ejs": "^3.1.6",
     "express": "^4.17.3",
     "express-openid-connect": "^2.7.2",

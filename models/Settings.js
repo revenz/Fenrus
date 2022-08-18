@@ -11,6 +11,7 @@ class SettingsInstance {
     AccentColor = '#ff0090';
     ShowGroupTitles = true;
     BackgroundImage = '';
+    Docker = [];
     Groups = [];
     Dashboards = [];
     ThemeSettings = {};

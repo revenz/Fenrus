@@ -119,6 +119,15 @@ class BackupRouter{
                         await fsPromises.writeFile('./wwwroot' + item.Icon, item.IconBase64, { encoding: 'base64'});    
                         delete item.IconBase64;
                     }
+                    if(item.Properties){
+                        let props = Objects.keys(item.Properties);
+                        for(let p of props){
+                            let value = item.Properties[p];
+                            if(!value)
+                                continue;
+                            
+                        }
+                    }
                 }
             }
         }
