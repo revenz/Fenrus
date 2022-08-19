@@ -149,7 +149,7 @@ app.use(express.static(__dirname + '/wwwroot'));
 // morgan logs every request coming into the system 
 morgan.token('date', (req, res, tz) => { return timeString(); })
 morgan.format('myformat', ':date [:method] [:response-time ms] => :url');
-app.use(morgan('myformat'));
+//app.use(morgan('myformat'));
 
 // Calling the express.json() method for parsing
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -253,8 +253,21 @@ io.on('connection', function(socket) {
 
     socket.on('ssh', (args) => {
         args = cleanArgs(args);
-        let app = settings.findAppInstance(args[0]);
-        new SshService(socket).init(app);
+        if(args.length === 3)
+        {
+            new SshService(socket).init(args);    
+        }
+        else
+        {
+            let app = settings.findAppInstance(args[0]);
+            if(!app.SshPassword)
+            {
+                socket.emit('request-pwd', [app.SshServer, app.SshUsername]);
+            }
+            else{
+                new SshService(socket).init(app);
+            }
+        }
     });
     
     socket.on('docker', (args) => {

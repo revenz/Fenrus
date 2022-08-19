@@ -492,42 +492,50 @@ function openTerminal(type, uid){
     setTimeout(() => {
 
         const fitAddon = new FitAddon.FitAddon();
-        var term = new Terminal({ cursorBlink: true, fontFamily: 'Courier New', fontSize: 16 });
+        var term = new Terminal({ 
+            cursorBlink: true, 
+            fontFamily: 'Courier New',
+            fontSize: 16,            
+            convertEol: true,
+            fontFamily: "'Fira Mono', monospace"
+        });
         term.loadAddon(fitAddon);
         term.open(div); 
         fitAddon.fit();
         
         term.write('Welcome to the Fenrus Terminal\r\n');   
-        term.write('Server: ');
         term.focus();
-        let mode = !!type ? 3 : 0; // 0 = server, 1 = username, 2 = password, 3 = ssh
-        var socket;
-        
-        let line = '';
+        let line = ''; 
         let server, username, password;
+        const MODE_SERVER = 0;
+        const MODE_USERNAME = 1;
+        const MODE_PASSWORD = 2;
+        const MODE_TERMINAL = 3;
+        let mode = !!type ? MODE_TERMINAL : MODE_SERVER; 
+        let genericSsh = mode === MODE_SERVER;
+        let promptForPassword = false;
+        let authError = false;
+
         term.onKey(function (ev) {
             let key = ev.key;
             if(mode < 3){
-                if (key.charCodeAt(0) === 13)
+                let keyCode = key.charCodeAt(0);
+                if (keyCode === 13) // enter
                 {
-                    // enter
                     if(mode === 0 || mode === 1){
                         if(mode === 0)
                             server = line;
                         else
                             username = line;
-                        line = '';
-                        term.write(`\r\n${mode === 0 ? 'Username' : 'Password'}: `);
-                        ++mode;
+                        changeMode(mode + 1);
                         return;
                     }
                     password = line;
-                    line = '';
-                    ++mode;
+                    changeMode(mode + 1);
                     connect([server, username, password]);
                     return;
                 }
-                else if(key.charCodeAt(0) === 127){
+                else if(keyCode === 127){ //backspace
                     if(line.length > 0){
                         line = line.substring(0, line.length - 1);
                         if(mode !== 2)
@@ -546,6 +554,19 @@ function openTerminal(type, uid){
                 socket.emit('data', key);
             }
         });
+
+        const inputVariablePrefix = '\x1b[1;32m';
+        const inputVariableSuffix = '\x1b[37m';
+        const changeMode = (newMode) => {
+            if(newMode === 0)
+                term.write(`\r\n${inputVariablePrefix}Server${inputVariableSuffix}: `);
+            else if(newMode === 1)
+                term.write(`\r\n${inputVariablePrefix}Username${inputVariableSuffix}: `);
+            else if(newMode === 2)
+                term.write(`\r\n${inputVariablePrefix}Password${inputVariableSuffix}: `);
+            mode = newMode;
+            line = '';
+        }
 
         const connect = function(args){
             term.write('\r\nConnecting...\r\n');
@@ -568,36 +589,81 @@ function openTerminal(type, uid){
                 socket.emit('docker', args);
             else
                 socket.emit('ssh', args);
-            socket.on('connect', function() {
-                if(mode === 3)
-                    term.write('\r\n*** Connected to backend ***\r\n');
-            });
+            socket.on('connect', function() {});
 
             // Backend -> Browser
             socket.on('data', function(data) {
-                if(mode === 3)
+                if(mode === 3){
                     term.write(data);
+                    authError = false;
+                }
             });
-            socket.on('ssh-closed', () => {
+            socket.on('terminal-closed', () => {
+                if(authError && promptForPassword)
+                    return;
                 if(mode === 3)
-                    term.write('\r\nssh-close\r\n');
+                    term.write('\r\closed\r\n');
                 socket.close();
                 closeTerminal();
             });
+            socket.on('fenrus-error', (error) => {
+                term.write('\r\n' + error + '\r\n');
+                socket.close();
+                closeTerminal(5000);
+            });
+            socket.on('request-pwd', (args) => {
+                server = args[0];
+                username = args[1];
+                promptForPassword = true;
+                term.write(`\r\nEnter the password for: ${username}\r\n`);
+                changeMode(2)
+            });
+            socket.on('autherror', (error) => {
+                console.log('auth error', error, genericSsh, promptForPassword);
+                authError = true;
+                if(genericSsh){
+                    term.write('\r\nFailed to authenticate: ' + error + '\r\n');
+                    changeMode(1);
+                }
+                else if(promptForPassword){
+                    console.log('promptForPassword', promptForPassword);
+                    term.write('\r\n' + error + '\r\n');
+                    changeMode(2);
+                }
+                else
+                {
+                    term.write('\r\n' + error + '\r\n');
+                    socket.close();
+                    closeTerminal(5000);
+                }
+            });
 
             socket.on('disconnect', function() {
-                if(mode === 3)
-                    term.write('\r\n*** Disconnected from backend ***\r\n');
+                if(mode !== 3)
+                    return;
+                term.write('\r\n*** Disconnected ***\r\n');
+                mode = 4;
+                closeTerminal(5000);
             });
         }
 
-        const closeTerminal = function() {
-            div.className = 'closing';
-            setTimeout(() => {
-                div.remove();
-            }, 500);
+        const closeTerminal = function(timeout) {
+            const closeActual = () => {                
+                div.className = 'closing';
+                setTimeout(() => {
+                    div.remove();
+                }, 500);
+            }
+            if(timeout)
+                setTimeout(closeActual, timeout)
+            else
+                closeActual();
         }
 
+        var socket;
+        if(mode !== 3)
+            changeMode(mode);
+            
         if(uid)        
             connect([uid]);
 

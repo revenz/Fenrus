@@ -6,7 +6,6 @@ const System = require('../models/System');
 class JwtVerifier {
     verify(token) {        
         let system = System.getInstance();
-        console.log('###### system.JwtSecret', system.Properties.JwtSecret);
         const decode = jwt.verify(token, system.Properties.JwtSecret);
         if(typeof(decode) === 'string')
             decode = JSON.parse(decode);

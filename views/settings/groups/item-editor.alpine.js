@@ -137,7 +137,8 @@ Alpine.data('ItemEditor', () => ({
             Url: 'http://',
             Icon: '',
             Size: 'medium',
-            Properties:{}
+            Properties:{},
+            DockerCommand: '/bin/bash'
         };
         this.EditorTitle = 'New Item';                    
         this.Opened = true;
@@ -162,6 +163,8 @@ Alpine.data('ItemEditor', () => ({
             this.model.Properties = {};
         if(!this.model.Size)
             this.model.Size = 'medium';
+        if(!this.model.DockerCommand)
+            this.model.DockerCommand = '/bin/bash';
         this.NewEdit = this.model._Type === 'DashboardApp';
         this.appChanged(this.model.AppName);
         this.Opened = true;

@@ -155,7 +155,6 @@ class SmartApp
 
     setStatusIndicator(icon) 
     {        
-        console.log('status icon', icon);
         let imgIcon = document.getElementById(this.uid).querySelector('.status-indicator');
         if(imgIcon)
         {

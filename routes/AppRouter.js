@@ -308,7 +308,6 @@ class AppRouter extends FenrusRouter {
                     args.headers = { 'Accept': 'application/json' };
                 else if (!args.headers['Accept'])
                     args.headers['Accept'] = 'application/json';
-                console.log(`[${args.method || 'GET'}] => ${args.url}`);
                 return args;
             },
             fetchResponse: (args) => {
