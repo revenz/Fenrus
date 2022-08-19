@@ -50,7 +50,7 @@ class DockerService
         });
     }
 
-    async init()
+    async init(rows, cols)
     {
         const containerByName = await this.getContainer(this.app.DockerContainer);        
         if(!containerByName){
@@ -71,7 +71,8 @@ class DockerService
             AttachStdout: true,
             AttachStderr: true,
             AttachStdin: true,
-            Tty: true
+            Tty: true,
+            Env: ['LINES=' + rows, 'COLUMNS='+ cols]
         };
         this.socket.on('resize', (data) => {
             container.resize({h: data.rows, w: data.cols}, () => {
@@ -84,9 +85,7 @@ class DockerService
                 stdin: true,
                 stdout: true,
                 stderr: true,
-                rawMode: true,
-                // fix vim
-                hijack: true,
+                hijack: true
             };
 
             container.wait((err, data) => {
@@ -109,6 +108,14 @@ class DockerService
                 stream.on('data', (chunk) => {
                     let data = chunk.toString();
                     this.socket.emit('data', data);
+                });
+                this.socket.on('resize', (data) => {
+                    console.log('### resize', data);
+                    //container.resize({h: data.rows, w: data.cols});
+                    Object.keys(containerByName).forEach(x => {
+                        console.log('### key: ' + x);
+                    })
+                    container.resize({h: data.rows, w: data.cols});
                 });
                 stream.on('end', () => {
                     this.socket.emit('terminal-closed', '');

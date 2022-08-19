@@ -253,9 +253,12 @@ io.on('connection', function(socket) {
 
     socket.on('ssh', (args) => {
         args = cleanArgs(args);
+        let rows = args[0];
+        let cols = args[1];
+        args.splice(0, 2);
         if(args.length === 3)
         {
-            new SshService(socket).init(args);    
+            new SshService(socket).init(args, rows, cols);    
         }
         else
         {
@@ -265,15 +268,18 @@ io.on('connection', function(socket) {
                 socket.emit('request-pwd', [app.SshServer, app.SshUsername]);
             }
             else{
-                new SshService(socket).init(app);
+                new SshService(socket).init(app, rows, cols);
             }
         }
     });
     
     socket.on('docker', (args) => {
         args = cleanArgs(args);
+        let rows = args[0];
+        let cols = args[1];
+        args.splice(0, 2);
         let app = settings.findAppInstance(args[0]);
-        new DockerService(socket, app, system).init();
+        new DockerService(socket, app, system).init(rows, cols);
     });
 
   });

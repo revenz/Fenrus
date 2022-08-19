@@ -490,6 +490,7 @@ function openTerminal(type, uid){
     div.setAttribute('id', 'terminal');
     document.body.appendChild(div);
     setTimeout(() => {
+        document.body.classList.add('terminal');
 
         const fitAddon = new FitAddon.FitAddon();
         var term = new Terminal({ 
@@ -502,10 +503,15 @@ function openTerminal(type, uid){
         term.loadAddon(fitAddon);
         term.open(div); 
         fitAddon.fit();
+
+        let divClose = document.createElement('div');
+        divClose.className = 'close close-terminal';
+        div.appendChild(divClose);
         
         term.write('Welcome to the Fenrus Terminal\r\n');   
         term.focus();
         let line = ''; 
+        let socket;
         let server, username, password;
         const MODE_SERVER = 0;
         const MODE_USERNAME = 1;
@@ -515,6 +521,9 @@ function openTerminal(type, uid){
         let genericSsh = mode === MODE_SERVER;
         let promptForPassword = false;
         let authError = false;
+
+        let rows = term.rows;
+        let cols = term.cols;
 
         term.onKey(function (ev) {
             let key = ev.key;
@@ -568,6 +577,19 @@ function openTerminal(type, uid){
             line = '';
         }
 
+        const resizeEvent = (event) => {
+            fitAddon.fit();
+            let newRows = term.rows;
+            let newCols = term.cols;
+
+            if(newRows == rows && newCols == cols)
+                return;                
+            rows = newRows;
+            cols = newCols;
+            console.log('resize', rows, cols);            
+            socket.emit('resize', { rows: rows, cols: cols});
+        }
+
         const connect = function(args){
             term.write('\r\nConnecting...\r\n');
             let https = document.location.protocol === 'https:';
@@ -585,10 +607,12 @@ function openTerminal(type, uid){
             socket.on('connect_failed', function(){
                 console.log('connect_failed');
             });
+            if(Array.isArray(args) === false)
+                args = [args];
             if(type == 2)
-                socket.emit('docker', args);
+                socket.emit('docker', [term.rows, term.cols].concat(args));
             else
-                socket.emit('ssh', args);
+                socket.emit('ssh', [term.rows, term.cols].concat(args));
             socket.on('connect', function() {});
 
             // Backend -> Browser
@@ -645,9 +669,17 @@ function openTerminal(type, uid){
                 mode = 4;
                 closeTerminal(5000);
             });
+
+            window.addEventListener('resize', resizeEvent);
         }
+        divClose.addEventListener('click', () => {
+            socket?.close();
+            closeTerminal();
+        });
 
         const closeTerminal = function(timeout) {
+            window.removeEventListener('resize', resizeEvent);
+            document.body.classList.remove('terminal');
             const closeActual = () => {                
                 div.className = 'closing';
                 setTimeout(() => {
@@ -660,7 +692,6 @@ function openTerminal(type, uid){
                 closeActual();
         }
 
-        var socket;
         if(mode !== 3)
             changeMode(mode);
             

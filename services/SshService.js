@@ -9,15 +9,13 @@ class SshService
         this.socket = socket;
     }
 
-    init(args)
+    init(args, rows, cols)
     {
         var SSHClient = require('ssh2').Client;
 
         let server, username, password;
-        console.log('args', args);
         if (Array.isArray(args) === false)
         {
-            console.log('debug 0');
             let app = args;
             if (!app?.SshServer)
             {
@@ -30,7 +28,6 @@ class SshService
         }
         else
         {
-            console.log('debug 1');
             server = args[0];
             username = args[1];
             password = args[2];
@@ -40,12 +37,15 @@ class SshService
         var conn = new SSHClient();
         conn.on('ready', () => {
             this.socket.emit('data', '\r\n*** SSH CONNECTION ESTABLISHED ***\r\n');
-            conn.shell((err, stream) => {
+            conn.shell({rows: rows, cols: cols}, (err, stream) => {
                 if (err)
                     return this.socket.emit('data', '\r\n*** SSH SHELL ERROR: ' + err.message + ' ***\r\n');
                 this.socket.on('data', (data) =>
                 {
                     stream.write(data);
+                });
+                this.socket.on('resize', (data) => {
+                    stream.setWindow(data.rows, data.cols);
                 });
                 stream.on('data', (d) =>
                 {

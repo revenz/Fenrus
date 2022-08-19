@@ -464,3 +464,36 @@ body.not-home {
 .db-group:last-of-type .group-controls .move-down {
     display: none;
 }
+
+body.terminal .main-content {
+    display:none;
+}
+
+.terminal {
+    .close 
+    {        
+        width: 4rem;
+        height: 2rem;
+        position: fixed;
+        background: red;
+        z-index: 10;
+        right: 3rem;
+        top: 4rem;
+        opacity:0.3;
+        &:hover {
+            opacity:1;
+            cursor:pointer;
+        }
+        &::after {            
+            display: inline-block;
+            content: "\00d7";             
+            font-size: 2rem;
+            position: relative;
+            left: 0;
+            right: 0;
+            text-align: center;
+            width: 4rem;
+            top: -3px;
+        }
+    }
+}
