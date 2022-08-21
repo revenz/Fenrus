@@ -61,6 +61,12 @@
             "Label":"Animated Background",
             "Type":"Boolean",
             "Default":true
+        },
+        {
+            "Name":"BackgroundImage",
+            "Label":"Overlay Background",
+            "Type":"Boolean",
+            "Default":true
         }
     ]
 }

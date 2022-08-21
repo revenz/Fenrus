@@ -10,12 +10,12 @@
         </span>
         <span class="buttons">
             <button :disabled="isDisabled()" class="btn" @click="save">Save</button>
-            <button :disabled="isDisabled()" class="btn" onclick="document.getElementById('file-chooser').click()">Import</button>
+            <button :disabled="isDisabled()" class="btn" onclick="document.getElementById('import-file-chooser').click()">Import</button>
             <button :disabled="isDisabled()" class="btn" @click="exportConfig">Export</button>
         </span>
     </div>
 
-    <input :disabled="isDisabled()" style="display:none" id="file-chooser" class="file-chooser" type="file" accept="application/json" @change="importConfig">
+    <input :disabled="isDisabled()" style="display:none" id="import-file-chooser" class="import-file-chooser" type="file" accept="application/json" @change="importConfig">
 
     <div class="general settings-box">
         <div class="setting">

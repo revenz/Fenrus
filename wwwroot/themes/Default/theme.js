@@ -70,8 +70,12 @@ class DefaultTheme
 
         document.body.classList.remove('horizontal');
         document.body.classList.remove('vertical');
+        document.body.classList.remove('show-background');        
         document.body.classList.add(this.settings.Horizontal ? 'horizontal' : 'vertical');
+        if(this.settings.BackgroundImage && document.body.classList.contains('custom-background'))
+            document.body.classList.add('show-background');        
         eleDashboard.style.visibility = 'unset';
+
     }
 
     init(){

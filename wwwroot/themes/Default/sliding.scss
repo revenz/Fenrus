@@ -1,9 +1,27 @@
 
-body.no-custom-background:not(.settings)
+body.no-custom-background:not(.settings):not(.show-background)
 {
     background-image: none;
     --bg-base: rgb(10,10,10);
     background:var(--bg-base, rgb(10,10,10));
+}
+
+body.custom-background.show-background:not(.settings){
+    .bg1 {
+        opacity:0.1 !important;
+    }
+    .bg2 {
+        opacity:0.05 !important;
+    }
+    .bg3 {
+        opacity:0.03 !important;
+    }
+}
+
+
+body.no-custom-background:not(.settings),
+body.custom-background.show-background:not(.settings)
+{
     .bg 
     {
         background-image: linear-gradient(-60deg, var(--accent, #ff0090) 50%, var(--bg-base, rgb(10,10,10)) 50%);
