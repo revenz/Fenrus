@@ -120,7 +120,7 @@ class BackupRouter{
                         delete item.IconBase64;
                     }
                     if(item.Properties){
-                        let props = Objects.keys(item.Properties);
+                        let props = Object.keys(item.Properties);
                         for(let p of props){
                             let value = item.Properties[p];
                             if(!value)

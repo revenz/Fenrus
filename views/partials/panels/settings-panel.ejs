@@ -46,6 +46,17 @@
             </label>
         </span>
     </div>
+    <div class="setting">
+        <span class="label">Status Indicators</span>
+        <span class="value">
+            <label for="ShowStatusIndicators" class="toggle-switchy" @change="update">
+                <input type="checkbox" id="ShowStatusIndicators" x-model="model.ShowStatusIndicators" />
+                <span class="toggle">
+                    <span class="switch"></span>
+                </span>
+            </label>
+        </span>
+    </div>
 </div>
 
 <script>
@@ -73,6 +84,10 @@
                     eleDashboard.classList.remove('hide-group-titles');
                     if(this.model.ShowGroupTitles === false)
                         eleDashboard.classList.add('hide-group-titles');
+
+                    eleDashboard.classList.remove('status-indicators');
+                    if(this.model.ShowStatusIndicators === true)
+                        eleDashboard.classList.add('status-indicators');
 
                     if(this.model.LinkTarget != target){
                         // need to update all the targets

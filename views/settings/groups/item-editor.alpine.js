@@ -20,7 +20,6 @@ Alpine.data('ItemEditor', () => ({
         this.validate();
     },
     changeTab(event) {
-        console.log('chagning tabs', event);
         this.activeTab = event.target.getAttribute('x-tab');
     },
     input(){
@@ -209,7 +208,7 @@ Alpine.data('ItemEditor', () => ({
         groupEditor.updatePreview();
 
         
-        toast(`Item ${item.Name} added`, true);
+        toast(`${item.Name} saved`, true);
 
         if(this.AddingItem && this.KeepOpen)
         {

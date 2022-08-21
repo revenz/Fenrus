@@ -6,6 +6,9 @@ class DockerService
     socket;
     docker;
     app;
+    stream;
+    timeOutTimer;
+    AUTO_TIMEOUT = 10 * 60 * 1000;
 
     constructor(socket, app, system)
     {
@@ -64,8 +67,7 @@ class DockerService
             console.log('##### failed to locate container: ', this.app.DockerContainer, container);
             return;
         }
-        
-        console.log('##### actual container', container);
+
         let cmd = {
             Cmd: [this.app.DockerCommand || '/bin/bash'],
             AttachStdout: true,
@@ -97,6 +99,8 @@ class DockerService
                 return;
             }
             exec.start(options, (err, stream) => {
+                this.stream = stream;
+                this.resetTimeout();
                 let name = containerByName.Names;
                 if(Array.isArray(name) && name.length > 0)
                     name = name[0];
@@ -104,17 +108,12 @@ class DockerService
                     name = name.substring(1);
                 if(!name)
                     name = this.app.DockerContainer;
-                this.socket.emit('data', `\r\n*** Connected to ${name} ***\r\n`);
+                this.socket.emit('data', `\r\n*** Connected to ${name} ***\r\n\r\n`);
                 stream.on('data', (chunk) => {
                     let data = chunk.toString();
                     this.socket.emit('data', data);
                 });
                 this.socket.on('resize', (data) => {
-                    console.log('### resize', data);
-                    //container.resize({h: data.rows, w: data.cols});
-                    Object.keys(containerByName).forEach(x => {
-                        console.log('### key: ' + x);
-                    })
                     container.resize({h: data.rows, w: data.cols});
                 });
                 stream.on('end', () => {
@@ -123,10 +122,34 @@ class DockerService
 
                 this.socket.on('data', (data) => {
                     if (typeof data !== 'object')
+                    {
                         stream.write(data);
+                        this.resetTimeout();
+                    }
                 });
             });
         });
+    }
+
+    resetTimeout(){
+        if(this.timeOutTimer)
+            clearTimeout(this, this.timeOutTimer);
+        this.timeOutTimer = setTimeout(() => this.closeSocket(), this.AUTO_TIMEOUT);
+    }
+
+    closeSocket()
+    {
+        console.log('### AUTOMATICALLY TIMEOUT OUT DOCKER CONNECTION');
+        try{
+            if(this.socket){
+                this.socket.emit('terminal-closed', '');
+            }
+            if(this.stream){
+                this.stream.end();
+            }
+        }catch(err) {
+            console.log('### error: ', err);
+        }
     }
 }
 

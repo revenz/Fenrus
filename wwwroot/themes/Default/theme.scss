@@ -117,7 +117,9 @@ body {
     }
 }
 
-
-.db-item.is-up-false:not(:hover){
-    opacity:0.3;
+.dashboard.status-indicators 
+{
+    .db-item.is-up-false:not(:hover){
+        opacity:0.3;
+    }
 }

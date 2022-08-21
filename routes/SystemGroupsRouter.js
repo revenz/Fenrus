@@ -117,6 +117,7 @@ class SystemGroupsRouter
                 apps: apps,
                 model:group,
                 systemGroups: systemGroups,
+                docker: [],
                 groups: groups
             }));   
         });

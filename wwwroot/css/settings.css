@@ -202,11 +202,11 @@ select {
 }
 .settings-box p {
   margin: 1rem;
+  white-space: pre-line;
 }
 
 #file-chooser-btn {
   display: block;
-  white-space: pre-line;
 }
 
 .modal-background {
@@ -610,6 +610,16 @@ table .controls [class^=icon-]:hover {
 .initial-config {
   background: rgba(0, 0, 0, 0.8);
   width: min(70vw, 700px);
+}
+.initial-config .header {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
+}
+.initial-config .header .title {
+  flex-grow: 1;
+  font-size: 1.5rem;
+  margin-left: calc(1rem - 1px);
 }
 
 .app-info-item {

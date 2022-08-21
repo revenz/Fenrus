@@ -19,7 +19,7 @@ class DefaultTheme
             }
 
 
-            let json = document.getElementById('theme-settings').value;            
+            let json = document.getElementById('theme-settings').value;          
             this.settings = json ? JSON.parse(json) : {};
 
             window.addEventListener('load', (event) => { this.load()});
@@ -49,15 +49,22 @@ class DefaultTheme
 
         let eleDashboard = document.querySelector('.dashboard');
         if(!eleDashboard)
-            return;
-        let className = 'dashboard ' + this.settings.Placement;
+            return;            
+        let className = eleDashboard.className || '';
+        console.log(eleDashboard.className );
+
+        if(className.indexOf('dashboard') < 0)
+            className += ' dashboard';
+        className = className.replace(/(bottom|left|top|right|vertical|horizontal|center)/g, ' ');
+        className += ' ' + this.settings.Placement;
         className += this.settings.Horizontal ? ' horizontal' : ' vertical';
+        className = className.replace(/  +/g, ' ');
         eleDashboard.className = className;
     
         let animateBackground = this.settings.AnimatedBackground !== false;
         document.body.classList.remove('animate-background');
         document.body.classList.remove('no-animate-background');
-        document.body.classList.add((animateBackground ? '' : 'no-') + 'animate-background');
+        document.body.classList.add((animateBackground ? '' : 'no-') + 'animate-background');        
 
         this.shrinkGroups();            
 

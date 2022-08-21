@@ -43,7 +43,7 @@ class Common
                     themeSettings[setting.Name] = '';
             }
         }
-
+        
         let args = {         
             isHome:req.originalUrl === '/' || !req.originalUrl || req.originalUrl.startsWith('/dashboard'),
             isSettings: req?.originalUrl?.startsWith('/settings'),

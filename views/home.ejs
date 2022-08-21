@@ -23,8 +23,8 @@
     </div>
     <% } %>
 </div>
-
-<div x-uid="<%= dashboard.Uid %>" class="dashboard <%= themeVariables?.ClassName %> <%= settings.ShowGroupTitles === false ? 'hide-group-titles' : '' %>"
+<div x-uid="<%= dashboard.Uid %>" 
+    class="dashboard <%= themeVariables?.ClassName %> <%= settings.ShowGroupTitles === false ? 'hide-group-titles' : '' %> <%= settings.ShowStatusIndicators ? 'status-indicators' : '' %>"
     oncontextmenu="openDefaultContextMenu(event); return false">    
     <%- include('dashboard.ejs') %>
     

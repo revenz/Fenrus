@@ -475,6 +475,6 @@ body {
     justify-content: end;
   }
 }
-.db-item.is-up-false:not(:hover) {
+.dashboard.status-indicators .db-item.is-up-false:not(:hover) {
   opacity: 0.3;
 }

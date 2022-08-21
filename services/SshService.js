@@ -4,6 +4,10 @@ const Settings = require('../models/Settings');
 class SshService 
 {
     socket;
+    conn;
+    timeOutTimer;
+    AUTO_TIMEOUT = 10 * 60 * 1000;
+
     constructor(socket)
     {
         this.socket = socket;
@@ -35,6 +39,7 @@ class SshService
         console.log('server: ', server);
         console.log('username: ', username);
         var conn = new SSHClient();
+        this.conn = conn;
         conn.on('ready', () => {
             this.socket.emit('data', '\r\n*** SSH CONNECTION ESTABLISHED ***\r\n');
             conn.shell({rows: rows, cols: cols}, (err, stream) => {
@@ -77,6 +82,20 @@ class SshService
             username: username,
             password: password
         });
+    }
+
+    resetTimeout(){
+        if(this.timeOutTimer)
+            clearTimeout(this, this.timeOutTimer);
+        this.timeOutTimer = setTimeout(() => this.closeSocket(), this.AUTO_TIMEOUT);
+    }
+
+    closeSocket(){
+        if(!this.conn)
+            return;
+        this.conn.end();
+        if(this.socket)
+            this.socket.close();
     }
 }
 

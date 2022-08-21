@@ -82,6 +82,7 @@ router.get('/:uid', async (req, res) => {
         title: 'Dashboards',
         description: description,
         themes: themes,
+        data: {}, // needed for generic list
         model: {
             dashboard: dashboard,
             groups: groups

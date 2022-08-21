@@ -623,6 +623,7 @@ function openTerminal(type, uid){
                 }
             });
             socket.on('terminal-closed', () => {
+                console.log('got terminal-closed');
                 if(authError && promptForPassword)
                     return;
                 if(mode === 3)
