@@ -7,6 +7,7 @@ const dns = require('dns');
 const net = require('net');
 const fetch = require("node-fetch");
 const {promisify} = require('util');
+const https = require('https');
 
 const dnsLookupP = promisify(dns.lookup);
 
@@ -152,11 +153,28 @@ class UpTimeService
     async isReachable(url)
     {
         try{
-            const req = await fetch(url);
-            let status = req.status; // 200
+            if(/^https:\/\//i.test(url))
+            {
+                console.log('using https agent for: ' + url);
+                const httpsAgent = new https.Agent({
+                    rejectUnauthorized: false,
+                });
+                const req = await fetch(url, {
+                    agent: httpsAgent
+                });
+                let status = req.status; // 200
+            }
+            else
+            {
+                const req = await fetch(url);
+                let status = req.status; // 200
+            }
             return true;
         }
         catch(err) {
+            if(err.code === 'ERR_INVALID_PROTOCOL')
+                return true; // this means its reached, but moaning about http/https, so record it as up
+            console.log('err for ' + url, err);
             return false;
         }
     }

@@ -7,9 +7,9 @@
     <% if(target !== 'IFrame') { %>
         onclick="launch(event, '<%= model.Uid %>')" target="<%= target %>"
         <% } else { %> 
-            onclick="openIframe(event, '<%= JSON.stringify(model) %>'); return false;"
+            onclick="openIframe(event, '<%= JSON.stringify(model).replace(/'/g, "\\'") %>'); return false;"
         <% } %>
-        oncontextmenu="openContextMenu(event, '<%= JSON.stringify(model) %>'); return false;"
+        oncontextmenu="openContextMenu(event, '<%= JSON.stringify(model).replace(/'/g, "\\'") %>'); return false;"
     >
     <div class="inner">
         <div class="icon">

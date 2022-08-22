@@ -17,6 +17,7 @@ RUN apk -U --update --no-cache add --virtual=build-dependencies \
       giflib-dev && \
       # Runtime deps
       apk -U --update --no-cache add \
+      bash \
       nodejs \
       cairo \
       jpeg \
