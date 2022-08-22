@@ -128,6 +128,7 @@ Alpine.data('ItemEditor', () => ({
         this.isItemSaved = false;
         this.EditorApp.Properties = {};
         this.AddingItem = true;
+        this.activeTab = 'General';
         this.model = 
         {
             _Type: 'DashboardApp',
@@ -137,7 +138,8 @@ Alpine.data('ItemEditor', () => ({
             Icon: '',
             Size: 'medium',
             Properties:{},
-            DockerCommand: '/bin/bash'
+            DockerCommand: '/bin/bash',
+            TerminalType: 'SSH'
         };
         this.EditorTitle = 'New Item';                    
         this.Opened = true;
@@ -149,6 +151,7 @@ Alpine.data('ItemEditor', () => ({
         this.activeTab = 'General';
         this.isItemSaved = false;
         this.AddingItem = false;
+        this.activeTab = 'General';
         this.EditorApp.Properties = {};
         let item = groupEditor.model.Items.find(x => x.Uid === uid);
         if(!item)
@@ -164,6 +167,8 @@ Alpine.data('ItemEditor', () => ({
             this.model.Size = 'medium';
         if(!this.model.DockerCommand)
             this.model.DockerCommand = '/bin/bash';
+        if(!this.model.TerminalType)
+            this.model.TerminalType = 'SSH';
         this.NewEdit = this.model._Type === 'DashboardApp';
         this.appChanged(this.model.AppName);
         this.Opened = true;
@@ -187,7 +192,10 @@ Alpine.data('ItemEditor', () => ({
         if(this.validate() === false)
             return;
             
-        return JSON.parse(JSON.stringify(this.model));
+        let result = JSON.parse(JSON.stringify(this.model));
+        if(result._Type !== 'DashboardTerminal')
+            delete result.TerminalType;
+        return result;
     },
     save() {                
         if(this.isDisabled()) return;

@@ -1,0 +1,15 @@
+<a id="<%= model.Uid %>" title="<%= model.Name %>"
+    class="db-item db-terminal db-basic <%= model.Size || 'medium' %>" href="<%= model.Url%>" title="<%= model.Name %>"    
+    onclick="openTerminal(<%= model.TerminalType === 'Docker' ? 2 : 1 %>, '<%= model.Uid %>'); return false;"
+    oncontextmenu="openContextMenu(event, '<%= JSON.stringify(model) %>', ); return false;"
+    >
+    <div class="inner">
+        <div class="icon">
+        <img src="<%= model.Icon || '/favicon.svg' %>?version=<%= version %>" />
+        </div>
+        <div class="content">
+            <div class="title"><%= model.Name %></div>
+        </div>
+        <div class="arrow"></div>
+    </div>
+</a>

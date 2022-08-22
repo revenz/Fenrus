@@ -210,12 +210,10 @@ class SettingsInstance {
     static findAppInstanceInGroup(items, uid){
         if(!items) return null;
         for(let item of items){
-            if(item._Type === 'DashboardApp')
-            {
-                if(item.Uid === uid)
-                    return item;
-            }
-            else if(item._Type === 'DashboardGroup'){
+            if(item.Uid === uid)
+                return item;
+
+            if(item._Type === 'DashboardGroup'){
                 if(item.Items?.length)
                 {
                     let item = SettingsInstance.findAppInstanceInGroup(item.Items, uid);

@@ -230,7 +230,6 @@ function openDefaultContextMenu(event) {
         }
     
         contextMenus['DEFAULT'].open(event);
-
 }
 
 function openContextMenu(event, app){
@@ -248,13 +247,18 @@ function openContextMenu(event, app){
     let docker = ele.getAttribute('x-docker');
     if(!contextMenus[uid])
     {
-        const menuItems = [
-        {
-            content: `${infoIcon}Up-Time`,
-            events: {
-                click: (e) => openUpTime(app)                
-            }
-        },
+        let menuItems = [];
+        if(app._Type !== 'DashboardTerminal'){
+            menuItems.push(
+            {
+                content: `${infoIcon}Up-Time`,
+                events: {
+                    click: (e) => openUpTime(app)                
+                }
+            });
+        }
+
+        menuItems = menuItems.concat([
         {
           content: `${deleteIcon}Delete`
         },
@@ -275,7 +279,7 @@ function openContextMenu(event, app){
                 }
             }
         }
-        ];
+        ]);
         if(ssh){
             menuItems.push(
             {

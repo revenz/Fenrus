@@ -33,11 +33,11 @@
                             <template x-if="EditorApp.Properties?.length > 0">
                                 <button :class="{ 'btn': true, 'active': activeTab === 'Properties'}" x-tab="Properties" @click="changeTab">Properties</button>
                             </template>
-                            <template x-if="model._Type !== 'Dashboard'">
+                            <template x-if="model._Type !== 'Dashboard' && (model._Type !== 'DashboardTerminal' || model.TerminalType === 'SSH')">
                                 <button :class="{ 'btn': true, 'active': activeTab === 'SSH'}" x-tab="SSH" @click="changeTab">SSH</button>
                             </template>
                             <% if(docker?.length) { %>
-                            <template x-if="model._Type !== 'Dashboard'">
+                            <template x-if="model._Type !== 'Dashboard' && (model._Type !== 'DashboardTerminal' || model.TerminalType === 'Docker')">
                                 <button :class="{ 'btn': true, 'active': activeTab === 'Docker'}" x-tab="Docker" @click="changeTab">Docker</button>
                             </template>
                             <% } %>
@@ -53,6 +53,7 @@
                                         <option value="DashboardApp">App</option>
                                         <option value="DashboardLink">Link</option>
                                         <option value="Dashboard">Dashboard</option>
+                                        <option value="DashboardTerminal">Terminal</option>
                                     </select>
                                 </span>
                             </div> 
@@ -88,6 +89,19 @@
                                     </span>
                                 </div>
                             </template>
+                            <template x-if="model._Type === 'DashboardTerminal'">
+                                <div class="setting">
+                                    <span class="label">Type</span>
+                                    <span class="value">                                
+                                        <select :disabled="isDisabled()" x-model="model.TerminalType" @keydown.enter="save">
+                                            <% if(docker?.length) { %>
+                                            <option value="Docker">Docker</option>
+                                            <% } %>
+                                            <option value="SSH">SSH</option>
+                                        </select>
+                                    </span>
+                                </div>
+                            </template>
                             <template x-if="model._Type != 'Dashboard'">
                                 <div class="setting">
                                     <span class="label">Name</span>
@@ -96,7 +110,7 @@
                                     </span>
                                 </div>
                             </template>
-                            <template x-if="model._Type != 'Dashboard'">                    
+                            <template x-if="model._Type != 'Dashboard' && model._Type != 'DashboardTerminal'">                    
                                 <div class="setting">
                                     <span class="label">Target</span>
                                     <span class="value">
@@ -107,7 +121,7 @@
                                     </span>
                                 </div> 
                             </template>
-                            <template x-if="model._Type != 'Dashboard'">
+                            <template x-if="model._Type != 'Dashboard' && model._Type != 'DashboardTerminal'">
                                 <div class="setting">
                                     <span class="label">URL</span>
                                     <span class="value">
@@ -250,7 +264,7 @@
                             </div>
                         </template>
 
-                        <template x-if="model._Type !== 'Dashboard'">
+                        <template x-if="model._Type !== 'Dashboard' && (model._Type !== 'DashboardTerminal' || model.TerminalType === 'SSH')">
                             <div :class="{ 'tabpage': true, 'active': activeTab === 'SSH'}">     
                                 <p>By configuring SSH for this item, this will allow you to terminal into the item.
                                     
@@ -280,7 +294,7 @@
                         </template>
 
                         <% if(docker?.length) { %>
-                        <template x-if="model._Type !== 'Dashboard'">
+                        <template x-if="model._Type !== 'Dashboard' && (model._Type !== 'DashboardTerminal' || model.TerminalType === 'Docker')">
                             <div :class="{ 'tabpage': true, 'active': activeTab === 'Docker'}">
                                 <p>Here you can configure Docker settings for this item, which will allow you to terminal into the docker container.
 
