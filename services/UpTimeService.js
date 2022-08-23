@@ -103,6 +103,8 @@ class UpTimeService
         if(!UpTimeService.UserApps[user.Uid])
             UpTimeService.UserApps[user.Uid] = {};
         for(let item of toCheck){
+            if(!item?.Url || /^http(s)?:/i.test(item.Url) !== true)
+                continue;
             tasks.push(new Promise(async (resolve, reject) =>
             {
                 try
