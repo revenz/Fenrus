@@ -108,7 +108,7 @@ class UpTimeService
                 try
                 {
                     let isUp = await this.isReachable(item.Url);
-                    UpTimeService.UserApps[user.Uid][item.Url] = isUp;
+                    UpTimeService.UserApps[user.Uid][item.Url] = isUp === true;
                     await this.recordUpTime(user.Uid, item.Uid, date, isUp)
                 }catch(err) {
                     this.log('error in checking uptime: ' + err);
@@ -140,8 +140,13 @@ class UpTimeService
         }
         uptimes.unshift({
             date: date,
-            up: isUp
+            up: isUp === true,
+            message: isUp === true ? null : isUp
         });
+
+        for(let i=10;i<uptimes.length;i++)
+            delete uptimes[i].message; // only keep last 10 messages
+
         const maxItems = (60 / 5) * 24 * 7; // 60 / 5 == number of 5mins in an hour, * 24 == in a day, * 7 in a week
         if(uptimes.length > maxItems)
             uptimes.length = maxItems;
@@ -155,7 +160,6 @@ class UpTimeService
         try{
             if(/^https:\/\//i.test(url))
             {
-                console.log('using https agent for: ' + url);
                 const httpsAgent = new https.Agent({
                     rejectUnauthorized: false,
                 });
@@ -174,8 +178,7 @@ class UpTimeService
         catch(err) {
             if(err.code === 'ERR_INVALID_PROTOCOL')
                 return true; // this means its reached, but moaning about http/https, so record it as up
-            console.log('err for ' + url, err);
-            return false;
+            return ('' + err).replace(', reason:', '\nreason:');
         }
     }
 

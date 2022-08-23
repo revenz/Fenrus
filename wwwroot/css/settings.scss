@@ -499,66 +499,6 @@ a.subpage{
     }
 }
 
-
-table {
-    border: solid 1px var(--input-background);
-    padding:0;
-    margin:0;
-    width:100%;
-    border-collapse: collapse;
-    thead th {            
-        font-weight: 600;
-        background: rgba(var(--input-background-rgb), 0.3);
-        border:none;
-        border-bottom: solid 1px var(--input-background);
-        text-align: left;
-        height: 2.2rem;
-        line-height: 2.2rem;
-    }
-    tr > :first-child {
-        padding-left:1rem;
-    }
-    td {
-        height: 3rem;
-        line-height: 3rem;
-    }
-    .name {
-        a {
-            color:var(--color);
-            text-decoration: none;
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-    }
-    .switch {
-        width:8rem;
-        text-align: center;
-        label {            
-            position: relative;
-            top: -2px;
-        }
-    }
-    .controls {
-        width:10rem;
-        text-align: right;
-        [class^="icon-"] {
-            color:var(--color);
-            text-decoration: none;
-            padding-top:3px;
-            font-size:1.5rem;
-            margin-right:0.5rem;
-            cursor:pointer;
-            position: relative;
-            top:0.35rem;
-            opacity: 0.5;
-            &:hover {
-                opacity: 1;
-            }
-        }       
-    }    
-}
-
 .modal-wrapper {
     display:none;
     &.visible {

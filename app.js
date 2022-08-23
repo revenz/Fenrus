@@ -8,6 +8,7 @@ const cron = require('node-cron');
 const UpTimeService = require('./services/UpTimeService');
 const JwtVerifier = require('./helpers/JwtVerifier');
 const Settings= require('./models/Settings');
+const Minifier = require('./helpers/Minifier');
 
 // middleware
 const morgan = require('morgan');
@@ -75,6 +76,8 @@ for(let dir of ['./wwwroot/images/icons', './wwwroot/images/backgrounds', './dat
     if(fs.existsSync(dir) == false)
         fs.mkdirSync(dir, {recursive: true});
 }
+
+new Minifier().minifyJavascript();
 
 // express app
 const app = express();

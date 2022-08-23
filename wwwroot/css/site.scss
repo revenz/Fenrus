@@ -497,3 +497,123 @@ body.terminal .main-content {
         }
     }
 }
+
+
+table {
+    border: solid 1px var(--input-background);
+    padding:0;
+    margin:0;
+    width:100%;
+    border-collapse: collapse;
+    thead th {            
+        font-weight: 600;
+        background: rgba(var(--input-background-rgb), 0.3);
+        border:none;
+        border-bottom: solid 1px var(--input-background);
+        text-align: left;
+        height: 2.2rem;
+        line-height: 2.2rem;
+    }
+    tr > :first-child {
+        padding-left:1rem;
+    }
+    td {
+        height: 3rem;
+        line-height: 3rem;
+    }
+    .name {
+        a {
+            color:var(--color);
+            text-decoration: none;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+    .switch {
+        width:8rem;
+        text-align: center;
+        label {            
+            position: relative;
+            top: -2px;
+        }
+    }
+    .controls {
+        width:10rem;
+        text-align: right;
+        [class^="icon-"] {
+            color:var(--color);
+            text-decoration: none;
+            padding-top:3px;
+            font-size:1.5rem;
+            margin-right:0.5rem;
+            cursor:pointer;
+            position: relative;
+            top:0.35rem;
+            opacity: 0.5;
+            &:hover {
+                opacity: 1;
+            }
+        }       
+    }    
+}
+
+#up-time-chart-container {
+    flex-grow:1;
+    display:flex;
+    flex-direction: column;
+    max-height: calc(100% - 4rem);
+}
+.up-time-table-wrapper {
+    flex-grow:1;
+    overflow: auto;
+    padding:1rem;
+    position:relative;
+    max-height:100%;
+}
+.up-time-table {
+    width:unset;
+    height:unset;
+    td {
+        line-height: unset !important;        
+        white-space: pre-line;
+    }
+    .date {
+        width:4.5rem;
+    }
+    th {
+        background:#131B1C;
+    }
+    thead, tbody tr {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+    tbody {
+        display: block;
+        overflow-y: auto;
+        table-layout: fixed;
+        position: absolute;
+        top: calc(3rem + 8px);
+        bottom: 1rem;
+        left: 1rem;
+        right: 1rem;
+        border: solid 1px var(--border-color);
+        border-top: none;
+    }
+    td.up, th.up  {
+        width: 4rem;
+        text-align: center;
+        span.up {
+            color:var(--success);
+        }
+        span.down {
+            color:Var(--error);
+        }
+    }
+    tbody {
+        tr + tr {
+            border-top:solid 1px var(--border-color);
+        }
+    }
+}

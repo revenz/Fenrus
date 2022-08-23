@@ -494,63 +494,6 @@ a.subpage span {
   color: var(--color);
 }
 
-table {
-  border: solid 1px var(--input-background);
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  border-collapse: collapse;
-}
-table thead th {
-  font-weight: 600;
-  background: rgba(var(--input-background-rgb), 0.3);
-  border: none;
-  border-bottom: solid 1px var(--input-background);
-  text-align: left;
-  height: 2.2rem;
-  line-height: 2.2rem;
-}
-table tr > :first-child {
-  padding-left: 1rem;
-}
-table td {
-  height: 3rem;
-  line-height: 3rem;
-}
-table .name a {
-  color: var(--color);
-  text-decoration: none;
-}
-table .name a:hover {
-  text-decoration: underline;
-}
-table .switch {
-  width: 8rem;
-  text-align: center;
-}
-table .switch label {
-  position: relative;
-  top: -2px;
-}
-table .controls {
-  width: 10rem;
-  text-align: right;
-}
-table .controls [class^=icon-] {
-  color: var(--color);
-  text-decoration: none;
-  padding-top: 3px;
-  font-size: 1.5rem;
-  margin-right: 0.5rem;
-  cursor: pointer;
-  position: relative;
-  top: 0.35rem;
-  opacity: 0.5;
-}
-table .controls [class^=icon-]:hover {
-  opacity: 1;
-}
-
 .modal-wrapper {
   display: none;
 }

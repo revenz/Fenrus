@@ -1579,3 +1579,120 @@ body.terminal .main-content {
   width: 4rem;
   top: -3px;
 }
+
+table {
+  border: solid 1px var(--input-background);
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+table thead th {
+  font-weight: 600;
+  background: rgba(var(--input-background-rgb), 0.3);
+  border: none;
+  border-bottom: solid 1px var(--input-background);
+  text-align: left;
+  height: 2.2rem;
+  line-height: 2.2rem;
+}
+table tr > :first-child {
+  padding-left: 1rem;
+}
+table td {
+  height: 3rem;
+  line-height: 3rem;
+}
+table .name a {
+  color: var(--color);
+  text-decoration: none;
+}
+table .name a:hover {
+  text-decoration: underline;
+}
+table .switch {
+  width: 8rem;
+  text-align: center;
+}
+table .switch label {
+  position: relative;
+  top: -2px;
+}
+table .controls {
+  width: 10rem;
+  text-align: right;
+}
+table .controls [class^=icon-] {
+  color: var(--color);
+  text-decoration: none;
+  padding-top: 3px;
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  position: relative;
+  top: 0.35rem;
+  opacity: 0.5;
+}
+table .controls [class^=icon-]:hover {
+  opacity: 1;
+}
+
+#up-time-chart-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100% - 4rem);
+}
+
+.up-time-table-wrapper {
+  flex-grow: 1;
+  overflow: auto;
+  padding: 1rem;
+  position: relative;
+  max-height: 100%;
+}
+
+.up-time-table {
+  width: unset;
+  height: unset;
+}
+.up-time-table td {
+  line-height: unset !important;
+  white-space: pre-line;
+}
+.up-time-table .date {
+  width: 4.5rem;
+}
+.up-time-table th {
+  background: #131B1C;
+}
+.up-time-table thead, .up-time-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.up-time-table tbody {
+  display: block;
+  overflow-y: auto;
+  table-layout: fixed;
+  position: absolute;
+  top: calc(3rem + 8px);
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  border: solid 1px var(--border-color);
+  border-top: none;
+}
+.up-time-table td.up, .up-time-table th.up {
+  width: 4rem;
+  text-align: center;
+}
+.up-time-table td.up span.up, .up-time-table th.up span.up {
+  color: var(--success);
+}
+.up-time-table td.up span.down, .up-time-table th.up span.down {
+  color: Var(--error);
+}
+.up-time-table tbody tr + tr {
+  border-top: solid 1px var(--border-color);
+}
