@@ -7,6 +7,13 @@
         <span class="icon-fenrus coloured"></span>
         About
     </span>
+    <% if(user?.IsAdmin) { %>
+        <span class="buttons" x-data="AboutConfig">
+            <button class="btn" onclick="document.getElementById('file-chooser').click()">Import Config</button>
+            <button class="btn" @click="exportConfig">Export Config</button>
+            <input style="display:none" id="file-chooser" class="file-chooser" type="file" accept="application/json" @change="importConfig">
+        </span>
+    <% } %>
 </div>
 
 <div class="settings-box">
@@ -38,4 +45,43 @@
     </div>
 </div>
 
+<% if(user?.IsAdmin) { %>
+<script>
+
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('AboutConfig', () => ({
+            importConfig(event){
+                let files = event.target.files;
+                if (files.length === 0) {
+                    console.log('No file is selected');
+                    return;
+                }
+
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    let json = event.target.result;
+                    fetch('/settings/backup/import-config', {
+                        method: 'POST',     
+                        headers: {
+                            'content-type': 'application/json'
+                        },                    
+                        body: json
+                    }).then(() => {
+                        toast('Backup imported', true);
+                    });
+                };
+                reader.readAsText(files[0]);
+            },
+            exportConfig(){
+                const link = document.createElement('a');
+                link.href = '/settings/backup/export-config?ts=' + new Date().getTime();
+                link.download = 'Fenrus-' + new Date().toLocaleDateString() + '.json';
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+            }
+        }))
+    });
+</script>
+<% } %>
 <%- include('../foot.ejs') %>

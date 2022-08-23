@@ -11,6 +11,7 @@ const FenrusRouter = require('./FenrusRouter');
 const UpTimeRouter = require('./UpTimeRouter');
 const BackupRouter = require('./BackupRouter');
 const DockerRouter = require('./DockerRouter');
+const LoggedInMiddleware = require('../middleware/LoggedInMiddleware');
 
 class SettingsRouter extends FenrusRouter 
 {
@@ -30,6 +31,7 @@ class SettingsRouter extends FenrusRouter
 
     init() 
     {  
+        this.router.use(LoggedInMiddleware);
         this.router.get('/', async(req, res) => await this.safeAsync('index', req, res));
         this.router.get('/about', (req, res) => this.safe('about', req, res));
         this.router.post('/', async(req, res) => await this.safeAsync('save', req, res));

@@ -2,6 +2,10 @@ const express = require('express');
 const common = require('./Common');
 const fsPromises = require("fs/promises");
 const ImageHelper = require('../helpers/ImageHelper');
+const AdminMiddleware = require('../middleware/AdminMiddleware');
+const UserManager = require('../helpers/UserManager');
+const Settings = require('../models/Settings');
+const System = require('../models/System');
 
 class BackupRouter{
     
@@ -26,6 +30,10 @@ class BackupRouter{
         this.router.get('/', async (req, res) => await this.index(req, res));
         this.router.get('/export', async (req, res) => await this.export(req, res));
         this.router.post('/import', async (req, res) => await this.import(req, res));
+        
+        this.router.use(AdminMiddleware);
+        this.router.get('/export-config', async (req, res) => await this.exportConfig(req, res));
+        this.router.post('/import-config', async (req, res) => await this.importConfig(req, res));
     }
 
     async index(req, res) 
@@ -50,6 +58,26 @@ class BackupRouter{
     async export(req, res) {
         console.log('##### exporting !!!!');
         let settings = await this.getSettings(req);
+        let data = await this.exportSettings(settings);
+        console.log('data', data);
+        let json = JSON.stringify(data, null, 2);
+        res.writeHead(200, {
+          'Content-Disposition': `attachment; filename="Fenrus-${new Date().toLocaleDateString()}.json"`,
+          'Content-Type': 'application/json',
+        })
+        res.write(json);
+        res.end();        
+    }
+
+    async exportForUser(uid) {
+        let settings = await Settings.getForUser(uid);
+        return await this.exportSettings(settings);
+    }
+
+    async exportSettings(settings)
+    {
+        if(!settings)
+            return {};
         let json = settings.toJson();
         let cloned = JSON.parse(json);
         if(cloned.BackgroundImage)
@@ -79,17 +107,10 @@ class BackupRouter{
                 }
             }
         }
-        json = JSON.stringify(cloned, null, 2);
-        res.writeHead(200, {
-          'Content-Disposition': `attachment; filename="Fenrus-${new Date().toLocaleDateString()}.json"`,
-          'Content-Type': 'application/json',
-        })
-        res.write(json);
-        res.end();        
+        return cloned;
     }
 
     async import(req, res) {
-        console.log('###### IMPORTING2!');
         let settings = await this.getSettings(req);        
         let model = req.body;
         if(!model.Revision)
@@ -97,18 +118,31 @@ class BackupRouter{
             res.status(400).send('Invalid data').end();
             return;
         }
+        await this.importConfig(settings, model);
 
+        res.status(200).send('').end();
+    }
+
+    async importForUser(uid, config)
+    {
+        let settings = await Settings.getForUser(uid);
+        await this.importSetting(settings, config);
+    }
+
+    async importSetting(settings, config)
+    {
+        console.log('import config');
         let imageHelper = new ImageHelper();
 
-        if(model.BackgroundImageBase64)
+        if(config.BackgroundImageBase64)
         {
             console.log('#### IMPORT CUSTOM BACKGROUND');
             await fsPromises.writeFile('./wwwroot' + item.BackgroundImage, item.BackgroundImageBase64, { encoding: 'base64'});    
         }
 
-        if(model?.Groups?.length)
+        if(config?.Groups?.length)
         {
-            for(let grp of model.Groups)
+            for(let grp of config.Groups)
             {
                 if(!grp?.Items?.length)
                     continue;
@@ -132,9 +166,9 @@ class BackupRouter{
             }
         }
 
-        if(model?.SearchEngines?.length)
+        if(config?.SearchEngines?.length)
         {
-            for(let item of model.SearchEngines)
+            for(let item of config.SearchEngines)
             {
                 if(item.IconBase64){
                     console.log('#### IMPORT CUSTOM ICON: ' + item.Name);
@@ -144,22 +178,98 @@ class BackupRouter{
             }
         }
 
-        console.log('#### IMPORT groups: ' + model.Groups?.length);
-        console.log('#### IMPORT SearchEngines: ' + model.SearchEngines?.length);
-        console.log('#### IMPORT Dashboards: ' + model.Dashboards?.length);
-        settings.AccentColor = model.AccentColor;
-        settings.Theme = model.Theme;
-        settings.LinkTarget = model.LinkTarget;
-        settings.ShowGroupTitles = model.ShowGroupTitles;
-        settings.CollapseMenu = model.CollapseMenu;
-        settings.Groups = model.Groups;
-        settings.Dashboards = model.Dashboards;
-        settings.ThemeSettings = model.ThemeSettings;
-        settings.ShowSearch = model.ShowSearch;
-        settings.SearchEngines = model.SearchEngines;
-        settings.ShowStatusIndicators = model.ShowStatusIndicators;
+        console.log('#### IMPORT groups: ' + config.Groups?.length);
+        console.log('#### IMPORT SearchEngines: ' + config.SearchEngines?.length);
+        console.log('#### IMPORT Dashboards: ' + config.Dashboards?.length);
+        settings.AccentColor = config.AccentColor;
+        settings.Theme = config.Theme;
+        settings.LinkTarget = config.LinkTarget;
+        settings.ShowGroupTitles = config.ShowGroupTitles;
+        settings.CollapseMenu = config.CollapseMenu;
+        settings.Groups = config.Groups;
+        settings.Dashboards = config.Dashboards;
+        settings.ThemeSettings = config.ThemeSettings;
+        settings.ShowSearch = config.ShowSearch;
+        settings.SearchEngines = config.SearchEngines;
+        settings.ShowStatusIndicators = config.ShowStatusIndicators;
         await settings.save();
-        res.status(200).send('').end();
+    }
+
+    
+    /**
+     * Exports the entire Fenrus configuration, including users and system settings
+     */
+    async exportConfig(req, res) {
+        let users = UserManager.getInstance().Users;
+        let system = System.getInstance();
+        let json = system.toJson();
+        let config = JSON.parse(json);
+        delete config.Revision;
+
+        config.Users = [];
+        for(let user of users)
+        {
+            user.Config = await this.exportForUser(user.Uid);
+            config.Users.push(user);
+        }
+        json = JSON.stringify(config, null, 2);
+        res.writeHead(200, {
+          'Content-Disposition': `attachment; filename="Fenrus-${new Date().toLocaleDateString()}.json"`,
+          'Content-Type': 'application/json',
+        })
+        res.write(json);
+        res.end();
+    }
+
+    /**
+     * Imports the entire Fenrus configuration, including users and system settings
+     */
+    async importConfig(req, res) {   
+        console.log('### importing config', res);
+        let model = req.body;
+        if(!model){
+            return res.status(400).send('').end();
+        }
+        console.log(model);
+        let system = System.getInstance();
+        system.AuthStrategy = model.AuthStrategy;
+        system.AllowRegister = model.AllowRegister;
+        system.AllowGuest = model.AllowGuest;
+        let userManager = UserManager.getInstance();
+
+        if(model.SearchEngines)
+            system.SearchEngines = model.SearchEngines;
+        if(model.Docker)
+            system.Docker = model.Docker;
+        if(model.Properties)
+            system.Properties = model.Properties;
+        if(model.GuestDashboard)
+            system.GuestDashboard = model.GuestDashboard;
+        if(model.SystemGroups)
+            system.SystemGroups = model.SystemGroups;
+
+        if(model.Users)
+        {
+            var users = [];
+            for(let user of model.Users)
+            {
+                if(!user?.Uid || !user?.Config)
+                    continue;
+
+                users.push({
+                    Uid: user.Uid,
+                    Username: user.Username,
+                    Password: user.Password,
+                    IsAdmin: user.IsAdmin
+                });
+                console.log('restoring user', user.Uid, user.Name);
+                await this.importForUser(user.Uid, user.Config);
+            }
+            userManager.Users = users;
+            await userManager.save();
+        }
+        console.log('### Backup restored');
+        res.status(200).end();
     }
 }
   

@@ -142,6 +142,8 @@ class UpTime
                 {
                     if(col === 'Date')
                         value = new Date(value).toLocaleTimeString();                    
+                    if(!value && col === 'Message' && d.up)
+                        value = 'Success';
                     td.innerText = value;
                 }
             }

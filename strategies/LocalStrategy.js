@@ -91,7 +91,6 @@ class LocalStrategy
                 });
                 return;
             }
-
             
             let manager = UserManager.getInstance();
             let user;
