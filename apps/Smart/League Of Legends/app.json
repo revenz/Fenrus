@@ -1,0 +1,30 @@
+{
+  "Name": "League Of Legends",
+  "Icon": "icon.png",
+  "TestFunction": true,
+  "Interval": 45,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://www.leagueoflegends.com/"
+  },
+  "Properties": [
+    {
+      "Name": "API Key",
+      "Id": "apiKey",
+      "Type": "string",
+      "Help" : "API Key from https://developer.riotgames.com/ (requires you to setup a personal App)"
+    },
+	{
+      "Name": "Region",
+      "Id": "region",
+      "Type": "string",
+      "Help" : "Region type from https://developer.riotgames.com/docs/lol 'Platform Routing Values' eg 'NA1' or 'EUW1'"
+    },
+	{
+      "Name": "SummonerName",
+      "Id": "summonerName",
+      "Type": "string",
+      "Help" : "The League Of Legends Summoner Name to monitor"
+    }
+  ]
+}
