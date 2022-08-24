@@ -255,7 +255,6 @@ class BackupRouter{
         }
         console.log(model);
         let system = System.getInstance();
-        system.AuthStrategy = model.AuthStrategy;
         system.AllowRegister = model.AllowRegister;
         system.AllowGuest = model.AllowGuest;
         let userManager = UserManager.getInstance();

@@ -56,6 +56,7 @@
                     console.log('No file is selected');
                     return;
                 }
+                showBlocker('Importing Configuration');
 
                 let reader = new FileReader();
                 reader.onload = function(event) {
@@ -67,18 +68,23 @@
                         },                    
                         body: json
                     }).then(() => {
+                        hideBlocker();
                         toast('Backup imported', true);
                     });
                 };
                 reader.readAsText(files[0]);
             },
             exportConfig(){
+                showBlocker('Exporting Configuration');
                 const link = document.createElement('a');
                 link.href = '/settings/backup/export-config?ts=' + new Date().getTime();
                 link.download = 'Fenrus-' + new Date().toLocaleDateString() + '.json';
                 document.body.appendChild(link)
                 link.click()
                 document.body.removeChild(link)
+                setTimeout(() => {                    
+                    hideBlocker();
+                }, 3000);
             }
         }))
     });
