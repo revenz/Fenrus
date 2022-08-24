@@ -85,29 +85,49 @@ class BackupRouter{
             console.log('#### BACKGROUND IMAGE: ' + cloned.BackgroundImage)
             cloned.BackgroundImageBase64 = await fsPromises.readFile('./wwwroot/' + cloned.BackgroundImage, {encoding: 'base64'});
         }
-        if(cloned.Groups?.length)
-        {
-            for(let grp of cloned.Groups)
-            {
-                if(!grp.Items?.length)
-                    continue;
-                for(let item of grp.Items){
-                    if(item.Icon && item.Icon.indexOf('apps') < 0){
-                        item.IconBase64 = await fsPromises.readFile('./wwwroot/' + item.Icon, {encoding: 'base64'});
-                    }
-                }
-            }
-        }
-        if(cloned.SearchEngines?.length)
-        {
-            for(let item of cloned.SearchEngines)
-            {
-                if(item.Icon){
-                    item.IconBase64 = await fsPromises.readFile('./wwwroot/' + item.Icon, {encoding: 'base64'});
-                }
-            }
-        }
+        await this.prepareCollectionForExport(cloned.Groups);
+        await this.prepareCollectionForExport(cloned.SearchEngines);
         return cloned;
+    }
+
+    async prepareItemForExport(item) 
+    {
+        if(item.Icon && item.Icon.indexOf('apps') < 0)
+        {
+            item.IconBase64 = await fsPromises.readFile('./wwwroot/' + item.Icon, {encoding: 'base64'});
+        }
+    }
+
+    async prepareItemForImport(item) 
+    {
+        if(item.IconBase64)
+        {
+            await fsPromises.writeFile('./wwwroot' + item.Icon, item.IconBase64, { encoding: 'base64'});    
+            delete item.IconBase64;
+        }
+    }
+
+    async prepareCollectionForExport(collection)
+    {
+        if(!collection?.length)
+            return;
+        for(let item of collection){
+            if(item.Items?.length)
+                this.prepareCollectionForExport(item.Items);
+            if(item.Icon)
+                await this.prepareItemForExport(item);
+        }
+    }
+    async prepareCollectionForImport(collection)
+    {
+        if(!collection?.length)
+            return;
+        for(let item of collection){
+            if(item.Items?.length)
+                this.prepareItemForImport(item.Items);
+            if(item.Icon)
+                await this.prepareItemForImport(item);
+        }
     }
 
     async import(req, res) {
@@ -206,6 +226,9 @@ class BackupRouter{
         let config = JSON.parse(json);
         delete config.Revision;
 
+        await this.prepareCollectionForExport(config.SearchEngines);
+        await this.prepareCollectionForExport(config.SystemGroups);
+
         config.Users = [];
         for(let user of users)
         {
@@ -237,8 +260,6 @@ class BackupRouter{
         system.AllowGuest = model.AllowGuest;
         let userManager = UserManager.getInstance();
 
-        if(model.SearchEngines)
-            system.SearchEngines = model.SearchEngines;
         if(model.Docker)
             system.Docker = model.Docker;
         if(model.Properties)
@@ -246,7 +267,15 @@ class BackupRouter{
         if(model.GuestDashboard)
             system.GuestDashboard = model.GuestDashboard;
         if(model.SystemGroups)
+        {
+            this.prepareCollectionForImport(model.SystemGroups);
             system.SystemGroups = model.SystemGroups;
+        }
+        if(model.SearchEngines)
+        {
+            this.prepareCollectionForImport(model.SearchEngines);
+            system.SearchEngines = model.SearchEngines;
+        }
 
         if(model.Users)
         {
