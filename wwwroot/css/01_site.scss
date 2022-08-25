@@ -1,13 +1,4 @@
-﻿@use 'fonticons';
-@use 'carousel';
-@use 'toggle-switchy';
-@use 'button';
-@use 'main-menu';
-@use 'contextmenu';
-@use 'scroller';
-@use 'apps';
-
-html {
+﻿html {
     font-size: 14px;
     font-family:sans-serif;
     position: relative;
@@ -617,7 +608,6 @@ table {
         }
     }
 }
-
 
 
 .blocker {

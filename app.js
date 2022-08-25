@@ -77,7 +77,9 @@ for(let dir of ['./wwwroot/images/icons', './wwwroot/images/backgrounds', './dat
         fs.mkdirSync(dir, {recursive: true});
 }
 
-new Minifier().minifyJavascript();
+var minifier = new Minifier();
+minifier.minifyJavascript();
+minifier.minifyCss();
 
 // express app
 const app = express();

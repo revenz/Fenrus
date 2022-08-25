@@ -4,9 +4,9 @@
         <div class="title">
             <span x-text="model.Name"><%= model.Name %></span>
             <div class="group-controls">
-                <span class="move-up icon-angle-up" title="Move Up" onclick="moveGroup('<%= model.Uid %>', true)"></span>
-                <span class="move-down icon-angle-down" title="Move Down" onclick="moveGroup('<%= model.Uid %>', false)"></span>
-                <span class="remove-group icon-trash" title="Remove Group" onclick="removeGroup('<%= model.Uid %>', )"></span>
+                <span class="move-up fa-solid fa-angle-up" title="Move Up" onclick="moveGroup('<%= model.Uid %>', true)"></span>
+                <span class="move-down fa-solid fa-angle-down" title="Move Down" onclick="moveGroup('<%= model.Uid %>', false)"></span>
+                <span class="remove-group fa-solid fa-trash" title="Remove Group" onclick="removeGroup('<%= model.Uid %>', )"></span>
             </div>
         </div>
     <% } %>

@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "devStart": "nodemon app.js  --ignore ./data/ --ignore fenrus.js"
+    "devStart": "nodemon app.js  --ignore ./data/ --ignore _fenrus.js --ignore _fenrus.css --ext js,css,scss"
   },
   "keywords": [],
   "dependencies": {
@@ -24,6 +24,7 @@
     "morgan": "^1.10.0",
     "node-cron": "^3.0.1",
     "node-fetch": "^2.6.7",
+    "sass": "^1.54.5",
     "socket.io": "^4.5.1",
     "ssh2": "^1.11.0",
     "uglify-js": "^3.17.0",

@@ -9,13 +9,13 @@
         </li>
         <li>
            <a href="/">
-                <span class="icon-home"></span>
+                <span class="fa-solid fa-house"></span>
                <span class="title">Home</span>
             </a>
         </li>
         <li <%= pageUrl == '/settings' ? 'class=active' : '' %>>
            <a href="/settings">
-                <span class="icon-sliders"></span>
+                <span class="fa-solid fa-sliders"></span>
                <span class="title">General</span>
             </a>
         </li>
@@ -24,19 +24,19 @@
         </li>
         <li <%= /^\/settings\/dashboards(\/[a-z0-9\-]{36})?$/.test(pageUrl) ? 'class=active' : '' %>>
            <a href="/settings/dashboards">
-                <span class="icon-th-large"></span>
+                <span class="fa-solid fa-table-cells-large"></span>
                <span class="title">Dashboards</span>
             </a>
         </li>
         <li <%= /^\/settings\/groups(\/[a-z0-9\-]{36})?$/.test(pageUrl) ? 'class=active' : '' %>>
            <a href="/settings/groups">
-                <span class="icon-puzzle-piece"></span>
+                <span class="fa-solid fa-puzzle-piece"></span>
                <span class="title">Groups</span>
             </a>
         </li>
         <li <%= /^\/settings\/search-engines(\/[a-z0-9\-]{36})?$/.test(pageUrl) ? 'class=active' : '' %>>
            <a href="/settings/search-engines">
-                <span class="icon-search"></span>
+                <span class="fa-solid fa-magnifying-glass"></span>
                <span class="title">Search Engines</span>
             </a>
         </li>
@@ -47,31 +47,31 @@
         </li>
         <li <%= pageUrl == '/settings/dashboards/Guest' ? 'class=active' : '' %>>
            <a href="/settings/dashboards/Guest">
-                <span class="icon-th-large"></span>
+                <span class="fa-solid fa-table-cells-large"></span>
                <span class="title">Guest Dashboard</span>
             </a>
         </li>        
         <li <%= /^\/settings\/system\/groups(\/[a-z0-9\-]{36})?$/.test(pageUrl) ? 'class=active' : '' %>>
            <a href="/settings/system/groups">
-                <span class="icon-puzzle-piece"></span>
+                <span class="fa-solid fa-puzzle-piece"></span>
                <span class="title">System Groups</span>
             </a>
         </li>
         <li <%= /^\/settings\/system\/search-engines(\/[a-z0-9\-]{36})?$/.test(pageUrl) ? 'class=active' : '' %>>
            <a href="/settings/system/search-engines">
-                <span class="icon-search"></span>
+                <span class="fa-solid fa-magnifying-glass"></span>
                <span class="title">System Search Engines</span>
             </a>
         </li>
         <li <%= pageUrl == '/settings/users' ? 'class=active' : '' %>>
            <a href="/settings/users">
-                <span class="icon-users"></span>
+                <span class="fa-solid fa-user-group"></span>
                <span class="title">Users</span>
             </a>
         </li>
         <li <%= pageUrl == '/settings/docker' ? 'class=active' : '' %>>
            <a href="/settings/system/docker">
-                <span class="icon-microchip"></span>
+                <span class="fa-solid fa-microchip"></span>
                <span class="title">Docker</span>
             </a>
         </li>
