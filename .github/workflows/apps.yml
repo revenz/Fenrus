@@ -15,11 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      #- name: action-zip
-      #  uses: montudor/action-zip@v1.0.0
-      #  with:
-      #    args: zip -qq -r apps.zip apps/
       
+      # delete old apps.zip
+      - name: Remove File
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: /apps.zip
+      
+      # zip the apps
       - name: Install zip
         uses: montudor/action-zip@v1
       - name: Zip output
