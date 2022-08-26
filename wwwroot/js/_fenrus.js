@@ -5553,6 +5553,7 @@ function openTerminal(type, uid){
         const MODE_TERMINAL = 3;
         let mode = !!type ? MODE_TERMINAL : MODE_SERVER; 
         let genericSsh = mode === MODE_SERVER;
+        let promptForUser = false;
         let promptForPassword = false;
         let authError = false;
 
@@ -5658,7 +5659,7 @@ function openTerminal(type, uid){
             });
             socket.on('terminal-closed', () => {
                 console.log('got terminal-closed');
-                if(authError && promptForPassword)
+                if(authError && (promptForPassword || promptForUser))
                     return;
                 if(mode === 3)
                     term.write('\r\closed\r\n');
@@ -5669,6 +5670,12 @@ function openTerminal(type, uid){
                 term.write('\r\n' + error + '\r\n');
                 socket.close();
                 closeTerminal(5000);
+            });
+            socket.on('request-user', (args) => {
+                server = args[0];
+                promptForUser = true;
+                term.write(`\r\nServer: ${server}\r\n`);
+                changeMode(1)
             });
             socket.on('request-pwd', (args) => {
                 server = args[0];
@@ -5684,8 +5691,11 @@ function openTerminal(type, uid){
                     term.write('\r\nFailed to authenticate: ' + error + '\r\n');
                     changeMode(1);
                 }
+                else if(promptForUser) {
+                    term.write('\r\n' + error + '\r\n');
+                    changeMode(1);
+                }
                 else if(promptForPassword){
-                    console.log('promptForPassword', promptForPassword);
                     term.write('\r\n' + error + '\r\n');
                     changeMode(2);
                 }

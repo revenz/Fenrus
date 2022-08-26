@@ -66,7 +66,7 @@ UserManager.getInstance().load();
 if(fs.existsSync('./buildnum.txt')){            
     let build = fs.readFileSync('./buildnum.txt', { encoding: 'utf-8'});
     if(build){
-        Globals.Build = build.trim();        
+        Globals.Build = build.replace(/[^\d]/g, '');
         console.log('Version: ', Globals.getVersion());
     }
 }
@@ -272,7 +272,11 @@ io.on('connection', function(socket) {
         else
         {
             let app = settings.findAppInstance(args[0]);
-            if(!app.SshPassword)
+            if(!app.SshUsername)
+            {
+                socket.emit('request-user', [app.SshServer, app.SshUsername]);
+            }
+            else if(!app.SshPassword)
             {
                 socket.emit('request-pwd', [app.SshServer, app.SshUsername]);
             }
