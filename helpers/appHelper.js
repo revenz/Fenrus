@@ -17,8 +17,13 @@ class AppHelperInstance {
         return list;
     }
 
+    count() {
+        return Object.keys(this.apps).length;
+    }
+
     load() 
     {
+        console.log('Loading Applications');
         let getApps = (startPath) => {
           var files=fs.readdirSync(startPath);
             let results = {};

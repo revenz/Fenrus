@@ -72,6 +72,12 @@ class SystemRouter
         let zipfile =  dir + '/' + new Utils().newGuid();
         try
         {
+            let appHelper = AppHelper.getInstance();
+            if(!appHelper.count())
+                appHelper.load();            
+            let previous = appHelper.count() || 0;
+            console.log('Previous application count: ' + previous);
+
             await HttpHelper.download(appsUrl, zipfile);
             
             const zip = new StreamZip.async({ file: zipfile});
@@ -80,11 +86,9 @@ class SystemRouter
             await zip.close();
 
             console.log('Successfully updated applications');
-            let appHelper = AppHelper.getInstance();
-            let previous = appHelper.apps?.length || 0;
             appHelper.load();
-            let updated = appHelper.apps?.length || 0;
-            console.log('Updating application list in memory');
+            let updated = appHelper.count() || 0;
+            console.log('Updated application list in memory');
             res.status(200).send(`Updated ${count} applications.\n\n${updated - previous} new app${updated - previous == 1 ? '' : 's'}`).end();
         }
         catch(err)
