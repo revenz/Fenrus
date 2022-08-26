@@ -23,7 +23,7 @@ jobs:
       - name: Install zip
         uses: montudor/action-zip@v1
       - name: Zip output
-        run: zip -qq -r ../apps.zip .
+        run: zip -qq -r ../apps.zip Basic Smart
         working-directory: apps
 
 
