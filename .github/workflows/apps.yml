@@ -1,0 +1,37 @@
+name: Build Apps.zip
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+    paths:
+      - apps/**
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: action-zip
+        uses: montudor/action-zip@v1.0.0
+        with:
+          args: zip -qq -r apps.zip apps
+
+      # Commits the updated apps.zip      
+      - name: check for changes
+        run: git status
+      - name: set username
+        run: git config user.name "Automated"
+      - name: set email
+        run: git config user.email "auto@auto.test"
+      - name: stage changed files
+        run: git add .
+      - name: commit changed files
+        run: git commit -m "Auto repo.json"
+      - name: fetch from master
+        run: git fetch origin master
+      - name: push code to master
+        run: git push origin HEAD:master
