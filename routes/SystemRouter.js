@@ -80,9 +80,12 @@ class SystemRouter
             await zip.close();
 
             console.log('Successfully updated applications');
-            AppHelper.getInstance().load();
+            let appHelper = AppHelper.getInstance();
+            let previous = appHelper.apps?.length || 0;
+            appHelper.load();
+            let updated = appHelper.apps?.length || 0;
             console.log('Updating application list in memory');
-            res.status(200).send(`Updated ${count} applications`).end();
+            res.status(200).send(`Updated ${count} applications.\n\n${updated - previous} new app${updated - previous == 1 ? '' : 's'}`).end();
         }
         catch(err)
         {
