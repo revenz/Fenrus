@@ -91,8 +91,12 @@
                 console.log('udpting apps');
                 showBlocker('Updating Apps');
                 fetch('/system/update-apps', { method: 'POST' })
-                .then(() => {
+                .then((res) => res.text())
+                .then((text) => {          
+                    toast(text || 'Updated applications', true);
                     hideBlocker();
+                }).catch(err => {
+                    toast(err || 'Failed to update user', false);
                 });
             }
         }))

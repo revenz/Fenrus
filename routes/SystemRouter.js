@@ -60,20 +60,32 @@ class SystemRouter
 
     async updateApps(req, res)
     {
-        const dir = __dirname + '/temp';
-        if(fs.existsSync(dir) == false)
+        console.log('Updating Applications');
+        const dir = __dirname + '/../temp';
+        if(fs.existsSync(dir) == false){
+            console.log('Creating temporary directory');
             fs.mkdirSync(dir, {recursive: true});
-
+        }
+        
         let appsUrl = 'https://github.com/revenz/Fenrus/raw/master/apps.zip';
         let zipfile =  dir + '/' + new Utils().newGuid();
-        await HttpHelper.download(appsUrl, zipfile);
-        
-        const zip = new StreamZip.async({ file: zipfile});
-        const count = await zip.extract(null, './apps');
-        console.log(`Extracted ${count} entries`);
-        await zip.close();
+        try
+        {
+            await HttpHelper.download(appsUrl, zipfile);
+            
+            const zip = new StreamZip.async({ file: zipfile});
+            const count = await zip.extract(null, './apps');
+            console.log(`Extracted ${count} entries`);
+            await zip.close();
 
-        res.status(200).send('').end();
+            console.log('Successfully updated applications');
+            res.status(200).send(`Updated ${count} applications`).end();
+        }
+        catch(err)
+        {
+            console.log('Failed to update applications: ' + err);
+            res.status(500).send('' + err).end();
+        }
     }
 }
 
