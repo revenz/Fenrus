@@ -6,6 +6,7 @@ const HttpHelper = require('../helpers/HttpHelper');
 const Utils = require('../helpers/utils');
 const StreamZip = require('node-stream-zip');
 const fs = require('fs');
+const AppHelper = require('../helpers/appHelper');
 
 class SystemRouter
 {    
@@ -79,6 +80,8 @@ class SystemRouter
             await zip.close();
 
             console.log('Successfully updated applications');
+            AppHelper.getInstance().load();
+            console.log('Updating application list in memory');
             res.status(200).send(`Updated ${count} applications`).end();
         }
         catch(err)
