@@ -16,10 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: action-zip
-        uses: montudor/action-zip@v1.0.0        
-      - name: Zip Apps
-        run: zip -qq -r . ../apps.zip
-        working-directory: apps
+        uses: montudor/action-zip@v1.0.0
+        with:
+          args: zip -qq -r apps.zip apps/
+
       # Commits the updated apps.zip      
       - name: check for changes
         run: git status
