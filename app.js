@@ -16,6 +16,7 @@ const themeMiddleware = require('./middleware/ThemeMiddleware');
 const fileBlockerMiddleware = require('./middleware/FileBlockerMiddleware');
 const cookieParser = require('cookie-parser');
 const cookie = require('cookie');
+const AdminMiddleware = require('./middleware/AdminMiddleware');
 
 // routers
 const HomeRouter = require('./routes/HomeRouter');
@@ -32,6 +33,7 @@ const ProxyRouter = require('./routes/ProxyRouter');
 const req = require('express/lib/request');
 const SshService = require('./services/SshService');
 const DockerService = require('./services/DockerService');
+const SystemRouter = require('./routes/SystemRouter');
 
 const consoleLogger = console.log;
 
@@ -206,6 +208,8 @@ function configureRoutes(app, authStrategy)
     app.use('/settings', new SettingsRouter().get());
     app.use('/theme-settings', new ThemeRouter().get());
 
+    app.use(AdminMiddleware);
+    app.use('/system', new SystemRouter().get());
 
     if(authStrategy.errorHandler)
         app.use(authStrategy.errorHandler);  

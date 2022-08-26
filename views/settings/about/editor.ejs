@@ -9,6 +9,7 @@
     </span>
     <% if(user?.IsAdmin) { %>
         <span class="buttons" x-data="AboutConfig">
+            <button class="btn" @click="updateApps">Update Apps</button>
             <button class="btn" onclick="document.getElementById('file-chooser').click()">Import Config</button>
             <button class="btn" @click="exportConfig">Export Config</button>
             <input style="display:none" id="file-chooser" class="file-chooser" type="file" accept="application/json" @change="importConfig">
@@ -85,6 +86,14 @@
                 setTimeout(() => {                    
                     hideBlocker();
                 }, 3000);
+            },
+            updateApps(){
+                console.log('udpting apps');
+                showBlocker('Updating Apps');
+                fetch('/system/update-apps', { method: 'POST' })
+                .then(() => {
+                    hideBlocker();
+                });
             }
         }))
     });

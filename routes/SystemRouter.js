@@ -2,6 +2,10 @@ const express = require('express');
 const FileHelper = require('../helpers/FileHelper');
 const System = require('../models/System');
 const common = require('./Common');
+const HttpHelper = require('../helpers/HttpHelper');
+const Utils = require('../helpers/utils');
+const StreamZip = require('node-stream-zip');
+const fs = require('fs');
 
 class SystemRouter
 {    
@@ -50,6 +54,26 @@ class SystemRouter
             await system.save();
             res.status(200).send('').end();
         });
+
+        this.router.post('/update-apps', async(req, res) => this.updateApps(req, res));
+    }
+
+    async updateApps(req, res)
+    {
+        const dir = __dirname + '/temp';
+        if(fs.existsSync(dir) == false)
+            fs.mkdirSync(dir, {recursive: true});
+
+        let appsUrl = 'https://github.com/revenz/Fenrus/raw/master/apps.zip';
+        let zipfile =  dir + '/' + new Utils().newGuid();
+        await HttpHelper.download(appsUrl, zipfile);
+        
+        const zip = new StreamZip.async({ file: zipfile});
+        const count = await zip.extract(null, './apps');
+        console.log(`Extracted ${count} entries`);
+        await zip.close();
+
+        res.status(200).send('').end();
     }
 }
 

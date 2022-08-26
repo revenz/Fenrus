@@ -670,3 +670,8 @@ table {
     transform: rotate(360deg);
   }
 }
+
+a[class*="fa-"] {
+    color:var(--color);
+    text-decoration: none !important;
+}
