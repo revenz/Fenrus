@@ -67,7 +67,7 @@ class SystemRouter
             fs.mkdirSync(dir, {recursive: true});
         }
         
-        let appsUrl = 'https://github.com/revenz/Fenrus/raw/master/apps.zip';
+        let appsUrl = 'https://github.com/revenz/Fenrus/raw/master/apps.zip?t=' + new Date().getTime();
         let zipfile =  dir + '/' + new Utils().newGuid();
         try
         {
