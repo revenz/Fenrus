@@ -364,7 +364,7 @@ function openIframe(event, app){
         else
         {
             let img = document.createElement('i');
-            img.className = 'icon icon-close';
+            img.className = 'fa-solid fa-times';
             let imgWrapper = document.createElement('div');
             imgWrapper.className = 'icon';
             imgWrapper.appendChild(img);
@@ -5630,7 +5630,7 @@ function openTerminal(type, uid){
             let https = document.location.protocol === 'https:';
             socket = io((https ? 'wss' : 'ws') + '://' + document.location.host, {
                 rejectUnauthorized: false,
-                transports:['websocket']
+                transports:['polling', 'websocket']
             });
             socket.on("connect_error", (err) => {
                 socket.close();
@@ -5740,8 +5740,16 @@ function openTerminal(type, uid){
         if(mode !== 3)
             changeMode(mode);
             
-        if(uid)        
-            connect([uid]);
+        if(uid)
+        {
+            fetch('/terminal/' + uid).then((res) => res.text()).then(text => {
+                if(text)
+                    connect([text]);
+                else
+                    connect([uid]);
+            })
+            //connect([uid]);
+        }
 
     }, 750);
 }

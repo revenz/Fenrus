@@ -34,6 +34,7 @@ const req = require('express/lib/request');
 const SshService = require('./services/SshService');
 const DockerService = require('./services/DockerService');
 const SystemRouter = require('./routes/SystemRouter');
+const Utils = require('./helpers/utils');
 
 const consoleLogger = console.log;
 
@@ -163,7 +164,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
-
+let authStrategy;
 if(system.getIsConfigured() === false){
     // not yet configured, we have to add a special /initial-config route
     let callback = (authStrategy) => {
@@ -173,7 +174,7 @@ if(system.getIsConfigured() === false){
 }
 else
 {    
-    let authStrategy =  system.getAuthStrategy();    
+    authStrategy =  system.getAuthStrategy();    
     configureRoutes(app, authStrategy);
 }
 
@@ -191,6 +192,8 @@ app.use('/401', new Four01Router().get());
 
 app.use('/proxy', new ProxyRouter().get());
 
+let cachedTerminals = {};
+
 function configureRoutes(app, authStrategy)
 {
     app.system = system;
@@ -207,6 +210,24 @@ function configureRoutes(app, authStrategy)
 
     app.use('/settings', new SettingsRouter().get());
     app.use('/theme-settings', new ThemeRouter().get());
+
+    app.use('/terminal/:appId', (req, res) => {            
+        if(authStrategy.authMiddleware)
+        {
+            // uses a cookie, we can just skip this
+            return res.status(200).send('').end();
+        }
+        let app = req.settings.findAppInstance(req.params.appId);
+        if(!app)
+            return res.status('404').send('Application not found').end();
+        let terminalUid = new Utils().newGuid();
+        if(app.DockerContainer)
+            cachedTerminals[terminalUid] = { DockerUid: app.DockerUid, DockerContainer: app.DockerContainer, DockerCommand: app.DockerCommand, Expires: new Date(new Date().getTime() + 5 * 60000)};
+        else
+            cachedTerminals[terminalUid] = { SshServer: app.SshServer, SshUsername: app.SshUsername, SshPassword: app.SshPassword, Expires: new Date(new Date().getTime() + 5 * 60000)};
+
+        return res.status(200).send(terminalUid);
+    });
 
     app.use(AdminMiddleware);
     app.use('/system', new SystemRouter().get());
@@ -241,11 +262,7 @@ cron.schedule("*/5 * * * *", () => {
 });
 
 
-io.on('connection', function(socket) {
-    var cookies = cookie.parse(socket.handshake.headers.cookie);  
-    let user = new JwtVerifier().verify(cookies.jwt_auth);
-    if(!user)
-        return;
+io.on('connection', function(socket) {   
 
     const cleanArgs = (args) => {
         if(!args?.length)
@@ -258,7 +275,20 @@ io.on('connection', function(socket) {
         }
         return args;
     }
-    let settings = Settings.getForUserSync(user.Uid);
+
+    let user;
+    let settings;
+    if(authStrategy.authMiddleware)
+    {
+        // local strategy 
+        let cookies = cookie.parse(socket.handshake.headers.cookie);  
+        user = new JwtVerifier().verify(cookies.jwt_auth);
+        if(!user){
+            console.log('Terminal: Could not verify user: ' + cookies?.jwt_auth);
+            return;
+        }
+        settings = Settings.getForUserSync(user.Uid);
+    }
 
     socket.on('ssh', (args) => {
         args = cleanArgs(args);
@@ -267,20 +297,40 @@ io.on('connection', function(socket) {
         args.splice(0, 2);
         if(args.length === 3)
         {
+            console.log('test1', args);
             new SshService(socket).init(args, rows, cols);    
         }
         else
         {
-            let app = settings.findAppInstance(args[0]);
-            if(!app.SshUsername)
+            let app;
+            if(cachedTerminals[args[0]])
             {
-                socket.emit('request-user', [app.SshServer, app.SshUsername]);
+                app = cachedTerminals[args[0]];
+                delete cachedTerminals[args[0]];
+                if(app.Expires < new Date())
+                {      
+                    socket.emit('fenrus-error', 'Could not find app ' + args[0]);   
+                }
+            }
+            else
+            {
+                app = settings.findAppInstance(args[0]);
+            }
+            
+            if(!app){
+                console.log(`Docker: Could not find app '${args[0]}' for user '${user.Name}'`);                
+                socket.emit('fenrus-error', 'Could not find app ' + args[0]);                
+            }
+            else if(!app.SshUsername)
+            {
+                socket.emit('request-user', [app.SshServer]);
             }
             else if(!app.SshPassword)
             {
                 socket.emit('request-pwd', [app.SshServer, app.SshUsername]);
             }
             else{
+                console.log('test', app);
                 new SshService(socket).init(app, rows, cols);
             }
         }
@@ -291,7 +341,28 @@ io.on('connection', function(socket) {
         let rows = args[0];
         let cols = args[1];
         args.splice(0, 2);
-        let app = settings.findAppInstance(args[0]);
+        
+        let app;
+        if(cachedTerminals[args[0]])
+        {
+            app = cachedTerminals[args[0]];
+            delete cachedTerminals[args[0]];
+            if(app.Expires < new Date())
+            {      
+                socket.emit('fenrus-error', 'Could not find app ' + args[0]);   
+            }
+        }
+        else
+        {
+            app = settings.findAppInstance(args[0]);
+        }
+
+        if(!app)
+        {            
+            console.log(`Docker: Could not find docker app '${args[0]}' for user '${user.Name}'`);
+            socket.emit('fenrus-error', 'Could not find docker app ' + args[0]);
+            return;
+        }
         new DockerService(socket, app, system).init(rows, cols);
     });
 

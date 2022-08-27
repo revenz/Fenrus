@@ -29,6 +29,8 @@ class DockerService
     }
 
     async getContainer(name) {
+        if(!name)
+            throw 'Name not given';
         return await new Promise((resolve, reject) => {
             name = name.toLowerCase();
             this.docker.listContainers({all: true}, (err, containers) => {
@@ -55,7 +57,13 @@ class DockerService
 
     async init(rows, cols)
     {
-        const containerByName = await this.getContainer(this.app.DockerContainer);        
+        let name = this.app.DockerContainer;
+        if(!name){
+            this.socket.emit('fenrus-error', 'Name not set on container');
+            console.log('##### Name not set on container', this.app);
+            return;
+        }
+        const containerByName = await this.getContainer(name);        
         if(!containerByName){
             this.socket.emit('fenrus-error', 'Failed to find container');
             console.log('##### failed to locate container by name: ', this.app.DockerContainer);
