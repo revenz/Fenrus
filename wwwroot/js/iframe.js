@@ -37,7 +37,7 @@ function openIframe(event, app){
         else
         {
             let img = document.createElement('i');
-            img.className = 'icon icon-close';
+            img.className = 'fa-solid fa-times';
             let imgWrapper = document.createElement('div');
             imgWrapper.className = 'icon';
             imgWrapper.appendChild(img);

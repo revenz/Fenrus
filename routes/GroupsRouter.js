@@ -141,7 +141,7 @@ class GroupsRouter{
         let systemGroups = [];
         if(req.user.IsAdmin)
         {
-            systemGroups = system.SystemGroups.filter(x => x.Uid != group.Uid);
+            systemGroups = system.SystemGroups ? system.SystemGroups.filter(x => x.Uid != group.Uid) : [];
         }
         let groups = req.settings.Groups.filter(x => x.Uid != group.Uid);
         
