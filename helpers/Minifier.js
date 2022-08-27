@@ -42,7 +42,7 @@ class Minifier
             if(addFileNames)
                 combined += '/**** ' + file + '****/\n' + content + '\n';
             else
-                combined += content + '\n';
+                combined += content + '/* */\n'; // add /* */ to break any comments left open by previous file
             return;
             let result = uglify.minify(content);
             if (result.error) {

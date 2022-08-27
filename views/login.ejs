@@ -9,9 +9,8 @@
     <% } else { %>
         <title>Fenrus</title>
     <% } %>
-    <link rel="stylesheet" href="/css/site.min.css?version=<%= version %>" />
+    <link rel="stylesheet" href="/css/_fenrus.css?version=<%= version %>" />
     <link id="theme-style" rel="stylesheet" href="/themes/Default/theme.min.css?version=<%= version %>" />
-    <link rel="stylesheet" href="/css/login.css?version=<%= version %>" />
 </head>
 
 <body class="no-custom-background animate-background login-page">
@@ -56,9 +55,7 @@
         </div>
     </div>
 
-    <script src="/js/alpinejs-3.8.1.min.js?version=<%= version %>" defer></script>
-    <script src="/js/iodine.min.js?version=<%= version %>" defer></script>
-
+    <script src="/js/_fenrus.min.js?version=<%= version %>" defer></script>
 
     <script>
 
@@ -119,8 +116,5 @@
             }))
         });
     </script>
-
-    <script src="/js/site.js" asp-append-version="true"></script>
-
 </body>
 </html>
