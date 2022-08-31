@@ -1,5 +1,6 @@
 const Settings = require('../models/Settings');
 const docker = require('dockerode');
+var stream = require('stream');
 
 class DockerService 
 {
@@ -55,8 +56,8 @@ class DockerService
         });
     }
 
-    async init(rows, cols)
-    {
+    async loadContainer(){
+
         let name = this.app.DockerContainer;
         if(!name){
             this.socket.emit('fenrus-error', 'Name not set on container');
@@ -75,6 +76,48 @@ class DockerService
             console.log('##### failed to locate container: ', this.app.DockerContainer, container);
             return;
         }
+        return { container, containerByName };
+    }
+
+    async log(rows, cols) {
+        let gc = await this.loadContainer();
+        if(!gc)
+            return;
+        const container = gc.container;
+        const containerByName = gc.containerByName;
+
+        var logStream = new stream.PassThrough();
+        logStream.on('data', (chunk) => {
+            let line = chunk.toString('utf8');
+            this.socket.emit('data', line);
+        });
+
+        container.logs({
+            follow: true,
+            stdout: true,
+            tail:100,
+            stderr: true
+        }, (err, stream) => {
+            if(err) 
+                return logger.error(err.message);
+            container.modem.demuxStream(stream, logStream, logStream);
+            stream.on('end', () => {
+                logStream.end('!stop!');
+            });
+            this.socket.on('disconnect', () => {
+                console.log('####socket closed');
+                stream.destroy();
+            });
+        });
+    }
+
+    async init(rows, cols)
+    {
+        let gc = await this.loadContainer();
+        if(!gc)
+            return;
+        const container = gc.container;
+        const containerByName = gc.containerByName;
 
         let cmd = {
             Cmd: [this.app.DockerCommand || '/bin/bash'],

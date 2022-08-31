@@ -34,6 +34,10 @@
   
     &-item {
       padding: 4px;
+      .icon {
+        width:1.5rem;
+        text-align: center;
+      }
     }
   
     &-item[data-divider="top"] {

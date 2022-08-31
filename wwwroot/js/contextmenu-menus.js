@@ -5,6 +5,7 @@ const addIcon = `<span class="icon fa-solid fa-plus" style="padding-right:0.5rem
 const editIcon = `<span class="icon fa-solid fa-pen-to-square" style="padding-right:0.5rem"></span>`;
 const dashboardIcon = `<span class="icon fa-solid fa-house" style="padding-right:0.5rem"></span>`;
 const terminalIcon = `<span class="icon fa-solid fa-terminal" style="padding-right:0.5rem"></span>`;
+const logIcon = `<span class="icon fa-solid fa-file-lines" style="padding-right:0.5rem"></span>`;
 
 function openDefaultContextMenu(event) {
     event?.preventDefault();
@@ -67,29 +68,6 @@ function openContextMenu(event, app){
                 }
             });
         }
-
-        menuItems = menuItems.concat([
-        {
-          content: `${deleteIcon}Delete`
-        },
-        {
-            content: `${editIcon}Edit Group`,
-            divider: "top", // top, bottom, top-bottom
-            events: {
-                click: (e) => {
-                    document.location = '/settings/groups/' + groupUid                
-                }
-            }
-        },
-        {
-            content: `${dashboardIcon}Edit Dashboard`,
-            events: {
-                click: (e) => {
-                    document.location = '/settings/dashboards/' + dashboardUid                
-                }
-            }
-        }
-        ]);
         if(ssh){
             menuItems.push(
             {
@@ -103,13 +81,43 @@ function openContextMenu(event, app){
         else if(docker){
             menuItems.push(
             {
-                divider: "top",
                 content: `${terminalIcon}Terminal`,
                 events: {
                     click: (e) => openTerminal(2, uid)
                 }
             });
+            menuItems.push(
+            {
+                content: `${logIcon}Log`,
+                events: {
+                    click: (e) => openDockerLog(uid)
+                }
+            });
         }
+
+        menuItems = menuItems.concat([
+        {
+            content: `${editIcon}Edit Group`,
+            divider: "top",
+            events: {
+                click: (e) => {
+                    document.location = '/settings/groups/' + groupUid                
+                }
+            }
+        },
+        {
+            content: `${dashboardIcon}Edit Dashboard`,
+            events: {
+                click: (e) => {
+                    document.location = '/settings/dashboards/' + dashboardUid                
+                }
+            }
+        },
+        {
+            divider: "top",
+            content: `${deleteIcon}Delete`
+        },
+        ]);
         
         let menu = new ContextMenu({
             menuItems

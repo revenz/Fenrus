@@ -335,6 +335,33 @@ io.on('connection', function(socket) {
             }
         }
     });
+    socket.on('docker-log', (args) => {
+        args = cleanArgs(args);
+        let rows = args[0];
+        let cols = args[1];
+        args.splice(0, 2);
+        let app;
+        if(cachedTerminals[args[0]])
+        {
+            app = cachedTerminals[args[0]];
+            delete cachedTerminals[args[0]];
+            if(app.Expires < new Date())
+            {      
+                socket.emit('fenrus-error', 'Could not find app ' + args[0]);   
+            }
+        }
+        else
+        {
+            app = settings.findAppInstance(args[0]);
+        }
+        if(!app)
+        {            
+            console.log(`Docker: Could not find docker app '${args[0]}' for user '${user.Name}'`);
+            socket.emit('fenrus-error', 'Could not find docker app ' + args[0]);
+            return;
+        }
+        new DockerService(socket, app, system).log(rows, cols);
+    });
     
     socket.on('docker', (args) => {
         args = cleanArgs(args);

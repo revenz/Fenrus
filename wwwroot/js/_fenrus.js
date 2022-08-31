@@ -100,6 +100,7 @@ const addIcon = `<span class="icon fa-solid fa-plus" style="padding-right:0.5rem
 const editIcon = `<span class="icon fa-solid fa-pen-to-square" style="padding-right:0.5rem"></span>`;
 const dashboardIcon = `<span class="icon fa-solid fa-house" style="padding-right:0.5rem"></span>`;
 const terminalIcon = `<span class="icon fa-solid fa-terminal" style="padding-right:0.5rem"></span>`;
+const logIcon = `<span class="icon fa-solid fa-file-lines" style="padding-right:0.5rem"></span>`;
 
 function openDefaultContextMenu(event) {
     event?.preventDefault();
@@ -162,29 +163,6 @@ function openContextMenu(event, app){
                 }
             });
         }
-
-        menuItems = menuItems.concat([
-        {
-          content: `${deleteIcon}Delete`
-        },
-        {
-            content: `${editIcon}Edit Group`,
-            divider: "top", // top, bottom, top-bottom
-            events: {
-                click: (e) => {
-                    document.location = '/settings/groups/' + groupUid                
-                }
-            }
-        },
-        {
-            content: `${dashboardIcon}Edit Dashboard`,
-            events: {
-                click: (e) => {
-                    document.location = '/settings/dashboards/' + dashboardUid                
-                }
-            }
-        }
-        ]);
         if(ssh){
             menuItems.push(
             {
@@ -198,13 +176,43 @@ function openContextMenu(event, app){
         else if(docker){
             menuItems.push(
             {
-                divider: "top",
                 content: `${terminalIcon}Terminal`,
                 events: {
                     click: (e) => openTerminal(2, uid)
                 }
             });
+            menuItems.push(
+            {
+                content: `${logIcon}Log`,
+                events: {
+                    click: (e) => openDockerLog(uid)
+                }
+            });
         }
+
+        menuItems = menuItems.concat([
+        {
+            content: `${editIcon}Edit Group`,
+            divider: "top",
+            events: {
+                click: (e) => {
+                    document.location = '/settings/groups/' + groupUid                
+                }
+            }
+        },
+        {
+            content: `${dashboardIcon}Edit Dashboard`,
+            events: {
+                click: (e) => {
+                    document.location = '/settings/dashboards/' + dashboardUid                
+                }
+            }
+        },
+        {
+            divider: "top",
+            content: `${deleteIcon}Delete`
+        },
+        ]);
         
         let menu = new ContextMenu({
             menuItems
@@ -324,6 +332,123 @@ class ContextMenu {
       window.addEventListener("blur", () => this.closeMenu());
     }
   }
+/**** docker-log.js****/
+function openDockerLog(uid){
+    let div = document.createElement('div');
+    div.setAttribute('id', 'terminal');
+    document.body.appendChild(div);
+    setTimeout(() => {
+        document.body.classList.add('terminal');
+
+        const fitAddon = new FitAddon.FitAddon();
+        var term = new Terminal({ 
+            cursorBlink: true, 
+            fontFamily: 'Courier New',
+            fontSize: 16,            
+            convertEol: true,
+            fontFamily: "'Fira Mono', monospace"
+        });
+        term.loadAddon(fitAddon);
+        term.open(div); 
+        fitAddon.fit();
+
+        let divClose = document.createElement('div');
+        divClose.className = 'terminal-btn close close-terminal';
+        div.appendChild(divClose);
+
+        let divPause = document.createElement('div');
+        divPause.className = 'terminal-btn pause pause-terminal';
+        div.appendChild(divPause);
+        
+        let socket;
+        let paused = false;
+        let rows = term.rows;
+        let cols = term.cols;
+
+
+        const resizeEvent = (event) => {
+            fitAddon.fit();
+            let newRows = term.rows;
+            let newCols = term.cols;
+
+            if(newRows == rows && newCols == cols)
+                return;                
+            rows = newRows;
+            cols = newCols;
+            console.log('resize', rows, cols);            
+            socket.emit('resize', { rows: rows, cols: cols});
+        }
+
+        const connect = function(args){
+            let https = document.location.protocol === 'https:';
+            socket = io((https ? 'wss' : 'ws') + '://' + document.location.host, {
+                rejectUnauthorized: false,
+                transports:['polling', 'websocket']
+            });
+            socket.on("connect_error", (err) => {
+                socket.close();
+                console.log('connect_failed');
+                term.write(`\r\nFailed to connect to server\r\n${err}\r\n`);
+            });
+            socket.on('connect_failed', function(){
+                console.log('connect_failed');
+            });
+            socket.emit('docker-log', [term.rows, term.cols].concat(args));;
+            socket.on('connect', function() {});
+
+            // Backend -> Browser
+            socket.on('data', function(data) {
+                if(!paused)
+                    term.write(data);
+            });
+            socket.on('terminal-closed', () => {                
+                term.write('\r\closed\r\n');
+                socket.close();
+                closeTerminal();
+            });
+
+            socket.on('disconnect', function() {
+                term.write('\r\n*** Disconnected ***\r\n');
+                closeTerminal(5000);
+            });
+
+            window.addEventListener('resize', resizeEvent);
+        }
+        divClose.addEventListener('click', () => {
+            socket?.close();
+            closeTerminal();
+        });
+        divPause.addEventListener('click', () => {
+            divPause.classList.remove('paused');
+            paused = !paused;
+            if(paused)
+                divPause.classList.add('paused');
+        });
+
+        const closeTerminal = function(timeout) {
+            window.removeEventListener('resize', resizeEvent);
+            document.body.classList.remove('terminal');
+            const closeActual = () => {                
+                div.className = 'closing';
+                setTimeout(() => {
+                    div.remove();
+                }, 500);
+            }
+            if(timeout)
+                setTimeout(closeActual, timeout)
+            else
+                closeActual();
+        }
+            
+        fetch('/terminal/' + uid).then((res) => res.text()).then(text => {
+            if(text)
+                connect([text]);
+            else
+                connect([uid]);
+        });
+
+    }, 750);
+}
 /**** iframe.js****/
 function openIframe(event, app){
     event?.preventDefault();
