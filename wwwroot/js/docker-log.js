@@ -63,8 +63,14 @@ function openDockerLog(uid){
 
             // Backend -> Browser
             socket.on('data', function(data) {
-                if(!paused)
+                if(!paused){
+                    data = data.replace(/([INFO|WARN|DBUG|ERRR|ERROR|WARNING|DEBUG|CRIT|CRTICAL])/g, xtermColor("$1", 'green'));
+                    data = data.replace(/([\d]{4}-[\d]{2}-[\d]{2}() [\d]{1,2}:[\d]{2}(:[\d]{2}(.[\d]+)?)?)?)/g, xtermColor("$1", 'blue'));
+                    data = data.replace('->', xtermColor("$1", 'yellow'));
+                    data = data.replace(/([GET|POST|PUT|DELETE|OPTIONS])/g, xtermColor("$1", 'magenta'));
+
                     term.write(data);
+                }
             });
             socket.on('terminal-closed', () => {                
                 term.write('\r\closed\r\n');
@@ -113,4 +119,46 @@ function openDockerLog(uid){
         });
 
     }, 750);
+}
+
+function xtermColor(line, color) {
+
+    const colors = {
+        black:0,
+        red: 1,
+        green: 2,
+        yellow: 3,
+        blue: 4,
+        magenta: 5,
+        cyan: 6,
+        white: 7
+    }
+    /** 
+     * 
+     * Foreground
+    30 Black
+    31 Red
+    32 Green
+    33 Yellow
+    34 Blue
+    35 Magenta
+    36 Cyan
+    37 White
+    Background:
+
+    40 Black
+    41 Red
+    42 Green
+    43 Yellow
+    44 Blue
+    45 Magenta
+    46 Cyan
+
+    47 White
+
+    0 Reset all
+    1 Bold
+
+     */
+    return '\x1b[1;' + (30 + colors[color.toLowerCase()]) + 'm' + line + '\x1b[0m';
 }
