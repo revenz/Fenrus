@@ -64,10 +64,16 @@ function openDockerLog(uid){
             // Backend -> Browser
             socket.on('data', function(data) {
                 if(!paused){
-                    data = data.replace(/([INFO|WARN|DBUG|ERRR|ERROR|WARNING|DEBUG|CRIT|CRTICAL])/g, xtermColor("$1", 'green'));
-                    data = data.replace(/([\d]{4}-[\d]{2}-[\d]{2}() [\d]{1,2}:[\d]{2}(:[\d]{2}(.[\d]+)?)?)?)/g, xtermColor("$1", 'blue'));
-                    data = data.replace('->', xtermColor("$1", 'yellow'));
-                    data = data.replace(/([GET|POST|PUT|DELETE|OPTIONS])/g, xtermColor("$1", 'magenta'));
+                    data = data.replace(/(\[[^\]]+\])/g, xtermColor("$1", 'cyan'));
+                    data = data.replace(/(\'[^\']+\')/g, xtermColor("$1", 'magenta'));
+                    data = data.replace(/(`[^`]+`)/g, xtermColor("$1", 'magenta'));
+                    data = data.replace(/("[^"]+")/g, xtermColor("$1", 'magenta'));
+                    data = data.replace(/((http(s)?:\/)?\/([\w\d-_\.]+\/)+([\w\d-_\.]+)?)/g, xtermColor("$1", 'green'));
+                    data = data.replace(/((\[)?(INFO|WARN|DBUG|ERRR|ERROR|WARNING|DEBUG|CRIT|CRTICAL)(\])?)/g, xtermColor("$1", 'green'));
+                    data = data.replace(/((\[)?[\d]{4}-[\d]{2}-[\d]{2}(\])?)/g, xtermColor("$1", 'blue'));
+                    data = data.replace(/((\[)?[\d]{1,2}:[\d]{2}:[\d]{2}(.[\d]+)?(\])?)/g, xtermColor("$1", 'blue'));
+                    data = data.replace('->', xtermColor("->", 'yellow'));
+                    data = data.replace(/((\[)?(GET|POST|PUT|DELETE|OPTIONS)(\])?)/g, xtermColor("$1", 'red'));
 
                     term.write(data);
                 }
