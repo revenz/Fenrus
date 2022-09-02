@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function changeDashboard(uid){    
-    document.cookie = 'dashboard=' + uid;
+    document.cookie = 'dashboard=' + uid + '; expires=Tue, 19 Jan 2038 04:14:07 GMT';
     window.location.reload(true);
 }
 
