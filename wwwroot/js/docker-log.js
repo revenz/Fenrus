@@ -63,17 +63,23 @@ function openDockerLog(uid){
 
             // Backend -> Browser
             socket.on('data', function(data) {
-                if(!paused){
-                    data = data.replace(/(\[[^\]]+\])/g, xtermColor("$1", 'cyan'));
-                    data = data.replace(/(\'[^\']+\')/g, xtermColor("$1", 'magenta'));
-                    data = data.replace(/(`[^`]+`)/g, xtermColor("$1", 'magenta'));
-                    data = data.replace(/("[^"]+")/g, xtermColor("$1", 'magenta'));
-                    data = data.replace(/((http(s)?:\/)?\/([\w\d-_\.]+\/)+([\w\d-_\.]+)?)/g, xtermColor("$1", 'green'));
-                    data = data.replace(/((\[)?(INFO|WARN|DBUG|ERRR|ERROR|WARNING|DEBUG|CRIT|CRTICAL)(\])?)/g, xtermColor("$1", 'green'));
-                    data = data.replace(/((\[)?[\d]{4}-[\d]{2}-[\d]{2}(\])?)/g, xtermColor("$1", 'blue'));
-                    data = data.replace(/((\[)?[\d]{1,2}:[\d]{2}:[\d]{2}(.[\d]+)?(\])?)/g, xtermColor("$1", 'blue'));
-                    data = data.replace('->', xtermColor("->", 'yellow'));
-                    data = data.replace(/((\[)?(GET|POST|PUT|DELETE|OPTIONS)(\])?)/g, xtermColor("$1", 'red'));
+                if(!paused)
+                {
+                    console.log('index: ' + data.indexOf('[34m'));
+                    if(/\[3[\d]m/.test(data) === false)
+                    {
+                        // if already has [3[\d]m then its already has ansi colors on it
+                        data = data.replace(/(\[[^\]]+\])/g, xtermColor("$1", 'cyan'));
+                        data = data.replace(/(\'[^\']+\')/g, xtermColor("$1", 'magenta'));
+                        data = data.replace(/(`[^`]+`)/g, xtermColor("$1", 'magenta'));
+                        data = data.replace(/("[^"]+")/g, xtermColor("$1", 'magenta'));
+                        data = data.replace(/(\[(GET|POST|PUT|DELETE|OPTIONS)\])/gi, xtermColor("$1", 'red'));
+                        data = data.replace(/(\[(INFO|WARN|DBUG|ERRR|ERROR|WARNING|DEBUG|CRIT|CRITICAL)\])/gi, xtermColor("$1", 'green'));
+                        data = data.replace(/((http(s)?:\/)?\/([\w\d-_\.]+\/)+([\w\d-_\.]+)?)/g, xtermColor("$1", 'green'));
+                        data = data.replace(/((\[)?[\d]{4}-[\d]{2}-[\d]{2}(T)?(\])?)/g, xtermColor("$1", 'blue'));
+                        data = data.replace(/((\[)?[\d]{1,2}:[\d]{2}:[\d]{2}(.[\d]+)?(Z)?(\])?)/g, xtermColor("$1", 'blue'));
+                        data = data.replace('->', xtermColor("->", 'yellow'));
+                    }
 
                     term.write(data);
                 }

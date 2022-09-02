@@ -18,7 +18,7 @@ function openTerminal(type, uid){
         fitAddon.fit();
 
         let divClose = document.createElement('div');
-        divClose.className = 'close close-terminal';
+        divClose.className = 'terminal-btn close close-terminal';
         div.appendChild(divClose);
         
         term.write('Welcome to the Fenrus Terminal\r\n');   
