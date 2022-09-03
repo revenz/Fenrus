@@ -35,7 +35,7 @@
 
     async statusXLarge(args, data, shrinkage){
         if(!data.processingFiles?.length){
-            if(shrinkage?.length)
+            if(shrinkage && Object.keys(shrinkage).length)
                 return this.statusShrinkage(args, shrinkage);
             return this.statusMedium(args, data);
         }
@@ -61,8 +61,7 @@
                 }
                 console.log('FileFlows search term: ' + searchTerm);
                 let images = await args.imageSearch(searchTerm);
-                this.pfImages[item.name] = images?.length ? images[0] : '';                
-                console.log('image:', this.pfImages[item.name]);
+                this.pfImages[item.name] = images?.length ? images[0] : '';      
             }
             let image = this.pfImages[item.name]
             items.push({
@@ -83,6 +82,7 @@
     }
 
     statusMedium(args, data){
+        console.log('ff medium');
         let secondlbl = 'Time';
         let secondValue = data.time;
 

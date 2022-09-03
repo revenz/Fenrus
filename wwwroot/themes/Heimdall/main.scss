@@ -112,21 +112,19 @@
         text-align: center;
         text-transform: uppercase;
         margin-bottom: 0.25rem;
-        border-bottom: solid 1px var(--accent);
 
         span {
             font-weight: 600;
-            border-top-left-radius: 0.5rem;
-            border-top-right-radius: 0.5rem;
-            background: rgba(0,0,0,0.6);
             padding: 0.5rem 0.5rem 0.5rem;
             min-width: 10rem;
             display: inline-block;
-            border: solid 1px var(--accent);
             position: relative;
             bottom: -1px;
-            color: var(--accent);
         }
+    }
+    .group-controls {
+        position:absolute;
+        right:0;
     }
 
     > .items {

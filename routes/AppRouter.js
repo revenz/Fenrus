@@ -134,6 +134,8 @@ class AppRouter extends FenrusRouter {
             if(!instance.funcArgs)
                 instance.funcArgs = this.getAppArgs(appInstance, req.settings);
             let funcArgs = instance.funcArgs;
+            if(req.query.size)
+                funcArgs.size = req.query.size;
             funcArgs.url = appInstance.ApiUrl || appInstance.Url;
             funcArgs.properties = appInstance.Properties;
             funcArgs.changeIcon = (icon) => {

@@ -1,4 +1,6 @@
-﻿body {
+﻿@use "sass:math";
+
+body {
     background: url('/themes/Basic/background.jpg');
     background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('/themes/Basic/background.jpg');
 }
@@ -13,7 +15,7 @@ $columnWidth:300;
 @for $i from 1 through 10 {
     $min: 600 + ($i - 1) * $columnWidth;
     $max: (600 + $i * $columnWidth) - 0.00001;
-    $width: 100 / ($i + 1);
+    $width: math.div(100, ($i + 1));
     @media screen and (min-width:#{$min}px) and (max-width:#{$max}px) 
     {
         .dashboard {
@@ -25,7 +27,7 @@ $columnWidth:300;
                 .db-group.width-#{$j} {
                     grid-column-start: span min(#{$j}, #{$i + 1}) !important;
                     .items > a {
-                        width: #{(100 / $j) + '%'};
+                        width: #{math.div(100, $j) + '%'};
                     }
                 }
             }
@@ -33,7 +35,7 @@ $columnWidth:300;
             .db-group.width-0 {
                 grid-column-start:span #{$i + 1} !important;
                 .items > a {
-                    width: #{(100 / ($i + 1)) + '%'};
+                    width: #{math.div(100, ($i + 1)) + '%'};
                 }
             }
         }

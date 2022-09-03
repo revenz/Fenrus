@@ -1,4 +1,6 @@
-var fs = require('fs');
+const fs = require('fs');
+const path = require('path');
+const FileHelper = require('../helpers/FileHelper');
 var uglify = require("uglify-js");
 var sass = require('sass');
 
@@ -9,8 +11,8 @@ class Minifier
         this.minifyFiles('js', /\.js$/, 'js', true);
     }
 
-    minifyCss() {
-        this.minifyFiles('css', /\.(scss)$/, 'css', false, (file, content) => {
+    async minifyCss() {
+        const minifyContent = function(file, content) {
             if(!file.endsWith('.scss'))
                 return content;
             try
@@ -23,19 +25,32 @@ class Minifier
                 console.log('Error processing file: ' + file);
                 throw err;
             }
-        });
+        }
+        this.minifyFiles('css', /\.(scss)$/, 'css', false, minifyContent);
+        
+        console.log('minifying theme css');
+        let themeDirs = await FileHelper.getDirectories('./wwwroot/themes');
+        for(let dir of themeDirs){
+            console.log('minifying theme ' + dir);
+            this.minifyFiles(path.join(__dirname, '..', 'wwwroot', 'themes', dir), /\.(scss)$/, 'css', false, minifyContent, '_theme');
+        }
     }
 
-    minifyFiles(folder, pattern, extension, addFileNames, processor){
+    minifyFiles(folder, pattern, extension, addFileNames, processor, outputFile){
         
+        if(!outputFile)
+        outputFile = '_fenrus';
+        console.log('minifying path: ' + folder);
         let jsFiles = [];
         let combined = '';
-        fs.readdirSync(__dirname + '/../wwwroot/' + folder).forEach(file =>{
+        if(folder.indexOf('themes') < 0)
+            folder = __dirname + '/../wwwroot/' + folder;
+        fs.readdirSync(folder).forEach(file =>{
             if(pattern.test(file) === false)
                 return;
-            if(file.indexOf('_fenrus') >= 0)
+            if(file.indexOf(outputFile) >= 0)
                 return;
-            let path = __dirname + '/../wwwroot/' + folder + '/' + file;
+            let path = folder + '/' + file;
             let content = fs.readFileSync(path, 'utf8');
             if(processor)
                 content = processor(path, content);
@@ -60,7 +75,7 @@ class Minifier
 
         console.log('combined length: ', combined.length);
 
-        fs.writeFileSync(__dirname + '/../wwwroot/' + folder +'/_fenrus.' + extension, combined, 'utf-8');
+        fs.writeFileSync(folder +'/' + outputFile + '.' + extension, combined, 'utf-8');
     }
 }
 module.exports = Minifier;

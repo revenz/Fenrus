@@ -16,7 +16,7 @@ class Theme {
 
     constructor(name){
         this.Name = name;
-        this.Css = ['theme.min.css'];
+        this.Css = ['_theme.css'];
         this.Templates = {
             Group: '',
             App: '',

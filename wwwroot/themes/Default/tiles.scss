@@ -360,8 +360,16 @@ $margin:0;
 }
 
 .db-item.bar-info {
+    &.large {
+        .content > .title {
+            display: none;
+        }
+        .bar-info:first-of-type {
+            margin-top: 0 !important;
+        }
+    }
     
-    &.xx-large, &.x-large {
+    &.xx-large, &.x-large, &.larger {
         .inner {
             display:flex;
             flex-direction: column;
@@ -405,11 +413,27 @@ $margin:0;
             font-weight: 600;
             font-size: 0.85rem; 
         }
-
+    }
+    &.medium 
+    {
+        .content > .title, .status {
+            display:none;
+        }
     }
 
+    &.larger {
+        .bar-info {
+            margin:0.5rem 0 !important;            
+        }
+        .bar-info:nth-child(n + 5) {
+            display: none;
+        }
+    }
     &.x-large {
-        .bar-info:nth-child(n + 4) {
+        .bar-info {
+            margin:0.5rem 0 !important;            
+        }
+        .bar-info:nth-child(n + 5) {
             display:none;
         }
     }

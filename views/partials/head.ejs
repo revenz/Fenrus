@@ -10,7 +10,7 @@
         <title>Fenrus</title>
     <% } %>
     <link rel="stylesheet" href="/css/_fenrus.css?version=<%= version %>" />
-    <link id="theme-style" rel="stylesheet" href="/themes/<%= theme.Name || 'Default' %>/theme.min.css?version=<%= version %>" />    
+    <link id="theme-style" rel="stylesheet" href="/themes/<%= theme.Name || 'Default' %>/_theme.css?version=<%= version %>" />    
     
     <% 
         let accentColor = (typeof(dashboard) !== 'undefined' ? dashboard?.AccentColor : null) || settings?.AccentColor || '#ff0090';

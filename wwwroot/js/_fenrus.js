@@ -254,10 +254,9 @@ class ContextMenu {
     contextMenu;
     static otherMenus = [];
 
-    constructor({ target = null, menuItems = [], mode = "dark" }) {
+    constructor({ target = null, menuItems = [] }) {
       this.target = target;
       this.menuItems = menuItems;
-      this.mode = mode;
       this.menuItemsNode = this.getMenuItemsNode();
       this.isOpened = false;
       ContextMenu.otherMenus.push(this);
@@ -291,6 +290,10 @@ class ContextMenu {
       item.classList.add("contextMenu-item");
 
       if(data.submenu?.length){
+        const caret = document.createElement('i');
+        caret.className = 'caret fa-solid fa-angle-right';
+        button.appendChild(caret);
+        item.classList.add("has-submenu");
         const sub = document.createElement('ul');
         sub.className = 'submenu contextMenuCommon';
         for(let si of data.submenu)
@@ -316,7 +319,6 @@ class ContextMenu {
   
       menuContainer.classList.add("contextMenu");
       menuContainer.classList.add("contextMenuCommon");
-      menuContainer.setAttribute("data-theme", this.mode);
   
       this.menuItemsNode.forEach((item) => menuContainer.appendChild(item));
   
@@ -839,7 +841,7 @@ function changeTheme(event) {
     let theme = event?.target?.value;
     if (!theme)
         return;
-    document.getElementById('theme-style').setAttribute('href', `/themes/${theme}/theme.min.css`);
+    document.getElementById('theme-style').setAttribute('href', `/themes/${theme}/_theme.css`);
 }
 
 function htmlEncode(text) {
@@ -992,12 +994,14 @@ class SmartApp
     controller;
     timerCarousel;
     icon;
+    ele;
 
     constructor(args)
     {
         this.uid = args.uid || args.instanceUid;
         this.name = args.name;
         this.interval = args.interval;
+        this.ele = document.getElementById(this.uid)
         this.icon = document.getElementById(this.uid).querySelector('.icon img')?.getAttribute('src');
         if(this.interval === 0)
             this.interval = 3000;
@@ -1067,6 +1071,12 @@ class SmartApp
             return true; // prevent request if the page doesnt have focus
         }    
 
+        if(this.hasFocus())
+            return true; // prevent a refresh if cursor is over the dashboard item
+        if(this.carouselPreventUpdate()){
+            return true; // only refresh when on last carousel
+        }
+
         return await this.refresh();
     }
     refresh()
@@ -1079,7 +1089,7 @@ class SmartApp
             let timeoutId = setTimeout(() => this.controller.abort(), Math.min(Math.max(this.interval, 3000), 5000));
 
             let success = true;
-            let url = `/apps/${encodeURIComponent(this.name)}/${encodeURIComponent(this.uid)}/status?name=` + encodeURIComponent(this.name) + '&t=' + new Date().getTime();
+            let url = `/apps/${encodeURIComponent(this.name)}/${encodeURIComponent(this.uid)}/status?name=` + encodeURIComponent(this.name) + '&size=' + encodeURIComponent(this.getItemSize()) + '&t=' + new Date().getTime();
             fetch(url, {
                 signal: this.controller.signal
             })
@@ -1152,13 +1162,38 @@ class SmartApp
         }
     }
 
+    hasFocus() {
+        if(!this.ele)
+            return false;
+        if(this.ele.matches(':hover'))
+            return true;
+        return false;
+    }
+
+    carouselPreventUpdate() {
+        if(this.interval > 10000)
+            return false; // timer is too long
+        if(!this.ele)
+            return false;
+        if(this.ele.className.indexOf('carousel') < 0)
+            return false;
+        let last = this.ele.querySelector('.carousel .item:nth-last-of-type(2)');
+        if(!last)
+            return false;
+        return last.className.indexOf('visible') < 0;
+    }
+
     getItemSize()
     {
-        let ele = document.getElementById(this.uid);
+        let ele = this.ele;
         if(!ele)
             return '';
+        if(ele.classList.contains('xx-large'))
+            return 'xx-large'
         if(ele.classList.contains('x-large'))
             return 'x-large'
+        if(ele.classList.contains('larger'))
+            return 'larger'
         if(ele.classList.contains('large'))
             return 'large'
         if(ele.classList.contains('medium'))
@@ -1238,7 +1273,7 @@ class SmartApp
     }
 
     setItemClass(item, className) {
-        item.className = item.className.replace(/(carousel|chart|db-basic)/g, '') + ' ' + className;
+        item.className = (item.className.replace(/(carousel|chart|db-basic|bar-info)/g, '') + ' ' + className).replace(/\s\s+/g, ' ');
     }
 
     carouselItem(e, id, itemIndex){
