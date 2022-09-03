@@ -7,7 +7,7 @@ class transmission {
             method: 'POST',
             body: "{\"arguments\": {\"fields\": [\"percentDone\",\"status\",\"rateDownload\",\"rateUpload\"]},\"method\": \"torrent-get\"}",
             headers: {
-                "Accept": "text/html",
+                "Accept": "application/html",
                 "X-Transmission-Session-Id": sessionId,
                 'Authorization': 'Basic ' + args.Utils.btoa(args.properties['username'] + ':' + args.properties['password'])
             }
