@@ -109,8 +109,8 @@
             title = args.Utils.htmlEncode(item.parentTitle) + '<br/>' + title;
         }
         return `
-<div class="fileflows fill" style="background:#222;background-image:url('${args.Utils.htmlEncode(item.image)}');background-size: cover;">    
-    <div class="name tr">${item.file}</div>
+<div class="fileflows fill" style="background-image:url('${args.Utils.htmlEncode(item.image)}');">    
+    <div class="name tr wrap">${item.file}</div>
     <div class="br">${item.library}</div>
     ${item.stepPercent ? `<div class="bl">${item.stepPercent.toFixed(1)}%</div>` : ''}
     <a class="cover-link" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}" />

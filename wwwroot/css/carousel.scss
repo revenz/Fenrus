@@ -83,6 +83,10 @@
     .inner > .icon {
         display:none;
     }
+    .fill {
+        background:#222;
+        background-size: cover;
+    }
     .app-icon {
         position:absolute;
         top:.25rem;
@@ -114,7 +118,9 @@
         max-width:70%;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
+        &:not(.wrap){
+            white-space: nowrap;
+        }
     }
     .br {
         bottom:0;

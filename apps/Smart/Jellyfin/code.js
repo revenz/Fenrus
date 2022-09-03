@@ -116,7 +116,7 @@
             title = args.Utils.htmlEncode(item.parentTitle) + '<br/>' + title;
         }
         return `
-<div class="jellyfin fill" style="background-image:url('${args.Utils.htmlEncode(item.image)}');">
+<div class="jellyfin fill" style="background-image:url('${args.Utils.htmlEncode(args.proxy(item.image))}');">
     
     <div class="name tr">${title}</div>
     ${item.date ? `<div class="br">${item.date.getFullYear()}</div>` : ''}
