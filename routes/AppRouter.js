@@ -8,6 +8,8 @@ const ChartHelper = require('../helpers/ChartHelper');
 const fsExists = require('fs.promises.exists');
 const Globals = require('../Globals');
 const FenrusRouter = require('./FenrusRouter');
+const gis = require('g-i-s');
+const { promise } = require('bcrypt/promises');
 
 class AppRouter extends FenrusRouter {
     
@@ -252,6 +254,25 @@ class AppRouter extends FenrusRouter {
             appIcon: appInstance.Icon,
             size: appInstance.Size,
             chart: chartHelper,        
+            imageSearch: (query) => {
+                return new Promise((resolve, reject) => {
+                    try
+                    {
+                        gis(query, (error, results) => {
+                            if(error){
+                                console.log('gis error: ' + error);
+                                resolve([]);
+                            }
+                            else {
+                                resolve(results.map(x => x.url));
+                            }
+                        });
+                    }catch(err) {
+                        console.log('imageSearch error: ' + err);
+                        resolve([]);
+                    }
+                });
+            },
             proxy: (url) => {
                 return '/proxy/' + utils.base64Encode(url).replace(/\//g, '-');
             },

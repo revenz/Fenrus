@@ -11,7 +11,7 @@
         if(args.size.indexOf('large') >= 0)
             return this.statusXLarge(args, data);
         else
-            return await this.statusMedium(args, data);
+            return this.statusMedium(args, data);
 
     }
 
@@ -42,9 +42,9 @@
         }));
     }
 
-    async statusMedium(args, data){
+    statusMedium(args, data){
         
-        stream_count = data?.stream_count ?? 0;
+        let streamCount = data?.stream_count ?? 0;
         
         return args.liveStats([
             ['Stream Count', streamCount]
