@@ -83,8 +83,8 @@ class Tautulli
         if(usingUsers){
             return `
     <div class="tautulli fill" style="background-image:url('${args.Utils.htmlEncode(item.image)}');background-size:contain">    
-        <div class="name tr">${title}</div>
-        <div class="br">${item.duration}</div>
+        <div class="bl">${item.duration}</div>
+        <div class="br">${title}</div>
         <a class="cover-link" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}" />
         <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon || '/apps/Plex/icon.png'}?version=${args.version}" /></a>
     </div>
