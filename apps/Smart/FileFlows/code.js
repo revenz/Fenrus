@@ -11,7 +11,6 @@
 
         if (!data || isNaN(data.queue))
             throw 'no data';        
-        console.log('fileflows data', data);
 
         if(args.size.indexOf('large') >= 0)
             return await this.statusXLarge(args, data);
