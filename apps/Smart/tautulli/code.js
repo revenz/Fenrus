@@ -60,8 +60,7 @@
             title = args.Utils.htmlEncode(item.parentTitle) + '<br/>' + title;
         }
         return `
-<div class="plex fill" style="background-image:url('${args.Utils.htmlEncode(item.image)}');">
-    
+<div class="tautulli fill" style="background:#222;background-image:url('${args.Utils.htmlEncode(item.image)}');">    
     <div class="name tr">${title}</div>
     <div class="br">${item.user}</div>
     <a class="cover-link" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}" />
