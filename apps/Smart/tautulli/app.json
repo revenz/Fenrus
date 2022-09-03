@@ -4,7 +4,7 @@
   "Interval":10,
   "Icon": "icon.png",
   "Info":{
-    "Authors": ["Froodle"],
+    "Authors": ["Froodle", "John Andrews"],
     "AppUrl":"https://tautulli.com/"
   },
   "Properties": [
