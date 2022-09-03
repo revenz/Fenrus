@@ -136,6 +136,7 @@
                                         <option value="small">Small</option>
                                         <option value="medium">Medium</option>
                                         <option value="large">Large</option>
+                                        <option value="larger">Larger</option>
                                         <option value="x-large">X-Large</option>
                                         <option value="xx-large">XX-Large</option>
                                     </select>
@@ -149,7 +150,7 @@
                                         <template x-if="model.Icon">
                                             <a :class="{'db-item':true, 'db-link': model._Type === 'DashboardLink', 'db-basic': !EditorApp.Carousel, 'db-app': model._Type === 'DashboardApp',
                                             'small': model.Size === 'small', 'medium': model.Size === 'medium', 'large': model.Size === 'large', 
-                                            'x-large': model.Size === 'x-large', 'xx-large': model.Size === 'xx-large', 'carousel': EditorApp.Carousel && model.Size.indexOf('large') >= 0}" >
+                                            'x-large': model.Size === 'x-large','larger': model.Size === 'larger', 'xx-large': model.Size === 'xx-large', 'carousel': EditorApp.Carousel && model.Size.indexOf('large') >= 0}" >
                                                 <div class="inner">
                                                     <div class="icon">
                                                         <img :src="model.Icon" class="icon-pick">

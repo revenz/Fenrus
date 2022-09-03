@@ -163,6 +163,11 @@ class DefaultTheme
                 w = 6;
                 h = 2;
             }
+            else if(item.classList.contains("larger"))
+            {
+                w = 6;
+                h = 4;
+            }
             else if(item.classList.contains("x-large"))
             {
                 w = largeWidth;
