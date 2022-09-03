@@ -3,6 +3,7 @@ const deleteIcon = `<span class="icon fa-solid fa-trash" style="padding-right:0.
 const infoIcon = `<span class="icon fa-solid fa-circle-info" style="padding-right:0.5rem"></span>`;
 const addIcon = `<span class="icon fa-solid fa-plus" style="padding-right:0.5rem"></span>`;
 const editIcon = `<span class="icon fa-solid fa-pen-to-square" style="padding-right:0.5rem"></span>`;
+const resizeIcon = `<span class="icon fa-solid fa-maximize" style="padding-right:0.5rem"></span>`;
 const dashboardIcon = `<span class="icon fa-solid fa-house" style="padding-right:0.5rem"></span>`;
 const terminalIcon = `<span class="icon fa-solid fa-terminal" style="padding-right:0.5rem"></span>`;
 const logIcon = `<span class="icon fa-solid fa-file-lines" style="padding-right:0.5rem"></span>`;
@@ -96,6 +97,29 @@ function openContextMenu(event, app){
         }
 
         menuItems = menuItems.concat([
+            {
+                content: `${resizeIcon}Resize`,
+                divider: "top",
+                submenu: ['Small', 'Medium', 'Large', 'Larger', 'X-Large', 'XX-Large'].map((x) =>
+                {
+                    return { 
+                        content: x,
+                        events: {
+                            click: (e) => {
+                                for(let size of ['Small', 'Medium', 'Large', 'Larger', 'X-Large', 'XX-Large']){
+                                    ele.classList.remove(size.toLowerCase());
+                                }
+                                ele.classList.add(x.toLowerCase());
+                                document.dispatchEvent(new CustomEvent('fenrus-item-resized', {
+                                    detail: { element: ele }
+                                }));
+
+                                fetch(`/settings/groups/${groupUid}/resize/${uid}/${x.toLowerCase()}`, { method: 'POST'});
+                            }
+                        }
+                    };
+                })
+            },
         {
             content: `${editIcon}Edit Group`,
             divider: "top",

@@ -98,6 +98,7 @@ const deleteIcon = `<span class="icon fa-solid fa-trash" style="padding-right:0.
 const infoIcon = `<span class="icon fa-solid fa-circle-info" style="padding-right:0.5rem"></span>`;
 const addIcon = `<span class="icon fa-solid fa-plus" style="padding-right:0.5rem"></span>`;
 const editIcon = `<span class="icon fa-solid fa-pen-to-square" style="padding-right:0.5rem"></span>`;
+const resizeIcon = `<span class="icon fa-solid fa-maximize" style="padding-right:0.5rem"></span>`;
 const dashboardIcon = `<span class="icon fa-solid fa-house" style="padding-right:0.5rem"></span>`;
 const terminalIcon = `<span class="icon fa-solid fa-terminal" style="padding-right:0.5rem"></span>`;
 const logIcon = `<span class="icon fa-solid fa-file-lines" style="padding-right:0.5rem"></span>`;
@@ -191,6 +192,29 @@ function openContextMenu(event, app){
         }
 
         menuItems = menuItems.concat([
+            {
+                content: `${resizeIcon}Resize`,
+                divider: "top",
+                submenu: ['Small', 'Medium', 'Large', 'Larger', 'X-Large', 'XX-Large'].map((x) =>
+                {
+                    return { 
+                        content: x,
+                        events: {
+                            click: (e) => {
+                                for(let size of ['Small', 'Medium', 'Large', 'Larger', 'X-Large', 'XX-Large']){
+                                    ele.classList.remove(size.toLowerCase());
+                                }
+                                ele.classList.add(x.toLowerCase());
+                                document.dispatchEvent(new CustomEvent('fenrus-item-resized', {
+                                    detail: { element: ele }
+                                }));
+
+                                fetch(`/settings/groups/${groupUid}/resize/${uid}/${x.toLowerCase()}`, { method: 'POST'});
+                            }
+                        }
+                    };
+                })
+            },
         {
             content: `${editIcon}Edit Group`,
             divider: "top",
@@ -243,7 +267,6 @@ class ContextMenu {
       const nodes = [];
   
       if (!this.menuItems) {
-        console.error("getMenuItemsNode :: Please enter menu items");
         return [];
       }
   
@@ -266,6 +289,14 @@ class ContextMenu {
       button.innerHTML = data.content;
       button.classList.add("contextMenu-button");
       item.classList.add("contextMenu-item");
+
+      if(data.submenu?.length){
+        const sub = document.createElement('ul');
+        sub.className = 'submenu contextMenuCommon';
+        for(let si of data.submenu)
+          sub.appendChild(this.createItemMarkup(si));
+        item.appendChild(sub);
+      }
   
       if (data.divider) item.setAttribute("data-divider", data.divider);
       item.appendChild(button);
@@ -284,6 +315,7 @@ class ContextMenu {
       const menuContainer = document.createElement("UL");
   
       menuContainer.classList.add("contextMenu");
+      menuContainer.classList.add("contextMenuCommon");
       menuContainer.setAttribute("data-theme", this.mode);
   
       this.menuItemsNode.forEach((item) => menuContainer.appendChild(item));

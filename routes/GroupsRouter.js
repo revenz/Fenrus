@@ -36,6 +36,8 @@ class GroupsRouter{
         this.router.get('/:uid', async (req, res) => await this.getItem(req, res));
         
         this.router.post('/:uid', async (req, res) => await this.save(req, res));
+
+        this.router.post('/:uid/resize/:itemUid/:size', async (req, res) => await this.resizeItem(req, res));
         
         this.router.post('/copy-item/:uid', async (req, res) => await this.copyItem(req, res));
     }
@@ -221,6 +223,31 @@ class GroupsRouter{
         await settings.save();
         return res.sendStatus(200); 
     }
+
+    
+    async resizeItem(req, res) 
+    {  
+        let uid = req.params.uid;
+        let itemUid = req.params.itemUid;
+        let size = req.params.size;
+
+        let settings = await this.getSettings(req);
+
+        // get existing 
+        let group = settings.Groups.find(x => x.Uid === uid);
+        if(!group)
+            return res.sendStatus(404);
+
+        let item = group.Items.find(x => x.Uid === itemUid);
+        if(!item)
+            return res.sendStatus(404);
+
+        item.Size = size;
+
+        await settings.save();
+        return res.sendStatus(200); 
+    }
+
 
     async copyItem(req, res) 
     {

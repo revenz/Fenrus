@@ -18,6 +18,8 @@ class DefaultTheme
                 document.body.insertAdjacentElement("afterbegin", div);
             }
 
+            document.addEventListener('fenrus-item-resized', (e) => this.onItemResized(e));
+
 
             let json = document.getElementById('theme-settings').value;          
             this.settings = json ? JSON.parse(json) : {};
@@ -40,6 +42,15 @@ class DefaultTheme
                 });
             }
         }
+    }
+
+    onItemResized(event) {
+        if(!event?.detail?.element)
+            return;
+
+        let group = event.detail.element.closest('.db-group');
+        if(group)
+            this.shrinkGroup(group);
     }
 
     load() 
