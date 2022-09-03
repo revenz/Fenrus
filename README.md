@@ -117,9 +117,3 @@ Icon: The icon to show when using this search engine
 Q: What is the default username/password?
 
 A: There is no default user.  Enter a username and password, then click the "Register" button.  This will create a new administrator user.   You can then go ot "System" and turn off registrations if you do not wish to allow open registrations.
-
----
-
-## TODO
-- Implement an application update system, so users do not need to install a new version of Fenrus to get the latest applications.  This will be done once the app has matured a little more.   I need to add more helpers for different types of Smart apps.
-- Document how to write an application.  These are written in Javascript and are not complex to write, however, there are some gotcha's that I need to document.
