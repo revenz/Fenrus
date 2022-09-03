@@ -2,8 +2,9 @@
 {
     async status(args)
     {
-        const [ data, updateAvailable ] = await Promise.all([
+        const [ data, shrinkage, updateAvailable ] = await Promise.all([
             await args.fetch('api/status'),
+            await args.fetch('api/library-file/shrinkage-groups'),
             await this.updateAvailable(args)
         ]);
 
@@ -13,7 +14,7 @@
             throw 'no data';        
 
         if(args.size.indexOf('large') >= 0)
-            return await this.statusXLarge(args, data);
+            return await this.statusXLarge(args, data, shrinkage);
         else
             return this.statusMedium(args, data);
     }
@@ -32,9 +33,12 @@
     pfImages = {};
     
 
-    async statusXLarge(args, data){
-        if(!data.processingFiles?.length)
+    async statusXLarge(args, data, shrinkage){
+        if(!data.processingFiles?.length){
+            if(shrinkage?.length)
+                return this.statusShrinkage(args, shrinkage);
             return this.statusMedium(args, data);
+        }
             
         let items =  [];
         for(let item of data.processingFiles || [])
@@ -97,6 +101,32 @@
             ['Queue', data.queue],
             [secondlbl, secondValue]
         ]);    
+    }
+    async statusShrinkage(args, shrinkage){
+        let items = [];
+            
+        Object.keys(shrinkage).forEach(group => 
+        {            
+            let item = shrinkage[group];
+            let increase = item.FinalSize > item.OriginalSize;
+            let percent;
+            let tooltip;
+            if(increase){
+                percent = 100 + ((item.FinalSize - item.OriginalSize) / item.OriginalSize * 100);
+                tooltip = args.Utils.formatBytes(item.FinalSize - item.OriginalSize) + ' Increase';
+            }else{
+                percent = (item.FinalSize / item.OriginalSize) * 100;
+                tooltip = args.Utils.formatBytes(item.OriginalSize - item.FinalSize) + ' Saved';
+            }
+            items.push({
+                label: group === '###TOTAL###' ? 'Total' : group,
+                percent: percent,
+                tooltip: tooltip,
+                icon: '/common/hdd.svg'
+            });
+        });
+        
+        return args.barInfo(items);
     }
     
     getItemHtml(args, item) {
