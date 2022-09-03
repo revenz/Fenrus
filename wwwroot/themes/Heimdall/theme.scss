@@ -80,15 +80,14 @@
         background: rgba(255, 255, 255, 0.1);
         box-shadow: 0 0 40px 0 rgb(0 0 0 / 20%);
     }
-
+    
     .arrow {
         &::after {
-            content: '\f0da';
-            font-family: 'icomoon' !important;
-            font-size:2rem;
+            font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f105";
+            font-size:1.5rem;
             position:relative;
             left:7px;
-            top:-3px;
+            top:1px;
             color:rgba(255,255,255,0.7);
             z-index:2;
         }

@@ -76,12 +76,13 @@ body {
   top: 1.75rem;
 }
 .db-item .arrow::after {
-  content: "";
-  font-family: "icomoon" !important;
-  font-size: 2rem;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "";
+  font-size: 1.5rem;
   position: relative;
   left: 7px;
-  top: -3px;
+  top: 1px;
   color: rgba(255, 255, 255, 0.7);
   z-index: 2;
 }
