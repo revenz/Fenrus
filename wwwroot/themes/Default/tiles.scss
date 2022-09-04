@@ -322,7 +322,67 @@ $margin:0;
         }
     }
 }
-
+@supports ( -moz-appearance:none )
+{    
+    .dashboard, .side
+    { 
+        .db-item.db-basic 
+        {
+            &.medium, &.x-large, &.xx-large
+            {
+                &:hover {         
+                    .inner {
+                        width: 106px;
+                        left: -8px;
+                        top: -7px;
+                        height: 106px;
+                    }
+                    .icon img {
+                        display:none;
+                    }  
+                    .title {
+                        left: 14px;
+                        position: relative;
+                        top: 6px;
+                    }
+                    &:not(.live-stats) .title {
+                        top:-7px;
+                    }
+                    .status {
+                        position: relative;
+                        top: 8px;
+                        left: 14px;
+                    }
+                    .livestats {
+                        position:relative;
+                        left:-14px;
+                        top:-4px;
+                    }
+                    .value {
+                        position:relative;
+                        left:14px;
+                        top:4px;
+                    }
+                }
+            }
+            &.medium:hover .inner
+            {
+                width: 106px;
+                height: 106px;
+            }
+            &.x-large:hover .inner
+            {
+                width: 212px;
+                height: 212px;
+            }
+            &.xx-large:hover .inner
+            {
+                width: 316px;
+                height: 316px;
+            }
+        }
+    }
+}
 .setting .db-item.medium {
     .inner, .icon {
         max-height:100%;

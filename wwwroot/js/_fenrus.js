@@ -1263,6 +1263,9 @@ class SmartApp
                 content = `<img class="app-chart" src="${content}" />`;
                 this.setItemClass(eleItem, 'chart');
             }
+            else if(content.indexOf('livestats') > 0){
+                this.setItemClass(eleItem, 'db-basic live-stats');
+            }
             else {
                 this.setItemClass(eleItem, 'db-basic');
             }
@@ -1273,7 +1276,7 @@ class SmartApp
     }
 
     setItemClass(item, className) {
-        item.className = (item.className.replace(/(carousel|chart|db-basic|bar-info)/g, '') + ' ' + className).replace(/\s\s+/g, ' ');
+        item.className = (item.className.replace(/(carousel|chart|db-basic|bar-info|live-stats)/g, '') + ' ' + className).replace(/\s\s+/g, ' ');
     }
 
     carouselItem(e, id, itemIndex){
