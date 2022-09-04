@@ -995,7 +995,8 @@ class SmartApp
     timerCarousel;
     icon;
     ele;
-    carouselUpdatePending;
+    carouselCanUpdate = true;
+    carouselWaitingUpdate = null;
 
     constructor(args)
     {
@@ -1014,14 +1015,11 @@ class SmartApp
     async trigger(){
         if(this.stillActive() === false)
             return;
-        
         let result = await this.doWork();
         
         if(this.stillActive() === false)
             return;
 
-        if(!result)
-            return; // nothing more to do
         if(this.interval <= 0)
             return; // nothing more to do
         
@@ -1073,14 +1071,11 @@ class SmartApp
         }    
 
         if(this.hasFocus())
-            return true; // prevent a refresh if cursor is over the dashboard item
-        if(this.carouselPreventUpdate()){
-            this.carouselUpdatePending = true;
-            return true; // only refresh when on last carousel
-        }
+            return true; // prevent a refresh if cursor is over the dashboard item        
 
         return await this.refresh();
     }
+
     refresh()
     {        
         return new Promise((resolve, reject) =>
@@ -1172,19 +1167,6 @@ class SmartApp
         return false;
     }
 
-    carouselPreventUpdate() {
-        if(this.interval > 10000)
-            return false; // timer is too long
-        if(!this.ele)
-            return false;
-        if(this.ele.className.indexOf('carousel') < 0)
-            return false;
-        let first = this.ele.querySelector('.carousel .item');
-        if(!first)
-            return true;
-        return first.className.indexOf('visible') < 0;
-    }
-
     getItemSize()
     {
         let ele = this.ele;
@@ -1230,56 +1212,64 @@ class SmartApp
 
     appSetStatus(content)
     {
+        if(!content)
+            return;
         let eleItem = document.getElementById(this.uid);
         if(!eleItem)
             return;
+        this.setInLocalStorage(content);        
+        if(/^:carousel:/.test(content)){
+            if(this.carouselCanUpdate)
+                this.initialCarouselContent(content);
+            else
+                this.carouselWaitingUpdate = content;
+            return;
+        }  
 
         let ele = eleItem.querySelector('.status');
-        if (ele && content) {
-            this.setInLocalStorage(content);        
-            if(/^:carousel:/.test(content)){
-                content = content.substring(10);
-                let index = content.indexOf(':');
-                let carouselId = content.substring(0, index);
-                content = content.substring(index + 1);
-                if(this.timerCarousel){
-                    clearInterval(this.timerCarousel);
-                    this.timerCarousel = null;
-                }
-                this.carouselTimer(carouselId);
-                this.setItemClass(eleItem, 'carousel');
-                ele.innerHTML = content;
-                let eleControls = ele.querySelector('.controls');
-                let indexes = ele.querySelectorAll('.controls a');
-                eleControls.className = 'controls items-' + indexes.length;
-                for(let i=0;i<indexes.length;i++)
-                {
-                    indexes[i].addEventListener('click', (event) => {
-                        event.stopImmediatePropagation();
-                        event.preventDefault();
-                        this.carouselItem(event, carouselId, i);
-                    }, false);
-                }
-                return;
-            }    
-            else if(/^:bar-info:/.test(content)){
-                content = content.substring(10);
-                this.setItemClass(eleItem, 'bar-info');
-            }
-            else if(/^data:/.test(content)){
-                content = `<img class="app-chart" src="${content}" />`;
-                this.setItemClass(eleItem, 'chart');
-            }
-            else if(content.indexOf('livestats') > 0){
-                this.setItemClass(eleItem, 'db-basic live-stats');
-            }
-            else {
-                this.setItemClass(eleItem, 'db-basic');
-            }
-            ele.innerHTML = content;
-
-
+        if(!ele)
+            return;
+        if(/^:bar-info:/.test(content)){
+            content = content.substring(10);
+            this.setItemClass(eleItem, 'bar-info');
         }
+        else if(/^data:/.test(content)){
+            content = `<img class="app-chart" src="${content}" />`;
+            this.setItemClass(eleItem, 'chart');
+        }
+        else if(content.indexOf('livestats') > 0){
+            this.setItemClass(eleItem, 'db-basic live-stats');
+        }
+        else {
+            this.setItemClass(eleItem, 'db-basic');
+        }
+        ele.innerHTML = content;
+    }
+
+    initialCarouselContent(content){
+        content = content.substring(10);
+        let index = content.indexOf(':');
+        let carouselId = content.substring(0, index);
+        content = content.substring(index + 1);
+        if(this.timerCarousel){
+            clearInterval(this.timerCarousel);
+            this.timerCarousel = null;
+        }
+        this.carouselTimer(carouselId);
+        this.setItemClass(this.ele, 'carousel');
+        this.ele.innerHTML = content;
+        let eleControls = this.ele.querySelector('.controls');
+        let indexes = this.ele.querySelectorAll('.controls a');
+        eleControls.className = 'controls items-' + indexes.length;
+        for(let i=0;i<indexes.length;i++)
+        {
+            indexes[i].addEventListener('click', (event) => {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                this.carouselItem(event, carouselId, i);
+            }, false);
+        }
+
     }
 
     setItemClass(item, className) {
@@ -1321,6 +1311,7 @@ class SmartApp
     carouselTimer(id) {
         if(this.timerCarousel)
             clearInterval(this.timerCarousel);
+        let self = this;
         this.timerCarousel = setInterval(() => {
             let carousel = document.getElementById(id);
             if(!carousel)
@@ -1335,12 +1326,15 @@ class SmartApp
             ++index;            
             let hasNext = document.getElementById(id + '-' + index);
             index = hasNext ? index : 0;
-            this.carouselItem(null, id, index);
-            if(index === 0 && this.carouselUpdatePending)
+            this.carouselCanUpdate = index === 0;
+            if(index === 0 && this.carouselWaitingUpdate)
             {
-                this.carouselUpdatePending = false;
-                this.trigger();
-                return;
+                this.initialCarouselContent(this.carouselWaitingUpdate);
+                this.carouselWaitingUpdate = null;
+            }
+            else
+            {
+                this.carouselItem(null, id, index);
             }
         }, 5000);
     }

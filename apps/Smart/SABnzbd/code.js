@@ -69,9 +69,9 @@
 
     async statusLarge(args)
     {        
-        const [ data, serverStats ] = await Promise.all([
+        const [ data, history ] = await Promise.all([
             await this.getData(args, 'queue'),
-            await this.getData(args, 'server_stats')
+            await this.getData(args, 'history')
         ]);
         
         let mbleft = parseFloat(data?.queue?.mbleft, 10);
@@ -99,8 +99,7 @@
             let mb = parseFloat(item.mb, 10);
             let mbleft = parseFloat(item.mbleft, 10);
             let percent = (mb - mbleft) / mb * 100;
-            percent.toFixed(2) + '%'            
-            console.log('speeds', speeds);
+            percent.toFixed(2) + '%'
             let chartBase64 = await args.chart.line({
                 title: '',
                 min: Math.min(...speeds),   
@@ -109,35 +108,32 @@
                 data: [speeds]
             });
 
-            if(this.pfImages[item.filename] === undefined)
-            {
-                let searchTerm = item.filename.replace(/\\/g, '/');
-                if(/([^\/]+)s[\d]+e[\d]+/i.test(searchTerm)){
-                    searchTerm = /([^\/]+)s[\d]+e[\d]+/i.exec(searchTerm)[1];
-                    console.log('searchTerm', searchTerm);
-                    searchTerm = searchTerm.replace(/\./g, ' ');
-                }
-                else if(/([^\/]+)(720p|1080p|4k|3840|BluRay)/i.test(searchTerm)){
-                    searchTerm = /([^\/]+)(720p|1080p|4k|3840|480|576|BluRay)/i.exec(searchTerm)[1];
-                    searchTerm = searchTerm.replace(/(720|1080|3840|480|576)[ip]/gi, '');
-                    searchTerm = searchTerm.replace(/\./g, ' ');
-                }
-                else {
-                    searchTerm = searchTerm.substring(searchTerm.lastIndexOf('/') + 1);
-                }
-                console.log('SABnzbd search term: ' + searchTerm);
-                let images = await args.imageSearch(searchTerm);
-                this.pfImages[item.filename] = images?.length ? images[0] : '';      
-            }
+            let image = await this.searchForImage(args, item.filename);
             
-            if(this.pfImages[item.filename])
+            if(image)
             {
                 return args.carousel([
-                    this.getCarouselItemHtml(args, this.pfImages[item.filename], item.filename, kbpersec, percent.toFixed(1)),
-                    this.getCarouselItemHtml(args, chartBase64, item.filename, kbpersec, percent.toFixed(1))
+                    this.getCarouselItemHtml(args, image, item.filename, kbpersec, percent.toFixed(1) + '%'),
+                    this.getCarouselItemHtml(args, chartBase64, item.filename, kbpersec, percent.toFixed(1) + '%')
                 ]);
             }
-            return args.carousel([this.getCarouselItemHtml(args, chartBase64, item.filename, kbpersec, percent.toFixed(1))]);
+            return args.carousel([this.getCarouselItemHtml(args, chartBase64, item.filename, kbpersec, percent.toFixed(1) + '%')]);
+        }
+        else if(history?.history?.slots?.length)
+        {
+            // history
+            let items = [];
+            for(let item of history.history.slots){
+                if(item.status !== 'Completed')
+                    continue;
+                let image = await this.searchForImage(args, item.series || item.name);
+                items.push(this.getCarouselItemHtml(args, image, item.name, item.size, 
+                    '<i style="color:#6ebd6e;margin-right:0.5rem" class="fa-solid fa-download"></i>' + args.Utils.formatMilliTimeToWords(item.download_time * 1000)));
+                if(items.length > 4)
+                    break;
+            }
+            if(items.length)
+                return args.carousel(items);
         }
 
         if(item?.filename){
@@ -169,12 +165,38 @@
         ]);
     }
 
+    async searchForImage(args, filename) {
+        if(this.pfImages[filename] === undefined)
+        {
+            let searchTerm = filename.replace(/\\/g, '/');
+            searchTerm = searchTerm.replace(/\/[\d]+\/[\d]+$/, '');
+            if(/([^\/]+)s[\d]+e[\d]+/i.test(searchTerm)){
+                searchTerm = /([^\/]+)s[\d]+e[\d]+/i.exec(searchTerm)[1];
+                searchTerm = searchTerm.replace(/\./g, ' ');
+            }
+            else if(/([^\/]+)(720p|1080p|4k|3840|BluRay)/i.test(searchTerm)){
+                searchTerm = /([^\/]+)(720p|1080p|4k|3840|480|576|BluRay)/i.exec(searchTerm)[1];
+                searchTerm = searchTerm.replace(/(720|1080|3840|480|576)[ip]/gi, '');
+                searchTerm = searchTerm.replace(/\./g, ' ');
+            }
+            else {
+                searchTerm = searchTerm.substring(searchTerm.lastIndexOf('/') + 1);
+            }
+
+            console.log('SABnzbd search term: ' + searchTerm);
+
+            let images = await args.imageSearch(searchTerm);
+            this.pfImages[filename] = images?.length ? images[0] : '';      
+        }
+        return this.pfImages[filename];
+    }
+
     getCarouselItemHtml(args, imgSrc, name, br, bl){
         return `
         <div class="sabnzbd fill" style="background-image:url('${args.Utils.htmlEncode(imgSrc)}');">    
             <div class="name tr wrap">${name}</div>
-            <div class="br">${br}</div>
-            <div class="bl">${bl}%</div>
+            ${br ? `<div class="br">${br}</div>` : ''}
+            ${bl ? `<div class="bl">${bl}</div>` : ''}
             <a class="cover-link" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}" />
             <a class="app-icon" target="${args.linkTarget}" href="${args.Utils.htmlEncode(args.url)}"><img src="${args.appIcon || '/apps/SABnzbd/icon.png'}?version=${args.version}" /></a>
         </div>
