@@ -995,6 +995,7 @@ class SmartApp
     timerCarousel;
     icon;
     ele;
+    carouselUpdatePending;
 
     constructor(args)
     {
@@ -1074,6 +1075,7 @@ class SmartApp
         if(this.hasFocus())
             return true; // prevent a refresh if cursor is over the dashboard item
         if(this.carouselPreventUpdate()){
+            this.carouselUpdatePending = true;
             return true; // only refresh when on last carousel
         }
 
@@ -1177,10 +1179,10 @@ class SmartApp
             return false;
         if(this.ele.className.indexOf('carousel') < 0)
             return false;
-        let last = this.ele.querySelector('.carousel .item:nth-last-of-type(2)');
-        if(!last)
-            return false;
-        return last.className.indexOf('visible') < 0;
+        let first = this.ele.querySelector('.carousel .item');
+        if(!first)
+            return true;
+        return first.className.indexOf('visible') < 0;
     }
 
     getItemSize()
@@ -1240,11 +1242,16 @@ class SmartApp
                 let index = content.indexOf(':');
                 let carouselId = content.substring(0, index);
                 content = content.substring(index + 1);
-                if(!this.timerCarousel)
-                    this.carouselTimer(carouselId);
+                if(this.timerCarousel){
+                    clearInterval(this.timerCarousel);
+                    this.timerCarousel = null;
+                }
+                this.carouselTimer(carouselId);
                 this.setItemClass(eleItem, 'carousel');
                 ele.innerHTML = content;
+                let eleControls = ele.querySelector('.controls');
                 let indexes = ele.querySelectorAll('.controls a');
+                eleControls.className = 'controls items-' + indexes.length;
                 for(let i=0;i<indexes.length;i++)
                 {
                     indexes[i].addEventListener('click', (event) => {
@@ -1325,9 +1332,16 @@ class SmartApp
             
             let visible = carousel.querySelector('.item.visible');
             let index = parseInt(visible.id.substring(visible.id.indexOf('-') + 1), 10);
-            ++index;
+            ++index;            
             let hasNext = document.getElementById(id + '-' + index);
-            this.carouselItem(null, id, hasNext ? index : 0);
+            index = hasNext ? index : 0;
+            this.carouselItem(null, id, index);
+            if(index === 0 && this.carouselUpdatePending)
+            {
+                this.carouselUpdatePending = false;
+                this.trigger();
+                return;
+            }
         }, 5000);
     }
 }

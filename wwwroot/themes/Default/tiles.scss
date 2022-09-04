@@ -401,6 +401,7 @@ $margin:0;
 
 .db-item.chart {
     .inner {
+        display:flex;
         > .icon {
             display:none;
         }
@@ -412,6 +413,9 @@ $margin:0;
                 background:rgba(0,0,0,0.3);
                 padding:0.5rem;
                 text-transform: unset;
+            }
+            .status {
+                flex-grow:1;
             }
         }
     }

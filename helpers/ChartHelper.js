@@ -10,10 +10,13 @@ class ChartHelper
     constructor(widthPixels, heightPixels) {
         this.width = widthPixels || 400;
         this.height = heightPixels || 400;
+        //this.width = this.width * 4;
+        //this.height = this.height * 4;
         this.chartJSNodeCanvas = new ChartJSNodeCanvas({ width: this.width, height: this.height, backgroundColour: this.backgroundColour});
     }
     
     async line(args) {
+      console.log('#########chart dimensions: ' + this.width + ' x' + this.height);
         let title = args.title;
         let labels = args.labels;
         let datasets = args.data;

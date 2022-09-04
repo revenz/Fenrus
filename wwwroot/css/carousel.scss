@@ -20,6 +20,9 @@
         width:calc(100% - 8rem);
         text-align: center;
         z-index: 5;
+        &.items-0, &.items-1 {
+            display:none;
+        }
         a {
             display: inline-block;
             background-color: var(--color);

@@ -194,6 +194,8 @@ class AppRouter extends FenrusRouter {
             w = 2, h = 2;
         else if(appInstance.Size === 'large')
             w = 6, h = 2;
+        else if(appInstance.Size === 'larger')
+            w = 6, h = 4;
         else if(appInstance.Size === 'x-large')
             w = 4, h = 4;
         else if(appInstance.Size === 'xx-large')
