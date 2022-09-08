@@ -196,7 +196,7 @@ class SABnzbd
 
     getCarouselItemHtml(args, imgSrc, name, br, bl){
         return `
-        <div class="sabnzbd fill" style="background-image:url('${args.Utils.htmlEncode(imgSrc)}');">    
+        <div class="sabnzbd fill" style="background-image:url('${args.Utils.htmlEncode(imgSrc || '/apps/SABnzbd/icon.png')}');">    
             <div class="name tr wrap">${name}</div>
             ${br ? `<div class="br">${br}</div>` : ''}
             ${bl ? `<div class="bl">${bl}</div>` : ''}
