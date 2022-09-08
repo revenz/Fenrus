@@ -1,4 +1,6 @@
-﻿class SABnzbd
+﻿const humanizeDuration = require("humanize-duration");
+
+class SABnzbd
 { 
     getUrl(args, mode) {
         return `api?output=json&apikey=${args.properties['apikey']}&mode=${mode}`;
@@ -127,8 +129,9 @@
                 if(item.status !== 'Completed')
                     continue;
                 let image = await this.searchForImage(args, item.series || item.name);
+                let millisecondsAgo = new Date().getTime() - (item.completed * 1000);
                 items.push(this.getCarouselItemHtml(args, image, item.name, item.size, 
-                    '<i style="color:#6ebd6e;margin-right:0.5rem" class="fa-solid fa-download"></i>' + args.Utils.formatMilliTimeToWords(item.download_time * 1000)));
+                    '<i style="color:#6ebd6e;margin-right:0.5rem" class="fa-solid fa-download"></i>' + humanizeDuration(millisecondsAgo, { largest: 1 }) + ' ago'));
                 if(items.length > 4)
                     break;
             }
