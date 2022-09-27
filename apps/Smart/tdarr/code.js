@@ -28,7 +28,7 @@
   
       return args.liveStats([
         ['Queue', queue],
-        ['Proc/Err', `${processed}/${errored}`],
+        ['Proc / Err', `${processed} / ${errored}`],
       ]);
     }
   
