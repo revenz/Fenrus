@@ -36,22 +36,29 @@ class Utils {
         return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&#34;").replace(/\'/g, "&#39;");
     }
         
-    formatBytes(bytes) {
+	//used for formatting non byte intergers such as GB by having sizeTypeStart as 3
+    formatBytesAdvanced(bytes, sizeTypeStart) {
         if (typeof (bytes) === 'string') {
             bytes = parseFloat(bytes, 10);
         }
-
         if (isNaN(bytes))
             return '';
 
-        let order = 0;
         const sizes = ["B", "KB", "MB", "GB", "TB"];
-        while (bytes >= 1000 && order < sizes.length - 1) {
-            ++order;
+        while (bytes >= 1000 && sizeTypeStart < sizes.length - 1) {
+            ++sizeTypeStart;
             bytes /= 1000; 
         }
-        return bytes.toFixed(2) + ' ' +sizes[order];
+        return bytes.toFixed(2) + ' ' +sizes[sizeTypeStart];
     }
+	
+	formatBytes(bytes) {
+		return this.formatBytesAdvanced(bytes, 0)
+	}
+		
+		
+	
+	
 
     formatTime(date, showSeconds) {
         let minute = date.getMinutes();
