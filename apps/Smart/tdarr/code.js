@@ -36,7 +36,7 @@ class Tdarr {
         ['Proc / Err', `${processed} / ${errored}`]] 
 		
 	  if(args.properties['showSpaceSaved'] == 'true') {	
-	    const sizeSaved = args.Utils.formatBytesAdvanced(parseFloat(data.sizeDiff), 3)
+	    const sizeSaved = args.Utils.formatBytes(parseFloat(data.sizeDiff) * 1000000000)
 		results.push(['Space saved', sizeSaved])
 	  }
 	  
