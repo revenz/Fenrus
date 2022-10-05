@@ -1,8 +1,14 @@
-﻿class Tdarr {
+class Tdarr {
     async status(args) {
+		
+		
+      let url = args.url;
+      if(url.endsWith('/'))
+        url = url.substring(0, url.length - 1);
+	
       const data = await args.fetch(
         {
-          url: `${args.url}/api/v2/cruddb/`,
+          url: `${url}/api/v2/cruddb/`,
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -25,15 +31,23 @@
       const queue = parseInt(data.table1Count) + parseInt(data.table4Count);
       const processed = parseInt(data.table2Count) + parseInt(data.table5Count);
       const errored = parseInt(data.table3Count) + parseInt(data.table6Count);
-  
-      return args.liveStats([
-        ['Queue', queue],
-        ['Proc / Err', `${processed} / ${errored}`],
-      ]);
+
+	  let results =	[['Queue', queue],
+        ['Proc / Err', `${processed} / ${errored}`]] 
+		
+	  if(args.properties['showSpaceSaved'] == 'true') {	
+	    const sizeSaved = args.Utils.formatBytes(parseFloat(data.sizeDiff) * 1000000000)
+		results.push(['Space saved', sizeSaved])
+	  }
+	  
+      return args.liveStats(results);
     }
   
     async test(args) {
-      const data = await args.fetch(`${args.url}/api/v2/status`);
+      let url = args.url;
+      if(url.endsWith('/'))
+        url = url.substring(0, url.length - 1);
+      const data = await args.fetch(`${url}/api/v2/status`);
       return (data.status === 'good');
     }
   }
