@@ -17,7 +17,7 @@ To switch to an non-default search engine on the home screen type in the search 
             <FenrusTableColumn TItem="Models.SearchEngine" ColumnName="Name">
                 <Header>Name</Header>
                 <Cell Context="item">
-                    @item.Name
+                    <a href="/settings/search-engines/@item.Uid">@item.Name</a>
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.SearchEngine" ColumnName="IsDefault" Width="10rem">

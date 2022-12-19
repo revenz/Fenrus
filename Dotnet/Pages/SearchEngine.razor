@@ -1,0 +1,15 @@
+@page "/settings/search-engines/{uidString}"
+
+<PageTitle>Fenrus - Search Engine</PageTitle>
+
+<FenrusPage Title="Search Engine" Icon="fa-solid fa-magnifying-glass">
+    <Buttons>
+        <button class="btn" @onclick="() => Save()">Save</button>
+        <button class="btn" @onclick="() => Cancel()">Cancel</button>
+    </Buttons>
+    <Body>
+        <InputText Label="Name" @bind-Value="@Model.Name" Help="The Name of the search engine" />
+        <InputText Label="URL" @bind-Value="@Model.Url" Help="The URL of the search engine.  Note %s will be replaced with the search string" />
+        <InputText Label="Shortcut" @bind-Value="@Model.Shortcut" Help="The shortcut for this search engine.  Typing this shortcut then space will switch the search to use this search engine" />
+    </Body>
+</FenrusPage>

@@ -1,13 +1,23 @@
-@page "/settings/groups"
+@page "/settings/dashboards/{uidString}"
 
-<PageTitle>Fenrus - Groups</PageTitle>
+<PageTitle>Fenrus - Dashboard</PageTitle>
 
-<FenrusPage Title="Groups" Icon="fa-solid fa-puzzle-piece" PageDescription="This page lets you create groups which can be used on Dashboards.
-                                                                                     
-A group will not appear by itself, it must be added to a dashboard.">
+<FenrusPage Title="Dashboard" Icon="fa-solid fa-house">
+    <Buttons>
+        <button class="btn" @onclick="() => Save()">Save</button>
+        <button class="btn" @onclick="() => Cancel()">Cancel</button>
+    </Buttons>
     <Body>
-    
-    <FenrusTable TItem="Models.Group" Data=@Items>
+        <InputText Label="Name" @bind-Value="@Model.Name" Help="The Name of the dashboard" />
+        <InputColor Label="Accent" @bind-Value="@Model.AccentColor" Help="The general accent colour of the application"></InputColor>
+        <InputSelect TItem="string" Label="Theme" @bind-Value="@Model.Theme" Help="Your personal theme to use.">
+            <InputSelectOption TItem="string"StringValue="Default" Label="Default" />
+            <InputSelectOption TItem="string"StringValue="Basic" Label="Basic" />
+            <InputSelectOption TItem="string"StringValue="Heimdall" Label="Heimdall" />
+        </InputSelect>
+        
+        
+    <FenrusTable TItem="Models.Group" Data=@Model.Groups>
         <ToolBar>
             <FenrusTableButton Label="Add" Icon="fa-solid fa-plus" Clicked="() => Add()" />
         </ToolBar>
@@ -37,6 +47,5 @@ A group will not appear by itself, it must be added to a dashboard.">
             </FenrusTableColumn>
         </Columns>
     </FenrusTable>
-        
     </Body>
 </FenrusPage>

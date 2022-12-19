@@ -15,7 +15,7 @@ To add items to your Dashboard, first create a Group containing the items you wi
             <FenrusTableColumn TItem="Models.Dashboard" ColumnName="Name">
                 <Header>Name</Header>
                 <Cell Context="item">
-                    @item.Name
+                    <a href="/settings/dashboards/@item.Uid">@item.Name</a>
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.Dashboard" ColumnName="Enabled" Width="10rem">

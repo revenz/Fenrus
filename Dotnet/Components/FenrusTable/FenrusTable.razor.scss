@@ -118,6 +118,14 @@ $borderColor: var(--input-background);
     border-left: none;
   }
 
+  ::deep span > a {
+    text-decoration: unset;
+    color: var(--color);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
   > span {
     text-overflow: ellipsis;
     overflow: hidden;
