@@ -83,12 +83,14 @@ input {
   left: 95px; 
   height: 20px; 
   width: 20px;
+  pointer-events: none;
 }
 .color-slider-bar-indicator {
   border: 1px solid rgb(255, 255, 255); 
   position: absolute; 
   left: -4px; 
   top: -5px;
+  pointer-events: none;
 }
 .color-slider-bar-indicator-square {
   width: 2rem; 

@@ -22,8 +22,6 @@ class FenrusColor
         this.input.addEventListener('keyup', (e) => {
             this.manualEntry(); 
         });
-        let crosshair = picker.querySelector('.crosshair');
-        let sliderIndicator = picker.querySelector('.color-slider-bar-indicator');
         this.colorPickerRgb = picker.querySelector('.color-picker-rgb');
         this.preview = document.getElementById(uid +'-preview');
         this.preview.addEventListener('click', (e) => {
@@ -46,23 +44,57 @@ class FenrusColor
                 this.close();
             });
         }
+        this.initSlider(picker);
+        this.initArea(picker);
+    }
+    
+    initArea(picker) {
+        let crosshair = picker.querySelector('.crosshair');
 
         document.addEventListener('click', (event) => {
             if(!this.visible)return;
             const withinBoundaries = event.composedPath().includes(picker);
-            if(!withinBoundaries) {                
+            if(!withinBoundaries) {
                 this.close();
             }
         });
-        picker.querySelector('.color-picker-rgb').addEventListener('click', (event) => {
+        let area = picker.querySelector('.color-picker-rgb');
+        area.addEventListener('click', (event) => {
             crosshair.style.left = (event.offsetX + 5.5) + 'px';
             crosshair.style.top = (event.offsetY + 6) + 'px';
             this.mainPickerClicked(event);
         });
-        picker.querySelector('.color-slider').addEventListener('click', (event) => {
+
+        let mouseMoveEvent = (event) => {
+            crosshair.style.left = (event.offsetX + 5.5) + 'px';
+            crosshair.style.top = (event.offsetY + 6) + 'px';
+            this.mainPickerClicked(event);
+        }
+        area.addEventListener('mousedown', () => {
+            area.addEventListener('mousemove', mouseMoveEvent);
+        });
+        document.addEventListener('mouseup', (event) => {
+            area.removeEventListener('mousemove', mouseMoveEvent)
+        });
+    }
+    
+    initSlider(picker) {
+        let sliderIndicator = picker.querySelector('.color-slider-bar-indicator');
+        let colorSlider = picker.querySelector('.color-slider');
+        colorSlider.addEventListener('click', (event) => {
             sliderIndicator.style.top = (event.offsetY - 3) + 'px';
-            this.moveSlider(event);            
-        })
+            this.moveSlider(event);
+        });
+        let mouseMoveEvent = (event) => {
+            sliderIndicator.style.top = (event.offsetY - 3) + 'px';
+            this.moveSlider(event);
+        }
+        colorSlider.addEventListener('mousedown', () => {
+            colorSlider.addEventListener('mousemove', mouseMoveEvent);
+        });
+        document.addEventListener('mouseup', (event) => {
+            colorSlider.removeEventListener('mousemove', mouseMoveEvent)
+        });
     }
     
     close() {
