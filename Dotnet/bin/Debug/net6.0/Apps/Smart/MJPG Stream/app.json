@@ -1,7 +1,0 @@
-﻿{
-  "Name": "MJPG Stream",
-  "Interval":3600,
-  "Info":{
-    "Authors": ["Froodle"]
-  }
-}
