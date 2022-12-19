@@ -1,0 +1,25 @@
+using Fenrus.Models;
+using Microsoft.AspNetCore.Components;
+
+namespace Fenrus.Components;
+
+/// <summary>
+/// Main dashboard component
+/// </summary>
+public partial class DashboardComponent
+{
+    /// <summary>
+    /// Gets or sets the user settings
+    /// </summary>
+    [Parameter] public UserSettings Settings { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the page helper
+    /// </summary>
+    [Parameter] public PageHelper PageHelper { get; set; }
+
+    /// <summary>
+    /// Gets or sets the dashboard model
+    /// </summary>
+    [Parameter] public Dashboard Model { get; set; }
+}

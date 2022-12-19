@@ -1,0 +1,251 @@
+.fillspace {
+  flex-grow: 1;
+}
+
+.fenrus-table-toolbar {
+  display: flex;
+  flex-direction: row;
+}
+.fenrus-table-toolbar .fenrus-table-toolbar-buttons {
+  flex-grow: 1;
+  overflow: hidden;
+  margin: auto 0 0.5rem;
+}
+.fenrus-table-toolbar ::deep .fenrus-table-button-separator {
+  border-left: 1px solid var(--border-color);
+  height: 1rem;
+  display: inline-block;
+  position: relative;
+  top: 4px;
+  width: 1px;
+  margin: 0 0.25rem;
+}
+.fenrus-table-toolbar ::deep .fenrus-table-button {
+  cursor: pointer;
+}
+.fenrus-table-toolbar .fenrus-table-toolbar-filter {
+  width: 16rem;
+  position: relative;
+}
+.fenrus-table-toolbar .fenrus-table-toolbar-filter input {
+  background-color: transparent !important;
+  width: calc(100% - 3rem);
+  line-height: 1rem;
+  padding-right: 1.75rem;
+  border: 1px solid var(--input-background) !important;
+  height: 1rem;
+  margin: 0.25rem;
+}
+.fenrus-table-toolbar .fenrus-table-toolbar-filter input:focus {
+  border-color: var(--accent);
+}
+.fenrus-table-toolbar .fenrus-table-toolbar-filter i {
+  position: absolute;
+  right: 1rem;
+  top: 0.9rem;
+  font-size: 0.8rem;
+  color: rgba(var(--color-rgb), 0.5);
+}
+.fenrus-table-toolbar ::deep button {
+  text-transform: uppercase;
+  background: transparent;
+  color: rgba(var(--color-rgb), 0.8);
+  border: unset;
+  border-radius: 0 !important;
+  font-size: 0.8rem;
+  outline: none;
+}
+.fenrus-table-toolbar ::deep button:hover {
+  color: var(--color-rgb);
+}
+.fenrus-table-toolbar ::deep button .icon {
+  margin-right: 0.25rem;
+}
+
+@media screen and (max-width: 578px) {
+  .fenrus-table-data {
+    font-size: 0.85rem;
+  }
+}
+.fenrus-table {
+  position: relative !important;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+  overflow: auto;
+}
+
+.fenrus-table-inner {
+  height: 100%;
+  position: relative !important;
+  display: flex;
+  flex-direction: column;
+}
+
+@supports (-moz-appearance: none) {
+  ::deep .fenrus-table-row {
+    /** scrollbar on firefox */
+    padding-right: 0.75rem;
+  }
+}
+.fenrus-table-row {
+  border: solid 1px var(--input-background);
+  display: flex;
+  flex-direction: row;
+  user-select: none;
+  width: 100%;
+}
+.fenrus-table-row:not(.fenrus-table-header-row) {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+}
+.fenrus-table-row > span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  height: 2.2rem;
+  line-height: 2.2rem;
+}
+.fenrus-table-row > span:not(.fenrus-table-select) {
+  padding-left: 0.5rem;
+}
+.fenrus-table-row > span.pre-text {
+  white-space: pre-line;
+  height: unset;
+  line-height: unset;
+  margin: 0.3rem 0;
+}
+.fenrus-table-row.selected {
+  background: rgba(var(--accent-rgb), 0.3);
+}
+
+.fenrus-table-header-row {
+  padding-right: 0.7rem;
+  font-weight: 600;
+  background: rgba(var(--input-background-rgb), 0.3);
+}
+
+::deep .fenrus-table-body {
+  height: calc(100% - 2.4rem);
+  overflow-y: scroll;
+  border-left: solid 1px var(--input-background);
+  border-bottom: solid 1px var(--input-background);
+  border-right: solid 1px var(--input-background);
+}
+::deep .fenrus-table-body::-webkit-scrollbar-track {
+  border-right: solid 1px var(--input-background);
+  border-left: solid 1px var(--input-background);
+}
+
+.fenrus-table-data {
+  overflow: hidden;
+  top: 1.75rem;
+  flex-grow: 1;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  border: solid 1px var(--input-background);
+}
+
+.hidden {
+  display: none;
+  width: unset !important;
+}
+
+@media screen and (max-width: 578px) {
+  .fenrus-table-toolbar {
+    display: unset;
+  }
+  .fenrus-table-data {
+    top: 3.5rem;
+  }
+}
+::deep .resizer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 5px;
+  cursor: col-resize;
+  user-select: none;
+  border-right: 2px solid rgba(var(--color-rgb), 0.05);
+}
+::deep .resizer:hover,
+::deep .resizing {
+  border-right: 2px solid var(--accent);
+}
+::deep .pager {
+  text-align: right;
+  border: solid 1px var(--border-color);
+  border-top: none;
+}
+::deep .pager .page-size {
+  float: right;
+  margin: 0.3rem 0.25rem 0.25rem;
+  width: 4rem;
+  text-align: center;
+}
+::deep .pager .page-size select {
+  background-color: transparent;
+  color: var(--color) !important;
+  border-color: transparent;
+  height: 1.75rem;
+}
+::deep .pager .page-size select:focus {
+  outline: 1px solid var(--accent);
+}
+::deep .pager .page-size select.select-one {
+  color: rgba(var(--color-rgb), 0.3) !important;
+}
+::deep .pager .page-size select option {
+  background-color: var(--input-background) !important;
+}
+::deep .pager .page-size select option:not(.select-one) {
+  color: var(--color) !important;
+}
+::deep .pager .page-size select option:checked {
+  background-color: rgba(var(--accent-rgb), 0.3);
+}
+::deep .pager ul {
+  margin: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
+::deep .pager ul li {
+  display: inline-block;
+  width: 2rem;
+  border: solid 1px var(--accent);
+  text-align: center;
+  margin: 0 0.25rem;
+  cursor: pointer;
+  color: white;
+  filter: opacity(0.4);
+}
+::deep .pager ul li:hover {
+  background-image: linear-gradient(rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.3)) !important;
+  box-shadow: inset 0 -3px 0 0 var(--accent) !important;
+}
+::deep .pager ul li.current-page {
+  filter: unset;
+}
+@media (max-width: 576px) {
+  ::deep .pager .page-size {
+    width: 3.5rem;
+  }
+}
+
+.fenrus-table-row ::deep .fenrus-switch {
+  top: 0.3rem;
+}
+
+.fenrus-table-row ::deep .actions {
+  font-size: 1.1rem;
+  text-align: right;
+}
+.fenrus-table-row ::deep .actions a, .fenrus-table-row ::deep .actions span {
+  margin-right: 0.75rem;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=FenrusTable.razor.css.map */

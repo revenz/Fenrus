@@ -1,0 +1,85 @@
+﻿{
+  "Name": "DailyReminder",
+  "TestFunction": false,
+  "Interval": 600,
+  "Icon": "icon.png",
+  "Info":{
+    "Authors": ["Froodle"]
+  },
+  "Properties": [
+    {
+      "Name": "Start Date",
+      "Id": "startDate1",
+      "Type": "string",
+	  "Default": "2022-01-30",
+	  "Help" : "Format YYYY-MM-DD ie 2022-03-25"
+    },
+	{
+      "Name": "(Optional) Secondary Start Date",
+      "Id": "startDate2",
+      "Type": "string",
+	  "Default": "",
+	  "Help" : "Second start date for when you have a event that may happen twice a week/month etc. \nFormat YYYY-MM-DD ie 2022-03-25"
+    },
+	{
+      "Name": "Reminder Type",
+      "Id": "reminderType",
+      "Type": "select",
+      "Options":
+      [
+        { 
+            "Label": "Every x Days",
+            "Value":"days"
+        },
+		{ 
+            "Label": "Every x Weeks",
+            "Value":"weeks"
+        },
+        { 
+            "Label": "Every x Months",
+            "Value":"months"
+        }
+      ]
+    },
+	{
+      "Name": "X increment for Type",
+      "Id": "typeIncrement",
+	  "Default": "1",
+      "Type": "string",
+	  "Help" : "The number here would mean every x days/weeks/months dependent on Reminder type eg 3 would mean every '3' days"
+    },
+	{
+      "Name": "Display Text",
+      "Id": "displayText",
+      "Type": "string",
+	  "Default": "in {days} days",
+	  "Help" : "The text to be displayed, {days} will be replaced with total days left"
+    },
+	{
+      "Name": "Day offset",
+      "Id": "dayOffset",
+	  "Default": "0",
+	  "Help": "Offset to add/remove from day.\nUseful for if you wish to have \"today\" be the day before the actual day\n(by specifying -1)",
+      "Type": "string"
+    },
+	{
+      "Name": "Hour offset",
+      "Id": "hourOffset",
+	  "Default": "0",
+	  "Help": "Offset to add/remove hours.\nUseful for if you wish to have the 'new day' start at 3am by entering '3' also accepts minus values",
+      "Type": "string"
+    },
+	{
+      "Name": "Custom Icon URL when day is \"Today\"",
+      "Id": "todayIcon",
+	  "Help": "Overrides current icon with whatever icon is specified by url here.\nThis will only apply when the date is \"Today\"",
+      "Type": "string"
+    },
+	{
+      "Name": "Custom Icon URL when day is NOT \"Today\"",
+      "Id": "notTodayIcon",
+      "Help": "Overrides current icon with whatever icon is specified by url here.\nThis will only apply when the date is NOT \"Today\"",
+      "Type": "string"
+    }
+  ]
+}

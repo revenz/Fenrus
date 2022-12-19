@@ -1,0 +1,21 @@
+﻿{
+  "Name": "Steam",
+  "TestFunction":true,
+  "Interval":-1,
+  "DefaultUrl":"https://steampowered.com/",
+  "DefaultSize":"xx-large",
+  "Classes": "widget",
+  "Carousel": true,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://steampowered.com/"
+  },
+  "Properties": [
+    {
+      "Name": "Currency Symbol",
+      "Id": "currency",
+      "Type": "string",
+      "Default":"$"
+    }
+  ]
+}

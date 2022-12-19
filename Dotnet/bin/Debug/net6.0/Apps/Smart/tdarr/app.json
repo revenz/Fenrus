@@ -1,0 +1,23 @@
+{
+  "Name": "Tdarr",
+  "TestFunction": true,
+  "Interval":2,
+  "Properties": [
+    {
+      "Name": "Show space saved",
+      "Id": "showSpaceSaved",
+      "Type": "select",
+      "Options":
+      [
+        { 
+            "Label": "false",
+            "Value":"false"
+        },
+		{ 
+            "Label": "true",
+            "Value":"true"
+        }
+      ]
+    }
+  ]
+}

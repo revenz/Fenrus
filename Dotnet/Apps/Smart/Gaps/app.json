@@ -1,0 +1,65 @@
+{
+  "Name": "Gaps",
+  "Icon": "icon.png",
+  "TestFunction":true,
+  "Interval":300,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://github.com/JasonHHouse/gaps"
+  },
+  "Properties": [
+    {
+      "Name": "(Required) RSS ID",
+      "Id": "rssID",
+      "Type": "string",
+	  "Help" : "Full RSS ID from Gaps, Example rss/3953866d8320566a03b664674d95bac66ddb7938/2"
+    },
+	{
+      "Name": "(Optional) RSS ID 2",
+      "Id": "rssID2",
+      "Type": "string",
+	  "Help" : "Full RSS ID from Gaps, Example rss/3953866d8320566a03b664674d95bac66ddb7938/5"
+    },
+	{
+      "Name": "(Optional) RSS ID 3",
+      "Id": "rssID3",
+      "Type": "string",
+	  "Help" : "Full RSS ID from Gaps, Example rss/3953866d8320566a03b664674d95bac66ddb7938/6"
+    },
+	{
+      "Name": "Group/Seperate Missing",
+      "Id": "group",
+      "Type": "select",
+      "Options":
+      [
+        { 
+            "Label": "Group",
+            "Value":"group"
+        },
+		{ 
+            "Label": "Seperate",
+            "Value":"seperate"
+        }
+      ]
+    },	
+	{
+      "Name": "(Optional) Library 1 Name",
+      "Id": "lib1Name",
+      "Type": "string",
+      "IfValue": { "group" : "seperate" }
+    },
+	{
+      "Name": "(Optional) Library 2 Name",
+      "Id": "lib2Name",
+      "Type": "string",
+      "IfValue": { "group" : "seperate" }
+    },
+	{
+      "Name": "(Optional) Library 3 Name",
+      "Id": "lib3Name",
+      "Type": "string",
+      "IfValue": { "group" : "seperate" }
+    }
+	
+  ]
+}

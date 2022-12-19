@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Sentry",
+  "TestFunction": true,
+  "Interval": 300,
+  "Properties": [
+    {
+      "Name": "API Token",
+      "Id": "apiToken",
+      "Type": "string"
+    }
+  ]
+}

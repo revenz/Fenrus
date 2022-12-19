@@ -1,0 +1,63 @@
+﻿.fenrus-tabs
+{
+    display:flex;
+    flex-direction:column;
+    flex-grow:1;
+}
+
+.fenrus-tab-buttons {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 2rem;
+    border-bottom: solid 1px var(--input-background);
+    padding-left:1rem;
+}
+
+
+@media screen and (max-width:500px){
+    .fenrus-tab-buttons {
+        padding-left: 0;
+    }
+}
+
+.tab-button {
+    width: 8rem;
+    overfenrus-x: hidden;
+    text-overflow: ellipsis;
+    border-color: var(--input-background) !important;
+    
+    position:relative;
+    bottom:-1px;
+    margin-right:0.25rem;
+    
+    height: 2.1875rem;
+    font-weight: normal;
+    outline: none !important;
+    line-height: initial;
+    box-shadow: none;
+    border-radius: unset !important;
+    text-transform: uppercase;
+    border: solid 1px var(--accent);
+    background-color: transparent;
+    color: var(--color);
+    cursor:pointer;
+
+    &:hover {
+        border-color: var(--accent) !important;
+        background-image: linear-gradient(rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.3)) !important;
+        box-shadow: inset 0 -3px 0 0 var(--accent) !important;    
+    }
+
+    &.active {
+        border-color: var(--accent) !important;
+        border-bottom:1px solid var(--base) !important;
+        font-size:0.7rem;
+    }
+    &:not(.active){
+        font-size:0.7rem !important;
+    }
+}
+
+.fenrus-tabs-content {
+    flex-grow: 1;
+}

@@ -1,0 +1,21 @@
+﻿{
+  "Name": "Portainer",
+  "Interval": 10,
+  "TestFunction": true,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://www.portainer.io"
+  },
+  "Properties": [
+    {
+      "Name": "Username",
+      "Id": "username",
+      "Type": "string"
+    },
+    {
+      "Name": "Password",
+      "Id": "password",
+      "Type": "password"
+    }
+  ]
+}

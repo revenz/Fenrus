@@ -1,0 +1,10 @@
+﻿{
+  "Name": "FileFlows",
+  "TestFunction": true,
+  "Interval":2,
+  "Icon": "icon.svg",
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://fileflows.com/"
+  }
+}

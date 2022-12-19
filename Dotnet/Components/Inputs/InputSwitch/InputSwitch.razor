@@ -1,0 +1,9 @@
+@namespace Fenrus.Components.Inputs
+@inherits Input<bool>
+
+<InputWrapper Input="@this">
+    <label class="input-switch" @onclick:preventDefault @onclick:stopPropagation @onclick="ToggleValue">
+        <input class="switch-checkbox" type="checkbox" checked=@(Value ? "checked" : null) @onclick:stopPropagation>
+        <span class="slider round"></span>
+    </label>
+</InputWrapper>

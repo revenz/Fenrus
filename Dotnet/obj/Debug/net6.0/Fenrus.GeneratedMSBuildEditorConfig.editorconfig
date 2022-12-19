@@ -1,0 +1,144 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Fenrus
+build_property.RootNamespace = Fenrus
+build_property.ProjectDir = /home/john/src/Fenrus/Dotnet/
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /home/john/src/Fenrus/Dotnet
+build_property._RazorSourceGeneratorDebug = 
+
+[/home/john/src/Fenrus/Dotnet/Components/DashboardComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9EYXNoYm9hcmRDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Components/DashboardItems/AppItemComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9EYXNoYm9hcmRJdGVtcy9BcHBJdGVtQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Components/DashboardItems/LinkItemComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9EYXNoYm9hcmRJdGVtcy9MaW5rSXRlbUNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Components/FenrusTable/FenrusTableButton.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9GZW5ydXNUYWJsZS9GZW5ydXNUYWJsZUJ1dHRvbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Components/FenrusTable/FenrusTableColumn.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9GZW5ydXNUYWJsZS9GZW5ydXNUYWJsZUNvbHVtbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Components/Inputs/InputSelect/InputSelect.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9JbnB1dHMvSW5wdXRTZWxlY3QvSW5wdXRTZWxlY3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Components/Inputs/InputSelect/InputSelectOption.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9JbnB1dHMvSW5wdXRTZWxlY3QvSW5wdXRTZWxlY3RPcHRpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Components/SearchComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9TZWFyY2hDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Components/UpTimeComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9VcFRpbWVDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Components/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9fSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Pages/App.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Pages/Dashboards.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGFzaGJvYXJkcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Pages/General.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2VuZXJhbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Pages/Groups.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR3JvdXBzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Pages/SearchEngines.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2VhcmNoRW5naW5lcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Pages/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Components/FenrusPage/FenrusPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9GZW5ydXNQYWdlL0ZlbnJ1c1BhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-53418iupyl
+
+[/home/john/src/Fenrus/Dotnet/Components/FenrusSwitch/FenrusSwitch.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9GZW5ydXNTd2l0Y2gvRmVucnVzU3dpdGNoLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-c2tlp09m1v
+
+[/home/john/src/Fenrus/Dotnet/Components/FenrusTable/FenrusTable.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9GZW5ydXNUYWJsZS9GZW5ydXNUYWJsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-xurzw83ppm
+
+[/home/john/src/Fenrus/Dotnet/Components/FenrusTabs/FenrusTab.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9GZW5ydXNUYWJzL0ZlbnJ1c1RhYi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-gbe0sth225
+
+[/home/john/src/Fenrus/Dotnet/Components/FenrusTabs/FenrusTabs.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9GZW5ydXNUYWJzL0ZlbnJ1c1RhYnMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-0qrm5bh003
+
+[/home/john/src/Fenrus/Dotnet/Components/Inputs/InputColor/InputColor.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9JbnB1dHMvSW5wdXRDb2xvci9JbnB1dENvbG9yLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-v1u248k5rj
+
+[/home/john/src/Fenrus/Dotnet/Components/Inputs/InputSwitch/InputSwitch.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9JbnB1dHMvSW5wdXRTd2l0Y2gvSW5wdXRTd2l0Y2gucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-cm49s288j4
+
+[/home/john/src/Fenrus/Dotnet/Components/Inputs/InputWrapper/InputWrapper.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9JbnB1dHMvSW5wdXRXcmFwcGVyL0lucHV0V3JhcHBlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-fyq918t31p
+
+[/home/john/src/Fenrus/Dotnet/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL01haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-xzme0fte05
+
+[/home/john/src/Fenrus/Dotnet/Shared/MainMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL01haW5NZW51LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-xrw6nbfrdb
+
+[/home/john/src/Fenrus/Dotnet/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Pages/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX0xheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Views/Home/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9EYXNoYm9hcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/john/src/Fenrus/Dotnet/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

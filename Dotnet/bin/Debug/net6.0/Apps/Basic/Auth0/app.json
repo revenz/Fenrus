@@ -1,0 +1,5 @@
+{
+  "Name": "Auth0",
+  "Icon": "icon.png",
+  "DefaultUrl":"https://auth0.com/auth/login"
+}

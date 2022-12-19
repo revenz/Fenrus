@@ -1,0 +1,284 @@
+$borderColor: var(--input-background);
+
+.fillspace {
+  flex-grow: 1;
+}
+
+.fenrus-table-toolbar {
+  display: flex;
+  flex-direction: row;
+
+  .fenrus-table-toolbar-buttons {
+    flex-grow: 1;
+    overflow: hidden;
+    margin: auto 0 0.5rem;
+  }
+
+  ::deep .fenrus-table-button-separator {
+    border-left:1px solid var(--border-color);
+    height:1rem;
+    display: inline-block;
+    position: relative;
+    top: 4px;
+    width: 1px;
+    margin: 0 0.25rem;
+  }
+  
+  ::deep .fenrus-table-button {
+    cursor:pointer;
+  }
+
+  .fenrus-table-toolbar-filter {
+    width: 16rem;
+    position: relative;
+
+    input {
+      background-color: transparent !important;
+      width: calc(100% - 3rem);
+      line-height: 1rem;
+      padding-right: 1.75rem;
+      border: 1px solid var(--input-background) !important;
+      height: 1rem;
+      margin: 0.25rem;
+
+      &:focus {
+        border-color: var(--accent);
+      }
+    }
+
+    i {
+      position: absolute;
+      right: 1rem;
+      top: 0.9rem;
+      font-size: 0.8rem;
+      color: rgba(var(--color-rgb), 0.5);
+    }
+  }
+
+  ::deep button {
+    text-transform: uppercase;
+    background: transparent;
+    color: rgba(var(--color-rgb), 0.8);
+    border: unset;
+    border-radius: 0 !important;
+    font-size: 0.8rem;
+    outline:none;
+
+    &:hover {
+      color: var(--color-rgb);
+    }
+
+    .icon {
+      margin-right: 0.25rem;
+    }
+  }
+}
+@media screen and (max-width: 578px) {
+  .fenrus-table-data {
+    font-size: 0.85rem;
+  }
+}
+
+.fenrus-table {
+  position: relative !important;
+  max-width:100%;
+  width:100%;
+  height:100%;
+  flex-grow:1;
+  overflow: auto;
+}
+
+
+.fenrus-table-inner {
+  height:100%;
+  position: relative !important;
+  display:flex;
+  flex-direction:column;
+}
+
+@supports (-moz-appearance:none)
+{
+  ::deep .fenrus-table-row {
+    /** scrollbar on firefox */
+    padding-right: 0.75rem;
+  }
+}
+
+
+
+.fenrus-table-row {
+  border: solid 1px $borderColor;
+  display: flex;
+  flex-direction: row;
+  user-select: none;
+  width: 100%;
+  &:not(.fenrus-table-header-row) {
+    border-top: none;
+    border-right: none;
+    border-left: none;
+  }
+
+  > span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 2.2rem;
+    line-height: 2.2rem;
+
+    &:not(.fenrus-table-select) {
+      padding-left: 0.5rem;
+    }
+
+    &.pre-text {
+      white-space: pre-line;
+      height: unset;
+      line-height: unset;
+      margin: 0.3rem 0;
+    }
+  }
+
+  &.selected {
+    background: rgba(var(--accent-rgb), 0.3);
+  }
+}
+.fenrus-table-header-row {
+  padding-right: 0.7rem;
+  font-weight: 600;
+  background: rgba(var(--input-background-rgb), 0.3);
+}
+
+::deep .fenrus-table-body {
+  height: calc(100% - 2.4rem);
+  overflow-y: scroll;
+  border-left: solid 1px $borderColor;
+  border-bottom: solid 1px $borderColor;
+  border-right: solid 1px $borderColor;
+  &::-webkit-scrollbar-track {
+    border-right: solid 1px $borderColor;
+    border-left: solid 1px $borderColor;
+  }
+}
+
+.fenrus-table-data {
+  overflow:hidden;
+  top: 1.75rem;
+  flex-grow:1;
+  font-size:0.9rem;
+  display:flex;
+  flex-direction: column;
+  border:solid 1px $borderColor;
+}
+
+
+.hidden {
+  display:none;
+  width:unset !important;
+}
+
+
+
+@media screen and (max-width:578px) {
+  .fenrus-table-toolbar {
+    display: unset;
+  }
+
+  .fenrus-table-data {
+    top: 3.5rem;
+  }
+}
+
+
+::deep {
+  .resizer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 5px;
+    cursor: col-resize;
+    user-select: none;
+    border-right: 2px solid rgba(var(--color-rgb), 0.05);
+  }
+
+  .resizer:hover,
+  .resizing {
+    border-right: 2px solid var(--accent);
+  }
+
+  .pager {
+    text-align: right;
+    border:solid 1px var(--border-color);
+    border-top:none;
+    .page-size {
+      float: right;
+      margin: 0.3rem 0.25rem 0.25rem;
+      width: 4rem;
+      text-align: center;
+
+      select {
+        background-color: transparent;
+        color: var(--color) !important;
+        border-color: transparent;
+        height:1.75rem;
+
+        &:focus {
+          outline: 1px solid var(--accent);
+        }
+
+        &.select-one {
+          color: rgba(var(--color-rgb), 0.3) !important;
+        }
+
+        option {
+          background-color: var(--input-background) !important;
+          &:not(.select-one) {
+            color: var(--color) !important;
+          }
+
+          &:checked {
+            background-color: rgba(var(--accent-rgb), 0.3);
+          }
+        }
+      }
+    }
+    ul {
+      margin:0.5rem;
+      list-style: none;
+      padding:0;
+      li {
+        display: inline-block;
+        width: 2rem;
+        border: solid 1px var(--accent);
+        text-align: center;
+        margin: 0 0.25rem;
+        cursor: pointer;
+        color:white;
+        filter: opacity(0.4);
+        &:hover {
+          background-image: linear-gradient(rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.3)) !important;
+          box-shadow: inset 0 -3px 0 0 var(--accent) !important;
+        }
+        &.current-page {
+          filter: unset;
+        }
+      }
+    }
+  }
+  @media (max-width:576px) {
+    .pager .page-size {
+      width:3.5rem;
+    }
+  }
+}
+
+.fenrus-table-row ::deep .fenrus-switch {
+  top:0.3rem;
+}
+
+.fenrus-table-row ::deep .actions {
+  font-size:1.1rem;
+  text-align: right;
+  a, span {
+    margin-right:0.75rem;
+    cursor:pointer;
+  }
+}

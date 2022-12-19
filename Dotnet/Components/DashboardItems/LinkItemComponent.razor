@@ -1,0 +1,14 @@
+<a id="@Model.Uid" title="@Model.Name" href="@Model.Url" onclick="@OnClickCode" target="@Target"
+   class="db-item db-link db-basic is-up-<%= model.IsUp %> @Model.Size.ToString().ToLower() @(Target == "IFrame" ? "iframe" : string.Empty) is-up-<%= isUp[model.Uid]%>"
+   oncontextmenu="openContextMenu(event, '@SerializedJsSafeModel'); return false;"
+>
+<div class="inner">
+    <div class="icon">
+        <img src="@(Model.Icon?.EmptyAsNull() ?? "/favicon.svg")?version=@Globals.Version" />
+    </div>
+    <div class="content">
+        <div class="title">@Model.Name</div>
+    </div>
+    <div class="arrow"></div>
+</div>
+</a>

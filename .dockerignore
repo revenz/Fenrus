@@ -1,1 +1,4 @@
 Dockerfile
+build-docker.ps1
+build-docker.sh
+.github

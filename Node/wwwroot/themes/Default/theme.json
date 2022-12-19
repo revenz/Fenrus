@@ -1,0 +1,72 @@
+{
+    "Name":"Default",
+    "Css":[
+        "theme.min.css"
+    ],
+    "Scripts":[
+        "packer.growing.min.js",
+        "theme.js"
+    ],
+    "Settings":[        
+        {
+            "Name":"Placement",
+            "Type":"Select",
+            "Default":"center",
+            "Options":
+            [
+                { 
+                    "Label": "Bottom Left",
+                    "Value":"bottom left"
+                },
+                { 
+                    "Label": "Bottom Right",
+                    "Value":"bottom right"
+                },
+                { 
+                    "Label": "Top Right",
+                    "Value":"top right"
+                },
+                { 
+                    "Label": "Top Left",
+                    "Value":"top left"
+                },
+                { 
+                    "Label": "Center Left",
+                    "Value":"center left"
+                },
+                { 
+                    "Label": "Center",
+                    "Value":"center"
+                },
+                { 
+                    "Label": "Center Right",
+                    "Value":"center right"
+                }
+            ]
+        },
+        {
+            "Name":"MaxHeight",
+            "Label":"Group Height",
+            "Type":"Integer",
+            "Default":8,
+            "Minimum":4,
+            "Maximum":16
+        },
+        {
+            "Name":"Horizontal",
+            "Type":"Boolean"
+        },
+        {
+            "Name":"AnimatedBackground",
+            "Label":"Animated Background",
+            "Type":"Boolean",
+            "Default":true
+        },
+        {
+            "Name":"BackgroundImage",
+            "Label":"Overlay Background",
+            "Type":"Boolean",
+            "Default":true
+        }
+    ]
+}

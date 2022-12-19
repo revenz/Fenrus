@@ -1,0 +1,43 @@
+﻿{
+  "Name": "AgentDVR",
+  "TestFunction": true,
+  "Interval":1,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://www.ispyconnect.com/"
+  },
+  "Properties": [
+    {
+      "Name": "Camera ID",
+      "Id": "cameraIds",
+      "Type": "string",
+      "Help" : "ID of your camera noramlly just 1/2/3 etc incremented,\n supports multiple camera outputs comma seperated ie 1,2,3 (no spaces)"
+    },
+	{
+      "Name":"Snapshot mode",
+      "Id":"snapshotMode",
+      "Type": "bool",
+      "Help":"Replaces MJPG video feed with snapshots instead, might be useful for browser compatability, Also enables auto scaling"
+    },
+
+    {
+      "Name":"(Not required) Custom Image Resolution override",
+      "Id":"resolution",
+      "Type": "string",
+      "Help":"Set resolution of returned image "
+    },
+    {
+      "Name":"Scale image",
+	  "IfValue": { "snapshotMode" : true },
+      "Id":"scale",
+      "Type": "bool",
+      "Help":"tick to scale image to set resolution and ratio, untick to maintain images original ratio"
+    },
+    {
+      "Name":"Image background RGB value (if it has background and scale not enabled)",
+      "Id":"rbg",
+      "Type": "string",
+      "Help":"the RGB value comma seperated eg 255,255,255 of the background"
+    }
+  ]
+}

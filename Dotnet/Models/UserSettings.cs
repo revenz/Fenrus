@@ -1,0 +1,123 @@
+namespace Fenrus.Models;
+
+/// <summary>
+/// User settings
+/// </summary>
+public class UserSettings
+{
+    /// <summary>
+    /// Gets the Uid of the User
+    /// </summary>
+    public Guid Uid { get; init; }
+
+    /// <summary>
+    /// Gets or sets the revision of the saved settings
+    /// </summary>
+    public int Revision { get; set; }
+
+    /// <summary>
+    /// Gets or sets the target to open dashboard links
+    /// </summary>
+    public string LinkTarget { get; set; }
+
+    /// <summary>
+    /// Gets or sets the users theme
+    /// </summary>
+    public string Theme { get; set; }
+
+    /// <summary>
+    /// Gets or sets if menus should be collapsed
+    /// </summary>
+    public bool CollapseMenu { get; set; }
+
+    /// <summary>
+    /// Gets or sets the accent color
+    /// </summary>
+    public string AccentColor { get; set; }
+
+    /// <summary>
+    /// Gets or sets if group titles should be shown
+    /// </summary>
+    public bool ShowGroupTitles { get; set; }
+
+    /// <summary>
+    /// Gets or sets the default background image for dashboards
+    /// </summary>
+    public string BackgroundImage { get; set; }
+
+    /// <summary>
+    /// Gets or sets if search should be shown
+    /// </summary>
+    public bool ShowSearch { get; set; }
+
+    /// <summary>
+    /// Gets or sets if status indicators should be shown
+    /// </summary>
+    public bool ShowStatusIndicators { get; set; }
+
+    /// <summary>
+    /// Gets or sets the users theme settings
+    /// </summary>
+    public object ThemeSettings { get; set; }
+
+    private readonly List<DockerServer> _Docker = new ();
+    private readonly List<Group> _Groups = new ();
+    private readonly List<Dashboard> _Dashboards = new ();
+    private readonly List<SearchEngine> _SearchEngines = new ();
+
+    /// <summary>
+    /// Gets or sets the configured docker instances
+    /// </summary>
+    public List<DockerServer> Docker 
+    {
+        get => _Docker;
+        set
+        {
+            _Docker.Clear();
+            if (value != null)
+                _Docker.AddRange(value);
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets groups for the user
+    /// </summary>
+    public List<Group> Groups 
+    {
+        get => _Groups;
+        set
+        {
+            _Groups.Clear();
+            if (value != null)
+                _Groups.AddRange(value);
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the users dashboards
+    /// </summary>
+    public List<Dashboard> Dashboards
+    {
+        get => _Dashboards;
+        set
+        {
+            _Dashboards.Clear();
+            if(value != null)
+                _Dashboards.AddRange(value);
+        }
+    }
+    
+    /// <summary>
+    /// Gets or sets the users search engines
+    /// </summary>
+    public List<SearchEngine> SearchEngines
+    {
+        get => _SearchEngines;
+        set
+        {
+            _SearchEngines.Clear();
+            if (value != null)
+                _SearchEngines.AddRange(value);
+        }
+    }
+}

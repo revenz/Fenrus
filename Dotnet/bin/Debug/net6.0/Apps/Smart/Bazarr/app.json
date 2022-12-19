@@ -1,0 +1,18 @@
+{
+  "Name": "Bazarr",
+  "Icon": "icon.png",
+  "TestFunction": true,
+  "Interval": 20,
+  "Info":{
+    "Authors": ["Froodle"],
+    "AppUrl":"https://www.bazarr.media/"
+  },
+  "Properties": [
+    {
+      "Name": "API Key",
+      "Id": "apiKey",
+      "Type": "password",
+      "Help" : "Found at Bazarr Settings -> General -> API Key (Under Security)"
+    }
+  ]
+}

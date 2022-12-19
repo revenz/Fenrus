@@ -1,0 +1,16 @@
+﻿{
+  "Name": "TeamCity",
+  "Interval": 3,
+  "TestFunction":true,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://www.jetbrains.com/teamcity/"
+  },
+  "Properties": [
+    {
+      "Name": "Access Token",
+      "Id": "token",
+      "Type": "string"
+    }
+  ]
+}

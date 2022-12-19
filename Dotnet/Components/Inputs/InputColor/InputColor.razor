@@ -1,0 +1,60 @@
+@namespace Fenrus.Components.Inputs
+@inherits Input<string>
+
+<InputWrapper Input="@this">
+    <input id="@Uid-input" type="text"
+           autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" @bind-value="@Value"/>
+    <span id="@Uid-preview" class="preview" style="background-color:@Value"></span>
+    <div id="@Uid-picker" class="color-picker hidden">
+        <div class="color-picker-area">
+            <div class="color-picker-rgb">
+                <div style="position: relative; width: 100%; height: 100%">
+                    <div class="color-picker-rgb-bg-1"></div>
+                    <div class="color-picker-rgb-bg-2"></div>
+                </div>
+                <div class="crosshair" style="left:@(PointerX + 5.5)px;top:@(PointerY + 6)px">
+                    <div style="position: absolute; background: rgb(255, 255, 255); width: 4px; height: 20px; left: 8px; top: 0px;"></div>
+                    <div style="position: absolute; background: rgb(255, 255, 255); height: 4px; width: 20px; top: 8px; left: 0px;"></div>
+                    <div style="position: absolute; background: rgb(76, 76, 76); height: 18px; width: 2px; left: 9px; top: 1px;"></div>
+                    <div style="position: absolute; background: rgb(76, 76, 76); width: 18px; height: 2px; top: 9px; left: 1px;"></div>
+                </div>
+            </div>
+
+            <div class="color-slider">
+                <div class="color-slider-bar">
+                    <div class="color-slider-bar-indicator" style="top:@(SliderY - 3)px">
+                        <div style="border: 2px solid rgb(76, 76, 76);">
+                            <div style="border: 1px solid rgb(255, 255, 255);">
+                                <div class="color-slider-bar-indicator-square"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="background: rgba(0, 0, 255, 0.2); opacity: 0; display: none; position: absolute; left: 231px; top: 0px; width: 36px; height: 127px; cursor: default;">
+            </div>
+        </div>
+        <div class="color-palette">
+            @foreach (var c in new[]
+            {
+                "#ff0090", "125, 125, 125", "236, 28, 35", "254, 241, 0", "34, 177, 75",
+                "0, 161, 231", "63, 71, 204", "163, 73, 164", "255, 255, 255", "195, 195, 195", "184, 121, 87", "254, 174, 201",
+                "255, 200, 13", "238, 227, 175", "181, 230, 29", "153, 217, 234", "112, 146, 190", "200, 191, 231"
+            })
+            {
+                <div class="color-palette-sw">
+                    @if (c.StartsWith("#"))
+                    {
+                        <div data-color="@c" style="background-color: @c;"></div>
+                    }
+                    else
+                    {
+                        <div data-color="@c" style="background-color: rgb(@c);"></div>
+                    }
+                </div>
+            }
+        </div>
+        <div class="color-btn color-btn-close" style="display: none; left: 12px; bottom: 12px; padding: 0px 15px; max-width: 181px; height: 18px; border: 1px solid rgb(187, 187, 187); color: rgb(0, 0, 0);">
+            <div style="display: inline; line-height: 18px;">Close</div></div>
+    </div>
+</InputWrapper>

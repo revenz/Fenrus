@@ -1,0 +1,42 @@
+@page "/settings/dashboards"
+
+<PageTitle>Fenrus - Dashboards</PageTitle>
+
+<FenrusPage Title="Dashboards" Icon="fa-solid fa-table-cells-large" PageDescription="This page lets you create Dashboards.  Having more than one dashboard will let you switch between them on the home screen.
+
+To add items to your Dashboard, first create a Group containing the items you wish to add.  Then you can add that new Group to a Dashboard.">
+    <Body>
+    
+    <FenrusTable TItem="Models.Dashboard" Data=@Items>
+        <ToolBar>
+            <FenrusTableButton Label="Add" Icon="fa-solid fa-plus" Clicked="() => Add()" />
+        </ToolBar>
+        <Columns>
+            <FenrusTableColumn TItem="Models.Dashboard" ColumnName="Name">
+                <Header>Name</Header>
+                <Cell Context="item">
+                    @item.Name
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.Dashboard" ColumnName="Enabled" Width="10rem">
+                <Header>Enabled</Header>
+                <Cell Context="item">
+                    <FenrusSwitch @bind-Value="@item.Enabled"></FenrusSwitch>
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.Dashboard" ColumnName="Actions" Width="10rem">
+                <Header></Header>
+                <Cell Context="item">
+                    <div class="actions">
+                        <span title="Move Up" class="fa-solid fa-angle-up" @onclick="() => Move(item, true)"></span>
+                        <span title="Move Down" class="fa-solid fa-angle-down" @onclick="() => Move(item, false)"></span>
+                        <a title="Edit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
+                        <span title="Delete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
+                    </div>
+                </Cell>
+            </FenrusTableColumn>
+        </Columns>
+    </FenrusTable>
+        
+    </Body>
+</FenrusPage>

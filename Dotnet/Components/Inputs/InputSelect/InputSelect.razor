@@ -1,0 +1,36 @@
+@namespace Fenrus.Components.Inputs
+@using Fenrus.Models.UiModels
+@inherits Input<TItem>
+@typeparam TItem
+
+<InputWrapper Input="@this">
+    <div>
+        <select id=@Uid @onchange="SelectionChanged" class="@(SelectedIndex == -1 ? "select-one" : "")" @onkeydown="OnKeyDown">
+            @if (AllowClear)
+            {
+                <option class="select-one" selected=@(SelectedIndex == -1 ? "selected" : null) value="@(-1)">@lblSelectOne
+                </option>
+            }
+            @foreach (var item in Items)
+            {
+                if (item is ListGroup grp)
+                {
+                    <optgroup label=@grp.Label>
+                        @foreach (var gi in grp.Items)
+                        {
+                            <option>@gi.Label</option>
+                        }
+                    </optgroup>
+                }
+                else if (item is ListOption lo)
+                {
+                    <option>@lo.Label</option>
+                }
+            }
+        </select>
+    </div>
+</InputWrapper>
+
+<CascadingValue Value="this" IsFixed="true">
+    @ChildContent
+</CascadingValue>

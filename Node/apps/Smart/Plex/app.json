@@ -1,0 +1,18 @@
+﻿{
+  "Name": "Plex",
+  "TestFunction": true,
+  "Interval": 60,
+  "Carousel":true,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://plex.tv"
+  },
+  "Properties": [
+    {
+      "Name": "Token",
+      "Id": "token",
+      "Type": "string",
+      "Help": "Refer to this guide to get the Plex token\nhttps://github.com/revenz/Fenrus/wiki/Plex-Token"
+    }
+  ]
+}

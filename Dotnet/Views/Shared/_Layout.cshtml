@@ -1,0 +1,24 @@
+@using Fenrus.Models
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
+    <link id="theme-style" rel="stylesheet" href="/themes/Default/_theme.css?version=@Globals.Version" />
+</head>
+
+<body class="<%= isHome ? 'home' : 'not-home' %> <%= isSettings? 'settings' : 'not-settings' %> <%= customBackground ? 'custom-background' : 'no-custom-background' %> <%= themeVariables?.BodyClassName %>">
+    <ul class="main-menu">
+        <li><a title="Home" href="/"><span class="fa-solid fa-house"></span></a></li>
+        <li><a title="Settings" href="/settings"><span class="fa-solid fa-sliders"></span></a></li>
+        <li><a title="About" href="/settings/about"><span class="icon-fenrus"></span></a></li>
+    </ul>
+
+    <div class="main-content">
+        @RenderBody()
+    </div>
+
+    <script src="/js/_fenrus.js?version=@Globals.Version" defer></script>
+
+</body>
+</html>

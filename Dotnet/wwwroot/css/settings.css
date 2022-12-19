@@ -1,0 +1,648 @@
+.fenrus-page-body .main-content,
+body.initial-config-page .main-content {
+  display: flex;
+  overflow: auto;
+}
+.fenrus-page-body .main-content > div,
+body.initial-config-page .main-content > div {
+  margin: auto;
+}
+.fenrus-page-body input[type=text], .fenrus-page-body input[type=password], .fenrus-page-body input[type=number], .fenrus-page-body select,
+body.initial-config-page input[type=text],
+body.initial-config-page input[type=password],
+body.initial-config-page input[type=number],
+body.initial-config-page select {
+  width: calc(100% - 1rem);
+  padding: 0.5rem;
+  background: var(--input-background);
+  border: solid 1px var(--input-border);
+  color: var(--input-color);
+}
+.fenrus-page-body input[type=text]:focus, .fenrus-page-body input[type=password]:focus, .fenrus-page-body input[type=number]:focus, .fenrus-page-body select:focus,
+body.initial-config-page input[type=text]:focus,
+body.initial-config-page input[type=password]:focus,
+body.initial-config-page input[type=number]:focus,
+body.initial-config-page select:focus {
+  outline: solid 1px var(--accent);
+}
+.fenrus-page-body input[type=text]:disabled, .fenrus-page-body input[type=password]:disabled, .fenrus-page-body input[type=number]:disabled, .fenrus-page-body select:disabled,
+body.initial-config-page input[type=text]:disabled,
+body.initial-config-page input[type=password]:disabled,
+body.initial-config-page input[type=number]:disabled,
+body.initial-config-page select:disabled {
+  opacity: 0.5;
+}
+.fenrus-page-body select,
+body.initial-config-page select {
+  width: 100%;
+}
+.fenrus-page-body .settings-box,
+body.initial-config-page .settings-box {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.fenrus-page-body .settings-box form,
+body.initial-config-page .settings-box form {
+  width: 100%;
+}
+.fenrus-page-body .settings-box .items-header,
+body.initial-config-page .settings-box .items-header {
+  margin-top: 3rem;
+}
+.fenrus-page-body .settings-box .group-list,
+body.initial-config-page .settings-box .group-list {
+  border-top: solid 1px var(--border-color);
+}
+.fenrus-page-body .settings-box .setting,
+body.initial-config-page .settings-box .setting {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
+}
+.fenrus-page-body .settings-box .setting .label,
+body.initial-config-page .settings-box .setting .label {
+  width: 16rem;
+  min-width: 16rem;
+  margin: 0.5rem 0 0;
+}
+.fenrus-page-body .settings-box .setting .value,
+body.initial-config-page .settings-box .setting .value {
+  flex-grow: 1;
+}
+.fenrus-page-body .settings-box .setting .value.padtop,
+body.initial-config-page .settings-box .setting .value.padtop {
+  margin: 0.5rem 0 0;
+}
+.fenrus-page-body .settings-box .setting .value a,
+body.initial-config-page .settings-box .setting .value a {
+  color: var(--color);
+}
+.fenrus-page-body .settings-box .setting .value ul:not(.livestats),
+body.initial-config-page .settings-box .setting .value ul:not(.livestats) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fenrus-page-body .settings-box .setting .value ul:not(.livestats) li + li,
+body.initial-config-page .settings-box .setting .value ul:not(.livestats) li + li {
+  margin-top: 0.75rem;
+}
+.fenrus-page-body .settings-box td,
+body.initial-config-page .settings-box td {
+  padding: 0.5rem;
+}
+.fenrus-page-body .settings-box tbody td,
+body.initial-config-page .settings-box tbody td {
+  border-bottom: solid 1px var(---border-color);
+}
+.fenrus-page-body .settings-box table,
+body.initial-config-page .settings-box table {
+  width: 100%;
+}
+.fenrus-page-body .settings-box table tr > td,
+body.initial-config-page .settings-box table tr > td {
+  width: min(30%, 10rem);
+}
+.fenrus-page-body .settings-box .color-picker input,
+body.initial-config-page .settings-box .color-picker input {
+  width: calc(100% - 1rem - 40px) !important;
+}
+.fenrus-page-body .settings-box ul:not(.value-list):not(.livestats),
+body.initial-config-page .settings-box ul:not(.value-list):not(.livestats) {
+  margin: 0;
+  padding: 0;
+}
+.fenrus-page-body .settings-box ul:not(.value-list):not(.livestats) > li,
+body.initial-config-page .settings-box ul:not(.value-list):not(.livestats) > li {
+  list-style: none;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: row;
+}
+.fenrus-page-body .settings-box ul:not(.value-list):not(.livestats) > li .name,
+body.initial-config-page .settings-box ul:not(.value-list):not(.livestats) > li .name {
+  flex-grow: 1;
+  white-space: nowrap;
+}
+.fenrus-page-body .settings-box ul:not(.value-list):not(.livestats) > li .icon-sort + .name,
+body.initial-config-page .settings-box ul:not(.value-list):not(.livestats) > li .icon-sort + .name {
+  margin-left: 1rem;
+}
+.fenrus-page-body .settings-box ul:not(.value-list):not(.livestats) > li .url,
+body.initial-config-page .settings-box ul:not(.value-list):not(.livestats) > li .url {
+  width: min(21rem, 40vw);
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fenrus-page-body .settings-box ul:not(.value-list):not(.livestats) > li .enabled,
+body.initial-config-page .settings-box ul:not(.value-list):not(.livestats) > li .enabled {
+  width: 6rem;
+  min-width: 6rem;
+  max-width: 6rem;
+}
+.fenrus-page-body .settings-box ul:not(.value-list):not(.livestats) > li .items,
+body.initial-config-page .settings-box ul:not(.value-list):not(.livestats) > li .items {
+  width: 14rem;
+  text-align: center;
+}
+.fenrus-page-body .settings-box ul:not(.value-list):not(.livestats) > li.over,
+body.initial-config-page .settings-box ul:not(.value-list):not(.livestats) > li.over {
+  border: 3px dotted #666;
+}
+.fenrus-page-body .settings-box ul:not(.value-list):not(.livestats) .mover,
+body.initial-config-page .settings-box ul:not(.value-list):not(.livestats) .mover {
+  cursor: move;
+  margin-right: 0.5rem;
+}
+.fenrus-page-body .settings-box button.invalid,
+body.initial-config-page .settings-box button.invalid {
+  background: var(--error);
+  color: var(--color);
+}
+.fenrus-page-body .settings-box .invalid,
+body.initial-config-page .settings-box .invalid {
+  border: solid 1px var(--error) !important;
+}
+.fenrus-page-body .settings-box .invalid:after,
+body.initial-config-page .settings-box .invalid:after {
+  content: url(" ");
+  display: block;
+  float: left;
+  margin-right: 5px;
+  position: relative;
+  bottom: 2px;
+}
+.fenrus-page-body .settings-box .item-icon-picker .db-item,
+body.initial-config-page .settings-box .item-icon-picker .db-item {
+  margin-bottom: 1rem;
+}
+.fenrus-page-body .settings-box p,
+body.initial-config-page .settings-box p {
+  margin: 1rem;
+  white-space: pre-line;
+}
+.fenrus-page-body td.controls,
+body.initial-config-page td.controls {
+  padding-right: 1rem;
+}
+.fenrus-page-body .controls,
+body.initial-config-page .controls {
+  text-align: right;
+  white-space: nowrap;
+}
+.fenrus-page-body .controls a, .fenrus-page-body .controls span,
+body.initial-config-page .controls a,
+body.initial-config-page .controls span {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  color: white;
+  opacity: 0.7;
+  text-decoration: none !important;
+}
+.fenrus-page-body .controls a:hover, .fenrus-page-body .controls span:hover,
+body.initial-config-page .controls a:hover,
+body.initial-config-page .controls span:hover {
+  opacity: 1;
+}
+.fenrus-page-body #file-chooser-btn,
+body.initial-config-page #file-chooser-btn {
+  display: block;
+}
+.fenrus-page-body .modal-background,
+body.initial-config-page .modal-background {
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+}
+.fenrus-page-body .modal,
+body.initial-config-page .modal {
+  z-index: 101;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.fenrus-page-body .modal, .fenrus-page-body .modal-box,
+body.initial-config-page .modal,
+body.initial-config-page .modal-box {
+  display: flex;
+  flex-direction: column;
+  width: min(70vw, 36rem);
+  background: rgba(0, 0, 0, 0.7);
+  border: solid 1px var(--border-color);
+}
+.fenrus-page-body .modal-title,
+body.initial-config-page .modal-title {
+  font-size: 1.5rem;
+  border-bottom: solid 1px var(--border-color);
+  padding: 1rem 2rem;
+}
+.fenrus-page-body .modal-body,
+body.initial-config-page .modal-body {
+  padding: 1rem 2rem;
+  margin: 2rem 0;
+}
+.fenrus-page-body .modal-buttons,
+body.initial-config-page .modal-buttons {
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+.fenrus-page-body .modal-buttons button + button,
+body.initial-config-page .modal-buttons button + button {
+  margin-left: 1rem;
+}
+.fenrus-page-body .background-picker .image-preview,
+body.initial-config-page .background-picker .image-preview {
+  width: auto;
+  height: 150px;
+  margin-bottom: 1rem;
+}
+.fenrus-page-body .background-picker .buttons,
+body.initial-config-page .background-picker .buttons {
+  display: flex;
+  flex-direction: row;
+}
+.fenrus-page-body .background-picker .buttons .btn + .btn,
+body.initial-config-page .background-picker .buttons .btn + .btn {
+  margin-left: 1rem !important;
+}
+.fenrus-page-body .user-list .list-header,
+body.initial-config-page .user-list .list-header {
+  font-weight: bold;
+}
+.fenrus-page-body .user-list .controls,
+body.initial-config-page .user-list .controls {
+  width: 10rem;
+  position: unset !important;
+}
+.fenrus-page-body .user-list .is-admin,
+body.initial-config-page .user-list .is-admin {
+  width: 8rem;
+  text-align: center;
+}
+.fenrus-page-body .contains-toggle li span,
+body.initial-config-page .contains-toggle li span {
+  margin: auto;
+}
+.fenrus-page-body .contains-toggle li .controls,
+body.initial-config-page .contains-toggle li .controls {
+  position: relative;
+  top: 0.15rem;
+}
+.fenrus-page-body .group-list .no-items,
+body.initial-config-page .group-list .no-items {
+  width: 8rem;
+}
+.fenrus-page-body .group-list .enabled,
+body.initial-config-page .group-list .enabled {
+  width: 6rem;
+  text-align: center;
+}
+.fenrus-page-body .group-list .controls,
+body.initial-config-page .group-list .controls {
+  width: 4rem;
+}
+.fenrus-page-body .search-engine-list .enabled, .fenrus-page-body .search-engine-list .default,
+body.initial-config-page .search-engine-list .enabled,
+body.initial-config-page .search-engine-list .default {
+  width: 8rem;
+  text-align: center;
+}
+.fenrus-page-body .search-engine-list .controls,
+body.initial-config-page .search-engine-list .controls {
+  width: 4rem;
+}
+.fenrus-page-body a.subpage,
+body.initial-config-page a.subpage {
+  text-decoration: none;
+  height: 1.75rem;
+  width: 1.75rem;
+  display: flex;
+  place-items: center;
+  border: solid 2px white;
+  border-radius: 1rem;
+  float: right;
+  cursor: pointer;
+}
+.fenrus-page-body a.subpage span,
+body.initial-config-page a.subpage span {
+  margin: auto;
+  position: relative;
+  top: 1px;
+  left: 1px;
+}
+.fenrus-page-body .help-text,
+body.initial-config-page .help-text {
+  display: block;
+  font-style: italic;
+  color: var(--color-darkest);
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+}
+.fenrus-page-body .settings-outer,
+body.initial-config-page .settings-outer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background: var(--base);
+}
+.fenrus-page-body .settings-menu,
+body.initial-config-page .settings-menu {
+  width: 250px;
+  min-width: 250px;
+  background-color: rgba(var(--base-rgb), 0.15);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+.fenrus-page-body .settings-menu .logo,
+body.initial-config-page .settings-menu .logo {
+  margin: 1.5rem 1rem 1rem 2rem;
+  display: flex;
+  place-items: center;
+}
+.fenrus-page-body .settings-menu .logo img,
+body.initial-config-page .settings-menu .logo img {
+  width: 2.5rem;
+  margin-right: 0.5rem;
+}
+.fenrus-page-body .settings-menu .logo .title,
+body.initial-config-page .settings-menu .logo .title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #ff0090;
+  font-style: italic;
+}
+.fenrus-page-body .settings-menu .group,
+body.initial-config-page .settings-menu .group {
+  margin-top: 2rem;
+  text-transform: uppercase;
+  padding-left: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.fenrus-page-body .settings-menu ul,
+body.initial-config-page .settings-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-grow: 1;
+}
+.fenrus-page-body .settings-menu li,
+body.initial-config-page .settings-menu li {
+  border-left: solid 0.5rem transparent;
+}
+.fenrus-page-body .settings-menu li:not(.group):hover,
+body.initial-config-page .settings-menu li:not(.group):hover {
+  background: rgba(var(--accent-rgb), 0.2);
+}
+.fenrus-page-body .settings-menu li.active,
+body.initial-config-page .settings-menu li.active {
+  background-color: rgba(var(--accent-rgb), 0.3);
+  border-color: var(--accent);
+}
+.fenrus-page-body .settings-menu a,
+body.initial-config-page .settings-menu a {
+  color: var(--color);
+  text-decoration: none;
+  padding: 1rem;
+  display: block;
+  height: 1.25rem;
+  display: flex;
+  place-items: center;
+  padding-left: 2rem;
+}
+.fenrus-page-body .settings-menu span[class^=fa-],
+.fenrus-page-body .settings-menu span[class^=icon-],
+body.initial-config-page .settings-menu span[class^=fa-],
+body.initial-config-page .settings-menu span[class^=icon-] {
+  font-size: 1.5rem;
+  width: 2rem;
+  text-align: center;
+  display: block;
+  margin-right: 0.5rem;
+}
+.fenrus-page-body .settings-content,
+body.initial-config-page .settings-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 100vh;
+}
+.fenrus-page-body .settings-content > div,
+body.initial-config-page .settings-content > div {
+  display: flex;
+  flex-direction: column;
+}
+.fenrus-page-body .settings-content .page-description,
+body.initial-config-page .settings-content .page-description {
+  height: unset;
+  margin: 1rem 3rem;
+  white-space: pre-wrap;
+}
+.fenrus-page-body .settings-content .top-row,
+body.initial-config-page .settings-content .top-row {
+  height: 3.5rem;
+  min-height: 3.5rem;
+  display: flex !important;
+  flex-direction: row;
+  padding: 0 1.5rem;
+  align-items: center;
+}
+.fenrus-page-body .settings-content .top-row input[type=text],
+body.initial-config-page .settings-content .top-row input[type=text] {
+  width: calc(100% - 1rem);
+  padding: 7px 0 3px;
+  margin-left: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1em;
+  border-bottom: solid 1px var(--accent);
+  color: var(--input-color);
+}
+.fenrus-page-body .settings-content .top-row input[type=text]:focus,
+body.initial-config-page .settings-content .top-row input[type=text]:focus {
+  outline: none;
+}
+.fenrus-page-body .settings-content .top-row .title,
+body.initial-config-page .settings-content .top-row .title {
+  align-items: center;
+  font-size: 1.15rem;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  width: 100%;
+}
+.fenrus-page-body .settings-content .top-row .title span[class^=icon-],
+body.initial-config-page .settings-content .top-row .title span[class^=icon-] {
+  color: var(--accent);
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+.fenrus-page-body .settings-content .top-row .buttons,
+body.initial-config-page .settings-content .top-row .buttons {
+  white-space: nowrap;
+  margin-left: 1rem;
+  margin-right: -0.5rem;
+}
+.fenrus-page-body .settings-content .top-row .allow-register-label,
+body.initial-config-page .settings-content .top-row .allow-register-label {
+  white-space: nowrap;
+  padding-right: 1rem;
+}
+.fenrus-page-body .settings-content .list,
+body.initial-config-page .settings-content .list {
+  margin: 2rem;
+}
+.fenrus-page-body .list-toolbar,
+body.initial-config-page .list-toolbar {
+  display: flex;
+  flex-direction: row;
+  margin: 0.5rem;
+}
+.fenrus-page-body .list-toolbar > span, .fenrus-page-body .list-toolbar a,
+body.initial-config-page .list-toolbar > span,
+body.initial-config-page .list-toolbar a {
+  text-decoration: none;
+  cursor: pointer;
+  color: rgba(var(--color-rgb), 0.8);
+  text-transform: uppercase;
+}
+.fenrus-page-body .list-toolbar > span span[class^=icon-], .fenrus-page-body .list-toolbar a span[class^=icon-],
+body.initial-config-page .list-toolbar > span span[class^=icon-],
+body.initial-config-page .list-toolbar a span[class^=icon-] {
+  margin-right: 0.25rem;
+}
+.fenrus-page-body .list-toolbar > span:hover, .fenrus-page-body .list-toolbar a:hover,
+body.initial-config-page .list-toolbar > span:hover,
+body.initial-config-page .list-toolbar a:hover {
+  color: var(--color);
+}
+.fenrus-page-body .modal-wrapper,
+body.initial-config-page .modal-wrapper {
+  display: none;
+}
+.fenrus-page-body .modal-wrapper.visible,
+body.initial-config-page .modal-wrapper.visible {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+.fenrus-page-body .modal-wrapper .modal-body,
+body.initial-config-page .modal-wrapper .modal-body {
+  display: flex;
+  flex-direction: column;
+}
+.fenrus-page-body .modal-wrapper .modal-body > * + *,
+body.initial-config-page .modal-wrapper .modal-body > * + * {
+  margin-top: 0.5rem;
+}
+.fenrus-page-body #add-group-item,
+body.initial-config-page #add-group-item {
+  margin-right: 1rem;
+  position: absolute;
+  bottom: 2rem;
+  right: 3rem;
+  transform: scale(1.5);
+  z-index: 3;
+}
+.fenrus-page-body .preview-dashboard,
+body.initial-config-page .preview-dashboard {
+  overflow: auto;
+}
+.fenrus-page-body .preview-dashboard .db-item .actions,
+body.initial-config-page .preview-dashboard .db-item .actions {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+}
+.fenrus-page-body .preview-dashboard .db-item .actions span,
+body.initial-config-page .preview-dashboard .db-item .actions span {
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 3px;
+}
+.fenrus-page-body .preview-dashboard .db-item:hover .actions,
+body.initial-config-page .preview-dashboard .db-item:hover .actions {
+  display: flex;
+  flex-flow: wrap;
+}
+.fenrus-page-body .app-info-item,
+body.initial-config-page .app-info-item {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
+}
+.fenrus-page-body .app-info-item .label,
+body.initial-config-page .app-info-item .label {
+  width: 10rem;
+  min-width: 10rem;
+}
+.fenrus-page-body .app-info-item a,
+body.initial-config-page .app-info-item a {
+  color: var(--accent);
+}
+.fenrus-page-body .content > .tabs,
+body.initial-config-page .content > .tabs {
+  margin-top: 1rem;
+}
+.fenrus-page-body .tabs,
+body.initial-config-page .tabs {
+  display: flex;
+  flex-direction: column;
+}
+.fenrus-page-body .tabs .tab-buttons,
+body.initial-config-page .tabs .tab-buttons {
+  display: flex;
+  flex-direction: row;
+  border-bottom: solid 1px var(--accent, #ff0090);
+  padding-left: 1rem;
+}
+.fenrus-page-body .tabs .tab-buttons button,
+body.initial-config-page .tabs .tab-buttons button {
+  border: 1px solid var(--border-color);
+  position: relative;
+  bottom: -2px;
+}
+.fenrus-page-body .tabs .tab-buttons button.active,
+body.initial-config-page .tabs .tab-buttons button.active {
+  border-color: var(--accent, #ff0090);
+  border-bottom: 2px solid var(--base);
+}
+.fenrus-page-body .tabs .tabpage,
+body.initial-config-page .tabs .tabpage {
+  margin-top: 1rem;
+  display: none;
+  flex-grow: 1;
+}
+.fenrus-page-body .tabs .tabpage.active,
+body.initial-config-page .tabs .tabpage.active {
+  display: unset;
+}
+
+/*# sourceMappingURL=settings.css.map */

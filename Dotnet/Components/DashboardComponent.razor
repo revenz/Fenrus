@@ -1,0 +1,81 @@
+@using Fenrus.Models
+
+<input type="hidden" id="hdn-dashboard-name" value="@Model.Name" />
+<input type="hidden" id="hdn-dashboard-background" value="@(Model.BackgroundImage?.EmptyAsNull() ?? Settings?.BackgroundImage)" />
+<input type="hidden" id="hdn-dashboard-theme" value="@(Model.Theme?.EmptyAsNull() ?? Settings?.Theme?.EmptyAsNull() ?? "Default")" />
+
+@if(string.IsNullOrEmpty(Model.AccentColor) == false)
+{
+    var accentColor = Model.AccentColor;
+    var accentRgb = int.Parse(accentColor[1..3], System.Globalization.NumberStyles.HexNumber) + "," +
+                    int.Parse(accentColor[3..5], System.Globalization.NumberStyles.HexNumber) + "," +
+                    int.Parse(accentColor[5..7], System.Globalization.NumberStyles.HexNumber);
+    <style>
+          body {
+              --accent-rgb:@accentRgb;
+              --accent:@accentColor;
+          }
+    </style>
+
+}
+
+<CascadingValue IsFixed="true" Value="PageHelper">
+@if(Model.Groups.Any()) 
+{
+    var groupIndex = 0;
+    foreach(var group in Model.Groups)
+    {
+        if (!group.Enabled)
+            continue;
+
+        <div id="@group.Uid" class="db-group @(Settings.ShowGroupTitles ? "hide-labels" : string.Empty)">
+            @if(group.HideGroupTitle == false) 
+            {
+                <div class="title">
+                    <span x-text="@group.Name">@group.Name</span>
+                    <div class="group-controls">
+                        <span class="move-up fa-solid fa-angle-up" title="Move Up" onclick="moveGroup('@group.Uid', true)"></span>
+                        <span class="move-down fa-solid fa-angle-down" title="Move Down" onclick="moveGroup('@group.Uid', false)"></span>
+                        <span class="remove-group fa-solid fa-trash" title="Remove Group" onclick="removeGroup('@group.Uid', )"></span>
+                    </div>
+                </div>
+            }
+    
+            <div class="items">
+                @foreach (var item in group.Items)
+                {
+                    if (item.Enabled == false)
+                        continue;
+                    if (item is LinkItem link)
+                    {
+                        <Fenrus.Components.DashboardItems.LinkItemComponent Model=@link Settings=@Settings />
+                    }
+                    else if (item is AppItem app)
+                    {
+                        <Fenrus.Components.DashboardItems.AppItemComponent Model=@app Settings=@Settings />
+                    }
+                }
+            </div>
+        </div>
+        @if(string.IsNullOrWhiteSpace(group.AccentColor) == false) 
+        {  
+            var groupAccentRgb = int.Parse(group.AccentColor[1..3], System.Globalization.NumberStyles.HexNumber) + "," +
+                            int.Parse(group.AccentColor[3..5], System.Globalization.NumberStyles.HexNumber) + "," +
+                            int.Parse(group.AccentColor[5..7], System.Globalization.NumberStyles.HexNumber);
+            <style>
+                #@group.Uid {
+                    --accent-rgb:@groupAccentRgb;
+                    --accent:@group.AccentColor;
+                }
+            </style>
+        }
+        ++groupIndex;
+    }
+} 
+else 
+{
+    <div class="no-dashboard">
+        No groups added to Model
+    </div>
+}
+</CascadingValue>

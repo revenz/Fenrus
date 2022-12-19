@@ -1,0 +1,97 @@
+input {
+  width: calc(100% - 4.5rem) !important;
+  padding-left:4rem !important;
+}
+.preview {
+  position: absolute;
+  border-right: solid 2px var(--base);
+  width: 3rem;
+  height: 100%;
+  left: 0;
+  cursor:pointer;
+}
+.color-picker{
+  display:flex;
+  flex-direction: column;
+  width: 18.2rem;
+  height: 14rem;
+  padding:1rem;
+  position:fixed;
+  z-index:2;
+  background:var(--base);
+  border: solid 1px var(--input-background);
+  &.hidden {
+    display:none;
+  }
+}
+.color-picker-area {
+  flex-grow:1;
+  display:flex;
+  flex-direction: row;
+  margin-bottom: 0.75rem;
+}
+.color-palette {
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.color-palette-sw {
+  border: 1px solid var(--input-background);
+  margin: 0 0.2rem 0.2rem;
+  > div {
+    width:1.5rem;
+    height:1rem;
+  }
+}
+.color-picker-rgb {
+  border: 1px solid var(--input-background);
+  cursor:crosshair;
+  flex-grow:1;
+  margin-right:1rem;
+}
+.color-picker-rgb-bg-1, .color-picker-rgb-bg-2 {
+  position:absolute;
+  left:0;
+  right:0;
+  height:100%;
+  width:100%;
+}
+.color-picker-rgb-bg-1 {
+  background-color: rgba(0, 0, 0, 0);
+  background-image: linear-gradient(to right, white 0%, rgba(255,255,255,0) 100%);  
+}
+.color-picker-rgb-bg-2 {
+  background-color: rgba(0, 0, 0, 0);
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, black 100%);
+}
+.color-slider {
+  width:2rem;
+}
+.color-slider-bar {
+  display: block; 
+  border: 1px solid var(--input-background);
+  position:relative;
+  height:100%;
+  width:2rem;
+  background-color: rgba(0, 0, 0, 0);
+  background-image: linear-gradient(rgb(204, 0, 0) 0%, rgb(153, 153, 0) 17%, rgb(51, 204, 0) 33%, rgb(0, 204, 204) 50%, rgb(0, 0, 204) 66%, rgb(204, 0, 204) 83%, rgb(204, 0, 0) 100%);
+}
+.crosshair
+{
+  position: absolute; 
+  top: 10px; 
+  left: 95px; 
+  height: 20px; 
+  width: 20px;
+}
+.color-slider-bar-indicator {
+  border: 1px solid rgb(255, 255, 255); 
+  position: absolute; 
+  left: -4px; 
+  top: -5px;
+}
+.color-slider-bar-indicator-square {
+  width: 2rem; 
+  height: 0.25rem;
+  cursor:pointer;
+}

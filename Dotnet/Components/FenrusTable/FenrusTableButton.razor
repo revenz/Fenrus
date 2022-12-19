@@ -1,0 +1,9 @@
+@namespace Fenrus.Components
+
+<button class="fenrus-table-button" @onclick="@OnClick" disabled="@(Enabled == false)">
+    @if (string.IsNullOrEmpty(Icon) == false)
+    {
+        <span class="icon @Icon"></span>
+    }
+    @Label
+</button>

@@ -1,0 +1,57 @@
+.help-text {
+  font-size:0.8rem;
+  font-style:italic;
+  color: var(--color-darkest);
+  white-space: pre-wrap;
+}
+
+.input-label {
+  margin-bottom:auto;
+}
+
+.error-text {
+  font-size:0.8rem;
+  color: var(--accent);
+  white-space: pre-wrap;
+  display:block;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  &.flex-grow {
+    flex-grow:1;
+  }
+}
+.input-wrapper-outer {
+  margin-bottom:1rem;
+}
+
+.input-label {
+  width: 14rem;
+  min-width:14rem;
+  margin: 0.4rem auto auto;
+}
+.hide-label .input-label {
+  display:none;
+}
+.input-value {
+  flex-grow: 1;
+  position: relative;
+  margin: 1px; /* one pixel margin for outline of selected inputs */
+}
+
+.row.disabled {
+  opacity: 0.3 !important;
+}
+
+@media screen and (max-width:578px)
+{
+  .row {
+    flex-direction:column;
+  }
+  .input-label {
+    width:unset;
+    margin:unset;
+  }
+}

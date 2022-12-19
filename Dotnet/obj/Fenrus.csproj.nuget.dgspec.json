@@ -1,0 +1,94 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/john/src/Fenrus/Dotnet/Fenrus.csproj": {}
+  },
+  "projects": {
+    "/home/john/src/Fenrus/Dotnet/Fenrus.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/john/src/Fenrus/Dotnet/Fenrus.csproj",
+        "projectName": "Fenrus",
+        "projectPath": "/home/john/src/Fenrus/Dotnet/Fenrus.csproj",
+        "packagesPath": "/home/john/.nuget/packages/",
+        "outputPath": "/home/john/src/Fenrus/Dotnet/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/john/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Docker.DotNet": {
+              "target": "Package",
+              "version": "[3.125.12, )"
+            },
+            "Jint": {
+              "target": "Package",
+              "version": "[3.0.0-beta-2044, )"
+            },
+            "LigerShark.WebOptimizer.Core": {
+              "target": "Package",
+              "version": "[3.0.372, )"
+            },
+            "LigerShark.WebOptimizer.Sass": {
+              "target": "Package",
+              "version": "[3.0.91, )"
+            },
+            "Markdig": {
+              "target": "Package",
+              "version": "[0.30.4, )"
+            },
+            "NLog": {
+              "target": "Package",
+              "version": "[5.1.0, )"
+            },
+            "SSH.NET": {
+              "target": "Package",
+              "version": "[2020.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/john/.dotnet/sdk/6.0.402/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "Name": "HDHomeRun",
+  "Icon": "icon.png",
+  "TestFunction": true,
+  "Interval": 10,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://www.silicondust.com"
+  }
+}
