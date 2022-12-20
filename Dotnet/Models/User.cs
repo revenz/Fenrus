@@ -8,6 +8,7 @@ public class User: IModal
     /// <summary>
     /// Gets or sets Uid of the user
     /// </summary>
+    [LiteDB.BsonId] 
     public Guid Uid { get; set; }
 
     /// <summary>

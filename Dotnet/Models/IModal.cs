@@ -1,3 +1,5 @@
+using LiteDB;
+
 namespace Fenrus.Models;
 
 /// <summary>
@@ -8,6 +10,7 @@ public interface IModal
     /// <summary>
     /// Gets or sets the unique identifier
     /// </summary>
+    [BsonId]
     Guid Uid { get; set; }
     
     /// <summary>

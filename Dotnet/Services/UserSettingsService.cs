@@ -7,7 +7,7 @@ namespace Fenrus.Services;
 /// </summary>
 public class UserSettingsService
 {
-    private string FileForUser(Guid uid) => Path.Combine("data", "configs", uid + ".json");
+    // private string FileForUser(Guid uid) => Path.Combine("data", "configs", uid + ".json");
 
     /// <summary>
     /// Gets the defaults settings for guests
@@ -25,40 +25,33 @@ public class UserSettingsService
     /// <summary>
     /// Loads a users settings
     /// </summary>
-    /// <param name="uid"></param>
-    /// <returns></returns>
+    /// <param name="uid">the UID of the user</param>
+    /// <returns>the user settings</returns>
     public UserSettings? Load(Guid uid)
     {
-        string file = FileForUser(uid);
-        Logger.ILog($"checking for file: {file}");
-        UserSettings? settings;
-        if(File.Exists(file) == false)
-        {
-            // use default config
-            var guest = SettingsForGuest();
-            settings = new UserSettings();
-            if (guest.Dashboards.Any())
-            {
-                settings.Dashboards.Add(guest.Dashboards.First());
-                //settings.Dashboards.First().Name = "Default";
-                //Logger.ILog("###################", guest.Dashboards[0].Name, self.Dashboards[0].Name);
-
-                //self.Dashboards[0].Uid = new Utils().newGuid();
-                //self.Dashboards[0].Enabled = true;
-                //self.Dashboards[0].BackgroundImage = '';
-                //settings.BackgroundImage = guest.Dashboards.First().BackgroundImage;
-            }
-            settings.Theme = "Default";
-            settings.AccentColor = guest.AccentColor;
-
-            Save(settings);
+        var settings = DbHelper.GetByUid<UserSettings>(uid);
+        if (settings != null)
             return settings;
-        }
-        Logger.ILog("using config file: " + file);
-        
-        string json = File.ReadAllText(file);
+    
+        // use default config
+        var guest = SettingsForGuest();
+        settings = new UserSettings();
+        settings.Uid = uid;
+        if (guest.Dashboards.Any())
+        {
+            settings.Dashboards.Add(guest.Dashboards.First());
+            //settings.Dashboards.First().Name = "Default";
+            //Logger.ILog("###################", guest.Dashboards[0].Name, self.Dashboards[0].Name);
 
-        settings = JsonSerializer.Deserialize<UserSettings>(json);
+            //self.Dashboards[0].Uid = new Utils().newGuid();
+            //self.Dashboards[0].Enabled = true;
+            //self.Dashboards[0].BackgroundImage = '';
+            //settings.BackgroundImage = guest.Dashboards.First().BackgroundImage;
+        }
+        settings.Theme = "Default";
+        settings.AccentColor = guest.AccentColor;
+
+        Save(settings);
         return settings;
     }
 
@@ -67,9 +60,7 @@ public class UserSettingsService
     /// </summary>
     /// <param name="settings">the user settings</param>
     public void Save(UserSettings settings)
-    {
-        
-    }
+        => DbHelper.Update(settings);
 
     /// <summary>
     /// Saves a background for a user

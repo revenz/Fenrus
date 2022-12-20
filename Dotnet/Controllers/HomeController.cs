@@ -86,16 +86,21 @@ public class HomeController:Controller
 
     private async Task<IActionResult> Login(string username, string password)
     {
-        await CreateClaim(Guid.NewGuid(), username, true);
+        var user = new Services.UserService().Validate(username, password);
+        if (user == null)
+            return LoginPage("Login failed");
+        
+        await CreateClaim(user.Uid, user.Name, user.IsAdmin);
         return Redirect("/");
     }
     
     private async Task<IActionResult> Register(string username, string password)
     {
         var settings = new Services.SystemSettingsService().Get();
-        if (settings.AllowRegister)
+        if (settings.AllowRegister == false)
             return LoginPage("User registrations are not allowed");
-        await CreateClaim(Guid.NewGuid(), username, true);
+        var user = new Services.UserService().Register(username, password);
+        await CreateClaim(user.Uid, user.Name, user.IsAdmin);
         return Redirect("/");
     }
     

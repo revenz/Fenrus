@@ -30,7 +30,7 @@ public abstract class UserPage : ComponentBase
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var sid = authState?.User?.Claims?.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid")?.Value;
-        if (string.IsNullOrEmpty(sid) || Guid.TryParse(sid, out Guid uid))
+        if (string.IsNullOrEmpty(sid) || Guid.TryParse(sid, out Guid uid) == false)
         {
             Router.NavigateTo("/login");
             return;

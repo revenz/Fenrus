@@ -16,6 +16,7 @@ public abstract class GroupItem: IModal
     /// <summary>
     /// Gets or sets the Uid of the item
     /// </summary>
+    [LiteDB.BsonId]
     public Guid Uid { get; set; } = Guid.NewGuid();
     
     /// <summary>

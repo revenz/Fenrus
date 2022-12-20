@@ -3,12 +3,18 @@ namespace Fenrus.Models;
 /// <summary>
 /// User settings
 /// </summary>
-public class UserSettings
+public class UserSettings: IModal
 {
     /// <summary>
     /// Gets the Uid of the User
     /// </summary>
-    public Guid Uid { get; init; }
+    [LiteDB.BsonId]
+    public Guid Uid { get; set; }
+
+    /// <summary>
+    /// Gets or sets the users name
+    /// </summary>
+    public string Name { get; set; }
 
     /// <summary>
     /// Gets or sets the revision of the saved settings

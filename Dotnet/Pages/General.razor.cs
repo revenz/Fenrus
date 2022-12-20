@@ -33,7 +33,12 @@ public partial class General : UserPage
     private async Task Save()
     {
         SaveBackground();
-        Console.WriteLine("saving!");
+        Settings.AccentColor = Model.AccentColor;
+        Settings.LinkTarget = Model.LinkTarget;
+        Settings.Theme = Model.Theme;
+        Settings.ShowGroupTitles = Model.GroupTitles;
+        Settings.ShowStatusIndicators = Model.ShowIndicators;
+        new Services.UserSettingsService().Save(Settings);
     }
 
     void SaveBackground()

@@ -8,6 +8,7 @@ public class DockerServer: IModal
     /// <summary>
     /// Gets or sets the Uid 
     /// </summary>
+    [LiteDB.BsonId]
     public Guid Uid { get; set; }
     
     /// <summary>

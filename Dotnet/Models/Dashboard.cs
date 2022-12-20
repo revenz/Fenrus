@@ -8,6 +8,7 @@ public class Dashboard: IModal
     /// <summary>
     /// Gets or sets the Uid of the dashboard
     /// </summary>
+    [LiteDB.BsonId]
     public Guid Uid { get; set; }
     
     /// <summary>

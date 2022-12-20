@@ -8,6 +8,7 @@ public class Group: IModal
     /// <summary>
     /// Gets or sets the Uid of the group
     /// </summary>
+    [LiteDB.BsonId]
     public Guid Uid { get; set; }
 
     /// <summary>

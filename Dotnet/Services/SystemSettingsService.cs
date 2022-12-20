@@ -30,27 +30,11 @@ public class SystemSettingsService
     private static void SaveSettings()
     {
         ++Settings.Revision;
-        FileInfo fi = new FileInfo(Filename);
-        if (fi.Directory.Exists == false)
-            fi.Directory.Create();
-        File.WriteAllText(Filename, JsonSerializer.Serialize(Settings));
+        DbHelper.Update(Settings);
     }
 
     private static SystemSettings? Load()
-    {
-        try
-        {
-            if (File.Exists(Filename) == false)
-                return null;
-            string json = File.ReadAllText(Filename);
-            var settings = JsonSerializer.Deserialize<SystemSettings>(json);
-            return settings;
-        }
-        catch (Exception)
-        {
-            return Settings;
-        }
-    }
+        => DbHelper.FirstOrDefault<SystemSettings>();
 
     /// <summary>
     /// Gets the system settings
