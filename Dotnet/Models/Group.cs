@@ -3,7 +3,7 @@ namespace Fenrus.Models;
 /// <summary>
 /// Group
 /// </summary>
-public class Group
+public class Group: IModal
 {
     /// <summary>
     /// Gets or sets the Uid of the group

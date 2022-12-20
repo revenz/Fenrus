@@ -5,9 +5,8 @@ namespace Fenrus.Pages;
 /// <summary>
 /// Search engine page
 /// </summary>
-public partial class SearchEngine: ComponentBase
+public partial class SearchEngine: UserPage
 {
-    [Inject] private NavigationManager Router { get; set; }
     
     Models.SearchEngine Model { get; set; } = new();
 

@@ -5,7 +5,7 @@ namespace Fenrus.Models;
 /// <summary>
 /// A group item
 /// </summary>
-public abstract class GroupItem
+public abstract class GroupItem: IModal
 {
     /// <summary>
     /// Gets the Type of the item

@@ -3,7 +3,7 @@ namespace Fenrus.Models;
 /// <summary>
 /// Search Engine
 /// </summary>
-public class SearchEngine
+public class SearchEngine: IModal
 {
     /// <summary>
     /// Gets or sets the Uid

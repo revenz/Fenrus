@@ -1,0 +1,20 @@
+@namespace Fenrus.Components.Dialogs
+
+@if (Visible)
+{
+    <div class="background-overlay fenrus-modal-background-overlay"></div>
+
+    <div class="fenrus-modal" style="@Styling">
+        <div class="fenrus-modal-inner">
+            <div class="fenrus-modal-title">
+                <span>@Title</span>
+            </div>
+            <div class="fenrus-modal-body">
+                @Body
+            </div>
+            <div class="fenrus-modal-footer">
+                @Footer
+            </div>
+        </div>
+    </div>
+}

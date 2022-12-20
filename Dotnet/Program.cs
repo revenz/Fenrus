@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 Fenrus.Logger.Initialize();
 Fenrus.Services.AppService.Initialize();
 
@@ -15,7 +17,20 @@ builder.Services.AddWebOptimizer(pipeline =>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.SlidingExpiration = true;
+        options.AccessDeniedPath = "/Forbidden/";
+    });
+
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseWebSockets();
 app.UseWebOptimizer();
 app.UseWhen(

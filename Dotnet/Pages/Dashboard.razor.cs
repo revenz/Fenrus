@@ -5,7 +5,7 @@ namespace Fenrus.Pages;
 /// <summary>
 /// Dashboard page
 /// </summary>
-public partial class Dashboard : ComponentBase
+public partial class Dashboard : CommonPage<Models.Group>
 {
     [Inject] private NavigationManager Router { get; set; }
     Models.Dashboard Model { get; set; } = new();
@@ -30,28 +30,10 @@ public partial class Dashboard : ComponentBase
     /// </summary>
     public Guid Uid { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task PostGotUser()
     {
-        base.OnInitialized();
         Console.WriteLine("Guid: " + Uid);
-        this.Model = DemoHelper.GetDemoUserSettings().Dashboards.FirstOrDefault(x => x.Uid == Uid) ?? new ();
-    }
-    
-    
-
-    private async Task Move(Models.Group item, bool up)
-    {
-        
-    }
-
-    private async Task Remove(Models.Group item)
-    {
-        
-    }
-
-    private async Task Add()
-    {
-        
+        this.Model = Settings.Dashboards.FirstOrDefault(x => x.Uid == Uid) ?? new ();
     }
     
     void Save()

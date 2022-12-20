@@ -3,7 +3,7 @@ namespace Fenrus.Models;
 /// <summary>
 /// Docker server
 /// </summary>
-public class DockerServer
+public class DockerServer: IModal
 {
     /// <summary>
     /// Gets or sets the Uid 

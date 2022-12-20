@@ -3,7 +3,7 @@ namespace Fenrus.Models;
 /// <summary>
 /// Dashboard
 /// </summary>
-public class Dashboard
+public class Dashboard: IModal
 {
     /// <summary>
     /// Gets or sets the Uid of the dashboard

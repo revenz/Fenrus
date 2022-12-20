@@ -70,4 +70,15 @@ public class UserSettingsService
     {
         
     }
+
+    /// <summary>
+    /// Saves a background for a user
+    /// </summary>
+    /// <param name="uid">the Uid of the user</param>
+    /// <param name="background">the background image data</param>
+    /// <param name="extension">the background extension</param>
+    public void SaveBackground(Guid uid, byte[] background, string extension)
+    {
+        
+    }
 }

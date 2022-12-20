@@ -1,0 +1,77 @@
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  background: rgba(var(--base-rgb), 0.7);
+}
+
+.fenrus-modal-background-overlay {
+  z-index: 10 !important;
+}
+
+.fenrus-modal {
+  z-index: 11;
+  padding: 1rem;
+}
+
+@media screen and (min-width: 578.0001px) {
+  .fenrus-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: min(28rem, 80vw);
+    max-width: min(40rem, 80vw);
+    box-shadow: 0 3px 10px rgba(var(--color-rgb), 0.1);
+    background: rgba(var(--base-rgb), 0.9);
+  }
+  .fenrus-modal-footer {
+    text-align: right;
+  }
+  .fenrus-modal-footer button {
+    width: 6rem;
+    padding: 0;
+  }
+}
+@media screen and (max-width: 578px) {
+  .fenrus-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: var(--base);
+  }
+  .fenrus-modal-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .fenrus-modal-body {
+    flex-grow: 1;
+    position: relative;
+  }
+  .fenrus-modal-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .fenrus-modal-footer button {
+    flex-grow: 1;
+    flex-basis: 0;
+    margin: auto;
+  }
+  .fenrus-modal-footer button + button {
+    margin-left: 1rem;
+  }
+}
+.fenrus-modal-title {
+  color: var(--accent);
+}
+
+.fenrus-modal-body {
+  margin: 1rem 0;
+}

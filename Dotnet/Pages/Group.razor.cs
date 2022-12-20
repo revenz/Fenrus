@@ -5,9 +5,8 @@ namespace Fenrus.Pages;
 /// <summary>
 /// Group page
 /// </summary>
-public partial class Group: ComponentBase
+public partial class Group: UserPage
 {
-    [Inject] private NavigationManager Router { get; set; }
     Models.Group Model { get; set; } = new();
 
     [Parameter]

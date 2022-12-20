@@ -1,0 +1,16 @@
+@namespace Fenrus.Components.Inputs
+@inherits Input<string>
+
+<InputWrapper Input="@this">
+    <div class="item-icon-picker">
+        <div class="preview">
+            <img id="@Uid-preview" style="display:none; width: 100px;height: 100px;object-fit: contain;margin-bottom:1rem"/>
+            <div id="@Uid-no-image" class="no-image" style="display:none"></div>
+        </div>
+
+        <button class="btn" onclick="document.getElementById('@Uid-file-chooser').click()">
+            Browse...
+        </button>
+        <input style="display:none" id="@Uid-file-chooser" class="file-chooser" type="file" accept="image/*">
+    </div>
+</InputWrapper>

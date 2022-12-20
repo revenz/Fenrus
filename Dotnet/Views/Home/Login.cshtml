@@ -1,0 +1,62 @@
+@model Fenrus.Controllers.LoginPageModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.svg?version=@Globals.Version">
+    <title>Fenrus</title>
+    <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
+    <link id="theme-style" rel="stylesheet" href="/themes/Default/_theme.css?version=@Globals.Version" />
+</head>
+
+<body class="no-custom-background animate-background login-page">
+    <div class="bg bg1"></div>
+    <div class="bg bg2"></div>
+    <div class="bg bg3"></div>
+
+    <div class="main-content">
+        <form class="login-box" method="post">
+            <div class="header">
+                <span class="logo">
+                    <img src="/favicon.svg?version=@Globals.Version" />
+                </span>
+                <span class="title">Fenrus</span>
+            </div>
+            @if (string.IsNullOrEmpty(Model.Error) == false)
+            {
+                <div class="error">
+                    <span>@Model.Error</span>
+                </div>
+            }
+            <div class="field">
+                <span class="label">Username</span>
+                <span class="value">
+                    <input type="text" name="username" autofocus required />
+                </span>
+            </div>
+            <div class="field">
+                <span class="label">Password</span>
+                <span class="value">
+                    <input type="password" name="password" required />
+                </span>
+            </div>
+            <div class="buttons">
+                <input type="submit" name="action" value="Login" class="btn" />
+                @if(Model.AllowRegister) { 
+                    <input type="submit" name="action" value="Register" class="btn" />
+                }
+                @if(Model.AllowGuest) { 
+                    <input type="submit" name="action" value="Guest" class="btn" />
+                }
+            </div>
+        </form>
+    </div>
+
+    <script src="/js/_fenrus.js?version=@Globals.Version" defer></script>
+</body>
+</html>

@@ -21,6 +21,20 @@ public class DirectoryHelper
         return AppDomain.CurrentDomain.BaseDirectory;
 #endif
     }
+    
+    /// <summary>
+    /// Gets the data root directory
+    /// </summary>
+    /// <returns>the root data directory</returns>
+    public static string GetDataDirectory()
+        => Path.Combine(GetBaseDirectory(), "Data");
+    
+    /// <summary>
+    /// Gets the user root directory
+    /// </summary>
+    /// <returns>the root user directory</returns>
+    public static string GetUserDirectory()
+        => Path.Combine(GetDataDirectory(), "Users");
 
     /// <summary>
     /// Gets the apps root directory

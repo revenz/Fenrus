@@ -10,3 +10,5 @@ temp/
 bin/
 obj/
 .idea/
+Data/
+*.map

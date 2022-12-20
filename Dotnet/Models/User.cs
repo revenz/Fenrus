@@ -3,12 +3,21 @@ namespace Fenrus.Models;
 /// <summary>
 /// User
 /// </summary>
-public class User
+public class User: IModal
 {
     /// <summary>
     /// Gets or sets Uid of the user
     /// </summary>
     public Guid Uid { get; set; }
+
+    /// <summary>
+    /// Alias for username
+    /// </summary>
+    public string Name
+    {
+        get => Username;
+        set => Username = value;
+    }
 
     /// <summary>
     /// Gets or sets the username
