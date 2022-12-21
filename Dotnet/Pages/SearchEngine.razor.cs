@@ -1,5 +1,7 @@
+using Fenrus.Models;
 using Fenrus.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Pages;
 
@@ -33,9 +35,21 @@ public partial class SearchEngine: UserPage
     /// Gets or sets the UID of the group
     /// </summary>
     public Guid Uid { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this is a system search engine
+    /// </summary>
+    [FromQuery]
+    protected bool IsSystem { get; set; }
 
     private bool isNew = false;
-    
+
+    private Models.SearchEngine GetSearchEngine()
+    {
+        if (IsSystem)
+            return DbHelper.GetByUid<Models.SearchEngine>(Uid);
+        return Settings.SearchEngines.First(x => x.Uid == Uid);
+    }
 
     protected override async Task PostGotUser()
     {
@@ -44,11 +58,14 @@ public partial class SearchEngine: UserPage
             // new search engine
             isNew = true;
             Model = new();
+            if (IsSystem)
+                Model.IsSystem = true;
         }
         else
         {
             isNew = false;
-            Model = Settings.SearchEngines.First(x => x.Uid == Uid);
+            Model = GetSearchEngine();
+            
             if (string.IsNullOrEmpty(Model.Icon) == false)
             {
                 if (Model.Icon.StartsWith("db:/image/"))
@@ -72,14 +89,20 @@ public partial class SearchEngine: UserPage
         {
             Model.Icon = saveImage;
             Model.Uid = Guid.NewGuid();
+            Model.IsSystem = IsSystem;
+            if (IsSystem)
+            {
+                DbHelper.Insert(Model);
+                return;
+            }
             Settings.SearchEngines.Add(Model);
         }
         else
         {
-            var existing = Settings.SearchEngines.First(x => x.Uid == Uid);
+            var existing = GetSearchEngine();
             existing.Enabled = Model.Enabled;
             existing.IsDefault = Model.IsDefault;
-            existing.IsSystem = Model.IsSystem;
+            existing.IsSystem = IsSystem;
             if (string.IsNullOrEmpty(saveImage) == false)
             {
                 // delete existing icon
@@ -91,9 +114,14 @@ public partial class SearchEngine: UserPage
             existing.Name = Model.Name;
             existing.Shortcut = Model.Shortcut;
             existing.Url = Model.Url;
+            if (IsSystem)
+            {
+                DbHelper.Update(existing);
+                return;
+            }
         }
         Settings.Save();
-        this.Router.NavigateTo("/settings/search-engines");
+        Router.NavigateTo("/settings/search-engines");
     }
 
     void Cancel()

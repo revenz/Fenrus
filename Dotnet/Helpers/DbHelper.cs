@@ -95,4 +95,16 @@ public class DbHelper
         var collection = db.GetCollection<T>(typeof(T).Name);
         collection.Delete(uid);
     }
+
+    /// <summary>
+    /// Gets all items in the database
+    /// </summary>
+    /// <typeparam name="T">the type of items to get</typeparam>
+    /// <returns>a list of all the items</returns>
+    public static List<T> GetAll<T>()
+    {
+        using var db = GetDb();
+        var collection = db.GetCollection<T>(typeof(T).Name);
+        return collection.Query().ToList();
+    }
 }

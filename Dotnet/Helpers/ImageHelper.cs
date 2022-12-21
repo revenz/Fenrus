@@ -13,7 +13,7 @@ public class ImageHelper
     public static (byte[] Data, string Extension) ImageFromBase64(string base64)
     {
         // data:image/jpeg;base64,
-        if (base64?.StartsWith("data:image/") == false)
+        if (base64?.StartsWith("data:image/") != true)
             return (new byte[] { }, string.Empty); // not valid base64 image
         string b64 = base64["data:image/".Length..];
         string extension = b64.Substring(0, b64.IndexOf(";", StringComparison.Ordinal)).ToLower();

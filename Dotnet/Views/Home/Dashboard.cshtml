@@ -1,4 +1,5 @@
 @using Fenrus.Components
+@using Fenrus.Services
 @model Fenrus.Models.DashboardPageModel
 @{
     ViewBag.Title = "";
@@ -6,6 +7,12 @@
     bool isGuest = false;
     UserSettings settings = Model.Settings;
     var pageHelper = new PageHelper();
+
+    string dashboardClass = "dashboard ";
+    if (settings.ShowGroupTitles == false)
+        dashboardClass += "hide-group-titles ";
+    if (settings.ShowStatusIndicators)
+        dashboardClass += "status-indicators ";
 }
 
 
@@ -40,8 +47,7 @@
     }
 </div>
     
-<div x-uid="@Model.Dashboard.Uid" 
-     class="dashboard <%= themeVariables?.ClassName %> <%= settings.ShowGroupTitles === false ? 'hide-group-titles' : '' %> <%= settings.ShowStatusIndicators ? 'status-indicators' : '' %>"
+<div x-uid="@Model.Dashboard.Uid" class="@dashboardClass"
      oncontextmenu="openDefaultContextMenu(event); return false">    
     
     @(await Html.RenderComponentAsync<DashboardComponent>(RenderMode.Static, new
@@ -176,4 +182,11 @@
     }
 }
         
-        
+@if (Model.Theme.Scripts?.Any() == true)
+{
+    <input type="hidden" id="theme-settings" value="@JsonSerializer.Serialize(Model.Theme.Settings)" />
+    foreach (var script in Model.Theme.Scripts)
+    {
+        <script src="/themes/@Model.Theme.DirectoryName/@script?version=@Globals.Version" defer></script>
+    }
+}

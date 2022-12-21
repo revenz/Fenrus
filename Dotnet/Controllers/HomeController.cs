@@ -3,6 +3,7 @@ using Fenrus.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Fenrus.Controllers;
 
@@ -19,21 +20,25 @@ public class HomeController:Controller
     [HttpGet]
     public IActionResult Home()
     {
-#if(DEBUG)
-        var settings = DemoHelper.GetDemoUserSettings();
+        var sid = User?.Claims?.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid")?.Value;
+        if (string.IsNullOrEmpty(sid) || Guid.TryParse(sid, out Guid uid) == false)
+            return Redirect("/login");
+
+        var settings = new Services.UserSettingsService().Load(uid);
+
+        var dashboard = settings.Dashboards.FirstOrDefault() ?? new();
+        if (string.IsNullOrEmpty(dashboard.BackgroundImage?.EmptyAsNull() ?? settings.BackgroundImage) == false)
+            ViewBag.CustomBackground = "true";
+
+        var theme = new Services.ThemeService().GetTheme(dashboard.Theme?.EmptyAsNull() ?? settings.Theme?.EmptyAsNull() ?? "Default");
+        
         DashboardPageModel model = new DashboardPageModel
         {
-            Dashboard = settings.Dashboards.First(),
-            Settings = settings
+            Dashboard = dashboard,
+            Settings = settings,
+            Theme = theme
         };
         return View("Dashboard", model);
-#else
-        Dashboard model = new Dashboard()
-        {
-            Name = "Test Dashboard"
-        };
-        return View("Dashboard", model);
-#endif
     }
 
     /// <summary>

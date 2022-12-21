@@ -19,6 +19,10 @@
         <button class="btn" onclick="document.getElementById('@Uid-file-chooser').click()">
             Browse...
         </button>
+        @if (Reset)
+        {
+            <button class="btn" @onclick="() => ResetImage()">Reset</button>
+        }
         <input style="display:none" id="@Uid-file-chooser" class="file-chooser" type="file" accept="image/*">
     </div>
 </InputWrapper>

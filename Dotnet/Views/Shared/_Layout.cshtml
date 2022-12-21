@@ -1,13 +1,20 @@
-@using Fenrus.Models
+@{
+    bool home = Context.Request.Path == "/" || Context.Request.Path.StartsWithSegments("/dashboard");
+    string bodyClass = home ? "home " : "not-home ";
+    if (ViewBag.CustomBackground != null)
+        bodyClass += "custom-background ";
+    else
+        bodyClass += "no-custom-background ";
+}
 <!DOCTYPE html>
 <html>
 <head>
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
-    <link id="theme-style" rel="stylesheet" href="/themes/Default/_theme.css?version=@Globals.Version" />
+    <link id="theme-style" rel="stylesheet" href="/themes/Default/theme.css?version=@Globals.Version" />
 </head>
 
-<body class="<%= isHome ? 'home' : 'not-home' %> <%= isSettings? 'settings' : 'not-settings' %> <%= customBackground ? 'custom-background' : 'no-custom-background' %> <%= themeVariables?.BodyClassName %>">
+<body class="@bodyClass">
     <ul class="main-menu">
         <li><a title="Home" href="/"><span class="fa-solid fa-house"></span></a></li>
         <li><a title="Settings" href="/settings"><span class="fa-solid fa-sliders"></span></a></li>

@@ -25,6 +25,11 @@ public abstract class UserPage : ComponentBase
     /// Gets the user settings
     /// </summary>
     protected UserSettings Settings { get; private set; }
+    
+    /// <summary>
+    /// Gets the system settings
+    /// </summary>
+    protected SystemSettings SystemSettings { get; private set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,6 +48,8 @@ public abstract class UserPage : ComponentBase
             Router.NavigateTo("/login");
             return;
         }
+
+        SystemSettings = new Services.SystemSettingsService().Get();
 
         await PostGotUser();
     }

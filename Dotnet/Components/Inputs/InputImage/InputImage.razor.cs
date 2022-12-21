@@ -12,6 +12,11 @@ public partial class InputImage : Input<string>
     /// Gets or sets the initial image to show in the preview
     /// </summary>
     [Parameter] public string InitialImage { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if the reset button should be shown
+    /// </summary>
+    [Parameter] public bool Reset { get; set; }
 
     private async Task ImageChosen(ChangeEventArgs e)
     {
@@ -39,5 +44,11 @@ public partial class InputImage : Input<string>
         this.Value = value;
         StateHasChanged(); 
         return Task.CompletedTask;
+    }
+
+    private async Task ResetImage()
+    {
+        this.Value = "";
+        this.InitialImage = "";
     }
 }

@@ -1,7 +1,9 @@
 {
     "Name":"Default",
     "Css":[
-        "theme.min.css"
+        "main.css",
+        "sliding.css",
+        "tiles.css"
     ],
     "Scripts":[
         "packer.growing.min.js",

@@ -1,13 +1,9 @@
 @page "/settings/search-engines"
 @inherits CommonPage<Fenrus.Models.SearchEngine>
 
-<PageTitle>Fenrus - Search Engines</PageTitle>
+<PageTitle>Fenrus - @Title</PageTitle>
 
-<FenrusPage Title="Search Engines" Icon="fa-solid fa-magnifying-glass" PageDescription="This page lets you configure search engines that can be used on the home screen.
-
-If you do not configure any and have no system search engines configured, the search box will not appear on the home screen.
-
-To switch to an non-default search engine on the home screen type in the search engine Shortcut followed by a space.">
+<FenrusPage Title="@Title" Icon="fa-solid fa-magnifying-glass" PageDescription="@Description">
     <Body>
     
     <FenrusTable TItem="Models.SearchEngine" Data=@Items>

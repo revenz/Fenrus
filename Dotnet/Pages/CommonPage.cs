@@ -2,6 +2,7 @@ using Fenrus.Components.Dialogs;
 using Fenrus.Models;
 using Humanizer;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Pages;
 
@@ -18,6 +19,12 @@ where T : IModal
         => typeof(T).Name.Pluralize().Underscore().Hyphenate();
     
     /// <summary>
+    /// Gets or sets if this is a system search engine
+    /// </summary>
+    [FromQuery]
+    protected bool IsSystem { get; set; }
+    
+    /// <summary>
     /// Removes an item, prompting for confirmation
     /// </summary>
     /// <param name="item">The item being removed</param>
@@ -25,7 +32,6 @@ where T : IModal
     {
         if (await Confirm.Show("Delete", $"Delete {GetTypeName()} '{item.Name}'?") == false)
             return;
-        Console.WriteLine("deleting: " + item.Name);
         DoDelete(item);
     }
 
@@ -38,7 +44,8 @@ where T : IModal
 
     protected virtual async Task Add()
     {
-        Router.NavigateTo($"/settings/{GetTypeNameRoute()}/" + Guid.Empty);   
+        Router.NavigateTo($"/settings/{GetTypeNameRoute()}/" + Guid.Empty + 
+                          (IsSystem ? "isSystem=true" : string.Empty));   
     }
 
     protected async Task Move(T item, bool up)

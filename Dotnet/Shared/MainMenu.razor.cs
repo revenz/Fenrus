@@ -1,4 +1,7 @@
+using Fenrus.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Fenrus.Shared;
 
@@ -7,16 +10,12 @@ namespace Fenrus.Shared;
 /// </summary>
 public partial class MainMenu 
 {
-    /// <summary>
-    /// Gets or sets if this user is an administrator
-    /// </summary>
-    public bool IsAdministrator { get; set; }
-
     [Inject] private NavigationManager Router { get; set; }
+    [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
     private List<MenuGroup> Menu = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Router.LocationChanged += (obj, e) => this.StateHasChanged();
         Menu.Add(new MenuGroup()
@@ -38,6 +37,23 @@ public partial class MainMenu
                 new () { Name = "Search Engines", Link = "/settings/search-engines", Icon = "fa-solid fa-magnifying-glass"}
             }
         });
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var isAdmin = authState.User.FindFirst(x=> x.Type == "Role");
+        if (isAdmin != null)
+        {
+            Menu.Add(new MenuGroup()
+            {
+                Name = "Administrator", 
+                Items = new List<MenuItem>()
+                {
+                    new () { Name = "Guest Dashboard", Link = "/settings/guest-dashboard", Icon = "fa-solid fa-table-cells-large"},
+                    new () { Name = "System Groups", Link = "/settings/groups?isSystem=true", Icon = "fa-solid fa-puzzle-piece"},
+                    new () { Name = "System Search Engines", Link = "/settings/search-engines?isSystem=true", Icon = "fa-solid fa-magnifying-glass"},
+                    new () { Name = "Users", Link = "/settings/users", Icon = "fa-solid fa-user-group"}
+                }
+            });
+        }
     }
 
     private bool IsActive(MenuItem item)

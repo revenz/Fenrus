@@ -6,6 +6,9 @@ public partial class Groups: CommonPage<Models.Group>
 
     protected override async Task PostGotUser()
     {
-        Items = Settings.Groups;
+        if (IsSystem)
+            Items = DbHelper.GetAll<Models.Group>();
+        else
+            Items = Settings.Groups;
     }
 }

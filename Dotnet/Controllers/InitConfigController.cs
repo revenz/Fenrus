@@ -92,17 +92,18 @@ public class InitConfigController : Controller
             settings.OAuthStrategyIssuerBaseUrl = model.OAuthStrategyIssuerBaseUrl;
         }
 
-        service.Save();
-
         if (model.Strategy == AuthStrategy.LocalStrategy)
         {
             var userService = new UserService();
             var user = userService.Register(model.LocalStrategyUsername, model.LocalStrategyPassword, isAdmin: true);
 
+            // need to save service after registering the user to make correctly set InitDone to true
+            service.Save();
             return Redirect("/");
         }
         else
         {
+            service.Save();
             // need to restart the app to use OpenIDConnect
             _ = Task.Run(async () =>
             {

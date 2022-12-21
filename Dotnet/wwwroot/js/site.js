@@ -41,7 +41,7 @@ function changeTheme(event) {
     let theme = event?.target?.value;
     if (!theme)
         return;
-    document.getElementById('theme-style').setAttribute('href', `/themes/${theme}/_theme.css`);
+    document.getElementById('theme-style').setAttribute('href', `/themes/${theme}/theme.css`);
 }
 
 function htmlEncode(text) {

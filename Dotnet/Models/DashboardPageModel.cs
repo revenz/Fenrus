@@ -14,4 +14,9 @@ public class DashboardPageModel
     /// Gets the dashboard to render
     /// </summary>
     public Dashboard Dashboard { get; init; }
+    
+    /// <summary>
+    /// Gets the theme
+    /// </summary>
+    public Theme Theme { get; init; }
 }

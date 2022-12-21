@@ -35,7 +35,7 @@ public class UserService
         if (user != null)
         {
             // already exists, just update them
-            user.Password = password;
+            user.Password = BCrypt.Net.BCrypt.HashPassword(password);;
             user.IsAdmin = isAdmin;
             DbHelper.Update(user);
             return user;

@@ -12,7 +12,7 @@ public class ThemeService
     /// Gets a theme by its name
     /// </summary>
     /// <param name="name">the name of the theme</param>
-    /// <returns>the them</returns>
+    /// <returns>the theme</returns>
     public Theme GetTheme(string name)
     {
         if(string.IsNullOrWhiteSpace(name))
@@ -24,7 +24,7 @@ public class ThemeService
         
         var theme = new Theme();
         theme.Name = name;
-        theme.Directory = Path.Combine("..", "wwwroot", "themes", name);
+        theme.Directory = Path.Combine(DirectoryHelper.GetWwwRootDirectory(), "themes", name);
         theme.DirectoryName = name;
         var file = Path.Combine(theme.Directory, "theme.json");
         if (File.Exists(file) == false)
@@ -34,12 +34,15 @@ public class ThemeService
         }
 
         // more complex theme, with theme file        
-        var json = File.ReadLines(file);
+        var json = File.ReadAllText(file);
 
-        var deserialized = JsonSerializer.Deserialize<Theme>(file);
+        var deserialized = JsonSerializer.Deserialize<Theme>(json);
         if (deserialized == null)
             return theme;
         theme = deserialized;
+        theme.Name = name;
+        theme.Directory = Path.Combine(DirectoryHelper.GetWwwRootDirectory(), "themes", name);
+        theme.DirectoryName = name;
         
         // if(!theme.Templates)
         //     theme.Templates = {
