@@ -83,4 +83,16 @@ public class DbHelper
         var collection = db.GetCollection<T>(typeof(T).Name);
         collection.Update(item);
     }
+
+    /// <summary>
+    /// Deletes an item from the database
+    /// </summary>
+    /// <param name="uid">the Uid of the item being deleted</param>
+    /// <typeparam name="T">the type being deleted</typeparam>
+    public static void Delete<T>(Guid uid) where T : IModal
+    {
+        using var db = GetDb();
+        var collection = db.GetCollection<T>(typeof(T).Name);
+        collection.Delete(uid);
+    }
 }

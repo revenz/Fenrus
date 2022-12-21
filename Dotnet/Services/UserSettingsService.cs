@@ -49,9 +49,9 @@ public class UserSettingsService
             //settings.BackgroundImage = guest.Dashboards.First().BackgroundImage;
         }
         settings.Theme = "Default";
-        settings.AccentColor = guest.AccentColor;
+        settings.AccentColor = guest.AccentColor?.EmptyAsNull() ?? "#FF0090";
 
-        Save(settings);
+        DbHelper.Insert(settings);
         return settings;
     }
 

@@ -14,4 +14,12 @@ public partial class SearchEngines: CommonPage<Models.SearchEngine>
     {
         Items = Settings.SearchEngines;
     }
+
+    protected override void DoDelete(Models.SearchEngine item)
+    {
+        Settings.SearchEngines.RemoveAll(x => x.Uid == item.Uid);
+        Items.RemoveAll(x => x.Uid == item.Uid);
+        Settings.Save();
+        this.StateHasChanged();
+    }
 }

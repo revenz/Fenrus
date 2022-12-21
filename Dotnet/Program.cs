@@ -17,21 +17,70 @@ builder.Services.AddWebOptimizer(pipeline =>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+builder.Services.AddTransient<Fenrus.Middleware.InitialConfigMiddleware>();
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-        options.SlidingExpiration = true;
-        options.AccessDeniedPath = "/Forbidden/";
-    });
+if (Fenrus.Services.SystemSettingsService.UsingOAuth)
+{
+    var system = new Fenrus.Services.SystemSettingsService().Get();
+    builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddOpenIdConnect(options =>
+        {
+            options.ClientId = system.OAuthStrategyClientId;
+            options.ClientSecret = system.OAuthStrategySecret;
+            options.Authority = system.OAuthStrategyIssuerBaseUrl;
+            options.Events = new()
+            {
+                OnTokenValidated = async ctx =>
+                {
+                    //var userID = ctx.Principal.FindFirstValue("sub");
+
+                    //var db = ctx.HttpContext.RequestServices.GetRequiredService<MyDb>();
+
+                    //Do things I need to do with the user here.
+                }
+            };
+        });
+}
+else
+{
+    builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(options =>
+        {
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            options.SlidingExpiration = true;
+            options.AccessDeniedPath = "/Forbidden/";
+        });
+}
 
 var app = builder.Build();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseWhen(context =>
+{
+    if (Fenrus.Services.SystemSettingsService.InitConfigDone)
+        return false;
+    var path = context.Request.Path;
+    if (path.StartsWithSegments("/settings"))
+        return true;
+    if (path.StartsWithSegments("/dashboard"))
+        return true;
+    if (path.StartsWithSegments("/fimage"))
+        return false;
+    if (path.Value == "/")
+        return true;
+    return false;
+}, appBuilder => appBuilder.UseMiddleware<Fenrus.Middleware.InitialConfigMiddleware>());
 
-app.UseWebSockets();
+app.UseWhen(context => Fenrus.Services.SystemSettingsService.InitConfigDone,
+    appBuild =>
+    {
+        appBuild.UseWebSockets();
+    });
+
+app.UseWhen(context => Fenrus.Services.SystemSettingsService.InitConfigDone && Fenrus.Services.SystemSettingsService.UsingOAuth,
+    appBuild =>
+    {
+    });
+
 app.UseWebOptimizer();
 app.UseWhen(
     context => context.Request.Path.StartsWithSegments("/apps") == false,
@@ -52,6 +101,8 @@ app.UseWhen(
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseEndpoints(x =>
 {
     x.MapControllers();

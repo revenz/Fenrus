@@ -10,7 +10,6 @@
   <ItemGroup>
     <Folder Include="Apps\Basic" />
     <Folder Include="Data" />
-    <Folder Include="Middleware" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +21,7 @@
     <PackageReference Include="LigerShark.WebOptimizer.Sass" Version="3.0.91" />
     <PackageReference Include="LiteDB" Version="5.0.14" />
     <PackageReference Include="Markdig" Version="0.30.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.12" />
     <PackageReference Include="NLog" Version="5.1.0" />
     <PackageReference Include="SSH.NET" Version="2020.0.2" />
   </ItemGroup>

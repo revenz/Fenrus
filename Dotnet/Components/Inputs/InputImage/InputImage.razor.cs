@@ -8,6 +8,11 @@ namespace Fenrus.Components.Inputs;
 /// </summary>
 public partial class InputImage : Input<string>
 {
+    /// <summary>
+    /// Gets or sets the initial image to show in the preview
+    /// </summary>
+    [Parameter] public string InitialImage { get; set; }
+
     private async Task ImageChosen(ChangeEventArgs e)
     {
         var value = e.Value;

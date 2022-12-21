@@ -4,8 +4,8 @@ public partial class Groups: CommonPage<Models.Group>
 {
     public List<Models.Group> Items { get; set; } = new();
 
-    protected override void OnInitialized()
+    protected override async Task PostGotUser()
     {
-        Items = DemoHelper.GetDemoUserSettings().Groups;
+        Items = Settings.Groups;
     }
 }

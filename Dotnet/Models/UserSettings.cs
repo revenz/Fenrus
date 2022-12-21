@@ -1,3 +1,5 @@
+using Fenrus.Services;
+
 namespace Fenrus.Models;
 
 /// <summary>
@@ -126,4 +128,10 @@ public class UserSettings: IModal
                 _SearchEngines.AddRange(value);
         }
     }
+
+    /// <summary>
+    /// Saves the user settings
+    /// </summary>
+    public void Save()
+        => new UserSettingsService().Save(this);
 }

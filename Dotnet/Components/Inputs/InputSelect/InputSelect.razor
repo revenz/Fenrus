@@ -18,13 +18,13 @@
                     <optgroup label=@grp.Label>
                         @foreach (var gi in grp.Items)
                         {
-                            <option>@gi.Label</option>
+                            <option value="@gi.Value" selected="@ValueMatches(gi.Value)">@gi.Label</option>
                         }
                     </optgroup>
                 }
                 else if (item is ListOption lo)
                 {
-                    <option>@lo.Label</option>
+                    <option value="@lo.Value" selected="@ValueMatches(lo.Value)">@lo.Label</option>
                 }
             }
         </select>

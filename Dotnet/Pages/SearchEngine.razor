@@ -12,5 +12,6 @@
         <InputText Label="Name" @bind-Value="@Model.Name" Help="The Name of the search engine" />
         <InputText Label="URL" @bind-Value="@Model.Url" Help="The URL of the search engine.  Note %s will be replaced with the search string" />
         <InputText Label="Shortcut" @bind-Value="@Model.Shortcut" Help="The shortcut for this search engine.  Typing this shortcut then space will switch the search to use this search engine" />
+        <InputImage Label="Icon" @bind-value="@Icon" InitialImage="@InitialImage" />
     </Body>
 </FenrusPage>

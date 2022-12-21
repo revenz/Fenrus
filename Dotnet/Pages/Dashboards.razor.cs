@@ -11,6 +11,6 @@ public partial class Dashboards: CommonPage<Models.Dashboard>
 
     protected override async Task PostGotUser()
     {
-        Items = DemoHelper.GetDemoUserSettings().Dashboards;
+        Items = Settings.Dashboards;
     }
 }

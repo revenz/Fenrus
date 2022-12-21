@@ -1,0 +1,150 @@
+@using Fenrus.Controllers
+@model Fenrus.Controllers.InitConfigModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.svg?version=@Globals.Version">
+    <title>Fenrus - Initial Configuration</title>
+    <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
+    <link id="theme-style" rel="stylesheet" href="/themes/Default/_theme.css?version=@Globals.Version" />
+    <style>        
+        .error input {
+            border: solid 1px red !important;          
+        }
+        .error::after {        
+            display: inline-block;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            font: var(--fa-font-solid);
+            content: "\f071";
+            position: absolute;
+            right: 0.5rem;
+            top: 0.5rem;
+            font-size: 1.4rem;
+            color: yellow;
+        }
+        .value {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body class="no-custom-background animate-background initial-config-page">
+    <div class="bg bg1"></div>
+    <div class="bg bg2"></div>
+    <div class="bg bg3"></div>
+
+    <div class="main-content">
+
+
+    <div class="initial-config settings-box">
+        <form method="post" onsubmit="initConfig_Submitting()">
+            <div class="header">
+                <span class="title">Initial Configuration</span>
+                <div class="buttons">
+                    <input type="submit" name="action" value="Save" class="btn" />
+                </div>
+            </div>
+            <div class="setting">
+                <span class="label">Login Strategy</span>
+                <span class="value">
+                    <select id="@nameof(Model.Strategy)" name="@nameof(Model.Strategy)" onchange="initConfig_StrategyChanaged(event)">
+                        <option selected="@(Model.Strategy == AuthStrategy.LocalStrategy ? "selected" : null)" value="@((int)AuthStrategy.LocalStrategy)">Local Username/Password</option>
+                        <option selected="@(Model.Strategy == AuthStrategy.OAuthStrategy ? "selected" : null)" value="@((int)AuthStrategy.OAuthStrategy)">OAuth</option>
+                    </select>
+                </span>
+            </div>
+            <div id="Strategy_Local">
+                <div class="setting">
+                    <span class="label">Admin Username</span>
+                    <span class="value">
+                        <input type="text" id="@nameof(Model.LocalStrategyUsername)" name="@nameof(Model.LocalStrategyUsername)" autofocus required value=@Model.LocalStrategyUsername />
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">Password</span>
+                    <span class="value">
+                        <input type="password" id="@nameof(Model.LocalStrategyPassword)" name="@nameof(Model.LocalStrategyPassword)" required value=@Model.LocalStrategyPassword />
+                    </span>
+                </div>
+            </div>
+            <div id="Strategy_OAuth" style="display:none">
+                <div class="setting">
+                    <span class="label">Issuer Base URL</span>
+                    <span class="value">
+                        <input type="text" id="@nameof(Model.OAuthStrategyIssuerBaseUrl)" name="@nameof(Model.OAuthStrategyIssuerBaseUrl)" autofocus value=@Model.OAuthStrategyIssuerBaseUrl />
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">Client ID</span>
+                    <span class="value">
+                        <input type="text" id="@nameof(Model.OAuthStrategyClientId)" name="@nameof(Model.OAuthStrategyClientId)" value=@Model.OAuthStrategyClientId />
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">Secret</span>
+                    <span class="value">
+                        <input type="text" id="@nameof(Model.OAuthStrategySecret)" name="@nameof(Model.OAuthStrategySecret)" value=@Model.OAuthStrategySecret />
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">Base URL</span>
+                    <span class="value">
+                        <input type="text" id="@nameof(Model.OAuthStrategyBaseUrl)" name="@nameof(Model.OAuthStrategyBaseUrl)" value=@Model.OAuthStrategyBaseUrl />
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+
+    <script src="/js/_fenrus.js?version=@Globals.Version" defer></script>
+    
+    <script>
+        function initConfig_StrategyChanaged()
+        {
+            let local = document.getElementById('Strategy_Local');
+            let oauth = document.getElementById('Strategy_OAuth');
+            
+            let target = document.getElementById('@nameof(Model.Strategy)');
+            let usingOAuth = target.value == '@((int)AuthStrategy.OAuthStrategy)';
+            let shown = usingOAuth ? oauth : local;
+            let hidden = usingOAuth ? local : oauth;
+            
+            hidden.style.display = 'none';
+            shown.style.display = '';
+            
+            hidden.querySelectorAll('input').forEach(input => {
+                input.removeAttribute('required');
+            });
+            shown.querySelectorAll('input').forEach(input => {
+                input.setAttribute('required', true);
+            })
+        }
+        
+        function initConfig_Submitting() {
+            console.log('submitting');
+        }            
+        
+        document.querySelectorAll('input').forEach(input => 
+        {
+            let parent = input.parentElement;
+            input.addEventListener('blur', () => {parent.classList.remove('error'); input.checkValidity();})
+            input.addEventListener('keydown', () => {parent.classList.remove('error');});
+            input.addEventListener('invalid', () => {
+                console.log('invalid: ', input);
+                parent.classList.add('error');
+            }, false);
+        });
+        
+        initConfig_StrategyChanaged();
+
+    </script>
+</body>
+</html>

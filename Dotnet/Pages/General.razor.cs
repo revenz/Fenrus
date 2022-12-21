@@ -43,16 +43,8 @@ public partial class General : UserPage
 
     void SaveBackground()
     {
-        if (string.IsNullOrEmpty(Background))
+        var image = ImageHelper.ImageFromBase64(Background);
+        if (image.Data?.Any() != true)
             return;
-        // data:image/jpeg;base64,
-        if (Background.StartsWith("data:image/") == false)
-            return; // not valid base64 image
-        string b64 = Background.Substring("data:image/".Length);
-        string extension = b64.Substring(0, b64.IndexOf(";")).ToLower();
-        if (extension == "jpeg")
-            extension = "jpg";
-        b64 = b64.Substring(b64.IndexOf(",") + 1);
-        var data = Convert.FromBase64String(b64);
     }
 }

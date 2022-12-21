@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Fenrus.Models.UiModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -44,6 +45,19 @@ public partial class InputSelect<TItem> : Input<TItem>
             //     this.Value = Options.ToArray()[value].Value;
             UpdateDescription();
         }
+    }
+
+    private bool ValueMatches(object other)
+    {
+        if (other == null && Value == null)
+            return true;
+        if (other == null)
+            return false;
+        if (Value == null)
+            return false;
+        string jvalue = JsonSerializer.Serialize(Value);
+        string ovalue = JsonSerializer.Serialize(other);
+        return jvalue == ovalue;
     }
 
     protected override void OnInitialized()
