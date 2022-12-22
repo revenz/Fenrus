@@ -1,8 +1,7 @@
 @using Fenrus.Components
-@using Fenrus.Services
 @model Fenrus.Models.DashboardPageModel
 @{
-    ViewBag.Title = "";
+    ViewBag.Title = "Fenrus";
     Layout = "_Layout";
     bool isGuest = false;
     UserSettings settings = Model.Settings;
@@ -13,8 +12,12 @@
         dashboardClass += "hide-group-titles ";
     if (settings.ShowStatusIndicators)
         dashboardClass += "status-indicators ";
-}
 
+    ViewBag.Background = Model.Dashboard.BackgroundImage?.EmptyAsNull() ?? settings.BackgroundImage;
+    ViewBag.AccentColor = Model.Dashboard.AccentColor?.EmptyAsNull() ?? 
+                          settings.AccentColor?.EmptyAsNull() ?? 
+                          "#FF0090";
+}
 
 @if (settings.SearchEngines?.Any() == true)
 {

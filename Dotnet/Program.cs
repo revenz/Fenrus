@@ -1,3 +1,4 @@
+using Blazored.Toast;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 Fenrus.Logger.Initialize();
@@ -13,10 +14,17 @@ builder.Services.AddWebOptimizer(pipeline =>
     pipeline.CompileScssFiles(new () { MinifyCss = true, SourceComments = false});
     pipeline.AddScssBundle("/css/_fenrus.css", "css/**/*.scss");
 });
+builder.Services.AddBlazoredToast();
 
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+builder.Services.AddServerSideBlazor(options =>
+{
+});
 
+builder.Services.AddSignalR(hubOptions =>
+{
+    hubOptions.MaximumReceiveMessageSize = 10 * 1024 * 1024; // 10MB
+});
 builder.Services.AddTransient<Fenrus.Middleware.InitialConfigMiddleware>();
 
 if (Fenrus.Services.SystemSettingsService.UsingOAuth)
@@ -112,7 +120,9 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapBlazorHub();
+app.MapBlazorHub(options =>
+{
+});
 app.MapFallbackToPage("/_Host");
 
 app.Run();

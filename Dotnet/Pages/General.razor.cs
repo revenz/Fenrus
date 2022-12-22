@@ -1,4 +1,3 @@
-using Fenrus.Models;
 using Fenrus.Models.UiModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -70,5 +69,7 @@ public partial class General : UserPage
         Settings.ShowGroupTitles = Model.GroupTitles;
         Settings.ShowStatusIndicators = Model.ShowIndicators;
         new Services.UserSettingsService().Save(Settings);
+        App.UpdateAccentColor(Settings.AccentColor);
+        ToastService.ShowSuccess("Settings Saved");
     }
 }

@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace Fenrus.Pages;
 
 /// <summary>
@@ -6,15 +8,19 @@ namespace Fenrus.Pages;
 public partial class App
 {
     private string AccentRgb, AccentColor;
-    protected override void OnInitialized()
+    /// <summary>
+    /// Updates the accent color
+    /// </summary>
+    /// <param name="accentColor">the accent color</param>
+    public void UpdateAccentColor(string accentColor)
     {
-        base.OnInitialized();
-
-        var settings = DemoHelper.GetDemoUserSettings();
+        if (Regex.IsMatch(accentColor, "^#[a-fA-F0-9]{6}") == false)
+            return;
         
-        AccentColor = settings.AccentColor;
+        AccentColor = accentColor;
         AccentRgb = int.Parse(AccentColor[1..3], System.Globalization.NumberStyles.HexNumber) + "," +
                     int.Parse(AccentColor[3..5], System.Globalization.NumberStyles.HexNumber) + "," +
                     int.Parse(AccentColor[5..7], System.Globalization.NumberStyles.HexNumber);
+        StateHasChanged();
     }
 }

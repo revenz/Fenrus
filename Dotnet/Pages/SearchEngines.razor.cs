@@ -27,11 +27,11 @@ To switch to an non-default search engine on the home screen type in the search 
             Items = Settings.SearchEngines;
     }
 
-    protected override void DoDelete(Models.SearchEngine item)
+    protected override bool DoDelete(Models.SearchEngine item)
     {
         if (IsSystem)
         {
-            DbHelper.Delete<Models.SearchEngine>(item.Uid);    
+            DbHelper.Delete<Models.SearchEngine>(item.Uid);
         }
         else
         {
@@ -40,5 +40,6 @@ To switch to an non-default search engine on the home screen type in the search 
             Settings.Save();
         }
         StateHasChanged();
+        return true;
     }
 }

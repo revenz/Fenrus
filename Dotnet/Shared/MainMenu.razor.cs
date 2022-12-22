@@ -39,7 +39,7 @@ public partial class MainMenu
         });
 
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var isAdmin = authState.User.FindFirst(x=> x.Type == "Role");
+        var isAdmin = authState.User.FindFirst(x=> x.Value == "Administrator");
         if (isAdmin != null)
         {
             Menu.Add(new MenuGroup()
@@ -47,10 +47,10 @@ public partial class MainMenu
                 Name = "Administrator", 
                 Items = new List<MenuItem>()
                 {
-                    new () { Name = "Guest Dashboard", Link = "/settings/guest-dashboard", Icon = "fa-solid fa-table-cells-large"},
-                    new () { Name = "System Groups", Link = "/settings/groups?isSystem=true", Icon = "fa-solid fa-puzzle-piece"},
-                    new () { Name = "System Search Engines", Link = "/settings/search-engines?isSystem=true", Icon = "fa-solid fa-magnifying-glass"},
-                    new () { Name = "Users", Link = "/settings/users", Icon = "fa-solid fa-user-group"}
+                    new () { Name = "Guest Dashboard", Link = "/settings/system/guest-dashboard", Icon = "fa-solid fa-table-cells-large"},
+                    new () { Name = "System Groups", Link = "/settings/system/groups", Icon = "fa-solid fa-puzzle-piece"},
+                    new () { Name = "System Search Engines", Link = "/settings/system/search-engines", Icon = "fa-solid fa-magnifying-glass"},
+                    new () { Name = "Users", Link = "/settings/system/users", Icon = "fa-solid fa-user-group"}
                 }
             });
         }

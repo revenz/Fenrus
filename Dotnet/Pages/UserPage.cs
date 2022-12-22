@@ -1,3 +1,4 @@
+using Blazored.Toast.Services;
 using Fenrus.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -20,6 +21,17 @@ public abstract class UserPage : ComponentBase
     /// Gets or sets the navigation manager (router)
     /// </summary>
     [Inject] protected NavigationManager Router { get; set; }
+
+    
+    /// <summary>
+    /// Gets or sets the app instance
+    /// </summary>
+    [CascadingParameter] protected App App { get; set; }
+
+    /// <summary>
+    /// Gets or sets the toast service
+    /// </summary>
+    [Inject] protected IToastService ToastService { get; set; }
     
     /// <summary>
     /// Gets the user settings
@@ -50,6 +62,8 @@ public abstract class UserPage : ComponentBase
         }
 
         SystemSettings = new Services.SystemSettingsService().Get();
+        
+        App.UpdateAccentColor(Settings.AccentColor);
 
         await PostGotUser();
     }

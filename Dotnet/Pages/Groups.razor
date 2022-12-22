@@ -1,11 +1,10 @@
 @page "/settings/groups"
+@page "/settings/system/groups"
 @inherits CommonPage<Fenrus.Models.Group>
 
-<PageTitle>Fenrus - Groups</PageTitle>
+<PageTitle>Fenrus - @Title</PageTitle>
 
-<FenrusPage Title="Groups" Icon="fa-solid fa-puzzle-piece" PageDescription="This page lets you create groups which can be used on Dashboards.
-                                                                                     
-A group will not appear by itself, it must be added to a dashboard.">
+<FenrusPage Title="@Title" Icon="fa-solid fa-puzzle-piece" PageDescription="@Description">
     <Body>
     
     <FenrusTable TItem="Models.Group" Data=@Items>

@@ -4,21 +4,6 @@
 <input type="hidden" id="hdn-dashboard-background" value="@(Model.BackgroundImage?.EmptyAsNull() ?? Settings?.BackgroundImage)" />
 <input type="hidden" id="hdn-dashboard-theme" value="@(Model.Theme?.EmptyAsNull() ?? Settings?.Theme?.EmptyAsNull() ?? "Default")" />
 
-@if(string.IsNullOrEmpty(Model.AccentColor) == false)
-{
-    var accentColor = Model.AccentColor;
-    var accentRgb = int.Parse(accentColor[1..3], System.Globalization.NumberStyles.HexNumber) + "," +
-                    int.Parse(accentColor[3..5], System.Globalization.NumberStyles.HexNumber) + "," +
-                    int.Parse(accentColor[5..7], System.Globalization.NumberStyles.HexNumber);
-    <style>
-          body {
-              --accent-rgb:@accentRgb;
-              --accent:@accentColor;
-          }
-    </style>
-
-}
-
 <CascadingValue IsFixed="true" Value="PageHelper">
 @if(Model.Groups.Any()) 
 {

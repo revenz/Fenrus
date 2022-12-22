@@ -1,4 +1,5 @@
 @page "/settings/groups/{uidString}"
+@page "/settings/system/groups/{uidString}"
 @inherits UserPage
 
 <PageTitle>Fenrus - Group</PageTitle>
@@ -10,7 +11,7 @@
     </Buttons>
     <Body>
         <InputText Label="Name" @bind-Value="@Model.Name" Help="The Name of the group" />
-        <InputColor Label="Accent" @bind-Value="@Model.AccentColor" Help="The accent color for the group"></InputColor>
+        <InputColor Label="Accent" Placeholder="Default Color" @bind-Value="@Model.AccentColor" Help="The accent color for the group"></InputColor>
         <InputSwitch Label="Show Group Title" @bind-Value="@Model.HideGroupTitle" Help="Whether or not to show the group title."></InputSwitch>
     </Body>
 </FenrusPage>

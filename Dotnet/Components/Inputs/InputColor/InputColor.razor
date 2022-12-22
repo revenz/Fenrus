@@ -2,7 +2,7 @@
 @inherits Input<string>
 
 <InputWrapper Input="@this">
-    <input id="@Uid-input" type="text"
+    <input id="@Uid-input" type="text" placeholder="@Placeholder"
            autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" @bind-value="@Value"/>
     <span id="@Uid-preview" class="preview" style="background-color:@Value"></span>
     <div id="@Uid-picker" class="color-picker hidden">

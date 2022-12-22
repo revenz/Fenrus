@@ -7,6 +7,7 @@
     </style>
 </HeadContent>
 
+<CascadingValue Value="this" IsFixed="true">
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
@@ -19,5 +20,11 @@
         </LayoutView>
     </NotFound>
 </Router>
+</CascadingValue>
 
 <Fenrus.Components.Dialogs.Confirm />
+<BlazoredToasts IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa fa-thumbs-up"
+                ErrorIcon="fa fa-bug"
+                RemoveToastsOnNavigation="true" />

@@ -1,3 +1,4 @@
+@using System.Text.RegularExpressions
 @{
     bool home = Context.Request.Path == "/" || Context.Request.Path.StartsWithSegments("/dashboard");
     string bodyClass = home ? "home " : "not-home ";
@@ -12,6 +13,39 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
     <link id="theme-style" rel="stylesheet" href="/themes/Default/theme.css?version=@Globals.Version" />
+    
+    @if (string.IsNullOrEmpty(ViewBag.Background) == false)
+    {
+        string bkg = ViewBag.Background;
+        if (bkg.StartsWith("db:/image/"))
+        {
+            bkg = "/fimage/" + bkg[10..];
+        }
+        <style>
+            body {
+                background-image: url(@bkg);
+            }
+        </style>
+    }
+    
+    @{
+        var accentColor = ViewBag.AccentColor ?? "#FF0090";
+        if (Regex.IsMatch(accentColor, "^#[a-fA-F0-9]{6}"))
+        {
+            var r = accentColor.Substring(1, 2);
+            var g = accentColor.Substring(3, 2);
+            var b = accentColor.Substring(5, 2);
+            var accentRgb = int.Parse(r, System.Globalization.NumberStyles.HexNumber) + "," +
+                            int.Parse(g, System.Globalization.NumberStyles.HexNumber) + "," +
+                            int.Parse(b, System.Globalization.NumberStyles.HexNumber);
+            <style>
+                  body {
+                      --accent-rgb:@accentRgb;
+                      --accent:@accentColor;
+                  }
+            </style>
+        }
+    }
 </head>
 
 <body class="@bodyClass">
