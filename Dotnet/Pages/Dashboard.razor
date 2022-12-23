@@ -9,18 +9,18 @@
         <button class="btn" @onclick="() => Cancel()">Cancel</button>
     </Buttons>
     <Body>
-        <InputText Label="Name" @bind-Value="@Model.Name" Help="The Name of the dashboard" />
-        <InputColor Label="Accent" @bind-Value="@Model.AccentColor" Help="The general accent colour of the application"></InputColor>
-        <InputSelect TItem="string" Label="Theme" @bind-Value="@Model.Theme" Help="Your personal theme to use.">
-            <InputSelectOption TItem="string"StringValue="Default" Label="Default" />
-            <InputSelectOption TItem="string"StringValue="Basic" Label="Basic" />
-            <InputSelectOption TItem="string"StringValue="Heimdall" Label="Heimdall" />
-        </InputSelect>
+    <InputText Label="Name" @bind-Value="@Model.Name" Help="The Name of the dashboard" />
+    <InputColor Label="Accent" @bind-Value="@Model.AccentColor" Help="The general accent colour of the application"></InputColor>
+    <InputSelect TItem="string" Label="Theme" @bind-Value="@Model.Theme" Help="Your personal theme to use.">
+        <InputSelectOption TItem="string"StringValue="Default" Label="Default" />
+        <InputSelectOption TItem="string"StringValue="Basic" Label="Basic" />
+        <InputSelectOption TItem="string"StringValue="Heimdall" Label="Heimdall" />
+    </InputSelect>
         
         
     <FenrusTable TItem="Models.Group" Data=@Model.Groups>
         <ToolBar>
-            <FenrusTableButton Label="Add" Icon="fa-solid fa-plus" Clicked="() => Add()" />
+            <FenrusTableButton Label="Add" Icon="fa-solid fa-plus" Clicked="() => AddGroup()" />
         </ToolBar>
         <Columns>
             <FenrusTableColumn TItem="Models.Group" ColumnName="Name">
@@ -50,3 +50,5 @@
     </FenrusTable>
     </Body>
 </FenrusPage>
+
+<Fenrus.Components.Dialogs.GroupAddDialog @ref="GroupAddDialog" />

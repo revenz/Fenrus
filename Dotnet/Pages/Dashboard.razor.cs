@@ -1,3 +1,4 @@
+using Fenrus.Models.UiModels;
 using Microsoft.AspNetCore.Components;
 
 namespace Fenrus.Pages;
@@ -9,6 +10,8 @@ public partial class Dashboard : CommonPage<Models.Group>
 {
     [Inject] private NavigationManager Router { get; set; }
     Models.Dashboard Model { get; set; } = new();
+
+    private Fenrus.Components.Dialogs.GroupAddDialog GroupAddDialog { get; set; }
 
     [Parameter]
     public string UidString
@@ -33,11 +36,9 @@ public partial class Dashboard : CommonPage<Models.Group>
 
     protected override async Task PostGotUser()
     {
-        Console.WriteLine("Guid: " + Uid);
-        
         if (Uid == Guid.Empty)
         {
-            // new search engine
+            // new item
             isNew = true;
             Model = new();
             Model.Name = "New Dashboard";
@@ -79,5 +80,36 @@ public partial class Dashboard : CommonPage<Models.Group>
     void Cancel()
     {
         this.Router.NavigateTo("/settings/dashboards");
+    }
+
+    async Task AddGroup()
+    {
+        var inUse = Model.Groups.Select(x => x.Uid);
+        var available = Settings.Groups.Where(x => inUse.Contains(x.Uid) == false).ToList();
+        if (available.Any() == false)
+        {
+            ToastService.ShowWarning("No available groups to add");
+            return;
+        }
+        var adding = await GroupAddDialog.Show(available.Select(x => new ListOption
+        {
+            Label = x.Name, 
+            Value = x.Uid
+        }).ToList());
+
+        if (adding?.Any() != true)
+            return;
+        foreach (var opt in adding)
+        {
+            if (opt.Value is Guid uid == false)
+                continue;
+            if (Model.Groups.Any(x => x.Uid == uid))
+                continue;
+            var group = available.FirstOrDefault(x => x.Uid == uid);
+            if (group == null)
+                continue;
+            Model.Groups.Add(group);
+        }
+        StateHasChanged();
     }
 }

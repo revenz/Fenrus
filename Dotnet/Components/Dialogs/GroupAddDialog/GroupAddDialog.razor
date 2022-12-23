@@ -1,0 +1,23 @@
+@using Fenrus.Models.UiModels
+@namespace Fenrus.Components.Dialogs
+
+<Modal Title="Add Group" Visible="Visible">
+
+    <Body>
+    <ul>
+        @foreach (var option in Options)
+        {
+            <li>
+                <label>
+                    <input type="checkbox" @onchange="(e) => CheckItem(option, e)" />
+                    <span>@option.Label</span>
+                </label>
+            </li>
+        }
+    </ul>
+    </Body>
+    <Footer>
+        <button class="btn" id="@btnAddUid" @onclick=@Add>Add</button>
+        <button class="btn" @onclick=@Cancel>Cancel</button>
+    </Footer>
+</Modal>
