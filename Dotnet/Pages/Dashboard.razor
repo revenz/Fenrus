@@ -16,9 +16,8 @@
         <InputSelectOption TItem="string"StringValue="Basic" Label="Basic" />
         <InputSelectOption TItem="string"StringValue="Heimdall" Label="Heimdall" />
     </InputSelect>
-        
-        
-    <FenrusTable TItem="Models.Group" Data=@Model.Groups>
+    
+    <FenrusTable TItem="Models.Group" Data=@Model.Groups @ref=Table>
         <ToolBar>
             <FenrusTableButton Label="Add" Icon="fa-solid fa-plus" Clicked="() => AddGroup()" />
         </ToolBar>

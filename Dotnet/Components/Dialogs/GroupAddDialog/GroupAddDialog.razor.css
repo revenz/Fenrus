@@ -1,0 +1,9 @@
+::deep .add-group-list {
+  list-style: none;
+  padding: 0;
+}
+::deep .add-group-list li {
+  margin: 0.1rem;
+}
+
+/*# sourceMappingURL=GroupAddDialog.razor.css.map */

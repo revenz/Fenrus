@@ -47,6 +47,8 @@ public class Dashboard: IModal
         get => _Groups;
         set
         {
+            if (value == _Groups)
+                return; // same object
             _Groups.Clear();
             if(value?.Any() == true)
                 _Groups.AddRange(value);

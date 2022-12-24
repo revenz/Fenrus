@@ -1,3 +1,4 @@
+using Fenrus.Components;
 using Fenrus.Models.UiModels;
 using Microsoft.AspNetCore.Components;
 
@@ -10,6 +11,8 @@ public partial class Dashboard : CommonPage<Models.Group>
 {
     [Inject] private NavigationManager Router { get; set; }
     Models.Dashboard Model { get; set; } = new();
+
+    private Fenrus.Components.FenrusTable<Models.Group> Table { get; set; }
 
     private Fenrus.Components.Dialogs.GroupAddDialog GroupAddDialog { get; set; }
 
@@ -60,6 +63,7 @@ public partial class Dashboard : CommonPage<Models.Group>
     }
     void Save()
     {
+        //Model.Groups = Table.Data ?? new();
         if (isNew)
         {
             Model.Uid = Guid.NewGuid();
@@ -108,8 +112,18 @@ public partial class Dashboard : CommonPage<Models.Group>
             var group = available.FirstOrDefault(x => x.Uid == uid);
             if (group == null)
                 continue;
+            group.Enabled = true;
             Model.Groups.Add(group);
         }
-        StateHasChanged();
+        Table.SetData(Model.Groups);
+    }
+
+    protected override bool DoDelete(Models.Group item)
+    {
+        if (Model.Groups.Contains(item) == false)
+            return false;
+        Model.Groups.Remove(item);
+        Table.SetData(Model.Groups);
+        return true;
     }
 }
