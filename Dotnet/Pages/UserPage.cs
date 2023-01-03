@@ -1,4 +1,5 @@
 using Blazored.Toast.Services;
+using Fenrus.Components;
 using Fenrus.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -27,6 +28,11 @@ public abstract class UserPage : ComponentBase
     /// Gets or sets the app instance
     /// </summary>
     [CascadingParameter] protected App App { get; set; }
+
+    /// <summary>
+    /// Gets the popup handler
+    /// </summary>
+    protected FenrusPopup Popup => App.Popup;
 
     /// <summary>
     /// Gets or sets the toast service

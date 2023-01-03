@@ -1,0 +1,410 @@
+.popup {
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.popup-level-1 {
+  z-index: 10;
+}
+
+.popup-level-2 {
+  z-index: 20;
+}
+
+.popup-level-3 {
+  z-index: 30;
+}
+
+.popup-level-4 {
+  z-index: 40;
+}
+
+.popup-level-5 {
+  z-index: 50;
+}
+
+.popup-level-6 {
+  z-index: 60;
+}
+
+.popup-level-7 {
+  z-index: 70;
+}
+
+.popup-level-8 {
+  z-index: 80;
+}
+
+.popup-level-9 {
+  z-index: 90;
+}
+
+.popup-level-10 {
+  z-index: 100;
+}
+
+.popup-level-11 {
+  z-index: 110;
+}
+
+.popup-level-12 {
+  z-index: 120;
+}
+
+.popup-level-13 {
+  z-index: 130;
+}
+
+.popup-level-14 {
+  z-index: 140;
+}
+
+.popup-level-15 {
+  z-index: 150;
+}
+
+.popup-level-16 {
+  z-index: 160;
+}
+
+.popup-level-17 {
+  z-index: 170;
+}
+
+.popup-level-18 {
+  z-index: 180;
+}
+
+.popup-level-19 {
+  z-index: 190;
+}
+
+.popup-level-20 {
+  z-index: 200;
+}
+
+.popup-level-21 {
+  z-index: 210;
+}
+
+.popup-level-22 {
+  z-index: 220;
+}
+
+.popup-level-23 {
+  z-index: 230;
+}
+
+.popup-level-24 {
+  z-index: 240;
+}
+
+.popup-level-25 {
+  z-index: 250;
+}
+
+.popup-level-26 {
+  z-index: 260;
+}
+
+.popup-level-27 {
+  z-index: 270;
+}
+
+.popup-level-28 {
+  z-index: 280;
+}
+
+.popup-level-29 {
+  z-index: 290;
+}
+
+.popup-level-30 {
+  z-index: 300;
+}
+
+.popup-level-31 {
+  z-index: 310;
+}
+
+.popup-level-32 {
+  z-index: 320;
+}
+
+.popup-level-33 {
+  z-index: 330;
+}
+
+.popup-level-34 {
+  z-index: 340;
+}
+
+.popup-level-35 {
+  z-index: 350;
+}
+
+.popup-level-36 {
+  z-index: 360;
+}
+
+.popup-level-37 {
+  z-index: 370;
+}
+
+.popup-level-38 {
+  z-index: 380;
+}
+
+.popup-level-39 {
+  z-index: 390;
+}
+
+.popup-level-40 {
+  z-index: 400;
+}
+
+.popup-level-41 {
+  z-index: 410;
+}
+
+.popup-level-42 {
+  z-index: 420;
+}
+
+.popup-level-43 {
+  z-index: 430;
+}
+
+.popup-level-44 {
+  z-index: 440;
+}
+
+.popup-level-45 {
+  z-index: 450;
+}
+
+.popup-level-46 {
+  z-index: 460;
+}
+
+.popup-level-47 {
+  z-index: 470;
+}
+
+.popup-level-48 {
+  z-index: 480;
+}
+
+.popup-level-49 {
+  z-index: 490;
+}
+
+.popup-level-50 {
+  z-index: 500;
+}
+
+.popup-level-51 {
+  z-index: 510;
+}
+
+.popup-level-52 {
+  z-index: 520;
+}
+
+.popup-level-53 {
+  z-index: 530;
+}
+
+.popup-level-54 {
+  z-index: 540;
+}
+
+.popup-level-55 {
+  z-index: 550;
+}
+
+.popup-level-56 {
+  z-index: 560;
+}
+
+.popup-level-57 {
+  z-index: 570;
+}
+
+.popup-level-58 {
+  z-index: 580;
+}
+
+.popup-level-59 {
+  z-index: 590;
+}
+
+.popup-level-60 {
+  z-index: 600;
+}
+
+.popup-level-61 {
+  z-index: 610;
+}
+
+.popup-level-62 {
+  z-index: 620;
+}
+
+.popup-level-63 {
+  z-index: 630;
+}
+
+.popup-level-64 {
+  z-index: 640;
+}
+
+.popup-level-65 {
+  z-index: 650;
+}
+
+.popup-level-66 {
+  z-index: 660;
+}
+
+.popup-level-67 {
+  z-index: 670;
+}
+
+.popup-level-68 {
+  z-index: 680;
+}
+
+.popup-level-69 {
+  z-index: 690;
+}
+
+.popup-level-70 {
+  z-index: 700;
+}
+
+.popup-level-71 {
+  z-index: 710;
+}
+
+.popup-level-72 {
+  z-index: 720;
+}
+
+.popup-level-73 {
+  z-index: 730;
+}
+
+.popup-level-74 {
+  z-index: 740;
+}
+
+.popup-level-75 {
+  z-index: 750;
+}
+
+.popup-level-76 {
+  z-index: 760;
+}
+
+.popup-level-77 {
+  z-index: 770;
+}
+
+.popup-level-78 {
+  z-index: 780;
+}
+
+.popup-level-79 {
+  z-index: 790;
+}
+
+.popup-level-80 {
+  z-index: 800;
+}
+
+.popup-level-81 {
+  z-index: 810;
+}
+
+.popup-level-82 {
+  z-index: 820;
+}
+
+.popup-level-83 {
+  z-index: 830;
+}
+
+.popup-level-84 {
+  z-index: 840;
+}
+
+.popup-level-85 {
+  z-index: 850;
+}
+
+.popup-level-86 {
+  z-index: 860;
+}
+
+.popup-level-87 {
+  z-index: 870;
+}
+
+.popup-level-88 {
+  z-index: 880;
+}
+
+.popup-level-89 {
+  z-index: 890;
+}
+
+.popup-level-90 {
+  z-index: 900;
+}
+
+.popup-level-91 {
+  z-index: 910;
+}
+
+.popup-level-92 {
+  z-index: 920;
+}
+
+.popup-level-93 {
+  z-index: 930;
+}
+
+.popup-level-94 {
+  z-index: 940;
+}
+
+.popup-level-95 {
+  z-index: 950;
+}
+
+.popup-level-96 {
+  z-index: 960;
+}
+
+.popup-level-97 {
+  z-index: 970;
+}
+
+.popup-level-98 {
+  z-index: 980;
+}
+
+.popup-level-99 {
+  z-index: 990;
+}
+
+.popup-level-100 {
+  z-index: 1000;
+}
+
+/*# sourceMappingURL=FenrusPopup.razor.css.map */

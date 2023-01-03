@@ -1,0 +1,41 @@
+@namespace Fenrus.Components.SideEditors
+
+<SideEditor Title=@Title>
+    <Buttons>
+        <button class="btn" @onclick="() => Save()">Save</button>
+        <button class="btn" @onclick="() => Cancel()">Cancel</button>
+    </Buttons>
+    <Body>
+        <FenrusTabs>
+            <FenrusTab Title="General">
+                <InputSelect TItem="string" Label="Type" @bind-Value="@Model.ItemType">
+                    <InputSelectOption TItem="string" StringValue="DashboardApp" Label="App" />
+                    <InputSelectOption TItem="string" StringValue="DashboardLink" Label="Link" />
+                    <InputSelectOption TItem="string" StringValue="Dashboard" Label="Dashboard" />
+                    <InputSelectOption TItem="string" StringValue="DashboardTerminal" Label="Terminal" />
+                </InputSelect>
+                @if (Model.Type == "DashboardApp")
+                {
+                    <InputSelect TItem="string" Label="App" @bind-Value="@Model.AppName">
+                        <InputSelectGroup TItem="string" Label="Smart Apps" Items="SmartApps" />
+                        <InputSelectGroup TItem="string" Label="Basic Apps" Items="BasicApps" />
+                    </InputSelect>
+                }
+                <InputText @bind-Value="@Model.Name" Label="Name"></InputText>
+                <InputSelect TItem="string" Label="Target" @bind-Value="@Model.Target">
+                    <InputSelectOption TItem="string" StringValue="Default" Label="Default" />
+                    <InputSelectOption TItem="string" StringValue="IFrame" Label="IFrame" />
+                </InputSelect>
+                <InputText @bind-Value="@Model.Url" Label="URL"></InputText>
+                <InputSelect TItem="ItemSize" Label="Size" @bind-Value="@Model.Size">
+                    <InputSelectOption TItem="ItemSize" Value="ItemSize.Small" Label="Small" />
+                    <InputSelectOption TItem="ItemSize" Value="ItemSize.Medium" Label="Medium" />
+                    <InputSelectOption TItem="ItemSize" Value="ItemSize.Large" Label="Large" />
+                    <InputSelectOption TItem="ItemSize" Value="ItemSize.Larger" Label="Larger" />
+                    <InputSelectOption TItem="ItemSize" Value="ItemSize.XLarge" Label="XLarge" />
+                    <InputSelectOption TItem="ItemSize" Value="ItemSize.XXLarge" Label="XXLarge" />
+                </InputSelect>
+            </FenrusTab>
+        </FenrusTabs>
+    </Body>
+</SideEditor>

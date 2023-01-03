@@ -1,3 +1,4 @@
+using Fenrus.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace Fenrus.Pages;
@@ -76,5 +77,10 @@ public partial class Group: UserPage
     void Cancel()
     {
         Router.NavigateTo("/settings/groups");
+    }
+
+    async Task AddItem()
+    {
+        var result = await Popup.GroupItemEditor(null);
     }
 }

@@ -6,12 +6,13 @@
 
 <FenrusPage Title="Group" Icon="fa-solid fa-puzzle-piece">
     <Buttons>
+        <button class="btn" @onclick="() => AddItem()">Add Item</button>
         <button class="btn" @onclick="() => Save()">Save</button>
         <button class="btn" @onclick="() => Cancel()">Cancel</button>
     </Buttons>
     <Body>
-        <InputText Label="Name" @bind-Value="@Model.Name" Help="The Name of the group" />
-        <InputColor Label="Accent" Placeholder="Default Color" @bind-Value="@Model.AccentColor" Help="The accent color for the group"></InputColor>
-        <InputSwitch Label="Show Group Title" @bind-Value="@Model.HideGroupTitle" Help="Whether or not to show the group title."></InputSwitch>
+    <InputText Label="Name" @bind-Value="@Model.Name" Help="The Name of the group" />
+    <InputColor Label="Accent" Placeholder="Default Color" @bind-Value="@Model.AccentColor" Help="The accent color for the group"></InputColor>
+    <InputSwitch Label="Show Group Title" @bind-Value="@Model.HideGroupTitle" Help="Whether or not to show the group title."></InputSwitch>
     </Body>
 </FenrusPage>

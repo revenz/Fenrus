@@ -38,6 +38,11 @@ public class AppItem:GroupItem
     public string DockerContainer { get; set; }
 
     /// <summary>
+    /// Gets or sets the command to run in docker, eg bash, ash or sh
+    /// </summary>
+    public string DockerCommand { get; set; }
+
+    /// <summary>
     /// Gets or sets the ssh server to connect to
     /// </summary>
     public string SshServer { get; set; }

@@ -7,6 +7,11 @@ namespace Fenrus.Pages;
 /// </summary>
 public partial class App
 {
+    /// <summary>
+    /// Gets the popup component
+    /// </summary>
+    public Components.FenrusPopup Popup { get; private set; }
+    
     private string AccentRgb, AccentColor;
     /// <summary>
     /// Updates the accent color

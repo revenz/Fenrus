@@ -24,13 +24,25 @@ public partial class InputSelectOption<TItem>
     }
     
     [CascadingParameter] InputSelect<TItem> Select { get; set; }
+    [CascadingParameter] InputSelectGroup<TItem> Group { get; set; }
 
     protected override void OnInitialized()
     {
-        Select.AddOption(new ()
+        if (Group != null)
         {
-            Label = this.Label,
-            Value = this.Value
-        });
+            Group.AddOption(new()
+            {
+                Label = this.Label,
+                Value = this.Value
+            });
+        }
+        else
+        {
+            Select.AddOption(new()
+            {
+                Label = this.Label,
+                Value = this.Value
+            });
+        }
     }
 }

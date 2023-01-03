@@ -10,6 +10,11 @@ public class AppService
     private static readonly Dictionary<string, FenrusApp> _Apps = new ();
 
     /// <summary>
+    /// Gets a copy of the app dictionary
+    /// </summary>
+    public static Dictionary<string, FenrusApp> Apps => _Apps.ToDictionary(x => x.Key, x => x.Value);
+
+    /// <summary>
     /// Initializes the apps in the system
     /// </summary>
     public static void Initialize()
