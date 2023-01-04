@@ -2,5 +2,5 @@
 @inherits Input<string>
 
 <InputWrapper Input="@this">
-    <input type="text" @bind-value="@Value" />
+    <input type="@(Password ? "password" : "text")" @bind-value="@Value" />
 </InputWrapper>

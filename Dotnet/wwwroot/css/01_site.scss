@@ -64,7 +64,13 @@ body {
         position:absolute !important;
     }
 }
-
+a {
+  color:var(--accent);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
 .main-content {
     flex-grow:1;
     justify-content: center;
@@ -526,7 +532,7 @@ body.terminal .main-content {
 
 
 table {
-    border: solid 1px var(--input-background);
+    border: none;
     padding:0;
     margin:0;
     width:100%;

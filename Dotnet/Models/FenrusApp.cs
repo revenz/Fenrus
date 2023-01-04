@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Fenrus.Models.UiModels;
 
 namespace Fenrus.Models;
 
@@ -125,4 +126,9 @@ public class FenrusAppProperty
     /// </summary>
     [JsonPropertyName("default")]
     public object DefaultValue { get; set; }
+    
+    /// <summary>
+    /// Gets or sets list options for a Select input
+    /// </summary>
+    public List<ListOption> Options { get; set; }
 }

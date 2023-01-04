@@ -121,6 +121,12 @@ The main URL will be where the user is taken when the item is clicked."></InputT
                         case AppPropertyType.String:
                             <InputText Label="@prop.Name" Help="@prop.Help" Value="@(Model.GetValue(prop) as string ?? string.Empty)" ValueChanged="((val) => Model.SetValue(prop, val))"/>
                             break;
+                        case AppPropertyType.Password:
+                            <InputText Label="@prop.Name" Help="@prop.Help" Password="true" Value="@(Model.GetValue(prop) as string ?? string.Empty)" ValueChanged="((val) => Model.SetValue(prop, val))"/>
+                            break;
+                        case AppPropertyType.Select:
+                            <InputSelect TItem="string" Label="@prop.Name" Help="@prop.Help" Value="@(Model.GetValue(prop) as string ?? string.Empty)" ValueChanged="((val) => Model.SetValue(prop, val))" Options="@prop.Options"/>
+                            break;
                     }
                 }
             }
@@ -162,7 +168,9 @@ The main URL will be where the user is taken when the item is clicked."></InputT
                     }
                     <tr>
                         <td>Application URL</td>
-                        <td>@SelectedApp.Info.AppUrl</td>
+                        <td>
+                            <a href="@SelectedApp.Info.AppUrl" rel="noreferrer" target="_blank">@SelectedApp.Info.AppUrl</a>
+                        </td>
                     </tr>
                 </table>
             }

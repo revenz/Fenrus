@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Fenrus.Models.UiModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Fenrus.Components.Inputs;
 
@@ -14,6 +15,21 @@ public partial class InputSelect<TItem> : Input<TItem>
 
     [Parameter] public bool ShowDescription { get; set; }
     [Parameter] public RenderFragment ChildContent { get; set; }
+
+    private List<ListOption> _Options;
+    [Parameter]
+    public List<ListOption> Options
+    {
+        get => _Options;
+        set
+        {
+            if (_Options == value)
+                return;
+            _Options = value;
+            if(value?.Any() == true)
+                Items.AddRange(value);
+        }
+    }
 
     private string Description { get; set; }
     private bool UpdatingValue = false;

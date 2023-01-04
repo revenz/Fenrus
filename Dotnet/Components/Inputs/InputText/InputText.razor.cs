@@ -12,6 +12,11 @@ public partial class InputText : Input<string>
     /// Gets or sets if this field is required
     /// </summary>
     [Parameter] public bool Required { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this is a password field
+    /// </summary>
+    [Parameter] public bool Password { get; set; }
 
     private string _Pattern;
     /// <summary>

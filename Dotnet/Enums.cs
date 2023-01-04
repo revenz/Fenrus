@@ -49,5 +49,9 @@ public enum AppPropertyType
     /// <summary>
     /// Password input
     /// </summary>
-    Password
+    Password,
+    /// <summary>
+    /// Select input
+    /// </summary>
+    Select
 }
