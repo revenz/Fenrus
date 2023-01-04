@@ -29,7 +29,10 @@ public class DashboardAppController: Controller
             return new NotFoundResult();
 
         var image = System.IO.File.OpenRead(appIcon);
-        return File(image, "image/" + appIcon.Substring(appIcon.LastIndexOf(".", StringComparison.Ordinal) + 1));
+        string type = "image/" + appIcon.Substring(appIcon.LastIndexOf(".", StringComparison.Ordinal) + 1);
+        if (type == "image/svg")
+            type = "image/svg+xml";
+        return File(image, type);
     }
 
     /// <summary>

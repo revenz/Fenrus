@@ -21,6 +21,21 @@ public partial class GroupItemEditor
     private Dictionary<string, FenrusApp> Apps;
     private List<ListOption> SmartApps, BasicApps;
 
+    private FenrusApp SelectedApp;
+
+    private string SelectedAppName
+    {
+        get => SelectedApp?.Name;
+        set
+        {
+            if (value != null && Apps.ContainsKey(value))
+                SelectedApp = Apps[value];
+            else
+                SelectedApp = null;
+            Model.AppName = value;
+        }
+    }
+
     protected override void OnInitialized()
     {
         Apps = AppService.Apps;
@@ -65,6 +80,7 @@ public partial class GroupItemEditor
         {
             Title = "New Item";
             Model.ItemType = "DashboardApp";
+            Model.AppName = "FileFlows";
             Model.Target = string.Empty;
             Model.Url = "https://";
             Model.Enabled = true;
@@ -73,6 +89,11 @@ public partial class GroupItemEditor
             Model.Size = ItemSize.Medium;
             Model.Uid = Guid.Empty;
         }
+
+        if (string.IsNullOrEmpty(Model.TerminalType))
+            Model.TerminalType = "SSH";
+
+        SelectedAppName = Model.AppName;
     }
 
     async Task Save()
@@ -130,6 +151,16 @@ class GroupItemEditorModel : GroupItem
     public override string Type => ItemType;
     public string ItemType { get; set; }
     public string Url { get; set; }
+    
+    public string TerminalType { get; set; }
+
+    public string ApiUrl { get; set; }
+
+    public string SizeString
+    {
+        get => Size.ToString();
+        set => Size = Enum.Parse<ItemSize>(value);
+    }
 
     public string AppName { get; set; }
     public string Target { get; set; }
@@ -140,4 +171,39 @@ class GroupItemEditorModel : GroupItem
     public Guid? DockerUid { get; set; }
     public string DockerContainer { get; set; }
     public string DockerCommand { get; set; }
+
+    public Dictionary<string, object> Properties { get; set; } = new();
+
+    public object GetValue(FenrusAppProperty prop)
+    {
+        if (Properties.ContainsKey(prop.Id) == false)
+        {
+            if (prop.DefaultValue != null)
+            {
+                if (prop.DefaultValue is JsonElement je)
+                {
+                    // in case its a json element value, we need to convert it
+                    prop.DefaultValue = je.ValueKind == JsonValueKind.String ? je.GetString() :
+                        je.ValueKind == JsonValueKind.False ? false :
+                        je.ValueKind == JsonValueKind.True ? true :
+                        je.ValueKind == JsonValueKind.Number ? je.GetInt32() :
+                        je.ValueKind == JsonValueKind.Null ? null :
+                        null;
+                }
+                Properties.Add(prop.Id, prop.DefaultValue);
+            }
+
+            return prop.DefaultValue;
+        }
+
+        return Properties[prop.Id];
+    }
+
+    public void SetValue(FenrusAppProperty prop, object value)
+    {
+        if (Properties.ContainsKey(prop.Id))
+            Properties[prop.Id] = value;
+        else
+            Properties.Add(prop.Id, value);
+    }
 }

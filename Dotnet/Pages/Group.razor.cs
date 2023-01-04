@@ -1,5 +1,6 @@
 using Fenrus.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.ClearScript;
 
 namespace Fenrus.Pages;
 
@@ -82,5 +83,17 @@ public partial class Group: UserPage
     async Task AddItem()
     {
         var result = await Popup.GroupItemEditor(null);
+        if (result.Success == false)
+            return;
+        this.Model.Items.Add(result.Data);
+    }
+
+    async Task Edit(GroupItem item)
+    {
+        var index = Model.Items.IndexOf(item);
+        var result = await Popup.GroupItemEditor(item);
+        if (result.Success == false)
+            return;
+        Model.Items[index] = result.Data;
     }
 }

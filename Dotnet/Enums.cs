@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Fenrus;
 
 /// <summary>
@@ -43,5 +45,9 @@ public enum AppPropertyType
     /// <summary>
     /// Boolean input
     /// </summary>
-    Bool
+    Bool,
+    /// <summary>
+    /// Password input
+    /// </summary>
+    Password
 }

@@ -60,6 +60,17 @@ public class FenrusApp
     /// </summary>
     [JsonIgnore]
     public string FullPath { get; set; }
+
+    private List<FenrusAppProperty> _Properties = new();
+
+    /// <summary>
+    /// Gets or sets the properties of the app
+    /// </summary>
+    public List<FenrusAppProperty> Properties
+    {
+        get => _Properties;
+        set => _Properties = value ?? new(); // we dont like nulls
+    }
 }
 
 /// <summary>
@@ -102,4 +113,10 @@ public class FenrusAppProperty
     /// Gets or sets the help to shown with this input property
     /// </summary>
     public string Help { get; set; }
+
+    /// <summary>
+    /// Gets or sets the default value
+    /// </summary>
+    [JsonPropertyName("default")]
+    public object DefaultValue { get; set; }
 }

@@ -27,4 +27,10 @@ public partial class FenrusTabs : ComponentBase
     {
         this.ActiveTab = tab;
     }
+
+    /// <summary>
+    /// Triggers state has changed
+    /// </summary>
+    public void TriggerStateChanged()
+        => StateHasChanged();
 }

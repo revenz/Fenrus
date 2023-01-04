@@ -19,9 +19,12 @@ function CreateImagePicker(csharp, uid){
         if(!file)
             return;
         getImageBase64(file, (base64) => {
-            noImage.style.display = 'none';
-            preview.style.display = '';
-            preview.setAttribute('src', base64);
+            if(noImage)
+                noImage.style.display = 'none';
+            if(preview) {
+                preview.style.display = '';
+                preview.setAttribute('src', base64);
+            }
             csharp.invokeMethodAsync("updateValue", base64);
         });
     })

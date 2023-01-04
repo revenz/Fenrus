@@ -17,6 +17,11 @@ public partial class InputImage : Input<string>
     /// Gets or sets if the reset button should be shown
     /// </summary>
     [Parameter] public bool Reset { get; set; }
+    
+    /// <summary>
+    /// Gets or sets a custom preview template to show instead of the default preview
+    /// </summary>
+    [Parameter] public RenderFragment<string> PreviewTemplate { get; set; }
 
     private async Task ImageChosen(ChangeEventArgs e)
     {

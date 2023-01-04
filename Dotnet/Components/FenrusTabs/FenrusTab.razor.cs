@@ -8,6 +8,19 @@ public partial class FenrusTab:ComponentBase
 
     [Parameter] public string Title { get; set; }
 
+    private bool _Visible = true;
+    [Parameter]
+    public bool Visible
+    {
+        get => _Visible;
+        set
+        {
+            if (value == _Visible) return;
+            _Visible = value;
+            Tabs?.TriggerStateChanged();
+        }
+    } 
+
     [Parameter]
     public RenderFragment ChildContent { get; set; }
 

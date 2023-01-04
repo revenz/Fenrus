@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Fenrus.Models;
 
 namespace Fenrus.Services;
@@ -30,18 +31,24 @@ public class AppService
     /// <param name="smartApps">if these apps are smart or not</param>
     private static void LoadApps(string dir, bool smartApps)
     {
+        var options = new JsonSerializerOptions();
+        options.PropertyNameCaseInsensitive = true;
+        options.AllowTrailingCommas = true;
+        options.Converters.Add(new JsonStringEnumConverter());
         foreach (var file in new DirectoryInfo(dir).GetFiles("app.json", SearchOption.AllDirectories))
         {
             try
             {
                 var json = File.ReadAllText(file.FullName);
-                var app = JsonSerializer.Deserialize<FenrusApp>(json);
+                var app = JsonSerializer.Deserialize<FenrusApp>(json, options);
                 if (string.IsNullOrWhiteSpace(app.Name))
                     continue;
                 if (_Apps.ContainsKey(app.Name))
                     continue;
                 app.IsSmart = smartApps;
                 app.FullPath = file.Directory?.FullName ?? string.Empty;
+                if (string.IsNullOrEmpty(app.Icon))
+                    app.Icon = "icon.png"; // default image
                 _Apps.Add(app.Name, app);
             }
             catch (Exception ex)

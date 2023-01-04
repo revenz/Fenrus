@@ -6,13 +6,14 @@
         bodyClass += "custom-background ";
     else
         bodyClass += "no-custom-background ";
+    string theme = ViewBag.Theme?.ToString()?.EmptyAsNull() ?? "Default"; 
 }
 <!DOCTYPE html>
 <html>
 <head>
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
-    <link id="theme-style" rel="stylesheet" href="/themes/Default/theme.css?version=@Globals.Version" />
+    <link id="theme-style" rel="stylesheet" href="/themes/@theme/theme.css?version=@Globals.Version" />
     
     @if (string.IsNullOrEmpty(ViewBag.Background) == false)
     {

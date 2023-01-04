@@ -4,14 +4,18 @@
 <InputWrapper Input="@this">
     <div class="item-icon-picker">
         <div class="preview">
-            @if (string.IsNullOrEmpty(InitialImage))
+            @if (PreviewTemplate != null)
+            {
+                @PreviewTemplate(Value?.EmptyAsNull() ?? InitialImage)
+            }
+            else if (string.IsNullOrEmpty(InitialImage))
             {
                 <img id="@Uid-preview" style="display:none; width: 100px;height: 100px;object-fit: contain;margin-bottom:1rem"/>
                 <div id="@Uid-no-image" class="no-image" style="display:none"></div>
             }
             else
             {
-                <img id="@Uid-preview" style="width: 100px;height: 100px;object-fit: contain;margin-bottom:1rem" src="@InitialImage" />
+                <img id="@Uid-preview" style="width: 100px;height: 100px;object-fit: contain;margin-bottom:1rem" src="@InitialImage"/>
                 <div id="@Uid-no-image" class="no-image" style="display:none"></div>
             }
         </div>

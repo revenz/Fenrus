@@ -12,6 +12,10 @@
   padding-left: 1rem;
 }
 
+.tab-button.hidden {
+  display: none;
+}
+
 @media screen and (max-width: 500px) {
   .fenrus-tab-buttons {
     padding-left: 0;

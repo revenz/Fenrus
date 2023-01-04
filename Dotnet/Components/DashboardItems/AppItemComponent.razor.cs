@@ -45,7 +45,7 @@ public partial class AppItemComponent
         Css = Model.Size.ToString().ToLower() + " ";
         if(App.IsSmart)
             Css += "db-smart ";
-        if(App.Carousel && Model.Size > ItemSize.Large)
+        if(App.Carousel && Model.Size >= ItemSize.Large)
             Css += "carousel ";
         if (Model.Target == "IFrame")
             Css += "iframe ";

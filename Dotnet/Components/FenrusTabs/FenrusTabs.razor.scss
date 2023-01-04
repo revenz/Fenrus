@@ -12,6 +12,9 @@
     border-bottom: solid 1px var(--input-background);
     padding-left:1rem;
 }
+.tab-button.hidden {
+  display:none;
+}
 
 
 @media screen and (max-width:500px){

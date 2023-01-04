@@ -5,7 +5,7 @@
     <div class="fenrus-tab-buttons">
         @foreach(var tab in Tabs)
         {
-            <button class="tab-button @(ActiveTab == @tab ? "active" : "")" @onclick="() => SelectTab(tab)">
+            <button class="tab-button @(ActiveTab == @tab ? "active" : "") @(tab.Visible == false ? "hidden" : "")" @onclick="() => SelectTab(tab)">
                 @tab.Title
             </button>
         }
