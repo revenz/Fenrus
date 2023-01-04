@@ -249,7 +249,7 @@
   transform: rotateY(180deg);
 }
 
-.dashboard .db-item.db-basic.medium:hover .icon::after, .dashboard .db-item.db-basic.x-large:hover .icon::after, .dashboard .db-item.db-basic.xx-large:hover .icon::after, .side .db-item.db-basic.medium:hover .icon::after, .side .db-item.db-basic.x-large:hover .icon::after, .side .db-item.db-basic.xx-large:hover .icon::after {
+.dashboard .db-item.db-basic.medium:hover .icon::after, .dashboard .db-item.db-basic.x-large:hover .icon::after, .dashboard .db-item.db-basic.xx-large:hover .icon::after, .side .db-item.db-basic.medium:hover .icon::after, .side .db-item.db-basic.x-large:hover .icon::after, .side .db-item.db-basic.xx-large:hover .icon::after, .preview .db-item.db-basic.medium:hover .icon::after, .preview .db-item.db-basic.x-large:hover .icon::after, .preview .db-item.db-basic.xx-large:hover .icon::after {
   content: "";
   position: absolute;
   top: 0;
@@ -258,10 +258,10 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
 }
-.dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .content, .side .db-item.db-basic.medium:hover .content, .side .db-item.db-basic.x-large:hover .content, .side .db-item.db-basic.xx-large:hover .content {
+.dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .content, .side .db-item.db-basic.medium:hover .content, .side .db-item.db-basic.x-large:hover .content, .side .db-item.db-basic.xx-large:hover .content, .preview .db-item.db-basic.medium:hover .content, .preview .db-item.db-basic.x-large:hover .content, .preview .db-item.db-basic.xx-large:hover .content {
   display: unset;
 }
-.dashboard .db-item.db-basic.medium:hover .inner, .dashboard .db-item.db-basic.x-large:hover .inner, .dashboard .db-item.db-basic.xx-large:hover .inner, .side .db-item.db-basic.medium:hover .inner, .side .db-item.db-basic.x-large:hover .inner, .side .db-item.db-basic.xx-large:hover .inner {
+.dashboard .db-item.db-basic.medium:hover .inner, .dashboard .db-item.db-basic.x-large:hover .inner, .dashboard .db-item.db-basic.xx-large:hover .inner, .side .db-item.db-basic.medium:hover .inner, .side .db-item.db-basic.x-large:hover .inner, .side .db-item.db-basic.xx-large:hover .inner, .preview .db-item.db-basic.medium:hover .inner, .preview .db-item.db-basic.x-large:hover .inner, .preview .db-item.db-basic.xx-large:hover .inner {
   transform: rotateY(180deg);
   top: -0.5rem;
   right: -0.5rem;

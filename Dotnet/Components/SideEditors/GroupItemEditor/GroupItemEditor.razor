@@ -1,162 +1,172 @@
 @namespace Fenrus.Components.SideEditors
 
-<SideEditor Title=@Title>
+<SideEditor Title=@Title @ref=Editor>
     <Buttons>
         <button class="btn" @onclick="() => Save()">Save</button>
         <button class="btn" @onclick="() => Cancel()">Cancel</button>
     </Buttons>
     <Body>
-        <FenrusTabs>
-            <FenrusTab Title="General">
-                <InputSelect TItem="string" Label="Type" @bind-Value="@Model.ItemType">
-                    <InputSelectOption TItem="string" StringValue="DashboardApp" Label="App" />
-                    <InputSelectOption TItem="string" StringValue="DashboardLink" Label="Link" />
-                    <InputSelectOption TItem="string" StringValue="Dashboard" Label="Dashboard" />
-                    <InputSelectOption TItem="string" StringValue="DashboardTerminal" Label="Terminal" />
+    <FenrusTabs>
+        <FenrusTab Title="General">
+            <InputSelect TItem="string" Label="Type" @bind-Value="@Model.ItemType">
+                <InputSelectOption TItem="string" StringValue="DashboardApp" Label="App" />
+                <InputSelectOption TItem="string" StringValue="DashboardLink" Label="Link" />
+                <InputSelectOption TItem="string" StringValue="Dashboard" Label="Dashboard" />
+                <InputSelectOption TItem="string" StringValue="DashboardTerminal" Label="Terminal" />
+            </InputSelect>
+            @if (Model.Type == "DashboardApp")
+            {
+                <InputSelect TItem="string" Label="App" @bind-Value="@SelectedAppName" Placeholder="Select An App" AllowClear="true" Required="true">
+                    <InputSelectGroup TItem="string" Label="Smart Apps" Items="SmartApps" />
+                    <InputSelectGroup TItem="string" Label="Basic Apps" Items="BasicApps" />
                 </InputSelect>
-                @if (Model.Type == "DashboardApp")
-                {
-                    <InputSelect TItem="string" Label="App" @bind-Value="@SelectedAppName">
-                        <InputSelectGroup TItem="string" Label="Smart Apps" Items="SmartApps" />
-                        <InputSelectGroup TItem="string" Label="Basic Apps" Items="BasicApps" />
-                    </InputSelect>
-                }
-                else if (Model.Type == "DashboardTerminal")
-                {
-                    <InputSelect TItem="string" Label="Terminal" @bind-Value="@Model.TerminalType">
-                        <InputSelectOption TItem="string" StringValue="SSH" Label="SSH" />
-                        <InputSelectOption TItem="string" StringValue="Docker" Label="Docker" />
-                    </InputSelect>
-                }
-                <InputText @bind-Value="@Model.Name" Label="Name"></InputText>
-                @if (Model.Type == "DashboardApp" || Model.Type == "DashboardLink")
-                {
-                    <InputSelect TItem="string" Label="Target" @bind-Value="@Model.Target">
-                        <InputSelectOption TItem="string" StringValue="Default" Label="Default" />
-                        <InputSelectOption TItem="string" StringValue="IFrame" Label="IFrame" />
-                    </InputSelect>
-                    <InputText @bind-Value="@Model.Url" Label="URL"></InputText>
-                }
-                <InputSelect TItem="string" Label="Size" @bind-Value="@Model.SizeString">
-                    <InputSelectOption TItem="string" Value="nameof(ItemSize.Small)" Label="Small" />
-                    <InputSelectOption TItem="string" Value="nameof(ItemSize.Medium)" Label="Medium" />
-                    <InputSelectOption TItem="string" Value="nameof(ItemSize.Large)" Label="Large" />
-                    <InputSelectOption TItem="string" Value="nameof(ItemSize.Larger)" Label="Larger" />
-                    <InputSelectOption TItem="string" Value="nameof(ItemSize.XLarge)" Label="XLarge" />
-                    <InputSelectOption TItem="string" Value="nameof(ItemSize.XXLarge)" Label="XXLarge" />
+            }
+            else if (Model.Type == "DashboardTerminal")
+            {
+                <InputSelect TItem="string" Label="Terminal" @bind-Value="@Model.TerminalType">
+                    <InputSelectOption TItem="string" StringValue="SSH" Label="SSH" />
+                    <InputSelectOption TItem="string" StringValue="Docker" Label="Docker" />
                 </InputSelect>
-                <InputImage @bind-value="Model.Icon" Label="Icon">
-                    <PreviewTemplate Context="previewIcon">
-                        @{
-                            string icon = previewIcon;
-                            if (string.IsNullOrEmpty(icon))
-                            {
-                                if (Model.Type == "DashboardApp" && string.IsNullOrEmpty(Model.AppName) == false)
-                                    icon = "/apps/" + Model.AppName + "/app.png";
-                                else
-                                    icon = "/favicon.svg";
-                            }
-                            bool carousel = false && Model.Size >= ItemSize.Large;
-                            string iconClass = "db-item " +
-                                               (Model.Type == "DashboardLink" ? "db-link " : string.Empty) +
-                                               (Model.Type == "DashboardApp" ? "db-app " : string.Empty) +
-                                               (carousel ? "db-basic " : string.Empty) +
-                                               Model.Size.ToString().ToLower().Replace("xl", "x-l") + " " +
-                                               (carousel ? "carousel " : string.Empty);
-                            <a class="@iconClass">
-                                <div class="inner">
-                                    <div class="icon">
-                                        <img src="@icon" class="icon-pick">
-                                    </div>
-                                    <div class="content">
-                                        <div class="title">@Model.Name</div>
-                                        @if (carousel == false)
-                                        {
-                                            <div class="status">
-                                                <ul class="livestats">
-                                                    <li><span class="title">Sample</span><span class="value">1234</span></li>
-                                                    <li><span class="title">Other</span><span class="value">5657</span></li>
-                                                </ul>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="status">
-                                                <div class="carousel">
-                                                    <div class="item visible">
-                                                        <div class="fill" style="background:#333">
-                                                            <div class="name tr">Sample item</div>
-                                                            <div class="br">2010</div>
-                                                            <a class="app-icon"><img src="@icon"></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="controls">
-                                                        <a></a><a></a><a></a><a></a><a></a><a></a>
+            }
+            <InputText @bind-Value="@Model.Name" Label="Name" Required="true"></InputText>
+            @if (Model.Type == "DashboardApp" || Model.Type == "DashboardLink")
+            {
+                <InputSelect TItem="string" Label="Target" @bind-Value="@Model.Target">
+                    <InputSelectOption TItem="string" StringValue="Default" Label="Default" />
+                    <InputSelectOption TItem="string" StringValue="IFrame" Label="IFrame" />
+                </InputSelect>
+                <InputText @bind-Value="@Model.Url" Label="URL" Required="true" Pattern="^[^:]+://."></InputText>
+            }
+            <InputSelect TItem="string" Label="Size" @bind-Value="@Model.SizeString">
+                <InputSelectOption TItem="string" Value="nameof(ItemSize.Small)" Label="Small" />
+                <InputSelectOption TItem="string" Value="nameof(ItemSize.Medium)" Label="Medium" />
+                <InputSelectOption TItem="string" Value="nameof(ItemSize.Large)" Label="Large" />
+                <InputSelectOption TItem="string" Value="nameof(ItemSize.Larger)" Label="Larger" />
+                <InputSelectOption TItem="string" Value="nameof(ItemSize.XLarge)" Label="XLarge" />
+                <InputSelectOption TItem="string" Value="nameof(ItemSize.XXLarge)" Label="XXLarge" />
+            </InputSelect>
+            <InputImage @bind-value="Model.Icon" Label="Icon">
+                <PreviewTemplate Context="previewIcon">
+                    @{
+                        string icon = previewIcon;
+                        if (string.IsNullOrEmpty(icon))
+                        {
+                            if (Model.Type == "DashboardApp" && string.IsNullOrEmpty(Model.AppName) == false)
+                                icon = "/apps/" + Model.AppName + "/app.png";
+                            else
+                                icon = "/favicon.svg";
+                        }
+                        bool carousel = (Model.Size < ItemSize.Large || Model.Type != "DashboardApp" || SelectedApp == null || 
+                                         SelectedApp.Carousel == false) == false;
+                        string iconClass = "db-item " +
+                                           (Model.Type == "DashboardLink" ? "db-link " : string.Empty) +
+                                           (Model.Type == "DashboardApp" ? "db-app " : string.Empty) +
+                                           (carousel == false ? "db-basic " : string.Empty) +
+                                           Model.Size.ToString().ToLower().Replace("xl", "x-l") + " " +
+                                           (carousel ? "carousel " : string.Empty);
+                        <a class="@iconClass">
+                            <div class="inner">
+                                <div class="icon">
+                                    <img src="@icon" class="icon-pick">
+                                </div>
+                                <div class="content">
+                                    <div class="title">@Model.Name</div>
+                                    @if (carousel == false)
+                                    {
+                                        <div class="status">
+                                            <ul class="livestats">
+                                                <li><span class="title">Sample</span><span class="value">1234</span></li>
+                                                <li><span class="title">Other</span><span class="value">5657</span></li>
+                                            </ul>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="status">
+                                            <div class="carousel">
+                                                <div class="item visible">
+                                                    <div class="fill" style="background:#333">
+                                                        <div class="name tr">Sample item</div>
+                                                        <div class="br">2010</div>
+                                                        <a class="app-icon"><img src="@icon"></a>
                                                     </div>
                                                 </div>
+                                                <div class="controls">
+                                                    <a></a><a></a><a></a><a></a><a></a><a></a>
+                                                </div>
                                             </div>
-                                        }
-                                    </div>
-                                    <div class="arrow"></div>
+                                        </div>
+                                    }
                                 </div>
-                            </a>
-                        }
-                    </PreviewTemplate>
-                </InputImage>
-            </FenrusTab>
+                                <div class="arrow"></div>
+                            </div>
+                        </a>
+                    }
+                </PreviewTemplate>
+            </InputImage>
+        </FenrusTab>
             
-            <FenrusTab Title="Properties" Visible="@(Model.Type == "DashboardApp" && SelectedApp != null)">
-                <InputText @bind-Value="@Model.ApiUrl" Label="URL" Help="Optional URL to use to contact the API if different that the URL above.
+        <FenrusTab Title="Properties" Visible="@(Model.Type == "DashboardApp" && SelectedApp != null)">
+            <InputText @bind-Value="@Model.ApiUrl" Label="URL" Help="Optional URL to use to contact the API if different that the URL above.
 The main URL will be where the user is taken when the item is clicked."></InputText>
-                @foreach (var prop in SelectedApp.Properties)
+            @if (SelectedApp?.Properties != null)
+            {
+                foreach (var prop in SelectedApp.Properties)
                 {
                     switch (prop.Type)
                     {
                         case AppPropertyType.Bool:
-                            <InputSwitch Label="@prop.Name" Help="@prop.Help" Value="@(Model.GetValue(prop) as bool? == true)" ValueChanged="((val) => Model.SetValue(prop, val))" />
+                            <InputSwitch Label="@prop.Name" Help="@prop.Help" Value="@(Model.GetValue(prop) as bool? == true)" ValueChanged="((val) => Model.SetValue(prop, val))"/>
                             break;
                         case AppPropertyType.String:
-                            <InputText Label="@prop.Name" Help="@prop.Help" Value="@(Model.GetValue(prop) as string ?? string.Empty)" ValueChanged="((val) => Model.SetValue(prop, val))" />
+                            <InputText Label="@prop.Name" Help="@prop.Help" Value="@(Model.GetValue(prop) as string ?? string.Empty)" ValueChanged="((val) => Model.SetValue(prop, val))"/>
                             break;
                     }
                 }
-            </FenrusTab>
+            }
+        </FenrusTab>
             
-            <FenrusTab Title="SSH" Visible="@(Model.Type != "DashboardTerminal" || Model.TerminalType == "SSH")">
-                <p>By configuring SSH for this item, this will allow you to terminal into the item.
+        <FenrusTab Title="SSH" Visible="@(Model.Type != "DashboardTerminal" || Model.TerminalType == "SSH")">
+            <p>By configuring SSH for this item, this will allow you to terminal into the item.
                                                        
-                    If username or password is blank, you will be prompted for this information.</p>
-                <InputText @bind-Value="@Model.SshServer" Label="Address" Placeholder="1.2.3.4" Help="Optional address for connecting to a SSH terminal." />
-                <InputText @bind-Value="@Model.SshUserName" Label="Username" Placeholder="username" Help="Optional Username for connecting to a SSH terminal." />
-                <InputText @bind-Value="@Model.SshPassword" Label="Password" Placeholder="password" Help="Optional Password for connecting to a SSH terminal." />
-            </FenrusTab>
+                If username or password is blank, you will be prompted for this information.</p>
+            <InputText @bind-Value="@Model.SshServer" Label="Address" Placeholder="1.2.3.4" Help="Optional address for connecting to a SSH terminal." />
+            <InputText @bind-Value="@Model.SshUserName" Label="Username" Placeholder="username" Help="Optional Username for connecting to a SSH terminal." />
+            <InputText @bind-Value="@Model.SshPassword" Label="Password" Placeholder="password" Help="Optional Password for connecting to a SSH terminal." />
+        </FenrusTab>
             
-            <FenrusTab Title="Docker" Visible="@(Model.Type != "DashboardTerminal" || Model.TerminalType == "Docker")">
-                <p>Here you can configure Docker settings for this item, which will allow you to terminal into the docker container.</p>
-                @if(Model.Type != "DashboardTerminal"){
-                    <p>Note: If SSH is configured you will not be able to connect user this Docker connection.</p>
-                }
-                <InputText @bind-Value="@Model.DockerContainer" Label="Address" Placeholder="1.2.3.4" Help="Optional address for connecting to a SSH terminal." />
-                <InputText @bind-Value="@Model.DockerContainer" Label="Name" Placeholder="Name" Help="The name of the Docker container to connect to" />
-                <InputSelect TItem="string" Label="Command" @bind-Value="@Model.DockerCommand" Help="The command to connect to.">
-                    <InputSelectOption TItem="string" StringValue="/bin/ash" Label="/bin/ash" />
-                    <InputSelectOption TItem="string" StringValue="/bin/bash" Label="/bin/bash" />
-                    <InputSelectOption TItem="string" StringValue="/bin/sh" Label="/bin/sh" />
-                </InputSelect>
-            </FenrusTab>
+        <FenrusTab Title="Docker" Visible="@(Model.Type != "DashboardTerminal" || Model.TerminalType == "Docker")">
+            <p>Here you can configure Docker settings for this item, which will allow you to terminal into the docker container.</p>
+            @if(Model.Type != "DashboardTerminal"){
+                <p>Note: If SSH is configured you will not be able to connect user this Docker connection.</p>
+            }
+            <InputText @bind-Value="@Model.DockerContainer" Label="Address" Placeholder="1.2.3.4" Help="Optional address for connecting to a SSH terminal." />
+            <InputText @bind-Value="@Model.DockerContainer" Label="Name" Placeholder="Name" Help="The name of the Docker container to connect to" />
+            <InputSelect TItem="string" Label="Command" @bind-Value="@Model.DockerCommand" Help="The command to connect to.">
+                <InputSelectOption TItem="string" StringValue="/bin/ash" Label="/bin/ash" />
+                <InputSelectOption TItem="string" StringValue="/bin/bash" Label="/bin/bash" />
+                <InputSelectOption TItem="string" StringValue="/bin/sh" Label="/bin/sh" />
+            </InputSelect>
+        </FenrusTab>
             
-            <FenrusTab Title="Info" Visible="@(Model.Type == "DashboardApp" && SelectedApp != null)">
+        <FenrusTab Title="Info" Visible="@(Model.Type == "DashboardApp" && SelectedApp?.Info != null)">
+            @if (SelectedApp?.Info != null)
+            {
                 <table>
-                    <tr>
-                        <td>Author</td>
-                        <td>@string.Join(", ", SelectedApp.Info.Authors)</td>
-                    </tr>
+                    @if (SelectedApp?.Info?.Authors?.Any() == true)
+                    {
+                        <tr>
+                            <td>Author</td>
+                            <td>@string.Join(", ", SelectedApp.Info.Authors)</td>
+                        </tr>
+                    }
                     <tr>
                         <td>Application URL</td>
                         <td>@SelectedApp.Info.AppUrl</td>
                     </tr>
                 </table>
-            </FenrusTab>
-        </FenrusTabs>
+            }
+        </FenrusTab>
+    </FenrusTabs>
     </Body>
 </SideEditor>

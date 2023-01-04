@@ -8,7 +8,7 @@
         <select id=@Uid @onchange="SelectionChanged" class="@(SelectedIndex == -1 ? "select-one" : "")" @onkeydown="OnKeyDown">
             @if (AllowClear)
             {
-                <option class="select-one" selected=@(SelectedIndex == -1 ? "selected" : null) value="@(-1)">@lblSelectOne
+                <option class="select-one" disabled selected=@(SelectedIndex == -1 ? "selected" : null) value="@(-1)">@lblSelectOne
                 </option>
             }
             @foreach (var item in Items)

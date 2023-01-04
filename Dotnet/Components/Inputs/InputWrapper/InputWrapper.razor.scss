@@ -3,6 +3,13 @@
   font-style:italic;
   color: var(--color-darkest);
   white-space: pre-wrap;
+  ::deep a {
+    color: var(--accent);
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .input-label {

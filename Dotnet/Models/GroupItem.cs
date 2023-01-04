@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Fenrus.Models;
@@ -27,6 +28,7 @@ public abstract class GroupItem: IModal
     /// <summary>
     /// Gets or sets the name of the item
     /// </summary>
+    [Required]
     public string Name { get; set; }
     
     /// <summary>

@@ -4,6 +4,13 @@
   color: var(--color-darkest);
   white-space: pre-wrap;
 }
+.help-text ::deep a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.help-text ::deep a:hover {
+  text-decoration: underline;
+}
 
 .input-label {
   margin-bottom: auto;

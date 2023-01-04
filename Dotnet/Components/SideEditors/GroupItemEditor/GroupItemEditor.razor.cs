@@ -20,6 +20,8 @@ public partial class GroupItemEditor
 
     private Dictionary<string, FenrusApp> Apps;
     private List<ListOption> SmartApps, BasicApps;
+    
+    private SideEditor Editor { get; set; }
 
     private FenrusApp SelectedApp;
 
@@ -28,8 +30,21 @@ public partial class GroupItemEditor
         get => SelectedApp?.Name;
         set
         {
+            if (Model.Name == SelectedApp?.Name)
+                Model.Name = string.Empty; // clear it since we are changing apps
+            if (Model.Url == SelectedApp?.DefaultUrl)
+                Model.Url = "https://"; // clear it since we are changing apps
             if (value != null && Apps.ContainsKey(value))
+            {
                 SelectedApp = Apps[value];
+                if (string.IsNullOrEmpty(Model.Name))
+                    Model.Name = SelectedApp.Name; // make the name the app name if empty
+                if (string.IsNullOrWhiteSpace(SelectedApp.DefaultUrl) == false &&
+                    string.IsNullOrWhiteSpace(Model.Url) || Model.Url == "https://" || Model.Url == "http://")
+                    Model.Url = SelectedApp.DefaultUrl; // update the apps default url
+                // set the default size
+                Model.Size = SelectedApp.DefaultSize ?? ItemSize.Medium;
+            }
             else
                 SelectedApp = null;
             Model.AppName = value;
@@ -80,7 +95,6 @@ public partial class GroupItemEditor
         {
             Title = "New Item";
             Model.ItemType = "DashboardApp";
-            Model.AppName = "FileFlows";
             Model.Target = string.Empty;
             Model.Url = "https://";
             Model.Enabled = true;
@@ -99,6 +113,9 @@ public partial class GroupItemEditor
     async Task Save()
     {
         // validate
+        if (await Editor.Validate() == false)
+            return;
+        
         GroupItem result;
         switch (Model.ItemType)
         {

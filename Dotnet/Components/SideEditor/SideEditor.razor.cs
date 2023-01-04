@@ -1,3 +1,4 @@
+using Fenrus.Components.Inputs;
 using Microsoft.AspNetCore.Components;
 
 namespace Fenrus.Components;
@@ -5,7 +6,7 @@ namespace Fenrus.Components;
 /// <summary>
 /// Side editor
 /// </summary>
-public partial class SideEditor
+public partial class SideEditor:EditorForm
 {
     /// <summary>
     /// Gets or sets the icon to display

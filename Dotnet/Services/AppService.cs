@@ -34,6 +34,7 @@ public class AppService
         var options = new JsonSerializerOptions();
         options.PropertyNameCaseInsensitive = true;
         options.AllowTrailingCommas = true;
+        options.Converters.Add(new ItemSizeConverter());
         options.Converters.Add(new JsonStringEnumConverter());
         foreach (var file in new DirectoryInfo(dir).GetFiles("app.json", SearchOption.AllDirectories))
         {
@@ -49,6 +50,8 @@ public class AppService
                 app.FullPath = file.Directory?.FullName ?? string.Empty;
                 if (string.IsNullOrEmpty(app.Icon))
                     app.Icon = "icon.png"; // default image
+                if(string.IsNullOrWhiteSpace(app.DefaultUrl))
+                    app.DefaultUrl = $"http://{app.Name.ToLower().Replace(" ", "-")}.lan/";
                 _Apps.Add(app.Name, app);
             }
             catch (Exception ex)
@@ -73,5 +76,20 @@ public class AppService
         {
             Name = appName
         };
+    }
+}
+
+class ItemSizeConverter : JsonConverter<ItemSize>
+{
+    public override ItemSize Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var value = reader.GetString();
+        value = value.Replace("-", "");
+        return Enum.Parse<ItemSize>(value, ignoreCase: true);
+    }
+
+    public override void Write(Utf8JsonWriter writer, ItemSize value, JsonSerializerOptions options)
+    {
+        throw new NotImplementedException();
     }
 }

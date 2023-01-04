@@ -1,3 +1,7 @@
+.row.error {
+  --input-border:var(--error);
+}
+
 input[type="checkbox"] {
   appearance: none;
   background-color: var(--base) !important;

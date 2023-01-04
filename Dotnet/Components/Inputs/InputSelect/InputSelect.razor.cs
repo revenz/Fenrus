@@ -30,6 +30,11 @@ public partial class InputSelect<TItem> : Input<TItem>
         get => _AllowClear;
         set { _AllowClear = value; }
     }
+    
+    /// <summary>
+    /// Gets or sets if this field is required, only tested if AllowClear is also set
+    /// </summary>
+    [Parameter] public bool Required { get; set; }
 
     private int _SelectedIndex = -1;
 
@@ -63,7 +68,7 @@ public partial class InputSelect<TItem> : Input<TItem>
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        lblSelectOne = "Select One";
+        lblSelectOne = Placeholder?.EmptyAsNull() ?? "Select One";
         ValueUpdated();
     }
 
@@ -115,6 +120,7 @@ public partial class InputSelect<TItem> : Input<TItem>
     {
         if(args.Value is TItem val)
             Value = val;
+        
         try
         {
             if (int.TryParse(args?.Value?.ToString(), out int index))
@@ -192,5 +198,19 @@ public partial class InputSelect<TItem> : Input<TItem>
     {
         this.Items.Add(group);
         this.StateHasChanged();
+    }
+
+    public override Task<bool> Validate()
+    {
+        this.ErrorMessage = string.Empty;
+        if (AllowClear && Required)
+        {
+            if (SelectedIndex == -1)
+            {
+                this.ErrorMessage = "Required";
+                return Task.FromResult(false);
+            }
+        }
+        return base.Validate();
     }
 }

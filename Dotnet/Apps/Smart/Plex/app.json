@@ -12,7 +12,7 @@
       "Name": "Token",
       "Id": "token",
       "Type": "string",
-      "Help": "Refer to this guide to get the Plex token\nhttps://github.com/revenz/Fenrus/wiki/Plex-Token"
+      "Help": "Refer to [this guide](https://github.com/revenz/Fenrus/wiki/Plex-Token) to get the Plex token"
     }
   ]
 }

@@ -48,6 +48,12 @@ public class FenrusApp
     /// Gets or sets the default size for this app
     /// </summary>
     public ItemSize? DefaultSize { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the default URL for the application
+    /// This is used to prefill the group item editor when selecting this app
+    /// </summary>
+    public string DefaultUrl { get; set; }
 
     /// <summary>
     /// Gets or sets if this is a smart app

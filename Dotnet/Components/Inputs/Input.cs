@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -16,6 +17,8 @@ public interface IInput
     void Dispose();
 
     bool Focus();
+    Task<bool> Validate();
+
 }
 
 
@@ -30,7 +33,7 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
 
     public string Suffix { get; set; }
     public string Prefix { get; set; }
-
+    
     [Parameter] public EventCallback OnSubmit { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
 
@@ -41,6 +44,8 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
 
     [Parameter]
     public bool ReadOnly { get; set; }
+    
+    [CascadingParameter] public EditorForm Editor { get; set; }
 
     [Parameter]
     public bool Disabled { get; set; }
@@ -129,6 +134,8 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
     protected override void OnInitialized()
     {
         base.OnInitialized();
+        if(this.Editor != null)
+            this.Editor.RegisterControl(this);
         this.Visible = true;
 
     }
@@ -145,6 +152,13 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
     private bool Disposed = false;
     public virtual void Dispose()
     {
+        this.Editor?.UnregisterControl(this);
         Disposed = true;
     }
+
+    /// <summary>
+    /// Validates the input
+    /// </summary>
+    /// <returns>true if the input is valid, otherwise false</returns>
+    public virtual Task<bool> Validate() => Task.FromResult(true);
 }
