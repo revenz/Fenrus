@@ -10,7 +10,7 @@ $margin:0;
     display: block;
     background:rgba(0,0,0,0.5);
     position: relative;
-    text-decoration: none;
+    text-decoration: none !important;
     color:rgba(255,255,255,0.8);
     margin:$margin;
     padding:$padding;
@@ -336,6 +336,8 @@ $margin:0;
                         left: -8px;
                         top: -7px;
                         height: 106px;
+                        max-width: unset;
+                        max-height: unset;
                     }
                     .icon img {
                         display:none;

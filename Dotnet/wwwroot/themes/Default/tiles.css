@@ -6,7 +6,7 @@
   display: block;
   background: rgba(0, 0, 0, 0.5);
   position: relative;
-  text-decoration: none;
+  text-decoration: none !important;
   color: rgba(255, 255, 255, 0.8);
   margin: 0;
   padding: 0.5rem;
@@ -273,6 +273,8 @@
     left: -8px;
     top: -7px;
     height: 106px;
+    max-width: unset;
+    max-height: unset;
   }
   .dashboard .db-item.db-basic.medium:hover .icon img, .dashboard .db-item.db-basic.x-large:hover .icon img, .dashboard .db-item.db-basic.xx-large:hover .icon img, .side .db-item.db-basic.medium:hover .icon img, .side .db-item.db-basic.x-large:hover .icon img, .side .db-item.db-basic.xx-large:hover .icon img {
     display: none;
