@@ -1,9 +1,11 @@
 using System.Security.Claims;
+using System.Text;
 using Fenrus.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.ClearScript.JavaScript;
 
 namespace Fenrus.Controllers;
 
@@ -38,7 +40,21 @@ public class HomeController:Controller
             Settings = settings,
             Theme = theme
         };
+        ViewBag.Accent = dashboard.AccentColor?.EmptyAsNull() ?? settings.AccentColor?.EmptyAsNull() ?? string.Empty;
         return View("Dashboard", model);
+    }
+
+    /// <summary>
+    /// Gets a favicon
+    /// </summary>
+    /// <param name="color">the color of the favicon</param>
+    /// <returns>the favicon</returns>
+    [HttpGet("favicon")]
+    [ResponseCache(Duration = 7 * 24 * 60 * 60)]
+    public IActionResult Favicon([FromQuery] string color)
+    {
+        string svg = FavIconHelper.GetFavIconSvg(color);
+        return Content(svg, "image/svg+xml");
     }
 
     /// <summary>

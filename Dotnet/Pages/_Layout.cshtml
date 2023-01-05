@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Components.Web
+﻿@using Fenrus.Services
+@using Microsoft.AspNetCore.Components.Web
 @namespace Fenrus.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
@@ -12,7 +13,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="~/" />
-    <link rel="icon" type="image/x-icon" href="/favicon.svg">
     <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
     <link href="Fenrus.styles.css?v=@Globals.Version" rel="stylesheet" />
     <link id="theme-style" rel="stylesheet" href="/themes/@theme/theme.css?version=@Globals.Version" />
@@ -42,5 +42,17 @@
 
 <script defer src="js/_fenrus.js?v=@Globals.Version"></script>
 <script defer src="~/_framework/blazor.server.js?v=@Globals.Version"></script>
+
+@{
+    var themeInstance = new ThemeService().GetTheme(theme);
+    @if (themeInstance?.Scripts?.Any() == true)
+    {
+        <input type="hidden" id="theme-settings" value="@JsonSerializer.Serialize(themeInstance.Settings)" />
+        foreach (var script in themeInstance.Scripts)
+        {
+            <script src="/themes/@themeInstance.DirectoryName/@script?version=@Globals.Version" defer></script>
+        }
+    }
+}
 </body>
 </html>

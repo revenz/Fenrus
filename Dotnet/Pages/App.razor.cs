@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Components;
 
 namespace Fenrus.Pages;
 
@@ -12,7 +13,14 @@ public partial class App
     /// </summary>
     public Components.FenrusPopup Popup { get; private set; }
     
-    private string AccentRgb, AccentColor;
+    public EventCallback AccentColorUpdated { get; set; }
+    
+    /// <summary>
+    /// Gets the accent color
+    /// </summary>
+    public string AccentColor { get; private set; }
+    
+    private string AccentRgb;
     /// <summary>
     /// Updates the accent color
     /// </summary>
@@ -27,5 +35,6 @@ public partial class App
                     int.Parse(AccentColor[3..5], System.Globalization.NumberStyles.HexNumber) + "," +
                     int.Parse(AccentColor[5..7], System.Globalization.NumberStyles.HexNumber);
         StateHasChanged();
+        _ = AccentColorUpdated.InvokeAsync();
     }
 }

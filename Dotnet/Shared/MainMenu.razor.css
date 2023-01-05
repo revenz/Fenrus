@@ -10,7 +10,7 @@
 .logo span {
   font-size: 1.75rem;
   font-weight: 600;
-  color: #ff0090;
+  color: var(--accent);
   font-style: italic;
 }
 

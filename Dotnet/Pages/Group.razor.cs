@@ -1,6 +1,7 @@
+using System.Runtime.InteropServices;
 using Fenrus.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.ClearScript;
+using Microsoft.JSInterop;
 
 namespace Fenrus.Pages;
 
@@ -10,7 +11,16 @@ namespace Fenrus.Pages;
 public partial class Group: UserPage
 {
     Models.Group Model { get; set; } = new();
+    
+    /// <summary>
+    /// Gets or sets the JS Runtime
+    /// </summary>
+    [Inject] public IJSRuntime jsRuntime { get; set; }
 
+    
+    /// <summary>
+    /// Gets or sets the UID as a string
+    /// </summary>
     [Parameter]
     public string UidString
     {
@@ -31,7 +41,7 @@ public partial class Group: UserPage
     /// </summary>
     public Guid Uid { get; set; }
     private bool isNew = false;
-
+    
     protected override async Task PostGotUser()
     {
         if (Uid == Guid.Empty)
@@ -54,6 +64,7 @@ public partial class Group: UserPage
             isNew = false;
             Model = Settings.Groups.First(x => x.Uid == Uid);
         }
+        await UpdatePreview(250);
     }
 
     void Save()
@@ -88,9 +99,22 @@ public partial class Group: UserPage
             {
                 this.Model.Items.Add(result.Data);
                 StateHasChanged();
+                await UpdatePreview();
             }
         }
     }
+
+    async Task UpdatePreview(int timeout = 0)
+    {
+        if (timeout > 0)
+        {
+            string js = $"setTimeout(function() {{ if(themeInstance) themeInstance.initPreview(); }}, {timeout});";
+            await jsRuntime.InvokeVoidAsync("eval", js);
+        }
+        else
+            await jsRuntime.InvokeVoidAsync("eval", "if(themeInstance){themeInstance.initPreview();}");
+    }
+
 
     async Task Edit(GroupItem item)
     {

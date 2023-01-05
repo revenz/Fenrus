@@ -1,7 +1,7 @@
 @using Fenrus.Components
 @model Fenrus.Models.DashboardPageModel
 @{
-    ViewBag.Title = "Fenrus";
+    ViewBag.Title = Model?.Dashboard?.Name?.EmptyAsNull() ?? "Fenrus";
     Layout = "_Layout";
     bool isGuest = false;
     UserSettings settings = Model.Settings;

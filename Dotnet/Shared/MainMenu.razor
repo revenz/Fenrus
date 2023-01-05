@@ -1,7 +1,7 @@
 @namespace Fenrus.Shared
 
 <div class="logo">
-    <img src="/favicon.svg?version=@Globals.Version">
+    <img src="/favicon?color=@Uri.EscapeDataString(App?.AccentColor ?? string.Empty)&version=@Globals.Version">
     <span class="title">Fenrus</span>
 </div>
 <ul>

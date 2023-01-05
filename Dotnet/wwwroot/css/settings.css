@@ -682,6 +682,7 @@ body.initial-config-page #add-group-item {
 .side-editor .preview-dashboard,
 body.initial-config-page .preview-dashboard {
   overflow: auto;
+  flex-grow: 1;
 }
 .fenrus-page-body .preview-dashboard .db-item .actions,
 .side-editor .preview-dashboard .db-item .actions,

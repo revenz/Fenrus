@@ -1,4 +1,5 @@
 using Fenrus.Models;
+using Fenrus.Pages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -12,6 +13,8 @@ public partial class MainMenu
 {
     [Inject] private NavigationManager Router { get; set; }
     [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    [CascadingParameter] private App App { get; set; }
 
     private List<MenuGroup> Menu = new();
 
@@ -54,6 +57,9 @@ public partial class MainMenu
                 }
             });
         }
+
+        // update the icon if the accent color changes
+        App.AccentColorUpdated = EventCallback.Factory.Create(this, StateHasChanged);
     }
 
     private bool IsActive(MenuItem item)

@@ -533,6 +533,7 @@ body.initial-config-page
 
     .preview-dashboard {
         overflow: auto;
+        flex-grow:1;
         .db-item {
             .actions {            
                 display:none;
