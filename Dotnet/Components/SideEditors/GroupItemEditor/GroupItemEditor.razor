@@ -2,7 +2,14 @@
 
 <SideEditor Title=@Title @ref=Editor>
     <Buttons>
-        <button class="btn" @onclick="() => Save()">Save</button>
+        @if (IsNew)
+        {
+            <div class="keep-open">
+                <span class="label">Keep Open</span>
+                <FenrusSwitch @bind-Value="KeepOpen" />
+            </div>
+        }
+        <button class="btn" @onclick="() => Save()">@(IsNew ? "Add" : "Save")</button>
         <button class="btn" @onclick="() => Cancel()">Cancel</button>
     </Buttons>
     <Body>
@@ -16,7 +23,7 @@
             </InputSelect>
             @if (Model.Type == "DashboardApp")
             {
-                <InputSelect TItem="string" Label="App" @bind-Value="@SelectedAppName" Placeholder="Select An App" AllowClear="true" Required="true">
+                <InputSelect @ref="AppSelector" TItem="string" Label="App" @bind-Value="@SelectedAppName" Placeholder="Select An App" AllowClear="true" Required="true">
                     <InputSelectGroup TItem="string" Label="Smart Apps" Items="SmartApps" />
                     <InputSelectGroup TItem="string" Label="Basic Apps" Items="BasicApps" />
                 </InputSelect>

@@ -2,6 +2,7 @@ using Fenrus.Models;
 using Fenrus.Models.UiModels;
 using Fenrus.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Fenrus.Components.SideEditors;
 
@@ -13,14 +14,22 @@ public partial class GroupItemEditor
     [Parameter] public GroupItem Item { get; set; }
     
     [Parameter] public EventCallback<GroupItem> OnSaved { get; set; }
+    /// <summary>
+    /// Event that is called when saving but keeping open
+    /// </summary>
+    [Parameter] public EventCallback<GroupItem> OnSavedKeepOpen { get; set; }
     [Parameter] public EventCallback OnCanceled { get; set; }
 
     private GroupItemEditorModel Model;
     private string Title;
+    private bool IsNew;
+    private bool KeepOpen { get; set; }
 
     private Dictionary<string, FenrusApp> Apps;
     private List<ListOption> SmartApps, BasicApps;
-    
+
+    private Fenrus.Components.Inputs.InputSelect<string> AppSelector { get; set; }
+
     private SideEditor Editor { get; set; }
 
     private FenrusApp SelectedApp;
@@ -62,6 +71,8 @@ public partial class GroupItemEditor
         
         this.Model = new();
         Title = "Edit Item";
+        IsNew = false;
+        KeepOpen = false;
         if (Item is AppItem app)
         {
             Model.ItemType = app.Type;
@@ -102,6 +113,7 @@ public partial class GroupItemEditor
             Model.Name = string.Empty;
             Model.Size = ItemSize.Medium;
             Model.Uid = Guid.Empty;
+            IsNew = true;
         }
 
         if (string.IsNullOrEmpty(Model.TerminalType))
@@ -156,8 +168,21 @@ public partial class GroupItemEditor
                 throw new Exception("Unknown type: " + Model.ItemType);
         }
 
-        await OnSaved.InvokeAsync(result);
+        if (IsNew && KeepOpen)
+        {
+            await OnSavedKeepOpen.InvokeAsync(result);
+            // rest the model
+            SelectedApp = null;
+            AppSelector?.Clear();
+            Model.Name = string.Empty;
+            Model.AppName = string.Empty;
+            Model.Url = "https://";
+            Model.Icon = string.Empty;
+        }
+        else
+            await OnSaved.InvokeAsync(result);
     }
+
 
     Task Cancel()
         => OnCanceled.InvokeAsync();

@@ -1,6 +1,7 @@
 using Fenrus.Components.SideEditors;
 using Fenrus.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Fenrus.Components;
 
@@ -14,6 +15,70 @@ public partial class FenrusPopup
     public void Show<T>()
     {
         
+    }
+
+    /// <summary>
+    /// Opens a group item editor for new items
+    /// This differs from the other editor as this will yield multiple items back if kept open
+    /// </summary>
+    /// <returns>a async list of items being added, each item is returned as it is added</returns>
+    public async IAsyncEnumerable<PopupResult<GroupItem>> GroupItemEditorNew()
+    {
+        bool done = false;
+        TaskCompletionSource<PopupResult<GroupItem>> task = new ();
+        #region popup
+        FenrusPopupItem popup = new()
+        {
+            Type = typeof(GroupItemEditor),
+            Parameters = new()
+            {
+                { nameof(SideEditors.GroupItemEditor.Item), null },
+                {
+                    // this event fires, but keeps the editor opened, so we're not done yet
+                    nameof(SideEditors.GroupItemEditor.OnSavedKeepOpen),
+                    EventCallback.Factory.Create<GroupItem>(this, model =>
+                    {
+                        task.SetResult(new() { Data = model, Success = true });
+                    })
+                },
+                {
+                    nameof(SideEditors.GroupItemEditor.OnSaved),
+                    EventCallback.Factory.Create<GroupItem>(this, model =>
+                    {
+                        done = true;
+                        task.SetResult(new() { Data = model, Success = true });
+                    })
+                },
+                {
+                    nameof(SideEditors.GroupItemEditor.OnCanceled),
+                    EventCallback.Factory.Create(this, _ =>
+                    {
+                        done = true;
+                        task.SetResult(new() { Success = false });
+                    })
+                }
+            }
+        };
+        #endregion
+        Popups.Add(popup);
+        StateHasChanged();
+        while (done == false)
+        {
+            var result = await task.Task.WaitAsync(CancellationToken.None);
+            if (done)
+            {
+                // editor is completed, we can remove this popup and close
+                Popups.Remove(popup);
+                StateHasChanged();
+            }
+            else
+            {
+                // editor is kept open, so we need a new task to await 
+                task = new();
+            }
+
+            yield return result;
+        }
     }
 
     public Task<PopupResult<GroupItem>> GroupItemEditor(GroupItem item)

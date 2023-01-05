@@ -3,6 +3,7 @@ using Fenrus.Models.UiModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.JSInterop;
 
 namespace Fenrus.Components.Inputs;
 
@@ -12,6 +13,8 @@ namespace Fenrus.Components.Inputs;
 public partial class InputSelect<TItem> : Input<TItem>
 {
     private List<ListItem> Items = new();
+
+    private List<ListOption> AllItems = new();
 
     [Parameter] public bool ShowDescription { get; set; }
     [Parameter] public RenderFragment ChildContent { get; set; }
@@ -28,7 +31,18 @@ public partial class InputSelect<TItem> : Input<TItem>
             _Options = value;
             if(value?.Any() == true)
                 Items.AddRange(value);
+            InitializeAllItems();
         }
+    }
+
+    private void InitializeAllItems()
+    {
+        AllItems = Items.SelectMany(x =>
+        {
+            if (x is ListGroup grp)
+                return grp.Items;
+            return new List<ListOption> { (ListOption)x };
+        }).ToList();
     }
 
     private string Description { get; set; }
@@ -53,6 +67,20 @@ public partial class InputSelect<TItem> : Input<TItem>
     [Parameter] public bool Required { get; set; }
 
     private int _SelectedIndex = -1;
+
+    /// <summary>
+    /// Clears the current value
+    /// </summary>
+    public void Clear()
+    {
+        if (AllowClear == false)
+            return;
+        
+        SelectedIndex = -1;
+        Value = default;
+        jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('{Uid}').options[0].selected = true;");
+        StateHasChanged();
+    }
 
     public int SelectedIndex
     {
@@ -84,6 +112,7 @@ public partial class InputSelect<TItem> : Input<TItem>
     protected override void OnInitialized()
     {
         base.OnInitialized();
+        InitializeAllItems();
         lblSelectOne = Placeholder?.EmptyAsNull() ?? "Select One";
         ValueUpdated();
     }
@@ -134,13 +163,18 @@ public partial class InputSelect<TItem> : Input<TItem>
 
     private void SelectionChanged(ChangeEventArgs args)
     {
-        if(args.Value is TItem val)
-            Value = val;
-        
         try
         {
             if (int.TryParse(args?.Value?.ToString(), out int index))
+            {
                 SelectedIndex = index;
+                if (index >= 0)
+                {
+                    if(AllItems[index].Value is TItem val)
+                        Value = val;
+                }
+            }
+
             UpdateDescription();
         }
         finally
@@ -203,6 +237,7 @@ public partial class InputSelect<TItem> : Input<TItem>
     public void AddOption(ListOption option)
     {
         this.Items.Add(option);
+        this.AllItems.Add(option);
         this.StateHasChanged();
     }
 
@@ -213,6 +248,12 @@ public partial class InputSelect<TItem> : Input<TItem>
     public void AddGroup(ListGroup group)
     {
         this.Items.Add(group);
+        if (group.Items?.Any() == true)
+        {
+            foreach (var item in group.Items)
+                this.AllItems.Add(item);
+        }
+
         this.StateHasChanged();
     }
 

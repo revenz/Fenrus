@@ -82,10 +82,14 @@ public partial class Group: UserPage
 
     async Task AddItem()
     {
-        var result = await Popup.GroupItemEditor(null);
-        if (result.Success == false)
-            return;
-        this.Model.Items.Add(result.Data);
+        await foreach(var result in Popup.GroupItemEditorNew())
+        {
+            if (result.Success)
+            {
+                this.Model.Items.Add(result.Data);
+                StateHasChanged();
+            }
+        }
     }
 
     async Task Edit(GroupItem item)
