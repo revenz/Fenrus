@@ -47,7 +47,7 @@
     var themeInstance = new ThemeService().GetTheme(theme);
     @if (themeInstance?.Scripts?.Any() == true)
     {
-        <input type="hidden" id="theme-settings" value="@JsonSerializer.Serialize(themeInstance.Settings)" />
+        <input type="hidden" id="theme-settings" value="{}" />
         foreach (var script in themeInstance.Scripts)
         {
             <script src="/themes/@themeInstance.DirectoryName/@script?version=@Globals.Version" defer></script>

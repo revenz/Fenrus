@@ -67,7 +67,7 @@ class DefaultTheme
         if(className.indexOf('dashboard') < 0)
             className += ' dashboard';
         className = className.replace(/(bottom|left|top|right|vertical|horizontal|center)/g, ' ');
-        className += ' ' + this.settings.Placement;
+        className += ' ' + (this.settings.Placement || 'center'); 
         className += this.settings.Horizontal ? ' horizontal' : ' vertical';
         className = className.replace(/  +/g, ' ');
         eleDashboard.className = className;

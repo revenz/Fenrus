@@ -57,7 +57,7 @@ public partial class AppItemComponent
 
         Icon = (Model.Icon?.EmptyAsNull() ??
                 (string.IsNullOrEmpty(App.Icon) == false
-                    ? $"/apps/{HttpUtility.UrlEncode(App.Name)}/{App.Icon}"
+                    ? $"/apps/{Uri.EscapeDataString(App.Name)}/{App.Icon}"
                     : "/favicon.svg")
             ) + "?version=" + Globals.Version;
 

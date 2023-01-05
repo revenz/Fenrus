@@ -56,6 +56,7 @@
     @(await Html.RenderComponentAsync<DashboardComponent>(RenderMode.Static, new
     {
         Model = Model.Dashboard,
+        Groups = Model.Groups,
         Settings = settings,
         PageHelper = pageHelper
     }))
@@ -187,7 +188,7 @@
         
 @if (Model.Theme.Scripts?.Any() == true)
 {
-    <input type="hidden" id="theme-settings" value="@JsonSerializer.Serialize(Model.Theme.Settings)" />
+    <input type="hidden" id="theme-settings" value="@(settings.ThemeSettings == null ? "{}" : JsonSerializer.Serialize(settings.ThemeSettings))" />
     foreach (var script in Model.Theme.Scripts)
     {
         <script src="/themes/@Model.Theme.DirectoryName/@script?version=@Globals.Version" defer></script>

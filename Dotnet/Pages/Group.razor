@@ -30,7 +30,7 @@
                         if (string.IsNullOrEmpty(icon))
                         {
                             if (item is AppItem app)
-                                icon = $"/apps/{app.AppName}/app.png";
+                                icon = $"/apps/{Uri.EscapeDataString(app.AppName)}/app.png";
                             else
                                 icon = "/favicion.svg";
                         }

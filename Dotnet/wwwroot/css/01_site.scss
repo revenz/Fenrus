@@ -144,7 +144,9 @@ option {
     text-align: center;
     margin:1rem;
     z-index:2;
+    height:2rem;
     .search-inner {
+        z-index:2;
         border:solid 1px rgba(255,255,255,.15);
         height:3rem;
         display:flex;

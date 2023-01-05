@@ -33,12 +33,16 @@ public class HomeController:Controller
             ViewBag.CustomBackground = "true";
 
         var theme = new Services.ThemeService().GetTheme(dashboard.Theme?.EmptyAsNull() ?? settings.Theme?.EmptyAsNull() ?? "Default");
+
+        var groups = dashboard.Groups.Select(x => settings.Groups.FirstOrDefault(y => y.Uid == x.Uid))
+            .Where(x => x != null).ToList();
         
         DashboardPageModel model = new DashboardPageModel
         {
             Dashboard = dashboard,
             Settings = settings,
-            Theme = theme
+            Theme = theme,
+            Groups = groups
         };
         ViewBag.Accent = dashboard.AccentColor?.EmptyAsNull() ?? settings.AccentColor?.EmptyAsNull() ?? string.Empty;
         return View("Dashboard", model);

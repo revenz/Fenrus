@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Fenrus.Models;
 
 /// <summary>
@@ -62,5 +64,4 @@ public class Theme
     /// Gets or sets any theme settings
     /// </summary>
     public object Settings { get; set; }
-
 }

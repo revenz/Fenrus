@@ -19,4 +19,9 @@ public class DashboardPageModel
     /// Gets the theme
     /// </summary>
     public Theme Theme { get; init; }
+    
+    /// <summary>
+    /// Gets or sets the groups on this dashboard
+    /// </summary>
+    public List<Group> Groups { get; set; }
 }

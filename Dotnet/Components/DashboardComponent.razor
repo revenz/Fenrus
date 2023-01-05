@@ -5,10 +5,10 @@
 <input type="hidden" id="hdn-dashboard-theme" value="@(Model.Theme?.EmptyAsNull() ?? Settings?.Theme?.EmptyAsNull() ?? "Default")" />
 
 <CascadingValue IsFixed="true" Value="PageHelper">
-@if(Model.Groups.Any()) 
+@if(Groups?.Any() == true) 
 {
     var groupIndex = 0;
-    foreach(var group in Model.Groups)
+    foreach(var group in Groups)
     {
         if (!group.Enabled)
             continue;
