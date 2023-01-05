@@ -46,6 +46,8 @@ public class User: IModal
         get => _Items;
         set
         {
+            if (value == _Items)
+                return; // dont call clear here, this would wipe it out
             _Items.Clear();
             if(value?.Any() == true)
                 _Items.AddRange(value);

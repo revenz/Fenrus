@@ -12,7 +12,6 @@ class UpTime
     ctx;
 
     constructor(app){
-        console.log('uptime scontsrf');
         this.app = app;
         this.init();
     }

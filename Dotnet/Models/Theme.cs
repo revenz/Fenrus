@@ -22,6 +22,8 @@ public class Theme
         get => _Css;
         set
         {
+            if (value == _Css)
+                return; // dont call clear here, this would wipe it out
             _Css.Clear();
             if (value?.Any() == true)
                 _Css.AddRange(value);
@@ -36,6 +38,8 @@ public class Theme
         get => _Scripts;
         set
         {
+            if (value == _Scripts)
+                return; // dont call clear here, this would wipe it out
             _Scripts.Clear();
             if (value?.Any() == true)
                 _Scripts.AddRange(value);

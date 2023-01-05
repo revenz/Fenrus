@@ -81,6 +81,8 @@ public class UserSettings: IModal
         get => _Docker;
         set
         {
+            if (value == _Docker)
+                return; // dont call clear here, this would wipe it out
             _Docker.Clear();
             if (value != null)
                 _Docker.AddRange(value);
@@ -95,6 +97,8 @@ public class UserSettings: IModal
         get => _Groups;
         set
         {
+            if (value == _Groups)
+                return; // dont call clear here, this would wipe it out
             _Groups.Clear();
             if (value != null)
                 _Groups.AddRange(value);
@@ -109,6 +113,8 @@ public class UserSettings: IModal
         get => _Dashboards;
         set
         {
+            if (value == _Dashboards)
+                return; // dont call clear here, this would wipe it out
             _Dashboards.Clear();
             if(value != null)
                 _Dashboards.AddRange(value);
@@ -123,6 +129,8 @@ public class UserSettings: IModal
         get => _SearchEngines;
         set
         {
+            if (value == _SearchEngines)
+                return; // dont call clear here, this would wipe it out
             _SearchEngines.Clear();
             if (value != null)
                 _SearchEngines.AddRange(value);
