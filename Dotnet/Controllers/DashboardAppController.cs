@@ -69,7 +69,8 @@ public class DashboardAppController: Controller
         var statusArgs = JsObject.FromObject(engine, new
         {
             url = "https://github.com/revenz/Fenrus/", 
-            properties = new Dictionary<string, object>()
+            properties = new Dictionary<string, object>(),
+            fetch = new Func<object, Task<string>>(Fetch)
         });
         engine.SetValue("statusArgs", statusArgs);
 
@@ -82,5 +83,12 @@ public class DashboardAppController: Controller
         result = result.UnwrapIfPromise();
         var str = result.ToString();
         return Content(str);
-    }    
+    }
+
+    private async Task<string> Fetch(object parameters)
+    {
+        using HttpClient client = new HttpClient();
+        string url = parameters as string;
+        return await client.GetStringAsync(url);
+    }
 }
