@@ -26,6 +26,7 @@ class GOG {
         let currency = args.properties['currency'] || 'AUD';
         let country = args.properties['country'] || 'NZ';
         let data = await args.fetch(`https://menu.gog.com/v1/store/configuration?locale=en-US&currency=${currency}&country=${country}`);
+        args.log('data: ' + data);
         if(!data || !data['on-sale-now'] || isNaN(data['on-sale-now'].products?.length))
             return;
 
@@ -65,9 +66,11 @@ class GOG {
             return 'get data is null';
 
         let item = await this.getData(args);
-        if(!item)
-            return;
-
+        if(!item) 
+        {
+            return "item is null";
+        }
+        
         return args.carousel(this.data.map(x => {
             return this.getItemHtml(args, x);
         }));
