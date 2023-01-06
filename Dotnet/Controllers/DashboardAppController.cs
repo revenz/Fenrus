@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using Fenrus.Services;
 using Jint;
+using Jint.Native;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Controllers;
@@ -43,6 +44,9 @@ public class DashboardAppController: Controller
     [HttpGet("{name}/{uid}/status")]
     public IActionResult Status([FromRoute] string name, [FromRoute] Guid uid)
     {
+        if (name != "GOG")
+            return new NotFoundResult(); // for now
+        
         var app = AppService.GetByName(name);
         if (app?.IsSmart != true)
             return new NotFoundResult();
@@ -51,22 +55,32 @@ public class DashboardAppController: Controller
         if (System.IO.File.Exists(codeFile) == false)
             return new NotFoundResult();
 
-        return Content("");
         
         string code = System.IO.File.ReadAllText(codeFile);
-        code = string.Join("\n", code.Split("\n")[2..^3]).Trim();
-        code = "function " + Regex.Replace(code, @"(?<=(^|[\s]+))(await|async)", string.Empty);
-
+        code += $"\n\nlet instance = new {app.Name}()\nexport {{ instance }};";
+        
 
         var engine = new Engine(options =>
         {
         });
-
-        engine.Evaluate(code);
-        var result = engine.Invoke("status", new
+        engine.AddModule(app.Name, code);
+        var module = engine.ImportModule(app.Name);
+        
+        var statusArgs = JsObject.FromObject(engine, new
         {
-            url = "https://github.com/revenz/Fenrus/"
+            url = "https://github.com/revenz/Fenrus/", 
+            properties = new Dictionary<string, object>()
         });
-        return Content(result.ToString());
+        engine.SetValue("statusArgs", statusArgs);
+
+        var instance = module.Get("instance").AsObject();
+        engine.SetValue("instance", instance);
+        engine.Execute("var status = instance.status(statusArgs);");
+        var result = engine.GetValue("status");
+        //var result = engine.Invoke("status", thisObj: instance, arguments: new[] { statusArgs });
+        //var result = instance.Get("status").AsFunctionInstance().Invoke(engine, statusArgs);
+        result = result.UnwrapIfPromise();
+        var str = result.ToString();
+        return Content(str);
     }    
 }

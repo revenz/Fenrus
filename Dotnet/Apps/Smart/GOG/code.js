@@ -1,5 +1,5 @@
 ﻿
-class EpicGames {
+class GOG {
     dataAge;
     data;
     dataIndex = 0;
@@ -58,6 +58,11 @@ class EpicGames {
 
         if(args.size === 'small' || args.size === 'medium')
             return;
+        
+        if(!this)
+            return 'this is null';
+        if(!this.getData)
+            return 'get data is null';
 
         let item = await this.getData(args);
         if(!item)
@@ -86,5 +91,3 @@ class EpicGames {
         `;
     }
 }
-
-module.exports = EpicGames;
