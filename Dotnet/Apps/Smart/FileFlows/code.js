@@ -5,17 +5,18 @@
         args.log('getting status: ' + JSON.stringify(this));
         args.log('update available type: ' + typeof(this.updateAvailable()));
         args.log("about to get status");
-        let data = args.fetch('api/status');
-        args.log("about to get shrinkage");
-        let shrinkage = args.fetch('api/library-file/shrinkage-groups');
-        //const [ data, shrinkage, updateAvailable ] = await Promise.all([
-        //     await args.fetch('api/status'),
-        //     await args.fetch('api/library-file/shrinkage-groups'),
-        //     await this.updateAvailable(args)
-        // ]);
-        args.log("about to update available");
-        let updateAvailable = this.updateAvailable(args);
-        args.log('got status');
+        // let data = args.fetch('api/status');
+        // args.log("about to get shrinkage");
+        // let shrinkage = args.fetch('api/library-file/shrinkage-groups');
+        // args.log("about to update available");
+        // let updateAvailable = this.updateAvailable(args);
+        const [ data, shrinkage, updateAvailable ] = await Promise.all([
+            await args.fetch('api/status'),
+            await args.fetch('api/library-file/shrinkage-groups'),
+            await this.updateAvailable(args)
+        ]);
+        args.log('this is a stupid test');
+        throw 'args.log: ' + typeof(args.log);
 
         args.setStatusIndicator(updateAvailable ? 'update' : '');
 
@@ -29,9 +30,12 @@
     }
 
     async updateAvailable(args){
-        args.log('updateAvailable method');
+        args.log('updateAvailable method: ' + args);
         let data = await args.fetch('api/status/update-available');
-        return data?.UpdateAvailable === true;
+        args.log('args aint null...')
+        let result = data?.UpdateAvailable === true;
+        args.log('update available result: ' + result);
+        return result;
     }
 
     async getStatusIndicator(args){

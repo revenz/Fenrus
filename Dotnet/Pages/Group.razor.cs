@@ -92,6 +92,12 @@ public partial class Group: UserPage
             existing.HideGroupTitle = Model.HideGroupTitle;
             existing.Items = Model.Items ?? new();
         }
+
+        foreach (var item in Model.Items)
+        {
+            if (item.Uid == Guid.Empty)
+                item.Uid = Guid.NewGuid();
+        }
         Settings.Save();
         this.Router.NavigateTo("/settings/groups");
     }
@@ -113,7 +119,9 @@ public partial class Group: UserPage
         {
             if (result.Success)
             {
-                this.Model.Items.Add(result.Data);
+                var newItem = result.Data;
+                newItem.Uid = Guid.NewGuid();
+                this.Model.Items.Add(newItem);
                 StateHasChanged();
                 await UpdatePreview();
             }

@@ -35,7 +35,7 @@
                                 icon = "/favicion.svg";
                         }
                         icon += "?version=" + Globals.Version;
-                        <a class="@item.Size.ToString().ToLower() db-@item.Type[9..].ToLower() db-item db-basic" title="@item.Name">
+                        <a class="@item.Size.ToString().ToLower().Replace("xl", "x-l") db-@item.Type[9..].ToLower() db-item db-basic" title="@item.Name">
                             <div class="inner">
                                 <div class="icon">
                                     <img src="@icon">

@@ -19,7 +19,7 @@ public class Fetch
     /// <summary>
     /// Gets an instance of the fetch helper
     /// </summary>
-    public static readonly Func<FetchArgs, object> Instance = (args) =>
+    public static async Task<object> Execute(FetchArgs args)
     {
         var engine = args.Engine;
         var appUrl = args.AppUrl;
@@ -61,8 +61,9 @@ public class Fetch
             };
         }
         
-        if (url.StartsWith("http") == false) {
-            if (url.EndsWith('/') == false)
+        if (url.StartsWith("http") == false) 
+        {
+            if (appUrl.EndsWith('/') == false)
                 url = appUrl + '/' + url;
             else
                 url = appUrl + url;
@@ -70,8 +71,8 @@ public class Fetch
 
         args.Log("URL: " + url);
         request.RequestUri = new Uri(url);
-        var result = client.SendAsync(request).Result;
-        string content = result.Content.ReadAsStringAsync().Result;
+        var result = await client.SendAsync(request);
+        string content = await result.Content.ReadAsStringAsync();
         //return content;
         
         var trimmed = content.Trim();
@@ -86,7 +87,7 @@ public class Fetch
         if (double.TryParse(trimmed, out double dbl))
             return dbl;
         return content;
-    };
+    }
 
     /// <summary>
     /// Fetch parameters

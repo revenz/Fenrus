@@ -42,7 +42,7 @@ public partial class AppItemComponent
         
         App = AppService.GetByName(Model.AppName);
         Title = Model.Name?.EmptyAsNull() ?? App.Name;
-        Css = Model.Size.ToString().ToLower() + " ";
+        Css = Model.Size.ToString().ToLower().Replace("xl", "x-l") + " ";
         if(App.IsSmart)
             Css += "db-smart ";
         if(App.Carousel && Model.Size >= ItemSize.Large)

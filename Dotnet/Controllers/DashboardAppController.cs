@@ -5,6 +5,7 @@ using Jint.Native.Object;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using Fenrus.Helpers.AppHelpers;
 using Fenrus.Models;
 using Fenrus.Pages;
 using Humanizer;
@@ -102,6 +103,7 @@ public class DashboardAppController: Controller
     /// <param name="name">The app name</param>
     /// <returns>the app status</returns>
     [HttpGet("{name}/{uid}/status")]
+    [ResponseCache(NoStore = true)]
     public IActionResult Status([FromRoute] string name, [FromRoute] Guid uid, [FromQuery] string size)
     {
         var ai = GetAppInstance(name, uid);
@@ -116,23 +118,26 @@ public class DashboardAppController: Controller
             url = "https://github.com/revenz/Fenrus/", 
             size,
             properties = new Dictionary<string, object>(),
-            fetch = new Func<object, object>((parameters) =>
-                Helpers.AppHelpers.Fetch.Instance(new ()
+            fetch = new Func<object, Task<object>>(async (parameters) =>
+                await Fetch.Execute(new ()
                 {
                     Engine = engine,
-                    AppUrl =ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
+                    AppUrl = ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
                     Parameters = parameters,
-                    Log = (text =>
+                    Log = text =>
                     {
                         log.Add(text);
-                    })
+                    }
                 })
             ),
             log = new Action<string>(text =>
             {
                 log.Add(text);
             }),
-            carousel = Helpers.AppHelpers.Carousel.Instance,
+            carousel = Carousel.Instance,
+            barInfo = new Func<BarInfo.BarInfoItem[], string>(items =>
+                BarInfo.Generate(utils, items)
+            ),
             changeIcon = new Action<string>(icon =>
             {
                 Response.Headers.TryAdd("x-icon", utils.base64Encode(icon));
