@@ -80,4 +80,3 @@ class Radarr {
     }
 }
 
-module.exports = Radarr;

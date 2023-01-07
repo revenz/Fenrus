@@ -92,4 +92,3 @@ class SpeedtestTracker {
     }
 }
 
-module.exports = SpeedtestTracker;

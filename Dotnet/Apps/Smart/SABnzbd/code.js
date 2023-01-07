@@ -211,5 +211,3 @@ class SABnzbd
         return isNaN(data?.queue?.mbleft) === false;
     }
 }
-
-module.exports = SABnzbd;

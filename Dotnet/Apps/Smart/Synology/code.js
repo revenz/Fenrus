@@ -70,4 +70,3 @@ class Synology
         return !!token;
 	}
 }
-module.exports = Synology;

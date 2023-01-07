@@ -37,5 +37,3 @@
         return isNaN(data?.count) === false;
     }
 }
-
-module.exports = TeamCity;

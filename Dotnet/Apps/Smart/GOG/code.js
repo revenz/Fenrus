@@ -1,5 +1,4 @@
-﻿
-class GOG {
+﻿class GOG {
     dataAge;
     data;
     dataIndex = 0;

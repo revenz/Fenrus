@@ -157,4 +157,3 @@ class NodeLance {
     }
 }
 
-module.exports = NodeLance;

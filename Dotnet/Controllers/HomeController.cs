@@ -1,11 +1,8 @@
 using System.Security.Claims;
-using System.Text;
 using Fenrus.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.ClearScript.JavaScript;
 
 namespace Fenrus.Controllers;
 

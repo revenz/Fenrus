@@ -23,6 +23,11 @@ public class AppItem:GroupItem
     public string Url { get; set; }
 
     /// <summary>
+    /// Gets or sets an optional URL for the API which is used by smart apps
+    /// </summary>
+    public string ApiUrl { get; set; }
+
+    /// <summary>
     /// Gets or sets teh target of the link
     /// </summary>
     public string Target { get; set; }

@@ -78,5 +78,3 @@
         return isNaN(data.MediaContainer?.size) === false;
     }
 }
-
-module.exports = Plex;

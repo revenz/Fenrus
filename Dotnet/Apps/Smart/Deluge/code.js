@@ -81,5 +81,3 @@
         return !!token;
     }
 }
-
-module.exports = Deluge;

@@ -20,4 +20,3 @@ async status(args) {
                 return data.msg == 'FlareSolverr is ready!';
         }
 }
-module.exports = Flaresolverr;

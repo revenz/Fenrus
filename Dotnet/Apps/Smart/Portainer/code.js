@@ -53,5 +53,3 @@
         return !!(await this.authorize(args));
     }
 }
-
-module.exports = Portainer;

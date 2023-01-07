@@ -31,5 +31,3 @@
         return isNaN(data?.ads_blocked_today) === false;
     }
 }
-
-module.exports = PiHole;

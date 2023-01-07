@@ -5,6 +5,10 @@ using Jint.Native.Object;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using Fenrus.Models;
+using Fenrus.Pages;
+using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fenrus.Controllers;
 
@@ -44,34 +48,52 @@ public class DashboardAppController: Controller
         return File(image, type);
     }
 
-    private Engine GetAppInstance(string name, Guid uid)
+    private AppInstance GetAppInstance(string name, Guid uid)
     {
         string key = name + "_" + uid;
-        if (Cache.TryGetValue<Engine>(key, out Engine value))
+        if (Cache.TryGetValue<AppInstance>(key, out AppInstance value))
             return value;
         
         var app = AppService.GetByName(name);
         if (app?.IsSmart != true)
             return null;
+        
+        // need to move this into a helper method, or a base class
+        var sid = User?.Claims?.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid")?.Value;
+        if (string.IsNullOrEmpty(sid) || Guid.TryParse(sid, out Guid userUid) == false)
+            return null;
+
+        var settings = new Services.UserSettingsService().Load(userUid);
+        if (settings.Groups.SelectMany(x => x.Items).FirstOrDefault(x => x.Uid == uid) is AppItem userApp == false)
+            return null;
+            
 
         string codeFile = Path.Combine(app.FullPath, "code.js");
         if (System.IO.File.Exists(codeFile) == false)
             return null;
         
+        string appName = app.Name.Dehumanize();
         string code = System.IO.File.ReadAllText(codeFile);
-        code += $"\n\nlet instance = new {app.Name}()\nexport {{ instance }};";
+        code += $"\n\nlet instance = new {appName}()\nexport {{ instance }};";
         
         var engine = new Engine(options =>
         {
         });
-        engine.AddModule(app.Name, code);
-        var module = engine.ImportModule(app.Name);
+        engine.AddModule(appName, code);
+        var module = engine.ImportModule(appName);
         
         var instance = module.Get("instance").AsObject();
+
         engine.SetValue("instance", instance);
 
-        Cache.Set(key, engine, TimeSpan.FromMinutes(30));
-        return engine;
+        var ai = new AppInstance
+        {
+            App = app,
+            UserApp = userApp,
+            Engine = engine
+        };
+        Cache.Set(key, ai, TimeSpan.FromMinutes(30));
+        return ai;
     }
 
     /// <summary>
@@ -80,28 +102,61 @@ public class DashboardAppController: Controller
     /// <param name="name">The app name</param>
     /// <returns>the app status</returns>
     [HttpGet("{name}/{uid}/status")]
-    public IActionResult Status([FromRoute] string name, [FromRoute] Guid uid)
+    public IActionResult Status([FromRoute] string name, [FromRoute] Guid uid, [FromQuery] string size)
     {
-        if (name != "GOG")
-            return new NotFoundResult(); // for now
-
-        var engine = GetAppInstance(name, uid);
-        if (engine == null)
+        var ai = GetAppInstance(name, uid);
+        if (ai == null)
             return new NotFoundResult();
-        
+        var engine = ai.Engine;
+
+        List<string> log = new();
+        var utils = new Helpers.AppHelpers.Utils();
         var statusArgs = JsObject.FromObject(engine, new
         {
             url = "https://github.com/revenz/Fenrus/", 
+            size,
             properties = new Dictionary<string, object>(),
             fetch = new Func<object, object>((parameters) =>
-                Helpers.AppHelpers.Fetch.Instance(engine, parameters)
+                Helpers.AppHelpers.Fetch.Instance(new ()
+                {
+                    Engine = engine,
+                    AppUrl =ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
+                    Parameters = parameters,
+                    Log = (text =>
+                    {
+                        log.Add(text);
+                    })
+                })
             ),
-            log = new Action<object>(Console.WriteLine),
+            log = new Action<string>(text =>
+            {
+                log.Add(text);
+            }),
             carousel = Helpers.AppHelpers.Carousel.Instance,
-            Utils = Helpers.AppHelpers.Utils.Instance
+            changeIcon = new Action<string>(icon =>
+            {
+                Response.Headers.TryAdd("x-icon", utils.base64Encode(icon));
+            }),
+            setStatusIndicator = new Action<string>(indicator =>
+            {
+                indicator = (indicator ?? string.Empty).ToLower();
+                if (indicator.StartsWith("pause"))
+                    indicator = "/common/status-icons/paused.png";
+                else if (indicator.StartsWith("record"))
+                    indicator = "/common/status-icons/recording.png";
+                else if (indicator.StartsWith("stop"))
+                    indicator = "/common/status-icons/stop.png";
+                else if (indicator.StartsWith("update"))
+                    indicator = "/common/status-icons/update.png";
+                Response.Headers.TryAdd("x-status-indicator",
+                    indicator == "" ? indicator : utils.base64Encode(indicator));
+            })
         });
         engine.SetValue("statusArgs", statusArgs);
-        engine.Execute("var status = instance.status(statusArgs);");
+        engine.SetValue("statusArgsUtils", utils);
+        engine.Execute(@"
+statusArgs.Utils = statusArgsUtils;
+var status = instance.status(statusArgs);");
         var result = engine.GetValue("status");
         result = result.UnwrapIfPromise();
         var str = result.ToString();
@@ -113,6 +168,8 @@ class AppInstance
 {
     public Engine Engine { get; set; }
     
-    public ObjectInstance Instance { get; set; }
+    public FenrusApp App { get; set; }
+    
+    public AppItem UserApp { get; set; }
 
 }

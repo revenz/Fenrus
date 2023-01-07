@@ -63,4 +63,3 @@ class OctoPrint {
     }
 }
 
-module.exports = OctoPrint;

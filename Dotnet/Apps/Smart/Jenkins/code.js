@@ -24,4 +24,3 @@ class Jenkins {
         return xmlStr.includes('<buildUrls');
     }
 }
-module.exports = Jenkins;

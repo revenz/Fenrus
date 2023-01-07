@@ -57,5 +57,3 @@
         return data?.status == 'success';
     }
 }
-
-module.exports = Minecraft;

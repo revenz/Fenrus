@@ -37,4 +37,3 @@ class ValetudoRE {
 		return data.error_code == '0';
 	}
 }
-module.exports = ValetudoRE;

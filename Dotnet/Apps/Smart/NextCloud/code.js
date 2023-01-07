@@ -30,5 +30,3 @@
         return isNaN(data?.ocs?.data?.quota?.free) === false;
     }
 }
-
-module.exports = NextCloud;

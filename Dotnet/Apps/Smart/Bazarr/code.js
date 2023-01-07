@@ -42,4 +42,3 @@
     }
 }
 
-module.exports = Bazarr;

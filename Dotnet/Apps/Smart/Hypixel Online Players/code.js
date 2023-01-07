@@ -28,5 +28,3 @@
         return data?.success ?? false;
     }
 }
-
-module.exports = HypixelOnlinePlayers;

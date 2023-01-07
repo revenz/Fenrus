@@ -19,5 +19,3 @@
         return isNaN(data.pending) === false;
     }
 }
-
-module.exports = Overseerr;

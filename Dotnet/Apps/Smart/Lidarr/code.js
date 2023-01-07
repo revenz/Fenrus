@@ -24,5 +24,3 @@
         return isNaN(data?.totalRecords) === false;
     }
 }
-
-module.exports = Lidarr;

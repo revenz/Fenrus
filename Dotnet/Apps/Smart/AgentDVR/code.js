@@ -44,5 +44,3 @@ class AgentDVR {
         return isNaN(data?.devices) === false;
     }
 }
-
-module.exports = AgentDVR;

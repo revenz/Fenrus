@@ -62,5 +62,4 @@ class Jeedom {
 		console.log(data.id);
 		return data.id == '99999';
 	}
-}
-module.exports = Jeedom;		
+}		

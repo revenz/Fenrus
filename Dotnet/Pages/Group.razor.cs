@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+using Fenrus.Components.Dialogs;
 using Fenrus.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -10,6 +10,11 @@ namespace Fenrus.Pages;
 /// </summary>
 public partial class Group: UserPage
 {
+    /// <summary>
+    /// Gets or sets if this is a new group or not
+    /// </summary>
+    private bool isNew { get; set; }
+    
     Models.Group Model { get; set; } = new();
     
     /// <summary>
@@ -40,8 +45,10 @@ public partial class Group: UserPage
     /// Gets or sets the UID of the group
     /// </summary>
     public Guid Uid { get; set; }
-    private bool isNew = false;
     
+    /// <summary>
+    /// Called after the User has been retrieved
+    /// </summary>
     protected override async Task PostGotUser()
     {
         if (Uid == Guid.Empty)
@@ -67,6 +74,9 @@ public partial class Group: UserPage
         await UpdatePreview(250);
     }
 
+    /// <summary>
+    /// Saves the group and returns to the group page
+    /// </summary>
     void Save()
     {
         if (isNew)
@@ -86,11 +96,17 @@ public partial class Group: UserPage
         this.Router.NavigateTo("/settings/groups");
     }
 
+    /// <summary>
+    /// Cancels editing the group and returns to the groups page
+    /// </summary>
     void Cancel()
     {
         Router.NavigateTo("/settings/groups");
     }
 
+    /// <summary>
+    /// Opens the new item dialog and adds any items to the group
+    /// </summary>
     async Task AddItem()
     {
         await foreach(var result in Popup.GroupItemEditorNew())
@@ -104,6 +120,12 @@ public partial class Group: UserPage
         }
     }
 
+    /// <summary>
+    /// Updates the preview.
+    /// Call this in case the theme needs to modify the rendering of the preview (eg default theme compacts the items into a bin)
+    /// </summary>
+    /// <param name="timeout">a wait timeout before calling the initPreview of the theme, used when first render in
+    /// case the elements have not been added to the DOM yet</param>
     async Task UpdatePreview(int timeout = 0)
     {
         if (timeout > 0)
@@ -116,6 +138,10 @@ public partial class Group: UserPage
     }
 
 
+    /// <summary>
+    /// Edits an item
+    /// </summary>
+    /// <param name="item">the item to edit</param>
     async Task Edit(GroupItem item)
     {
         var index = Model.Items.IndexOf(item);
@@ -123,5 +149,21 @@ public partial class Group: UserPage
         if (result.Success == false)
             return;
         Model.Items[index] = result.Data;
+        StateHasChanged();
+        await UpdatePreview();
+    }
+
+    
+    /// <summary>
+    /// Deletes an item
+    /// </summary>
+    /// <param name="item">the item to delete</param>
+    async Task Delete(GroupItem item)
+    {
+        if (await Confirm.Show("Delete Item", $"Are you sure you want to delete '{item.Name}'?") == false)
+            return;
+        Model.Items.Remove(item);
+        StateHasChanged();
+        await UpdatePreview();
     }
 }

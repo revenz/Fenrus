@@ -109,5 +109,3 @@
         return summonerId != null;
     }
 }
-
-module.exports = LeagueOfLegends;

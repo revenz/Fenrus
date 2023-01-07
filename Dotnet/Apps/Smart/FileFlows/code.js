@@ -2,11 +2,20 @@
 {
     async status(args)
     {
-        const [ data, shrinkage, updateAvailable ] = await Promise.all([
-            await args.fetch('api/status'),
-            await args.fetch('api/library-file/shrinkage-groups'),
-            await this.updateAvailable(args)
-        ]);
+        args.log('getting status: ' + JSON.stringify(this));
+        args.log('update available type: ' + typeof(this.updateAvailable()));
+        args.log("about to get status");
+        let data = args.fetch('api/status');
+        args.log("about to get shrinkage");
+        let shrinkage = args.fetch('api/library-file/shrinkage-groups');
+        //const [ data, shrinkage, updateAvailable ] = await Promise.all([
+        //     await args.fetch('api/status'),
+        //     await args.fetch('api/library-file/shrinkage-groups'),
+        //     await this.updateAvailable(args)
+        // ]);
+        args.log("about to update available");
+        let updateAvailable = this.updateAvailable(args);
+        args.log('got status');
 
         args.setStatusIndicator(updateAvailable ? 'update' : '');
 
@@ -20,6 +29,7 @@
     }
 
     async updateAvailable(args){
+        args.log('updateAvailable method');
         let data = await args.fetch('api/status/update-available');
         return data?.UpdateAvailable === true;
     }
@@ -153,5 +163,3 @@
         return (data.processed === 0 || data.processed);          
     }
 }
-
-module.exports = FileFlows;

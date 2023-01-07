@@ -46,5 +46,3 @@
         return isNaN(data?.meta?.pagination?.total) === false;
     }
 }
-
-module.exports = Pterodactyl;

@@ -61,5 +61,3 @@
         return isNaN(data.length) === false;
     }
 }
-
-module.exports = Gaps;

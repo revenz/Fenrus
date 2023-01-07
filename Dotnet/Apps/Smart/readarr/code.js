@@ -37,5 +37,3 @@
         return data.appName != null;
     }
 }
-
-module.exports = Readarr;

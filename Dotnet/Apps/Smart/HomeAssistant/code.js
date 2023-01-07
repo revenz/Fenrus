@@ -45,4 +45,3 @@ class HomeAssistant {
     }
 }
 
-module.exports = HomeAssistant;

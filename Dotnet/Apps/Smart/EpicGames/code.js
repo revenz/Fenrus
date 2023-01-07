@@ -121,5 +121,3 @@ class EpicGames {
 `;
     }
 }
-
-module.exports = EpicGames;

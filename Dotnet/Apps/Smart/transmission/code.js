@@ -78,4 +78,3 @@ class transmission {
     }
 }
 
-module.exports = transmission;

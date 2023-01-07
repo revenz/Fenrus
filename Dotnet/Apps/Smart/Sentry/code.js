@@ -66,5 +66,3 @@
         return data?.user;
     }
 }
-
-module.exports = Sentry;

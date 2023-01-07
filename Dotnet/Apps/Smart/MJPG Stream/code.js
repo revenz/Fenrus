@@ -7,4 +7,3 @@ class MJPGStream {
     }
 }
 
-module.exports = MJPGStream;

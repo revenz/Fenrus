@@ -1,3 +1,6 @@
+using System.Text;
+using Blazored.Toast;
+
 namespace Fenrus.Helpers.AppHelpers;
 
 /// <summary>
@@ -6,44 +9,63 @@ namespace Fenrus.Helpers.AppHelpers;
 public class Utils
 {
     /// <summary>
-    /// Gets the instance of the utils
+    /// Creates a new GUID
     /// </summary>
-    public static readonly object Instance = new
+    /// <returns>a new GUID</returns>
+    public object newGuid() => Guid.NewGuid().ToString();
+
+    public string btoa(object o)
     {
-        newGuid = new Func<string>(() => Guid.NewGuid().ToString()),
-        htmlEncode = new Func<string, string>(text =>
-        {
-            if (string.IsNullOrEmpty(text))
-                return string.Empty;
+        if (o == null) return string.Empty;
+        byte[] bytes = Encoding.GetEncoding(28591).GetBytes(o.ToString());
+        return Convert.ToBase64String(bytes);
+    }
 
-            return text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;")
-                .Replace("\"", "&#34;").Replace("'", "&#39;");
-        }),
-        base64Encode = new Func<string, string>(str =>
-        {
-            if (String.IsNullOrEmpty(str)) return string.Empty;
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(str);
-            return Convert.ToBase64String(plainTextBytes);
-        }),
-        base64Decode = new Func<string, string>(str =>
-        {
-            if (String.IsNullOrEmpty(str)) return string.Empty;
-            var base64EncodedBytes = System.Convert.FromBase64String(str);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
-        }),
-        formatBytes = new Func<object, object>(bytes =>
-        {
-            if (long.TryParse(bytes?.ToString() ?? string.Empty, out long b))
-                return string.Empty;
-            var order = 0;
-            var sizes = new[] { "B", "KB", "MB", "GB", "TB" };
-            while (b >= 1000 && order < sizes.Length - 1)
-            {
-                ++order;
-                b /= 1000;
-            }
+    
+    public string atoa(string text)
+    {
+        return Encoding.GetEncoding(28591).GetString(Convert.FromBase64String(text));
+    }
 
-            return b.ToString("#.##") + ' ' + sizes[order];
-        })
-    };
+    public string htmlEncode(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return string.Empty;
+
+        return text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;")
+            .Replace("\"", "&#34;").Replace("'", "&#39;");
+    }
+
+
+    /// <summary>
+    /// Base 64 encodes a string
+    /// </summary>
+    public string base64Encode(string str)
+    {
+        if (String.IsNullOrEmpty(str)) return string.Empty;
+        var plainTextBytes = Encoding.UTF8.GetBytes(str);
+        return Convert.ToBase64String(plainTextBytes);
+    }
+
+    public string base64Decode(string str)
+    {
+        if (String.IsNullOrEmpty(str)) return string.Empty;
+        var base64EncodedBytes = Convert.FromBase64String(str);
+        return Encoding.UTF8.GetString(base64EncodedBytes);
+    }
+
+    public string formatBytes(object bytes)
+    {
+        if (long.TryParse(bytes?.ToString() ?? string.Empty, out long b))
+            return string.Empty;
+        var order = 0;
+        var sizes = new[] { "B", "KB", "MB", "GB", "TB" };
+        while (b >= 1000 && order < sizes.Length - 1)
+        {
+            ++order;
+            b /= 1000;
+        }
+
+        return b.ToString("#.##") + ' ' + sizes[order];
+    }
 }

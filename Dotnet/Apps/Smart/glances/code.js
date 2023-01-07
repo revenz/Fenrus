@@ -208,4 +208,3 @@ class Glances {
     }
 }
 
-module.exports = Glances;

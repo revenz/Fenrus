@@ -108,4 +108,3 @@ class Tautulli
     }
 }
 
-module.exports = Tautulli;

@@ -131,5 +131,3 @@
         return !!data?.token;
     }
 }
-
-module.exports = Jellyfin;
