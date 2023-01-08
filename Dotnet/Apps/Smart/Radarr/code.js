@@ -1,6 +1,8 @@
 class Radarr {
     getUrl(args, endpoint) {
-        return `api/v3/${endpoint}?apikey=${args.properties['apikey']}`;
+        let url = `api/v3/${endpoint}?apikey=${args.properties['apikey']}`;
+        args.log('radarr url: ' + url);
+        return url;
     }
 
     async status(args) {
@@ -29,7 +31,8 @@ class Radarr {
             });
         }
 
-        let filteredData = data?.filter((x, index, arr) => {
+        args.log('about to filter data');
+        let filteredData = !data || !data.filter ? [] : data.filter((x, index, arr) => {
             let validEntry = x.hasFile == false;
             if (validEntry && (filter == 'both' || filter == 'available')) {
                 validEntry = x.isAvailable == true;

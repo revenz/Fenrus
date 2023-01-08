@@ -5,23 +5,22 @@
         args.log('getting status: ' + JSON.stringify(this));
         args.log('update available type: ' + typeof(this.updateAvailable()));
         args.log("about to get status");
-        // let data = args.fetch('api/status');
-        // args.log("about to get shrinkage");
-        // let shrinkage = args.fetch('api/library-file/shrinkage-groups');
-        // args.log("about to update available");
-        // let updateAvailable = this.updateAvailable(args);
-        const [ data, shrinkage, updateAvailable ] = await Promise.all([
-            await args.fetch('api/status'),
-            await args.fetch('api/library-file/shrinkage-groups'),
-            await this.updateAvailable(args)
-        ]);
-        args.log('this is a stupid test');
-        throw 'args.log: ' + typeof(args.log);
+        let data = await args.fetch('api/status');
+        let shrinkage = await args.fetch('api/library-file/shrinkage-groups');
+        let updateAvailable = await this.updateAvailable(args);
+        // this no longer works with JINT
+        // const [ data, shrinkage, updateAvailable ] = await Promise.all([
+        //     await args.fetch('api/status'),
+        //     await args.fetch('api/library-file/shrinkage-groups'),
+        //     await this.updateAvailable(args)
+        // ]);
 
         args.setStatusIndicator(updateAvailable ? 'update' : '');
 
-        if (!data || isNaN(data.queue))
-            throw 'no data';        
+        if (!data || isNaN(data.queue)) {
+            args.log('there is no data: ' + JSON.stringify(data || 'null'));
+            throw 'no data';
+        }
 
         if(args.size.indexOf('large') >= 0)
             return await this.statusXLarge(args, data, shrinkage);
@@ -62,7 +61,7 @@
                 let searchTerm = item.relativePath.replace(/\\/g, '/');
                 if(/([^\/]+)s[\d]+e[\d]+/i.test(searchTerm)){
                     searchTerm = /([^\/]+)s[\d]+e[\d]+/i.exec(searchTerm)[1];
-                    console.log('searchTerm', searchTerm);
+                    args.log('searchTerm', searchTerm);
                     searchTerm = searchTerm.replace(/\./g, ' ');
                 }
                 else if(/([^\/]+)(720p|1080p|4k|3840|BluRay)/i.test(searchTerm)){
@@ -73,7 +72,7 @@
                 else {
                     searchTerm = searchTerm.substring(searchTerm.lastIndexOf('/') + 1);
                 }
-                console.log('FileFlows search term: ' + searchTerm);
+                args.log('FileFlows search term: ' + searchTerm);
                 let images = await args.imageSearch(searchTerm);
                 this.pfImages[item.name] = images?.length ? images[0] : '';      
             }
@@ -96,7 +95,7 @@
     }
 
     statusMedium(args, data){
-        console.log('ff medium');
+        args.log('ff medium');
         let secondlbl = 'Time';
         let secondValue = data.time;
 

@@ -6,7 +6,7 @@ namespace Fenrus.Helpers.AppHelpers;
 public class BarInfo
 {
     /// <summary>
-    /// Gets the instance of the bar info
+    /// Generates the bar info response
     /// </summary>
     public static string Generate(Utils utils, BarInfoItem[] items)
     {

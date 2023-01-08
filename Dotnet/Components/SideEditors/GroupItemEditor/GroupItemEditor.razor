@@ -114,7 +114,7 @@
         </FenrusTab>
             
         <FenrusTab Title="Properties" Visible="@(Model.Type == "DashboardApp" && SelectedApp != null)">
-            <InputText @bind-Value="@Model.ApiUrl" Label="URL" Help="Optional URL to use to contact the API if different that the URL above.
+            <InputText @bind-Value="@Model.ApiUrl" Label="API URL" Help="Optional URL to use to contact the API if different that the URL above.
 The main URL will be where the user is taken when the item is clicked."></InputText>
             @if (SelectedApp?.Properties != null)
             {

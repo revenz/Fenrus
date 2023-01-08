@@ -21,72 +21,87 @@ public class Fetch
     /// </summary>
     public static async Task<object> Execute(FetchArgs args)
     {
-        var engine = args.Engine;
-        var appUrl = args.AppUrl;
-        var parameters = args.Parameters;
-        
-        using HttpClient client = new HttpClient();
-        var request = new HttpRequestMessage();
-        request.Method = HttpMethod.Get;
-        string url;
-        if (parameters is string str)
+        try
         {
-            url = str;
-            request.Headers.Add("Accept", "application/json");
-        }
-        else
-        {
-            var fp = JsonSerializer.Deserialize<FetchParameters>(
-                JsonSerializer.Serialize(parameters)
-                , new JsonSerializerOptions()
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-            url = fp.Url;
-            fp.Headers ??= new();
-            if(fp.Headers.ContainsKey("Accept") == false)
-                fp.Headers.Add("Accept", "application/json");
-            foreach (var header in fp.Headers)
+            var engine = args.Engine;
+            var appUrl = args.AppUrl;
+            var parameters = args.Parameters;
+
+            using HttpClient client = new HttpClient();
+            var request = new HttpRequestMessage();
+            request.Method = HttpMethod.Get;
+            string url;
+            if (parameters is string str)
             {
-                request.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                url = str;
+                request.Headers.Add("Accept", "application/json");
+            }
+            else
+            {
+                var fp = JsonSerializer.Deserialize<FetchParameters>(
+                    JsonSerializer.Serialize(parameters)
+                    , new JsonSerializerOptions()
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                url = fp.Url;
+                fp.Headers ??= new();
+                if (fp.Headers.ContainsKey("Accept") == false)
+                    fp.Headers.Add("Accept", "application/json");
+                foreach (var header in fp.Headers)
+                {
+                    request.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+
+                request.Method = fp.Method?.ToLower() switch
+                {
+                    "post" => HttpMethod.Post,
+                    "put" => HttpMethod.Put,
+                    "delete" => HttpMethod.Delete,
+                    "patch" => HttpMethod.Patch,
+                    _ => HttpMethod.Get
+                };
             }
 
-            request.Method = fp.Method?.ToLower() switch
+            if (url.StartsWith("http") == false)
             {
-                "post" => HttpMethod.Post,
-                "put" => HttpMethod.Put,
-                "delete" => HttpMethod.Delete,
-                "patch" => HttpMethod.Patch,
-                _ => HttpMethod.Get   
-            };
-        }
-        
-        if (url.StartsWith("http") == false) 
-        {
-            if (appUrl.EndsWith('/') == false)
-                url = appUrl + '/' + url;
-            else
-                url = appUrl + url;
-        }
+                if (appUrl.EndsWith('/') == false)
+                    url = appUrl + '/' + url;
+                else
+                    url = appUrl + url;
+            }
 
-        args.Log("URL: " + url);
-        request.RequestUri = new Uri(url);
-        var result = await client.SendAsync(request);
-        string content = await result.Content.ReadAsStringAsync();
-        //return content;
-        
-        var trimmed = content.Trim();
-        if (trimmed.StartsWith("{") || trimmed.StartsWith("["))
-        {
-            var parsed = engine.Evaluate($"JSON.parse(`{content}`)").ToObject();
-            return parsed;
-        }
+            args.Log("URL: " + url);
+            request.RequestUri = new Uri(url);
+            var result = await client.SendAsync(request);
+            string content = await result.Content.ReadAsStringAsync();
+            //return content;
 
-        if (trimmed == "true") return true;
-        if (trimmed == "false") return false;
-        if (double.TryParse(trimmed, out double dbl))
-            return dbl;
-        return content;
+            var trimmed = content.Trim();
+            if (trimmed.StartsWith("{") || trimmed.StartsWith("["))
+            {
+                try
+                {
+                    var parsed = engine.Evaluate($"JSON.parse(`{content}`)").ToObject();
+                    return parsed;
+                }
+                catch (Exception ex)
+                {
+                    return content;
+                }
+            }
+
+            if (trimmed == "true") return true;
+            if (trimmed == "false") return false;
+            if (double.TryParse(trimmed, out double dbl))
+                return dbl;
+            return content;
+        }
+        catch (Exception ex)
+        {
+            // just want to see the exception
+            throw;
+        }
     }
 
     /// <summary>

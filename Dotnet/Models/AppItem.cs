@@ -62,4 +62,9 @@ public class AppItem:GroupItem
     /// Gets or sets the ssh password to connect with
     /// </summary>
     public string SshPassword { get; set; }
+
+    /// <summary>
+    /// Gets or sets custom properties for this app
+    /// </summary>
+    public Dictionary<string, object> Properties { get; set; }
 }

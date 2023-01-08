@@ -1,11 +1,10 @@
-﻿const e = require("express");
-
-class EpicGames {
+﻿class EpicGames {
     dataAge;
     data;
     dataIndex = 0;
+    countryCode;
 
-    getCountryCode(args){        
+    getCountryCode(args){
         let country = args.properties['country'] || 'en-NZ';
         country = country.substring(country.indexOf('-') + 1).toUpperCase();
         return country;
@@ -13,7 +12,7 @@ class EpicGames {
 
     async getData(args)
     {        
-        if(this.data?.length && this.dataAge && this.dataAge >= new Date().getTime() - (10 * 60 * 1000)){
+        if(this.data && this.data.length && this.dataAge && this.dataAge >= new Date().getTime() - (10 * 60 * 1000)){
             ++this.dataIndex;
 
             if(this.dataIndex >= this.data.length - 1)
@@ -35,9 +34,9 @@ class EpicGames {
 
     async getFreeGame(args)
     {
-        let data = await args.fetch('https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?country=' + this.getCountryCode(args));
+        let data = await args.fetch('https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?country=' + this.countryCode);
         if (!data?.data?.Catalog?.searchStore?.elements?.length)
-            return null;            
+            return null;
         let now = new Date().getTime();
         let sorted = data.data.Catalog.searchStore.elements.filter(x =>{
             let lineOffers = x.price?.lineOffers[0]?.appliedRules;
@@ -47,11 +46,17 @@ class EpicGames {
     }
 
     async getOnSale(args){
-        let data = await args.fetch('https://store-site-backend-static-ipv4.ak.epicgames.com/storefrontLayout?country=' + this.getCountryCode(args));
-        
-        let onSale = data?.data?.Storefront?.storefrontModules?.find(x => x.id?.indexOf('sale') >= 0);
-        if(!onSale)
+        let data = await args.fetch('https://store-site-backend-static-ipv4.ak.epicgames.com/storefrontLayout?country=' + this.countryCode);
+        if(data && typeof(data) === 'string')
+            data = JSON.parse(data);
+        if(!data || !data.data || !data.data.Storefront)
+        {
             return;
+        }
+        let onSale = data?.data?.Storefront?.storefrontModules?.find(x => x.id?.indexOf('sale') >= 0);
+        if(!onSale) {
+            return;
+        }
         let results = [];
         for(let offer of onSale.offers)
         {
@@ -63,8 +68,9 @@ class EpicGames {
     }
 
     getItem(data, args) {
-        if(!data)
+        if(!data) {
             return;
+        }
         let item = {};
         let country = args.properties['country'] || 'en-NZ';
         item.title = data.title;
@@ -75,8 +81,9 @@ class EpicGames {
                 slug = data.offerMappings[0].pageSlug;
         }else if(slug.indexOf('/') > 0)
             slug = slug.substring(0, slug.indexOf('/')); // sometimes has a /home on the end which breaks the url
-        if(!slug)
+        if(!slug) 
             return;
+        
         item.link = `https://www.epicgames.com/store/${country}/p/${slug}`;
         item.price = data.price.totalPrice.discountPrice === 0 ? 'FREE' : data.price.totalPrice.fmtPrice.discountPrice;
         if(item.price.indexOf('$') > 0)
@@ -87,16 +94,18 @@ class EpicGames {
     }
 
     async status(args) {
-        
         if(args.size === 'small' || args.size === 'medium')
             return;
+        this.countryCode = this.getCountryCode(args);
 
         let item = await this.getData(args);
-        if(!item)
+        if(!item) {
             return;
+        }
 
-        if(this.data.length > 10)
+        if(this.data.length > 10) {
             this.data.splice(10);
+        }
 
         return args.carousel(this.data.map(x => {
             return this.getItemHtml(args, x);

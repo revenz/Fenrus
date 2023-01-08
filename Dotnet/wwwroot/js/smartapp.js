@@ -19,8 +19,9 @@ class SmartApp
         this.interval = args.interval;
         this.ele = document.getElementById(this.uid)
         this.icon = document.getElementById(this.uid).querySelector('.icon img')?.getAttribute('src');
-        if(this.interval === 0)
+        if(!this.interval || this.interval < 500)
             this.interval = 3000;
+        console.log(`app ${args.name} interval: ${this.interval}`);
         this.dashboardIntanceUid = this.getDashboardInstanceUid();
         document.addEventListener('disposeDashboard', (e) => this.dispose(), false);
         this.trigger();

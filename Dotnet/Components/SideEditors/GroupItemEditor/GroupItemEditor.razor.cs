@@ -78,6 +78,7 @@ public partial class GroupItemEditor
             Model.ItemType = app.Type;
             Model.Target = app.Target;
             Model.Url = app.Url;
+            Model.ApiUrl = app.ApiUrl;
             Model.AppName = app.AppName;
             Model.DockerContainer = app.DockerContainer;
             Model.DockerUid = app.DockerUid;
@@ -90,6 +91,7 @@ public partial class GroupItemEditor
             Model.Name = app.Name;
             Model.Size = app.Size;
             Model.Uid = app.Uid;
+            Model.Properties = app.Properties ?? new ();
         }
         else if (Item is LinkItem link)
         {
@@ -136,6 +138,7 @@ public partial class GroupItemEditor
                     var app  = new AppItem();
                     app.Target = Model.Target;
                     app.Url = Model.Url;
+                    app.ApiUrl = Model.ApiUrl;
                     app.AppName = Model.AppName;
                     app.DockerContainer = Model.DockerContainer;
                     app.DockerUid = Model.DockerUid;
@@ -148,6 +151,11 @@ public partial class GroupItemEditor
                     app.Name = Model.Name;
                     app.Size = Model.Size;
                     app.Uid = Model.Uid;
+                    var appPropertes = SelectedApp.Properties?.Select(x => x.Id).ToList() ?? new() { };
+                    app.Properties = appPropertes?.Any() == true && Model.Properties?.Any() == true
+                        ? Model.Properties.Where(x => appPropertes.Contains(x.Key))
+                            .ToDictionary(x => x.Key, x => x.Value)
+                        : new();
                     result = app;
                 }
                 break;
@@ -168,7 +176,7 @@ public partial class GroupItemEditor
                 throw new Exception("Unknown type: " + Model.ItemType);
         }
 
-        if (IsNew && KeepOpen)
+        if (IsNew && KeepOpen) 
         {
             await OnSavedKeepOpen.InvokeAsync(result);
             // rest the model

@@ -117,18 +117,34 @@ public class DashboardAppController: Controller
         {
             url = "https://github.com/revenz/Fenrus/", 
             size,
-            properties = new Dictionary<string, object>(),
-            fetch = new Func<object, Task<object>>(async (parameters) =>
-                await Fetch.Execute(new ()
+            properties = ai.UserApp.Properties ?? new (),
+            // doesnt work if await, returns a Task to jint for some reason
+            // fetch = new Func<object, Task<object>>(async (parameters) =>
+            //     await Fetch.Execute(new ()
+            //     {
+            //         Engine = engine,
+            //         AppUrl = ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
+            //         Parameters = parameters,
+            //         Log = text =>
+            //         {
+            //             log.Add(text);
+            //         }
+            //     })
+            // ),
+            fetch = new Func<object, object>((parameters) =>
+                Fetch.Execute(new ()
                 {
                     Engine = engine,
                     AppUrl = ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
                     Parameters = parameters,
                     Log = text =>
                     {
+                        #if(DEBUG)
+                        Console.WriteLine(name + ": " + text);
+                        #endif
                         log.Add(text);
                     }
-                })
+                }).Result
             ),
             log = new Action<string>(text =>
             {
@@ -138,23 +154,33 @@ public class DashboardAppController: Controller
             barInfo = new Func<BarInfo.BarInfoItem[], string>(items =>
                 BarInfo.Generate(utils, items)
             ),
+            liveStats = new Func<string[][], string>(items => 
+                LiveStats.Generate(utils, items)
+            ),
             changeIcon = new Action<string>(icon =>
             {
                 Response.Headers.TryAdd("x-icon", utils.base64Encode(icon));
             }),
             setStatusIndicator = new Action<string>(indicator =>
             {
-                indicator = (indicator ?? string.Empty).ToLower();
-                if (indicator.StartsWith("pause"))
-                    indicator = "/common/status-icons/paused.png";
-                else if (indicator.StartsWith("record"))
-                    indicator = "/common/status-icons/recording.png";
-                else if (indicator.StartsWith("stop"))
-                    indicator = "/common/status-icons/stop.png";
-                else if (indicator.StartsWith("update"))
-                    indicator = "/common/status-icons/update.png";
-                Response.Headers.TryAdd("x-status-indicator",
-                    indicator == "" ? indicator : utils.base64Encode(indicator));
+                try
+                {
+                    indicator = (indicator ?? string.Empty).ToLower();
+                    if (indicator.StartsWith("pause"))
+                        indicator = "/common/status-icons/paused.png";
+                    else if (indicator.StartsWith("record"))
+                        indicator = "/common/status-icons/recording.png";
+                    else if (indicator.StartsWith("stop"))
+                        indicator = "/common/status-icons/stop.png";
+                    else if (indicator.StartsWith("update"))
+                        indicator = "/common/status-icons/update.png";
+                    Response.Headers.TryAdd("x-status-indicator",
+                        indicator == "" ? indicator : utils.base64Encode(indicator));
+                }
+                catch (Exception)
+                {
+                    // can fail if request is aborted
+                } 
             })
         });
         engine.SetValue("statusArgs", statusArgs);
@@ -164,8 +190,10 @@ statusArgs.Utils = statusArgsUtils;
 var status = instance.status(statusArgs);");
         var result = engine.GetValue("status");
         result = result.UnwrapIfPromise();
+        if (result == null)
+            result = string.Empty;
         var str = result.ToString();
-        return Content(str);
+        return Content(str ?? string.Empty);
     }
 }
 

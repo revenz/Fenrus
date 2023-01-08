@@ -258,6 +258,9 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
 }
+.dashboard .db-item.db-basic.medium:hover .icon, .dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .icon, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .icon, .dashboard .db-item.db-basic.xx-large:hover .content, .side .db-item.db-basic.medium:hover .icon, .side .db-item.db-basic.medium:hover .content, .side .db-item.db-basic.x-large:hover .icon, .side .db-item.db-basic.x-large:hover .content, .side .db-item.db-basic.xx-large:hover .icon, .side .db-item.db-basic.xx-large:hover .content, .preview .db-item.db-basic.medium:hover .icon, .preview .db-item.db-basic.medium:hover .content, .preview .db-item.db-basic.x-large:hover .icon, .preview .db-item.db-basic.x-large:hover .content, .preview .db-item.db-basic.xx-large:hover .icon, .preview .db-item.db-basic.xx-large:hover .content {
+  backface-visibility: unset;
+}
 .dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .content, .side .db-item.db-basic.medium:hover .content, .side .db-item.db-basic.x-large:hover .content, .side .db-item.db-basic.xx-large:hover .content, .preview .db-item.db-basic.medium:hover .content, .preview .db-item.db-basic.x-large:hover .content, .preview .db-item.db-basic.xx-large:hover .content {
   display: unset;
 }
