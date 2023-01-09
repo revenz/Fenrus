@@ -10,7 +10,7 @@
     var groupIndex = 0;
     foreach(var group in Groups)
     {
-        if (!group.Enabled)
+        if(Model.Groups.Any(x => x.Uid == group.Uid && x.Enabled) == false)
             continue;
 
         <div id="@group.Uid" class="db-group @(Settings.ShowGroupTitles ? "hide-labels" : string.Empty)">

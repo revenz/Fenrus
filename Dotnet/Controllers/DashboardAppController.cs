@@ -1,16 +1,11 @@
 using Fenrus.Services;
 using Jint;
 using Jint.Native;
-using Jint.Native.Object;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using System;
 using Fenrus.Helpers.AppHelpers;
 using Fenrus.Models;
-using Fenrus.Pages;
 using Humanizer;
-using LiteDB;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Fenrus.Controllers;
 
@@ -18,7 +13,7 @@ namespace Fenrus.Controllers;
 /// Controller for app 
 /// </summary>
 [Route("/apps")]
-public class DashboardAppController: Controller
+public class DashboardAppController: BaseController
 {
     private readonly IMemoryCache Cache;
     public DashboardAppController(IMemoryCache cache)
@@ -60,15 +55,12 @@ public class DashboardAppController: Controller
         if (app?.IsSmart != true)
             return null;
         
-        // need to move this into a helper method, or a base class
-        var sid = User?.Claims?.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid")?.Value;
-        if (string.IsNullOrEmpty(sid) || Guid.TryParse(sid, out Guid userUid) == false)
+        var settings = GetUserSettings();
+        if(settings == null)
             return null;
 
-        var settings = new Services.UserSettingsService().Load(userUid);
         if (settings.Groups.SelectMany(x => x.Items).FirstOrDefault(x => x.Uid == uid) is AppItem userApp == false)
             return null;
-            
 
         string codeFile = Path.Combine(app.FullPath, "code.js");
         if (System.IO.File.Exists(codeFile) == false)
@@ -114,9 +106,10 @@ public class DashboardAppController: Controller
 
         List<string> log = new();
         var utils = new Utils();
+        
         var statusArgs = JsObject.FromObject(engine, new
         {
-            url = "https://github.com/revenz/Fenrus/", 
+            url = ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url, 
             size,
             properties = ai.UserApp.Properties ?? new (),
             humanizer = new Helpers.AppHelpers.Humanizer(),   
@@ -133,6 +126,9 @@ public class DashboardAppController: Controller
             //         }
             //     })
             // ),
+            proxy = new Func<string, string>(url =>
+                "/proxy/" + utils.base64Encode(url).Replace("/", "-")
+            ),
             fetch = new Func<object, object>((parameters) =>
                 Fetch.Execute(new ()
                 {

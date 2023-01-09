@@ -10,7 +10,7 @@ namespace Fenrus.Controllers;
 /// Home Controller
 /// </summary>
 [Route("/")]
-public class HomeController:Controller
+public class HomeController : BaseController
 {
     /// <summary>
     /// Gets the dashboard main page
@@ -19,11 +19,9 @@ public class HomeController:Controller
     [HttpGet]
     public IActionResult Home()
     {
-        var sid = User?.Claims?.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid")?.Value;
-        if (string.IsNullOrEmpty(sid) || Guid.TryParse(sid, out Guid uid) == false)
+        var settings = GetUserSettings();
+        if(settings == null)
             return Redirect("/login");
-
-        var settings = new Services.UserSettingsService().Load(uid);
 
         var dashboard = settings.Dashboards.FirstOrDefault() ?? new();
         if (string.IsNullOrEmpty(dashboard.BackgroundImage?.EmptyAsNull() ?? settings.BackgroundImage) == false)
@@ -68,7 +66,7 @@ public class HomeController:Controller
 
     private IActionResult LoginPage(string error)
     {
-        var settings = new Services.SystemSettingsService().Get();
+        var settings = GetSystemSettings();
         LoginPageModel model = new LoginPageModel()
         {
             Error = error,
@@ -118,7 +116,7 @@ public class HomeController:Controller
     
     private async Task<IActionResult> Register(string username, string password)
     {
-        var settings = new Services.SystemSettingsService().Get();
+        var settings = GetSystemSettings();
         if (settings.AllowRegister == false)
             return LoginPage("User registrations are not allowed");
         var user = new Services.UserService().Register(username, password);
@@ -128,7 +126,7 @@ public class HomeController:Controller
     
     private async Task<IActionResult> Guest()
     {
-        var settings = new Services.SystemSettingsService().Get();
+        var settings = GetSystemSettings();
         if (settings.AllowGuest == false)
             return LoginPage("Guest access is not allowed");
         

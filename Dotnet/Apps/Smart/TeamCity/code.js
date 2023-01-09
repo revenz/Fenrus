@@ -1,7 +1,10 @@
 ﻿class TeamCity
 {
     doFetch (args, endpoint) {
-        return args.fetch({ url: 'app/rest/' + endpoint, headers: { 'Authorization': 'Bearer ' + args.properties['token'] } })
+        var result = args.fetch({ url: 'app/rest/' + endpoint, headers: { 'Authorization': 'Bearer ' + args.properties['token'] } })
+        if(typeof(result) === 'string')
+            return JSON.parse(result);
+        return result;
     }
     
     async status(args) {
