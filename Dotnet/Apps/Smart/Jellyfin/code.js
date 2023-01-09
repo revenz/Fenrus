@@ -16,18 +16,23 @@
                 Pw: password
             })
         });
+        if(typeof(data) === 'string') data = JSON.parse(data);
+        args.log('getTokenResult: ' + JSON.stringify(data));
         return {token: data.AccessToken, userId: data?.User?.Id };
     }
     
     async getLibraries(args, token){
         if(!token)
-            token = await this.getToken(args);        
+            token = await this.getToken(args);
+        args.log('token: ' + JSON.stringify(token));
         let data = await args.fetch({
             url: `Library/MediaFolders`,
             headers: {
                 'X-MediaBrowser-Token': token.token
             }
         });
+        if(typeof(data) === 'string') data = JSON.parse(data);
+        args.log('data: ' + JSON.stringify(data));
         return data?.Items?.map(x => x.Id);
     }
 

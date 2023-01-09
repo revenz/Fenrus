@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using Jint;
 
 namespace Fenrus.Helpers.AppHelpers;
@@ -45,13 +46,23 @@ public class Fetch
                         PropertyNameCaseInsensitive = true
                     });
                 url = fp.Url;
+
+                if (string.IsNullOrEmpty(fp.Body) == false)
+                {
+                    request.Content = new StringContent(fp.Body);
+                }
+                request.Headers.Clear();
                 fp.Headers ??= new();
                 if (fp.Headers.ContainsKey("Accept") == false)
                     fp.Headers.Add("Accept", "application/json");
                 foreach (var header in fp.Headers)
                 {
-                    request.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                    if (header.Key == "Content-Type")
+                        request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(header.Value);
+                    else
+                        request.Headers.Add(header.Key, header.Value);
                 }
+                
 
                 request.Method = fp.Method?.ToLower() switch
                 {
@@ -128,5 +139,10 @@ public class Fetch
         /// Gets or sets request headers
         /// </summary>
         public Dictionary<string, string> Headers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the body of the request
+        /// </summary>
+        public string Body { get; set; }
     }
 }

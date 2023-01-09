@@ -192,6 +192,7 @@ var status = instance.status(statusArgs);");
         if (result == null)
             result = string.Empty;
         var str = result.ToString();
+        
         return Content(str ?? string.Empty);
     }
 }

@@ -1,6 +1,4 @@
-﻿const humanizeDuration = require("humanize-duration");
-
-class Tautulli
+﻿class Tautulli
 {
     getUrl(args, endpoint) {
         return `api/v2?apikey=${args.properties['apikey']}&cmd=${endpoint}`;
@@ -34,7 +32,7 @@ class Tautulli
             {
                 items.push({
                     title: item.friendly_name || item.user,
-                    duration: humanizeDuration(item.total_duration * 1000, { largest: 2 }),
+                    duration: args.humanizer.Milliseconds(item.total_duration * 1000, { Precision: 2 }),
                     image: item.user_thumb?.length > 2 ? args.proxy(url + '/pms_image_proxy?img=' + item.user_thumb) : null
                 });
             }

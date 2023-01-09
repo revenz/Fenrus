@@ -11,7 +11,7 @@
     {
       "Name": "API Key",
       "Id": "apikey",
-      "Type": "password",
+      "Type": "string",
       "Help" : "Found at Tautulli Settings -> Web Interface -> API Key"
     }
   ]

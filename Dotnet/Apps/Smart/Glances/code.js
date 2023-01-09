@@ -2,10 +2,14 @@
 
 class Glances {
     doFetch(args, endpoint) {
-        return args.fetch({
+        var result = args.fetch({
             url: `api/3/` + endpoint,
             timeout: 10
         });
+        args.log('response: ' + result);
+        if(typeof(result) === 'string')
+            result = JSON.parse(result);        
+        return result;
     }
 
     async status(args) {
@@ -25,13 +29,16 @@ class Glances {
     }
 
     async systemInfo(args){
-        const [ cpu, memory, fileSystem, gpu, uptime ] = await Promise.all([
-          await this.doFetch(args, 'cpu'),
-          await this.doFetch(args, 'mem'),
-          await this.doFetch(args, 'fs'),
-          await this.doFetch(args, 'gpu'),
-          await this.doFetch(args, 'uptime'),
-        ]);
+        var cpu = await this.doFetch(args, 'cpu');
+        args.log('cpu: ' + JSON.stringify(cpu));
+        var memory = await this.doFetch(args, 'mem');
+        args.log('memory: ' + JSON.stringify(cpu));
+        let fileSystem = await this.doFetch(args, 'fs');
+        args.log('fs: ' + JSON.stringify(cpu));
+        let gpu = await this.doFetch(args, 'gpu');
+        args.log('gpu: ' + JSON.stringify(cpu)); 
+        let uptime = await this.doFetch(args, 'uptime');
+        args.log('uptime: ' + JSON.stringify(cpu));
 
         let items = [];
 
@@ -175,7 +182,6 @@ class Glances {
 
     async liveStats(args) 
     {        
-
         let firstQuery = args.properties['firstStatQuery'] || 'cpu/total';
         let secondQuery = args.properties['secStatQuery'] || 'mem/percent';
         let firstTitle = args.properties['firstStatTitle'] || 'CPU';
