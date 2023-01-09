@@ -57,10 +57,16 @@ public class Fetch
                     fp.Headers.Add("Accept", "application/json");
                 foreach (var header in fp.Headers)
                 {
-                    if (header.Key == "Content-Type")
-                        request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(header.Value);
-                    else
-                        request.Headers.Add(header.Key, header.Value);
+                    try
+                    {
+                        if (header.Key == "Content-Type")
+                            request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(header.Value);
+                        else
+                            request.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
                 
 
