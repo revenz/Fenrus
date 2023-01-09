@@ -2,7 +2,6 @@ using Fenrus.Models;
 using Fenrus.Models.UiModels;
 using Fenrus.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace Fenrus.Components.SideEditors;
 
@@ -11,29 +10,69 @@ namespace Fenrus.Components.SideEditors;
 /// </summary>
 public partial class GroupItemEditor
 {
+    /// <summary>
+    /// Gets or sets the item this is editing, leave null for a new item
+    /// </summary>
     [Parameter] public GroupItem Item { get; set; }
-    
+    /// <summary>
+    /// Gets or sets the callback when this editor is saved (and not kept open)
+    /// </summary>
     [Parameter] public EventCallback<GroupItem> OnSaved { get; set; }
     /// <summary>
     /// Event that is called when saving but keeping open
     /// </summary>
     [Parameter] public EventCallback<GroupItem> OnSavedKeepOpen { get; set; }
+    /// <summary>
+    /// Gets or sets the callback when this editor is canceled
+    /// </summary>
     [Parameter] public EventCallback OnCanceled { get; set; }
 
+    /// <summary>
+    /// Gets or sets the bound model the user is editing
+    /// </summary>
     private GroupItemEditorModel Model;
+    /// <summary>
+    /// Gets or sets the title of the editor
+    /// </summary>
     private string Title;
+    /// <summary>
+    /// Gets or sets if this is an editor for a new item
+    /// </summary>
     private bool IsNew;
+    /// <summary>
+    /// Gets or sets if this editor should be kept open after saving
+    /// Note: only available to new items
+    /// </summary>
     private bool KeepOpen { get; set; }
 
+    /// <summary>
+    /// Gets or sets all the apps, indexed by their names
+    /// </summary>
     private Dictionary<string, FenrusApp> Apps;
+    /// <summary>
+    /// Gets or sets a list of smart apps and basic apps
+    /// </summary>
     private List<ListOption> SmartApps, BasicApps;
 
-    private Fenrus.Components.Inputs.InputSelect<string> AppSelector { get; set; }
+    /// <summary>
+    /// Gets or sets the app selector input control
+    /// </summary>
+    private Inputs.InputSelect<string> AppSelector { get; set; }
 
+    /// <summary>
+    /// Gets or sets the side editor instance
+    /// </summary>
     private SideEditor Editor { get; set; }
 
+    /// <summary>
+    /// Gets or sets the selected app
+    /// Note: can be null if not editing an app or none is selected
+    /// </summary>
     private FenrusApp? SelectedApp;
 
+    /// <summary>
+    /// Gets or sets the selected app name
+    /// </summary>
     private string SelectedAppName
     {
         get => SelectedApp?.Name;
@@ -125,6 +164,10 @@ public partial class GroupItemEditor
         SelectedAppName = Model.AppName;
     }
 
+    /// <summary>
+    /// Save the editor
+    /// </summary>
+    /// <exception cref="Exception">throws if the item type being edited is unknown</exception>
     async Task Save()
     {
         // validate
@@ -193,38 +236,96 @@ public partial class GroupItemEditor
     }
 
 
+    /// <summary>
+    /// Cancels the editor
+    /// </summary>
+    /// <returns>a task to await</returns>
     Task Cancel()
         => OnCanceled.InvokeAsync();
 }
 
+/// <summary>
+/// The model for the Group Item Editor
+/// </summary>
 class GroupItemEditorModel : GroupItem
 {
+    /// <summary>
+    /// Gets the type being edited
+    /// </summary>
     public override string Type => ItemType;
+    /// <summary>
+    /// Gets or sets the type being edited
+    /// </summary>
     public string ItemType { get; set; }
+    /// <summary>
+    /// Gets or sets the URL of the item being edited
+    /// </summary>
     public string Url { get; set; }
     
+    /// <summary>
+    /// Gets or sets the terminal type
+    /// </summary>
     public string TerminalType { get; set; }
 
+    /// <summary>
+    /// Gets or sets the API URL (used by smart apps)
+    /// </summary>
     public string ApiUrl { get; set; }
 
+    /// <summary>
+    /// Gets or sets the size as a string
+    /// </summary>
     public string SizeString
     {
         get => Size.ToString();
         set => Size = Enum.Parse<ItemSize>(value);
     }
 
+    /// <summary>
+    /// Gets or sets the name of the application this is an instance of
+    /// </summary>
     public string AppName { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the target to open this item
+    /// </summary>
     public string Target { get; set; }
 
+    /// <summary>
+    /// Gets or sets the SSH Server for this item
+    /// </summary>
     public string SshServer { get; set; }
+    /// <summary>
+    /// Gets or sets the SSH username for this item
+    /// </summary>
     public string SshUserName { get; set; }
+    /// <summary>
+    /// Gets or sets the SSH password for this item
+    /// </summary>
     public string SshPassword { get; set; }
+    /// <summary>
+    /// Gets or sets the Docker UID for this item
+    /// </summary>
     public Guid? DockerUid { get; set; }
+    /// <summary>
+    /// Gets or sets the Docker container for this item
+    /// </summary>
     public string DockerContainer { get; set; }
+    /// <summary>
+    /// Gets or sets the Docker command for this item
+    /// </summary>
     public string DockerCommand { get; set; }
 
+    /// <summary>
+    /// Gets or sets any additional smart app properties for this item
+    /// </summary>
     public Dictionary<string, object> Properties { get; set; } = new();
 
+    /// <summary>
+    /// Gets a smart app property value
+    /// </summary>
+    /// <param name="prop">the property to lookup</param>
+    /// <returns>the value, or the FenrusAppProperty.DefaultValue if not set</returns>
     public object GetValue(FenrusAppProperty prop)
     {
         if (Properties.ContainsKey(prop.Id) == false)
@@ -250,6 +351,11 @@ class GroupItemEditorModel : GroupItem
         return Properties[prop.Id];
     }
 
+    /// <summary>
+    /// Sets a smart app property value
+    /// </summary>
+    /// <param name="prop">the property to set</param>
+    /// <param name="value">the value being set</param>
     public void SetValue(FenrusAppProperty prop, object value)
     {
         if (Properties.ContainsKey(prop.Id))

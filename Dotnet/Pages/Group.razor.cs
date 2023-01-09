@@ -136,13 +136,25 @@ public partial class Group: UserPage
     /// case the elements have not been added to the DOM yet</param>
     async Task UpdatePreview(int timeout = 0)
     {
-        if (timeout > 0)
+        string js = "if(themeInstance){themeInstance.initPreview();}";
+        try
         {
-            string js = $"setTimeout(function() {{ if(themeInstance) themeInstance.initPreview(); }}, {timeout});";
+            if (timeout > 0)
+                js = $"setTimeout(function() {{ if(themeInstance) themeInstance.initPreview(); }}, {timeout});";
             await jsRuntime.InvokeVoidAsync("eval", js);
         }
-        else
-            await jsRuntime.InvokeVoidAsync("eval", "if(themeInstance){themeInstance.initPreview();}");
+        catch (Exception)
+        {
+            //  may throw if prerendering, wait until after render
+            try
+            {
+                await Task.Delay(100);
+                await jsRuntime.InvokeVoidAsync("eval", js);
+            }
+            catch (Exception)
+            {
+            }
+        }
     }
 
 

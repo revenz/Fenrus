@@ -9,12 +9,12 @@ const terminalIcon = `<span class="icon fa-solid fa-terminal" style="padding-rig
 const logIcon = `<span class="icon fa-solid fa-file-lines" style="padding-right:0.5rem"></span>`;
 
 function openDefaultContextMenu(event) {
+    console.log('openDefaultContextMenu');
     event?.preventDefault();
     event?.stopPropagation();
     if(!contextMenus['DEFAULT'])
     {
         let dashboardUid = document.querySelector('.dashboard').getAttribute('x-uid');
-
         const menuItems = [
             {
                 content: `${dashboardIcon}Edit Dashboard`,
@@ -31,17 +31,20 @@ function openDefaultContextMenu(event) {
                 }
             }
 
-            ];
-            
-            let menu = new ContextMenu({
-                menuItems
-            });
-              
-            menu.init();
-            contextMenus['DEFAULT'] = menu;
-        }
+        ];
+        
+        console.log('menuItems before menu: ', JSON.parse(JSON.stringify(menuItems)));
+        let menu = new ContextMenu({
+            menuItems
+        });
+          
+        menu.init();
+        contextMenus['DEFAULT'] = menu;
+    }
     
-        contextMenus['DEFAULT'].open(event);
+    console.log('contextMenus[\'DEFAULT\']', contextMenus['DEFAULT']);
+    
+    contextMenus['DEFAULT'].open(event);
 }
 
 function openContextMenu(event, app){
