@@ -114,7 +114,15 @@ public partial class InputSelect<TItem> : Input<TItem>
         base.OnInitialized();
         InitializeAllItems();
         lblSelectOne = Placeholder?.EmptyAsNull() ?? "Select One";
+        
         ValueUpdated();
+
+        if (Value != null && AllItems.Any())
+        {
+            var index = AllItems.FindIndex(x => ValueMatches(x.Value));
+            if (index >= 0)
+                SelectedIndex = index;
+        }
     }
 
     protected override void ValueUpdated()
@@ -239,6 +247,8 @@ public partial class InputSelect<TItem> : Input<TItem>
         this.Items.Add(option);
         this.AllItems.Add(option);
         this.StateHasChanged();
+        if (ValueMatches(option.Value))
+            this.SelectedIndex = this.AllItems.Count;
     }
 
     /// <summary>
@@ -251,7 +261,11 @@ public partial class InputSelect<TItem> : Input<TItem>
         if (group.Items?.Any() == true)
         {
             foreach (var item in group.Items)
+            {
                 this.AllItems.Add(item);
+                if (ValueMatches(item.Value))
+                    this.SelectedIndex = this.AllItems.Count;
+            }
         }
 
         this.StateHasChanged();

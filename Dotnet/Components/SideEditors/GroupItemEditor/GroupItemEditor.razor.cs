@@ -32,7 +32,7 @@ public partial class GroupItemEditor
 
     private SideEditor Editor { get; set; }
 
-    private FenrusApp SelectedApp;
+    private FenrusApp? SelectedApp;
 
     private string SelectedAppName
     {
@@ -92,6 +92,7 @@ public partial class GroupItemEditor
             Model.Size = app.Size;
             Model.Uid = app.Uid;
             Model.Properties = app.Properties ?? new ();
+            // SelectedApp = Apps.ContainsKey(app.AppName) ? Apps[app.AppName] : null;
         }
         else if (Item is LinkItem link)
         {
