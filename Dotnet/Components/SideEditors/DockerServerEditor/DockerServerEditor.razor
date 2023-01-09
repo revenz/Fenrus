@@ -1,0 +1,13 @@
+@namespace Fenrus.Components.SideEditors
+
+<SideEditor Title=@Title @ref=Editor>
+    <Buttons>
+        <button class="btn" @onclick="() => Save()">Save</button>
+        <button class="btn" @onclick="() => Cancel()">Cancel</button>
+    </Buttons>
+    <Body>
+        <InputText @bind-Value="@Model.Name" Label="Name" Required="true"/>
+        <InputText @bind-Value="@Model.Address" Label="Address" Help="Address of Docker instance, leave blank for local instance" />
+        <InputNumber @bind-Value="@Model.Port" Label="Port" Placeholder="2375" Minimum="1" Maximum="65535" />
+    </Body>
+</SideEditor>

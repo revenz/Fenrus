@@ -12,11 +12,6 @@ public partial class FenrusPopup
 {
     private List<FenrusPopupItem> Popups = new();
 
-    public void Show<T>()
-    {
-        
-    }
-
     /// <summary>
     /// Opens a group item editor for new items
     /// This differs from the other editor as this will yield multiple items back if kept open
@@ -102,6 +97,49 @@ public partial class FenrusPopup
                 },
                 {
                     nameof(SideEditors.GroupItemEditor.OnCanceled),
+                    EventCallback.Factory.Create(this, _ =>
+                    {
+                        Popups.Remove(popup);
+                        StateHasChanged();
+                        task.SetResult(new() { Success = false });
+                    })
+                }
+            }
+        };
+        Popups.Add(popup);
+        StateHasChanged();
+        return task.Task;
+    }
+    
+    
+    /// <summary>
+    /// Opens a generic editor
+    /// </summary>
+    /// <param name="item">the item to edit</param>
+    /// <typeparam name="T">the type of editor to open</typeparam>
+    /// <typeparam name="U">the type of model being edited</typeparam>
+    /// <returns>the open result</returns>
+    public Task<PopupResult<U>> OpenEditor<T, U>(U item)
+    {
+        TaskCompletionSource<PopupResult<U>> task = new ();
+        FenrusPopupItem popup = null;
+        popup = new()
+        {
+            Type = typeof(T),
+            Parameters = new()
+            {
+                { "Item", item },
+                {
+                    "OnSaved",
+                    EventCallback.Factory.Create<U>(this, model =>
+                    {
+                        Popups.Remove(popup);
+                        StateHasChanged();
+                        task.SetResult(new() { Data = model, Success = true });
+                    })
+                },
+                {
+                    "OnCanceled",
                     EventCallback.Factory.Create(this, _ =>
                     {
                         Popups.Remove(popup);

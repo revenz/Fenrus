@@ -1,0 +1,34 @@
+@page "/settings/system/docker"
+@inherits CommonPage<Fenrus.Models.DockerServer>
+
+<PageTitle>Fenrus - @Title</PageTitle>
+
+<FenrusPage Title="@Title" Icon="fa-brands fa-docker" PageDescription="@Description">
+    <Body>
+    
+    <FenrusTable @ref=Table TItem="Models.DockerServer" Data=@Items>
+        <ToolBar>
+            <FenrusTableButton Label="Add" Icon="fa-solid fa-plus" Clicked="() => Add()" />
+        </ToolBar>
+        <Columns>
+            <FenrusTableColumn TItem="Models.DockerServer" ColumnName="Name">
+                <Header>Name</Header>
+                <Cell Context="item">
+                    <i class="fa-brands fa-docker"></i>
+                    <a @onclick="() => Edit(item)" @onclick:preventDefault="true" href="#">@item.Name</a>
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.DockerServer" ColumnName="Actions" Width="10rem">
+                <Header></Header>
+                <Cell Context="item">
+                    <div class="actions">
+                        <span title="Edit" class="fa-solid fa-pen-to-square" @onclick="() => Edit(item)"></span>
+                        <span title="Delete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
+                    </div>
+                </Cell>
+            </FenrusTableColumn>
+        </Columns>
+    </FenrusTable>
+        
+    </Body>
+</FenrusPage>

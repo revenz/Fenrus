@@ -107,6 +107,8 @@ public partial class GroupItemEditor
         
         BasicApps = Apps.Where(x => x.Value.IsSmart == false).OrderBy(x => x.Key)
             .Select(x => new ListOption() { Label = x.Key, Value = x.Key }).ToList();
+
+        var settings = new SystemSettingsService().Get();
         
         this.Model = new();
         Title = "Edit Item";

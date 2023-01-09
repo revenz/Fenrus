@@ -53,7 +53,8 @@ public partial class MainMenu
                     new () { Name = "Guest Dashboard", Link = "/settings/system/guest-dashboard", Icon = "fa-solid fa-table-cells-large"},
                     new () { Name = "System Groups", Link = "/settings/system/groups", Icon = "fa-solid fa-puzzle-piece"},
                     new () { Name = "System Search Engines", Link = "/settings/system/search-engines", Icon = "fa-solid fa-magnifying-glass"},
-                    new () { Name = "Users", Link = "/settings/system/users", Icon = "fa-solid fa-user-group"}
+                    new () { Name = "Users", Link = "/settings/system/users", Icon = "fa-solid fa-user-group"},
+                    new () { Name = "Docker", Link = "/settings/system/docker", Icon = "fa-brands fa-docker"}
                 }
             });
         }
