@@ -1,17 +1,24 @@
-﻿const humanizeDuration = require("humanize-duration");
-
-class SABnzbd
-{ 
+﻿class SABnzbd
+{
+    history;
+    pfImages;
+    
+    constructor(){
+        this.history = [];
+        this.pfImages = {};
+    }
+    
     getUrl(args, mode) {
         return `api?output=json&apikey=${args.properties['apikey']}&mode=${mode}`;
     }
 
     async getData(args, mode) {
-        return await args.fetch(this.getUrl(args, mode)); 
+        let url = this.getUrl(args, mode);
+        return await args.fetch(url); 
     }
 
-    async status(args) {
-        
+    async status(args) 
+    {        
         if(args.size.indexOf('large') >= 0)
             return await this.statusLarge(args);
         return await this.statusMedium(args);
@@ -66,25 +73,20 @@ class SABnzbd
         ]);
     }
 
-    history = [];    
-    pfImages = {};
-
     async statusLarge(args)
-    {        
-        const [ data, history ] = await Promise.all([
-            await this.getData(args, 'queue'),
-            await this.getData(args, 'history')
-        ]);
+    {
+        let data = await this.getData(args, 'queue');
+        let history = await this.getData(args, 'history');
         
         let mbleft = parseFloat(data?.queue?.mbleft, 10);
         if(isNaN(mbleft))
-            mbleft = 0;                    
+            mbleft = 0;      
         mbleft = args.Utils.formatBytes(mbleft * 1000 * 1000);
 
         let kbpersec = parseFloat(data?.queue?.kbpersec, 10);
         if(isNaN(kbpersec))
-            kbpersec = 0;            
-             
+            kbpersec = 0;
+
         this.history.push({
             date: new Date(),
             speed: kbpersec,
@@ -130,8 +132,9 @@ class SABnzbd
                     continue;
                 let image = await this.searchForImage(args, item.series || item.name);
                 let millisecondsAgo = new Date().getTime() - (item.completed * 1000);
+                args.log('about to push item');
                 items.push(this.getCarouselItemHtml(args, image, item.name, item.size, 
-                    '<i style="color:#6ebd6e;margin-right:0.5rem" class="fa-solid fa-download"></i>' + humanizeDuration(millisecondsAgo, { largest: 1 }) + ' ago'));
+                    '<i style="color:#6ebd6e;margin-right:0.5rem" class="fa-solid fa-download"></i>' + args.humanizer.Milliseconds(millisecondsAgo, { Precision: 1 }) + ' ago'));
                 if(items.length > 4)
                     break;
             }
@@ -186,7 +189,7 @@ class SABnzbd
                 searchTerm = searchTerm.substring(searchTerm.lastIndexOf('/') + 1);
             }
 
-            console.log('SABnzbd search term: ' + searchTerm);
+            args.log('SABnzbd search term: ' + searchTerm);
 
             let images = await args.imageSearch(searchTerm);
             this.pfImages[filename] = images?.length ? images[0] : '';      

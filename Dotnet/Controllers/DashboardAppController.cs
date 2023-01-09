@@ -9,6 +9,7 @@ using Fenrus.Helpers.AppHelpers;
 using Fenrus.Models;
 using Fenrus.Pages;
 using Humanizer;
+using LiteDB;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Fenrus.Controllers;
@@ -112,12 +113,13 @@ public class DashboardAppController: Controller
         var engine = ai.Engine;
 
         List<string> log = new();
-        var utils = new Helpers.AppHelpers.Utils();
+        var utils = new Utils();
         var statusArgs = JsObject.FromObject(engine, new
         {
             url = "https://github.com/revenz/Fenrus/", 
             size,
             properties = ai.UserApp.Properties ?? new (),
+            humanizer = new Helpers.AppHelpers.Humanizer(),   
             // doesnt work if await, returns a Task to jint for some reason
             // fetch = new Func<object, Task<object>>(async (parameters) =>
             //     await Fetch.Execute(new ()
@@ -161,6 +163,7 @@ public class DashboardAppController: Controller
             {
                 Response.Headers.TryAdd("x-icon", utils.base64Encode(icon));
             }),
+            imageSearch = new Func<string, string[]>(ImageSearch.Search ),
             setStatusIndicator = new Action<string>(indicator =>
             {
                 try

@@ -61,8 +61,12 @@ public partial class AppItemComponent
                     : "/favicon.svg")
             ) + "?version=" + Globals.Version;
 
+        int interval = App.Interval;
+        if (interval > 0)
+            interval *= 1000; // convert seconds to milliseconds
+
         PageHelper.RegisterScriptBlock($@"document.addEventListener('DOMContentLoaded', function(event) {{ 
-    LiveApp('{App.Name}', '{Model.Uid}', {App.Interval});
+    LiveApp('{App.Name}', '{Model.Uid}', {interval});
 }});");
     }
 }

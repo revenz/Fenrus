@@ -82,7 +82,8 @@ public class Fetch
             {
                 try
                 {
-                    var parsed = engine.Evaluate($"JSON.parse(`{content}`)").ToObject();
+                    engine.SetValue("temp_json", content);
+                    var parsed = engine.Evaluate("JSON.parse(temp_json)").ToObject();
                     return parsed;
                 }
                 catch (Exception ex)

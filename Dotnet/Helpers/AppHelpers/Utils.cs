@@ -58,7 +58,7 @@ public class Utils
     public string formatBytes(object bytes)
     {
         if (long.TryParse(bytes?.ToString() ?? string.Empty, out long b))
-            return string.Empty;
+            return "0 B";
         var order = 0;
         var sizes = new[] { "B", "KB", "MB", "GB", "TB" };
         while (b >= 1000 && order < sizes.Length - 1)

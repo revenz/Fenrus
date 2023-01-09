@@ -10,7 +10,7 @@ public class Carousel
     /// </summary>
     public static readonly object Instance = new Func<string[], string>(items =>
     {
-        var id = Guid.NewGuid().ToString("B");
+        var id = Guid.NewGuid().ToString("N");
         var html = $":carousel:{id}:<div class=\"carousel\" id=\"{id}\">";
         var controls = "<div class=\"controls\" onclick=\"event.stopImmediatePropagation();return false;\">";
         var count = 0;
