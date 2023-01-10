@@ -1,5 +1,6 @@
 .fenrus-table-row > .name > i {
   margin-right: 0.25rem;
+  color: var(--accent);
 }
 
 html {
