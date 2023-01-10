@@ -19,6 +19,7 @@ class DefaultTheme
             }
 
             document.addEventListener('fenrus-item-resized', (e) => this.onItemResized(e));
+            document.addEventListener('fenrus-item-deleted', (e) => this.onItemDeleted(e));
 
 
             let json = document.getElementById('theme-settings').value;          
@@ -49,6 +50,16 @@ class DefaultTheme
             return;
 
         let group = event.detail.element.closest('.db-group');
+        if(group)
+            this.shrinkGroup(group);
+    }
+    
+    onItemDeleted(event) {
+        console.log('recieved item deleted custom event!');
+        if(!event?.detail?.group)
+            return;
+
+        let group = event.detail.group;
         if(group)
             this.shrinkGroup(group);
     }

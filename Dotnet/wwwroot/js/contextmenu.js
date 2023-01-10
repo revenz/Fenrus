@@ -69,7 +69,6 @@ class ContextMenu {
       menuContainer.classList.add("contextMenu");
       menuContainer.classList.add("contextMenuCommon");
   
-      console.log('this.menuItemsNode: ', this.menuItemsNode);
       this.menuItemsNode.forEach((item) => menuContainer.appendChild(item));
   
       return menuContainer;

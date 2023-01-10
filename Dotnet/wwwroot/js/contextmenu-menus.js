@@ -52,11 +52,11 @@ function openContextMenu(event, app){
     event?.stopPropagation();
     if(typeof(app) === 'string')
         app = JSON.parse(app);
-
         
     let uid = app.Uid;
     let ele = document.getElementById(uid);
-    let groupUid = ele.closest('.db-group').getAttribute('id');
+    let group = ele.closest('.db-group');
+    let groupUid = group.getAttribute('id');
     let dashboardUid = ele.closest('.dashboard').getAttribute('x-uid');
     let ssh = ele.getAttribute('x-ssh') === '1';
     let docker = ele.getAttribute('x-docker');
@@ -117,7 +117,7 @@ function openContextMenu(event, app){
                                     detail: { element: ele }
                                 }));
 
-                                fetch(`/settings/groups/${groupUid}/resize/${uid}/${x.toLowerCase()}`, { method: 'POST'});
+                                fetch(`/settings/groups/${groupUid}/resize/${uid}/${x.toLowerCase().replace('-', '')}`, { method: 'POST'});
                             }
                         }
                     };
@@ -142,7 +142,25 @@ function openContextMenu(event, app){
         },
         {
             divider: "top",
-            content: `${deleteIcon}Delete`
+            content: `${deleteIcon}Delete`,
+            events: { 
+                click: async (e) => {
+                    if(await modalConfirm('Delete', `Delete ${app.Name}?`)) {
+                        ele.remove();
+                        let items = group.querySelectorAll('.items .db-item');
+                        if(items.length === 0){
+                            group.remove();
+                        }
+                        else
+                        {
+                            document.dispatchEvent(new CustomEvent('fenrus-item-deleted', {
+                                detail: { group: group }
+                            }));
+                        }
+                        fetch(`/settings/groups/${groupUid}/delete/${uid}`, { method: 'DELETE'});
+                    }
+                }
+            }
         },
         ]);
         
