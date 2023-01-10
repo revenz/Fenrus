@@ -5,7 +5,6 @@ namespace Fenrus.Controllers;
 /// <summary>
 /// Controller for user settings
 /// </summary>
-[Route("settings")]
 public class SettingsController : BaseController
 {
     /// <summary>
@@ -14,7 +13,7 @@ public class SettingsController : BaseController
     /// <param name="groupUid">the UID of the group</param>
     /// <param name="itemUid">the UID of the item</param>
     /// <param name="size">the new size</param>
-    [HttpPost("groups/{groupUid}/resize/{itemUid}/{size}")]
+    [HttpPost("settings/groups/{groupUid}/resize/{itemUid}/{size}")]
     public IActionResult ResizeItem([FromRoute] Guid groupUid, [FromRoute] Guid itemUid, [FromRoute] ItemSize size)
     {
         var settings = GetUserSettings();
@@ -41,7 +40,7 @@ public class SettingsController : BaseController
     /// </summary>
     /// <param name="groupUid">the UID of the group</param>
     /// <param name="itemUid">the UID of the item</param>
-    [HttpDelete("groups/{groupUid}/delete/{itemUid}")]
+    [HttpDelete("settings/groups/{groupUid}/delete/{itemUid}")]
     public IActionResult DeleteItem([FromRoute] Guid groupUid, [FromRoute] Guid itemUid)
     {
         var settings = GetUserSettings();

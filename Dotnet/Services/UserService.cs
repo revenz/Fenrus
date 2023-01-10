@@ -1,5 +1,3 @@
-using Microsoft.ClearScript.Util.Web;
-
 namespace Fenrus.Services;
 
 /// <summary>
@@ -49,4 +47,11 @@ public class UserService
         DbHelper.Insert(user);
         return user;
     }
+
+    /// <summary>
+    /// Gets all users in the system
+    /// </summary>
+    /// <returns>all users in the system</returns>
+    public List<Models.User> GetAll()
+        => DbHelper.GetAll<Models.User>();
 }

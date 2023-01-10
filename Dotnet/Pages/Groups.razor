@@ -1,42 +1,6 @@
 @page "/settings/groups"
-@page "/settings/system/groups"
-@inherits CommonPage<Fenrus.Models.Group>
 
-<PageTitle>Fenrus - @Title</PageTitle>
+<PageTitle>Fenrus - Groups</PageTitle>
 
-<FenrusPage Title="@Title" Icon="fa-solid fa-puzzle-piece" PageDescription="@Description">
-    <Body>
-    
-    <FenrusTable TItem="Models.Group" Data=@Items>
-        <ToolBar>
-            <FenrusTableButton Label="Add" Icon="fa-solid fa-plus" Clicked="() => Add()" />
-        </ToolBar>
-        <Columns>
-            <FenrusTableColumn TItem="Models.Group" ColumnName="Name">
-                <Header>Name</Header>
-                <Cell Context="item">
-                    <a href="/settings/groups/@item.Uid">@item.Name</a>
-                </Cell>
-            </FenrusTableColumn>
-            <FenrusTableColumn TItem="Models.Group" ColumnName="Enabled" Width="10rem">
-                <Header>Enabled</Header>
-                <Cell Context="item">
-                    <FenrusSwitch @bind-Value="@item.Enabled"></FenrusSwitch>
-                </Cell>
-            </FenrusTableColumn>
-            <FenrusTableColumn TItem="Models.Group" ColumnName="Actions" Width="10rem">
-                <Header></Header>
-                <Cell Context="item">
-                    <div class="actions">
-                        <span title="Move Up" class="fa-solid fa-angle-up" @onclick="() => Move(item, true)"></span>
-                        <span title="Move Down" class="fa-solid fa-angle-down" @onclick="() => Move(item, false)"></span>
-                        <a title="Edit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
-                        <span title="Delete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
-                    </div>
-                </Cell>
-            </FenrusTableColumn>
-        </Columns>
-    </FenrusTable>
-        
-    </Body>
-</FenrusPage>
+<PageGroups IsSystem="false" />
+

@@ -18,28 +18,17 @@ where T : IModal
         => typeof(T).Name.Humanize(LetterCasing.LowerCase);
     protected string GetTypeNameRoute()
         => typeof(T).Name.Pluralize().Underscore().Hyphenate();
-    
-    /// <summary>
-    /// Gets or sets if this is a system search engine
-    /// </summary>
-    public bool IsSystem { get; set; }
 
     /// <summary>
     /// Gets or sets the toast service
     /// </summary>
     [Inject] protected IToastService ToastService { get; set; }
 
-    protected override async Task OnParametersSetAsync()
-    {
-        IsSystem = Router.Uri.Contains("/system/");
-    }
-
-    protected override Task OnInitializedAsync()
-    {
-        IsSystem = Router.Uri.Contains("/system/");
-        return base.OnInitializedAsync();
-    }
-
+    /// <summary>
+    /// Gets or sets if this is a system page
+    /// </summary>
+    [Parameter] public bool IsSystem { get; set; }
+    
     /// <summary>
     /// Removes an item, prompting for confirmation
     /// </summary>

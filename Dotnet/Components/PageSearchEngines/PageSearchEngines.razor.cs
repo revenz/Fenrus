@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
+using Fenrus.Pages;
 
-namespace Fenrus.Pages;
+namespace Fenrus.Components;
 
 /// <summary>
 /// Search Engines page
 /// </summary>
-public partial class SearchEngines: CommonPage<Models.SearchEngine>
+public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
 {
     public List<Models.SearchEngine> Items { get; set; } = new();
 
