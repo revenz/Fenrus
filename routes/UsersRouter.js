@@ -21,7 +21,6 @@ class UsersRouter
     init()
     {
         this.router.get('/', (req, res) => {
-            console.log('USERS ROUTER')
             let userManager = UserManager.getInstance();         
             let system = System.getInstance();
 

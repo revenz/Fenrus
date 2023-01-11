@@ -39,9 +39,11 @@ class InitialConfigRouter{
         });
 
         this.router.post('/', async(req, res) => {
+            console.log('initial config post!');
             let system = System.getInstance();
             let strategyName = req.body.Strategy;
             let strategy = system.getAuthStrategy(strategyName);
+            console.log('strategyInstance', strategy);
             if(!strategy)
             {
                 res.status(400).send('Invalid strategy');
@@ -53,7 +55,6 @@ class InitialConfigRouter{
                 system.AuthStrategy = strategyName;
                 await system.save();
                 this.callback(strategy);
-                console.log('DEU BAOOOOOOOOOO');
                 res.sendStatus(200);            }
         });    
     }

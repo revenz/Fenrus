@@ -6,7 +6,7 @@ const System = require('./System');
 class SettingsInstance {
     Revision = 0;
     LinkTarget = '_self';
-    Theme = 'Heimdall';
+    Theme = '';
     CollapseMenu = false;
     AccentColor = '#ff0090';
     ShowGroupTitles = true;
@@ -51,11 +51,12 @@ class SettingsInstance {
             let guest = Settings.getForGuest();
             self.Dashboards = [ {...guest.Dashboards[0] }];
             self.Dashboards[0].Name = 'Default';
+            console.log('###################', guest.Dashboards[0].Name, self.Dashboards[0].Name);
             self.Dashboards[0].Uid = new Utils().newGuid();
             self.Dashboards[0].Enabled = true;
             self.Dashboards[0].BackgroundImage = '';
             self.BackgroundImage = guest.Dashboards[0].BackgroundImage;
-            self.Theme = 'Heimdall';
+            self.Theme = 'Default';
             self.AccentColor = guest.AccentColor;
             
             self.save();

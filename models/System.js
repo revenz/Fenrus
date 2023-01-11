@@ -5,8 +5,8 @@ class SystemInstance
 {
     Version;
     Revision;
-    AllowRegister = false;
-    AllowGuest = false;
+    AllowRegister = true;
+    AllowGuest = true;
     _File = './data/system.json';
     SearchEngines = [];
     Properties = {};

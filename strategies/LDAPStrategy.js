@@ -110,7 +110,7 @@ class LDAPStrategy {
       if (!username || !password) {
         res.json({
           success: false,
-          error: "Usuário ou senha inválidos",
+          error: "Invalid username or password",
         });
         return;
       }
@@ -130,7 +130,7 @@ class LDAPStrategy {
           success: false,
           error:
             user ||
-            (register ? "Failed to register" : "Usuário ou Senha Inválidos"),
+            (register ? "Failed to register" : "Invalid username or password"),
         });
         return;
       }
