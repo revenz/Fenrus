@@ -54,4 +54,11 @@ public class UserService
     /// <returns>all users in the system</returns>
     public List<Models.User> GetAll()
         => DbHelper.GetAll<Models.User>();
+
+    /// <summary>
+    /// Updates a user
+    /// </summary>
+    /// <param name="user">the user to update</param>
+    public void Update(Models.User user)
+        => DbHelper.Update(user);
 }

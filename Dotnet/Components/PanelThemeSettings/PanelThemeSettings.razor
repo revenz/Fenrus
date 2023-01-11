@@ -1,0 +1,52 @@
+@namespace Fenrus.Components
+
+<div class="theme-settings panel" x-data="ThemeSettings">
+    @{
+        bool showSettings = Theme.Settings?.Any() == true;   
+    }
+    @if(showSettings)
+    {
+        @foreach (var setting in Theme.Settings)
+        {
+            <div class="setting @setting.Type.ToString().ToLower()">
+                <span class="label">@(setting.Label?.EmptyAsNull() ?? setting.Name)</span>
+                <span class="value">
+                    @if(setting.Type == AppPropertyType.Bool)
+                    {
+                    <label for="<%= setting.Name %>" class="toggle-switchy">
+                        <input @change="update" type="checkbox" id="<%= setting.Name %>" x-model="model.<%= setting.Name %>"/>
+                        <span class="toggle">
+                            <span class="switch"></span>
+                        </span>
+                    </label>
+                    } else if(setting.Type == AppPropertyType.Select) {
+                        <select @change="update" x-model="model.<%= setting.Name %>">
+                            @foreach (var opt in setting.Options)
+                            {
+                                <option value="@opt.Value">@opt.Label</option>
+                            }
+                        </select>
+                    } else if(setting.Type == AppPropertyType.Integer) {
+                        <input @change="update" @input="updateSlider('slider-<%= setting.Name%>', <%= setting.Minimum || 0 %>, <%= setting.Maximum|| 100 %>)" id="slider-<%= setting.Name%>" type="range" min="<%= setting.Minimum || 0 %>" max="<%= setting.Maximum || 100 %>" x-model="model.<%= setting.Name %>"/>
+                        <span class="range-value" x-text="model.<%= setting.Name %>"></span>
+                    }
+                </span>
+            </div>
+        }
+        if (IsGuest)
+        {
+            showSettings = true;
+        }
+        <div class="setting">
+            <span class="label">Accent</span>
+            <span class="value color-picker">
+                <input type="text" @click.stop="toggleAccentColorPicker" id="accent-color-picker" x-model="model.AccentColor" data-jscolor="accentSettings" />
+            </span>
+        </div>
+    }
+    <div class="setting logout @(showSettings ? "has-settings" : "no-settings")">
+        <a href="/<%= isGuest ? 'login' : 'logout'%>" class="btn">@(IsGuest ? "Login" : "Logout")</a>
+        
+        .
+    </div>
+</div>

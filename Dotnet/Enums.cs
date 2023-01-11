@@ -54,5 +54,9 @@ public enum AppPropertyType
     /// <summary>
     /// Select input
     /// </summary>
-    Select
+    Select,
+    /// <summary>
+    /// Integer
+    /// </summary>
+    Integer
 }

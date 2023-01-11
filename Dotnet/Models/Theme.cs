@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Fenrus.Models.UiModels;
 
 namespace Fenrus.Models;
 
@@ -63,5 +64,37 @@ public class Theme
     /// <summary>
     /// Gets or sets any theme settings
     /// </summary>
-    public object Settings { get; set; }
+    public List<ThemeSetting> Settings { get; set; }
+}
+
+/// <summary>
+/// Theme property
+/// </summary>
+public class ThemeSetting
+{
+    /// <summary>
+    /// Gets or sets the human readable name for this property
+    /// </summary>
+    public string Name { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the label, if not set name will be used 
+    /// </summary>
+    public string Label { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the type of property
+    /// </summary>
+    public AppPropertyType Type { get; set; }
+
+    /// <summary>
+    /// Gets or sets the default value
+    /// </summary>
+    [JsonPropertyName("default")]
+    public object DefaultValue { get; set; }
+    
+    /// <summary>
+    /// Gets or sets list options for a Select input
+    /// </summary>
+    public List<ListOption> Options { get; set; }
 }

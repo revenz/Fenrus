@@ -1,4 +1,5 @@
 using Fenrus.Controllers;
+using Fenrus.Services;
 using LiteDB;
 
 namespace Fenrus.Models;
@@ -61,5 +62,13 @@ public class SystemSettings
     /// Gets or sets the OAuth strategy base URL
     /// </summary>
     public string OAuthStrategyBaseUrl { get; set; }
+    
+    
+
+    /// <summary>
+    /// Saves the system settings
+    /// </summary>
+    public void Save()
+        => new SystemSettingsService().Save();
 
 }

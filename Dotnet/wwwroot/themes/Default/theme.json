@@ -56,18 +56,18 @@
         },
         {
             "Name":"Horizontal",
-            "Type":"Boolean"
+            "Type":"Bool"
         },
         {
             "Name":"AnimatedBackground",
             "Label":"Animated Background",
-            "Type":"Boolean",
+            "Type":"Bool",
             "Default":true
         },
         {
             "Name":"BackgroundImage",
             "Label":"Overlay Background",
-            "Type":"Boolean",
+            "Type":"Bool",
             "Default":true
         }
     ]

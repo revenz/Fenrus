@@ -40,31 +40,43 @@ public partial class Users: CommonPage<User>
     }
 
     /// <summary>
-    /// Add a new docker item
+    /// Gets or sets if registrations are allowed
     /// </summary>
-    protected async override Task Add()
+    private bool AllowRegistrations
     {
-        // var result = await Popup.OpenEditor<DockerServerEditor, DockerServer>(null);
-        // if (result.Success == false)
-        //     return;
-        // Items.Add(result.Data);
-        // Items = Items.OrderBy(x => x.Name).ToList();
-        // StateHasChanged();
+        get => SystemSettings.AllowRegister;
+        set
+        {
+            if (value == SystemSettings.AllowRegister)
+                return;
+            SystemSettings.AllowRegister = value;
+            SystemSettings.Save();
+            ToastService.ShowSuccess("Updated Successfully");
+        }
     }
 
     /// <summary>
-    /// Edit a new docker item
+    /// Checks if the item is the same as the operating user
     /// </summary>
-    /// <param name="item"></param>
-    async Task Edit(User item)
+    /// <param name="item">the item to check</param>
+    /// <returns>if the item is the same as the operating user</returns>
+    private bool IsSelf(Models.User item)
+        => item.Uid == Settings.Uid;
+
+    /// <summary>
+    /// Updates a users admin status
+    /// </summary>
+    /// <param name="user">the user being updated</param>
+    /// <param name="isAdmin">whether or not they are now an admin</param>
+    private void AdminUpdated(User user, bool isAdmin)
     {
-        // var result = await Popup.OpenEditor<DockerServerEditor, DockerServer>(item);
-        // if (result.Success == false)
-        //     return;
-        // item.Address = result.Data.Address;
-        // item.Name = result.Data.Name;
-        // item.Port = result.Data.Port;
-        // Items = Items.OrderBy(x => x.Name).ToList();
-        // StateHasChanged();
+        if (IsSelf(user))
+            return;
+        if (user.IsAdmin != isAdmin)
+        {
+            user.IsAdmin = isAdmin;
+            new UserService().Update(user);
+        }
+
     }
 }
