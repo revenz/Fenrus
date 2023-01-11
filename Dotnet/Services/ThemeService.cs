@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Fenrus.Models;
 
@@ -30,13 +31,21 @@ public class ThemeService
         if (File.Exists(file) == false)
         {
             Logger.ILog("NO THEME FILE FOUND IN: " + file);
+            foreach(var scss in new DirectoryInfo(theme.Directory).GetFiles("*.scss"))
+                theme.Css.Add(scss.Name);
+            foreach(var js in new DirectoryInfo(theme.Directory).GetFiles("*.js"))
+                theme.Scripts.Add(js.Name);
             return theme; // basic theme nothing more to load
         }
 
         // more complex theme, with theme file        
         var json = File.ReadAllText(file);
 
-        var deserialized = JsonSerializer.Deserialize<Theme>(json);
+        var deserialized = JsonSerializer.Deserialize<Theme>(json, new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters = { new JsonStringEnumConverter() }
+        });
         if (deserialized == null)
             return theme;
         theme = deserialized;
@@ -62,7 +71,7 @@ public class ThemeService
     public List<string> GetThemes()
     {
         List<string> themes = new();
-        foreach (var dir in new DirectoryInfo(DirectoryHelper.GetWwwRootDirectory()).GetDirectories())
+        foreach (var dir in new DirectoryInfo(DirectoryHelper.GetThemesDirectory()).GetDirectories())
         {
             themes.Add(dir.Name);
         }

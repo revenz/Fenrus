@@ -1,0 +1,79 @@
+@namespace Fenrus.Components
+
+<div class="settings panel">
+    @if(Dashboards?.Any() == true) 
+    {
+        <div class="setting">
+            <span class="label">Dashboard</span>
+            <span class="value">
+                <select onchange="UpdateSetting('Dashboard', event)">
+                    @foreach(var dashboard in Dashboards) 
+                    {
+                        if (dashboard.Uid == Dashboard.Uid)
+                        {
+                            <option selected value="@dashboard.Uid">@dashboard.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@dashboard.Uid">@dashboard.Name</option>
+                        }
+                    }
+                </select>
+            </span>
+        </div>
+    }
+    
+    <div class="setting">
+        <span class="label">Theme</span>
+        <span class="value">
+            <select onchange="UpdateSetting('Theme', event)">
+                @foreach(var theme in Themes) {
+                    if (theme == Theme?.Name)
+                    {
+                        <option selected>@theme</option>
+                    }
+                    else
+                    {
+                        <option>@theme</option>
+                    }
+                }
+            </select>
+        </span>
+    </div>
+    
+    <div class="setting">
+        <span class="label">Link Target</span>
+        <span class="value">
+            <select onchange="UpdateSetting('LinkTarget', event)">
+                @foreach (var item in new[]
+                {
+                    ("_self", "Open in this tab"),
+                    ("_blank", "Open in new tab"),
+                    ("home-portal", "Open in same tab")
+                })
+                {
+                    if (Settings.LinkTarget == item.Item1)
+                    {
+                        <option selected value="@item.Item1">@item.Item2</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Item1">@item.Item2</option>
+                    }
+                }
+            </select>
+        </span>
+    </div>
+    <div class="setting">
+        <span class="label">Group Titles</span>
+        <span class="value">
+            <FenrusSwitch Value="Settings.ShowGroupTitles" />
+        </span>
+    </div>
+    <div class="setting">
+        <span class="label">Status Indicators</span>
+        <span class="value">
+            <FenrusSwitch Value="Settings.ShowStatusIndicators" />
+        </span>
+    </div>
+</div>

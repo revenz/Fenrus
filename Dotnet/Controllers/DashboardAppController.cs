@@ -16,6 +16,11 @@ namespace Fenrus.Controllers;
 public class DashboardAppController: BaseController
 {
     private readonly IMemoryCache Cache;
+    
+    /// <summary>
+    /// Constructs an instance of Dashboard App Controller
+    /// </summary>
+    /// <param name="cache">memory cache</param>
     public DashboardAppController(IMemoryCache cache)
     {
         this.Cache = cache;

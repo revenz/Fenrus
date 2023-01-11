@@ -63,4 +63,12 @@ public class DirectoryHelper
     /// <returns>the full path to wwwroot</returns>
     public static string GetWwwRootDirectory()
         => Path.Combine(GetBaseDirectory(), "wwwroot");
+    
+    
+    /// <summary>
+    /// Gets the full path to wwwroot/themes
+    /// </summary>
+    /// <returns>the full path to wwwroot/themes</returns>
+    public static string GetThemesDirectory()
+        => Path.Combine(GetWwwRootDirectory(), "themes");
 }

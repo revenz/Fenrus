@@ -27,8 +27,10 @@ public class HomeController : BaseController
         if (string.IsNullOrEmpty(dashboard.BackgroundImage?.EmptyAsNull() ?? settings.BackgroundImage) == false)
             ViewBag.CustomBackground = "true";
 
-        var theme = new Services.ThemeService().GetTheme(dashboard.Theme?.EmptyAsNull() ?? settings.Theme?.EmptyAsNull() ?? "Default");
-
+        var themeService = new Services.ThemeService();
+        var theme = themeService.GetTheme(dashboard.Theme?.EmptyAsNull() ?? settings.Theme?.EmptyAsNull() ?? "Default");
+        var themes = themeService.GetThemes();
+        
         var groups = dashboard.Groups.Select(x => settings.Groups.FirstOrDefault(y => y.Uid == x.Uid))
             .Where(x => x != null).ToList();
         
@@ -39,6 +41,12 @@ public class HomeController : BaseController
             Theme = theme,
             Groups = groups
         };
+        ViewBag.IsGuest = false;
+        ViewBag.Dashboard = dashboard;
+        ViewBag.UserSettings = settings;
+        ViewBag.Dashboards = settings.Dashboards;
+        ViewBag.Themes = themes;
+        ViewBag.Theme = theme;
         ViewBag.Accent = dashboard.AccentColor?.EmptyAsNull() ?? settings.AccentColor?.EmptyAsNull() ?? string.Empty;
         return View("Dashboard", model);
     }
@@ -129,7 +137,8 @@ public class HomeController : BaseController
         var settings = GetSystemSettings();
         if (settings.AllowGuest == false)
             return LoginPage("Guest access is not allowed");
-        
+
+        ViewBag.IsGuest = true;
         throw new NotImplementedException();
     }
 

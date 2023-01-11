@@ -40,13 +40,12 @@
         <div class="setting">
             <span class="label">Accent</span>
             <span class="value color-picker">
-                <input type="text" @click.stop="toggleAccentColorPicker" id="accent-color-picker" x-model="model.AccentColor" data-jscolor="accentSettings" />
+                <input type="text" click.stop="toggleAccentColorPicker" id="accent-color-picker"
+                       x-model="model.AccentColor" data-jscolor="accentSettings" />
             </span>
         </div>
     }
     <div class="setting logout @(showSettings ? "has-settings" : "no-settings")">
-        <a href="/<%= isGuest ? 'login' : 'logout'%>" class="btn">@(IsGuest ? "Login" : "Logout")</a>
-        
-        .
+        <a href="/@(IsGuest ? "login" : "logout")" class="btn">@(IsGuest ? "Login" : "Logout")</a>
     </div>
 </div>

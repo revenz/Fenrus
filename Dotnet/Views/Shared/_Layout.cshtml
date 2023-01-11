@@ -1,5 +1,6 @@
 @using System.Text.RegularExpressions
 @using Fenrus.Components
+@using Fenrus.Services
 @{
     bool home = Context.Request.Path == "/" || Context.Request.Path.StartsWithSegments("/dashboard");
     string bodyClass = home ? "home " : "not-home ";
@@ -7,7 +8,13 @@
         bodyClass += "custom-background ";
     else
         bodyClass += "no-custom-background ";
-    string theme = ViewBag.Theme?.ToString()?.EmptyAsNull() ?? "Default"; 
+    var themeInstance = ViewBag.Theme;
+    var theme = themeInstance.Name;
+    bool isGuest = ViewBag.IsGuest;
+    var userSettings = ViewBag.UserSettings;
+    var dashboards = ViewBag.Dashboards;
+    var dashboard = ViewBag.Dashboard;
+    var themes = ViewBag.Themes;
 }
 <!DOCTYPE html>
 <html>
@@ -54,14 +61,24 @@
 <body class="@bodyClass">
     <ul class="main-menu">
         <li><a title="Home" href="/"><span class="fa-solid fa-house"></span></a></li>
-        <li><a title="Settings" href="/settings"><span class="fa-solid fa-sliders"></span></a></li>
+        <li>
+            <a title="Settings" href="/settings"><span class="fa-solid fa-sliders"></span></a>
+            @(await Html.RenderComponentAsync<PanelUserSettings>(RenderMode.Static, new
+            {
+                Theme = themeInstance,
+                Themes = themes,
+                Settings = userSettings,
+                Dashboards = dashboards,
+                Dashboard = dashboard
+            }))
+        </li>
         <li>
             <a title="About" href="/settings/about"><span class="icon-fenrus"></span></a>
-                    
             @(await Html.RenderComponentAsync<PanelThemeSettings>(RenderMode.Static, new
             {
+                Theme = themeInstance,
+                IsGuest = isGuest
             }))
-
         </li>
     </ul>
 

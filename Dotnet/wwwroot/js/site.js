@@ -37,28 +37,11 @@ function LiveApp(name, instanceUid, interval)
     });
 }
 
-function changeTheme(event) {
-    let theme = event?.target?.value;
+function changeTheme(theme) {
     if (!theme)
         return;
     document.getElementById('theme-style').setAttribute('href', `/themes/${theme}/theme.css`);
 }
-
-function htmlEncode(text) {
-    var node = document.createTextNode(text);
-    var p = document.createElement('p');
-    p.appendChild(node);
-    return p.innerHTML;
-}
-
-function newGuid() 
-{
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
-
 
 function getCookie(cname) {
     let name = cname + "=";
@@ -75,11 +58,6 @@ function getCookie(cname) {
     }
     return "";
 }
-
-function changeTheme(name){
-    window.location.reload();
-}
-
 
 function fetchDashboard(uid,  backwards) {
     let currentTheme = document.getElementById('hdn-dashboard-theme')?.value || 'Default';
@@ -181,5 +159,30 @@ function removeGroup(groupUid, groupName)
     fetch(`/settings/dashboards/${dashboardUid}/remove-group/${groupUid}`, { method: 'POST'}).then(res => {
         let eleGroup = document.getElementById(groupUid);
         eleGroup?.remove();
+    });
+}
+
+function UpdateSetting(setting, event)
+{
+    let value = event;
+    if(event.target?.tagName === 'SELECT')
+    {
+        let index = event.target.selectedIndex;
+        value = event.target.options[index].value;
+    }
+    if(setting === 'Dashboard'){
+        changeDashboard(value);
+        return;
+    }
+    fetch(`/settings/update-setting/${setting}/${value}`, { method: 'POST'}).then(res => {
+        return res.json();
+    }).then(json => {
+        console.log('result: ', json);
+        console.log('theme: ', json.theme);
+        if(json.reload) {
+            window.location.reload();
+            return;
+        }
+        changeTheme(json.theme);
     });
 }

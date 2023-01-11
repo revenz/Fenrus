@@ -97,4 +97,14 @@ public class ThemeSetting
     /// Gets or sets list options for a Select input
     /// </summary>
     public List<ListOption> Options { get; set; }
+
+    /// <summary>
+    /// Gets or sets the minimum
+    /// </summary>
+    public int? Minimum { get; set; }
+
+    /// <summary>
+    /// Gets or sets the maximum
+    /// </summary>
+    public int? Maximum { get; set; }
 }

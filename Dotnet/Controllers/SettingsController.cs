@@ -59,4 +59,46 @@ public class SettingsController : BaseController
         settings.Save();
         return Content("");
     }
+
+    /// <summary>
+    /// Updates a setting
+    /// </summary>
+    /// <returns>result from the update</returns>
+    [HttpPost("settings/update-setting/{setting}/{value}")]
+    public IActionResult UpdateSetting([FromRoute] string setting, [FromRoute] string value)
+    {
+        bool reload = false;
+        var settings = GetUserSettings();
+        switch (setting)
+        {
+            case "LinkTarget":
+                settings.LinkTarget = value;
+                settings.Save();
+                break;
+            case "Theme":
+                // reload = true;
+                settings.Theme = value;
+                settings.Save();
+                break;
+            case "ShowGroupTitles":
+                settings.ShowGroupTitles = value?.ToLower() == "true";
+                settings.Save();
+                break;
+            case "ShowStatusIndicators":
+                settings.ShowStatusIndicators = value?.ToLower() == "true";
+                settings.Save();
+                break;
+            default:
+                return NotFound();
+        }
+
+        return Json(new
+        {
+            Reload = reload,
+            settings.Theme,
+            settings.LinkTarget,
+            settings.ShowGroupTitles,
+            settings.ShowStatusIndicators
+        });
+    }
 }

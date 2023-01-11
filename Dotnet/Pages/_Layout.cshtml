@@ -5,6 +5,7 @@
 
 @{
     string theme = ViewBag.Theme?.ToString()?.EmptyAsNull() ?? "Default"; 
+    var themeInstance = new ThemeService().GetTheme(theme);
 }
 
 <!DOCTYPE html>
@@ -44,7 +45,6 @@
 <script defer src="~/_framework/blazor.server.js?v=@Globals.Version"></script>
 
 @{
-    var themeInstance = new ThemeService().GetTheme(theme);
     @if (themeInstance?.Scripts?.Any() == true)
     {
         <input type="hidden" id="theme-settings" value="{}" />
