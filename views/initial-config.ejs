@@ -34,6 +34,7 @@
                 <select x-model="model.Strategy">
                     <option value="LocalStrategy">Local Username/Password</option>
                     <option value="OAuthStrategy">OAuth</option>
+                    <option value="LDAPStrategy">LDAP</option>
                 </select>
             </span>
         </div>
@@ -81,6 +82,22 @@
                 </div>
             </div>
         </template>
+        <template x-if="model.Strategy === 'LDAPStrategy'">
+            <div>
+                <div class="setting">
+                    <span class="label">LDAP User</span>
+                    <span class="value">
+                        <input type="text" x-model="model.LDAPStrategy.Username" autofocus data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+                    </span>
+                </div>
+                <div class="setting">
+                    <span class="label">LDAP Password</span>
+                    <span class="value">
+                        <input type="password" x-model="model.LDAPStrategy.Password" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="save" />
+                    </span>
+                </div>
+            </div>
+        </template>
     </div>
 
     <script src="/js/site.js?version=<%= version %>" asp-append-version="true"></script>
@@ -94,6 +111,7 @@
                 model: {
                     Strategy: 'LocalStrategy',
                     LocalStrategy: { Username: 'admin', Password: ''},
+                    LDAPStrategy: { Username: '', Password: ''},
                     OAuthStrategy: {
                         AdminUsername: '',
                         IssuerBaseUrl: 'https://accounts.google.com/',

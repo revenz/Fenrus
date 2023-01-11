@@ -64,12 +64,13 @@ class UserManagerInstance {
     }
 
     async validate(username, password)
-    {            
+    {        
         let user = this.getUser(username);
         if(!user)
             return false;
             
         let matches = await bcrypt.compare(password, user.Password);
+
         if(matches)
             return user;
 

@@ -174,7 +174,7 @@ if(system.getIsConfigured() === false){
 }
 else
 {    
-    authStrategy =  system.getAuthStrategy();    
+    authStrategy =  system.getAuthStrategy();   
     configureRoutes(app, authStrategy);
 }
 

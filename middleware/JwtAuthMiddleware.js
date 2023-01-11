@@ -34,7 +34,7 @@ module.exports = async (req, res, next) => {
     {
         if(!system.AllowGuest)
         {
-            res.status(401).redirect('/login?error=401');
+          //  res.status(401).redirect('/login?error=401');
             return;
         }
 

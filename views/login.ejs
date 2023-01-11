@@ -32,22 +32,19 @@
                 </div>
             </template>
             <div class="field">
-                <span class="label">Username</span>
+                <span class="label">USUÁRIO</span>
                 <span class="value">
                     <input type="text" x-model="model.Username" autofocus data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="login" />
                 </span>
             </div>
             <div class="field">
-                <span class="label">Password</span>
+                <span class="label">SENHA</span>
                 <span class="value">
                     <input type="password" x-model="model.Password" data-rules='["required"]' @blur="blur" @input="input" @keydown.enter="login" />
                 </span>
             </div>
             <div class="buttons">
                 <button class="btn" @click="login">Login</button>
-                <% if(allowRegister) { %>
-                <button class="btn" @click="register">Register</button>
-                <% } %>
                 <% if(allowGuest) { %>
                 <button class="btn" @click="guest">Guest</button>
                 <% } %>
@@ -84,7 +81,7 @@
                     });
                     return valid;
                 },
-                login() {                    
+                login() {          
                     this.doLoginRegister(false);
                 },
                 register(){
@@ -105,7 +102,7 @@
                         }
                     };
 
-                    fetch('/login', options).then(res => res.json()).then((res)=>{           
+                    fetch('/login', options).then(res => res.json()).then((res)=>{       
                         if(res.error)
                             this.error = res.error;
                         else if(res.success)
