@@ -237,7 +237,7 @@ class SmartApp
             else
                 this.carouselWaitingUpdate = content;
             return;
-        }  
+        }
 
         let ele = eleItem.querySelector('.status');
         if(!ele)
@@ -249,6 +249,15 @@ class SmartApp
         else if(/^data:/.test(content)){
             content = `<img class="app-chart" src="${content}" />`;
             this.setItemClass(eleItem, 'chart');
+        }
+        else if(/^chart:/.test(content))
+        {
+            content = content.substring(7);
+            let colonIndex = content.indexOf(':')
+            let chart = content.substring(0, colonIndex);
+            content = content.substring(colonIndex + 1)
+            this.renderChart(chart, JSON.parse(content), ele);
+            return;
         }
         else if(content.indexOf('livestats') > 0){
             this.setItemClass(eleItem, 'db-basic live-stats');
@@ -350,5 +359,79 @@ class SmartApp
                 this.carouselItem(null, id, index);
             }
         }, 5000);
+    }
+    
+    renderChart(type, args, ele){
+        let title = args.title;
+        let labels = args.labels;
+        let datasets = args.data;
+        let min = args.min;
+        let max = args.max;
+        var data = {
+            labels: labels,
+            datasets: datasets.map((x, index) => {
+                return {
+                    data: x,
+                    fill: false,
+                    borderColor: ['green', 'blue', 'yellow', 'red', 'purple', 'orange', 'cornflowerblue'][index],
+                    lineTension: 0.1
+                };
+            })
+        };
+        //options
+        var options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+                title: {
+                    display:true,
+                    color:'white',
+                    align:'end',
+                    position:'top',
+                    text: title.indexOf('\n') > 0 ? title : ('   ' + title + '   '),
+                },
+                legend: {
+                    display:false
+                }
+            },
+            elements: {
+                point: {
+                    radius:0
+                }
+            },
+            scales: {
+                yAxes: {
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    min: min == -1 ? null : min || 0,
+                    max: max == -1 ? null : max || 100,
+                    display: false,
+                    ticks: {
+                        display:false
+                    }
+                },
+                xAxes: {
+                    grid: {
+                        display: true
+                    },
+                    ticks: {
+                        display:false
+                    }
+                }
+            }
+        };
+        ele.innerHTML = '<canvas></canvas>';
+        let canvas = ele.querySelector('canvas');
+        let eleDbItem = ele.parentNode.parentNode.parentNode;
+        if(eleDbItem.classList.contains('chart') === false)
+            eleDbItem.classList.add('chart');               
+        new Chart(canvas, {
+            type: 'line',
+            data: data,
+            options: options
+        });
     }
 }

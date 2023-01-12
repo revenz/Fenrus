@@ -11,6 +11,10 @@ namespace Fenrus.Components.SideEditors;
 public partial class GroupItemEditor
 {
     /// <summary>
+    /// Gets if this item is has loaded, and if not, some setting should not be overriden, eg Size
+    /// </summary>
+    private bool Loaded { get; set; }
+    /// <summary>
     /// Gets or sets the item this is editing, leave null for a new item
     /// </summary>
     [Parameter] public GroupItem Item { get; set; }
@@ -90,12 +94,45 @@ public partial class GroupItemEditor
                 if (string.IsNullOrWhiteSpace(SelectedApp.DefaultUrl) == false &&
                     string.IsNullOrWhiteSpace(Model.Url) || Model.Url == "https://" || Model.Url == "http://")
                     Model.Url = SelectedApp.DefaultUrl; // update the apps default url
-                // set the default size
-                Model.Size = SelectedApp.DefaultSize ?? ItemSize.Medium;
+                if (Loaded)
+                {
+                    // set the default size
+                    Model.Size = SelectedApp.DefaultSize ?? ItemSize.Medium;
+                }
+
+                InitSelectedApp();
             }
             else
                 SelectedApp = null;
             Model.AppName = value;
+        }
+    }
+
+    private void InitSelectedApp()
+    {
+        if (SelectedApp == null)
+            return;
+        if (SelectedApp.Properties?.Any() == true)
+        {
+            foreach (var prop in SelectedApp.Properties)
+            {
+                if (prop.Options?.Any() != true)
+                    continue;
+                foreach (var opt in prop.Options)
+                {
+                    if(opt.Value is JsonElement je)
+                    {
+                        if (je.ValueKind == JsonValueKind.False)
+                            opt.Value = false;
+                        else if (je.ValueKind == JsonValueKind.True)
+                            opt.Value = true;
+                        else if (je.ValueKind == JsonValueKind.Number)
+                            opt.Value = je.GetInt32();
+                        else
+                            opt.Value = je.ToString();
+                    }
+                }
+            }
         }
     }
 
@@ -164,6 +201,7 @@ public partial class GroupItemEditor
             Model.TerminalType = "SSH";
 
         SelectedAppName = Model.AppName;
+        Loaded = true;
     }
 
     /// <summary>

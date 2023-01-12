@@ -132,7 +132,10 @@ The main URL will be where the user is taken when the item is clicked."></InputT
                             <InputText Label="@prop.Name" Help="@prop.Help" Password="true" Value="@(Model.GetValue(prop) as string ?? string.Empty)" ValueChanged="((val) => Model.SetValue(prop, val))"/>
                             break;
                         case AppPropertyType.Select:
-                            <InputSelect TItem="string" Label="@prop.Name" Help="@prop.Help" Value="@(Model.GetValue(prop) as string ?? string.Empty)" ValueChanged="((val) => Model.SetValue(prop, val))" Options="@prop.Options"/>
+                            <InputSelect TItem="string" Label="@prop.Name" Help="@prop.Help" 
+                                         Value="@(Model.GetValue(prop) as string ?? string.Empty)" 
+                                         ValueChanged="((val) => Model.SetValue(prop, val))" 
+                                         Options="@prop.Options"/>
                             break;
                     }
                 }

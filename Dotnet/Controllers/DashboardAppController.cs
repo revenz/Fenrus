@@ -134,6 +134,7 @@ public class DashboardAppController: BaseController
             proxy = new Func<string, string>(url =>
                 "/proxy/" + utils.base64Encode(url).Replace("/", "-")
             ),
+            chart = new Chart(),
             fetch = new Func<object, object>((parameters) =>
                 Fetch.Execute(new ()
                 {
