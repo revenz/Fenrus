@@ -1,3 +1,4 @@
+using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Controllers;
@@ -76,9 +77,14 @@ public class SettingsController : BaseController
                 settings.Save();
                 break;
             case "Theme":
-                // reload = true;
-                settings.Theme = value;
-                settings.Save();
+                if (settings.Theme != value || settings.Dashboards.Any(x => string.IsNullOrEmpty(x.Theme) == false && x.Theme != value))
+                {
+                    foreach (var db in settings.Dashboards)
+                        db.Theme = string.Empty; // switches the dashboard to the default theme..
+                    reload = true;
+                    settings.Theme = value;
+                    settings.Save();
+                }
                 break;
             case "ShowGroupTitles":
                 settings.ShowGroupTitles = value?.ToLower() == "true";

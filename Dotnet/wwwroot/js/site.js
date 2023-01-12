@@ -164,12 +164,17 @@ function removeGroup(groupUid, groupName)
 
 function UpdateSetting(setting, event)
 {
+    if(event.target?.className === 'slider round')
+        return;
     let value = event;
     if(event.target?.tagName === 'SELECT')
     {
         let index = event.target.selectedIndex;
         value = event.target.options[index].value;
     }
+    else if(event.target?.tagName === 'INPUT' && event.target.type === 'checkbox')
+        value = event.target.checked;
+    
     if(setting === 'Dashboard'){
         changeDashboard(value);
         return;
@@ -177,12 +182,27 @@ function UpdateSetting(setting, event)
     fetch(`/settings/update-setting/${setting}/${value}`, { method: 'POST'}).then(res => {
         return res.json();
     }).then(json => {
-        console.log('result: ', json);
-        console.log('theme: ', json.theme);
         if(json.reload) {
             window.location.reload();
             return;
         }
-        changeTheme(json.theme);
+
+        let eleDashboard = document.querySelector('.dashboard');
+        eleDashboard.classList.remove('hide-group-titles');
+        if(json.showGroupTitles === false)
+            eleDashboard.classList.add('hide-group-titles');
+
+        eleDashboard.classList.remove('status-indicators');
+        if(json.showStatusIndicators === true)
+            eleDashboard.classList.add('status-indicators');
+
+        if(json.linkTarget){
+            // need to update all the targets
+            for(let a of eleDashboard.querySelectorAll('a'))
+            {
+                if(a.getAttribute('href').length > 1)
+                    a.setAttribute('target', json.linkTarget);
+            }
+        }
     });
 }

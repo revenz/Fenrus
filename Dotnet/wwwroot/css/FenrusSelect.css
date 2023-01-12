@@ -1,0 +1,46 @@
+.fenrus-select {
+  background: var(--input-background);
+  width: 100%;
+  position: relative;
+}
+.fenrus-select .fenrus-select-value {
+  padding: 0.35rem;
+  display: block;
+  width: calc(100% - 0.7rem);
+  cursor: pointer;
+}
+.fenrus-select > .fa-caret-down {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+}
+.fenrus-select:not(.opened) ul {
+  display: none;
+}
+.fenrus-select ul {
+  padding: 0;
+  width: 100%;
+  position: absolute;
+  border: solid 1px var(--input-border);
+}
+.fenrus-select ul.opened {
+  display: unset;
+}
+.fenrus-select ul li {
+  z-index: 2;
+  list-style: none;
+  width: calc(100% - 0.5rem);
+  height: 1.5rem;
+  display: block;
+  margin: 0;
+  padding: 0.5rem 0.25rem;
+  user-select: none;
+  background: var(--input-background);
+}
+.fenrus-select ul li:hover {
+  background: var(--accent);
+  color: var(--color);
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=FenrusSelect.css.map */

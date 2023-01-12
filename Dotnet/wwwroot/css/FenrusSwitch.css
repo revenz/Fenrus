@@ -3,6 +3,7 @@
   display: inline-block;
   width: 3rem;
   height: 1.5rem;
+  /* The slider */
 }
 .fenrus-switch input {
   /* hide the default browser input checkbox */
@@ -10,15 +11,23 @@
   width: 0;
   height: 0;
 }
+.fenrus-switch input:checked + .slider {
+  background-color: rgba(var(--accent-rgb), 0.7);
+}
+.fenrus-switch input:focus + .slider {
+  box-shadow: 0 0 5px var(--accent);
+}
+.fenrus-switch input:checked + .slider:before {
+  transform: translateX(1.4rem);
+  background-color: rgba(var(--color-rgb), 1);
+}
 .fenrus-switch.disabled {
   opacity: 0.5;
 }
 .fenrus-switch.disabled .slider {
   cursor: not-allowed !important;
 }
-
-/* The slider */
-.slider {
+.fenrus-switch .slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -29,8 +38,7 @@
   transition: 0.4s;
   border-radius: 2rem;
 }
-
-.slider:before {
+.fenrus-switch .slider:before {
   position: absolute;
   content: "";
   height: 1.2rem;
@@ -42,17 +50,4 @@
   border-radius: 50%;
 }
 
-input:checked + .slider {
-  background-color: rgba(var(--accent-rgb), 0.7);
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 5px var(--accent);
-}
-
-input:checked + .slider:before {
-  transform: translateX(1.4rem);
-  background-color: rgba(var(--color-rgb), 1);
-}
-
-/*# sourceMappingURL=FenrusSwitch.razor.css.map */
+/*# sourceMappingURL=FenrusSwitch.css.map */
