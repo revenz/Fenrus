@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 
@@ -64,6 +65,8 @@ public class SettingsController : BaseController
     /// <summary>
     /// Updates a setting
     /// </summary>
+    /// <param name="setting">The setting being updated</param>
+    /// <param name="value">the new value</param>
     /// <returns>result from the update</returns>
     [HttpPost("settings/update-setting/{setting}/{value}")]
     public IActionResult UpdateSetting([FromRoute] string setting, [FromRoute] string value)
@@ -105,6 +108,63 @@ public class SettingsController : BaseController
             settings.LinkTarget,
             settings.ShowGroupTitles,
             settings.ShowStatusIndicators
+        });
+    }
+
+    /// <summary>
+    /// Updates a theme setting
+    /// </summary>
+    /// <param name="theme">The theme the setting is being updated for</param>
+    /// <param name="setting">The setting being updated</param>
+    /// <param name="value">the new value</param>
+    /// <returns>result from the update</returns>
+    [HttpPost("settings/theme/{theme}/update-setting/{setting}/{value}")]
+    public IActionResult UpdateSetting([FromRoute] string theme, [FromRoute] string setting, [FromRoute] string value)
+    {
+        if (string.IsNullOrWhiteSpace(theme))
+        {
+            Response.StatusCode = 500;
+            return Json(new
+            {
+                Error = "Invalid theme"
+            });
+        }
+
+        if (string.IsNullOrWhiteSpace(setting))
+        {
+            Response.StatusCode = 500;
+            return Json(new
+            {
+                Error = "Invalid setting"
+            });
+        }
+        var settings = GetUserSettings();
+        settings.ThemeSettings ??= new();
+        if(settings.ThemeSettings.ContainsKey(theme) == false)
+            settings.ThemeSettings.Add(theme, new Dictionary<string, object?>());
+        else if (settings.ThemeSettings[theme] == null)
+            settings.ThemeSettings[theme] = new();
+        var dict = settings.ThemeSettings[theme];
+
+        object oValue = value;
+        if (string.IsNullOrWhiteSpace(value) == false)
+        {
+            if (value.ToLower() == "true")
+                oValue = true;
+            else if (value.ToLower() == "false")
+                oValue = false;
+            else if (Regex.IsMatch(value, @"^[\d]+$"))
+                oValue = int.Parse(value);
+        }
+
+        if (dict.ContainsKey(setting))
+            dict[setting] = oValue;
+        else
+            dict.Add(setting, oValue);
+        settings.Save();
+        
+        return Json(new
+        {
         });
     }
 }

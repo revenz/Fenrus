@@ -164,6 +164,26 @@ function removeGroup(groupUid, groupName)
 
 function UpdateSetting(setting, event)
 {
+    if(setting === 'Dashboard'){
+        changeDashboard(event);
+        return;
+    }
+    UpdateSettingValue(`/settings/update-setting/${setting}/#VALUE#`, event);
+}
+
+function UpdateThemeSetting(theme, setting, event)
+{
+    let value = UpdateSettingValue(`/settings/theme/${theme}/update-setting/${setting}/#VALUE#`, event);
+    if(value === undefined)
+        return;
+
+    themeInstance.settings[setting] = value;
+    if(themeInstance.init)
+        themeInstance.init();
+}
+
+function UpdateSettingValue(url, event)
+{
     if(event.target?.className === 'slider round')
         return;
     let value = event;
@@ -181,15 +201,11 @@ function UpdateSetting(setting, event)
         let percent = (value - min) / (max - min) * 100;
         event.target.style = `background-size: ${percent}% 100%`;
         let rangeValue = event.target.parentNode.querySelector('.range-value');
-        if(rangeValue) 
+        if(rangeValue)
             rangeValue.textContent = value;
     }
-    
-    if(setting === 'Dashboard'){
-        changeDashboard(value);
-        return;
-    }
-    fetch(`/settings/update-setting/${setting}/${value}`, { method: 'POST'}).then(res => {
+    url = url.replace('#VALUE#', value);
+    fetch(url, { method: 'POST'}).then(res => {
         return res.json();
     }).then(json => {
         if(json.reload) {
@@ -215,4 +231,5 @@ function UpdateSetting(setting, event)
             }
         }
     });
+    return value;
 }

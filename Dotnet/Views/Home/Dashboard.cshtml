@@ -188,7 +188,9 @@
         
 @if (Model.Theme.Scripts?.Any() == true)
 {
-    <input type="hidden" id="theme-settings" value="@(settings.ThemeSettings == null ? "{}" : JsonSerializer.Serialize(settings.ThemeSettings))" />
+    var dict = settings.ThemeSettings?.ContainsKey(Model.Theme.Name) == true ? settings.ThemeSettings[Model.Theme.Name] : new Dictionary<string, object?>();
+    dict ??= new();
+    <input type="hidden" id="theme-settings" value="@JsonSerializer.Serialize(dict)" />
     foreach (var script in Model.Theme.Scripts)
     {
         <script src="/themes/@Model.Theme.DirectoryName/@script?version=@Globals.Version" defer></script>

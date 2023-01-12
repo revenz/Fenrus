@@ -12,7 +12,7 @@
                 <span class="label">@(setting.Label?.EmptyAsNull() ?? setting.Name)</span>
                 <span class="value">
                     @{
-                        string jsCode = $"UpdateSetting('Theme.{Theme.Name}.{setting.Name}', event)";
+                        string jsCode = $"UpdateThemeSetting('{Theme.Name}', '{setting.Name}', event)";
                         if (setting.Type == AppPropertyType.Bool)
                         {
                             <JavaScriptSwitch Value="GetBoolValue(setting)" Code="@jsCode"/>

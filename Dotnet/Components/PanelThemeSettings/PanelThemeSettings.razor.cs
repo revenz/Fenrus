@@ -28,14 +28,14 @@ public partial class PanelThemeSettings : ComponentBase
 
     private bool GetThemeValue(ThemeSetting setting, out object? value)
     {
-        string key = Theme.Name + "." + setting.Name;
-        if (Settings.ThemeSettings == null)
+        if (Settings.ThemeSettings == null || Settings.ThemeSettings.ContainsKey(Theme.Name) == false)
         {
             value = null;
             return false;
         }
 
-        return Settings.ThemeSettings.TryGetValue(key, out value);
+        var dict = Settings.ThemeSettings[Theme.Name];
+        return dict.TryGetValue(setting.Name, out value);
     }
     
     string GetStringValue(ThemeSetting setting)
