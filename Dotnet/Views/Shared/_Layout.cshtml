@@ -77,6 +77,7 @@
             @(await Html.RenderComponentAsync<PanelThemeSettings>(RenderMode.Static, new
             {
                 Theme = themeInstance,
+                Settings = userSettings,
                 IsGuest = isGuest
             }))
         </li>

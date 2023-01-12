@@ -174,6 +174,16 @@ function UpdateSetting(setting, event)
     }
     else if(event.target?.tagName === 'INPUT' && event.target.type === 'checkbox')
         value = event.target.checked;
+    else if(event.target?.tagName === 'INPUT' && event.target.type === 'range') {
+        value = event.target.value;
+        let min = parseInt(event.target.getAttribute('min'), 10);
+        let max = parseInt(event.target.getAttribute('max'), 10);
+        let percent = (value - min) / (max - min) * 100;
+        event.target.style = `background-size: ${percent}% 100%`;
+        let rangeValue = event.target.parentNode.querySelector('.range-value');
+        if(rangeValue) 
+            rangeValue.textContent = value;
+    }
     
     if(setting === 'Dashboard'){
         changeDashboard(value);

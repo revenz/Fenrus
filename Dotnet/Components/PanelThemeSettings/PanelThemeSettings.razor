@@ -11,24 +11,29 @@
             <div class="setting @setting.Type.ToString().ToLower()">
                 <span class="label">@(setting.Label?.EmptyAsNull() ?? setting.Name)</span>
                 <span class="value">
-                    @if(setting.Type == AppPropertyType.Bool)
-                    {
-                    <label for="<%= setting.Name %>" class="toggle-switchy">
-                        <input @change="update" type="checkbox" id="<%= setting.Name %>" x-model="model.<%= setting.Name %>"/>
-                        <span class="toggle">
-                            <span class="switch"></span>
-                        </span>
-                    </label>
-                    } else if(setting.Type == AppPropertyType.Select) {
-                        <select @change="update" x-model="model.<%= setting.Name %>">
-                            @foreach (var opt in setting.Options)
-                            {
-                                <option value="@opt.Value">@opt.Label</option>
-                            }
-                        </select>
-                    } else if(setting.Type == AppPropertyType.Integer) {
-                        <input @change="update" @input="updateSlider('slider-<%= setting.Name%>', <%= setting.Minimum || 0 %>, <%= setting.Maximum|| 100 %>)" id="slider-<%= setting.Name%>" type="range" min="<%= setting.Minimum || 0 %>" max="<%= setting.Maximum || 100 %>" x-model="model.<%= setting.Name %>"/>
-                        <span class="range-value" x-text="model.<%= setting.Name %>"></span>
+                    @{
+                        string jsCode = $"UpdateSetting('Theme.{Theme.Name}.{setting.Name}', event)";
+                        if (setting.Type == AppPropertyType.Bool)
+                        {
+                            <JavaScriptSwitch Value="GetBoolValue(setting)" Code="@jsCode"/>
+                        }
+                        else if (setting.Type == AppPropertyType.Select)
+                        {
+                            <JavaScriptSelect Value="@GetStringValue(setting)"
+                                              Options="@(setting.Options.Select(x => x.Value.ToString()).ToArray())"
+                                              Labels="@(setting.Options.Select(x => x.Label).ToArray())"
+                                              Code="@jsCode"/>
+                        }
+                        else if (setting.Type == AppPropertyType.Integer)
+                        {
+                            var value = GetIntValue(setting);
+                            int min = setting.Minimum ?? 0;
+                            int max = setting.Maximum ?? 100;
+                            var percent = (double)(value - min) / (max - min) * 100;
+                            var style = $"background-size: {percent}% 100%";
+                            <input onchange="@jsCode" id="slider-@setting.Name" style="@style" type="range" min="@min" max="@max" value="@value" />
+                            <span class="range-value">@value</span>
+                        }
                     }
                 </span>
             </div>
@@ -37,13 +42,16 @@
         {
             showSettings = true;
         }
-        <div class="setting">
-            <span class="label">Accent</span>
-            <span class="value color-picker">
-                <input type="text" click.stop="toggleAccentColorPicker" id="accent-color-picker"
-                       x-model="model.AccentColor" data-jscolor="accentSettings" />
-            </span>
-        </div>
+        @if (false)
+        {
+            <div class="setting">
+                <span class="label">Accent</span>
+                <span class="value color-picker">
+                    <input type="text" click.stop="toggleAccentColorPicker" id="accent-color-picker"
+                           x-model="model.AccentColor" data-jscolor="accentSettings"/>
+                </span>
+            </div>
+        }
     }
     <div class="setting logout @(showSettings ? "has-settings" : "no-settings")">
         <a href="/@(IsGuest ? "login" : "logout")" class="btn">@(IsGuest ? "Login" : "Logout")</a>

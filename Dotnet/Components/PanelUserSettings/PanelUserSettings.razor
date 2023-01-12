@@ -6,29 +6,10 @@
         <div class="setting">
             <span class="label">Dashboard</span>
             <span class="value">
-                @if (false)
-                {
-                    <select onchange="UpdateSetting('Dashboard', event)">
-                        @foreach (var dashboard in Dashboards)
-                        {
-                            if (dashboard.Uid == Dashboard.Uid)
-                            {
-                                <option selected value="@dashboard.Uid">@dashboard.Name</option>
-                            }
-                            else
-                            {
-                                <option value="@dashboard.Uid">@dashboard.Name</option>
-                            }
-                        }
-                    </select>
-                }
-                else
-                {
-                    <JavaScriptSelect Value="@Dashboard.Uid.ToString()" 
-                                      Options="@Dashboards.Select(x => x.Uid.ToString()).ToArray()"
-                                      Labels="@Dashboards.Select(x => x.Name).ToArray()"
-                                      Code="UpdateSetting('Dashboard', event)" />
-                }
+                <JavaScriptSelect Value="@Dashboard.Uid.ToString()" 
+                                  Options="@Dashboards.Select(x => x.Uid.ToString()).ToArray()"
+                                  Labels="@Dashboards.Select(x => x.Name).ToArray()"
+                                  Code="UpdateSetting('Dashboard', event)" />
             </span>
         </div>
     }
@@ -36,62 +17,19 @@
     <div class="setting">
         <span class="label">Theme</span>
         <span class="value">
-            @if (false)
-            {
-                <select onchange="UpdateSetting('Theme', event)">
-                    @foreach (var theme in Themes)
-                    {
-                        if (theme == Theme?.Name)
-                        {
-                            <option selected>@theme</option>
-                        }
-                        else
-                        {
-                            <option>@theme</option>
-                        }
-                    }
-                </select>
-            }
-            else
-            {
-                <JavaScriptSelect Value="@Theme?.Name" 
-                                  Options="@Themes.ToArray()"
-                                  Code="UpdateSetting('Theme', event)" />
-            }
+            <JavaScriptSelect Value="@Theme?.Name" 
+                              Options="@Themes.ToArray()"
+                              Code="UpdateSetting('Theme', event)" />
         </span>
     </div>
     
     <div class="setting">
         <span class="label">Link Target</span>
         <span class="value">
-            @if (false)
-            {
-                <select onchange="UpdateSetting('LinkTarget', event)">
-                    @foreach (var item in new[]
-                    {
-                        ("_self", "Open in this tab"),
-                        ("_blank", "Open in new tab"),
-                        ("home-portal", "Open in same tab")
-                    })
-                    {
-                        if (Settings.LinkTarget == item.Item1)
-                        {
-                            <option selected value="@item.Item1">@item.Item2</option>
-                        }
-                        else
-                        {
-                            <option value="@item.Item1">@item.Item2</option>
-                        }
-                    }
-                </select>
-            }
-            else
-            {
-                <JavaScriptSelect Value="@Settings.LinkTarget" 
-                                  Options="@(new [] { "_self", "_this", "home-portal"})"
-                                  Labels="@(new [] { "Open in this tab", "Open in new tab", "Open in same tab"})"
-                                  Code="UpdateSetting('LinkTarget', event)" />
-            }
+            <JavaScriptSelect Value="@Settings.LinkTarget" 
+                              Options="@(new [] { "_self", "_this", "home-portal"})"
+                              Labels="@(new [] { "Open in this tab", "Open in new tab", "Open in same tab"})"
+                              Code="UpdateSetting('LinkTarget', event)" />
         </span>
     </div>
     <div class="setting">

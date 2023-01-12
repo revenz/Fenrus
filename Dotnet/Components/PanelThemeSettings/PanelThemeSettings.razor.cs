@@ -15,8 +15,51 @@ public partial class PanelThemeSettings : ComponentBase
     public Theme Theme { get; set; }   
     
     /// <summary>
+    /// Gets or sets the user settings
+    /// </summary>
+    [Parameter]
+    public UserSettings Settings { get; set; }
+    
+    /// <summary>
     /// Gets or sets if the current user is a guest or logged in user
     /// </summary>
     [Parameter]
     public bool IsGuest { get; set; }
+
+    private bool GetThemeValue(ThemeSetting setting, out object? value)
+    {
+        string key = Theme.Name + "." + setting.Name;
+        if (Settings.ThemeSettings == null)
+        {
+            value = null;
+            return false;
+        }
+
+        return Settings.ThemeSettings.TryGetValue(key, out value);
+    }
+    
+    string GetStringValue(ThemeSetting setting)
+    {
+        if (GetThemeValue(setting, out object value) && value != null)
+            return value.ToString();
+        return setting.DefaultValue?.ToString() ?? string.Empty;
+    }
+
+    bool GetBoolValue(ThemeSetting setting)
+    {
+        if (GetThemeValue(setting, out object value) && value is bool b)
+            return b;
+        return setting.DefaultValue as bool? == true;
+    }
+
+    int GetIntValue(ThemeSetting setting)
+    {
+        if (GetThemeValue(setting, out object value) && value is int i)
+            return i;
+        if (setting.DefaultValue == null)
+            return 0;
+        if (int.TryParse(setting.DefaultValue.ToString(), out int i2))
+            return i2;
+        return 0;
+    }
 }

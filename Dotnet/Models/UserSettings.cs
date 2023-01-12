@@ -66,7 +66,7 @@ public class UserSettings: IModal
     /// <summary>
     /// Gets or sets the users theme settings
     /// </summary>
-    public object ThemeSettings { get; set; }
+    public Dictionary<string, object?> ThemeSettings { get; set; }
 
     private readonly List<DockerServer> _Docker = new ();
     private readonly List<Group> _Groups = new ();
