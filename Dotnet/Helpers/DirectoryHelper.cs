@@ -30,6 +30,13 @@ public class DirectoryHelper
         => Path.Combine(GetBaseDirectory(), "Data");
     
     /// <summary>
+    /// Gets the up time root directory
+    /// </summary>
+    /// <returns>the root up time directory</returns>
+    public static string GetUpTimeDirectory()
+        => Path.Combine(GetDataDirectory(), "UpTime");
+    
+    /// <summary>
     /// Gets the user root directory
     /// </summary>
     /// <returns>the root user directory</returns>

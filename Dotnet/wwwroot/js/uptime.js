@@ -24,6 +24,7 @@ class UpTime
         utcContainer.innerHTML = '<div id="up-time-chart"></div>';
         this.ctx = document.getElementById('up-time-chart');
         upTime.style.display = 'unset';
+        console.log('about to get uptime data');
         this.getData();
     }
 
