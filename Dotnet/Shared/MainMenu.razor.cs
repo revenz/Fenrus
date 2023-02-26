@@ -64,10 +64,13 @@ public partial class MainMenu
     }
 
     private bool IsActive(MenuItem item)
+        => IsActive(item.Link);
+
+    private bool IsActive(string itemLink)
     {
         string url = Router.Uri;
         url = url.Substring(Router.BaseUri.Length - 1);
-        return item.Link == url;
+        return itemLink == url;
     }
 }
 

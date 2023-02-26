@@ -24,13 +24,17 @@ public class SystemSettingsService
     {
         InitConfigDone = GetInitConfigDone();
         
-        var settings = Load();
-        if (settings != null)
+        SystemSettings settings;
+        if (InitConfigDone)
         {
-            Settings = settings;
-            return;
+            settings = Load();
+            if (settings != null)
+            {
+                Settings = settings;
+                return;
+            }
         }
-            
+
         // doesnt exist, or corrupt, lets create a new file
         settings = new();
         settings.AllowGuest = true;
@@ -73,6 +77,9 @@ public class SystemSettingsService
     /// <returns>if initial configuration is done</returns>
     private static bool GetInitConfigDone()
     {
+        if (File.Exists(DbHelper.DbFile) == false)
+            return false;
+        
         var settings = DbHelper.FirstOrDefault<SystemSettings>();
         if (settings == null)
             return false;

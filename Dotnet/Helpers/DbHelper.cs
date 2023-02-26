@@ -8,7 +8,7 @@ namespace Fenrus.Helpers;
 /// </summary>
 public class DbHelper
 {
-    private static readonly string DbFile = Path.Combine(DirectoryHelper.GetDataDirectory(), "Fenrus.db");
+    internal static readonly string DbFile = Path.Combine(DirectoryHelper.GetDataDirectory(), "Fenrus.db");
 
     /// <summary>
     /// Gets the database 

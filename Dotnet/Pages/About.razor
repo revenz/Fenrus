@@ -1,0 +1,20 @@
+@page "/settings/about"
+@inherits UserPage
+
+<PageTitle>Fenrus - About</PageTitle>
+
+<FenrusPage Title="General Settings" Icon="fa-solid fa-sliders">
+    <Buttons>
+        <button class="btn">Update Apps</button>
+        <button class="btn">Import Config</button>
+        <button class="btn">Export Config</button>
+    </Buttons>
+    <Body>
+    
+    <InputLabel Label="Author" Value="John Andrews" />
+    <InputLabel Label="Version" Value="@Globals.Version" />
+    <InputLabel Label="Website" Value="https://github.com/revenz/fenrus" Link="true" Target="_blank" />
+    
+    
+    </Body>
+</FenrusPage>

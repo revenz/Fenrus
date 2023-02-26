@@ -57,6 +57,9 @@ li a {
   display: block;
   margin-right: 0.5rem;
 }
+.icon .icon-fenrus {
+  margin-top: 0.35rem;
+}
 
 .version-info {
   padding-top: 1rem;

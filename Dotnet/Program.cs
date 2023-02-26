@@ -27,7 +27,13 @@ builder.Services.AddSignalR(hubOptions =>
 });
 builder.Services.AddTransient<Fenrus.Middleware.InitialConfigMiddleware>();
 
-if (Fenrus.Services.SystemSettingsService.UsingOAuth)
+var dataDir = DirectoryHelper.GetDataDirectory();
+if (Directory.Exists(dataDir) == false)
+    Directory.CreateDirectory(dataDir);
+
+if (
+    Fenrus.Services.SystemSettingsService.InitConfigDone == true &&
+    Fenrus.Services.SystemSettingsService.UsingOAuth)
 {
     var system = new Fenrus.Services.SystemSettingsService().Get();
     builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
