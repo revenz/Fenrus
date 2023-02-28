@@ -77,7 +77,7 @@ function fetchDashboard(uid,  backwards) {
         if(typeof(themeInstance) !== 'undefined')
             themeInstance.init();
 
-        let dashboardBackground = document.getElementById('hdn-dashboard-background')?.value || null;
+        let dashboardBackground = document.getElementById('hdn-dashboard-background')?.value || null;       
         document.body.style.backgroundImage = dashboardBackground ? `url('${dashboardBackground}')` : null;
         document.body.classList.remove('custom-background');
         document.body.classList.remove('no-custom-background');
@@ -171,6 +171,77 @@ function UpdateSetting(setting, event)
     UpdateSettingValue(`/settings/update-setting/${setting}/#VALUE#`, event);
 }
 
+function UpdateDashboardSetting(setting, event)
+{
+    let uid = document.querySelector('div.dashboard[x-uid]').getAttribute('x-uid');
+    if(!uid)
+        return;
+    
+    UpdateSettingValue(`/settings/dashboard/${uid}/update-setting/${setting}/#VALUE#`, event);
+}
+
+function ChangeBackgroundColor(event, color){
+    if(window.BackgroundInstance?.changeBackgroundColor)
+        window.BackgroundInstance?.changeBackgroundColor(color);
+    UpdateDashboardSetting('BackgroundColor', color);
+}
+function ChangeAccentColor(event, color){
+    document.body.style.setProperty('--accent', color);
+    UpdateDashboardSetting('AccentColor', color);
+    if(window.BackgroundInstance?.changeAccentColor)
+        window.BackgroundInstance?.changeAccentColor(color);
+}
+function ChangeBackground(event){
+    let background = event;
+    if(typeof(background) !== 'string') {
+        let index = background.target.selectedIndex;
+        background = background.target.options[index].value;
+    }
+    
+    let bkgSrc = '/backgrounds/' + background;
+
+    let backgroundScript = document.getElementById('background-script');
+    if(backgroundScript) {
+        // check if its the same background
+        if(backgroundScript.getAttribute('src') === bkgSrc)
+            return; // same background, nothing to do 
+        
+        backgroundScript.remove();
+    }
+    
+    if(window.BackgroundInstance?.dispose) {
+        window.BackgroundInstance.dispose();
+        delete Background;
+    }
+        
+    InitBackground(background);
+    UpdateDashboardSetting('Background', event);
+}
+
+var loadedBackgrounds = {};
+function InitBackground(background){
+    if(!background)
+        return;
+    
+    let bkgSrc = '/backgrounds/' + background;
+    
+    if(typeof(loadedBackgrounds[bkgSrc]) === 'function'){
+        window.BackgroundInstance = new loadedBackgrounds[bkgSrc]();
+        window.BackgroundInstance.init();
+        return;
+    }
+        
+    let backgroundScript = document.createElement('script');
+    backgroundScript.setAttribute('id', 'background-script');
+    backgroundScript.onload = () => {
+        loadedBackgrounds[bkgSrc] = window.BackgroundType;
+        window.BackgroundInstance = new window.BackgroundType();
+        window.BackgroundInstance.init();
+    };
+    backgroundScript.setAttribute('src', bkgSrc);
+    document.head.append(backgroundScript);
+}
+
 function UpdateThemeSetting(theme, setting, event)
 {
     let value = UpdateSettingValue(`/settings/theme/${theme}/update-setting/${setting}/#VALUE#`, event);
@@ -184,17 +255,17 @@ function UpdateThemeSetting(theme, setting, event)
 
 function UpdateSettingValue(url, event)
 {
-    if(event.target?.className === 'slider round')
+    if(event?.target?.className === 'slider round')
         return;
     let value = event;
-    if(event.target?.tagName === 'SELECT')
+    if(event?.target?.tagName === 'SELECT')
     {
         let index = event.target.selectedIndex;
         value = event.target.options[index].value;
     }
-    else if(event.target?.tagName === 'INPUT' && event.target.type === 'checkbox')
+    else if(event?.target?.tagName === 'INPUT' && event.target.type === 'checkbox')
         value = event.target.checked;
-    else if(event.target?.tagName === 'INPUT' && event.target.type === 'range') {
+    else if(event?.target?.tagName === 'INPUT' && event.target.type === 'range') {
         value = event.target.value;
         let min = parseInt(event.target.getAttribute('min'), 10);
         let max = parseInt(event.target.getAttribute('max'), 10);
@@ -204,7 +275,7 @@ function UpdateSettingValue(url, event)
         if(rangeValue)
             rangeValue.textContent = value;
     }
-    url = url.replace('#VALUE#', value);
+    url = url.replace('#VALUE#', encodeURIComponent(value));
     fetch(url, { method: 'POST'}).then(res => {
         return res.json();
     }).then(json => {
@@ -232,4 +303,29 @@ function UpdateSettingValue(url, event)
         }
     });
     return value;
+}
+
+function shadeColor(color, percent) {
+
+    let R = parseInt(color.substring(1,3),16);
+    let G = parseInt(color.substring(3,5),16);
+    let B = parseInt(color.substring(5,7),16);
+
+    R = parseInt(R * (100 + percent) / 100);
+    G = parseInt(G * (100 + percent) / 100);
+    B = parseInt(B * (100 + percent) / 100);
+
+    R = (R<255)?R:255;
+    G = (G<255)?G:255;
+    B = (B<255)?B:255;
+
+    R = Math.round(R)
+    G = Math.round(G)
+    B = Math.round(B)
+
+    let RR = ((R.toString(16).length===1)?"0"+R.toString(16):R.toString(16));
+    let GG = ((G.toString(16).length===1)?"0"+G.toString(16):G.toString(16));
+    let BB = ((B.toString(16).length===1)?"0"+B.toString(16):B.toString(16));
+
+    return "#"+RR+GG+BB;
 }

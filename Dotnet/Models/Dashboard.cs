@@ -25,6 +25,16 @@ public class Dashboard: IModal
     /// Gets or sets the background image for the dashboard
     /// </summary>
     public string BackgroundImage { get; set; }
+
+    /// <summary>
+    /// Gets or sets the background for the dashboard
+    /// </summary>
+    public string Background { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the background color for the dashboard
+    /// </summary>
+    public string BackgroundColor { get; set; }
     
     /// <summary>
     /// Gets or sets the theme used by the dashboard

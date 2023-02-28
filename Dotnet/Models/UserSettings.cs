@@ -54,6 +54,16 @@ public class UserSettings: IModal
     public string BackgroundImage { get; set; }
 
     /// <summary>
+    /// Gets or sets the default background for dashboards
+    /// </summary>
+    public string Background { get; set; }
+
+    /// <summary>
+    /// Gets or sets the default background color for dashboards
+    /// </summary>
+    public string BackgroundColor { get; set; }
+
+    /// <summary>
     /// Gets or sets if search should be shown
     /// </summary>
     public bool ShowSearch { get; set; }

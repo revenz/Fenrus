@@ -5,7 +5,7 @@ namespace Fenrus.Components;
 
 /// <summary>
 /// JavaScript version of Fenrus Select
-/// ALl events for value changes call javascript function
+/// All events for value changes call javascript function
 /// This is used on the main dashboard screen in the panel settings
 /// </summary>
 public partial class JavaScriptSelect

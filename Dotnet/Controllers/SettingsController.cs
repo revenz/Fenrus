@@ -110,6 +110,61 @@ public class SettingsController : BaseController
             settings.ShowStatusIndicators
         });
     }
+    /// <summary>
+    /// Updates a dashboard setting
+    /// </summary>
+    /// <param name="uid">The UID of the dashboard to update the setting for</param>
+    /// <param name="setting">The setting being updated</param>
+    /// <param name="value">the new value</param>
+    /// <returns>result from the update</returns>
+    [HttpPost("settings/dashboard/{uid}/update-setting/{setting}/{value}")]
+    public IActionResult UpdateDashboardSetting([FromRoute] Guid uid, [FromRoute] string setting, [FromRoute] string value)
+    {
+        if (uid == Guid.Empty)
+        {
+            Response.StatusCode = 500;
+            return Json(new
+            {
+                Error = "Invalid Dashboard"
+            });
+        }
+
+        if (string.IsNullOrWhiteSpace(setting))
+        {
+            Response.StatusCode = 500;
+            return Json(new
+            {
+                Error = "Invalid setting"
+            });
+        }
+        var settings = GetUserSettings();
+        var dashboard = settings.Dashboards?.FirstOrDefault(x => x.Uid == uid);
+        switch (setting)
+        {
+            case nameof(dashboard.AccentColor):
+                dashboard.AccentColor = value;
+                break;
+            case nameof(dashboard.BackgroundColor):
+                dashboard.BackgroundColor = value;
+                break;
+            case nameof(dashboard.Background):
+                dashboard.Background = value;
+                break;
+            case nameof(dashboard.BackgroundImage):
+                dashboard.BackgroundImage = value;
+                break;
+            case nameof(dashboard.Theme):
+                dashboard.Theme = value;
+                break;
+            default:
+                return NotFound();
+        }
+        settings.Save();
+        
+        return Json(new
+        {
+        });
+    }
 
     /// <summary>
     /// Updates a theme setting
@@ -119,7 +174,7 @@ public class SettingsController : BaseController
     /// <param name="value">the new value</param>
     /// <returns>result from the update</returns>
     [HttpPost("settings/theme/{theme}/update-setting/{setting}/{value}")]
-    public IActionResult UpdateSetting([FromRoute] string theme, [FromRoute] string setting, [FromRoute] string value)
+    public IActionResult UpdateThemeSetting([FromRoute] string theme, [FromRoute] string setting, [FromRoute] string value)
     {
         if (string.IsNullOrWhiteSpace(theme))
         {

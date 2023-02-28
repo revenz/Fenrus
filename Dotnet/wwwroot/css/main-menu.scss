@@ -78,6 +78,8 @@
                         min-width: 10rem;
                         text-align: right;
                         margin-right:1rem;
+                        margin-top: 0.25rem;
+                        margin-bottom:auto;
                     }
                     + .setting {
                         margin-top:1rem;
@@ -97,7 +99,7 @@
                     }
                     .value {
                         flex-grow:1;
-                        min-width:10rem;
+                        min-width:18rem;
                     }                    
                     select {
                         width:100%;

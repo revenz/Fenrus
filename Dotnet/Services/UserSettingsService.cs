@@ -48,6 +48,20 @@ public class UserSettingsService
             //self.Dashboards[0].BackgroundImage = '';
             //settings.BackgroundImage = guest.Dashboards.First().BackgroundImage;
         }
+        else
+        {
+            // create basic dasbhoard
+            settings.Dashboards.Add(new ()
+            {
+                Uid = Guid.NewGuid(),
+                AccentColor = guest.AccentColor?.EmptyAsNull() ?? "#FF0090",
+                Background = "#006600",
+                Enabled = true,
+                Name = "Default",
+                Theme = "Default",
+                Groups = new ()
+            });
+        }
         settings.Theme = "Default";
         settings.AccentColor = guest.AccentColor?.EmptyAsNull() ?? "#FF0090";
 

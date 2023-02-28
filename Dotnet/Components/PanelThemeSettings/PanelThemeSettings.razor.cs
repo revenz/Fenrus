@@ -12,21 +12,27 @@ public partial class PanelThemeSettings : ComponentBase
     /// Gets or sets the theme the user is using
     /// </summary>
     [Parameter]
-    public Theme Theme { get; set; }   
-    
+    public Theme Theme { get; set; }
+
     /// <summary>
     /// Gets or sets the user settings
     /// </summary>
     [Parameter]
     public UserSettings Settings { get; set; }
-    
+
     /// <summary>
     /// Gets or sets if the current user is a guest or logged in user
     /// </summary>
     [Parameter]
     public bool IsGuest { get; set; }
 
-    private bool GetThemeValue(ThemeSetting setting, out object? value)
+    /// <summary>
+    /// Gets or sets the page helper
+    /// </summary>
+    [Parameter]
+    public PageHelper PageHelper { get; set; }
+
+private bool GetThemeValue(ThemeSetting setting, out object? value)
     {
         if (Settings.ThemeSettings == null || Settings.ThemeSettings.ContainsKey(Theme.Name) == false)
         {

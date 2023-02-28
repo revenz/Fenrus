@@ -33,6 +33,10 @@ public partial class PanelUserSettings : ComponentBase
     /// </summary>
     [Parameter] public Theme Theme { get; set; }
 
+    /// <summary>
+    /// Gets or sets the page helper
+    /// </summary>
+    [Parameter] public PageHelper PageHelper { get; set; }
 
     private void DashboardChange(ChangeEventArgs e)
     {

@@ -17,6 +17,7 @@
     ViewBag.AccentColor = Model.Dashboard.AccentColor?.EmptyAsNull() ?? 
                           settings.AccentColor?.EmptyAsNull() ?? 
                           "#FF0090";
+    ViewBag.BackgroundCOlor = Model.Dashboard.BackgroundColor?.EmptyAsNull() ?? "#009099";
 }
 
 @if (settings.SearchEngines?.Any() == true)
@@ -56,7 +57,7 @@
     @(await Html.RenderComponentAsync<DashboardComponent>(RenderMode.Static, new
     {
         Model = Model.Dashboard,
-        Groups = Model.Groups,
+        Model.Groups,
         Settings = settings,
         PageHelper = pageHelper
     }))
@@ -195,4 +196,13 @@
     {
         <script src="/themes/@Model.Theme.DirectoryName/@script?version=@Globals.Version" defer></script>
     }
+}
+
+@if (string.IsNullOrEmpty(Model?.Dashboard?.Background) == false)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            InitBackground('@Model.Dashboard.Background');
+        });
+    </script>
 }

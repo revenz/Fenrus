@@ -72,6 +72,23 @@ public class HomeController : BaseController
     public IActionResult Login()
         => LoginPage(null);
 
+    
+    /// <summary>
+    /// Logs the user out of the system
+    /// </summary>
+    /// <returns>the logout response</returns>
+    [HttpGet("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync();
+        return Redirect("/login");
+    }
+
+    /// <summary>
+    /// Gets the login page
+    /// </summary>
+    /// <param name="error">[Optional] error to show on the login page</param>
+    /// <returns>the login page response object</returns>
     private IActionResult LoginPage(string error)
     {
         var settings = GetSystemSettings();

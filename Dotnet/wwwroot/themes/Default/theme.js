@@ -73,7 +73,6 @@ class DefaultTheme
         if(!eleDashboard)
             return;            
         let className = eleDashboard.className || '';
-        console.log(eleDashboard.className );
 
         if(className.indexOf('dashboard') < 0)
             className += ' dashboard';
@@ -82,12 +81,7 @@ class DefaultTheme
         className += this.settings.Horizontal ? ' horizontal' : ' vertical';
         className = className.replace(/  +/g, ' ');
         eleDashboard.className = className;
-    
-        let animateBackground = this.settings.AnimatedBackground !== false;
-        document.body.classList.remove('animate-background');
-        document.body.classList.remove('no-animate-background');
-        document.body.classList.add((animateBackground ? '' : 'no-') + 'animate-background');        
-
+        
         this.shrinkGroups();            
 
         document.body.classList.remove('horizontal');
@@ -112,8 +106,8 @@ class DefaultTheme
         let classes = [];
         let bodyClasses = [];
         classes.push(args?.Placement || 'bottom-left');
-        let animateBackground = args?.AnimatedBackground !== false;
-        bodyClasses.push((animateBackground ? '' : 'no-') + 'animate-background');
+        // let animateBackground = args?.AnimatedBackground !== false;
+        // bodyClasses.push((animateBackground ? '' : 'no-') + 'animate-background');
         
         if(args?.Horizontal){
             classes.push('horizontal');

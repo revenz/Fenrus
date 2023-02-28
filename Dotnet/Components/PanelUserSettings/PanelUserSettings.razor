@@ -33,6 +33,27 @@
         </span>
     </div>
     <div class="setting">
+        <span class="label">Accent Color</span>
+        <span class="value">
+            <JavaScriptColorPicker Value="@Dashboard.AccentColor" Code="ChangeAccentColor(event, color)" PageHelper=@PageHelper />
+        </span>
+    </div>
+    <div class="setting">
+        <span class="label">Background</span>
+        <span class="value">
+            <JavaScriptSelect Value="@Dashboard.Background" 
+                              Options="@Helpers.BackgroundHelper.GetBackgroundValues()"
+                              Labels="@Helpers.BackgroundHelper.GetBackgroundNames()"
+                              Code="ChangeBackground(event)" />
+        </span>
+    </div>
+    <div class="setting">
+        <span class="label">Background Color</span>
+        <span class="value">
+            <JavaScriptColorPicker Value="@Dashboard.BackgroundColor" Code="ChangeBackgroundColor(event, color)" PageHelper=@PageHelper />
+        </span>
+    </div>
+    <div class="setting">
         <span class="label">Group Titles</span>
         <span class="value">
             <JavaScriptSwitch Value="Settings.ShowGroupTitles" Code="UpdateSetting('ShowGroupTitles', event)" />

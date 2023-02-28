@@ -15,6 +15,7 @@
     var dashboards = ViewBag.Dashboards;
     var dashboard = ViewBag.Dashboard;
     var themes = ViewBag.Themes;
+    var pageHelper = new PageHelper();
 }
 <!DOCTYPE html>
 <html>
@@ -40,6 +41,7 @@
     
     @{
         var accentColor = ViewBag.AccentColor ?? "#FF0090";
+        var bkgColor = ViewBag.BackgroundColor ?? "#009099";
         if (Regex.IsMatch(accentColor, "^#[a-fA-F0-9]{6}"))
         {
             var r = accentColor.Substring(1, 2);
@@ -48,10 +50,20 @@
             var accentRgb = int.Parse(r, System.Globalization.NumberStyles.HexNumber) + "," +
                             int.Parse(g, System.Globalization.NumberStyles.HexNumber) + "," +
                             int.Parse(b, System.Globalization.NumberStyles.HexNumber);
+            
+            var bgR = bkgColor.Substring(1, 2);
+            var bgG = bkgColor.Substring(3, 2);
+            var bgB = bkgColor.Substring(5, 2);
+            var bkgRgb = int.Parse(bgR, System.Globalization.NumberStyles.HexNumber) + "," +
+                            int.Parse(bgG, System.Globalization.NumberStyles.HexNumber) + "," +
+                            int.Parse(bgB, System.Globalization.NumberStyles.HexNumber);
             <style>
                   body {
                       --accent-rgb:@accentRgb;
                       --accent:@accentColor;
+                      --background:@bkgColor;
+                      --background-rgb:@bkgRgb;
+                      background: var(--background);
                   }
             </style>
         }
@@ -69,7 +81,8 @@
                 Themes = themes,
                 Settings = userSettings,
                 Dashboards = dashboards,
-                Dashboard = dashboard
+                Dashboard = dashboard,
+                PageHelper = pageHelper
             }))
         </li>
         <li>
@@ -78,7 +91,8 @@
             {
                 Theme = themeInstance,
                 Settings = userSettings,
-                IsGuest = isGuest
+                IsGuest = isGuest,
+                PageHelper = pageHelper
             }))
         </li>
     </ul>
@@ -87,7 +101,16 @@
         @RenderBody()
     </div>
 
-    <script src="/js/_fenrus.js?version=@Globals.Version" defer></script>
+    <script src="/js/_fenrus.js?version=@Globals.Version"></script>
 
+    @if (pageHelper.ScriptBlocks.Any() == true)
+    {
+        foreach (var sb in pageHelper.ScriptBlocks)
+        {
+            <script>
+            @Html.Raw(sb)
+            </script>
+        }
+    }
 </body>
 </html>

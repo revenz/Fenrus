@@ -75,6 +75,8 @@
   min-width: 10rem;
   text-align: right;
   margin-right: 1rem;
+  margin-top: 0.25rem;
+  margin-bottom: auto;
 }
 .main-menu li:hover .panel .setting + .setting, .main-menu li.force-hover .panel .setting + .setting {
   margin-top: 1rem;
@@ -94,7 +96,7 @@
 }
 .main-menu li:hover .panel .setting .value, .main-menu li.force-hover .panel .setting .value {
   flex-grow: 1;
-  min-width: 10rem;
+  min-width: 18rem;
 }
 .main-menu li:hover .panel .setting select, .main-menu li.force-hover .panel .setting select {
   width: 100%;
