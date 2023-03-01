@@ -8,6 +8,7 @@
     "Yes": "Yes",
     "No": "No",
     "Ok": "OK",
+    "Search": "Search",
     "Dashboard": "Dashboard",
     "Theme": "Theme",
     "AccentColor": "Accent Color",
@@ -16,6 +17,7 @@
     "BackgroundColor": "Background Color",
     "GroupTitles": "Group Titles",
     "StatusIndicators": "Status Indicators",
+    "ShowSearch": "Show Search",
     "Default": "Default",
     "ChooseImage":"Choose Image...", 
     "CurrentImage": "Current Image"

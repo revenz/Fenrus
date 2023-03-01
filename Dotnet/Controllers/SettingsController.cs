@@ -115,6 +115,18 @@ public class SettingsController : BaseController
                 dashboard.Theme = value;
                 reload = true;
                 break;
+            case nameof(dashboard.LinkTarget):
+                dashboard.LinkTarget = value;
+                break;
+            case nameof(dashboard.ShowSearch):
+                dashboard.ShowSearch = bool.Parse(value);
+                break;
+            case nameof(dashboard.ShowStatusIndicators):
+                dashboard.ShowStatusIndicators = bool.Parse(value);
+                break;
+            case nameof(dashboard.ShowGroupTitles):
+                dashboard.ShowGroupTitles = bool.Parse(value);
+                break;
             default:
                 return NotFound();
         }

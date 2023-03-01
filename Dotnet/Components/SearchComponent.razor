@@ -1,9 +1,9 @@
-<div class="search" x-data="SearchSettings">
+<div class="search" id="search-container">
     <div class="search-inner">
-        <img :src="(model.SearchEngine?.Icon || model.DefaultEngine?.Icon) + '?version=<%= version %>'">
-        <input id="search-text" @input="onInput" @@keydown.enter="search" x-model="model.SearchText" autofocus autocomplete="off" />
-        <button @click="search">Search</button>
+        <img id="search-icon" src="@Default.Icon" />
+        <input id="search-text" onkeydown="SearchKeyDown(event)" autofocus autocomplete="off" />
+        <button click="SearchPerform()">@Translater.Instant("Labels.Search")</button>
     </div>
 </div>
 <style id="styleFilter"></style>
-<input type="hidden" id="searchEngines" value="@JsonSerializer.Serialize(Settings.SearchEngines)" />
+<input type="hidden" id="search-engines" value="@JsonSerializer.Serialize(SearchEngines)" />

@@ -50,15 +50,20 @@ public class UserSettingsService
         }
         else
         {
-            // create basic dasbhoard
+            // create basic dashboard
             settings.Dashboards.Add(new ()
             {
                 Uid = Guid.NewGuid(),
                 AccentColor = guest.Dashboards?.FirstOrDefault()?.AccentColor?.EmptyAsNull() ?? "#FF0090",
-                Background = "#006600",
+                Background = "default.js",
                 Enabled = true,
                 Name = "Default",
                 Theme = "Default",
+                LinkTarget = "_self",
+                ShowGroupTitles = true,
+                ShowSearch = true,
+                ShowStatusIndicators = true,
+                BackgroundColor = "#000000",
                 Groups = new ()
             });
         }

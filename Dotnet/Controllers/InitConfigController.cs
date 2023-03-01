@@ -11,12 +11,19 @@ namespace Fenrus.Controllers;
 [Route("init-config")]
 public class InitConfigController : Controller
 {
+    /// <summary>
+    /// Gets or sets the application lifetime instance used to restart the application
+    /// </summary>
     private IApplicationLifetime ApplicationLifetime { get; set; }
+    
+    /// <summary>
+    /// Constructs an instance of the init config controller
+    /// </summary>
+    /// <param name="appLifetime">the application lifetime used to restart the application</param>
     public InitConfigController(IApplicationLifetime appLifetime)
     {
         ApplicationLifetime = appLifetime;
     }
-
     
     /// <summary>
     /// Gets the initial configuration page
@@ -92,6 +99,8 @@ public class InitConfigController : Controller
             settings.OAuthStrategyIssuerBaseUrl = model.OAuthStrategyIssuerBaseUrl;
         }
 
+        SaveInitialData();
+        
         if (model.Strategy == AuthStrategy.LocalStrategy)
         {
             var userService = new UserService();
@@ -113,7 +122,49 @@ public class InitConfigController : Controller
             return View("Restarting");
         }
     }
-    
+
+
+    /// <summary>
+    /// Saves the initial data to the database
+    /// </summary>
+    private void SaveInitialData()
+    {
+        AddSearchEngine("DuckDuckGo", "duckduckgo.jpg", "ddg", "https://duckduckgo.com/?q=%s", isDefault: true);
+        AddSearchEngine("Google", "google.png", "g", "https://www.google.com/search?q=%s");
+        AddSearchEngine("YouTube", "youtube.png", "yt", "https://www.youtube.com/results?search_query=%s");
+        AddSearchEngine("Ecosia", "ecosia.jpg", "ec", "https://www.ecosia.org/search?method=index&q=%s");
+    }
+
+    /// <summary>
+    /// Adds a search engine to the system if it doesn't already exist
+    /// </summary>
+    /// <param name="name">the name of the search engine</param>
+    /// <param name="iconFile">the icon file on disk</param>
+    /// <param name="shortcut">the shortcut to use for the search engine</param>
+    /// <param name="url">the URL used for the search engine</param>
+    /// <param name="isDefault">sets this search engine as the default</param>
+    private void AddSearchEngine(string name, string iconFile, string shortcut, string url, bool isDefault = false)
+    {
+        var existing = DbHelper.GetByName<Models.SearchEngine>(name);
+        if (existing != null)
+            return; // already exists
+        string fullFile = "wwwroot/search-engines/" + iconFile;
+        if (System.IO.File.Exists(fullFile) == false)
+            return; // cant add it
+        var data = System.IO.File.ReadAllBytes(fullFile);
+        string extension = iconFile.Substring(iconFile.LastIndexOf(".", StringComparison.Ordinal) + 1);
+        var imageUid = ImageHelper.SaveImage(data, extension);
+        DbHelper.Insert(new Models.SearchEngine()
+        {
+            Name = name,
+            Icon = imageUid,
+            Enabled = true,
+            IsDefault = isDefault,
+            IsSystem = true,
+            Shortcut = shortcut,
+            Url = url
+        });
+    }
 }
 
 /// <summary>

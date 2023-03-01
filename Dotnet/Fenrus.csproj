@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Folder Include="Apps\Basic" />
-    <Folder Include="Data" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +25,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.12" />
     <PackageReference Include="NLog" Version="5.1.0" />
     <PackageReference Include="SSH.NET" Version="2020.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\search-engines\youtube.png" />
   </ItemGroup>
 
 </Project>

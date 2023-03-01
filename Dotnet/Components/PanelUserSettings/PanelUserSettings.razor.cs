@@ -19,6 +19,11 @@ public partial class PanelUserSettings : ComponentBase
     [Parameter] public UserSettings Settings { get; set; }
     
     /// <summary>
+    /// Gets or sets the system search engines
+    /// </summary>
+    [Parameter] public List<Models.SearchEngine> SystemSearchEngines { get; set; }
+    
+    /// <summary>
     /// Gets or sets the current dashboard
     /// </summary>
     [Parameter] public Dashboard Dashboard { get; set; }

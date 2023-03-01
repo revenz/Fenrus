@@ -47,6 +47,7 @@ public class HomeController : BaseController
         ViewBag.Dashboards = settings.Dashboards;
         ViewBag.Themes = themes;
         ViewBag.Theme = theme;
+        ViewBag.SystemSearchEngines = DbHelper.GetAll<Models.SearchEngine>();
         ViewBag.Accent = dashboard.AccentColor?.EmptyAsNull() ?? string.Empty;
         return View("Dashboard", model);
     }

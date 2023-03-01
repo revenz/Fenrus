@@ -22,9 +22,9 @@ To switch to an non-default search engine on the home screen type in the search 
     protected override async Task PostGotUser()
     {
         if (IsSystem)
-            Items = DbHelper.GetAll<Models.SearchEngine>();
+            Items = DbHelper.GetAll<Models.SearchEngine>().OrderBy(x => x.Name).ToList();
         else
-            Items = Settings.SearchEngines;
+            Items = Settings.SearchEngines.OrderBy(x => x.Name).ToList();
     }
 
     protected override bool DoDelete(Models.SearchEngine item)

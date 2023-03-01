@@ -68,8 +68,9 @@ public abstract class UserPage : ComponentBase
         }
 
         SystemSettings = new Services.SystemSettingsService().Get();
-        
-        // App.UpdateAccentColor(Settings.AccentColor);
+
+        var accent = Settings.Dashboards?.FirstOrDefault(x => x.Enabled)?.AccentColor ?? "#FF0090";
+        App.UpdateAccentColor(accent);
 
         await PostGotUser();
     }

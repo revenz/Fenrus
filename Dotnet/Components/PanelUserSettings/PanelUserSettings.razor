@@ -50,12 +50,21 @@
             <JavaScriptSelect Value="@Dashboard.LinkTarget" 
                               Options="@(new [] { "_self", "_this", "home-portal"})"
                               Labels="@(new [] { Translater.Instant("Enums.LinkTarget.OpenInThisTab"), 
-                                      Translater.Instant("Enums.LinkTarget.OpenInNewTab"),
-                                      Translater.Instant("Enums.LinkTarget.OpenInSameTab")
+                                          Translater.Instant("Enums.LinkTarget.OpenInNewTab"),
+                                          Translater.Instant("Enums.LinkTarget.OpenInSameTab")
                                       })"
                               Code="UpdateDashboardSetting('LinkTarget', event)" />
         </span>
     </div>
+    @if (Settings.SearchEngines?.Any() == true || SystemSearchEngines?.Any() == true)
+    {
+        <div class="setting">
+            <span class="label">@Translater.Instant("Labels.ShowSearch")</span>
+            <span class="value">
+                <JavaScriptSwitch Value="Dashboard.ShowSearch" Code="UpdateDashboardSetting('ShowSearch', event)"/>
+            </span>
+        </div>
+    }
     <div class="setting">
         <span class="label">@Translater.Instant("Labels.GroupTitles")</span>
         <span class="value">
