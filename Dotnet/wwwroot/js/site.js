@@ -173,11 +173,16 @@ function UpdateSetting(setting, event)
 
 function UpdateDashboardSetting(setting, event)
 {
-    let uid = document.querySelector('div.dashboard[x-uid]').getAttribute('x-uid');
-    if(!uid)
-        return;
-    
-    UpdateSettingValue(`/settings/dashboard/${uid}/update-setting/${setting}/#VALUE#`, event);
+    return new Promise(async (resolve, reject) =>
+    {
+        let uid = document.querySelector('div.dashboard[x-uid]').getAttribute('x-uid');
+        if (!uid) {
+            reject();
+            return;
+        }
+        let result = await UpdateSettingValue(`/settings/dashboard/${uid}/update-setting/${setting}/${event.extension || '#VALUE#'}`, event);
+        resolve(result);
+    });
 }
 
 function ChangeBackgroundColor(event, color){
@@ -193,6 +198,11 @@ function ChangeAccentColor(event, color){
 }
 function ChangeBackground(event){
     let background = event;
+    if(background === 'image-picker'){
+        // special case, open an image picker 
+        BackgroundImagePicker();
+        return;
+    }
     if(typeof(background) !== 'string') {
         let index = background.target.selectedIndex;
         background = background.target.options[index].value;
@@ -201,7 +211,7 @@ function ChangeBackground(event){
     let bkgSrc = '/backgrounds/' + background;
 
     let backgroundScript = document.getElementById('background-script');
-    if(backgroundScript) {
+    if(background !== 'image.js' && backgroundScript) {
         // check if its the same background
         if(backgroundScript.getAttribute('src') === bkgSrc)
             return; // same background, nothing to do 
@@ -221,8 +231,7 @@ function ChangeBackground(event){
 var loadedBackgrounds = {};
 function InitBackground(background){
     if(!background)
-        return;
-    
+        return;    
     let bkgSrc = '/backgrounds/' + background;
     
     if(typeof(loadedBackgrounds[bkgSrc]) === 'function'){
@@ -242,9 +251,62 @@ function InitBackground(background){
     document.head.append(backgroundScript);
 }
 
-function UpdateThemeSetting(theme, setting, event)
+function BackgroundImagePicker(){
+    let setValue = (value) =>{
+        let target = document.querySelector('#DashboardBackgroundSelect ul');
+        if(value === 'CurrentImage') {
+            let opt = target.querySelector('.opt-CurrentImage');
+            if (!opt) {
+                // option doesn't exist, they didnt have a current image, we have to add it
+                opt = document.createElement('li');
+                opt.setAttribute('data-value', 'image');
+                opt.setAttribute('class', 'opt-CurrentImage');
+                opt.innerText = 'Current Image';
+                opt.addEventListener('click', (event) => {
+                    fenrusSelectOptionClick(event);
+                    ChangeBackground('current');
+                });
+                target.insertBefore(opt, target.firstChild);
+            }
+            opt.click();
+        }
+        else {
+            target.querySelector('.opt-' + value)?.click();
+        }
+    } 
+    
+    const id = 'background-image-picker';
+    let ele = document.getElementById(id);
+    if(ele)
+        ele.remove();
+    ele = document.createElement('input');
+    ele.setAttribute('id', id);
+    ele.setAttribute('type', 'file');
+    ele.setAttribute('accept', 'image/*');
+    ele.style.display = 'hidden';
+    document.body.append(ele);
+    ele.addEventListener('change', (event) => {
+        let file = event.target.files[0];
+        if (!file) {
+            setValue('default');
+            return;
+        }
+        let extension = file.name.substring(file.name.lastIndexOf('.') + 1);;
+        let reader = new FileReader();
+        reader.onload = async (e) => {
+            ele.remove();            
+            let contents = e.target.result;            
+            let result = await UpdateDashboardSetting('BackgroundImage', { extension: extension, data: contents });
+            setValue('CurrentImage');        
+        };
+        reader.readAsArrayBuffer(file);
+    }, false);
+    ele.click();
+}
+
+async function UpdateThemeSetting(theme, setting, event)
 {
-    let value = UpdateSettingValue(`/settings/theme/${theme}/update-setting/${setting}/#VALUE#`, event);
+    let value = (await UpdateSettingValue(`/settings/theme/${theme}/update-setting/${setting}/#VALUE#`, event))?.value;
     if(value === undefined)
         return;
 
@@ -255,54 +317,59 @@ function UpdateThemeSetting(theme, setting, event)
 
 function UpdateSettingValue(url, event)
 {
-    if(event?.target?.className === 'slider round')
-        return;
-    let value = event;
-    if(event?.target?.tagName === 'SELECT')
-    {
-        let index = event.target.selectedIndex;
-        value = event.target.options[index].value;
-    }
-    else if(event?.target?.tagName === 'INPUT' && event.target.type === 'checkbox')
-        value = event.target.checked;
-    else if(event?.target?.tagName === 'INPUT' && event.target.type === 'range') {
-        value = event.target.value;
-        let min = parseInt(event.target.getAttribute('min'), 10);
-        let max = parseInt(event.target.getAttribute('max'), 10);
-        let percent = (value - min) / (max - min) * 100;
-        event.target.style = `background-size: ${percent}% 100%`;
-        let rangeValue = event.target.parentNode.querySelector('.range-value');
-        if(rangeValue)
-            rangeValue.textContent = value;
-    }
-    url = url.replace('#VALUE#', encodeURIComponent(value));
-    fetch(url, { method: 'POST'}).then(res => {
-        return res.json();
-    }).then(json => {
-        if(json.reload) {
-            window.location.reload();
+    return new Promise((resolve, reject) => {
+       
+        if(event?.target?.className === 'slider round') {
+            reject();
             return;
         }
-
-        let eleDashboard = document.querySelector('.dashboard');
-        eleDashboard.classList.remove('hide-group-titles');
-        if(json.showGroupTitles === false)
-            eleDashboard.classList.add('hide-group-titles');
-
-        eleDashboard.classList.remove('status-indicators');
-        if(json.showStatusIndicators === true)
-            eleDashboard.classList.add('status-indicators');
-
-        if(json.linkTarget){
-            // need to update all the targets
-            for(let a of eleDashboard.querySelectorAll('a'))
-            {
-                if(a.getAttribute('href').length > 1)
-                    a.setAttribute('target', json.linkTarget);
-            }
+        let value = event;
+        if(event?.target?.tagName === 'SELECT')
+        {
+            let index = event.target.selectedIndex;
+            value = event.target.options[index].value;
         }
+        else if(event?.target?.tagName === 'INPUT' && event.target.type === 'checkbox')
+            value = event.target.checked;
+        else if(event?.target?.tagName === 'INPUT' && event.target.type === 'range') {
+            value = event.target.value;
+            let min = parseInt(event.target.getAttribute('min'), 10);
+            let max = parseInt(event.target.getAttribute('max'), 10);
+            let percent = (value - min) / (max - min) * 100;
+            event.target.style = `background-size: ${percent}% 100%`;
+            let rangeValue = event.target.parentNode.querySelector('.range-value');
+            if(rangeValue)
+                rangeValue.textContent = value;
+        }
+        url = url.replace('#VALUE#', encodeURIComponent(value));
+        fetch(url, { method: 'POST', body: event?.data}).then(res => {
+            return res.json();
+        }).then(json => {
+            if(json.reload) {
+                window.location.reload();
+                return;
+            }
+    
+            let eleDashboard = document.querySelector('.dashboard');
+            eleDashboard.classList.remove('hide-group-titles');
+            if(json.showGroupTitles === false)
+                eleDashboard.classList.add('hide-group-titles');
+    
+            eleDashboard.classList.remove('status-indicators');
+            if(json.showStatusIndicators === true)
+                eleDashboard.classList.add('status-indicators');
+    
+            if(json.linkTarget){
+                // need to update all the targets
+                for(let a of eleDashboard.querySelectorAll('a'))
+                {
+                    if(a.getAttribute('href').length > 1)
+                        a.setAttribute('target', json.linkTarget);
+                }
+            }
+            resolve({ result: json, value: value});
+        });
     });
-    return value;
 }
 
 function shadeColor(color, percent) {

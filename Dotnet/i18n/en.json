@@ -1,0 +1,30 @@
+{
+  "Language": "English",
+  "Labels": {
+    "VersionNumber": "Version: {version}",
+    "Version":"Version",
+    "Cancel": "Cancel",
+    "Close": "Close",
+    "Yes": "Yes",
+    "No": "No",
+    "Ok": "OK",
+    "Dashboard": "Dashboard",
+    "Theme": "Theme",
+    "AccentColor": "Accent Color",
+    "LinkTarget": "Link Target",
+    "Background": "Background",
+    "BackgroundColor": "Background Color",
+    "GroupTitles": "Group Titles",
+    "StatusIndicators": "Status Indicators",
+    "Default": "Default",
+    "ChooseImage":"Choose Image...", 
+    "CurrentImage": "Current Image"
+  },
+  "Enums": {
+    "LinkTarget": {
+      "OpenInThisTab":"Open in this tab", 
+      "OpenInNewTab": "Open in new tab",
+      "OpenInSameTab": "Open in same tab"
+    }
+  }
+}

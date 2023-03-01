@@ -1,9 +1,28 @@
-class VantaClouds2Background
+class VantaNetBackground
 {
-    type = 'clouds2';
-    customSettings = {};
+    type = 'net';
+    customSettings = {
+        backgroundColor: getComputedStyle(document.body).getPropertyValue('--background'),
+        color: getComputedStyle(document.body).getPropertyValue('--accent')
+    };
     effect;
 
+    changeBackgroundColor(color){
+        this.backgroundColor = color;
+        if(this.effect) {
+            this.effect.setOptions({
+                backgroundColor: color
+            });
+        }
+    }
+    changeAccentColor(color){
+        this.effect?.destroy();
+        this.customSettings = {
+            backgroundColor: getComputedStyle(document.body).getPropertyValue('--background'),
+            color: getComputedStyle(document.body).getPropertyValue('--accent')
+        };
+        this.initEffect();
+    }
     dispose(){
         this.effect?.destroy();
         this.removeById('vanta_' + this.type);
@@ -26,6 +45,10 @@ class VantaClouds2Background
             bkg.setAttribute('id', 'vanta-bkg');
             document.body.insertBefore(bkg, document.body.firstChild);
         }
+        this.initEffect();
+    }
+
+    initEffect(){
 
         let settings = {
             el: '#vanta-bkg',
@@ -63,4 +86,4 @@ class VantaClouds2Background
         });
     }
 }
-window.BackgroundType = VantaClouds2Background;
+window.BackgroundType = VantaNetBackground;

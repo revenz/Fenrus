@@ -19,12 +19,13 @@ class VantaBirdsBackground
         }
     }
     changeAccentColor(color){
-        if(this.effect) {
-            this.effect.setOptions({
-                color1: this.getAccentColor(),
-                color2: this.getAccentColorDarken()
-            });
-        }
+        this.effect?.destroy();
+        this.customSettings = {
+            backgroundColor: getComputedStyle(document.body).getPropertyValue('--background'),
+            color1: this.getAccentColor(),
+            color2: this.getAccentColorDarken()
+        };
+        this.initEffect();
     }
     
     getAccentColor() {
@@ -56,6 +57,10 @@ class VantaBirdsBackground
             bkg.setAttribute('id', 'vanta-bkg');
             document.body.insertBefore(bkg, document.body.firstChild);
         }
+        this.initEffect();
+    }
+
+    initEffect(){
 
         let settings = {
             el: '#vanta-bkg',

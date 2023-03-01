@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using Humanizer;
+using Jint.Runtime.Debugger;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Controllers;
@@ -63,54 +63,6 @@ public class SettingsController : BaseController
     }
 
     /// <summary>
-    /// Updates a setting
-    /// </summary>
-    /// <param name="setting">The setting being updated</param>
-    /// <param name="value">the new value</param>
-    /// <returns>result from the update</returns>
-    [HttpPost("settings/update-setting/{setting}/{value}")]
-    public IActionResult UpdateSetting([FromRoute] string setting, [FromRoute] string value)
-    {
-        bool reload = false;
-        var settings = GetUserSettings();
-        switch (setting)
-        {
-            case "LinkTarget":
-                settings.LinkTarget = value;
-                settings.Save();
-                break;
-            case "Theme":
-                if (settings.Theme != value || settings.Dashboards.Any(x => string.IsNullOrEmpty(x.Theme) == false && x.Theme != value))
-                {
-                    foreach (var db in settings.Dashboards)
-                        db.Theme = string.Empty; // switches the dashboard to the default theme..
-                    reload = true;
-                    settings.Theme = value;
-                    settings.Save();
-                }
-                break;
-            case "ShowGroupTitles":
-                settings.ShowGroupTitles = value?.ToLower() == "true";
-                settings.Save();
-                break;
-            case "ShowStatusIndicators":
-                settings.ShowStatusIndicators = value?.ToLower() == "true";
-                settings.Save();
-                break;
-            default:
-                return NotFound();
-        }
-
-        return Json(new
-        {
-            Reload = reload,
-            settings.Theme,
-            settings.LinkTarget,
-            settings.ShowGroupTitles,
-            settings.ShowStatusIndicators
-        });
-    }
-    /// <summary>
     /// Updates a dashboard setting
     /// </summary>
     /// <param name="uid">The UID of the dashboard to update the setting for</param>
@@ -118,7 +70,7 @@ public class SettingsController : BaseController
     /// <param name="value">the new value</param>
     /// <returns>result from the update</returns>
     [HttpPost("settings/dashboard/{uid}/update-setting/{setting}/{value}")]
-    public IActionResult UpdateDashboardSetting([FromRoute] Guid uid, [FromRoute] string setting, [FromRoute] string value)
+    public async Task<IActionResult> UpdateDashboardSetting([FromRoute] Guid uid, [FromRoute] string setting, [FromRoute] string value)
     {
         if (uid == Guid.Empty)
         {
@@ -137,6 +89,7 @@ public class SettingsController : BaseController
                 Error = "Invalid setting"
             });
         }
+        bool reload = false;
         var settings = GetUserSettings();
         var dashboard = settings.Dashboards?.FirstOrDefault(x => x.Uid == uid);
         switch (setting)
@@ -151,10 +104,16 @@ public class SettingsController : BaseController
                 dashboard.Background = value;
                 break;
             case nameof(dashboard.BackgroundImage):
-                dashboard.BackgroundImage = value;
+                {
+                    using var ms = new MemoryStream(2048);
+                    await Request.Body.CopyToAsync(ms);
+                    byte[] data = ms.ToArray();
+                    dashboard.BackgroundImage = ImageHelper.SaveImage(data, value, uid: dashboard.Uid);
+                }
                 break;
             case nameof(dashboard.Theme):
                 dashboard.Theme = value;
+                reload = true;
                 break;
             default:
                 return NotFound();
@@ -163,6 +122,7 @@ public class SettingsController : BaseController
         
         return Json(new
         {
+            reload
         });
     }
 

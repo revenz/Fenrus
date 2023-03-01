@@ -26,8 +26,7 @@ public partial class MainMenu
             Name = "General", 
             Items = new List<MenuItem>()
             {
-                new () { Name = "Home", Link = "/", Icon = "fa-solid fa-house"},
-                new () { Name = "General", Link = "/settings", Icon = "fa-solid fa-sliders"},
+                new () { Name = "Home", Link = "/", Icon = "fa-solid fa-house"}
             }
         });
         Menu.Add(new MenuGroup()

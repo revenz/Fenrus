@@ -10,6 +10,18 @@ namespace Fenrus.Components;
 /// </summary>
 public partial class JavaScriptSelect
 {
+    private string _Id = Guid.NewGuid().ToString();
+    
+    /// <summary>
+    /// Gets or sets the ID of the DOM element
+    /// </summary>
+    [Parameter]
+    public string Id
+    {
+        get => _Id;
+        set => _Id = value?.EmptyAsNull() ?? Guid.NewGuid().ToString();
+    }
+    
     /// <summary>
     /// Gets or sets if this is checked
     /// </summary>

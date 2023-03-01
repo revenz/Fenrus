@@ -38,8 +38,6 @@ public class DemoHelper
         settings.Dashboards.Add(GetDemoDashboard());
         settings.Docker.Add(GetDemoDockerServer());
         settings.Groups = settings.Dashboards[0].Groups;
-        settings.AccentColor = "#ff0090";
-        settings.ShowSearch = true;
 
         settings.SearchEngines.Add(new()
         {

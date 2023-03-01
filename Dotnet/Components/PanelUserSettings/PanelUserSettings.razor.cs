@@ -37,9 +37,4 @@ public partial class PanelUserSettings : ComponentBase
     /// Gets or sets the page helper
     /// </summary>
     [Parameter] public PageHelper PageHelper { get; set; }
-
-    private void DashboardChange(ChangeEventArgs e)
-    {
-        Console.WriteLine("Dashboard change!");
-    }
 }

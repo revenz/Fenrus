@@ -8,15 +8,13 @@
     var pageHelper = new PageHelper();
 
     string dashboardClass = "dashboard ";
-    if (settings.ShowGroupTitles == false)
+    if (Model?.Dashboard?.ShowGroupTitles == false)
         dashboardClass += "hide-group-titles ";
-    if (settings.ShowStatusIndicators)
+    if (Model?.Dashboard?.ShowStatusIndicators == true)
         dashboardClass += "status-indicators ";
 
-    ViewBag.Background = Model.Dashboard.BackgroundImage?.EmptyAsNull() ?? settings.BackgroundImage;
-    ViewBag.AccentColor = Model.Dashboard.AccentColor?.EmptyAsNull() ?? 
-                          settings.AccentColor?.EmptyAsNull() ?? 
-                          "#FF0090";
+    ViewBag.Background = Model.Dashboard.BackgroundImage ?? string.Empty;
+    ViewBag.AccentColor = Model.Dashboard.AccentColor?.EmptyAsNull() ?? "#FF0090";
     ViewBag.BackgroundCOlor = Model.Dashboard.BackgroundColor?.EmptyAsNull() ?? "#009099";
 }
 

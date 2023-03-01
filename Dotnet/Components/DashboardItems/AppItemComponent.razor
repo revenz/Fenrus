@@ -12,7 +12,7 @@
     <div class="inner">
         <div class="icon">
             <img src="@Icon" />
-            @if (Settings.ShowStatusIndicators)
+            @if (Dashboard?.ShowStatusIndicators == true)
             {
                 <div class="status-indicator"></div>
             }

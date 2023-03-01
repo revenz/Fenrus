@@ -1,10 +1,11 @@
 @using Fenrus.Models
 
 <input type="hidden" id="hdn-dashboard-name" value="@Model.Name" />
-<input type="hidden" id="hdn-dashboard-background" value="@(Model.BackgroundImage?.EmptyAsNull() ?? Settings?.BackgroundImage)" />
-<input type="hidden" id="hdn-dashboard-theme" value="@(Model.Theme?.EmptyAsNull() ?? Settings?.Theme?.EmptyAsNull() ?? "Default")" />
+<input type="hidden" id="hdn-dashboard-background" value="@(Model.BackgroundImage?.EmptyAsNull() ?? Model?.BackgroundImage)" />
+<input type="hidden" id="hdn-dashboard-theme" value="@(Model.Theme?.EmptyAsNull() ?? Model?.Theme?.EmptyAsNull() ?? "Default")" />
 
 <CascadingValue IsFixed="true" Value="PageHelper">
+<CascadingValue IsFixed="true" Value="Model">
 @if(Groups?.Any() == true) 
 {
     var groupIndex = 0;
@@ -13,7 +14,7 @@
         if(Model.Groups.Any(x => x.Uid == group.Uid && x.Enabled) == false)
             continue;
 
-        <div id="@group.Uid" class="db-group @(Settings.ShowGroupTitles ? "hide-labels" : string.Empty)">
+        <div id="@group.Uid" class="db-group @(Model.ShowGroupTitles ? "hide-labels" : string.Empty)">
             @if(group.HideGroupTitle == false) 
             {
                 <div class="title">
@@ -63,4 +64,5 @@ else
         No groups added to dashboard
     </div>
 }
+</CascadingValue>
 </CascadingValue>

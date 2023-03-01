@@ -4,7 +4,7 @@
     @if(Dashboards?.Any() == true) 
     {
         <div class="setting">
-            <span class="label">Dashboard</span>
+            <span class="label">@Translater.Instant("Labels.Dashboard")</span>
             <span class="value">
                 <JavaScriptSelect Value="@Dashboard.Uid.ToString()" 
                                   Options="@Dashboards.Select(x => x.Uid.ToString()).ToArray()"
@@ -15,54 +15,57 @@
     }
     
     <div class="setting">
-        <span class="label">Theme</span>
+        <span class="label">@Translater.Instant("Labels.Theme")</span>
         <span class="value">
-            <JavaScriptSelect Value="@Theme?.Name" 
+            <JavaScriptSelect Value="@Dashboard.Theme" 
                               Options="@Themes.ToArray()"
-                              Code="UpdateSetting('Theme', event)" />
-        </span>
-    </div>
-    
-    <div class="setting">
-        <span class="label">Link Target</span>
-        <span class="value">
-            <JavaScriptSelect Value="@Settings.LinkTarget" 
-                              Options="@(new [] { "_self", "_this", "home-portal"})"
-                              Labels="@(new [] { "Open in this tab", "Open in new tab", "Open in same tab"})"
-                              Code="UpdateSetting('LinkTarget', event)" />
+                              Code="UpdateDashboardSetting('Theme', event)" />
         </span>
     </div>
     <div class="setting">
-        <span class="label">Accent Color</span>
+        <span class="label">@Translater.Instant("Labels.AccentColor")</span>
         <span class="value">
             <JavaScriptColorPicker Value="@Dashboard.AccentColor" Code="ChangeAccentColor(event, color)" PageHelper=@PageHelper />
         </span>
     </div>
     <div class="setting">
-        <span class="label">Background</span>
+        <span class="label">@Translater.Instant("Labels.Background")</span>
         <span class="value">
-            <JavaScriptSelect Value="@Dashboard.Background" 
-                              Options="@Helpers.BackgroundHelper.GetBackgroundValues()"
-                              Labels="@Helpers.BackgroundHelper.GetBackgroundNames()"
+            <JavaScriptSelect Id="DashboardBackgroundSelect" Value="@Dashboard.Background" 
+                              Options="@BackgroundHelper.GetBackgroundValues(string.IsNullOrEmpty(Dashboard.BackgroundImage) == false)"
+                              Labels="@BackgroundHelper.GetBackgroundNames(string.IsNullOrEmpty(Dashboard.BackgroundImage) == false)"
                               Code="ChangeBackground(event)" />
         </span>
     </div>
     <div class="setting">
-        <span class="label">Background Color</span>
+        <span class="label">@Translater.Instant("Labels.BackgroundColor")</span>
         <span class="value">
             <JavaScriptColorPicker Value="@Dashboard.BackgroundColor" Code="ChangeBackgroundColor(event, color)" PageHelper=@PageHelper />
         </span>
     </div>
+    
     <div class="setting">
-        <span class="label">Group Titles</span>
+        <span class="label">@Translater.Instant("Labels.LinkTarget")</span>
         <span class="value">
-            <JavaScriptSwitch Value="Settings.ShowGroupTitles" Code="UpdateSetting('ShowGroupTitles', event)" />
+            <JavaScriptSelect Value="@Dashboard.LinkTarget" 
+                              Options="@(new [] { "_self", "_this", "home-portal"})"
+                              Labels="@(new [] { Translater.Instant("Enums.LinkTarget.OpenInThisTab"), 
+                                      Translater.Instant("Enums.LinkTarget.OpenInNewTab"),
+                                      Translater.Instant("Enums.LinkTarget.OpenInSameTab")
+                                      })"
+                              Code="UpdateDashboardSetting('LinkTarget', event)" />
         </span>
     </div>
     <div class="setting">
-        <span class="label">Status Indicators</span>
+        <span class="label">@Translater.Instant("Labels.GroupTitles")</span>
         <span class="value">
-            <JavaScriptSwitch Value="Settings.ShowStatusIndicators" Code="UpdateSetting('ShowStatusIndicators', event)" />
+            <JavaScriptSwitch Value="Dashboard.ShowGroupTitles" Code="UpdateDashboardSetting('ShowGroupTitles', event)" />
+        </span>
+    </div>
+    <div class="setting">
+        <span class="label">@Translater.Instant("Labels.StatusIndicators")</span>
+        <span class="value">
+            <JavaScriptSwitch Value="Dashboard.ShowStatusIndicators" Code="UpdateDashboardSetting('ShowStatusIndicators', event)" />
         </span>
     </div>
 </div>

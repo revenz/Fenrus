@@ -64,7 +64,6 @@ public partial class Group: UserPage
                 ++count;
                 Model.Name = $"New Group ({count})";
             }
-            Model.AccentColor = Settings.AccentColor;
         }
         else
         {

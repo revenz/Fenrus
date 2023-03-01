@@ -69,7 +69,7 @@ public abstract class UserPage : ComponentBase
 
         SystemSettings = new Services.SystemSettingsService().Get();
         
-        App.UpdateAccentColor(Settings.AccentColor);
+        // App.UpdateAccentColor(Settings.AccentColor);
 
         await PostGotUser();
     }

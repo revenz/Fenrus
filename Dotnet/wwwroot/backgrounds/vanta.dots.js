@@ -2,8 +2,38 @@
 class VantaDotsBackground
 {
     type = 'dots';
-    customSettings = {};
+    customSettings = {
+        backgroundColor: getComputedStyle(document.body).getPropertyValue('--background'),
+        color: this.getAccentColor(),
+        color2: this.getAccentColorDarken()
+    };
     effect;
+
+
+    changeBackgroundColor(color){
+        this.backgroundColor = color;
+        if(this.effect) {
+            this.effect.setOptions({
+                backgroundColor: color
+            });
+        }
+    }
+    changeAccentColor(color){
+        this.effect?.destroy();
+        this.customSettings = {
+            backgroundColor: getComputedStyle(document.body).getPropertyValue('--background'),
+            color: this.getAccentColor(),
+            color2: this.getAccentColorDarken()
+        };
+        this.initEffect();
+    }
+
+    getAccentColor() {
+        return getComputedStyle(document.body).getPropertyValue('--accent');
+    }
+    getAccentColorDarken() {
+        return shadeColor(this.getAccentColor(), -30);
+    }
 
     dispose(){
         this.effect?.destroy();
@@ -27,6 +57,10 @@ class VantaDotsBackground
             bkg.setAttribute('id', 'vanta-bkg');
             document.body.insertBefore(bkg, document.body.firstChild);
         }
+        this.initEffect();
+    }
+    
+    initEffect(){
 
         let settings = {
             el: '#vanta-bkg',

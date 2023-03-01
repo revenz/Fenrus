@@ -24,56 +24,6 @@ public class UserSettings: IModal
     public int Revision { get; set; }
 
     /// <summary>
-    /// Gets or sets the target to open dashboard links
-    /// </summary>
-    public string LinkTarget { get; set; }
-
-    /// <summary>
-    /// Gets or sets the users theme
-    /// </summary>
-    public string Theme { get; set; }
-
-    /// <summary>
-    /// Gets or sets if menus should be collapsed
-    /// </summary>
-    public bool CollapseMenu { get; set; }
-
-    /// <summary>
-    /// Gets or sets the accent color
-    /// </summary>
-    public string AccentColor { get; set; }
-
-    /// <summary>
-    /// Gets or sets if group titles should be shown
-    /// </summary>
-    public bool ShowGroupTitles { get; set; }
-
-    /// <summary>
-    /// Gets or sets the default background image for dashboards
-    /// </summary>
-    public string BackgroundImage { get; set; }
-
-    /// <summary>
-    /// Gets or sets the default background for dashboards
-    /// </summary>
-    public string Background { get; set; }
-
-    /// <summary>
-    /// Gets or sets the default background color for dashboards
-    /// </summary>
-    public string BackgroundColor { get; set; }
-
-    /// <summary>
-    /// Gets or sets if search should be shown
-    /// </summary>
-    public bool ShowSearch { get; set; }
-
-    /// <summary>
-    /// Gets or sets if status indicators should be shown
-    /// </summary>
-    public bool ShowStatusIndicators { get; set; }
-
-    /// <summary>
     /// Gets or sets the users theme settings
     /// </summary>
     public Dictionary<string, Dictionary<string, object?>> ThemeSettings { get; set; }

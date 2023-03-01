@@ -1,8 +1,38 @@
 class VantaCellsBackground
 {
     type = 'cells';
-    customSettings = {};
+    customSettings = {
+        colorMode: 'lerp',
+        backgroundColor: getComputedStyle(document.body).getPropertyValue('--background'),
+        color1: this.getAccentColor(),
+        color2: this.getAccentColorDarken()
+    };
     effect;
+
+    changeBackgroundColor(color){
+        this.backgroundColor = color;
+        if(this.effect) {
+            this.effect.setOptions({
+                backgroundColor: color
+            });
+        }
+    }
+    changeAccentColor(color){
+        this.effect?.destroy();
+        this.customSettings = {
+            backgroundColor: getComputedStyle(document.body).getPropertyValue('--background'),
+            color1: this.getAccentColor(),
+            color2: this.getAccentColorDarken()
+        };
+        this.initEffect();
+    }
+
+    getAccentColor() {
+        return getComputedStyle(document.body).getPropertyValue('--accent');
+    }
+    getAccentColorDarken() {
+        return shadeColor(this.getAccentColor(), -70);
+    }
 
     dispose(){
         this.effect?.destroy();
@@ -26,6 +56,10 @@ class VantaCellsBackground
             bkg.setAttribute('id', 'vanta-bkg');
             document.body.insertBefore(bkg, document.body.firstChild);
         }
+        this.initEffect();
+    }
+
+    initEffect(){
 
         let settings = {
             el: '#vanta-bkg',

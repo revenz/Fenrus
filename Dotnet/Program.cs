@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 Fenrus.Logger.Initialize();
 Fenrus.Services.AppService.Initialize();
 
+var i18nFiles = Directory.GetFiles("i18n", "*.json");
+Translater.Init(i18nFiles);
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddMvc();

@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace Fenrus.Helpers;
 
 /// <summary>
@@ -39,6 +41,26 @@ public class ImageHelper
         using var db = DbHelper.GetDb();
         string id = Guid.NewGuid().ToString();
         db.FileStorage.Upload("db:/image/" + id, id + "." + image.Extension, new MemoryStream(image.Data));
+        return "db:/image/" + id;
+    }
+
+    /// <summary>
+    /// Saves an image into the database and returns its ID
+    /// </summary>
+    /// <param name="data">the image data</param>
+    /// <param name="extension">the image extension</param>
+    /// <param name="uid">[Optional] UID of the image to save</param>
+    /// <returns>the image ID, or empty if no image was passed in</returns>
+    public static string SaveImage(byte[] data, string extension, Guid? uid = null)
+    {
+        if (Regex.IsMatch(extension, "^[a-zA-Z]+$") == false)
+            return string.Empty; // disallowed extension, we dont want them use .. or anything invalid here
+        if (data?.Any() != true)
+            return string.Empty;
+        
+        using var db = DbHelper.GetDb();
+        string id = uid == null || uid == Guid.Empty ? Guid.NewGuid().ToString() : uid.Value.ToString();
+        db.FileStorage.Upload("db:/image/" + id, id + "." + extension, new MemoryStream(data));
         return "db:/image/" + id;
     }
 

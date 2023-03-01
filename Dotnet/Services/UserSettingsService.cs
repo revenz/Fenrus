@@ -54,7 +54,7 @@ public class UserSettingsService
             settings.Dashboards.Add(new ()
             {
                 Uid = Guid.NewGuid(),
-                AccentColor = guest.AccentColor?.EmptyAsNull() ?? "#FF0090",
+                AccentColor = guest.Dashboards?.FirstOrDefault()?.AccentColor?.EmptyAsNull() ?? "#FF0090",
                 Background = "#006600",
                 Enabled = true,
                 Name = "Default",
@@ -62,8 +62,6 @@ public class UserSettingsService
                 Groups = new ()
             });
         }
-        settings.Theme = "Default";
-        settings.AccentColor = guest.AccentColor?.EmptyAsNull() ?? "#FF0090";
 
         DbHelper.Insert(settings);
         return settings;

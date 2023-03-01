@@ -19,11 +19,16 @@ public partial class LinkItemComponent
     /// </summary>
     [Parameter] public UserSettings Settings { get; set; }
 
+    /// <summary>
+    /// Gets or sets the current dashboard
+    /// </summary>
+    [CascadingParameter] public Dashboard Dashboard { get; set; }
+
     private string Target, OnClickCode, SerializedJsSafeModel;
 
     protected override void OnInitialized()
     {
-        Target = Model.Target?.EmptyAsNull() ?? Settings.LinkTarget?.EmptyAsNull() ?? "_self";
+        Target = Model.Target?.EmptyAsNull() ?? Dashboard.LinkTarget?.EmptyAsNull() ?? "_self";
         SerializedJsSafeModel = JsonSerializer.Serialize(Model).Replace("'", "\\'");
         OnClickCode = Target == "IFrame"
             ? $"openIframe(event, '{SerializedJsSafeModel}'); return false;"

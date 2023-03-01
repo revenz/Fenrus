@@ -1,6 +1,7 @@
+@using Humanizer
 @namespace Fenrus.Components
 
-<div class="fenrus-select">
+<div class="fenrus-select" id="@Id">
     <span class="fenrus-select-value" onclick="fenrusSelectValueClick(event)">@InitialString</span>
     <i class="fa-solid fa-caret-down"></i>
     <ul>
@@ -9,7 +10,7 @@
             var value = Options[i];
             var label = (Labels != null && Labels.Length > i) ? Labels[i] : value;
             var onclick = $"fenrusSelectOptionClick(event); event = '{value}'; {Code}";
-            <li data-value="@value" onclick="@onclick">@label</li>
+            <li data-value="@value" class="opt-@label.Dehumanize()" onclick="@onclick">@label</li>
         }    
     </ul>
 </div>

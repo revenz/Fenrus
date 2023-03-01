@@ -27,6 +27,11 @@ public partial class AppItemComponent
     /// </summary>
     [CascadingParameter] public PageHelper PageHelper { get; set; }
 
+    /// <summary>
+    /// Gets or sets the current dashboard
+    /// </summary>
+    [CascadingParameter] public Dashboard Dashboard { get; set; }
+
     private FenrusApp App { get; set; }
 
     private string Css;
@@ -34,7 +39,7 @@ public partial class AppItemComponent
 
     protected override void OnInitialized()
     {
-        Target = Model.Target?.EmptyAsNull() ?? Settings.LinkTarget?.EmptyAsNull() ?? "_self";
+        Target = Model.Target?.EmptyAsNull() ?? Dashboard?.LinkTarget?.EmptyAsNull() ?? "_self";
         SerializedJsSafeModel = JsonSerializer.Serialize(Model).Replace("'", "\\'");
         OnClickCode = Target == "IFrame"
             ? $"openIframe(event, '{SerializedJsSafeModel}'); return false;"

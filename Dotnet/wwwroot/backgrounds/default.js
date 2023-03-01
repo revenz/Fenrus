@@ -1,4 +1,4 @@
-class DefautlBackground
+class DefaultBackground
 {    
     dispose(){
         let removeIfExists = function(id)
@@ -82,4 +82,4 @@ body
         styleEle.innerHTML = css;
     }
 }
-window.BackgroundType = DefautlBackground;
+window.BackgroundType = DefaultBackground;

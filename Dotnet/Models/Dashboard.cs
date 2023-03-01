@@ -46,6 +46,26 @@ public class Dashboard: IModal
     /// </summary>
     public string AccentColor { get; set; }
 
+    /// <summary>
+    /// Gets or sets the target to open dashboard links
+    /// </summary>
+    public string LinkTarget { get; set; }
+
+    /// <summary>
+    /// Gets or sets if group titles should be shown
+    /// </summary>
+    public bool ShowGroupTitles { get; set; }
+
+    /// <summary>
+    /// Gets or sets if status indicators should be shown
+    /// </summary>
+    public bool ShowStatusIndicators { get; set; }
+
+    /// <summary>
+    /// Gets or sets if search should be shown
+    /// </summary>
+    public bool ShowSearch { get; set; }
+
 
     private List<Group> _Groups = new();
 

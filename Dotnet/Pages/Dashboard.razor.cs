@@ -52,8 +52,9 @@ public partial class Dashboard : CommonPage<Models.Group>
                 ++count;
                 Model.Name = $"New Dashboard ({count})";
             }
-            Model.AccentColor = Settings.AccentColor;
-            Model.Theme = Settings.Theme;
+
+            Model.AccentColor = "#ff0090";;
+            Model.Theme = "Default";
         }
         else
         {

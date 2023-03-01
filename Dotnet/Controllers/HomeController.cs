@@ -24,11 +24,11 @@ public class HomeController : BaseController
             return Redirect("/login");
 
         var dashboard = settings.Dashboards.FirstOrDefault() ?? new();
-        if (string.IsNullOrEmpty(dashboard.BackgroundImage?.EmptyAsNull() ?? settings.BackgroundImage) == false)
+        if (string.IsNullOrEmpty(dashboard.BackgroundImage) == false)
             ViewBag.CustomBackground = "true";
 
         var themeService = new Services.ThemeService();
-        var theme = themeService.GetTheme(dashboard.Theme?.EmptyAsNull() ?? settings.Theme?.EmptyAsNull() ?? "Default");
+        var theme = themeService.GetTheme(dashboard.Theme?.EmptyAsNull() ?? "Default");
         var themes = themeService.GetThemes();
         
         var groups = dashboard.Groups.Select(x => settings.Groups.FirstOrDefault(y => y.Uid == x.Uid))
@@ -47,7 +47,7 @@ public class HomeController : BaseController
         ViewBag.Dashboards = settings.Dashboards;
         ViewBag.Themes = themes;
         ViewBag.Theme = theme;
-        ViewBag.Accent = dashboard.AccentColor?.EmptyAsNull() ?? settings.AccentColor?.EmptyAsNull() ?? string.Empty;
+        ViewBag.Accent = dashboard.AccentColor?.EmptyAsNull() ?? string.Empty;
         return View("Dashboard", model);
     }
 
