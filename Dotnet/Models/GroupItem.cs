@@ -30,11 +30,6 @@ public abstract class GroupItem: IModal
     /// </summary>
     [Required]
     public string Name { get; set; }
-    
-    /// <summary>
-    /// Gets or sets if the item is enabled
-    /// </summary>
-    public bool Enabled { get; set; }
 
     /// <summary>
     /// Gets or sets the item size

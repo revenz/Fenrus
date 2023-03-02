@@ -1,5 +1,8 @@
 using Fenrus.Components;
+using Fenrus.Models;
 using Fenrus.Models.UiModels;
+using Fenrus.Services;
+using Markdig.Extensions.ListExtras;
 using Microsoft.AspNetCore.Components;
 
 namespace Fenrus.Pages;
@@ -12,9 +15,14 @@ public partial class Dashboard : CommonPage<Models.Group>
     [Inject] private NavigationManager Router { get; set; }
     Models.Dashboard Model { get; set; } = new();
 
-    private Fenrus.Components.FenrusTable<Models.Group> Table { get; set; }
+    /// <summary>
+    /// The groups in this dashboard
+    /// </summary>
+    private List<Models.Group> Groups = new();
 
-    private Fenrus.Components.Dialogs.GroupAddDialog GroupAddDialog { get; set; }
+    private FenrusTable<Models.Group> Table { get; set; }
+
+    private Components.Dialogs.GroupAddDialog GroupAddDialog { get; set; }
 
     [Parameter]
     public string UidString
@@ -61,13 +69,38 @@ public partial class Dashboard : CommonPage<Models.Group>
             isNew = false;
             Model = Settings.Dashboards.First(x => x.Uid == Uid);
         }
+        var sysGroups = new GroupService().GetSystemGroups(enabledOnly: true);
+        Groups = Settings.Groups.Where(x => Model.GroupUids.Contains(x.Uid))
+            .Union(sysGroups.Where(x => Model.GroupUids.Contains(x.Uid))).ToList();
     }
+
+    /// <summary>
+    /// Gets all the groups that are available to this dashboard
+    /// </summary>
+    /// <param name="notInUse">When true, will filter out any group that is currently in this dashboard,
+    /// otherwise all groups will be returned</param>
+    /// <returns> all the groups that are available to this dashboard</returns>
+    List<Models.Group> GetAllAvailableGroups(bool notInUse = false)
+    {
+        var userGroups = Settings.Groups;
+        var sysGroups = new GroupService().GetSystemGroups(enabledOnly: true);
+
+        var result = userGroups.Union(sysGroups);
+        if (notInUse)
+        {
+            var used = Groups.Select(x => x.Uid);
+            result = result.Where(x => used.Contains(x.Uid) == false);
+        }
+        return result.ToList();
+    }
+    
     void Save()
     {
         //Model.Groups = Table.Data ?? new();
         if (isNew)
         {
             Model.Uid = Guid.NewGuid();
+            Model.GroupUids = Groups.Select(x => x.Uid).ToList();
             Settings.Dashboards.Add(Model);
         }
         else
@@ -76,7 +109,7 @@ public partial class Dashboard : CommonPage<Models.Group>
             existing.Name = Model.Name;
             existing.AccentColor = Model.AccentColor;
             existing.Theme = Model.Theme;
-            existing.Groups = Model.Groups ?? new();
+            existing.GroupUids = Groups?.Select(x => x.Uid)?.ToList() ?? new ();
         }
         Settings.Save();
         this.Router.NavigateTo("/settings/dashboards");
@@ -89,11 +122,10 @@ public partial class Dashboard : CommonPage<Models.Group>
 
     async Task AddGroup()
     {
-        var inUse = Model.Groups.Select(x => x.Uid);
-        var available = Settings.Groups.Where(x => inUse.Contains(x.Uid) == false).ToList();
+        var available = GetAllAvailableGroups(notInUse: true);
         if (available.Any() == false)
         {
-            ToastService.ShowWarning("No available groups to add");
+            ToastService.ShowWarning(Translater.Instant("Pages.Dashboard.Messages.NoAvailableGroups"));
             return;
         }
         var adding = await GroupAddDialog.Show(available.Select(x => new ListOption
@@ -108,23 +140,22 @@ public partial class Dashboard : CommonPage<Models.Group>
         {
             if (opt.Value is Guid uid == false)
                 continue;
-            if (Model.Groups.Any(x => x.Uid == uid))
+            if (Groups.Any(x => x.Uid == uid))
                 continue;
             var group = available.FirstOrDefault(x => x.Uid == uid);
             if (group == null)
                 continue;
-            group.Enabled = true;
-            Model.Groups.Add(group);
+            Groups.Add(group);
         }
-        Table.SetData(Model.Groups);
+        Table.SetData(Groups);
     }
 
     protected override bool DoDelete(Models.Group item)
     {
-        if (Model.Groups.Contains(item) == false)
+        if (Groups.Contains(item) == false)
             return false;
-        Model.Groups.Remove(item);
-        Table.SetData(Model.Groups);
+        Groups.Remove(item);
+        Table.SetData(Groups);
         return true;
     }
 }

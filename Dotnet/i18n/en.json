@@ -28,5 +28,27 @@
       "OpenInNewTab": "Open in new tab",
       "OpenInSameTab": "Open in same tab"
     }
+  },
+  "Pages": {
+    "Dashboard": {
+      "Title": "Fenrus - Dashboard",
+      "Messages": {
+        "NoAvailableGroups": "No available groups to add"
+      },
+      "Fields": {
+        
+      }
+    },
+    "Group": {
+      "Title": "Fenrus - Group",
+      "Buttons": {
+        "AddItem": "Add Item"
+      },
+      "Fields": {
+        "Name-Help": "The Name of the group",
+        "ShowGroupTitle": "Show Group Title",
+        "ShowGroupTitle-Help": "Whether or not to show the group title"
+      }
+    }
   }
 }

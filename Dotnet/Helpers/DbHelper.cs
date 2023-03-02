@@ -10,6 +10,14 @@ public class DbHelper
 {
     internal static readonly string DbFile = Path.Combine(DirectoryHelper.GetDataDirectory(), "Fenrus.db");
 
+    // static DbHelper()
+    // {
+    //     var mapper = BsonMapper.Global;
+    //
+    //     mapper.Entity<Models.Dashboard>()
+    //         .Ignore(x => x.Groups); // ignore this property (do not store)
+    // }
+
     /// <summary>
     /// Gets the database 
     /// </summary>

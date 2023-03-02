@@ -13,7 +13,7 @@
             <FenrusTableColumn TItem="Models.Group" ColumnName="Name">
                 <Header>Name</Header>
                 <Cell Context="item">
-                    <a href="/settings/groups/@item.Uid">@item.Name</a>
+                    <a href="/settings/@(IsSystem ? "system/" : "")groups/@item.Uid">@item.Name</a>
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.Group" ColumnName="Enabled" Width="10rem">

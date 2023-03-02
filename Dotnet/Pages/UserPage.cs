@@ -13,6 +13,8 @@ namespace Fenrus.Pages;
 [Authorize]
 public abstract class UserPage : ComponentBase
 {
+    protected string lblSave, lblCancel, lblHelp, lblDelete, lblEdit, lblMoveUp, lblMoveDown, lblCopy, lblName;
+    
     /// <summary>
     /// Gets or sets the Authentication state provider
     /// </summary>
@@ -66,6 +68,16 @@ public abstract class UserPage : ComponentBase
             Router.NavigateTo("/login");
             return;
         }
+
+        lblCancel = Translater.Instant("Labels.Cancel");
+        lblSave = Translater.Instant("Labels.Save");
+        lblHelp = Translater.Instant("Labels.Help");
+        lblDelete = Translater.Instant("Labels.Delete");
+        lblEdit = Translater.Instant("Labels.Edit");
+        lblMoveDown = Translater.Instant("Labels.MoveDown");
+        lblMoveUp = Translater.Instant("Labels.MoveUp");
+        lblCopy = Translater.Instant("Labels.Copy");
+        lblName = Translater.Instant("Labels.Name");
 
         SystemSettings = new Services.SystemSettingsService().Get();
 

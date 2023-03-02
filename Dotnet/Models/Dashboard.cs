@@ -66,22 +66,14 @@ public class Dashboard: IModal
     /// </summary>
     public bool ShowSearch { get; set; }
 
-
-    private List<Group> _Groups = new();
+    public List<Guid> _GroupUids = new();
 
     /// <summary>
-    /// Gets or sets the Groups in the dashboard
+    /// Gets or sets the UIDs of the groups in this dashboard
     /// </summary>
-    public List<Group> Groups
+    public List<Guid> GroupUids
     {
-        get => _Groups;
-        set
-        {
-            if (value == _Groups)
-                return; // same object
-            _Groups.Clear();
-            if(value?.Any() == true)
-                _Groups.AddRange(value);
-        }
+        get => _GroupUids;
+        set => _GroupUids = value ?? new();
     }
 }

@@ -164,7 +164,6 @@ public partial class GroupItemEditor
             Model.SshPassword = app.SshPassword;
             Model.SshServer = app.SshServer;
             Model.SshUserName = app.SshUserName;
-            Model.Enabled = app.Enabled;
             Model.Icon = app.Icon;
             Model.Name = app.Name;
             Model.Size = app.Size;
@@ -177,7 +176,6 @@ public partial class GroupItemEditor
             Model.ItemType = link.Type;
             Model.Target = link.Target;
             Model.Url = link.Url;
-            Model.Enabled = link.Enabled;
             Model.Icon = link.Icon;
             Model.Name = link.Name;
             Model.Size = link.Size;
@@ -189,7 +187,6 @@ public partial class GroupItemEditor
             Model.ItemType = "DashboardApp";
             Model.Target = string.Empty;
             Model.Url = "https://";
-            Model.Enabled = true;
             Model.Icon = string.Empty;
             Model.Name = string.Empty;
             Model.Size = ItemSize.Medium;
@@ -230,7 +227,6 @@ public partial class GroupItemEditor
                     app.SshPassword = Model.SshPassword;
                     app.SshServer = Model.SshServer;
                     app.SshUserName = Model.SshUserName;
-                    app.Enabled = Model.Enabled;
                     app.Icon = Model.Icon;
                     app.Name = Model.Name;
                     app.Size = Model.Size;
@@ -248,7 +244,6 @@ public partial class GroupItemEditor
                     var link = new LinkItem();
                     link.Target = Model.Target;
                     link.Url = Model.Url;
-                    link.Enabled = Model.Enabled;
                     link.Icon = Model.Icon;
                     link.Name = Model.Name;
                     link.Size = Model.Size;

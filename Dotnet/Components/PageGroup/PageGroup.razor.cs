@@ -1,15 +1,29 @@
 using Fenrus.Components.Dialogs;
 using Fenrus.Models;
+using Fenrus.Pages;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace Fenrus.Pages;
+namespace Fenrus.Components;
 
 /// <summary>
-/// Group page
+/// Page Group
 /// </summary>
-public partial class Group: UserPage
+public partial class PageGroup: CommonPage<Models.Group>
 {
+    private string Title => IsSystem ? "System Groups" : "Groups";
+    
+    private string Description => IsSystem
+        ? @"This page lets you configure groups that will be available to all users and will be available to use on the Guest dashboard.
+
+If you disable a group here that group will become unavailable to all users using it."
+        : @"This page lets you create groups which can be used on Dashboards.
+                                                                                     
+A group will not appear by itself, it must be added to a dashboard.";
+    
+    
+    
+    
     /// <summary>
     /// Gets or sets if this is a new group or not
     /// </summary>
@@ -45,19 +59,26 @@ public partial class Group: UserPage
     /// Gets or sets the UID of the group
     /// </summary>
     public Guid Uid { get; set; }
+
+    private string lblPageTitle, lblAddItem, lblShowGroupTitle, lblShowGroupTitleHelp, lblNameHelp; 
     
     /// <summary>
     /// Called after the User has been retrieved
     /// </summary>
     protected override async Task PostGotUser()
     {
+        lblPageTitle = Translater.Instant("Pages.Group.Title");
+        lblAddItem = Translater.Instant("Pages.Group.Buttons.AddItem");
+        lblShowGroupTitle = Translater.Instant("Pages.Group.Fields.ShowGroupTitle");
+        lblShowGroupTitleHelp = Translater.Instant("Pages.Group.Fields.ShowGroupTitle-Help");
+        lblNameHelp = Translater.Instant("Pages.Group.Fields.Name-Help");
         if (Uid == Guid.Empty)
         {
             // new item
             isNew = true;
             Model = new();
             Model.Name = "New Group";
-            var usedNames = Settings.Groups.Select(x => x.Name).ToArray();
+            var usedNames = GetAll().Select(x => x.Name).ToArray();
             int count = 1;
             while (usedNames.Contains(Model.Name))
             {
@@ -68,9 +89,23 @@ public partial class Group: UserPage
         else
         {
             isNew = false;
-            Model = Settings.Groups.First(x => x.Uid == Uid);
+            Model = GetById();
         }
         await UpdatePreview(250);
+    }
+
+    List<Models.Group> GetAll()
+    {
+        if (IsSystem)
+            return new Services.GroupService().GetSystemGroups();
+        return Settings.Groups;
+    }
+
+    Models.Group GetById()
+    {
+        if (IsSystem)
+            return new Services.GroupService().GetByUid(Uid);
+        return Settings.Groups.FirstOrDefault(x => x.Uid == Uid);
     }
 
     /// <summary>
@@ -87,7 +122,6 @@ public partial class Group: UserPage
         {
             var existing = Settings.Groups.First(x => x.Uid == Uid);
             existing.Name = Model.Name;
-            existing.AccentColor = Model.AccentColor;
             existing.HideGroupTitle = Model.HideGroupTitle;
             existing.Items = Model.Items ?? new();
         }
@@ -183,6 +217,16 @@ public partial class Group: UserPage
             return;
         Model.Items.Remove(item);
         StateHasChanged();
+        await UpdatePreview();
+    }
+
+    async Task Move(GroupItem item, bool up)
+    {
+        await UpdatePreview();
+    }
+
+    async Task Copy(GroupItem item)
+    {
         await UpdatePreview();
     }
 }

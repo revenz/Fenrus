@@ -17,7 +17,7 @@
         <InputSelectOption TItem="string"StringValue="Heimdall" Label="Heimdall" />
     </InputSelect>
     
-    <FenrusTable TItem="Models.Group" Data=@Model.Groups @ref=Table>
+    <FenrusTable TItem="Models.Group" Data=@Groups @ref=Table>
         <ToolBar>
             <FenrusTableButton Label="Add" Icon="fa-solid fa-plus" Clicked="() => AddGroup()" />
         </ToolBar>

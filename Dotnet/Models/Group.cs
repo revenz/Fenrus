@@ -30,11 +30,6 @@ public class Group: IModal
     /// Gets or sets if this is a system group
     /// </summary>
     public bool IsSystem { get; set; }
-    
-    /// <summary>
-    /// Gets or sets the groups accent colour
-    /// </summary>
-    public string AccentColor { get; set; }
 
     private readonly List<GroupItem> _Items = new();
     

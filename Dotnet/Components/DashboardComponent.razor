@@ -11,9 +11,6 @@
     var groupIndex = 0;
     foreach(var group in Groups)
     {
-        if(Model.Groups.Any(x => x.Uid == group.Uid && x.Enabled) == false)
-            continue;
-
         <div id="@group.Uid" class="db-group @(Model.ShowGroupTitles ? "hide-labels" : string.Empty)">
             @if(group.HideGroupTitle == false) 
             {
@@ -30,8 +27,6 @@
             <div class="items">
                 @foreach (var item in group.Items)
                 {
-                    if (item.Enabled == false)
-                        continue;
                     if (item is LinkItem link)
                     {
                         <Fenrus.Components.DashboardItems.LinkItemComponent Model=@link Settings=@Settings />
@@ -43,18 +38,6 @@
                 }
             </div>
         </div>
-        @if(string.IsNullOrWhiteSpace(group.AccentColor) == false) 
-        {  
-            var groupAccentRgb = int.Parse(group.AccentColor[1..3], System.Globalization.NumberStyles.HexNumber) + "," +
-                            int.Parse(group.AccentColor[3..5], System.Globalization.NumberStyles.HexNumber) + "," +
-                            int.Parse(group.AccentColor[5..7], System.Globalization.NumberStyles.HexNumber);
-            <style>
-                #@group.Uid {
-                    --accent-rgb:@groupAccentRgb;
-                    --accent:@group.AccentColor;
-                }
-            </style>
-        }
         ++groupIndex;
     }
 } 

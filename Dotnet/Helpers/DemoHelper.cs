@@ -21,7 +21,7 @@ public class DemoHelper
         db.Theme = "Default";
         db.AccentColor = "#ff0090";
         db.Uid = new Guid("12db295d-6360-459a-8d24-383b55b75b47");
-        db.Groups.Add(FenrusGroup());
+        // db.Groups.Add(FenrusGroup());
         return db;
     }
 
@@ -37,7 +37,7 @@ public class DemoHelper
         };
         settings.Dashboards.Add(GetDemoDashboard());
         settings.Docker.Add(GetDemoDockerServer());
-        settings.Groups = settings.Dashboards[0].Groups;
+        // settings.Groups = settings.Dashboards[0].Groups;
 
         settings.SearchEngines.Add(new()
         {
@@ -80,7 +80,6 @@ public class DemoHelper
         group.Items.Add(new AppItem()
         {
             Uid = new Guid("82b52581-9005-4766-a27f-36dce7c8661e"),
-            Enabled = true,
             Name = "GitHub - Fenrus",
             Url = "https://github.com/revenz/Fenrus",
             Size = ItemSize.Large,
@@ -91,7 +90,6 @@ public class DemoHelper
         group.Items.Add(new AppItem()
         {
             Uid = new Guid("49049f51-3a83-4fbe-8160-f03a57c0527d"),
-            Enabled = true,
             Name = "Reddit - Fenrus",
             Url = "https://reddit.com/r/Fenrus",
             Size = ItemSize.Medium,
@@ -101,7 +99,6 @@ public class DemoHelper
         group.Items.Add(new AppItem()
         {
             Uid = new Guid("4c571f69-6664-4965-912d-3100807c7b4d"),
-            Enabled = true,
             Name = "Discord - Fenrus",
             Url = "https://discord.gg/xbYK8wFMeU",
             Size = ItemSize.Medium,
@@ -110,7 +107,6 @@ public class DemoHelper
         group.Items.Add(new AppItem()
         {
             Uid = new Guid("6947269d-0480-4ddd-a47e-c1fd07e7197d"),
-            Enabled = true,
             Name = "Patreon",
             Url = "https://www.patreon.com/revenz",
             Size = ItemSize.Medium,

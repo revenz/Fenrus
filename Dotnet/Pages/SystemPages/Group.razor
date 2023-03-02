@@ -1,0 +1,9 @@
+@page "/settings/system/groups/{uidString}"
+
+@code {
+    [Parameter] public string UidString { get;set; }
+}
+
+<PageTitle>Fenrus - System Group</PageTitle>
+
+<PageGroup IsSystem="true" UidString=@UidString />

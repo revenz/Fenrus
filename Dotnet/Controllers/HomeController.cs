@@ -31,8 +31,25 @@ public class HomeController : BaseController
         var theme = themeService.GetTheme(dashboard.Theme?.EmptyAsNull() ?? "Default");
         var themes = themeService.GetThemes();
         
-        var groups = dashboard.Groups.Select(x => settings.Groups.FirstOrDefault(y => y.Uid == x.Uid))
-            .Where(x => x != null).ToList();
+        // load groups form the dashboard uids
+        // should move this into a service
+        var systemGroups = DbHelper.GetAll<Models.Group>().Where(x => x.Enabled && x.IsSystem)
+            .DistinctBy(x => x.Uid)
+            .ToDictionary(x => x.Uid, x => x);
+        var groups = new List<Models.Group>();
+        foreach (var gUid in dashboard.GroupUids)
+        {
+            var grp = settings.Groups.FirstOrDefault(x => x.Uid == gUid);
+            if (grp != null)
+            {
+                if (grp.Enabled)
+                    groups.Add(grp);
+            }
+            else if (systemGroups.ContainsKey(gUid))
+            {
+                groups.Add(systemGroups[gUid]);
+            }
+        }
         
         DashboardPageModel model = new DashboardPageModel
         {

@@ -64,7 +64,7 @@ public class UserSettingsService
                 ShowSearch = true,
                 ShowStatusIndicators = true,
                 BackgroundColor = "#000000",
-                Groups = new ()
+                GroupUids = new ()
             });
         }
 

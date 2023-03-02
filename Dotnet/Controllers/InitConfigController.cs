@@ -1,6 +1,8 @@
+using Fenrus.Models;
 using Fenrus.Services;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Group = Fenrus.Pages.Group;
 using IApplicationLifetime = Microsoft.Extensions.Hosting.IApplicationLifetime;
 
 namespace Fenrus.Controllers;
@@ -133,6 +135,65 @@ public class InitConfigController : Controller
         AddSearchEngine("Google", "google.png", "g", "https://www.google.com/search?q=%s");
         AddSearchEngine("YouTube", "youtube.png", "yt", "https://www.youtube.com/results?search_query=%s");
         AddSearchEngine("Ecosia", "ecosia.jpg", "ec", "https://www.ecosia.org/search?method=index&q=%s");
+        CreateGuestDashboard();
+    }
+
+    /// <summary>
+    /// Creates the default guest dashboard
+    /// </summary>
+    private void CreateGuestDashboard()
+    {
+        var uid = Globals.GuestDashbardUid;
+        var dashboard = DbHelper.GetByUid<Dashboard>(uid);
+        if (dashboard != null)
+            return; // already exists
+        var grpFenrusUid = new Guid("aa163b32-b9d7-4a1f-8737-e170091723e5");
+        var grpFileFlowsUid = new Guid("87544728-5584-45ff-8e4b-fcbdbbd27994");
+        
+        CreateGroup(grpFenrusUid, "Fenrus", new List<GroupItem>()
+        {
+            new AppItem() { Uid  = new Guid("eed93c2d-9bdc-465a-84cc-78b8d47bdea4"), Name = "GitHub - Fenrus", Url = "https://github.com/revenz/Fenrus", Size = ItemSize.Large, AppName = "GitHub" },
+            new AppItem() { Uid  = new Guid("33d584ec-8324-4525-8dcb-18d7fd06360f"), Name = "Discord - Fenrus", Url = "https://discord.gg/xbYK8wFMeU", Size = ItemSize.Medium, AppName = "Discord" },
+            new AppItem() { Uid  = new Guid("86496260-3b31-481f-b5cc-98853cfde7bd"), Name = "Patreon - FileFlows", Url = "https://www.patreon.com/revenz", Size = ItemSize.Medium, AppName = "Patreon" },
+        });
+        CreateGroup(grpFileFlowsUid, "FileFlows", new List<GroupItem>()
+        {
+            new AppItem() { Uid  = new Guid("6e7cb2a0-8fe9-485b-9652-dc5e2efc8dce"), Name = "YouTube - FileFlows", Url = "https://www.youtube.com/watch?v=4Qu0y5Lem3c&list=PLGMTs-C_ZYk00lTsj6ghqftjykKDlWTDk", Size = ItemSize.Medium, AppName = "YouTube" },
+            new AppItem() { Uid  = new Guid("72a0dc02-f263-4e2d-9f12-2cafab585200"), Name = "FileFlows Docs", Url = "https://docs.fileflows.com", Size = ItemSize.Medium, AppName = "Wiki" },
+            new AppItem() { Uid  = new Guid("2b8b3159-60c6-40d3-b38f-3c8d8fc760f3"), Name = "GitHub - FileFlows", Url = "https://github.com/revenz/FileFlows", Size = ItemSize.Medium, AppName = "GitHub" },
+        });
+        
+        dashboard = new();
+        dashboard.Uid = uid;
+        dashboard.Name = "Guest Dashboard";
+        dashboard.AccentColor = "#ff0090";
+        dashboard.Background = "#0a0a0a";
+        dashboard.ShowGroupTitles = true;
+        dashboard.ShowSearch = true;
+        dashboard.ShowStatusIndicators = false;
+        dashboard.LinkTarget = "_self";
+        dashboard.Background = "default.js";
+        dashboard.Enabled = true;
+        dashboard.Theme = "Default";
+        dashboard.GroupUids ??= new();
+        dashboard.GroupUids.Add(grpFenrusUid);
+        dashboard.GroupUids.Add(grpFileFlowsUid);
+        DbHelper.Insert(dashboard);
+    }
+
+    private Fenrus.Models.Group CreateGroup(Guid uid, string name, List<GroupItem> items)
+    {
+        var group = DbHelper.GetByUid<Fenrus.Models.Group>(uid);
+        if (group != null)
+            return group;
+        group = new();
+        group.Name = name;
+        group.Uid = uid;
+        group.Items = items;
+        group.Enabled = true;
+        group.IsSystem = true;
+        DbHelper.Insert(group);
+        return group;
     }
 
     /// <summary>
