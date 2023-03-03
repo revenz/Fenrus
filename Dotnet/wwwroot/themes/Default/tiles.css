@@ -261,13 +261,22 @@
 .dashboard .db-item.db-basic.medium:hover .icon, .dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .icon, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .icon, .dashboard .db-item.db-basic.xx-large:hover .content, .side .db-item.db-basic.medium:hover .icon, .side .db-item.db-basic.medium:hover .content, .side .db-item.db-basic.x-large:hover .icon, .side .db-item.db-basic.x-large:hover .content, .side .db-item.db-basic.xx-large:hover .icon, .side .db-item.db-basic.xx-large:hover .content, .preview .db-item.db-basic.medium:hover .icon, .preview .db-item.db-basic.medium:hover .content, .preview .db-item.db-basic.x-large:hover .icon, .preview .db-item.db-basic.x-large:hover .content, .preview .db-item.db-basic.xx-large:hover .icon, .preview .db-item.db-basic.xx-large:hover .content {
   backface-visibility: unset;
 }
+.dashboard .db-item.db-basic.medium:hover .icon img, .dashboard .db-item.db-basic.x-large:hover .icon img, .dashboard .db-item.db-basic.xx-large:hover .icon img, .side .db-item.db-basic.medium:hover .icon img, .side .db-item.db-basic.x-large:hover .icon img, .side .db-item.db-basic.xx-large:hover .icon img, .preview .db-item.db-basic.medium:hover .icon img, .preview .db-item.db-basic.x-large:hover .icon img, .preview .db-item.db-basic.xx-large:hover .icon img {
+  display: none;
+}
 .dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .content, .side .db-item.db-basic.medium:hover .content, .side .db-item.db-basic.x-large:hover .content, .side .db-item.db-basic.xx-large:hover .content, .preview .db-item.db-basic.medium:hover .content, .preview .db-item.db-basic.x-large:hover .content, .preview .db-item.db-basic.xx-large:hover .content {
   display: unset;
+  margin-left: 0.15rem !important;
+  margin-top: -0.4rem;
+}
+.dashboard .db-item.db-basic.medium:hover .content > div, .dashboard .db-item.db-basic.x-large:hover .content > div, .dashboard .db-item.db-basic.xx-large:hover .content > div, .side .db-item.db-basic.medium:hover .content > div, .side .db-item.db-basic.x-large:hover .content > div, .side .db-item.db-basic.xx-large:hover .content > div, .preview .db-item.db-basic.medium:hover .content > div, .preview .db-item.db-basic.x-large:hover .content > div, .preview .db-item.db-basic.xx-large:hover .content > div {
+  padding: 0 0.35rem;
+}
+.dashboard .db-item.db-basic.medium:hover .content > div:first-child, .dashboard .db-item.db-basic.x-large:hover .content > div:first-child, .dashboard .db-item.db-basic.xx-large:hover .content > div:first-child, .side .db-item.db-basic.medium:hover .content > div:first-child, .side .db-item.db-basic.x-large:hover .content > div:first-child, .side .db-item.db-basic.xx-large:hover .content > div:first-child, .preview .db-item.db-basic.medium:hover .content > div:first-child, .preview .db-item.db-basic.x-large:hover .content > div:first-child, .preview .db-item.db-basic.xx-large:hover .content > div:first-child {
+  padding-top: 0.25rem;
 }
 .dashboard .db-item.db-basic.medium:hover .inner, .dashboard .db-item.db-basic.x-large:hover .inner, .dashboard .db-item.db-basic.xx-large:hover .inner, .side .db-item.db-basic.medium:hover .inner, .side .db-item.db-basic.x-large:hover .inner, .side .db-item.db-basic.xx-large:hover .inner, .preview .db-item.db-basic.medium:hover .inner, .preview .db-item.db-basic.x-large:hover .inner, .preview .db-item.db-basic.xx-large:hover .inner {
-  transform: rotateY(180deg);
-  top: -0.5rem;
-  right: -0.5rem;
+  transform: rotateY(180deg) scale(1.15);
 }
 
 @supports (-moz-appearance: none) {

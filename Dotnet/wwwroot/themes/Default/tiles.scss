@@ -313,13 +313,22 @@ $margin:0;
                 .icon, .content {
                   backface-visibility: unset;
                 }
+                .icon img {
+                    display:none;
+                }
                 .content {
-                    display: unset;
+                    display: unset; 
+                    margin-left: 0.15rem !important;
+                    margin-top: -0.4rem;
+                    > div {
+                        padding:0 0.35rem;
+                    }
+                    > div:first-child {
+                        padding-top:0.25rem;
+                    }
                 }
                 .inner {
-                    transform: rotateY(180deg);
-                    top: -0.5rem;
-                    right: -0.5rem;
+                    transform: rotateY(180deg) scale(1.15);
                 }
             }
         }

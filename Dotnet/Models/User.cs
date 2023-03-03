@@ -34,23 +34,4 @@ public class User: IModal
     /// Gets or sets if the user is an admin
     /// </summary>
     public bool IsAdmin { get; set; }
-    
-    
-    private List<object> _Items = new();
-
-    /// <summary>
-    /// Gets or sets the items in the group
-    /// </summary>
-    public List<object> Items
-    {
-        get => _Items;
-        set
-        {
-            if (value == _Items)
-                return; // dont call clear here, this would wipe it out
-            _Items.Clear();
-            if(value?.Any() == true)
-                _Items.AddRange(value);
-        }
-    }
 }

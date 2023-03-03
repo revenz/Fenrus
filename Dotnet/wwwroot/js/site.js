@@ -134,7 +134,7 @@ function changeDashboard(uid){
 
 function moveGroup(groupUid, up){
     let dashboardUid = document.querySelector('.dashboard').getAttribute('x-uid');
-    fetch(`/settings/dashboards/${dashboardUid}/move-group/${groupUid}/${up}`, { method: 'POST'}).then(res => {
+    fetch(`/settings/dashboard/${dashboardUid}/move-group/${groupUid}/${up}`, { method: 'POST'}).then(res => {
         let eleGroup = document.getElementById(groupUid);
         let dashboard = eleGroup.parentElement;
         let groups = dashboard.querySelectorAll('.db-group');
@@ -156,7 +156,7 @@ function removeGroup(groupUid, groupName)
     if(confirm(`Do you want to remove the group '${groupName}'?`) !== true)
         return;
     let dashboardUid = document.querySelector('.dashboard').getAttribute('x-uid');        
-    fetch(`/settings/dashboards/${dashboardUid}/remove-group/${groupUid}`, { method: 'POST'}).then(res => {
+    fetch(`/settings/dashboard/${dashboardUid}/remove-group/${groupUid}`, { method: 'POST'}).then(res => {
         let eleGroup = document.getElementById(groupUid);
         eleGroup?.remove();
     });

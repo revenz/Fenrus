@@ -1,6 +1,7 @@
 using Fenrus.Components.Dialogs;
 using Fenrus.Models;
 using Fenrus.Pages;
+using Fenrus.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -113,10 +114,23 @@ A group will not appear by itself, it must be added to a dashboard.";
     /// </summary>
     void Save()
     {
+        if (IsSystem)
+        {
+            
+        }
+        else{}
         if (isNew)
         {
             Model.Uid = Guid.NewGuid();
-            Settings.Groups.Add(Model);
+            Model.Enabled = true; // default to being enabled
+            Model.IsSystem = IsSystem;
+        }
+        else if (IsSystem)
+        {
+            var existing = new GroupService().GetByUid(Uid);
+            existing.Name = Model.Name;
+            existing.HideGroupTitle = Model.HideGroupTitle;
+            existing.Items = Model.Items ?? new();
         }
         else
         {
@@ -131,8 +145,23 @@ A group will not appear by itself, it must be added to a dashboard.";
             if (item.Uid == Guid.Empty)
                 item.Uid = Guid.NewGuid();
         }
-        Settings.Save();
-        this.Router.NavigateTo("/settings/groups");
+
+        if (IsSystem)
+        {
+            if (isNew)
+                new GroupService().Add(Model);
+            else
+                new GroupService().Update(Model);
+            
+            this.Router.NavigateTo("/settings/system/groups");
+        }
+        else
+        {
+            Settings.Groups.Add(Model);
+            Settings.Save();
+            this.Router.NavigateTo("/settings/groups");
+        }
+
     }
 
     /// <summary>

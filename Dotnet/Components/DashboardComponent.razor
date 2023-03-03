@@ -19,7 +19,7 @@
                     <div class="group-controls">
                         <span class="move-up fa-solid fa-angle-up" title="Move Up" onclick="moveGroup('@group.Uid', true)"></span>
                         <span class="move-down fa-solid fa-angle-down" title="Move Down" onclick="moveGroup('@group.Uid', false)"></span>
-                        <span class="remove-group fa-solid fa-trash" title="Remove Group" onclick="removeGroup('@group.Uid', )"></span>
+                        <span class="remove-group fa-solid fa-trash" title="Remove Group" onclick="removeGroup('@group.Uid', '@group.Name.Replace("'", "\\'")')"></span>
                     </div>
                 </div>
             }

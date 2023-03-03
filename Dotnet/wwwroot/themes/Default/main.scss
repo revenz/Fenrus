@@ -63,10 +63,11 @@
         position: absolute;
         left:0.5rem;
         top:-1.5rem;
-        right:0.5rem;
+        right:0.5rem;    
+        min-width: 10rem;
 
         span {
-            padding: 0.5rem 0.5rem 0.5rem;
+            padding: 0 0.5rem 0.5rem;
             font-weight:600;
             color: var(--color);
         }

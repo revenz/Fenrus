@@ -73,6 +73,17 @@ public class UserSettingsService
     }
 
     /// <summary>
+    /// Gets all the groups from every user
+    /// This is used for the up time service 
+    /// </summary>
+    /// <returns>all the groups for all the users</returns>
+    public List<Group> GetAllGroups()
+    {
+        var users = DbHelper.GetAll<UserSettings>();
+        return users.SelectMany(x => x.Groups).ToList();
+    }
+
+    /// <summary>
     /// Saves a users settings
     /// </summary>
     /// <param name="settings">the user settings</param>

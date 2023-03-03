@@ -1,4 +1,6 @@
+using System.Security.Cryptography.Xml;
 using System.Text.RegularExpressions;
+using Fenrus.Services;
 using Jint.Runtime.Debugger;
 using Microsoft.AspNetCore.Mvc;
 
@@ -136,6 +138,50 @@ public class SettingsController : BaseController
         {
             reload
         });
+    }
+
+
+    /// <summary>
+    /// Removes a group from a dashboard
+    /// </summary>
+    /// <param name="uid">The UID of the dashboard to update the setting for</param>
+    /// <param name="groupUid">The UID of the group being removed</param>
+    [HttpPost("settings/dashboard/{uid}/remove-group/{groupUid}")]
+    public void RemoveGroup([FromRoute] Guid uid, [FromRoute] Guid groupUid)
+    {
+        var settings = GetUserSettings();
+        var dashboard = settings.Dashboards.FirstOrDefault(x => x.Uid == uid);
+        if (dashboard == null)
+            return;
+        dashboard.GroupUids = dashboard.GroupUids.Where(x => x != groupUid).ToList();
+        settings.Save();
+    }
+
+    /// <summary>
+    /// Moves a group inside a dashboard
+    /// </summary>
+    /// <param name="uid">The UID of the dashboard to update the setting for</param>
+    /// <param name="groupUid">The UID of the group moving up</param>
+    /// <param name="up">true if moving the group up, otherwise false</param>
+    [HttpPost("settings/dashboard/{uid}/move-group/{groupUid}/{up}")]
+    public void MoveGroup([FromRoute] Guid uid, [FromRoute] Guid groupUid, [FromRoute] bool up)
+    {
+        var settings = GetUserSettings();
+        var dashboard = settings.Dashboards.FirstOrDefault(x => x.Uid == uid);
+        if (dashboard == null)
+            return;
+        var index = dashboard.GroupUids.IndexOf(groupUid);
+        if (index < 0)
+            return;
+        if (up && index < 1)
+            return;
+        if (up == false && index >= dashboard.GroupUids.Count - 1)
+            return;
+        int dest = index + (up ? -1 : 1);
+        dashboard.GroupUids[index] = dashboard.GroupUids[dest];
+        dashboard.GroupUids[dest] = groupUid;
+        dashboard.GroupUids = dashboard.GroupUids.Distinct().ToList();
+        settings.Save();
     }
 
     /// <summary>

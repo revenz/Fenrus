@@ -13,11 +13,20 @@ public class UserService
     /// <returns>the user if validates, otherwise null</returns>
     public Models.User? Validate(string username, string password)
     {
-        var user = DbHelper.GetByName<Models.User>(username);
-        bool valid = BCrypt.Net.BCrypt.Verify(password, user.Password);
-        if (valid == false)
+        try
+        {
+            var user = DbHelper.GetByName<Models.User>(username);
+            if (user == null)
+                return null;
+            bool valid = BCrypt.Net.BCrypt.Verify(password, user.Password);
+            if (valid == false)
+                return null;
+            return user;
+        }
+        catch (Exception)
+        {
             return null;
-        return user;
+        }
     }
 
     /// <summary>

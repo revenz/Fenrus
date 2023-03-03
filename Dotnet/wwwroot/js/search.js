@@ -25,7 +25,7 @@ function SearchKeyDown(event)
             return;
         }
         
-        if(original === '' && event.code === 'Backspace')
+        if(original === ' ' && event.code === 'Backspace')
         {
             if(!searchText && SearchEngine){
                 // clear the search engine

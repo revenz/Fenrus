@@ -1,4 +1,5 @@
 using System.Timers;
+using Fenrus.Models;
 using Timer = System.Timers.Timer;
 
 namespace Fenrus.Services;
@@ -28,9 +29,39 @@ public class UpTimeService
 
     public void Monitor()
     {
-        
+        var userGroups = new UserSettingsService().GetAllGroups();
+        var systemGroups = new GroupService().GetSystemGroups();
+        var items = userGroups.Union(systemGroups).Where(x => x.Enabled)
+            .SelectMany(x => x.Items)
+            .Select(x =>
+            {
+                string url = null;
+                if (x is AppItem app)
+                    url = app.Url;
+                else if(x is LinkItem link)
+                    url = link.Url;
+                return url;
+            }).Where(x => string.IsNullOrEmpty(x) == false).Distinct().ToList();
+
+        foreach (var url in items)
+        {
+            _ = MonitorUptime(url);
+        }
+    }
+
+    private async Task MonitorUptime(string url)
+    {
+        var upTimeSite = new UpTimeSite(this.HttpClient, url);
+        var reachable = await upTimeSite.IsReachable();
+        UpTimeEntry entry = new();
+        entry.Url = url;
+        entry.Date = DateTime.Now;
+        entry.Message = reachable.Message;
+        entry.Status = reachable.Reachable;
+        DbHelper.Insert(entry);
     }
 }
+
 
 /// <summary>
 /// Site to monitor 
@@ -50,19 +81,22 @@ public class UpTimeSite
         this.Url = url;
     }
     
-    public async Task<bool> IsReachable()
+    public async Task<(bool Reachable, string Message)> IsReachable()
     {
         try
         {
             var result = await HttpClient.SendAsync(new (HttpMethod.Get, Url));
-            return result.IsSuccessStatusCode;
+            if (result.IsSuccessStatusCode)
+                return (true, string.Empty);
+            return (false, result.ReasonPhrase ?? result.StatusCode.ToString());
         }
-        catch(Exception) 
+        catch(Exception ex) 
         {
             // if(ex.Message === 'ERR_INVALID_PROTOCOL')
             //     return true; // this means its reached, but moaning about http/https, so record it as up
             //return ('' + err).replace(', reason:', '\nreason:');
-            return false;
+            
+            return (false, ex.Message);
         }
     }
 

@@ -1,3 +1,4 @@
+using Fenrus.Models;
 using Fenrus.Pages;
 
 namespace Fenrus.Components;
@@ -25,5 +26,19 @@ A group will not appear by itself, it must be added to a dashboard.";
             Items = DbHelper.GetAll<Models.Group>();
         else
             Items = Settings.Groups;
+    }
+
+    /// <summary>
+    /// Enables an item
+    /// </summary>
+    /// <param name="item">the item being enabled</param>
+    /// <param name="enabled">the enabled state</param>
+    private void ItemEnabled(Models.Group item, bool enabled)
+    {
+        item.Enabled = enabled;
+        if (IsSystem)
+            new Services.GroupService().Enable(item.Uid, enabled);
+        else
+            Settings.Save();
     }
 }

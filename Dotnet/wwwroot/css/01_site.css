@@ -144,7 +144,7 @@ option {
   text-align: center;
   margin: 1rem;
   z-index: 2;
-  height: 2rem;
+  height: 3rem;
 }
 .search .search-inner {
   z-index: 2;
@@ -443,7 +443,8 @@ body.not-home {
 }
 
 .db-group > .title .group-controls {
-  display: none;
+  display: inline-block;
+  visibility: hidden;
 }
 .db-group > .title .group-controls span {
   cursor: pointer;
@@ -453,7 +454,7 @@ body.not-home {
   color: var(--color);
 }
 .db-group > .title:hover .group-controls {
-  display: unset;
+  visibility: unset;
 }
 
 .db-group:first-of-type .group-controls .move-up {

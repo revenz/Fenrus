@@ -22,4 +22,34 @@ public class GroupService
     /// <returns>the group</returns>
     public Group GetByUid(Guid uid)
         => DbHelper.GetByUid<Group>(uid);
+
+    /// <summary>
+    /// Enables a group
+    /// </summary>
+    /// <param name="uid">the UID of the group to enable</param>
+    /// <param name="enabled">the enabled state</param>
+    public void Enable(Guid uid, bool enabled)
+    {
+        var group = GetByUid(uid);
+        if (group == null)
+            return;
+        if (group.Enabled == enabled)
+            return; // nothing to do
+        group.Enabled = enabled;
+        DbHelper.Update(group);
+    }
+
+    /// <summary>
+    /// Adds a new group
+    /// </summary>
+    /// <param name="group">the new group being added</param>
+    public void Add(Group group)
+        => DbHelper.Insert(group);
+    
+    /// <summary>
+    /// Updates a new group
+    /// </summary>
+    /// <param name="group">the new group being updated</param>
+    public void Update(Group group)
+        => DbHelper.Update(group);
 }

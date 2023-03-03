@@ -19,7 +19,7 @@
             <FenrusTableColumn TItem="Models.Group" ColumnName="Enabled" Width="10rem">
                 <Header>Enabled</Header>
                 <Cell Context="item">
-                    <FenrusSwitch @bind-Value="@item.Enabled"></FenrusSwitch>
+                    <FenrusSwitch Value="@item.Enabled" ValueChanged="@((value) => ItemEnabled(item, value))"></FenrusSwitch>
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.Group" ColumnName="Actions" Width="10rem">

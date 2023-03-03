@@ -203,12 +203,23 @@ var status = instance.status(statusArgs);");
     }
 }
 
+/// <summary>
+/// An initialised instance of an Application
+/// </summary>
 class AppInstance
 {
+    /// <summary>
+    /// Gets or sets the engine used to run this instance
+    /// </summary>
     public Engine Engine { get; set; }
     
+    /// <summary>
+    /// Gets or sets the App this is an instance of
+    /// </summary>
     public FenrusApp App { get; set; }
     
+    /// <summary>
+    /// Gets or sets the user app this is an instance for
+    /// </summary>
     public AppItem UserApp { get; set; }
-
 }
