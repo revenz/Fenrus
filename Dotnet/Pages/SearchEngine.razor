@@ -2,17 +2,17 @@
 @page "/settings/system/search-engines/{uidString}"
 @inherits UserPage
 
-<PageTitle>Fenrus - Search Engine</PageTitle>
+<PageTitle>Fenrus - @lblTitle</PageTitle>
 
-<FenrusPage Title="Search Engine" Icon="fa-solid fa-magnifying-glass">
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-magnifying-glass">
     <Buttons>
-        <button class="btn" @onclick="() => Save()">Save</button>
-        <button class="btn" @onclick="() => Cancel()">Cancel</button>
+        <button class="btn" @onclick="() => Save()">@lblSave</button>
+        <button class="btn" @onclick="() => Cancel()">@lblCancel</button>
     </Buttons>
     <Body>
-        <InputText Label="Name" @bind-Value="@Model.Name" Help="The Name of the search engine" />
-        <InputText Label="URL" @bind-Value="@Model.Url" Help="The URL of the search engine.  Note %s will be replaced with the search string" />
-        <InputText Label="Shortcut" @bind-Value="@Model.Shortcut" Help="The shortcut for this search engine.  Typing this shortcut then space will switch the search to use this search engine" />
-        <InputImage Label="Icon" @bind-value="@Icon" InitialImage="@InitialImage" />
+        <InputText Label="@lblName" @bind-Value="@Model.Name" Help="@lblNameHelp" />
+        <InputText Label="@lblUrl" @bind-Value="@Model.Url" Help="@lblUrlHelp" />
+        <InputText Label="@lblShortcut" @bind-Value="@Model.Shortcut" Help="@lblShortcutHelp" />
+        <InputImage Label="@lblIcon" @bind-value="@Icon" InitialImage="@InitialImage" />
     </Body>
 </FenrusPage>

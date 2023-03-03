@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Fenrus.Models;
+using Fenrus.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,11 @@ public class HomeController : BaseController
             return Redirect("/login");
 
         var dashboard = settings.Dashboards.FirstOrDefault() ?? new();
+        return ShowDashboard(dashboard, settings);
+    }
+
+    private IActionResult ShowDashboard(Dashboard dashboard, UserSettings settings)
+    {
         if (string.IsNullOrEmpty(dashboard.BackgroundImage) == false)
             ViewBag.CustomBackground = "true";
 
@@ -67,7 +73,7 @@ public class HomeController : BaseController
         ViewBag.SystemSearchEngines = DbHelper.GetAll<Models.SearchEngine>();
         ViewBag.Accent = dashboard.AccentColor?.EmptyAsNull() ?? string.Empty;
         return View("Dashboard", model);
-    }
+    } 
 
     /// <summary>
     /// Gets a favicon
@@ -151,7 +157,7 @@ public class HomeController : BaseController
     {
         var user = new Services.UserService().Validate(username, password);
         if (user == null)
-            return LoginPage("Login failed");
+            return LoginPage(Translater.Instant("Pages.Login.ErrorMessages.LoginFailed"));
         
         await CreateClaim(user.Uid, user.Name, user.IsAdmin);
         return Redirect("/");
@@ -161,7 +167,7 @@ public class HomeController : BaseController
     {
         var settings = GetSystemSettings();
         if (settings.AllowRegister == false)
-            return LoginPage("User registrations are not allowed");
+            return LoginPage(Translater.Instant("Pages.Login.ErrorMessages.RegistrationNotAllowed"));
         var user = new Services.UserService().Register(username, password);
         await CreateClaim(user.Uid, user.Name, user.IsAdmin);
         return Redirect("/");
@@ -171,10 +177,12 @@ public class HomeController : BaseController
     {
         var settings = GetSystemSettings();
         if (settings.AllowGuest == false)
-            return LoginPage("Guest access is not allowed");
+            return LoginPage(Translater.Instant("Pages.Login.ErrorMessages.GuestNotAllowed"));
 
         ViewBag.IsGuest = true;
-        throw new NotImplementedException();
+        var dashboard = new DashboardService().GetGuestDashboard();
+
+        return ShowDashboard(dashboard, new Services.UserSettingsService().SettingsForGuest());
     }
 
     private async Task CreateClaim(Guid uid, string username, bool isAdmin)

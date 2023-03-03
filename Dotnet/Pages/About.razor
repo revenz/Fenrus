@@ -1,9 +1,14 @@
 @page "/settings/about"
 @inherits UserPage
+@code {
 
-<PageTitle>Fenrus - About</PageTitle>
+    string lblTitle = Translater.Instant("Pages.About.Title");
 
-<FenrusPage Title="General Settings" Icon="fa-solid fa-sliders">
+}
+
+<PageTitle>Fenrus - @lblTitle</PageTitle>
+
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-sliders">
     <Buttons>
         <button class="btn">Update Apps</button>
         <button class="btn">Import Config</button>

@@ -2,12 +2,12 @@
 @namespace Fenrus.Pages
 @inherits CommonPage<Fenrus.Models.User>
 
-<PageTitle>Fenrus - @Title</PageTitle>
+<PageTitle>Fenrus - @lblTitle</PageTitle>
 
-<FenrusPage Title="@Title" Icon="fa-solid fa-user-group" PageDescription="@Description">
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-user-group" PageDescription="@lblDescription">
     <Buttons>
         <div class="allow-register">
-            <span class="label allow-register-label">Allow Registrations:</span>
+            <span class="label allow-register-label">@lblAllowRegistrations:</span>
             <FenrusSwitch @bind-Value="AllowRegistrations" />
         </div>
     </Buttons>
@@ -16,14 +16,14 @@
     <FenrusTable @ref=Table TItem="Models.User" Data=@Items>
         <Columns>
             <FenrusTableColumn TItem="Models.User" ColumnName="Name">
-                <Header>Name</Header>
+                <Header>@lblName</Header>
                 <Cell Context="item">
                     <i class="fa-solid fa-user"></i>
                     <span>@item.Name</span>
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.User" ColumnName="Admin" Width="10rem">
-                <Header>Admin</Header>
+                <Header>@lblAdmin</Header>
                 <Cell Context="item">
                     <FenrusSwitch Value="item.IsAdmin" Disabled="IsSelf(item)" ValueChanged="(value) => AdminUpdated(item, value)"></FenrusSwitch>
                 </Cell>
@@ -35,7 +35,7 @@
                     {
                         // only allow deleting of other users, they cannot delete themselves
                         <div class="actions">
-                            <span title="Delete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
+                            <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
                         </div>
                     }
                 </Cell>

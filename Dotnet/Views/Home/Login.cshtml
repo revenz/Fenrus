@@ -43,12 +43,12 @@
                 </span>
             </div>
             <div class="buttons">
-                <input type="submit" name="action" value="Login" class="btn" />
+                <input type="submit" name="action" value="Login" class="btn"  />
                 @if(Model.AllowRegister) { 
                     <input type="submit" name="action" value="Register" class="btn" />
                 }
                 @if(Model.AllowGuest) { 
-                    <input type="submit" name="action" value="Guest" class="btn" />
+                    <input type="submit" name="action" value="Guest" class="btn" onclick="this.form.setAttribute('novalidate', 'novalidate');" />
                 }
             </div>
         </form>

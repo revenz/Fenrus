@@ -49,7 +49,7 @@ public partial class Docker: CommonPage<Models.DockerServer>
             return;
         Items.Add(result.Data);
         Items = Items.OrderBy(x => x.Name).ToList();
-        StateHasChanged();
+        Table.SetData(Items);
     }
 
     /// <summary>
@@ -65,6 +65,21 @@ public partial class Docker: CommonPage<Models.DockerServer>
         item.Name = result.Data.Name;
         item.Port = result.Data.Port;
         Items = Items.OrderBy(x => x.Name).ToList();
-        StateHasChanged();
+        Table.SetData(Items);
+    }
+
+    /// <summary>
+    /// Actually performs the deletion after confirmation has been received
+    /// </summary>
+    /// <param name="item">the item being deleted</param>
+    /// <returns>if the deletion was successful</returns>
+    protected override bool DoDelete(DockerServer item)
+    {
+        if (base.DoDelete(item) == false)
+            return false;
+        
+        Items.RemoveAll(x => x.Uid == item.Uid);
+        Table.SetData(Items);
+        return true;
     }
 }

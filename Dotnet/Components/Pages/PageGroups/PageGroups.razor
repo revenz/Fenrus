@@ -2,7 +2,7 @@
 
 @inherits Fenrus.Pages.CommonPage<Fenrus.Models.Group>
 
-<FenrusPage Title="@Title" Icon="fa-solid fa-puzzle-piece" PageDescription="@Description">
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-puzzle-piece" PageDescription="@lblDescription">
     <Body>
     
     <FenrusTable TItem="Models.Group" Data=@Items>
@@ -11,14 +11,14 @@
         </ToolBar>
         <Columns>
             <FenrusTableColumn TItem="Models.Group" ColumnName="Name">
-                <Header>Name</Header>
+                <Header>@lblName</Header>
                 <Cell Context="item">
                     <i class="fa-solid fa-puzzle-piece"></i>
                     <a href="/settings/@(IsSystem ? "system/" : "")groups/@item.Uid">@item.Name</a>
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.Group" ColumnName="Enabled" Width="10rem">
-                <Header>Enabled</Header>
+                <Header>@lblEnabled</Header>
                 <Cell Context="item">
                     <FenrusSwitch Value="@item.Enabled" ValueChanged="@((value) => ItemEnabled(item, value))"></FenrusSwitch>
                 </Cell>
@@ -27,10 +27,8 @@
                 <Header></Header>
                 <Cell Context="item">
                     <div class="actions">
-                        <span title="Move Up" class="fa-solid fa-angle-up" @onclick="() => Move(item, true)"></span>
-                        <span title="Move Down" class="fa-solid fa-angle-down" @onclick="() => Move(item, false)"></span>
-                        <a title="Edit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
-                        <span title="Delete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
+                        <a title="@lblEdit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
+                        <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
                     </div>
                 </Cell>
             </FenrusTableColumn>

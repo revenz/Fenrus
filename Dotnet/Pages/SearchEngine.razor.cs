@@ -16,6 +16,8 @@ public partial class SearchEngine: UserPage
 
     private string InitialImage;
 
+    private string lblTitle, lblNameHelp, lblUrl, lblUrlHelp, lblShortcut, lblShortcutHelp, lblIcon;
+
     [Parameter]
     public string UidString
     {
@@ -51,8 +53,16 @@ public partial class SearchEngine: UserPage
         return Settings.SearchEngines.FirstOrDefault(x => x.Uid == Uid);
     }
 
-    protected override async Task PostGotUser()
+    protected override Task PostGotUser()
     {
+        lblTitle = Translater.Instant("Pages.SearchEngine.Title" + (IsSystem ? "-System": string.Empty));
+        lblNameHelp = Translater.Instant("Pages.SearchEngine.Fields.Name-Help");
+        lblUrl = Translater.Instant("Pages.SearchEngine.Fields.Url");
+        lblUrlHelp = Translater.Instant("Pages.SearchEngine.Fields.Url-Help");
+        lblShortcut = Translater.Instant("Pages.SearchEngine.Fields.Shortcut");
+        lblShortcutHelp = Translater.Instant("Pages.SearchEngine.Fields.Shortcut-Help");
+        lblIcon = Translater.Instant("Pages.SearchEngine.Fields.Icon");
+        
         if (Uid == Guid.Empty)
         {
             // new search engine
@@ -68,7 +78,7 @@ public partial class SearchEngine: UserPage
             if (Model == null)
             {
                 Router.NavigateTo(IsSystem ? "/settings/system/search-engines" : "/settings/search-engines");
-                return;
+                return Task.CompletedTask;
             }
             
             if (string.IsNullOrEmpty(Model.Icon) == false)
@@ -84,6 +94,8 @@ public partial class SearchEngine: UserPage
                 }
             }
         }
+
+        return Task.CompletedTask;
     }
 
     void Save()

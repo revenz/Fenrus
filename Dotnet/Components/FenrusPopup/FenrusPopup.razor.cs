@@ -132,7 +132,6 @@ public partial class FenrusPopup
             {
                 Popups.Remove(popup);
                 StateHasChanged();
-                return;
                 task.SetResult(new() { Data = model, Success = true });
             }));
         parameters.Add("OnCanceled",

@@ -60,7 +60,7 @@ public partial class PageDashboard : CommonPage<Models.Group>
     protected override async Task PostGotUser()
     {
         lblTitle = Translater.Instant(IsGuest
-            ? "Pages.Dashboard.TitleGuest"
+            ? "Pages.Dashboard.Title-Guest"
             : "Pages.Dashboard.Title");
         lblNameHelp = Translater.Instant("Pages.Dashboard.Fields.Name-Help");
         lblShowSearch = Translater.Instant("Pages.Dashboard.Fields.ShowSearch");

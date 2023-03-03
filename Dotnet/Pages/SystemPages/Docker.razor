@@ -13,7 +13,7 @@
         </ToolBar>
         <Columns>
             <FenrusTableColumn TItem="Models.DockerServer" ColumnName="Name">
-                <Header>Name</Header>
+                <Header>@lblName</Header>
                 <Cell Context="item">
                     <i class="fa-brands fa-docker"></i>
                     <a @onclick="() => Edit(item)" @onclick:preventDefault="true" href="#">@item.Name</a>
@@ -23,8 +23,8 @@
                 <Header></Header>
                 <Cell Context="item">
                     <div class="actions">
-                        <span title="Edit" class="fa-solid fa-pen-to-square" @onclick="() => Edit(item)"></span>
-                        <span title="Delete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
+                        <span title="@lblEdit" class="fa-solid fa-pen-to-square" @onclick="() => Edit(item)"></span>
+                        <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
                     </div>
                 </Cell>
             </FenrusTableColumn>

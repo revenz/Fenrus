@@ -14,7 +14,7 @@ namespace Fenrus.Pages;
 public abstract class UserPage : ComponentBase
 {
     protected string lblSave, lblCancel, lblHelp, lblDelete, lblEdit, lblMoveUp, 
-        lblMoveDown, lblCopy, lblName, lblAdd, lblEnabled, lblActions;
+        lblMoveDown, lblCopy, lblName, lblAdd, lblEnabled, lblActions, lblDefault;
     
     /// <summary>
     /// Gets or sets the Authentication state provider
@@ -82,6 +82,7 @@ public abstract class UserPage : ComponentBase
         lblAdd = Translater.Instant("Labels.Add");
         lblEnabled = Translater.Instant("Labels.Enabled");
         lblActions = Translater.Instant("Labels.Actions");
+        lblDefault  = Translater.Instant("Labels.Default");
         
         SystemSettings = new Services.SystemSettingsService().Get();
 

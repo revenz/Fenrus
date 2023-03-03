@@ -9,6 +9,14 @@
     "No": "No",
     "Ok": "OK",
     "Add": "Add",
+    "Name": "Name",
+    "MoveUp": "Move Up",
+    "MoveDown": "Move Down",
+    "Delete": "Delete",
+    "Help": "Help",
+    "Edit": "Edit",
+    "Copy": "Copy",
+    "Save": "Save",
     "Saved": "Saved",
     "Actions": "Actions",
     "Enabled": "Enabled",
@@ -24,7 +32,8 @@
     "ShowSearch": "Show Search",
     "Default": "Default",
     "ChooseImage":"Choose Image...", 
-    "CurrentImage": "Current Image"
+    "CurrentImage": "Current Image",
+    "ColorBackground": "Solid Color"
   },
   "Enums": {
     "LinkTarget": {
@@ -32,11 +41,20 @@
       "OpenInNewTab": "Open in new tab",
       "OpenInSameTab": "Open in same tab"
     }
-  },
+  },,
   "Pages": {
+    "About": {
+      "Title": "About"
+    },
+    "Dashboards":{
+      "Title": "Dashboards",
+      "Labels": {
+        "PageDescription": "This page lets you create Dashboards.  Having more than one dashboard will let you switch between them on the home screen.\n\nTo add items to your Dashboard, first create a Group containing the items you wish to add.  Then you can add that new Group to a Dashboard."
+      }
+    }, 
     "Dashboard": {
-      "Title": "Fenrus - Dashboard",
-      "TitleGuest": "Fenrus - Guest Dashboard",
+      "Title": "Dashboard",
+      "Title-Guest": "Guest Dashboard",
       "Messages": {
         "NoAvailableGroups": "No available groups to add",
         "GuestPageDescription": "This page lets you configure the Guest dashboard, the dashboard that will be shown to users if they have not signed in.  This is also the default dashboard set for new users.\n\nYou can disable this dashboard if you wish for users to login before using Fenrus."
@@ -45,11 +63,15 @@
         "Name-Help": "The Name of the dashboard",
         "ShowGroupTitles": "Show Group Titles",
         "ShowSearch": "Show Search",
-        "LinkTarget": "Link Target"
+        "LinkTarget": "Link Target",
+        "AccentColor": "Accent Color",
+        "BackgroundColor": "Background Color",
+        "Theme": "Theme"
       }
     },
     "Group": {
-      "Title": "Fenrus - Group",
+      "Title": "Group",
+      "Title-System": "System Group",
       "Buttons": {
         "AddItem": "Add Item"
       },
@@ -59,11 +81,54 @@
         "ShowGroupTitle-Help": "Whether or not to show the group title"
       }
     },
+    "Groups": {
+      "Title": "Groups",
+      "Title-System": "System Groups",
+      "Labels": {
+        "PageDescription": "This page lets you create groups which can be used on Dashboards.\n\nA group will not appear by itself, it must be added to a dashboard.",
+        "PageDescription-System": "This page lets you configure groups that will be available to all users and will be available to use on the Guest dashboard.\n\nIf you disable a group here that group will become unavailable to all users using it."
+      }
+    },
     "SearchEngines": {
       "Title": "Search Engines",
+      "Title-System": "System Search Engines",
       "Labels": {
         "AddSearchEngine": "Add Search Engine",
-        "EditSearchEngine": "Edit Search Engine"
+        "EditSearchEngine": "Edit Search Engine",
+        "PageDescription": "This page lets you configure search engines that can be used on the home screen.\n\nIf you do not configure any and have no system search engines configured, the search box will not appear on the home screen.\n\nTo switch to an non-default search engine on the home screen type in the search engine Shortcut followed by a space.",
+        "PageDescription-System": "This page lets you configure system wide search engines that will be available to all users and guests on the system."
+      }
+    },
+    "Login": {
+      "Title": "Login",
+      "ErrorMessages": {
+        "LoginFailed": "LoginFailed",
+        "RegistrationNotAllowed": "User registrations are not allowed",
+        "GuestNotAllowed": "Guest access is not allowed"
+      }
+    },
+    "SearchEngine": {
+      "Title": "Search Engine",
+      "Title-System": "System Search Engines",
+      "Fields": {
+        "Name-Help":"The name of the search engine",
+        "Url": "URL",
+        "Url-Help": "The URL of the search engine.  Note %s will be replaced with the search string",
+        "Shortcut": "Shortcut",
+        "Shortcut-Help": "The shortcut for this search engine.  Typing this shortcut then space will switch the search to use this search engine",
+        "Icon": "Icon"
+      }
+    },
+    "Users": {
+      "Title": "Users",
+      "Labels": {
+        "PageDescription": "This page lets you manage users for Fenrus."
+      },
+      "Fields": {
+        "AllowRegistrations": "Allow Registrations"
+      },
+      "Columns": {
+        "Admin": "Admin"
       }
     }
   }

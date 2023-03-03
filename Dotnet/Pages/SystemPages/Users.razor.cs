@@ -20,22 +20,18 @@ public partial class Users: CommonPage<User>
     /// </summary>
     private FenrusTable<User> Table { get; set; }
 
-    /// <summary>
-    /// Gets the page title
-    /// </summary>
-    private string Title => "Users";
-
-    /// <summary>
-    /// Gets the page description
-    /// </summary>
-    private string Description =>
-        "This page lets you manage users for Fenrus.";
+    
+    private string lblTitle, lblDescription, lblAllowRegistrations, lblAdmin;
     
     /// <summary>
     /// Called after the user has been fetched
     /// </summary>
     protected override async Task PostGotUser()
     {
+        lblTitle = Translater.Instant("Pages.Users.Title");
+        lblDescription = Translater.Instant("Pages.Users.Labels.PageDescription");
+        lblAllowRegistrations = Translater.Instant("Pages.Users.Fields.AllowRegistrations");
+        lblAdmin = Translater.Instant("Pages.Users.Columns.Admin");
         Items = new UserService().GetAll();
     }
 

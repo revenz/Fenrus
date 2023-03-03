@@ -1,7 +1,7 @@
 @namespace Fenrus.Components
 @inherits Fenrus.Pages.CommonPage<Fenrus.Models.SearchEngine>
 
-<FenrusPage Title="@Title" Icon="fa-solid fa-magnifying-glass" PageDescription="@Description">
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-magnifying-glass" PageDescription="@lblDescription">
     <Body>
     
     <FenrusTable TItem="Models.SearchEngine" Data=@Items @ref="Table">
@@ -17,22 +17,22 @@
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.SearchEngine" ColumnName="IsDefault" Width="10rem">
-                <Header>Default</Header>
+                <Header>@lblDefault</Header>
                 <Cell Context="item">
-                    <FenrusSwitch @bind-Value="@item.IsDefault"></FenrusSwitch>
+                    <FenrusSwitch Value="@item.IsDefault" ValueChanged="(value) => SetDefault(item, value)"></FenrusSwitch>
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.SearchEngine" ColumnName="Enabled" Width="10rem">
                 <Header>@lblEnabled</Header>
                 <Cell Context="item">
-                    <FenrusSwitch @bind-Value="@item.Enabled"></FenrusSwitch>
+                    <FenrusSwitch Value="@item.Enabled" ValueChanged="(value) => SetEnabled(item, value)"></FenrusSwitch>
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.SearchEngine" ColumnName="Actions" Width="10rem">
                 <Header></Header>
                 <Cell Context="item">
                     <div class="actions">
-                        <a title="@lblEdit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
+                        <a title="@lblEdit" class="fa-solid fa-pen-to-square" @onclick="() => Edit(item)"></a>
                         <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
                     </div>
                 </Cell>

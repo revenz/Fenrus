@@ -116,11 +116,8 @@ public partial class SearchEngineEditor
             Model.Uid = Guid.NewGuid();
             Model.IsSystem = IsSystem;
             
-            if (IsSystem) 
-            {
+            if (IsSystem)
                 new SearchEngineService().Add(Model);
-                await OnSaved.InvokeAsync(Model);
-            }
             else
             {
                 Settings.SearchEngines.Add(Model);
