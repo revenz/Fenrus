@@ -13,6 +13,7 @@
             <FenrusTableColumn TItem="Models.Group" ColumnName="Name">
                 <Header>Name</Header>
                 <Cell Context="item">
+                    <i class="fa-solid fa-puzzle-piece"></i>
                     <a href="/settings/@(IsSystem ? "system/" : "")groups/@item.Uid">@item.Name</a>
                 </Cell>
             </FenrusTableColumn>

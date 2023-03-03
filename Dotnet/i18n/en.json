@@ -8,6 +8,10 @@
     "Yes": "Yes",
     "No": "No",
     "Ok": "OK",
+    "Add": "Add",
+    "Saved": "Saved",
+    "Actions": "Actions",
+    "Enabled": "Enabled",
     "Search": "Search",
     "Dashboard": "Dashboard",
     "Theme": "Theme",
@@ -32,11 +36,16 @@
   "Pages": {
     "Dashboard": {
       "Title": "Fenrus - Dashboard",
+      "TitleGuest": "Fenrus - Guest Dashboard",
       "Messages": {
-        "NoAvailableGroups": "No available groups to add"
+        "NoAvailableGroups": "No available groups to add",
+        "GuestPageDescription": "This page lets you configure the Guest dashboard, the dashboard that will be shown to users if they have not signed in.  This is also the default dashboard set for new users.\n\nYou can disable this dashboard if you wish for users to login before using Fenrus."
       },
       "Fields": {
-        
+        "Name-Help": "The Name of the dashboard",
+        "ShowGroupTitles": "Show Group Titles",
+        "ShowSearch": "Show Search",
+        "LinkTarget": "Link Target"
       }
     },
     "Group": {
@@ -48,6 +57,13 @@
         "Name-Help": "The Name of the group",
         "ShowGroupTitle": "Show Group Title",
         "ShowGroupTitle-Help": "Whether or not to show the group title"
+      }
+    },
+    "SearchEngines": {
+      "Title": "Search Engines",
+      "Labels": {
+        "AddSearchEngine": "Add Search Engine",
+        "EditSearchEngine": "Edit Search Engine"
       }
     }
   }

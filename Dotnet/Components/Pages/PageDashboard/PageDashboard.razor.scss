@@ -1,0 +1,10 @@
+.top-fields {
+  display:grid;
+  grid-template-columns: 50% 50%;
+  max-width:54rem;
+  margin-top:1rem;
+  ::deep .input-label {
+    width:10rem !important;
+    min-width: 10rem !important;
+  }
+}

@@ -4,8 +4,6 @@ if(document.getElementById('search-container'))
     SearchEngineDefault = SearchEngines.filter(x => x.IsDefault)[0];
     SearchEngineLogo = document.getElementById('search-icon')
     SearchEngine = null;
-    console.log('Search Engines', SearchEngines);
-    console.log('Search Engine Default', SearchEngineDefault);   
 }
 function SearchKeyDown(event)
 {

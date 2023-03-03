@@ -3,6 +3,7 @@
   display: inline-block;
   width: 3rem;
   height: 1.5rem;
+  top: 0.25rem;
 }
 .input-switch input {
   /* hide the default browser input checkbox */

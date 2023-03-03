@@ -118,36 +118,34 @@ public partial class FenrusPopup
     /// <param name="item">the item to edit</param>
     /// <typeparam name="T">the type of editor to open</typeparam>
     /// <typeparam name="U">the type of model being edited</typeparam>
+    /// <param name="additionalParameters">[Optional] additional parameters to pass to the popup</param>
     /// <returns>the open result</returns>
-    public Task<PopupResult<U>> OpenEditor<T, U>(U item)
+    public Task<PopupResult<U>> OpenEditor<T, U>(U item, Dictionary<string, object> additionalParameters = null)
     {
         TaskCompletionSource<PopupResult<U>> task = new ();
         FenrusPopupItem popup = null;
+        
+        var parameters = additionalParameters ?? new ();
+        parameters.Add("Item", item);
+        parameters.Add("OnSaved",
+            EventCallback.Factory.Create<U>(this, model =>
+            {
+                Popups.Remove(popup);
+                StateHasChanged();
+                return;
+                task.SetResult(new() { Data = model, Success = true });
+            }));
+        parameters.Add("OnCanceled",
+            EventCallback.Factory.Create(this, _ =>
+            {
+                Popups.Remove(popup);
+                StateHasChanged();
+                task.SetResult(new() { Success = false });
+            }));
         popup = new()
         {
             Type = typeof(T),
-            Parameters = new()
-            {
-                { "Item", item },
-                {
-                    "OnSaved",
-                    EventCallback.Factory.Create<U>(this, model =>
-                    {
-                        Popups.Remove(popup);
-                        StateHasChanged();
-                        task.SetResult(new() { Data = model, Success = true });
-                    })
-                },
-                {
-                    "OnCanceled",
-                    EventCallback.Factory.Create(this, _ =>
-                    {
-                        Popups.Remove(popup);
-                        StateHasChanged();
-                        task.SetResult(new() { Success = false });
-                    })
-                }
-            }
+            Parameters = parameters
         };
         Popups.Add(popup);
         StateHasChanged();

@@ -9,8 +9,11 @@ body.initial-config-page
             margin:auto;
         }
     }
-
-
+    
+    .page-description {
+        white-space:pre-wrap;
+    }
+    
     input[type=text], input[type=password], input[type=number], select {
         width: calc(100% - 1rem);
         padding: 0.5rem;

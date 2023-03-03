@@ -48,7 +48,7 @@ public partial class SearchEngine: UserPage
     {
         if (IsSystem)
             return DbHelper.GetByUid<Models.SearchEngine>(Uid);
-        return Settings.SearchEngines.First(x => x.Uid == Uid);
+        return Settings.SearchEngines.FirstOrDefault(x => x.Uid == Uid);
     }
 
     protected override async Task PostGotUser()
@@ -65,6 +65,11 @@ public partial class SearchEngine: UserPage
         {
             isNew = false;
             Model = GetSearchEngine();
+            if (Model == null)
+            {
+                Router.NavigateTo(IsSystem ? "/settings/system/search-engines" : "/settings/search-engines");
+                return;
+            }
             
             if (string.IsNullOrEmpty(Model.Icon) == false)
             {

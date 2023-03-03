@@ -1,53 +1,8 @@
 @page "/settings/dashboards/{uidString}"
-@inherits CommonPage<Models.Group>
+@code {
+    [Parameter] public string UidString { get;set; }
+}
 
-<PageTitle>Fenrus - Dashboard</PageTitle>
+<PageTitle>@Translater.Instant("Pages.Dashboard.Title")</PageTitle>
 
-<FenrusPage Title="Dashboard" Icon="fa-solid fa-house">
-    <Buttons>
-        <button class="btn" @onclick="() => Save()">Save</button>
-        <button class="btn" @onclick="() => Cancel()">Cancel</button>
-    </Buttons>
-    <Body>
-    <InputText Label="Name" @bind-Value="@Model.Name" Help="The Name of the dashboard" />
-    <InputColor Label="Accent" @bind-Value="@Model.AccentColor" Help="The general accent colour of the application"></InputColor>
-    <InputSelect TItem="string" Label="Theme" @bind-Value="@Model.Theme" Help="Your personal theme to use.">
-        <InputSelectOption TItem="string"StringValue="Default" Label="Default" />
-        <InputSelectOption TItem="string"StringValue="Basic" Label="Basic" />
-        <InputSelectOption TItem="string"StringValue="Heimdall" Label="Heimdall" />
-    </InputSelect>
-    
-    <FenrusTable TItem="Models.Group" Data=@Groups @ref=Table>
-        <ToolBar>
-            <FenrusTableButton Label="Add" Icon="fa-solid fa-plus" Clicked="() => AddGroup()" />
-        </ToolBar>
-        <Columns>
-            <FenrusTableColumn TItem="Models.Group" ColumnName="Name">
-                <Header>Name</Header>
-                <Cell Context="item">
-                    <a href="/settings/groups/@item.Uid">@item.Name</a>
-                </Cell>
-            </FenrusTableColumn>
-            <FenrusTableColumn TItem="Models.Group" ColumnName="Enabled" Width="10rem">
-                <Header>Enabled</Header>
-                <Cell Context="item">
-                    <FenrusSwitch @bind-Value="@item.Enabled"></FenrusSwitch>
-                </Cell>
-            </FenrusTableColumn>
-            <FenrusTableColumn TItem="Models.Group" ColumnName="Actions" Width="10rem">
-                <Header></Header>
-                <Cell Context="item">
-                    <div class="actions">
-                        <span title="Move Up" class="fa-solid fa-angle-up" @onclick="() => Move(item, true)"></span>
-                        <span title="Move Down" class="fa-solid fa-angle-down" @onclick="() => Move(item, false)"></span>
-                        <a title="Edit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
-                        <span title="Delete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
-                    </div>
-                </Cell>
-            </FenrusTableColumn>
-        </Columns>
-    </FenrusTable>
-    </Body>
-</FenrusPage>
-
-<Fenrus.Components.Dialogs.GroupAddDialog @ref="GroupAddDialog" />
+<PageDashboard UidString=@UidString />

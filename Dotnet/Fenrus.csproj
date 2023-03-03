@@ -31,4 +31,22 @@
     <None Include="wwwroot\search-engines\youtube.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AdditionalFiles Include="Components\Pages\PageGroups\PageGroups.razor" />
+    <AdditionalFiles Include="Components\Pages\PageGroup\PageGroup.razor" />
+    <AdditionalFiles Include="Components\Pages\PageSearchEngines\PageSearchEngines.razor" />
+    <AdditionalFiles Include="Components\PanelThemeSettings\PanelThemeSettings.razor" />
+    <AdditionalFiles Include="Components\PanelUserSettings\PanelUserSettings.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\PanelThemeSettings\PanelThemeSettings.razor" />
+    <_ContentIncludedByDefault Remove="Components\PanelUserSettings\PanelUserSettings.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\PageDashboard\PageDashboard.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\PanelThemeSettings\PanelThemeSettings.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\PanelUserSettings\PanelUserSettings.razor" />
+    <_ContentIncludedByDefault Remove="Components\PageGroup\PageGroup.razor" />
+    <_ContentIncludedByDefault Remove="Components\PageGroups\PageGroups.razor" />
+  </ItemGroup>
+
 </Project>

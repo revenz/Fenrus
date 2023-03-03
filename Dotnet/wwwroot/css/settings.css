@@ -9,6 +9,11 @@ body.initial-config-page .main-content {
 body.initial-config-page .main-content > div {
   margin: auto;
 }
+.fenrus-page-body .page-description,
+.side-editor .page-description,
+body.initial-config-page .page-description {
+  white-space: pre-wrap;
+}
 .fenrus-page-body input[type=text], .fenrus-page-body input[type=password], .fenrus-page-body input[type=number], .fenrus-page-body select,
 .side-editor input[type=text],
 .side-editor input[type=password],

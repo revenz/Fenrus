@@ -13,7 +13,8 @@ namespace Fenrus.Pages;
 [Authorize]
 public abstract class UserPage : ComponentBase
 {
-    protected string lblSave, lblCancel, lblHelp, lblDelete, lblEdit, lblMoveUp, lblMoveDown, lblCopy, lblName;
+    protected string lblSave, lblCancel, lblHelp, lblDelete, lblEdit, lblMoveUp, 
+        lblMoveDown, lblCopy, lblName, lblAdd, lblEnabled, lblActions;
     
     /// <summary>
     /// Gets or sets the Authentication state provider
@@ -78,7 +79,10 @@ public abstract class UserPage : ComponentBase
         lblMoveUp = Translater.Instant("Labels.MoveUp");
         lblCopy = Translater.Instant("Labels.Copy");
         lblName = Translater.Instant("Labels.Name");
-
+        lblAdd = Translater.Instant("Labels.Add");
+        lblEnabled = Translater.Instant("Labels.Enabled");
+        lblActions = Translater.Instant("Labels.Actions");
+        
         SystemSettings = new Services.SystemSettingsService().Get();
 
         var accent = Settings.Dashboards?.FirstOrDefault(x => x.Enabled)?.AccentColor ?? "#FF0090";
