@@ -20,19 +20,67 @@ public class UpTimeService
         HttpClient = new(handler);
         Timer = new();
         Timer.Elapsed += TimerOnElapsed;
-        Timer.AutoReset = true;
+        Timer.Interval = GetNextInterval();
         Timer.Enabled = true;
-    } 
+    }
+
+    /// <summary>
+    /// Gets the next interval when the monitor should run
+    /// </summary>
+    /// <returns>the number of milliseconds until the monitor should run next</returns>
+    private int GetNextInterval()
+    {
+        var dt = DateTime.Now;
+        var d = new TimeSpan(0, 10, 0);
+        var modTicks = dt.Ticks % d.Ticks;
+        var delta = modTicks != 0 ? d.Ticks - modTicks : 0;
+        var target = new DateTime(dt.Ticks + delta, dt.Kind);
+        var diff = target - dt;
+        if (diff.TotalSeconds < 5)
+        {
+            target = target.AddMinutes(10);
+            diff = target - dt;
+        }
+        return (int)diff.TotalMilliseconds;
+    }
+
+    /// <summary>
+    /// Gets the up time data for a URL
+    /// </summary>
+    /// <param name="url">the URL </param>
+    /// <returns>any data for the URL</returns>
+    public List<UpTimeEntry> GetData(string url)
+    {
+        var db = DbHelper.GetDb();
+        var collection = db.GetCollection<UpTimeEntry>(nameof(UpTimeEntry));
+        return collection.Query().Where(x => x.Url == url)
+            .OrderByDescending(x => x.Date).Limit(100).ToList();
+    }
 
     private void TimerOnElapsed(object? sender, ElapsedEventArgs e)
-        => Monitor();
+    {
+        try
+        {
+            Monitor();
+        }
+        catch (Exception)
+        {
+
+        }
+        finally
+        {
+            Thread.Sleep(10_000);
+            Timer.Interval = GetNextInterval();
+            Timer.Start();
+        }
+    }
 
     public void Monitor()
     {
-        var userGroups = new UserSettingsService().GetAllGroups();
-        var systemGroups = new GroupService().GetSystemGroups();
+        var userGroups = new UserSettingsService().GetAllGroups() ?? new();
+        var systemGroups = new GroupService().GetSystemGroups() ?? new();
         var items = userGroups.Union(systemGroups).Where(x => x.Enabled)
-            .SelectMany(x => x.Items)
+            .SelectMany(x => x.Items ?? new List<GroupItem>())
             .Select(x =>
             {
                 string url = null;
@@ -51,14 +99,26 @@ public class UpTimeService
 
     private async Task MonitorUptime(string url)
     {
-        var upTimeSite = new UpTimeSite(this.HttpClient, url);
-        var reachable = await upTimeSite.IsReachable();
         UpTimeEntry entry = new();
         entry.Url = url;
-        entry.Date = DateTime.Now;
+        entry.Date = RoundDown(DateTime.Now, new TimeSpan(0, 10, 0));
+        using var db = DbHelper.GetDb();
+        var collection = db.GetCollection<UpTimeEntry>(nameof(UpTimeEntry));
+        if (collection.Exists(x => x.Url == url && x.Date == entry.Date))
+            return; // already monitored for this period
+
+        var upTimeSite = new UpTimeSite(this.HttpClient, url);
+        var reachable = await upTimeSite.IsReachable();
         entry.Message = reachable.Message;
         entry.Status = reachable.Reachable;
+        
         DbHelper.Insert(entry);
+    }
+    
+    public static DateTime RoundDown(DateTime dt, TimeSpan d)
+    {
+        var delta = dt.Ticks % d.Ticks;
+        return new DateTime(dt.Ticks - delta, dt.Kind);
     }
 }
 

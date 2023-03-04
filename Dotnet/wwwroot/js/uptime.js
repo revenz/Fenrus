@@ -10,18 +10,21 @@ class UpTime
 {
     app;
     ctx;
+    utcContainer;
 
     constructor(app){
+        console.log('uptime', app);
         this.app = app;
         this.init();
     }
 
     init() {        
+        console.log('uptime init');
         let upTime = document.getElementById('up-time-wrapper');
         document.getElementById('up-time-title').innerText = 'Up-Time For ' + this.app.Name;
-        let utcContainer = document.getElementById('up-time-chart-container');
-        utcContainer.className = '';
-        utcContainer.innerHTML = '<div id="up-time-chart"></div>';
+        this.utcContainer = document.getElementById('up-time-chart-container');
+        this.utcContainer.className = '';
+        this.utcContainer.innerHTML = '<div id="up-time-chart"></div>';
         this.ctx = document.getElementById('up-time-chart');
         upTime.style.display = 'unset';
         console.log('about to get uptime data');
@@ -30,7 +33,7 @@ class UpTime
 
     getData(){
             
-        fetch('/settings/up-time/' + this.app.Uid)
+        fetch('/settings/up-time?url=' + encodeURIComponent(this.app.Url))
         .then((response) => response.json())
         .then((data) => {
             this.renderChart(data);
@@ -41,8 +44,8 @@ class UpTime
     renderChart(data){        
         if(!data?.length)
         {
-            utcContainer.className = 'no-data';
-            utcContainer.innerText = 'No up-time data available';
+            this.utcContainer.className = 'no-data';
+            this.utcContainer.innerText = 'No up-time data available';
             return;
         }
         data = data.map(x => ({
@@ -136,7 +139,7 @@ class UpTime
                 let value = d[col.toLowerCase()];
                 if(col === 'Up')
                 {
-                    td.innerHTML = `<span class="icon icon-${value ? 'check' : 'times'} ${value ? 'up' : 'down'}"></span>`;
+                    td.innerHTML = `<span class="icon fas fa-${value ? 'check' : 'times'} ${value ? 'up' : 'down'}"></span>`;
                 }
                 else
                 {
@@ -151,10 +154,10 @@ class UpTime
                 break;
         }
 
-        let utcContainer = document.getElementById('up-time-chart-container');
+        this.utcContainer = document.getElementById('up-time-chart-container');
         let wrapper = document.createElement('div');
         wrapper.appendChild(table);
         wrapper.className = 'up-time-table-wrapper';
-        utcContainer.appendChild(wrapper);
+        this.utcContainer.appendChild(wrapper);
     }
 }
