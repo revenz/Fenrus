@@ -17,6 +17,11 @@ public class UserSettings: IModal
     /// Gets or sets the users name
     /// </summary>
     public string Name { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the language for this user
+    /// </summary>
+    public string Language { get; set; }
 
     /// <summary>
     /// Gets or sets the revision of the saved settings
@@ -101,5 +106,10 @@ public class UserSettings: IModal
     /// Saves the user settings
     /// </summary>
     public void Save()
-        => new UserSettingsService().Save(this);
+    {
+        if(this.Uid == Guid.Empty)
+            return; // dont save if Guid is empty, this means it is likely the guest dashboard
+        
+        new UserSettingsService().Save(this);
+    }
 }

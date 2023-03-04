@@ -16,7 +16,7 @@
     var dashboard = ViewBag.Dashboard;
     var themes = ViewBag.Themes;
     var systemSearchEngines = ViewBag.SystemSearchEngines;
-    var pageHelper = new PageHelper();
+    var pageHelper = new PageHelper((Fenrus.Helpers.Translater)ViewBag.Translater);
 }
 <!DOCTYPE html>
 <html>

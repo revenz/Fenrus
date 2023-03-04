@@ -50,10 +50,17 @@ public partial class PageDashboard : CommonPage<Models.Group>
     /// </summary>
     public Guid Uid { get; set; }
     private bool isNew = false;
+    
+    /// <summary>
+    /// Gets or sets the language for guest users
+    /// </summary>
+    private string Language { get; set; }
 
     private string lblTitle, lblNameHelp, lblShowSearch, lblShowGroupTitles, lblLinkTarget,
         lblOpenInThisTab,lblOpenInNewTab, lblOpenInSameTab, lblAccentColor, lblBackgroundColor,
-        lblTheme;
+        lblTheme, lblLanguage;
+
+    private List<ListOption> Languages;
 
     private List<ListOption> Themes;
 
@@ -72,6 +79,10 @@ public partial class PageDashboard : CommonPage<Models.Group>
         lblOpenInThisTab = Translater.Instant("Enums.LinkTarget.OpenInThisTab");
         lblOpenInNewTab = Translater.Instant("Enums.LinkTarget.OpenInNewTab");
         lblOpenInSameTab = Translater.Instant("Enums.LinkTarget.OpenInSameTab");
+        lblLanguage = Translater.Instant("Labels.Language");
+
+        Language = new SystemSettingsService().Get().Language?.EmptyAsNull() ?? "en";
+        Languages = Translater.GetLanguages().Select(x => new ListOption(){ Value = x.Value, Label = x.Key}).ToList();
 
         Themes = new ThemeService().GetThemes().Select(x => new ListOption()
         {
@@ -139,6 +150,12 @@ public partial class PageDashboard : CommonPage<Models.Group>
     {
         if (IsGuest)
         {
+            var ssService = new SystemSettingsService();
+            var system = ssService.Get();
+            system.AllowGuest = Model.Enabled;
+            system.Language = Language?.EmptyAsNull() ?? "en";
+            system.Save();
+            
             var service = new DashboardService();
             var existing = service.GetGuestDashboard();
             existing.Enabled = Model.Enabled;

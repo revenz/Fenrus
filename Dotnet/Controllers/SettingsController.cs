@@ -1,7 +1,4 @@
-using System.Security.Cryptography.Xml;
 using System.Text.RegularExpressions;
-using Fenrus.Services;
-using Jint.Runtime.Debugger;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Controllers;
@@ -62,6 +59,40 @@ public class SettingsController : BaseController
         group.Items.Remove(item);
         settings.Save();
         return Content("");
+    }
+
+
+    /// <summary>
+    /// Updates a user setting
+    /// </summary>
+    /// <param name="setting">The setting being updated</param>
+    /// <param name="value">the new value</param>
+    /// <returns>result from the update</returns>
+    [HttpPost("settings/update-setting/{setting}/{value}")]
+    public async Task<IActionResult> UpdateSetting([FromRoute] string setting, [FromRoute] string value)
+    {
+        var settings = GetUserSettings();
+        bool reload = false;
+        bool changed = false;
+        switch (setting)
+        {
+            case nameof(settings.Language):
+                if (value != null && value != settings.Language && Regex.IsMatch(value, "^[a-z]+$"))
+                {
+                    changed = true;
+                    settings.Language = value;
+                    reload = true;
+                }
+                break;
+        }
+        
+        if(changed)
+            settings.Save();
+        
+        return Json(new
+        {
+            reload
+        });
     }
 
     /// <summary>

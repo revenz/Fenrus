@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Components.Authorization;
+
 namespace Fenrus;
 
 /// <summary>
@@ -12,5 +14,21 @@ public static class ExtensionMethods
     /// <returns>null if empty</returns>
     public static string? EmptyAsNull(this string str)
          => string.IsNullOrWhiteSpace(str) ? null : str;
-    
+
+
+    /// <summary>
+    /// Gets the users SID from their authentication state
+    /// </summary>
+    /// <param name="state">the users authentication state</param>
+    /// <returns>the users SID</returns>
+    public static Guid? GetUserUid(this AuthenticationState state)
+    {
+        var sid = state?.User?.Claims
+            ?.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid")?.Value;
+        if (sid == null)
+            return null;
+        if (Guid.TryParse(sid, out Guid uid))
+            return uid;
+        return null;
+    }
 }

@@ -13,6 +13,16 @@ namespace Fenrus.Controllers;
 [Route("/")]
 public class HomeController : BaseController
 {
+    private Translater Translater;
+
+    public HomeController()
+    {
+        string language = new SystemSettingsService().Get()?.Language;
+        if (string.IsNullOrWhiteSpace(language))
+            language = "en";
+        Translater = Translater.GetForLanguage(language);
+    }
+
     /// <summary>
     /// Gets the dashboard main page
     /// </summary>
@@ -23,6 +33,9 @@ public class HomeController : BaseController
         var settings = GetUserSettings();
         if(settings == null)
             return Redirect("/login");
+
+        if (string.IsNullOrWhiteSpace(settings.Language) == false)
+            Translater = Helpers.Translater.GetForLanguage(settings.Language); 
 
         var dashboard = settings.Dashboards.FirstOrDefault() ?? new();
         return ShowDashboard(dashboard, settings);
@@ -62,8 +75,10 @@ public class HomeController : BaseController
             Dashboard = dashboard,
             Settings = settings,
             Theme = theme,
-            Groups = groups
+            Groups = groups,
+            Translater = Translater
         };
+        ViewBag.Translater = Translater;
         ViewBag.IsGuest = false;
         ViewBag.Dashboard = dashboard;
         ViewBag.UserSettings = settings;
@@ -116,11 +131,13 @@ public class HomeController : BaseController
     private IActionResult LoginPage(string error)
     {
         var settings = GetSystemSettings();
+        ViewBag.Translater = Translater;
         LoginPageModel model = new LoginPageModel()
         {
             Error = error,
             AllowGuest = settings.AllowGuest,
-            AllowRegister = settings.AllowRegister
+            AllowRegister = settings.AllowRegister,
+            Translater = Translater
         };
         return View("Login", model);
     }
@@ -139,16 +156,10 @@ public class HomeController : BaseController
         Console.WriteLine("Username: " + username);
         Console.WriteLine("Password: " + password);
 
-        switch (action)
-        {
-            case "Login":
-                return await Login(username, password);
-            case "Register":
-                return await Register(username, password);
-            case "Guest":
-                return await Guest();
-        }
-
+        if(action == "Login" || action == Translater.Instant("Pages.Login.Buttons.Login"))
+            return await Login(username, password);
+        if(action == "Register" || action == Translater.Instant("Pages.Login.Buttons.Register"))
+            return await Register(username, password);
         return Login();
     }
 
@@ -173,16 +184,21 @@ public class HomeController : BaseController
         return Redirect("/");
     }
     
-    private async Task<IActionResult> Guest()
+    /// <summary>
+    /// The guest dashboard
+    /// </summary>
+    /// <returns>the guest dashboard response</returns>
+    [HttpGet("guest")]
+    public async Task<IActionResult> Guest()
     {
         var settings = GetSystemSettings();
         if (settings.AllowGuest == false)
-            return LoginPage(Translater.Instant("Pages.Login.ErrorMessages.GuestNotAllowed"));
+            return Redirect("/login");
 
         ViewBag.IsGuest = true;
         var dashboard = new DashboardService().GetGuestDashboard();
 
-        return ShowDashboard(dashboard, new Services.UserSettingsService().SettingsForGuest());
+        return ShowDashboard(dashboard, new UserSettingsService().SettingsForGuest());
     }
 
     private async Task CreateClaim(Guid uid, string username, bool isAdmin)
@@ -246,4 +262,9 @@ public class LoginPageModel
     /// Gets or sets if guests are allowed
     /// </summary>
     public bool AllowGuest { get; set; }
+    
+    /// <summary>
+    /// Gets the translater to use for the page
+    /// </summary>
+    public Translater Translater { get; init; }
 }

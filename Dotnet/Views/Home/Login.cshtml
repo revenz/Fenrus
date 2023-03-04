@@ -31,24 +31,24 @@
                 </div>
             }
             <div class="field">
-                <span class="label">Username</span>
+                <span class="label">@Model.Translater.Instant("Pages.Login.Fields.Username")</span>
                 <span class="value">
                     <input type="text" name="username" autofocus required />
                 </span>
             </div>
             <div class="field">
-                <span class="label">Password</span>
+                <span class="label">@Model.Translater.Instant("Pages.Login.Fields.Password")</span>
                 <span class="value">
                     <input type="password" name="password" required />
                 </span>
             </div>
             <div class="buttons">
-                <input type="submit" name="action" value="Login" class="btn"  />
+                <input type="submit" name="action" value="@Model.Translater.Instant("Pages.Login.Buttons.Login")" class="btn"  />
                 @if(Model.AllowRegister) { 
-                    <input type="submit" name="action" value="Register" class="btn" />
+                    <input type="submit" name="action" value="@Model.Translater.Instant("Pages.Login.Buttons.Register")" class="btn" />
                 }
                 @if(Model.AllowGuest) { 
-                    <input type="submit" name="action" value="Guest" class="btn" onclick="this.form.setAttribute('novalidate', 'novalidate');" />
+                    <input type="button" value="@Model.Translater.Instant("Pages.Login.Buttons.Guest")" class="btn" onclick="document.location = 'guest';" />
                 }
             </div>
         </form>

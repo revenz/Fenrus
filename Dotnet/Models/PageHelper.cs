@@ -10,8 +10,22 @@ public class PageHelper
     /// </summary>
     public List<string> ScriptBlocks { get; private set; } = new();
     
+    /// <summary>
+    /// Gets or sets the translater to use
+    /// </summary>
+    public Translater Translater { get; init; }
+    
     public void RegisterScriptBlock(string script)
     {
         ScriptBlocks.Add(script);
+    }
+
+    /// <summary>
+    /// Constructs a page helper
+    /// </summary>
+    /// <param name="translater">the translater to use for translations</param>
+    public PageHelper(Translater translater)
+    {
+        this.Translater = translater;
     }
 }

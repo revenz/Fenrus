@@ -33,7 +33,11 @@
     "Default": "Default",
     "ChooseImage":"Choose Image...", 
     "CurrentImage": "Current Image",
-    "ColorBackground": "Solid Color"
+    "ColorBackground": "Solid Color",
+    "Language": "Language",
+    "UpdatedSuccessfully": "Updated Successfully",
+    "General": "General",
+    "Administrator":"Administrator" 
   },
   "Enums": {
     "LinkTarget": {
@@ -41,7 +45,7 @@
       "OpenInNewTab": "Open in new tab",
       "OpenInSameTab": "Open in same tab"
     }
-  },,
+  },
   "Pages": {
     "About": {
       "Title": "About"
@@ -68,6 +72,9 @@
         "BackgroundColor": "Background Color",
         "Theme": "Theme"
       }
+    },
+    "Docker": {
+      "Title": "Docker"
     },
     "Group": {
       "Title": "Group",
@@ -102,9 +109,20 @@
     "Login": {
       "Title": "Login",
       "ErrorMessages": {
-        "LoginFailed": "LoginFailed",
+        "LoginFailed": "Login Failed",
         "RegistrationNotAllowed": "User registrations are not allowed",
         "GuestNotAllowed": "Guest access is not allowed"
+      },
+      "Buttons":
+      {
+        "Login": "Login",
+        "Register": "Register",
+        "Guest": "Guest"
+      },
+      "Fields":
+      {
+        "Username": "Username",
+        "Password": "Password"
       }
     },
     "SearchEngine": {

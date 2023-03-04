@@ -24,4 +24,9 @@ public class DashboardPageModel
     /// Gets or sets the groups on this dashboard
     /// </summary>
     public List<Group> Groups { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the translater to use
+    /// </summary>
+    public Translater Translater { get; init; }
 }

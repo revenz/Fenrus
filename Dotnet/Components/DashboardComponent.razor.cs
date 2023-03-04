@@ -27,4 +27,9 @@ public partial class DashboardComponent
     /// Gets or sets the groups on this dashboard
     /// </summary>
     [Parameter] public List<Group> Groups { get; set; }
+
+    /// <summary>
+    /// Gets or sets the Translater to use
+    /// </summary>
+    [Parameter] public Translater Translater { get; set; }
 }

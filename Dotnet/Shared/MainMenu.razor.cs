@@ -1,5 +1,6 @@
 using Fenrus.Models;
 using Fenrus.Pages;
+using Fenrus.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -18,12 +19,31 @@ public partial class MainMenu
 
     private List<MenuGroup> Menu = new();
 
+    private string lblAbout, lblVersion;
+
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var uid = authState.GetUserUid();
+        if (uid == null)
+        {
+            Router.NavigateTo("/login");
+            return;
+        }
+
+        var settings = new Services.UserSettingsService().Load(uid.Value);
+        var isAdmin = authState.User.FindFirst(x=> x.Value == "Administrator");
+        string language = settings.Language?.EmptyAsNull() ??
+                          new SystemSettingsService().Get()?.Language?.EmptyAsNull() ?? "en";
+        var translater = Translater.GetForLanguage(language);
+        
+        lblAbout = translater.Instant("Pages.About.Title");
+        lblVersion = translater.Instant("Labels.VersionNumber", new { version = Globals.Version });
+        
         Router.LocationChanged += (obj, e) => this.StateHasChanged();
         Menu.Add(new MenuGroup()
         {
-            Name = "General", 
+            Name = translater.Instant("Labels.General"), 
             Items = new List<MenuItem>()
             {
                 new () { Name = "Home", Link = "/", Icon = "fa-solid fa-house"}
@@ -31,29 +51,27 @@ public partial class MainMenu
         });
         Menu.Add(new MenuGroup()
         {
-            Name = "Dashboard", 
+            Name = translater.Instant("Labels.Dashboard"),
             Items = new List<MenuItem>()
             {
-                new () { Name = "Dashboards", Link = "/settings/dashboards", Icon = "fa-solid fa-table-cells-large"},
-                new () { Name = "Groups", Link = "/settings/groups", Icon = "fa-solid fa-puzzle-piece"},
-                new () { Name = "Search Engines", Link = "/settings/search-engines", Icon = "fa-solid fa-magnifying-glass"}
+                new () { Name = translater.Instant("Pages.Dashboards.Title"), Link = "/settings/dashboards", Icon = "fa-solid fa-table-cells-large"},
+                new () { Name = translater.Instant("Pages.Groups.Title"), Link = "/settings/groups", Icon = "fa-solid fa-puzzle-piece"},
+                new () { Name = translater.Instant("Pages.SearchEngines.Title"), Link = "/settings/search-engines", Icon = "fa-solid fa-magnifying-glass"}
             }
         });
 
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var isAdmin = authState.User.FindFirst(x=> x.Value == "Administrator");
         if (isAdmin != null)
         {
             Menu.Add(new MenuGroup()
             {
-                Name = "Administrator", 
+                Name = translater.Instant("Labels.Administrator"),
                 Items = new List<MenuItem>()
                 {
-                    new () { Name = "Guest Dashboard", Link = "/settings/system/guest-dashboard", Icon = "fa-solid fa-table-cells-large"},
-                    new () { Name = "System Groups", Link = "/settings/system/groups", Icon = "fa-solid fa-puzzle-piece"},
-                    new () { Name = "System Search Engines", Link = "/settings/system/search-engines", Icon = "fa-solid fa-magnifying-glass"},
-                    new () { Name = "Users", Link = "/settings/system/users", Icon = "fa-solid fa-user-group"},
-                    new () { Name = "Docker", Link = "/settings/system/docker", Icon = "fa-brands fa-docker"}
+                    new () { Name = translater.Instant("Pages.Dashboard.Title-Guest"), Link = "/settings/system/guest-dashboard", Icon = "fa-solid fa-table-cells-large"},
+                    new () { Name = translater.Instant("Pages.Groups.Title-System"), Link = "/settings/system/groups", Icon = "fa-solid fa-puzzle-piece"},
+                    new () { Name = translater.Instant("Pages.SearchEngines.Title-System"), Link = "/settings/system/search-engines", Icon = "fa-solid fa-magnifying-glass"},
+                    new () { Name = translater.Instant("Pages.Users.Title"), Link = "/settings/system/users", Icon = "fa-solid fa-user-group"},
+                    new () { Name = translater.Instant("Pages.Docker.Title"), Link = "/settings/system/docker", Icon = "fa-brands fa-docker"}
                 }
             });
         }

@@ -5,7 +5,7 @@
     Layout = "_Layout";
     bool isGuest = false;
     UserSettings settings = Model.Settings;
-    var pageHelper = new PageHelper();
+    var pageHelper = new PageHelper(Model.Translater);
 
     string dashboardClass = "dashboard ";
     if (Model?.Dashboard?.ShowGroupTitles == false)
@@ -24,6 +24,7 @@
     @(await Html.RenderComponentAsync<SearchComponent>(RenderMode.Static, new
     {
         Settings = settings,
+        Model.Translater,
         SystemSearchEngines = systemSearchEngines
     }))
 }
@@ -58,12 +59,16 @@
         Model = Model.Dashboard,
         Model.Groups,
         Settings = settings,
-        PageHelper = pageHelper
+        PageHelper = pageHelper,
+        Model.Translater
     }))
 
 </div>
 
-@(await Html.RenderComponentAsync<UpTimeComponent>(RenderMode.Static))
+@(await Html.RenderComponentAsync<UpTimeComponent>(RenderMode.Static, new
+{
+    Model.Translater
+}))
 
 <div id="launching-app">
     <div class="inner">

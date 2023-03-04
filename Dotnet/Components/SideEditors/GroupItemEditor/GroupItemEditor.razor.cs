@@ -8,7 +8,7 @@ namespace Fenrus.Components.SideEditors;
 /// <summary>
 /// Group Item Editor
 /// </summary>
-public partial class GroupItemEditor
+public partial class GroupItemEditor : SideEditorBase
 {
     /// <summary>
     /// Gets if this item is has loaded, and if not, some setting should not be overriden, eg Size

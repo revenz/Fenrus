@@ -59,7 +59,7 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
     /// <param name="engine">the search engine being editted</param>
     private async Task Edit(SearchEngine engine)
     {
-        var result = await Popup.OpenEditor<SearchEngineEditor, SearchEngine>(engine, new ()
+        var result = await Popup.OpenEditor<SearchEngineEditor, SearchEngine>(Translater, engine, new ()
         {
             { nameof(SearchEngineEditor.IsSystem), IsSystem },
             { nameof(SearchEngineEditor.Settings), Settings }
@@ -79,7 +79,7 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
     /// </summary>
     private async Task Add()
     {
-        var result = await Popup.OpenEditor<SearchEngineEditor, SearchEngine>(null, new ()
+        var result = await Popup.OpenEditor<SearchEngineEditor, SearchEngine>(Translater, null, new ()
         {
             { nameof(SearchEngineEditor.IsSystem), IsSystem },
             { nameof(SearchEngineEditor.Settings), Settings }

@@ -1,0 +1,93 @@
+{
+  "Language": "Deutsch",
+  "Labels": {
+    "VersionNumber": "Ausführung: {version}",
+    "Version":"Ausführung",
+    "Cancel": "Stornieren",
+    "Close": "Schließen",
+    "Yes": "Ja",
+    "No": "Nein",
+    "Add": "Hinzufügen",
+    "MoveUp": "Nach Oben Bewegen",
+    "MoveDown": "Sich Abwärts Bewegen",
+    "Delete": "Löschen",
+    "Help": "Hilfe",
+    "Edit": "Bearbeiten",
+    "Copy": "Kopieren",
+    "Save": "Speichern",
+    "Saved": "Gerettet",
+    "Actions": "Aktionen",
+    "Enabled": "Ermöglicht",
+    "Search": "Suchen",
+    "Dashboard": "Armaturenbrett",
+    "Theme": "Thema",
+    "AccentColor": "Akzentfarbe",
+    "LinkTarget": "Linkziel",
+    "Background": "Hintergrund",
+    "BackgroundColor": "Hintergrundfarbe",
+    "GroupTitles": "Gruppentitel",
+    "StatusIndicators": "Statusanzeigen",
+    "ShowSearch": "Suche Anzeigen",
+    "Default": "Standard",
+    "ChooseImage":"Wählen Sie Bild...", 
+    "CurrentImage": "Aktuelles Bild",
+    "ColorBackground": "Einfarbig",
+    "Language": "Sprache",
+    "UpdatedSuccessfully": "Erfolgreich Geupdated",
+    "General": "Allgemein"
+  },
+  "Enums": {
+    "LinkTarget": {
+      "OpenInThisTab":"In diesem Tab öffnen", 
+      "OpenInNewTab": "In neuem Tab öffnen",
+      "OpenInSameTab": "In derselben Registerkarte öffnen"
+    }
+  },
+  "Pages": {
+    "About": {
+      "Title": "Um"
+    },
+    "Dashboards":{
+      "Title": "Dashboards",
+      "Labels": {
+        "PageDescription": "Auf dieser Seite können Sie Dashboards erstellen. Wenn Sie mehr als ein Dashboard haben, können Sie auf dem Startbildschirm zwischen ihnen wechseln.\n\nUm Elemente zu Ihrem Dashboard hinzuzufügen, erstellen Sie zunächst eine Gruppe mit den Elementen, die Sie hinzufügen möchten. Anschließend können Sie diese neue Gruppe zu einem Dashboard hinzufügen."
+      }
+    }, 
+    "Dashboard": {
+      "Title": "Dashboard",
+      "Title-Guest": "Gast-Dashboard",
+      "Messages": {
+        "NoAvailableGroups": "Keine verfügbaren Gruppen zum Hinzufügen",
+        "GuestPageDescription": "\nAuf dieser Seite können Sie das Gast-Dashboard konfigurieren, das Dashboard, das Benutzern angezeigt wird, wenn sie sich nicht angemeldet haben. Dies ist auch das Standard-Dashboard für neue Benutzer.\n\nSie können dieses Dashboard deaktivieren, wenn Sie möchten, dass sich Benutzer anmelden, bevor Sie Fenrus verwenden."
+      },
+      "Fields": {
+        "Name-Help": "Der Name des Dashboards",
+        "ShowGroupTitles": "Gruppentitel anzeigen",
+        "ShowSearch": "Suche anzeigen",
+        "LinkTarget": "Linkziel",
+        "AccentColor": "Akzentfarbe",
+        "BackgroundColor": "Hintergrundfarbe",
+        "Theme": "Thema"
+      }
+    },
+    "Login": {
+      "Title": "Anmeldung",
+      "ErrorMessages": {
+        "LoginFailed": "Fehler bei der Anmeldung",
+        "RegistrationNotAllowed": "Benutzerregistrierungen sind nicht zulässig\n",
+        "GuestNotAllowed": "Gastzugang ist nicht erlaubt"
+      },
+      "Buttons":
+      {
+        "Login": "Anmeldung",
+        "Register": "Registrieren",
+        "Guest": "Gast"
+      },
+      "Fields":
+      {
+        "Username": "Nutzername",
+        "Password": "Passwort"
+      }
+    }
+  }
+}

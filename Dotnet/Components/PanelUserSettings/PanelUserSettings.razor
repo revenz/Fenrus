@@ -15,6 +15,16 @@
     }
     
     <div class="setting">
+        <span class="label">@Translater.Instant("Labels.Language")</span>
+        <span class="value">
+            <JavaScriptSelect Value="@Settings.Language" 
+                              Options="@Languages.Select(x => (string)x.Value).ToArray()"
+                              Labels="@Languages.Select(x => x.Label).ToArray()"
+                              Code="UpdateSetting('Language', event)" />
+        </span>
+    </div>
+    
+    <div class="setting">
         <span class="label">@Translater.Instant("Labels.Theme")</span>
         <span class="value">
             <JavaScriptSelect Value="@Dashboard.Theme" 
@@ -33,7 +43,7 @@
         <span class="value">
             <JavaScriptSelect Id="DashboardBackgroundSelect" Value="@Dashboard.Background" 
                               Options="@BackgroundHelper.GetBackgroundValues(string.IsNullOrEmpty(Dashboard.BackgroundImage) == false)"
-                              Labels="@BackgroundHelper.GetBackgroundNames(string.IsNullOrEmpty(Dashboard.BackgroundImage) == false)"
+                              Labels="@BackgroundHelper.GetBackgroundNames(Translater, string.IsNullOrEmpty(Dashboard.BackgroundImage) == false)"
                               Code="ChangeBackground(event)" />
         </span>
     </div>

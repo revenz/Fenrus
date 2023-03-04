@@ -37,6 +37,11 @@ public class SystemSettings
     /// Gets or sets if guests are allowed
     /// </summary>
     public bool AllowGuest { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the system language
+    /// </summary>
+    public string Language { get; set; }
 
     /// <summary>
     /// Gets the authentication strategy

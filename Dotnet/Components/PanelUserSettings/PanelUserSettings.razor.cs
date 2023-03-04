@@ -1,4 +1,6 @@
 using Fenrus.Models;
+using Fenrus.Models.UiModels;
+using Fenrus.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace Fenrus.Components;
@@ -42,4 +44,12 @@ public partial class PanelUserSettings : ComponentBase
     /// Gets or sets the page helper
     /// </summary>
     [Parameter] public PageHelper PageHelper { get; set; }
+
+    private Translater Translater => PageHelper.Translater;
+
+    private List<ListOption> Languages;
+    protected override void OnInitialized()
+    {
+        Languages = Translater.GetLanguages().Select(x => new ListOption(){ Value = x.Value, Label = x.Key}).ToList();
+    }
 }

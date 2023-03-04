@@ -1,6 +1,7 @@
 using Blazored.Toast.Services;
 using Fenrus.Components;
 using Fenrus.Models;
+using Fenrus.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -15,6 +16,11 @@ public abstract class UserPage : ComponentBase
 {
     protected string lblSave, lblCancel, lblHelp, lblDelete, lblEdit, lblMoveUp, 
         lblMoveDown, lblCopy, lblName, lblAdd, lblEnabled, lblActions, lblDefault;
+    
+    /// <summary>
+    /// Gets the translater to use for this page
+    /// </summary>
+    protected Translater Translater { get; private set; }
     
     /// <summary>
     /// Gets or sets the Authentication state provider
@@ -55,20 +61,24 @@ public abstract class UserPage : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var sid = authState?.User?.Claims?.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid")?.Value;
-        if (string.IsNullOrEmpty(sid) || Guid.TryParse(sid, out Guid uid) == false)
+        var uid = authState.GetUserUid();
+        if (uid == null)
         {
             Router.NavigateTo("/login");
             return;
         }
 
-        Settings = new Services.UserSettingsService().Load(uid);
-        if (Settings.Uid != uid)
+        Settings = new UserSettingsService().Load(uid.Value);
+        if (Settings.Uid != uid.Value)
         {
             // guest dashboard, user doesn't exist
             Router.NavigateTo("/login");
             return;
         }
+
+        string language = Settings.Language?.EmptyAsNull() ??
+                          new SystemSettingsService().Get().Language?.EmptyAsNull() ?? "en";
+        Translater = Helpers.Translater.GetForLanguage(language);
 
         lblCancel = Translater.Instant("Labels.Cancel");
         lblSave = Translater.Instant("Labels.Save");

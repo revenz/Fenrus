@@ -47,10 +47,10 @@ public partial class Users: CommonPage<User>
                 return;
             SystemSettings.AllowRegister = value;
             SystemSettings.Save();
-            ToastService.ShowSuccess("Updated Successfully");
+            ToastService.ShowSuccess(Translater.Instant("Labels.UpdatedSuccessfully"));
         }
     }
-
+    
     /// <summary>
     /// Checks if the item is the same as the operating user
     /// </summary>

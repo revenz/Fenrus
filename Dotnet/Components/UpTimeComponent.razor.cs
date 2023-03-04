@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Components;
+
 namespace Fenrus.Components;
 
 /// <summary>
@@ -5,5 +7,8 @@ namespace Fenrus.Components;
 /// </summary>
 public partial class UpTimeComponent
 {
-    
+    /// <summary>
+    /// Gets or sets the Translater to use
+    /// </summary>
+    [Parameter] public Translater Translater { get; set; }
 }

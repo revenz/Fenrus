@@ -12,19 +12,7 @@ namespace Fenrus.Components;
 /// </summary>
 public partial class PageGroup: CommonPage<Models.Group>
 {
-    private string Title => IsSystem ? "System Groups" : "Groups";
-    
-    private string Description => IsSystem
-        ? @"This page lets you configure groups that will be available to all users and will be available to use on the Guest dashboard.
 
-If you disable a group here that group will become unavailable to all users using it."
-        : @"This page lets you create groups which can be used on Dashboards.
-                                                                                     
-A group will not appear by itself, it must be added to a dashboard.";
-    
-    
-    
-    
     /// <summary>
     /// Gets or sets if this is a new group or not
     /// </summary>
@@ -177,7 +165,7 @@ A group will not appear by itself, it must be added to a dashboard.";
     /// </summary>
     async Task AddItem()
     {
-        await foreach(var result in Popup.GroupItemEditorNew())
+        await foreach(var result in Popup.GroupItemEditorNew(Translater))
         {
             if (result.Success)
             {
@@ -227,7 +215,7 @@ A group will not appear by itself, it must be added to a dashboard.";
     async Task Edit(GroupItem item)
     {
         var index = Model.Items.IndexOf(item);
-        var result = await Popup.GroupItemEditor(item);
+        var result = await Popup.GroupItemEditor(Translater, item);
         if (result.Success == false)
             return;
         Model.Items[index] = result.Data;

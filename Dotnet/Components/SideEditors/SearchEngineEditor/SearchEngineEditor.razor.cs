@@ -7,7 +7,7 @@ namespace Fenrus.Components.SideEditors;
 /// <summary>
 /// Search Engine Editor
 /// </summary>
-public partial class SearchEngineEditor
+public partial class SearchEngineEditor: SideEditorBase
 {
     /// <summary>
     /// Gets or sets the item this is editing, leave null for a new item

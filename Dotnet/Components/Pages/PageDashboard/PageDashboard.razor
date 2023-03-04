@@ -21,6 +21,7 @@
         <div class="top-fields">
             <InputSwitch Label="@lblEnabled" @bind-Value="@Model.Enabled" />
             <InputSwitch Label="@lblShowSearch" @bind-Value="@Model.ShowSearch" />
+            <InputSelect TItem="string" Label="@lblLanguage" Options="@Languages" @bind-Value="@Language" />
             <InputSelect TItem="string" Label="@lblTheme" Options="@Themes" @bind-Value="@Model.Theme" />
             <InputSelect TItem="string" Label="@lblLinkTarget" @bind-Value="@Model.LinkTarget">
                 <InputSelectOption TItem="string" StringValue="_self" Label="@lblOpenInThisTab" />

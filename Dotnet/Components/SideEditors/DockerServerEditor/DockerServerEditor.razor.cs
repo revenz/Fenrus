@@ -7,7 +7,7 @@ namespace Fenrus.Components.SideEditors;
 /// <summary>
 /// Docker Server Editor
 /// </summary>
-public partial class DockerServerEditor
+public partial class DockerServerEditor : SideEditorBase
 {
     /// <summary>
     /// Gets or sets the item this is editing, leave null for a new item
