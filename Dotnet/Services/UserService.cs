@@ -56,6 +56,8 @@ public class UserService
         DbHelper.Insert(user);
         return user;
     }
+    
+    
 
     /// <summary>
     /// Gets all users in the system

@@ -8,8 +8,8 @@
     width:calc(100% - 3.25rem);
     outline:none;
   }
-  .jscolor-border {
-    border: solid 1px var(--input-border) !important;
-    background: var(--input-background) !important;
-  }
+}
+.jscolor-border {
+  border: solid 1px var(--input-border) !important;
+  background: var(--input-background) !important;
 }

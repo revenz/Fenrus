@@ -35,39 +35,59 @@ public class UserSettingsService
             return settings;
     
         // use default config
-        var guest = SettingsForGuest();
         settings = new UserSettings();
         settings.Uid = uid;
-        if (guest.Dashboards.Any())
+        var guestDashboard = new DashboardService().GetGuestDashboard();
+        Dashboard defaultDashboard;
+        if (guestDashboard != null)
         {
-            settings.Dashboards.Add(guest.Dashboards.First());
-            //settings.Dashboards.First().Name = "Default";
-            //Logger.ILog("###################", guest.Dashboards[0].Name, self.Dashboards[0].Name);
-
-            //self.Dashboards[0].Uid = new Utils().newGuid();
-            //self.Dashboards[0].Enabled = true;
-            //self.Dashboards[0].BackgroundImage = '';
-            //settings.BackgroundImage = guest.Dashboards.First().BackgroundImage;
+            defaultDashboard = new Dashboard()
+            {
+                BackgroundColor = guestDashboard.BackgroundColor,
+                Background = guestDashboard.Background,
+                AccentColor = guestDashboard.AccentColor,
+                ShowSearch = guestDashboard.ShowSearch,
+                GroupUids = guestDashboard.GroupUids?.Select(x => x)?.ToList() ?? new(),
+                LinkTarget = guestDashboard.LinkTarget,
+                ShowGroupTitles = guestDashboard.ShowGroupTitles,
+                ShowStatusIndicators = guestDashboard.ShowStatusIndicators,
+                Theme = guestDashboard.Theme,
+                BackgroundImage = guestDashboard.BackgroundImage,
+            };
         }
         else
         {
             // create basic dashboard
-            settings.Dashboards.Add(new ()
+            defaultDashboard= new ()
             {
                 Uid = Guid.NewGuid(),
-                AccentColor = guest.Dashboards?.FirstOrDefault()?.AccentColor?.EmptyAsNull() ?? "#FF0090",
+                AccentColor = "#FF0090",
                 Background = "default.js",
-                Enabled = true,
-                Name = "Default",
                 Theme = "Default",
                 LinkTarget = "_self",
                 ShowGroupTitles = true,
                 ShowSearch = true,
                 ShowStatusIndicators = true,
-                BackgroundColor = "#000000",
+                BackgroundColor = "#009099",
                 GroupUids = new ()
-            });
+            };
         }
+
+        defaultDashboard.Name = "Default";
+        defaultDashboard.Uid = Guid.NewGuid();
+        defaultDashboard.Enabled = true;
+        if (string.IsNullOrWhiteSpace(guestDashboard.AccentColor)) guestDashboard.AccentColor = "#ff0090";
+        if (string.IsNullOrWhiteSpace(guestDashboard.BackgroundColor)) guestDashboard.BackgroundColor = "#009099";
+        if (string.IsNullOrWhiteSpace(guestDashboard.Background)) guestDashboard.Background = "default.js";
+        if (string.IsNullOrWhiteSpace(guestDashboard.Theme)) guestDashboard.Theme = "Default";
+        if (string.IsNullOrWhiteSpace(guestDashboard.LinkTarget)) guestDashboard.LinkTarget = "_self";
+
+        if (defaultDashboard.GroupUids?.Any() != true)
+            defaultDashboard.GroupUids = new GroupService().GetSystemGroups(enabledOnly: true).Select(x => x.Uid).ToList();
+        settings.Dashboards = new List<Dashboard>()
+        {
+            defaultDashboard
+        };
 
         DbHelper.Insert(settings);
         return settings;

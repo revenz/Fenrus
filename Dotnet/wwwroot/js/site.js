@@ -396,3 +396,21 @@ function shadeColor(color, percent) {
 
     return "#"+RR+GG+BB;
 }
+
+function CreateColorPicker(element)
+{
+    if(typeof(element) === 'string') 
+        element = document.getElementById(element);
+    
+    var value = element.value;
+    new JSColor(element, 
+        { 
+            value: value, 
+            mode: 'HVS', 
+            shadow: false, 
+            controlBorderColor: 'var(--input-border)',
+            borderColor: 'var(--input-border)', 
+            borderRadius: 0, 
+            alphaChannel: false 
+        });
+}

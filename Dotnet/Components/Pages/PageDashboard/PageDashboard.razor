@@ -28,8 +28,8 @@
                 <InputSelectOption TItem="string" StringValue="_this" Label="@lblOpenInNewTab" />
                 <InputSelectOption TItem="string" StringValue="fenrus-popup" Label="@lblOpenInSameTab" />
             </InputSelect>          
-            <InputColor Label="@lblAccentColor" @bind-Value="@Model.AccentColor" />
-            <InputColor Label="@lblBackgroundColor" @bind-Value="@Model.BackgroundColor" />
+            <InputColorJs Label="@lblAccentColor" @bind-Value="@Model.AccentColor" />
+            <InputColorJs Label="@lblBackgroundColor" @bind-Value="@Model.BackgroundColor" />
         </div>
     }
     <FenrusTable TItem="Models.Group" Data=@Groups @ref=Table>
