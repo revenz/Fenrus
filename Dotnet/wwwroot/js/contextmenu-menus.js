@@ -58,7 +58,7 @@ function openContextMenu(event, app){
     let dashboardUid = ele.closest('.dashboard').getAttribute('x-uid');
     let ssh = ele.getAttribute('x-ssh') === '1';
     let docker = ele.getAttribute('x-docker');
-    let systemGrounp = group.className.indexOf('system-group') > 0;
+    let systemGroup = group.className.indexOf('system-group') > 0;
     if(!contextMenus[uid])
     {
         let menuItems = [];
@@ -97,11 +97,12 @@ function openContextMenu(event, app){
                 }
             });
         }
-        
-        let sizes = [Translations.Size_Small, Translations.Size_Medium, Translations.Size_Large, Translations.Size_Larger,
-            Translations.Size_XLarge, Translations.Size_XXLarge];
 
-        menuItems = menuItems.concat([
+        if(!systemGroup)
+        {
+            let sizes = [Translations.Size_Small, Translations.Size_Medium, Translations.Size_Large, Translations.Size_Larger,
+                Translations.Size_XLarge, Translations.Size_XXLarge];
+            menuItems = menuItems.concat([
             {
                 content: `${resizeIcon}${Translations.Resize}`,
                 divider: "top",
@@ -128,13 +129,16 @@ function openContextMenu(event, app){
                         }
                     };
                 })
-            },
+            }]);
+        }
+
+        menuItems = menuItems.concat([
         {
             content: `${editIcon}${Translations.EditGroup}`,
             divider: "top",
             events: {
                 click: (e) => {
-                    document.location = systemGrounp ? '/settings/system/groups/' + groupUid : '/settings/groups/' + groupUid                
+                    document.location = systemGroup ? '/settings/system/groups/' + groupUid : '/settings/groups/' + groupUid                
                 }
             }
         },
@@ -145,30 +149,33 @@ function openContextMenu(event, app){
                     document.location = '/settings/dashboards/' + dashboardUid                
                 }
             }
-        },
-        {
-            divider: "top",
-            content: `${deleteIcon}${Translations.Delete}`,
-            events: { 
-                click: async (e) => {
-                    if(await modalConfirm(Translations.Delete, `${Translations.Delete} ${app.Name}?`)) {
-                        ele.remove();
-                        let items = group.querySelectorAll('.items .db-item');
-                        if(items.length === 0){
-                            group.remove();
+        }]);
+
+
+        if(!systemGroup) {
+            menuItems = menuItems.concat([
+                {
+                    divider: "top",
+                    content: `${deleteIcon}${Translations.Delete}`,
+                    events: {
+                        click: async (e) => {
+                            if (await modalConfirm(Translations.Delete, `${Translations.Delete} ${app.Name}?`)) {
+                                ele.remove();
+                                let items = group.querySelectorAll('.items .db-item');
+                                if (items.length === 0) {
+                                    group.remove();
+                                } else {
+                                    document.dispatchEvent(new CustomEvent('fenrus-item-deleted', {
+                                        detail: {group: group}
+                                    }));
+                                }
+                                fetch(`/settings/groups/${groupUid}/delete/${uid}`, {method: 'DELETE'});
+                            }
                         }
-                        else
-                        {
-                            document.dispatchEvent(new CustomEvent('fenrus-item-deleted', {
-                                detail: { group: group }
-                            }));
-                        }
-                        fetch(`/settings/groups/${groupUid}/delete/${uid}`, { method: 'DELETE'});
                     }
-                }
-            }
-        },
-        ]);
+                },
+            ]);
+        }
         
         let menu = new ContextMenu({
             menuItems

@@ -19,7 +19,6 @@ class UpTime
     }
 
     init() {        
-        console.log('uptime init');
         let upTime = document.getElementById('up-time-wrapper');
         document.getElementById('up-time-title').innerText = 'Up-Time For ' + this.app.Name;
         this.utcContainer = document.getElementById('up-time-chart-container');
@@ -27,7 +26,6 @@ class UpTime
         this.utcContainer.innerHTML = '<div id="up-time-chart"></div>';
         this.ctx = document.getElementById('up-time-chart');
         upTime.style.display = 'unset';
-        console.log('about to get uptime data');
         this.getData();
     }
 
@@ -45,7 +43,7 @@ class UpTime
         if(!data?.length)
         {
             this.utcContainer.className = 'no-data';
-            this.utcContainer.innerText = 'No up-time data available';
+            this.utcContainer.innerText = Translations.UpTimeNoData;
             return;
         }
         data = data.map(x => ({
@@ -120,10 +118,14 @@ class UpTime
         table.appendChild(head);
         let headRow = document.createElement('tr');
         head.appendChild(headRow);
-        for(let col of ['Date', 'Up', 'Message']){
+        for(let col of [
+            { column: 'date', label: Translations.UpTimeColumnDate},
+            { column: 'up', label: Translations.UpTimeColumnUp},
+            { column: 'message', label: Translations.UpTimeColumnMessage}
+        ]){
             let th = document.createElement('th');
-            th.className = col.toLowerCase();
-            th.innerText = col;
+            th.className = col.column;
+            th.innerText = col.label;
             headRow.appendChild(th);
         }
         let tbody = document.createElement('tbody');
@@ -146,7 +148,7 @@ class UpTime
                     if(col === 'Date')
                         value = new Date(value).toLocaleTimeString();                    
                     if(!value && col === 'Message' && d.up)
-                        value = 'Success';
+                        value = Translations.Success;
                     td.innerText = value;
                 }
             }

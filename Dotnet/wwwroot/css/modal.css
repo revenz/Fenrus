@@ -9,11 +9,11 @@
 }
 
 .fenrus-modal-background-overlay {
-  z-index: 10 !important;
+  z-index: 1001 !important;
 }
 
 .fenrus-modal {
-  z-index: 11;
+  z-index: 1002;
   padding: 1rem;
 }
 
@@ -32,8 +32,11 @@
     text-align: right;
   }
   .fenrus-modal-footer button {
-    width: 6rem;
+    width: 8rem;
     padding: 0;
+  }
+  .fenrus-modal-footer button + button {
+    margin-left: 0.5rem;
   }
 }
 @media screen and (max-width: 578px) {
@@ -44,6 +47,8 @@
     bottom: 0;
     right: 0;
     background: var(--base);
+    display: flex;
+    flex-direction: column;
   }
   .fenrus-modal-inner {
     height: 100%;

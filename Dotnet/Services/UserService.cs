@@ -1,3 +1,5 @@
+using Fenrus.Models;
+
 namespace Fenrus.Services;
 
 /// <summary>
@@ -72,4 +74,40 @@ public class UserService
     /// <param name="user">the user to update</param>
     public void Update(Models.User user)
         => DbHelper.Update(user);
+
+    /// <summary>
+    /// Adds a new user
+    /// </summary>
+    /// <param name="user">the user being added</param>
+    public void Add(User user)
+    {
+        if (user.Uid == Guid.Empty)
+            user.Uid = Guid.NewGuid();
+        DbHelper.Insert(user);
+    }
+
+    /// <summary>
+    /// Changes a users password
+    /// </summary>
+    /// <param name="uid">The UID of the user to change the password to</param>
+    /// <param name="newPassword">the new password</param>
+    public void ChangePassword(Guid uid, string newPassword)
+    {
+        if (string.IsNullOrWhiteSpace(newPassword))
+            return; // need a password!
+
+        var user = DbHelper.GetByUid<User>(uid);
+        if (user == null)
+            return; // user doesnt exist
+        user.Password = newPassword;
+        DbHelper.Update(user);
+    }
+
+    /// <summary>
+    /// Gets a user by its UID
+    /// </summary>
+    /// <param name="uid">the UID of the user</param>
+    /// <returns>the user</returns>
+    public User GetByUid(Guid uid)
+        => DbHelper.GetByUid<User>(uid);
 }

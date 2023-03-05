@@ -1,5 +1,6 @@
 @page "/settings/system/users"
 @namespace Fenrus.Pages
+@using Fenrus.Models
 @inherits CommonPage<Fenrus.Models.User>
 
 <PageTitle>Fenrus - @lblTitle</PageTitle>
@@ -19,7 +20,14 @@
                 <Header>@lblName</Header>
                 <Cell Context="item">
                     <i class="fa-solid fa-user"></i>
-                    <span>@item.Name</span>
+                    @if (item.Uid == Settings.Uid)
+                    {
+                        <span>@item.Name</span>
+                    }
+                    else
+                    {
+                        <a href="#" @onclick="() => Edit(item)" @onclick:preventDefault="true">@item.Name</a>
+                    }
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.User" ColumnName="Admin" Width="10rem">
@@ -35,6 +43,10 @@
                     {
                         // only allow deleting of other users, they cannot delete themselves
                         <div class="actions">
+                            @if (Settings.Uid != item.Uid)
+                            {
+                                <a title="@lblEdit" class="fa-solid fa-pen-to-square" @onclick="() => Edit(item)"></a>
+                            }
                             <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
                         </div>
                     }

@@ -26,6 +26,11 @@ public class User: IModal
     public string Username { get; set; }
 
     /// <summary>
+    /// Gets or sets the email address for the user
+    /// </summary>
+    public string Email { get; set; }
+
+    /// <summary>
     /// Gets or sets the users password
     /// </summary>
     public string Password { get; set; }

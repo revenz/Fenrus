@@ -6,10 +6,12 @@ function modalConfirm(title, message) {
                             '<div class="fenrus-modal-title"></div>' +
                             '<div class="fenrus-modal-body"></div>' +
                             '<div class="fenrus-modal-footer">' +
-                                '<button class="btn confirm-ok">OK</button>' +
-                                '<button class="btn confirm-cancel">Cancel</button>' +
+                                '<button class="btn confirm-ok"></button>' +
+                                '<button class="btn confirm-cancel"></button>' +
                             '</div>'
                           '</div>';
+        modal.querySelector('.confirm-ok').innerText = Translations.Ok;
+        modal.querySelector('.confirm-cancel').innerText = Translations.Cancel;
         document.body.append(modal);
         modal.className = 'modal';
         modal.querySelector('.fenrus-modal-title').innerText = title;

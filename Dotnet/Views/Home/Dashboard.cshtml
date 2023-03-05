@@ -18,8 +18,10 @@
     ViewBag.BackgroundCOlor = Model.Dashboard.BackgroundColor?.EmptyAsNull() ?? "#009099";
     var systemSearchEngines = ViewBag.SystemSearchEngines as List<SearchEngine>;
 
-    string translations = System.Text.Json.JsonSerializer.Serialize(new
+    string translations = JsonSerializer.Serialize(new
     {
+        Ok = Model.Translater.Instant("Labels.Ok"),
+        Cancel = Model.Translater.Instant("Labels.Cancel"),
         Edit = Model.Translater.Instant("Labels.Edit"),
         Delete = Model.Translater.Instant("Labels.Delete"),
         EditDashboard = Model.Translater.Instant("ContextMenu.EditDashboard"),
@@ -28,6 +30,13 @@
         UpTime = Model.Translater.Instant("ContextMenu.UpTime"),
         Log = Model.Translater.Instant("ContextMenu.Log"),
         Resize  = Model.Translater.Instant("ContextMenu.Resize"),
+        RemoveGroupTitle = Model.Translater.Instant("Pages.Dashboard.Messages.RemoveGroupTitle"),
+        RemoveGroupMessage = Model.Translater.Instant("Pages.Dashboard.Messages.RemoveGroupMessage", new { name = "#NAME#"}),
+        Success = Model.Translater.Instant("Dialogs.UpTime.Labels.Success"),
+        UpTimeColumnDate = Model.Translater.Instant("Dialogs.UpTime.Columns.Date"),
+        UpTimeColumnUp = Model.Translater.Instant("Dialogs.UpTime.Columns.Up"),
+        UpTimeNoData = Model.Translater.Instant("Dialogs.UpTime.Labels.NoData"),
+        UpTimeColumnMessage = Model.Translater.Instant("Dialogs.UpTime.Columns.Message"),
         Size_Small = Model.Translater.Instant("Enums.ItemSize.Small"),
         Size_Medium = Model.Translater.Instant("Enums.ItemSize.Medium"),
         Size_Large = Model.Translater.Instant("Enums.ItemSize.Large"),

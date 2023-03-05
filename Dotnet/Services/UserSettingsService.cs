@@ -112,6 +112,13 @@ public class UserSettingsService
         => DbHelper.Update(settings);
 
     /// <summary>
+    /// Adds users settings
+    /// </summary>
+    /// <param name="settings">the user settings to add</param>
+    public void Add(UserSettings settings)
+        => DbHelper.Insert(settings);
+
+    /// <summary>
     /// Saves a background for a user
     /// </summary>
     /// <param name="uid">the Uid of the user</param>

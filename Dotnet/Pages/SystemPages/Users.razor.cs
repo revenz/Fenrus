@@ -73,6 +73,42 @@ public partial class Users: CommonPage<User>
             user.IsAdmin = isAdmin;
             new UserService().Update(user);
         }
+    }
 
+    
+    /// <summary>
+    /// Add a suer
+    /// </summary>
+    private async Task Add()
+    {
+        var result = await Popup.OpenEditor<UserEditor, User>(Translater, null);
+        if (result.Success == false)
+            return;
+        Items.Add(result.Data);
+        Items = Items.OrderBy(x => x.Name).ToList();
+        Table.SetData(Items);
+    }
+    /// <summary>
+    /// Edits a suer
+    /// </summary>
+    /// <param name="user">the user to edit</param>
+    private async Task Edit(User user)
+    {
+        if (user.Uid == Settings.Uid)
+        {
+            ToastService.ShowWarning(Translater.Instant("Pages.Users.Message.CannotEditSelf"));
+            return;
+        }
+
+        var result = await Popup.OpenEditor<UserEditor, User>(Translater, user);
+        if (result.Success == false)
+            return;
+        user.Name = result.Data.Name;
+        user.Username = result.Data.Username;
+        user.Password = result.Data.Password;
+        user.Email = result.Data.Email;
+        user.IsAdmin = result.Data.IsAdmin;
+        Items = Items.OrderBy(x => x.Name).ToList();
+        Table.SetData(Items);
     }
 }

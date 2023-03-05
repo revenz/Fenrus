@@ -156,15 +156,21 @@ function moveGroup(groupUid, up){
     });
 }
 
-function removeGroup(groupUid, groupName) 
+async function removeGroup(groupUid, groupName) 
 {
-    if(confirm(`Do you want to remove the group '${groupName}'?`) !== true)
-        return;
-    let dashboardUid = document.querySelector('.dashboard').getAttribute('x-uid');        
-    fetch(`/settings/dashboard/${dashboardUid}/remove-group/${groupUid}`, { method: 'POST'}).then(res => {
-        let eleGroup = document.getElementById(groupUid);
-        eleGroup?.remove();
-    });
+    let msg = Translations.RemoveGroupMessage.replace('#NAME#', groupName);
+    try {
+        if((await modalConfirm(Translations.RemoveGroupTitle, msg)) != true)
+            return;
+        console.log('test');
+        let dashboardUid = document.querySelector('.dashboard').getAttribute('x-uid');
+        fetch(`/settings/dashboard/${dashboardUid}/remove-group/${groupUid}`, {method: 'POST'}).then(res => {
+            let eleGroup = document.getElementById(groupUid);
+            eleGroup?.remove();
+        });
+    }catch(err) {
+        console.log('err', err);
+    }
 }
 
 function UpdateSetting(setting, event)
