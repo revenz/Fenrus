@@ -50,6 +50,8 @@ public partial class UserEditor: SideEditorBase
     private SideEditor Editor { get; set; }
 
     private string lblSave, lblCancel, lblName, lblUsername, lblEmail, lblPassword, lblIsAdmin;
+
+    private const string DUMMY_PASSWORD = "************";
     
     protected override void OnInitialized()
     {
@@ -70,6 +72,8 @@ public partial class UserEditor: SideEditorBase
             Model.Uid = Item.Uid;
             Model.IsAdmin = Item.IsAdmin;
             Model.Username = Item.Username;
+            Model.Password = string.IsNullOrEmpty(Item.Password) ? string.Empty : DUMMY_PASSWORD;
+            Model.Email = Item.Email;
         }
         else
         {
@@ -107,9 +111,10 @@ public partial class UserEditor: SideEditorBase
             var existing = service.GetByUid(Model.Uid);
             existing.IsAdmin = Model.IsAdmin;
             existing.Name = Model.Name;
-            if(existing.Password != Model.Password)
-                existing.Password = BCrypt.Net.BCrypt.HashPassword(Model.Password);
+            existing.Email = Model.Email;
             existing.Username = Model.Username;
+            if(string.IsNullOrEmpty(Model.Password) == false && Model.Password != DUMMY_PASSWORD && existing.Password != Model.Password)
+                existing.Password = BCrypt.Net.BCrypt.HashPassword(Model.Password);
             service.Update(existing);
         }
         

@@ -42,7 +42,9 @@
     "AddGroup": "Add Group",
     "Import": "Import",
     "Browse": "Browse",
-    "NoGroupAddedToDashboard": "No groups added to dashboard"
+    "NoGroupAddedToDashboard": "No groups added to dashboard",
+    "Website": "Website",
+    "Author": "Author"
   },
   "ContextMenu": {
     "EditDashboard": "Edit Dashboard",
@@ -91,7 +93,8 @@
         "ImportConfig": "Import Config"
       },
       "Labels": {
-        "Importing": "Importing previous configuration, this may take a while, please wait."        
+        "Importing": "Importing previous configuration, this may take a while, please wait.",
+        "ThirdParty": "Third Party"
       }
     },
     "Dashboards":{

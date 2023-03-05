@@ -38,7 +38,9 @@
     "AddGroup": "Gruppe hinzufügen",
     "Import": "Importieren",
     "Browse": "Durchsuche",
-    "NoGroupAddedToDashboard": "Keine Gruppen zum Dashboard hinzugefügt"
+    "NoGroupAddedToDashboard": "Keine Gruppen zum Dashboard hinzugefügt",
+    "Website": "Webseite",
+    "Author": "Autor"
   },
   "ContextMenu": {
     "EditDashboard": "Dashboard bearbeiten",
@@ -84,7 +86,8 @@
         "ImportConfig": "Konfig importieren"
       },
       "Labels": {
-        "Importing": "Vorherige Konfiguration wird importiert, dies kann eine Weile dauern, bitte warten."
+        "Importing": "Vorherige Konfiguration wird importiert, dies kann eine Weile dauern, bitte warten.",
+        "ThirdParty": "Dritte Seite"
       }
     },
     "Dashboards":{
