@@ -3,7 +3,6 @@ using Fenrus.Components.Dialogs;
 using Fenrus.Models;
 using Humanizer;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Pages;
 

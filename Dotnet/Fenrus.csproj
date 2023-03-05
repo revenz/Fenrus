@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Folder Include="Apps\Basic" />
-    <Folder Include="Data" />
   </ItemGroup>
 
   <ItemGroup>

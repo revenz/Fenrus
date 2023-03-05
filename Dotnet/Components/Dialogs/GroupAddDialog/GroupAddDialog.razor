@@ -1,7 +1,7 @@
 @using Fenrus.Models.UiModels
 @namespace Fenrus.Components.Dialogs
 
-<Modal Title="Add Group" Visible="Visible">
+<Modal Title="@lblTitle" Visible="Visible">
 
     <Body>
     <div>
@@ -19,7 +19,7 @@
     </div>
     </Body>
     <Footer>
-        <button class="btn" id="@btnAddUid" @onclick=@Add>Add</button>
-        <button class="btn" @onclick=@Cancel>Cancel</button>
+        <button class="btn" id="@btnAddUid" @onclick=@Add>@lblAdd</button>
+        <button class="btn" @onclick=@Cancel>@lblCancel</button>
     </Footer>
 </Modal>

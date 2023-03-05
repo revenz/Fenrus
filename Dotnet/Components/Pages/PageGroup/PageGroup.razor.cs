@@ -79,6 +79,11 @@ public partial class PageGroup: CommonPage<Models.Group>
         {
             isNew = false;
             Model = GetById();
+            if (Model == null)
+            {
+                Router.NavigateTo(IsSystem ? "/settings/system/groups" : "/settings/groups");
+                return;
+            }
         }
         await UpdatePreview(250);
     }

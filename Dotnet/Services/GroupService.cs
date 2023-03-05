@@ -52,4 +52,11 @@ public class GroupService
     /// <param name="group">the new group being updated</param>
     public void Update(Group group)
         => DbHelper.Update(group);
+
+    /// <summary>
+    /// Deletes a group
+    /// </summary>
+    /// <param name="uid">the UID of the group</param>
+    public void Delete(Guid uid)
+        => DbHelper.Delete<Group>(uid);
 }

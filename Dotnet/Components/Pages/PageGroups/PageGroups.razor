@@ -5,7 +5,7 @@
 <FenrusPage Title="@lblTitle" Icon="fa-solid fa-puzzle-piece" PageDescription="@lblDescription">
     <Body>
     
-    <FenrusTable TItem="Models.Group" Data=@Items>
+    <FenrusTable TItem="Models.Group" Data=@Items @ref="Table">
         <ToolBar>
             <FenrusTableButton Label="Add" Icon="fa-solid fa-plus" Clicked="() => Add()" />
         </ToolBar>

@@ -4,6 +4,11 @@
     fetchDashboard(path, true);
 }
 
+var eleTranslations = document.getElementById("translations");
+if(eleTranslations){
+    Translations = JSON.parse(eleTranslations.value); 
+}
+
 function abortRequests() {
     let uid = this.getDashboardInstanceUid();
     let event = new CustomEvent("disposeDashboard", 

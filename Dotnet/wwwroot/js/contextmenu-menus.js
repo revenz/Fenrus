@@ -9,7 +9,6 @@ const terminalIcon = `<span class="icon fa-solid fa-terminal" style="padding-rig
 const logIcon = `<span class="icon fa-solid fa-file-lines" style="padding-right:0.5rem"></span>`;
 
 function openDefaultContextMenu(event) {
-    console.log('openDefaultContextMenu');
     event?.preventDefault();
     event?.stopPropagation();
     if(!contextMenus['DEFAULT'])
@@ -17,7 +16,7 @@ function openDefaultContextMenu(event) {
         let dashboardUid = document.querySelector('.dashboard').getAttribute('x-uid');
         const menuItems = [
             {
-                content: `${dashboardIcon}Edit Dashboard`,
+                content: `${dashboardIcon} ${Translations.EditDashboard}`,
                 events: {
                     click: (e) => {
                         document.location = '/settings/dashboards/' + dashboardUid                
@@ -25,7 +24,7 @@ function openDefaultContextMenu(event) {
                 }
             },
             {
-                content: `${terminalIcon}Terminal`,
+                content: `${terminalIcon} ${Translations.Terminal}`,
                 events: {
                     click: (e) => openTerminal()
                 }
@@ -33,7 +32,6 @@ function openDefaultContextMenu(event) {
 
         ];
         
-        console.log('menuItems before menu: ', JSON.parse(JSON.stringify(menuItems)));
         let menu = new ContextMenu({
             menuItems
         });
@@ -60,13 +58,14 @@ function openContextMenu(event, app){
     let dashboardUid = ele.closest('.dashboard').getAttribute('x-uid');
     let ssh = ele.getAttribute('x-ssh') === '1';
     let docker = ele.getAttribute('x-docker');
+    let systemGrounp = group.className.indexOf('system-group') > 0;
     if(!contextMenus[uid])
     {
         let menuItems = [];
         if(app._Type !== 'DashboardTerminal'){
             menuItems.push(
             {
-                content: `${infoIcon}Up-Time`,
+                content: `${infoIcon}${Translations.UpTime}`,
                 events: {
                     click: (e) => openUpTime(app)                
                 }
@@ -76,7 +75,7 @@ function openContextMenu(event, app){
             menuItems.push(
             {
                 divider: "top",
-                content: `${terminalIcon}Terminal`,
+                content: `${terminalIcon}${Translations.Terminal}`,
                 events: {
                     click: (e) => openTerminal(1, uid)
                 }
@@ -85,55 +84,62 @@ function openContextMenu(event, app){
         else if(docker){
             menuItems.push(
             {
-                content: `${terminalIcon}Terminal`,
+                content: `${terminalIcon}${Translations.Terminal}`,
                 events: {
                     click: (e) => openTerminal(2, uid)
                 }
             });
             menuItems.push(
             {
-                content: `${logIcon}Log`,
+                content: `${logIcon}${Translations.Log}`,
                 events: {
                     click: (e) => openDockerLog(uid)
                 }
             });
         }
+        
+        let sizes = [Translations.Size_Small, Translations.Size_Medium, Translations.Size_Large, Translations.Size_Larger,
+            Translations.Size_XLarge, Translations.Size_XXLarge];
 
         menuItems = menuItems.concat([
             {
-                content: `${resizeIcon}Resize`,
+                content: `${resizeIcon}${Translations.Resize}`,
                 divider: "top",
-                submenu: ['Small', 'Medium', 'Large', 'Larger', 'X-Large', 'XX-Large'].map((x) =>
+                submenu: sizes.map((x) =>
                 {
                     return { 
                         content: x,
                         events: {
                             click: (e) => {
-                                for(let size of ['Small', 'Medium', 'Large', 'Larger', 'X-Large', 'XX-Large']){
-                                    ele.classList.remove(size.toLowerCase());
+                                let enumSizes = ['small', 'medium', 'large', 'larger', 'x-Large', 'xx-large'];
+                                for(let s of enumSizes){
+                                    ele.classList.remove(s.toLowerCase());
                                 }
+                                let index = sizes.indexOf(x);
+                                let size = enumSizes[index].replace('-', '');
+
                                 ele.classList.add(x.toLowerCase());
                                 document.dispatchEvent(new CustomEvent('fenrus-item-resized', {
                                     detail: { element: ele }
                                 }));
 
-                                fetch(`/settings/groups/${groupUid}/resize/${uid}/${x.toLowerCase().replace('-', '')}`, { method: 'POST'});
+                                fetch(`/settings/groups/${groupUid}/resize/${uid}/${size}`, { method: 'POST'});
                             }
                         }
                     };
                 })
             },
         {
-            content: `${editIcon}Edit Group`,
+            content: `${editIcon}${Translations.EditGroup}`,
             divider: "top",
             events: {
                 click: (e) => {
-                    document.location = '/settings/groups/' + groupUid                
+                    document.location = systemGrounp ? '/settings/system/groups/' + groupUid : '/settings/groups/' + groupUid                
                 }
             }
         },
         {
-            content: `${dashboardIcon}Edit Dashboard`,
+            content: `${dashboardIcon}${Translations.EditDashboard}`,
             events: {
                 click: (e) => {
                     document.location = '/settings/dashboards/' + dashboardUid                
@@ -142,10 +148,10 @@ function openContextMenu(event, app){
         },
         {
             divider: "top",
-            content: `${deleteIcon}Delete`,
+            content: `${deleteIcon}${Translations.Delete}`,
             events: { 
                 click: async (e) => {
-                    if(await modalConfirm('Delete', `Delete ${app.Name}?`)) {
+                    if(await modalConfirm(Translations.Delete, `${Translations.Delete} ${app.Name}?`)) {
                         ele.remove();
                         let items = group.querySelectorAll('.items .db-item');
                         if(items.length === 0){

@@ -3,6 +3,11 @@
 @using Fenrus.Models
 @inherits Fenrus.Pages.CommonPage<Fenrus.Models.Group>
 
+@if (Model == null)
+{
+    return;
+}
+
 <FenrusPage Title="Group" Icon="fa-solid fa-puzzle-piece">
     <Buttons>
         <button class="btn" @onclick="() => AddItem()">@lblAddItem</button>
@@ -10,60 +15,60 @@
         <button class="btn" @onclick="() => Cancel()">@lblCancel</button>
     </Buttons>
     <Body>
-        <InputText Label="@lblName" @bind-Value="@Model.Name" Help="@lblNameHelp" />
-        <InputSwitch Label="@lblShowGroupTitle" @bind-Value="@Model.HideGroupTitle" Help="@lblShowGroupTitleHelp"></InputSwitch>
-    
-        <div class="preview-dashboard">
-            <div class="db-group @(Model.HideGroupTitle ? "hide-labels" : string.Empty)" style="width: unset; min-width: unset; height: unset; min-height: unset;">
-                @if(Model.HideGroupTitle == false)
-                {
-                    <div class="title"><span>@Model.Name</span></div>
-                }
+    <InputText Label="@lblName" @bind-Value="@Model.Name" Help="@lblNameHelp"/>
+    <InputSwitch Label="@lblShowGroupTitle" @bind-Value="@Model.HideGroupTitle" Help="@lblShowGroupTitleHelp"></InputSwitch>
 
-                <div class="items" style="width: 30rem; height: 22.5rem; position: relative;">
-                    @foreach (var item in Model.Items)
+    <div class="preview-dashboard">
+        <div class="db-group @(Model.HideGroupTitle ? "hide-labels" : string.Empty)" style="width: unset; min-width: unset; height: unset; min-height: unset;">
+            @if (Model.HideGroupTitle == false)
+            {
+                <div class="title"><span>@Model.Name</span></div>
+            }
+
+            <div class="items" style="width: 30rem; height: 22.5rem; position: relative;">
+                @foreach (var item in Model.Items)
+                {
+                    string icon = item.Icon;
+                    if (string.IsNullOrEmpty(icon))
                     {
-                        string icon = item.Icon;
-                        if (string.IsNullOrEmpty(icon))
-                        {
-                            if (item is AppItem app)
-                                icon = $"/apps/{Uri.EscapeDataString(app.AppName)}/app.png";
-                            else
-                                icon = "/favicion.svg";
-                        }
-                        icon += "?version=" + Globals.Version;
-                        <a class="@item.Size.ToString().ToLower().Replace("xl", "x-l") db-@item.Type[9..].ToLower() db-item db-basic" title="@item.Name">
-                            <div class="inner">
-                                <div class="icon">
-                                    <img src="@icon">
-                                </div>
-                                <div class="content">
-                                    <div class="title">@item.Name</div>
-                                    <div class="status"></div>
-                                </div>
-                                <div class="arrow"></div>
-                                <div class="actions">
-                                    <span title="@lblMoveUp" class="edit" @onclick="() => Move(item, true)">
-                                        <span class="fa-solid fa-angle-up"></span>
-                                    </span>
-                                    <span title="@lblMoveDown" class="edit" @onclick="() => Move(item, false)">
-                                        <span class="fa-solid fa-angle-down"></span>
-                                    </span>
-                                    <span title="@lblEdit" class="edit" @onclick="() => Edit(item)">
-                                        <span class="fa-solid fa-pen-to-square"></span>
-                                    </span>
-                                    <span title="@lblCopy" class="copy" @onclick="() => Copy(item)">
-                                        <span class="fa-solid fa-copy"></span>
-                                    </span>
-                                    <span title="@lblDelete" class="delete" @onclick="() => Delete(item)">
-                                        <span class="fa-solid fa-trash"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </a>
+                        if (item is AppItem app)
+                            icon = $"/apps/{Uri.EscapeDataString(app.AppName)}/app.png";
+                        else
+                            icon = "/favicion.svg";
                     }
-                </div>
+                    icon += "?version=" + Globals.Version;
+                    <a class="@item.Size.ToString().ToLower().Replace("xl", "x-l") db-@item.Type[9..].ToLower() db-item db-basic" title="@item.Name">
+                        <div class="inner">
+                            <div class="icon">
+                                <img src="@icon">
+                            </div>
+                            <div class="content">
+                                <div class="title">@item.Name</div>
+                                <div class="status"></div>
+                            </div>
+                            <div class="arrow"></div>
+                            <div class="actions">
+                                <span title="@lblMoveUp" class="edit" @onclick="() => Move(item, true)">
+                                    <span class="fa-solid fa-angle-up"></span>
+                                </span>
+                                <span title="@lblMoveDown" class="edit" @onclick="() => Move(item, false)">
+                                    <span class="fa-solid fa-angle-down"></span>
+                                </span>
+                                <span title="@lblEdit" class="edit" @onclick="() => Edit(item)">
+                                    <span class="fa-solid fa-pen-to-square"></span>
+                                </span>
+                                <span title="@lblCopy" class="copy" @onclick="() => Copy(item)">
+                                    <span class="fa-solid fa-copy"></span>
+                                </span>
+                                <span title="@lblDelete" class="delete" @onclick="() => Delete(item)">
+                                    <span class="fa-solid fa-trash"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                }
             </div>
         </div>
+    </div>
     </Body>
 </FenrusPage>

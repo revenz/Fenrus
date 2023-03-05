@@ -12,6 +12,7 @@
     "Name": "Name",
     "MoveUp": "Move Up",
     "MoveDown": "Move Down",
+    "RemoveGroup": "Remove Group",
     "Delete": "Delete",
     "Help": "Help",
     "Edit": "Edit",
@@ -37,18 +38,50 @@
     "Language": "Language",
     "UpdatedSuccessfully": "Updated Successfully",
     "General": "General",
-    "Administrator":"Administrator" 
+    "Administrator":"Administrator",
+    "AddGroup": "Add Group",
+    "Import": "Import",
+    "Browse": "Browse",
+    "NoGroupAddedToDashboard": "No groups added to dashboard"
+  },
+  "ContextMenu": {
+    "EditDashboard": "Edit Dashboard",
+    "EditGroup": "Edit Group",
+    "Terminal": "Terminal",
+    "UpTime": "Up-Time",
+    "Log": "Log",
+    "Resize": "Resize"
   },
   "Enums": {
+    "ItemSize": {
+      "Small": "Small",
+      "Medium": "Medium",
+      "Large": "Large",
+      "Larger": "Larger",
+      "XLarge": "X-Large",
+      "XXLarge": "XX-Large"
+    },
     "LinkTarget": {
       "OpenInThisTab":"Open in this tab", 
       "OpenInNewTab": "Open in new tab",
       "OpenInSameTab": "Open in same tab"
     }
   },
+  "Dialogs": {
+    "ImportConfig": {
+      "Title": "Import Config",
+      "Description": "This allows you to import a configuration from an older Fenrus install into the new .NET version."
+    }
+  },
   "Pages": {
     "About": {
-      "Title": "About"
+      "Title": "About",
+      "Buttons": {
+        "ImportConfig": "Import Config"
+      },
+      "Labels": {
+        "Importing": "Importing previous configuration, this may take a while, please wait."        
+      }
     },
     "Dashboards":{
       "Title": "Dashboards",

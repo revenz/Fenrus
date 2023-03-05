@@ -11,15 +11,15 @@
     var groupIndex = 0;
     foreach(var group in Groups)
     {
-        <div id="@group.Uid" class="db-group @(Model.ShowGroupTitles ? "hide-labels" : string.Empty)">
+        <div id="@group.Uid" class="db-group @(Model.ShowGroupTitles ? "hide-labels" : string.Empty) @(group.IsSystem ? "system-group" : string.Empty)">
             @if(group.HideGroupTitle == false) 
             {
                 <div class="title">
                     <span x-text="@group.Name">@group.Name</span>
                     <div class="group-controls">
-                        <span class="move-up fa-solid fa-angle-up" title="Move Up" onclick="moveGroup('@group.Uid', true)"></span>
-                        <span class="move-down fa-solid fa-angle-down" title="Move Down" onclick="moveGroup('@group.Uid', false)"></span>
-                        <span class="remove-group fa-solid fa-trash" title="Remove Group" onclick="removeGroup('@group.Uid', '@group.Name.Replace("'", "\\'")')"></span>
+                        <span class="move-up fa-solid fa-angle-up" title="@Translater.Instant("Labels.MoveUp")" onclick="moveGroup('@group.Uid', true)"></span>
+                        <span class="move-down fa-solid fa-angle-down" title="@Translater.Instant("Labels.MoveDown")" onclick="moveGroup('@group.Uid', false)"></span>
+                        <span class="remove-group fa-solid fa-trash" title="@Translater.Instant("Labels.RemoveGroup")" onclick="removeGroup('@group.Uid', '@group.Name.Replace("'", "\\'")')"></span>
                     </div>
                 </div>
             }
@@ -44,7 +44,7 @@
 else 
 {
     <div class="no-dashboard">
-        No groups added to dashboard
+        @Translater.Instant("NoGroupAddedToDashboard")
     </div>
 }
 </CascadingValue>

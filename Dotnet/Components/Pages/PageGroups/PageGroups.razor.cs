@@ -1,5 +1,8 @@
+using Fenrus.Controllers;
 using Fenrus.Models;
 using Fenrus.Pages;
+using Markdig.Extensions.Tables;
+using Renci.SshNet.Messages.Transport;
 using Group = Fenrus.Models.Group;
 
 namespace Fenrus.Components;
@@ -10,6 +13,8 @@ namespace Fenrus.Components;
 public partial class PageGroups : CommonPage<Models.Group>
 {
     public List<Models.Group> Items { get; set; } = new();
+
+    private FenrusTable<Group> Table { get; set; }
 
     private string lblTitle, lblDescription;
 
@@ -35,5 +40,22 @@ public partial class PageGroups : CommonPage<Models.Group>
             new Services.GroupService().Enable(item.Uid, enabled);
         else
             Settings.Save();
+    }
+
+    protected override bool DoDelete(Group item)
+    {
+        if (IsSystem)
+        {
+            new Services.GroupService().Delete(item.Uid);
+        }
+        else
+        {
+            Settings.Groups = Settings.Groups.Where(x => x.Uid != item.Uid).ToList();
+            Settings.Save();
+        }
+
+        Items = Items.Where(x => x.Uid != item.Uid).ToList();
+        Table.SetData(Items);
+        return true;
     }
 }

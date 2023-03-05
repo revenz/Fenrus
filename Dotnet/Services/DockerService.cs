@@ -37,6 +37,17 @@ public class DockerService
     }
 
     /// <summary>
+    /// Adds a docker to the database
+    /// </summary>
+    /// <param name="server">the docker server</param>
+    public void Add(DockerServer server)
+    {
+        if(server.Uid == Guid.Empty)
+            server.Uid = Guid.NewGuid();
+        DbHelper.Insert(server);
+    }
+
+    /// <summary>
     /// Deletes a docker server from the system
     /// </summary>
     /// <param name="uid">the UID of the server to delete</param>

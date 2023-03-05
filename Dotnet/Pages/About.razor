@@ -1,16 +1,11 @@
 @page "/settings/about"
 @inherits UserPage
-@{
-    string lblTitle = Translater.Instant("Pages.About.Title");
-}
 
 <PageTitle>Fenrus - @lblTitle</PageTitle>
 
 <FenrusPage Title="@lblTitle" Icon="fa-solid fa-sliders">
     <Buttons>
-        <button class="btn">Update Apps</button>
-        <button class="btn">Import Config</button>
-        <button class="btn">Export Config</button>
+        <button class="btn" @onclick="() => ImportConfig()">@lblImportConfig</button>
     </Buttons>
     <Body>
     
@@ -21,3 +16,12 @@
     
     </Body>
 </FenrusPage>
+
+@if (Importing)
+{
+    <div class="importing">
+        <span>@lblImporting</span>
+    </div>
+}
+
+<Fenrus.Components.Dialogs.FileInputDialog @ref="FileInputDialog" Translater="Translater" />

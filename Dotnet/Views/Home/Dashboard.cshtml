@@ -17,7 +17,27 @@
     ViewBag.AccentColor = Model.Dashboard.AccentColor?.EmptyAsNull() ?? "#FF0090";
     ViewBag.BackgroundCOlor = Model.Dashboard.BackgroundColor?.EmptyAsNull() ?? "#009099";
     var systemSearchEngines = ViewBag.SystemSearchEngines as List<SearchEngine>;
+
+    string translations = System.Text.Json.JsonSerializer.Serialize(new
+    {
+        Edit = Model.Translater.Instant("Labels.Edit"),
+        Delete = Model.Translater.Instant("Labels.Delete"),
+        EditDashboard = Model.Translater.Instant("ContextMenu.EditDashboard"),
+        EditGroup = Model.Translater.Instant("ContextMenu.EditGroup"),
+        Terminal = Model.Translater.Instant("ContextMenu.Terminal"),
+        UpTime = Model.Translater.Instant("ContextMenu.UpTime"),
+        Log = Model.Translater.Instant("ContextMenu.Log"),
+        Resize  = Model.Translater.Instant("ContextMenu.Resize"),
+        Size_Small = Model.Translater.Instant("Enums.ItemSize.Small"),
+        Size_Medium = Model.Translater.Instant("Enums.ItemSize.Medium"),
+        Size_Large = Model.Translater.Instant("Enums.ItemSize.Large"),
+        Size_Larger = Model.Translater.Instant("Enums.ItemSize.Larger"),
+        Size_XLarge = Model.Translater.Instant("Enums.ItemSize.XLarge"),
+        Size_XXLarge = Model.Translater.Instant("Enums.ItemSize.XXLarge"),
+    });
 }
+
+<input type="hidden" id="translations" value="@translations" />
 
 @if (settings.SearchEngines?.Any() == true || systemSearchEngines?.Any() == true)
 {

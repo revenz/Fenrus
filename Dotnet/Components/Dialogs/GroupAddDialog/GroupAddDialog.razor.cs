@@ -10,7 +10,12 @@ namespace Fenrus.Components.Dialogs;
 public partial class GroupAddDialog: ComponentBase
 {
     [Inject] public IJSRuntime jsRuntime { get; set; }
-    
+
+    /// <summary>
+    /// Gets or sets the translater used
+    /// </summary>
+    [Parameter] public Translater Translater { get; set; }
+
     TaskCompletionSource<List<ListOption>> ShowTask;
 
     private readonly List<ListOption> CheckedItems = new();
@@ -24,20 +29,16 @@ public partial class GroupAddDialog: ComponentBase
     private bool Visible { get; set; }
     private bool focused = false;
 
+    private string lblTitle, lblAdd, lblCancel;
+
     protected override void OnInitialized()
     {
         // App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
         Instance = this;
+        lblTitle = Translater.Instant("Labels.AddGroup");
+        lblAdd = Translater.Instant("Labels.Add");
+        lblCancel = Translater.Instant("Labels.Cancel");
     }
-
-    // private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    // {
-    //     if (Visible)
-    //     {
-    //         No();
-    //         this.StateHasChanged();
-    //     }
-    // }
     
     /// <summary>
     /// Shows a modal with available list options
