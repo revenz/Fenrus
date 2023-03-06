@@ -12,48 +12,116 @@
     <title>Fenrus</title>
     <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
     <link id="theme-style" rel="stylesheet" href="/themes/Default/theme.css?version=@Globals.Version" />
+    <style>
+        .hidden {
+            display: none;
+        }
+        .field a {
+            width: 100%;
+            display: block;
+            text-align: right;
+            color: #ff0090;
+        }
+        .field a:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            flex-grow: 1;
+        }
+    </style>
 </head>
 
 <body class="login-page">
 
-    <div class="main-content">
-        <form class="login-box" method="post">
-            <div class="header">
-                <span class="logo">
-                    <img src="/favicon.svg?version=@Globals.Version" />
-                </span>
-                <span class="title">Fenrus</span>
+<div class="main-content">
+    <div class="login-box">
+        <div class="header">
+            <span class="logo">
+                <img src="/favicon.svg?version=@Globals.Version" />
+            </span>
+            <span class="title">Fenrus</span>
+        </div>
+        @if (string.IsNullOrEmpty(Model.Error) == false)
+        {
+            <div id="error" class="error">
+                <span>@Model.Error</span>
             </div>
-            @if (string.IsNullOrEmpty(Model.Error) == false)
-            {
-                <div class="error">
-                    <span>@Model.Error</span>
-                </div>
-            }
+        }
+        <form method="post" id="login-fields">
             <div class="field">
                 <span class="label">@Model.Translater.Instant("Pages.Login.Fields.Username")</span>
                 <span class="value">
-                    <input type="text" name="username" autofocus required />
+                    <input type="text" id="username" name="username" autofocus required />
                 </span>
             </div>
             <div class="field">
                 <span class="label">@Model.Translater.Instant("Pages.Login.Fields.Password")</span>
                 <span class="value">
-                    <input type="password" name="password" required />
+                    <input type="password" name="password" id="password" required />
                 </span>
             </div>
+            <div class="field">
+                <a href="#" onclick="ForgotPassword(event);">@Model.Translater.Instant("Pages.Login.Fields.ForgotPassword")</a>
+            </div>
             <div class="buttons">
-                <input type="submit" name="action" value="@Model.Translater.Instant("Pages.Login.Buttons.Login")" class="btn"  />
+                <button class="btn" type="submit" name="action" value="Login">@Model.Translater.Instant("Pages.Login.Buttons.Login")</button>
                 @if(Model.AllowRegister) { 
-                    <input type="submit" name="action" value="@Model.Translater.Instant("Pages.Login.Buttons.Register")" class="btn" />
+                    <button type="submit" name="action" value="Register" class="btn">@Model.Translater.Instant("Pages.Login.Buttons.Register")</button>
                 }
                 @if(Model.AllowGuest) { 
-                    <input type="button" value="@Model.Translater.Instant("Pages.Login.Buttons.Guest")" class="btn" onclick="document.location = 'guest';" />
+                    <button type="button" value="Guest" class="btn" onclick="document.location = 'guest';">@Model.Translater.Instant("Pages.Login.Buttons.Guest")</button>
                 }
             </div>
         </form>
+        <form method="post" id="forgot-password-fields" class="hidden">
+            <p class="description">
+                @Model.Translater.Instant("Pages.Login.Labels.ForgotPasswordDescription")
+            </p>
+            <div class="field" style="margin-bottom:4rem;">
+                <span class="value">
+                    <input type="text" name="usernameOrEmail" id="usernameOrEmail" autofocus
+                           placeholder="@Model.Translater.Instant("Pages.Login.Fields.UsernameOrEmailAddress")" />
+                </span>
+            </div>
+            <div class="buttons">
+                <button id="btnReset" class="btn" type="submit" name="action" value="Reset">@Model.Translater.Instant("Pages.Login.Buttons.Reset")</button>
+                <button class="btn" onclick="LoginForm()">@Model.Translater.Instant("Pages.Login.Buttons.Cancel")</button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <script src="/js/_fenrus.js?version=@Globals.Version" defer></script>
+<script>
+    function ForgotPassword(event)
+    {
+        let eleError = document.getElementById('error');
+        if (eleError)
+            eleError.remove();
+        
+        event.stopPropagation();
+        event.preventDefault();
+        document.getElementById('forgot-password-fields').className = '';
+        document.getElementById('login-fields').className = 'hidden';
+        
+        let eleUser = document.getElementById('username');
+        let eleEmail = document.getElementById('usernameOrEmail');
+        eleEmail.value = eleUser.value;
+        eleEmail.focus();
+        eleUser.required = false;
+        document.getElementById('password').required = false;
+        document.getElementById('usernameOrEmail').required = true;
+    }
+    function LoginForm()
+    {
+        document.getElementById('forgot-password-fields').className = 'hidden';
+        document.getElementById('login-fields').className = '';
+        document.getElementById('username').focus();
+        document.getElementById('username').required = true;
+        document.getElementById('password').required = true;
+        document.getElementById('usernameOrEmail').required = false;
+    }
+</script>
+
+<script src="/js/_fenrus.js?version=@Globals.Version" defer></script>
 </body>
 </html>

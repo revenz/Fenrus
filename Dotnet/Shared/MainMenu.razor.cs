@@ -48,7 +48,7 @@ public partial class MainMenu
             }
         });
 
-        if (App.IsAdmin != null)
+        if (App.IsAdmin == true)
         {
             Menu.Add(new MenuGroup()
             {

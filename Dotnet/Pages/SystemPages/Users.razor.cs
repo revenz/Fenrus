@@ -42,7 +42,7 @@ public partial class Users: CommonPage<User>
     /// </summary>
     private bool AllowRegistrations
     {
-        get => SystemSettings.AllowRegister;
+        get => SystemSettings?.AllowRegister == true;
         set
         {
             if (value == SystemSettings.AllowRegister)

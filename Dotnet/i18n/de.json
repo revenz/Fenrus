@@ -126,16 +126,27 @@
         "RegistrationNotAllowed": "Benutzerregistrierungen sind nicht zulässig\n",
         "GuestNotAllowed": "Gastzugang ist nicht erlaubt"
       },
+      "Labels": {
+        "PasswordReset": "Passwort wurde zurückgesetzt. Eine neue E-Mail wurde an Sie gesendet und auf der Konsole gedruckt.",
+        "PasswordResetFailed": "Kennwort konnte nicht zurückgesetzt werden",
+        "PasswordResetTokenInvalid": "Ungültiger Token zum Zurücksetzen des Kennworts oder Zurücksetzen des Kennworts ist abgelaufen.",
+        "PasswordResetSent": "Wenn der Benutzer existiert, wurde ein Passwort-Reset an Ihre E-Mail-Adresse gesendet oder auf der Konsole ausgedruckt.",
+        "ForgotPasswordDescription": "Geben Sie Ihren Benutzernamen oder Ihre E-Mail-Adresse ein und ein Link zum Zurücksetzen des Passworts wird Ihnen per E-Mail zugesendet und in das Konsolenprotokoll gedruckt."
+      },
       "Buttons":
       {
         "Login": "Anmeldung",
         "Register": "Registrieren",
-        "Guest": "Gast"
+        "Guest": "Gast",
+        "Reset": "Zurücksetzen",
+        "Cancel": "Stornieren"
       },
       "Fields":
       {
         "Username": "Nutzername",
-        "Password": "Passwort"
+        "Password": "Passwort",
+        "ForgotPassword": "Passwort vergessen?",
+        "UsernameOrEmailAddress": "Benutzername oder E-mail Adresse"
       }
     }
   }

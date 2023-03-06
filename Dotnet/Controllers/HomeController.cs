@@ -15,6 +15,15 @@ public class HomeController : BaseController
 {
     private Translater Translater;
 
+    /// <summary>
+    /// In memory password reset tokens
+    /// </summary>
+    private static readonly List<PasswordResetModel> ResetTokens = new();
+
+    private const string MSG_PasswordResetTokenInvalid = "PasswordResetTokenInvalid";
+    private const string MSG_PasswordResetFailed = "PasswordResetFailed";
+    private const string MSG_PasswordReset = "PasswordReset";
+    
     public HomeController()
     {
         string language = new SystemSettingsService().Get()?.Language;
@@ -106,12 +115,21 @@ public class HomeController : BaseController
     /// <summary>
     /// Gets the login page
     /// </summary>
+    /// <param name="msg">[Optional] message to show on the login page</param>
     /// <returns>the login page</returns>
     [HttpGet("login")]
-    public IActionResult Login()
-        => LoginPage(null);
+    public IActionResult Login([FromQuery] string msg = null)
+    {
+        if (msg == MSG_PasswordResetTokenInvalid)
+            return LoginPage(Translater.Instant("Pages.Login.Labels.PasswordResetTokenInvalid"));
+        if (msg == MSG_PasswordReset)
+            return LoginPage(Translater.Instant("Pages.Login.Labels.PasswordReset"));
+        if (msg == MSG_PasswordResetFailed)
+            return LoginPage(Translater.Instant("Pages.Login.Labels.PasswordResetFailed"));
+        return LoginPage(null);
+    }
 
-    
+
     /// <summary>
     /// Logs the user out of the system
     /// </summary>
@@ -148,17 +166,23 @@ public class HomeController : BaseController
     /// <param name="action">the action being performed, Login, Register, or Guest</param>
     /// <param name="username">the username</param>
     /// <param name="password">the password</param>
+    /// <param name="usernameOrEmail">the username or email for a password reset</param>
     /// <returns>the resulting action result</returns>
     [HttpPost("login")]
-    public async Task<IActionResult> LoginPost([FromForm] string action, [FromForm] string username, [FromForm] string password)
+    public async Task<IActionResult> LoginPost([FromForm] string action, [FromForm] string username, [FromForm] string password, [FromForm] string usernameOrEmail)
     {
         Console.WriteLine("Action: " + action);
         Console.WriteLine("Username: " + username);
         Console.WriteLine("Password: " + password);
 
-        if(action == "Login" || action == Translater.Instant("Pages.Login.Buttons.Login"))
+        if (action == "Reset")
+        {
+            return await Reset(usernameOrEmail);
+        }
+
+        if(action == "Login")
             return await Login(username, password);
-        if(action == "Register" || action == Translater.Instant("Pages.Login.Buttons.Register"))
+        if(action == "Register")
             return await Register(username, password);
         return Login();
     }
@@ -182,6 +206,56 @@ public class HomeController : BaseController
         var user = new Services.UserService().Register(username, password);
         await CreateClaim(user.Uid, user.Name, user.IsAdmin);
         return Redirect("/");
+    }
+
+    private async Task<IActionResult> Reset(string usernameOrEmail)
+    {
+        var user = new UserService().FindUser(usernameOrEmail);
+        if (user != null)
+        {
+            Guid token = Guid.NewGuid();
+            ResetTokens.Add(new ()
+            {
+                Date = DateTime.Now,
+                Token = token,
+                UserUid = user.Uid
+            });
+            string resetUrl = HttpContext.Request.Scheme + "://" +
+                              HttpContext.Request.Host + 
+                              HttpContext.Request.Path;
+            resetUrl = resetUrl.Substring(0, resetUrl.IndexOf("/login"));
+            resetUrl += "/reset-password/" + token;
+            Console.WriteLine("Password Reset Url: " + resetUrl);
+        }
+        
+        return LoginPage(Translater.Instant("Pages.Login.Labels.PasswordResetSent"));
+    }
+
+    /// <summary>
+    /// Performs a password reset
+    /// </summary>
+    /// <param name="token">the reset token</param>
+    /// <returns>the password reset page</returns>
+    [HttpGet("reset-password/{token}")]
+    public IActionResult PasswordReset([FromRoute] Guid token)
+    {
+        var reset = ResetTokens.FirstOrDefault(x => x.Token == token
+                                                    && x.Date > DateTime.Now.AddMinutes(-10));
+
+        // remove the token
+        ResetTokens.RemoveAll(x => x.Token == token);
+        
+        if (reset == null)
+            return Redirect("/login?msg=" + MSG_PasswordResetTokenInvalid);
+
+        var newPassword = Helpers.PasswordGenerator.Generate(20, 4);
+        var changed = new Services.UserService().ChangePassword(reset.UserUid, newPassword);
+
+        if (changed == false)
+            return Redirect("/login?msg=" + MSG_PasswordResetFailed);
+        
+        Console.WriteLine("New Password: " + newPassword);
+        return Redirect("/login?msg=" + MSG_PasswordReset);
     }
     
     /// <summary>
@@ -242,6 +316,27 @@ public class HomeController : BaseController
             CookieAuthenticationDefaults.AuthenticationScheme, 
             new ClaimsPrincipal(claimsIdentity), 
             authProperties);
+    }
+
+    /// <summary>
+    /// Password reset model
+    /// </summary>
+    private class PasswordResetModel
+    {
+        /// <summary>
+        /// Gets or sets the date when this token was created
+        /// </summary>
+        public DateTime Date { get; set; }
+
+        /// <summary>
+        /// Gets or sets the token
+        /// </summary>
+        public Guid Token { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the user UID 
+        /// </summary>
+        public Guid UserUid { get; set; }
     }
 }
 

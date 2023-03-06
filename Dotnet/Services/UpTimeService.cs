@@ -51,7 +51,7 @@ public class UpTimeService
     /// <returns>any data for the URL</returns>
     public List<UpTimeEntry> GetData(string url)
     {
-        var db = DbHelper.GetDb();
+        using var db = DbHelper.GetDb();
         var collection = db.GetCollection<UpTimeEntry>(nameof(UpTimeEntry));
         return collection.Query().Where(x => x.Url == url)
             .OrderByDescending(x => x.Date).Limit(100).ToList();

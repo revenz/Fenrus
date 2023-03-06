@@ -16,11 +16,11 @@ public abstract class UserPage : ComponentBase
 {
     protected string lblSave, lblCancel, lblHelp, lblDelete, lblEdit, lblMoveUp, 
         lblMoveDown, lblCopy, lblName, lblAdd, lblEnabled, lblActions, lblDefault;
-    
+
     /// <summary>
     /// Gets the translater to use for this page
     /// </summary>
-    protected Translater Translater { get; private set; }
+    protected Translater Translater => App.Translater;
     
     /// <summary>
     /// Gets or sets the Authentication state provider
@@ -58,13 +58,27 @@ public abstract class UserPage : ComponentBase
     /// </summary>
     protected SystemSettings SystemSettings { get; private set; }
 
+    /// <summary>
+    /// Signs out and redirect to the login
+    /// </summary>
+    protected void SignOut()
+    {
+        Router.NavigateTo("/logout", forceLoad: true);
+    }
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var uid = authState.GetUserUid();
         if (uid == null)
         {
-            Router.NavigateTo("/login");
+            SignOut();
+            return;
+        }
+
+        if (Router.Uri.ToLowerInvariant().Contains("/system/") && App.IsAdmin != true)
+        {
+            SignOut();
             return;
         }
 
@@ -72,13 +86,9 @@ public abstract class UserPage : ComponentBase
         if (Settings.Uid != uid.Value)
         {
             // guest dashboard, user doesn't exist
-            Router.NavigateTo("/login");
+            SignOut();
             return;
         }
-
-        string language = Settings.Language?.EmptyAsNull() ??
-                          new SystemSettingsService().Get().Language?.EmptyAsNull() ?? "en";
-        Translater = Helpers.Translater.GetForLanguage(language);
 
         lblCancel = Translater.Instant("Labels.Cancel");
         lblSave = Translater.Instant("Labels.Save");

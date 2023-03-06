@@ -1,4 +1,3 @@
-using System.Net;
 using System.Text.RegularExpressions;
 using Fenrus.Services;
 using Microsoft.AspNetCore.Components;
@@ -72,11 +71,13 @@ public partial class App
         var user = new UserService().GetByUid(uid.Value);
         if (user == null)
         {
-            Router.NavigateTo("/login");
+            Router.NavigateTo("/login", forceLoad: true);
             return;
         }
 
         IsAdmin = user.IsAdmin;
+        
+        Console.WriteLine("AppRazor IsAdmin: " + user.Name + " = " + user.IsAdmin);
         var settings = new UserSettingsService().Load(uid.Value);
         
         string language = settings.Language?.EmptyAsNull() ??

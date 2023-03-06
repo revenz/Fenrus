@@ -91,16 +91,18 @@ public class UserService
     /// </summary>
     /// <param name="uid">The UID of the user to change the password to</param>
     /// <param name="newPassword">the new password</param>
-    public void ChangePassword(Guid uid, string newPassword)
+    /// <returns>true if the password was changed, otherwise false</returns>
+    public bool ChangePassword(Guid uid, string newPassword)
     {
         if (string.IsNullOrWhiteSpace(newPassword))
-            return; // need a password!
+            return false; // need a password!
 
         var user = DbHelper.GetByUid<User>(uid);
         if (user == null)
-            return; // user doesnt exist
-        user.Password = newPassword;
+            return false; // user doesnt exist
+        user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
         DbHelper.Update(user);
+        return true;
     }
 
     /// <summary>
@@ -119,5 +121,24 @@ public class UserService
     {
         DbHelper.Delete<UserSettings>(uid);
         DbHelper.Delete<User>(uid);
+    }
+
+    /// <summary>
+    /// Finds a user by its username or email address
+    /// </summary>
+    /// <param name="usernameOrEmail">the username or email address of the user</param>
+    /// <returns>the user if found, otherwise null</returns>
+    public User? FindUser(string usernameOrEmail)
+    {
+        if (string.IsNullOrWhiteSpace(usernameOrEmail))
+            return null;
+        usernameOrEmail = usernameOrEmail.ToLowerInvariant().Trim();
+        using var db = DbHelper.GetDb();
+        
+        var collection = db.GetCollection<User>(nameof(User));
+        var user = collection.Query().Where(x => x.Email.ToLower() == usernameOrEmail ||
+                                      x.Username.ToLower() == usernameOrEmail)
+            .FirstOrDefault();
+        return user;
     }
 }

@@ -167,16 +167,27 @@
         "RegistrationNotAllowed": "User registrations are not allowed",
         "GuestNotAllowed": "Guest access is not allowed"
       },
+      "Labels": {
+        "PasswordReset": "Password has been reset.  A new email has been email to you and printed to the console.",
+        "PasswordResetFailed": "Failed to reset password",
+        "PasswordResetTokenInvalid": "Invalid password reset token, or password reset has expired.",
+        "PasswordResetSent": "If the user exists, a password reset will have been sent to your email address or printed to the console.",
+        "ForgotPasswordDescription": "Enter your username or email address and a password reset link will be emailed to you and printed to the console log."
+      },
       "Buttons":
       {
         "Login": "Login",
         "Register": "Register",
-        "Guest": "Guest"
+        "Guest": "Guest",
+        "Reset": "Reset",
+        "Cancel": "Cancel"
       },
       "Fields":
       {
         "Username": "Username",
-        "Password": "Password"
+        "Password": "Password",
+        "ForgotPassword": "Forgot Password?",
+        "UsernameOrEmailAddress": "Username or Email Address"
       }
     },
     "SearchEngine": {
