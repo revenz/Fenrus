@@ -47,6 +47,7 @@
     <_ContentIncludedByDefault Remove="Components\Pages\PanelUserSettings\PanelUserSettings.razor" />
     <_ContentIncludedByDefault Remove="Components\PageGroup\PageGroup.razor" />
     <_ContentIncludedByDefault Remove="Components\PageGroups\PageGroups.razor" />
+    <_ContentIncludedByDefault Remove="Apps\Smart\NodeLance\app.json" />
   </ItemGroup>
 
 </Project>

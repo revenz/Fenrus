@@ -2,7 +2,7 @@
   "Name": "Jellyfin",
   "Icon": "icon.png",
   "TestFunction": true,
-  "Interval": 2,
+  "Interval": 10,
   "DefaultSize":"x-large",
   "Carousel": true,
   "Info":{

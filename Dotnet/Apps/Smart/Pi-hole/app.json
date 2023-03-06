@@ -5,5 +5,13 @@
   "Info":{
     "Authors": ["John Andrews"],
     "AppUrl":"https://pi-hole.net"
-  }
+  },
+  "Properties": [
+    {
+      "Name": "API Token",
+      "Id": "token",
+      "Type": "string",
+      "Help": "Can be retrieve from the admin page of pi-hole, then under 'Settings', 'API / Web Interface', then click the 'Show API token' button."
+    }
+  ]
 }
