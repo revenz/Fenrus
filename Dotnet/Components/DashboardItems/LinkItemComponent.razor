@@ -4,7 +4,7 @@
 >
 <div class="inner">
     <div class="icon">
-        <img src="@(Model.Icon?.EmptyAsNull() ?? "/favicon.svg")?version=@Globals.Version" />
+        <img src="@GetIcon()" />
     </div>
     <div class="content">
         <div class="title">@Model.Name</div>

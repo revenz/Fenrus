@@ -60,11 +60,21 @@ class SmartApp
         }
         return true;
     }
+    
+    getTimeString(){
+        let dt = new Date();
+        return String(dt.getHours()).padStart(2, '0') + ':' +
+               String(dt.getMinutes()).padStart(2, '0') + ':' +
+               String(dt.getSeconds()).padStart(2, '0') + '.' +
+               String(dt.getMilliseconds()).padStart(4, '0');
+    }
 
     async doWork() 
     {
         if(!this.stillActive())
-            return false;        
+            return false;
+        let dt = new Date();
+        console.log(`${this.getTimeString()} - SmartApp doing work: ${this.name}`);
         if(++this.renderCount < 2)
         {
             let saved = this.getFromLocalStorage();

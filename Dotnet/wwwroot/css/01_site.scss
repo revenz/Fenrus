@@ -728,3 +728,14 @@ a[class*="fa-"] {
 .blazored-toast-header h5 {
     margin:0;
 }
+
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px var(--input-background) inset !important;
+}
+input:-webkit-autofill{
+    -webkit-text-fill-color: var(--color) !important;
+}

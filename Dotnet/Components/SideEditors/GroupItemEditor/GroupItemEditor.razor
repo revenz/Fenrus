@@ -65,6 +65,9 @@
                             else
                                 icon = "/favicon.svg";
                         }
+                        else if (icon.StartsWith("db:/image/"))
+                            icon = "/fimage/" + icon["db:/image/".Length..];
+                        icon += "?version=" + Globals.Version;
                         bool carousel = (Model.Size < ItemSize.Large || Model.Type != "DashboardApp" || SelectedApp == null || 
                                          SelectedApp.Carousel == false) == false;
                         string iconClass = "db-item " +

@@ -60,18 +60,35 @@ public partial class AppItemComponent
         //     Css += "docker ";
 
 
-        Icon = (Model.Icon?.EmptyAsNull() ??
-                (string.IsNullOrEmpty(App.Icon) == false
-                    ? $"/apps/{Uri.EscapeDataString(App.Name)}/{App.Icon}"
-                    : "/favicon.svg")
-            ) + "?version=" + Globals.Version;
+        Icon = GetIcon();
 
-        int interval = App.Interval;
-        if (interval > 0)
-            interval *= 1000; // convert seconds to milliseconds
+        if (App.IsSmart)
+        {
+            int interval = App.Interval;
+            if (interval > 0)
+                interval *= 1000; // convert seconds to milliseconds
 
-        PageHelper.RegisterScriptBlock($@"document.addEventListener('DOMContentLoaded', function(event) {{ 
+            PageHelper.RegisterScriptBlock($@"document.addEventListener('DOMContentLoaded', function(event) {{ 
     LiveApp('{App.Name}', '{Model.Uid}', {interval});
 }});");
+        }
+    }
+
+    /// <summary>
+    /// Gets the Icon URL
+    /// </summary>
+    /// <returns>the Icon URL</returns>
+    private string GetIcon()
+    { 
+        if (string.IsNullOrWhiteSpace(Model.Icon) != true)
+        {
+            if (Model.Icon.StartsWith("db:/image/"))
+                return "/fimage/" + Model.Icon["db:/image/".Length..] + "?version=" + Globals.Version;
+            return Model.Icon + "?version=" + Globals.Version;
+        }
+
+        if (string.IsNullOrEmpty(App.Icon) == false)
+            return $"/apps/{Uri.EscapeDataString(App.Name)}/{App.Icon}?version=" + Globals.Version;
+        return "/favicon.svg?version=" + Globals.Version;
     }
 }

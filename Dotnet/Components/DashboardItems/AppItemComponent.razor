@@ -6,6 +6,7 @@
 
 <a id="@Model.Uid" title="@Model.Name" href="@Model.Url" onclick="@OnClickCode" target="@Target"
    class="db-item db-app db-basic is-up-<%= isUp[model.Uid] %> @Css" 
+   x-interval="@(App.IsSmart ? App.Interval.ToString() : null)"
    oncontextmenu="openContextMenu(event, '@SerializedJsSafeModel'); return false;"
    x-docker="@(Model.DockerUid != null ? "1" : null)" x-ssh="@(string.IsNullOrWhiteSpace(Model.SshServer) ? null : "1")"
 >
