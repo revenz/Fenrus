@@ -1,0 +1,7 @@
+.git
+.cache
+bin/*
+obj/*
+Data/*
+data/*
+*.sh
