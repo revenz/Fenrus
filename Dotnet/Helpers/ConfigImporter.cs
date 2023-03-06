@@ -1,9 +1,6 @@
-using System.Runtime.Serialization;
 using System.Text;
-using System.Text.Json.Nodes;
 using Fenrus.Models;
 using Fenrus.Services;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Fenrus.Helpers;
 
@@ -14,7 +11,7 @@ public class ConfigImporter
     /// Imports configuration
     /// </summary>
     /// <param name="json">the raw JSON of the ocnfiguration to import</param>
-    public async Task<object> Import(string json)
+    public async Task<string> Import(string json)
     {
         await Task.Delay(1);
         try
@@ -54,7 +51,6 @@ public class ConfigImporter
         {
             if (existing.Contains(docker.Name.ToLowerInvariant()))
                 continue;
-            
             service.Add(docker);
             Log.AppendLine($"Docker '{docker.Name}' imported");
         }
@@ -78,7 +74,7 @@ public class ConfigImporter
             se.Shortcut = old.Shortcut;
             se.IsDefault = old.IsDefault;
             se.IsSystem = true;
-            se.Uid = old.Uid;
+            se.Uid = old.Uid != Guid.Empty ? old.Uid : Guid.NewGuid();
             
             if (string.IsNullOrWhiteSpace(old.IconBase64) == false)
                 se.Icon = ImageHelper.SaveImageFromBase64(old.IconBase64);
@@ -103,7 +99,7 @@ public class ConfigImporter
             se.Name = old.Name;
             se.Enabled = old.Enabled;
             se.IsSystem = true;
-            se.Uid = old.Uid;
+            se.Uid = old.Uid != Guid.Empty ? old.Uid : Guid.NewGuid();
             se.Items = new();
             foreach (var oldItem in old.Items)
             {
@@ -174,7 +170,7 @@ public class ConfigImporter
                 continue;
             var se = new User();
             se.Name = old.Username;
-            se.Uid = old.Uid;
+            se.Uid = old.Uid != Guid.Empty ? old.Uid : Guid.NewGuid();
             se.IsAdmin = old.IsAdmin;
             se.Password = old.Password;
             
@@ -187,6 +183,7 @@ public class ConfigImporter
             }
             var settings = new UserSettings();
             settings.Uid = se.Uid;
+            settings.Language = "en";
 
             settings.SearchEngines = old.Config.SearchEngines.Select(x =>
             {
@@ -195,11 +192,12 @@ public class ConfigImporter
                     se.Icon = ImageHelper.SaveImageFromBase64(x.IconBase64);
                 else
                     se.Icon = x.Icon;
-                se.IsDefault = se.IsDefault;
-                se.Shortcut = se.Shortcut;
-                se.Enabled = se.Enabled;
-                se.Name = se.Name;
-                se.Uid = se.Uid;
+                se.IsDefault = x.IsDefault;
+                se.Shortcut = x.Shortcut;
+                se.Enabled = x.Enabled;
+                se.Url = x.Url;
+                se.Name = x.Name;
+                se.Uid = x.Uid != Guid.Empty ? x.Uid : Guid.NewGuid();
                 return se;
             }).ToList();
 
@@ -208,7 +206,7 @@ public class ConfigImporter
                 var group = new Group();
                 group.Enabled = x.Enabled;
                 group.Name = x.Name;
-                group.Uid = x.Uid;
+                group.Uid = x.Uid != Guid.Empty ? x.Uid : Guid.NewGuid();
                 group.Items = x.Items.Select(ParseGroupItem).Where(y => y != null).ToList();
                 return group;
             }).ToList();
@@ -218,7 +216,7 @@ public class ConfigImporter
                 var db = new Dashboard();
                 db.Name = x.Name;
                 db.Enabled = x.Enabled;
-                db.Uid = x.Uid;
+                db.Uid = x.Uid != Guid.Empty ? x.Uid : Guid.NewGuid();
                 db.AccentColor = x.AccentColor?.EmptyAsNull() ?? old.Config.AccentColor?.EmptyAsNull() ?? "#ff0090";
                 db.Theme = old.Config.Theme?.EmptyAsNull() ?? "Default";
                 db.Background = "default.js";
@@ -231,7 +229,7 @@ public class ConfigImporter
                 return db;
             }).ToList();
             
-            settingsService.Save(settings);
+            settingsService.Add(settings);
         }
     }
 
@@ -261,6 +259,7 @@ public class ConfigImporter
     {
         if (dict?.Any() != true)
             return dict;
+        var toRemove = new List<string>();
         foreach (var key in dict.Keys)
         {
             var value = dict[key];
@@ -268,11 +267,30 @@ public class ConfigImporter
             {
                 if(je.ValueKind == JsonValueKind.String)
                     value = je.GetString();
+                else if(je.ValueKind == JsonValueKind.Number)
+                    value = je.GetInt32();
+                else if (je.ValueKind == JsonValueKind.Null)
+                    value = null;
+                else if (je.ValueKind == JsonValueKind.False)
+                    value = false;
+                else if (je.ValueKind == JsonValueKind.True)
+                    value = true;
+                else if (je.ValueKind == JsonValueKind.Undefined)
+                    value = null;
+                else
+                {
+                    Log.AppendLine($"Invalid dictionary value '{key}'");
+                    toRemove.Add(key);
+                }
+                
             }
 
             dict[key] = value;
         }
 
+        foreach (var key in toRemove)
+            dict.Remove(key);
+        
         return dict;
     }
 

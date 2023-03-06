@@ -8,7 +8,7 @@
 <FenrusPage Title="@lblTitle" Icon="fa-solid fa-user-group" PageDescription="@lblDescription">
     <Buttons>
         <div class="allow-register">
-            <span class="label allow-register-label">@lblAllowRegistrations:</span>
+            <span class="label allow-register-label" style="margin-right:0.5rem">@lblAllowRegistrations:</span>
             <FenrusSwitch @bind-Value="AllowRegistrations" />
         </div>
     </Buttons>
@@ -17,7 +17,7 @@
     <FenrusTable @ref=Table TItem="Models.User" Data=@Items>
         <Columns>
             <FenrusTableColumn TItem="Models.User" ColumnName="Name">
-                <Header>@lblName</Header>
+                <Header>@lblUsername</Header>
                 <Cell Context="item">
                     <i class="fa-solid fa-user"></i>
                     @if (item.Uid == Settings.Uid)
@@ -28,6 +28,12 @@
                     {
                         <a href="#" @onclick="() => Edit(item)" @onclick:preventDefault="true">@item.Name</a>
                     }
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.User" ColumnName="FullName" Width="14rem">
+                <Header>@lblFullName</Header>
+                <Cell Context="item">
+                    <span>@(item.FullName ?? string.Empty)</span>
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.User" ColumnName="Admin" Width="10rem">

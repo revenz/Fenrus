@@ -1,5 +1,8 @@
+using System.Net;
 using System.Text.RegularExpressions;
+using Fenrus.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Fenrus.Pages;
 
@@ -14,11 +17,29 @@ public partial class App
     public Components.FenrusPopup Popup { get; private set; }
     
     public EventCallback AccentColorUpdated { get; set; }
+    /// <summary>
+    /// Gets or sets the navigation manager used for routing
+    /// </summary>
+    [Inject] private NavigationManager Router { get; set; }
+    /// <summary>
+    /// Gets or sets the authentication state provider, used to get the user
+    /// </summary>
+    [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    
+    /// <summary>
+    /// Gets if the current user is an admin
+    /// </summary>
+    public bool IsAdmin { get; private set; }
     
     /// <summary>
     /// Gets the accent color
     /// </summary>
     public string AccentColor { get; private set; }
+
+    /// <summary>
+    /// Gets the Translater used for this app
+    /// </summary>
+    public Translater Translater { get; private set; }
     
     private string AccentRgb;
     /// <summary>
@@ -36,5 +57,30 @@ public partial class App
                     int.Parse(AccentColor[5..7], System.Globalization.NumberStyles.HexNumber);
         StateHasChanged();
         _ = AccentColorUpdated.InvokeAsync();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var uid = authState.GetUserUid();
+        if (uid == null)
+        {
+            Router.NavigateTo("/login");
+            return;
+        }
+
+        var user = new UserService().GetByUid(uid.Value);
+        if (user == null)
+        {
+            Router.NavigateTo("/login");
+            return;
+        }
+
+        IsAdmin = user.IsAdmin;
+        var settings = new UserSettingsService().Load(uid.Value);
+        
+        string language = settings.Language?.EmptyAsNull() ??
+                          new SystemSettingsService().Get()?.Language?.EmptyAsNull() ?? "en";
+        Translater = Translater.GetForLanguage(language);
     }
 }

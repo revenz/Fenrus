@@ -116,7 +116,11 @@ public class UserSettingsService
     /// </summary>
     /// <param name="settings">the user settings to add</param>
     public void Add(UserSettings settings)
-        => DbHelper.Insert(settings);
+    {
+        // delete it first in case it exists
+        DbHelper.Delete<UserSettings>(settings.Uid);
+        DbHelper.Insert(settings);
+    }
 
     /// <summary>
     /// Saves a background for a user

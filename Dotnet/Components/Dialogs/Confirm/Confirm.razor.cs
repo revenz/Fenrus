@@ -9,9 +9,18 @@ namespace Fenrus.Components.Dialogs;
 /// </summary>
 public partial class Confirm: ComponentBase, IDisposable
 {
+    /// <summary>
+    /// Gets or sets the javascript runtime to use
+    /// </summary>
     [Inject] public IJSRuntime jsRuntime { get; set; }
     
-    private string lblYes, lblNo;
+    /// <summary>
+    /// Gets or sets the translater to use
+    /// </summary>
+    [CascadingParameter] public Translater Translater { get; set; }
+    
+    
+    private string lblYes, lblNo, lblConfirm;
     private string Message, Title, SwitchMessage;
     TaskCompletionSource<bool> ShowTask;
     TaskCompletionSource<(bool, bool)> ShowSwitchTask;
@@ -27,8 +36,9 @@ public partial class Confirm: ComponentBase, IDisposable
 
     protected override void OnInitialized()
     {
-        this.lblYes = "Yes";
-        this.lblNo = "No";
+        this.lblYes = Translater.Instant("Labels.Yes");
+        this.lblNo = Translater.Instant("Labels.No");
+        this.lblConfirm = Translater.Instant("Labels.Confirm");
         // App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
         Instance = this;
     }
@@ -81,7 +91,7 @@ public partial class Confirm: ComponentBase, IDisposable
             // await Task.Delay(5);
             this.btnYesUid = Guid.NewGuid().ToString();
             this.focused = false;
-            this.Title = "Confirm";
+            this.Title = lblConfirm;
             this.Message = message ?? string.Empty;
             this.ShowSwitch = false;
             this.Visible = true;
@@ -96,7 +106,7 @@ public partial class Confirm: ComponentBase, IDisposable
     {
         this.btnYesUid = Guid.NewGuid().ToString();
         this.focused = false;
-        this.Title = title?.EmptyAsNull() ?? "Confirm";
+        this.Title = title?.EmptyAsNull() ?? lblConfirm;
         this.Message = message ?? string.Empty;
         this.SwitchMessage = switchMessage ?? string.Empty;
         this.ShowSwitch = true;

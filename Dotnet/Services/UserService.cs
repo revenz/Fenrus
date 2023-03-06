@@ -110,4 +110,14 @@ public class UserService
     /// <returns>the user</returns>
     public User GetByUid(Guid uid)
         => DbHelper.GetByUid<User>(uid);
+
+    /// <summary>
+    /// Deletes a user
+    /// </summary>
+    /// <param name="uid">the users UID</param>
+    public void Delete(Guid uid)
+    {
+        DbHelper.Delete<UserSettings>(uid);
+        DbHelper.Delete<User>(uid);
+    }
 }

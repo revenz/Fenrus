@@ -34,6 +34,12 @@ public class ImageHelper
     /// <returns>the image ID, or empty if no image was passed in</returns>
     public static string SaveImageFromBase64(string base64)
     {
+        if (string.IsNullOrEmpty(base64))
+            return string.Empty;
+        
+        if (base64.StartsWith("data:image/") == false)
+            return SaveImageFromBase64Data(base64);
+        
         var image = ImageFromBase64(base64);
         if (image.Data?.Any() != true)
             return string.Empty;
@@ -44,6 +50,24 @@ public class ImageHelper
         return "db:/image/" + id;
     }
 
+    /// <summary>
+    /// Saves an image into the database and returns its ID
+    /// </summary>
+    /// <param name="base64">the base64 data byte array</param>
+    /// <returns>the image ID, or empty if no image was passed in</returns>
+    private static string SaveImageFromBase64Data(string base64)
+    {
+        if (string.IsNullOrEmpty(base64))
+            return string.Empty;
+        
+        var data = Convert.FromBase64String(base64);
+
+        using var db = DbHelper.GetDb();
+        string id = Guid.NewGuid().ToString();
+        db.FileStorage.Upload("db:/image/" + id, id, new MemoryStream(data));
+        return "db:/image/" + id;
+    }
+    
     /// <summary>
     /// Saves an image into the database and returns its ID
     /// </summary>

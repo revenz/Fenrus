@@ -40,7 +40,11 @@
     "Browse": "Durchsuche",
     "NoGroupAddedToDashboard": "Keine Gruppen zum Dashboard hinzugefügt",
     "Website": "Webseite",
-    "Author": "Autor"
+    "Author": "Autor",
+    "Confirm": "Bestätigen",
+    "Message": "Nachricht",
+    "DeleteItem": "Löschen Sie {typeName} ''{name}''?",
+    "DeletedItem": "{typeName} ''{name}'' gelöscht"
   },
   "ContextMenu": {
     "EditDashboard": "Dashboard bearbeiten",

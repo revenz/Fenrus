@@ -71,16 +71,16 @@ public partial class SearchEngineEditor: SideEditorBase
             Model.Shortcut = Item.Shortcut;
             Model.Url = Item.Url;
             Model.Enabled = Item.Enabled;
-            if (string.IsNullOrEmpty(Model.Icon) == false)
+            if (string.IsNullOrEmpty(Item.Icon) == false)
             {
-                if (Model.Icon.StartsWith("db:/image/"))
+                if (Item.Icon.StartsWith("db:/image/"))
                 {
                     // db image
-                    InitialImage = "/fimage/" + Model.Icon["db:/image/".Length..];
+                    InitialImage = "/fimage/" + Item.Icon["db:/image/".Length..];
                 }
                 else
                 {
-                    InitialImage = Model.Icon;
+                    InitialImage = Item.Icon;
                 }
             }
         }

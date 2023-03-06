@@ -1,3 +1,5 @@
+using Fenrus.Components.Dialogs;
+
 namespace Fenrus.Pages;
 
 /// <summary>
@@ -34,10 +36,15 @@ public partial class About: UserPage
 
         this.Importing = true;
         this.StateHasChanged();
-            
-        var importResult = await new ConfigImporter().Import(result);
-        
+
+        var log = await new ConfigImporter().Import(result);
+
         this.Importing = false;
         this.StateHasChanged();
+
+        await MessageBox.Show(
+            title: Translater.Instant("Dialogs.ImportConfig.Result"),
+            message: log
+        );
     }
 }

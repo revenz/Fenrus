@@ -14,7 +14,7 @@ public abstract class CommonPage<T>: UserPage
 where T : IModal
 {
     protected string GetTypeName()
-        => typeof(T).Name.Humanize(LetterCasing.LowerCase);
+        => typeof(T).Name.Humanize();
     protected string GetTypeNameRoute()
         => typeof(T).Name.Pluralize().Underscore().Hyphenate();
 
@@ -35,10 +35,10 @@ where T : IModal
     protected async Task Remove(T item)
     {
         string typeName = GetTypeName();
-        if (await Confirm.Show("Delete", $"Delete {typeName} '{item.Name}'?") == false)
+        if (await Confirm.Show(Translater.Instant("Labels.Delete"), Translater.Instant("Labels.DeleteItem", new { typeName, name = item.Name})) == false)
             return;
         if (DoDelete(item))
-            ToastService.ShowSuccess($"Deleted {typeName} '{item.Name}'");
+            ToastService.ShowSuccess(Translater.Instant("Labels.DeletedItem", new { typeName, name = item.Name}));
     }
 
     /// <summary>

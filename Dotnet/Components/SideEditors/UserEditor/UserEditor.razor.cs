@@ -49,7 +49,8 @@ public partial class UserEditor: SideEditorBase
     /// </summary>
     private SideEditor Editor { get; set; }
 
-    private string lblSave, lblCancel, lblName, lblUsername, lblEmail, lblPassword, lblIsAdmin;
+    private string lblSave, lblCancel, lblUsername, lblEmail, lblPassword, lblIsAdmin,
+        lblFullName, lblFullNameHelp;
 
     private const string DUMMY_PASSWORD = "************";
     
@@ -57,7 +58,8 @@ public partial class UserEditor: SideEditorBase
     {
         lblSave = Translater.Instant("Labels.Save");
         lblCancel = Translater.Instant("Labels.Cancel");
-        lblName = Translater.Instant("Pages.User.Fields.Name");
+        lblFullName = Translater.Instant("Pages.User.Fields.FullName");
+        lblFullNameHelp = Translater.Instant("Pages.User.Fields.FullName-Help");
         lblUsername = Translater.Instant("Pages.User.Fields.Username");
         lblEmail = Translater.Instant("Pages.User.Fields.Email");
         lblPassword = Translater.Instant("Pages.User.Fields.Password");
@@ -68,19 +70,19 @@ public partial class UserEditor: SideEditorBase
         if (Item != null)
         {
             Title = Translater.Instant("Pages.User.Labels.EditUser");
-            Model.Name = Item.Name;
             Model.Uid = Item.Uid;
             Model.IsAdmin = Item.IsAdmin;
             Model.Username = Item.Username;
+            Model.FullName = Item.FullName;
             Model.Password = string.IsNullOrEmpty(Item.Password) ? string.Empty : DUMMY_PASSWORD;
             Model.Email = Item.Email;
         }
         else
         {
             Title = Translater.Instant("Pages.User.Labels.NewUser");
-            Model.Name = string.Empty;
             Model.Uid = Guid.NewGuid();
             Model.Username = string.Empty;
+            Model.FullName = string.Empty;
             Model.IsAdmin = false;
             Model.Password = string.Empty;
             IsNew = true;
@@ -110,9 +112,9 @@ public partial class UserEditor: SideEditorBase
         {
             var existing = service.GetByUid(Model.Uid);
             existing.IsAdmin = Model.IsAdmin;
-            existing.Name = Model.Name;
             existing.Email = Model.Email;
             existing.Username = Model.Username;
+            existing.FullName = Model.FullName;
             if(string.IsNullOrEmpty(Model.Password) == false && Model.Password != DUMMY_PASSWORD && existing.Password != Model.Password)
                 existing.Password = BCrypt.Net.BCrypt.HashPassword(Model.Password);
             service.Update(existing);

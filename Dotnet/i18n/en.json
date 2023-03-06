@@ -44,7 +44,11 @@
     "Browse": "Browse",
     "NoGroupAddedToDashboard": "No groups added to dashboard",
     "Website": "Website",
-    "Author": "Author"
+    "Author": "Author",
+    "Confirm": "Confirm",
+    "Message": "Message",
+    "DeleteItem": "Delete {typeName} ''{name}''?",
+    "DeletedItem": "Deleted {typeName} ''{name}''"
   },
   "ContextMenu": {
     "EditDashboard": "Edit Dashboard",
@@ -72,7 +76,8 @@
   "Dialogs": {
     "ImportConfig": {
       "Title": "Import Config",
-      "Description": "This allows you to import a configuration from an older Fenrus install into the new .NET version."
+      "Description": "This allows you to import a configuration from an older Fenrus install into the new .NET version.",
+      "Result": "Import Result"
     },
     "UpTime": {
       "Columns": {
@@ -187,7 +192,7 @@
       }
     },
     "Users": {
-      "Title": "Users",
+      "Title": "Users",      
       "Labels": {
         "PageDescription": "This page lets you manage users for Fenrus."
       },
@@ -198,6 +203,8 @@
         "AllowRegistrations": "Allow Registrations"
       },
       "Columns": {
+        "Username": "Username",
+        "FullName": "Full Name",
         "Admin": "Admin"
       }
     },
@@ -208,7 +215,8 @@
         "EditUser": "Edit User"
       },
       "Fields": {
-        "Name": "Name",
+        "FullName": "Full Name",
+        "FullName-Help": "The users full name or the name to display for them, if left blank their username will be their display name",
         "Username": "Username",
         "Email": "Email",
         "Password": "Password",

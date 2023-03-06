@@ -21,13 +21,15 @@ public partial class Users: CommonPage<User>
     private FenrusTable<User> Table { get; set; }
 
     
-    private string lblTitle, lblDescription, lblAllowRegistrations, lblAdmin;
+    private string lblTitle, lblDescription, lblAllowRegistrations, lblAdmin, lblUsername, lblFullName;
     
     /// <summary>
     /// Called after the user has been fetched
     /// </summary>
     protected override async Task PostGotUser()
     {
+        lblUsername = Translater.Instant("Pages.Users.Columns.Username");
+        lblFullName = Translater.Instant("Pages.Users.Columns.FullName");
         lblTitle = Translater.Instant("Pages.Users.Title");
         lblDescription = Translater.Instant("Pages.Users.Labels.PageDescription");
         lblAllowRegistrations = Translater.Instant("Pages.Users.Fields.AllowRegistrations");
@@ -110,5 +112,16 @@ public partial class Users: CommonPage<User>
         user.IsAdmin = result.Data.IsAdmin;
         Items = Items.OrderBy(x => x.Name).ToList();
         Table.SetData(Items);
+    }
+
+    protected override bool DoDelete(User item)
+    {
+        if (item.Uid == Settings.Uid)
+            return false; // cannot delete self
+        var service = new UserService();
+        service.Delete(item.Uid);
+        Items = Items.Where(x => x.Uid != item.Uid).ToList();
+        Table.SetData(Items);
+        return true;
     }
 }

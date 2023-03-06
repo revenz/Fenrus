@@ -8,26 +8,29 @@
     <link rel="icon" type="image/x-icon" href="/favicon?color=@Uri.EscapeDataString(AccentColor ?? string.Empty)&version=@Globals.Version">
 </HeadContent>
 
-<CascadingValue Value="this" IsFixed="true">
-    <Router AppAssembly="@typeof(App).Assembly">
-        <Found Context="routeData">
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
-            <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
-        </Found>
-        <NotFound>
-            <PageTitle>Not found</PageTitle>
-            <LayoutView Layout="@typeof(MainLayout)">
-                <p role="alert">Sorry, there's nothing at this address.</p>
-            </LayoutView>
-        </NotFound>
-    </Router>
-    
-    <FenrusPopup @ref="Popup" />
-</CascadingValue>
+<CascadingValue Value="Translater" IsFixed="true">
+    <CascadingValue Value="this" IsFixed="true">
+        <Router AppAssembly="@typeof(App).Assembly">
+            <Found Context="routeData">
+                <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+                <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
+            </Found>
+            <NotFound>
+                <PageTitle>Not found</PageTitle>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <p role="alert">Sorry, there's nothing at this address.</p>
+                </LayoutView>
+            </NotFound>
+        </Router>
 
-<Fenrus.Components.Dialogs.Confirm />
-<BlazoredToasts IconType="IconType.FontAwesome"
-                SuccessClass="success-toast-override"
-                SuccessIcon="fa fa-thumbs-up"
-                ErrorIcon="fa fa-bug"
-                RemoveToastsOnNavigation="true" />
+        <FenrusPopup @ref="Popup"/>
+    </CascadingValue>
+
+    <Fenrus.Components.Dialogs.Confirm />
+    <Fenrus.Components.Dialogs.MessageBox />
+    <BlazoredToasts IconType="IconType.FontAwesome"
+                    SuccessClass="success-toast-override"
+                    SuccessIcon="fa fa-thumbs-up"
+                    ErrorIcon="fa fa-bug"
+                    RemoveToastsOnNavigation="true" />
+</CascadingValue>
