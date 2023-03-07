@@ -3,6 +3,7 @@ using Fenrus.Models;
 using Fenrus.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Controllers;
@@ -124,7 +125,7 @@ public class HomeController : BaseController
             return Redirect("/init-config");
 
         if (SystemSettingsService.UsingOAuth)
-            return OAuthLogin();
+            return Redirect("/sso");
         
         if (msg == MSG_PasswordResetTokenInvalid)
             return LoginPage(Translater.Instant("Pages.Login.Labels.PasswordResetTokenInvalid"));
@@ -284,7 +285,9 @@ public class HomeController : BaseController
     /// <summary>
     /// Request an OAuth login
     /// </summary>
-    private IActionResult OAuthLogin()
+    [HttpGet("sso")]
+    [Authorize]
+    public IActionResult OAuthLogin()
     {
         var settings = GetSystemSettings();
         throw new NotImplementedException();

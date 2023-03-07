@@ -34,6 +34,9 @@ public class InitConfigController : Controller
     [HttpGet]
     public IActionResult Index()
     {
+        if (SystemSettingsService.InitConfigDone)
+            return Redirect("/");
+        
         string url = HttpContext.Request.GetDisplayUrl();
         url = url[..(url.IndexOf('/', 8) + 1)];
         return View("Index", new InitConfigModel()
@@ -52,6 +55,9 @@ public class InitConfigController : Controller
     [HttpPost]
     public IActionResult Save([FromForm] InitConfigModel model)
     {
+        if (SystemSettingsService.InitConfigDone)
+            return Redirect("/");
+        
         var service = new SystemSettingsService();
         var settings = service.Get();
         settings.Strategy = model.Strategy;

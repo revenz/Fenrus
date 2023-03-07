@@ -41,6 +41,7 @@ public class SystemSettingsService
         settings.AllowRegister = true;
         Settings = settings;
         SaveSettings();
+        InitConfigDone = false;
     }
 
     private static void SaveSettings()
@@ -115,4 +116,17 @@ public class SystemSettingsService
     /// </summary>
     public void MarkInitConfigDone()
         => InitConfigDone = true;
+
+    /// <summary>
+    /// Deletes the system configuration from the database.
+    /// Use this to reset initial configuration
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    public void Delete()
+    {
+        using var db = DbHelper.GetDb();
+        var collection = db.GetCollection<SystemSettings>(nameof(SystemSettings));
+        collection.DeleteAll();
+        InitConfigDone = false;
+    }
 }
