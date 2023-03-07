@@ -3,6 +3,7 @@ using Fenrus.Models;
 using Fenrus.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Controllers;
@@ -120,6 +121,12 @@ public class HomeController : BaseController
     [HttpGet("login")]
     public IActionResult Login([FromQuery] string msg = null)
     {
+        if (SystemSettingsService.InitConfigDone == false)
+            return Redirect("/init-config");
+
+        if (SystemSettingsService.UsingOAuth)
+            return Redirect("/sso");
+        
         if (msg == MSG_PasswordResetTokenInvalid)
             return LoginPage(Translater.Instant("Pages.Login.Labels.PasswordResetTokenInvalid"));
         if (msg == MSG_PasswordReset)
@@ -273,6 +280,17 @@ public class HomeController : BaseController
         var dashboard = new DashboardService().GetGuestDashboard();
 
         return ShowDashboard(dashboard, new UserSettingsService().SettingsForGuest());
+    }
+
+    /// <summary>
+    /// Request an OAuth login
+    /// </summary>
+    [HttpGet("sso")]
+    [Authorize]
+    public IActionResult OAuthLogin()
+    {
+        var settings = GetSystemSettings();
+        throw new NotImplementedException();
     }
 
     private async Task CreateClaim(Guid uid, string username, bool isAdmin)

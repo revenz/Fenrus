@@ -20,4 +20,9 @@ public class Globals
     /// An option group cannot be selected, it group all options below it
     /// </summary>
     public static string LIST_OPTION_GROUP = "###GROUP###";
+
+    /// <summary>
+    /// Gets if this app is running inside a docker container
+    /// </summary>
+    public static readonly bool IsDocker = Environment.GetEnvironmentVariable("Docker") == "1";
 }

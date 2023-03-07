@@ -1,8 +1,22 @@
 using Blazored.Toast;
+using Fenrus;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
-Fenrus.Logger.Initialize();
-Fenrus.Services.AppService.Initialize();
+if (args?.Any() == true && args[0] == "--init-config")
+{
+    Console.WriteLine("Resetting initial configuration flags");
+    new SystemSettingsService().Delete();
+    if (Globals.IsDocker)
+        Console.WriteLine("Restart the Docker container to take effect.");
+    else
+        Console.WriteLine("Restart the application to take effect.");
+    return;
+}
+
+Console.WriteLine("Starting Fenrus...");
+Logger.Initialize();
+AppService.Initialize();
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -31,12 +45,17 @@ var dataDir = DirectoryHelper.GetDataDirectory();
 if (Directory.Exists(dataDir) == false)
     Directory.CreateDirectory(dataDir);
 
-if (
-    Fenrus.Services.SystemSettingsService.InitConfigDone == true &&
-    Fenrus.Services.SystemSettingsService.UsingOAuth)
+bool oAuth = SystemSettingsService.InitConfigDone && SystemSettingsService.UsingOAuth;
+
+if (oAuth)
 {
-    var system = new Fenrus.Services.SystemSettingsService().Get();
-    builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    var system = new SystemSettingsService().Get();
+    builder.Services.AddAuthentication(o =>
+        {
+            o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            o.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+        })
+        .AddCookie()
         .AddOpenIdConnect(options =>
         {
             options.ClientId = system.OAuthStrategyClientId;
@@ -70,7 +89,8 @@ var app = builder.Build();
 
 app.UseWhen(context =>
 {
-    if (Fenrus.Services.SystemSettingsService.InitConfigDone)
+    Logger.DLog("Requesting: " + context.Request.Path);
+    if (SystemSettingsService.InitConfigDone)
         return false;
     var path = context.Request.Path;
     if (path.StartsWithSegments("/settings"))
@@ -84,16 +104,23 @@ app.UseWhen(context =>
     return false;
 }, appBuilder => appBuilder.UseMiddleware<Fenrus.Middleware.InitialConfigMiddleware>());
 
-app.UseWhen(context => Fenrus.Services.SystemSettingsService.InitConfigDone,
+app.UseWhen(context => SystemSettingsService.InitConfigDone,
     appBuild =>
     {
         appBuild.UseWebSockets();
     });
 
-app.UseWhen(context => Fenrus.Services.SystemSettingsService.InitConfigDone && Fenrus.Services.SystemSettingsService.UsingOAuth,
-    appBuild =>
-    {
-    });
+// app.UseWhen(context => Fenrus.Services.SystemSettingsService.InitConfigDone && Fenrus.Services.SystemSettingsService.UsingOAuth,
+//     appBuild =>
+//     {
+//     });
+
+if (oAuth)
+{
+    // app.MapGet("/login", (HttpContent ctx) =>
+    // {
+    // });
+}
 
 app.UseWebOptimizer();
 app.UseWhen(
@@ -132,6 +159,8 @@ app.MapBlazorHub(options =>
 app.MapFallbackToPage("/_Host");
 
 // create an uptime service to monitor the uptime status for monitor apps/links
-new Fenrus.Services.UpTimeService();
+new UpTimeService();
 
+Logger.ILog($"Fenrus v{Fenrus.Globals.Version} started");
 app.Run();
+Logger.ILog($"Fenrus v{Fenrus.Globals.Version} stopped");

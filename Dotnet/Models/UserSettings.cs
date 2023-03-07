@@ -24,11 +24,6 @@ public class UserSettings: IModal
     public string Language { get; set; }
 
     /// <summary>
-    /// Gets or sets the revision of the saved settings
-    /// </summary>
-    public int Revision { get; set; }
-
-    /// <summary>
     /// Gets or sets the users theme settings
     /// </summary>
     public Dictionary<string, Dictionary<string, object?>> ThemeSettings { get; set; }

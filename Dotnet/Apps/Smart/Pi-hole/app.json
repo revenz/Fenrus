@@ -1,6 +1,6 @@
 ﻿{
   "Name": "Pi-hole",
-  "TestFunction": true,
+  "TestFungction": true,
   "Interval": 10,
   "Info":{
     "Authors": ["John Andrews"],

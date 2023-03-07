@@ -41,11 +41,11 @@ public class SystemSettingsService
         settings.AllowRegister = true;
         Settings = settings;
         SaveSettings();
+        InitConfigDone = false;
     }
 
     private static void SaveSettings()
     {
-        ++Settings.Revision;
         var existing = DbHelper.FirstOrDefault<SystemSettings>();
         if(existing == null)
             DbHelper.Insert(Settings);
@@ -78,18 +78,37 @@ public class SystemSettingsService
     private static bool GetInitConfigDone()
     {
         if (File.Exists(DbHelper.DbFile) == false)
+        {
+            Logger.ILog("GetInitConfigDone(): DbFile Does not exist: " + DbHelper.DbFile);
             return false;
-        
+        }
+
         var settings = DbHelper.FirstOrDefault<SystemSettings>();
         if (settings == null)
+        {
+            Logger.ILog("GetInitConfigDone(): SystemSettings not saved in database");
             return false;
-        
+        }
+
         // look for an admin user
         using var db = DbHelper.GetDb();
         var collection = db.GetCollection<Models.User>();
         collection.EnsureIndex(x => x.IsAdmin);
         var admins = collection.Query().Where(x => x.IsAdmin).Count();
-        return admins > 0;
+        bool hasAdmins = admins > 0;
+        if (hasAdmins)
+            return true;
+        
+        // check if they are using SSO, if they are and theres no admins, we say initial config is done so they
+        // can register the admin
+        if (settings.Strategy == AuthStrategy.OAuthStrategy)
+        {
+            Logger.ILog("GetInitConfigDone(): No Admins but using OAuth");
+            return true;
+        }
+
+        Logger.ILog("GetInitConfigDone(): No Admins in database and using Strategy: " + settings.Strategy);
+        return false;
     }
 
     /// <summary>
@@ -97,4 +116,17 @@ public class SystemSettingsService
     /// </summary>
     public void MarkInitConfigDone()
         => InitConfigDone = true;
+
+    /// <summary>
+    /// Deletes the system configuration from the database.
+    /// Use this to reset initial configuration
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    public void Delete()
+    {
+        using var db = DbHelper.GetDb();
+        var collection = db.GetCollection<SystemSettings>(nameof(SystemSettings));
+        collection.DeleteAll();
+        InitConfigDone = false;
+    }
 }
