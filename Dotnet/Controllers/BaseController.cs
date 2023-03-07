@@ -19,8 +19,20 @@ public class BaseController : Controller
         if (string.IsNullOrEmpty(sid) || Guid.TryParse(sid, out Guid uid) == false)
             return null;
         
-        var settings = new Services.UserSettingsService().Load(uid);
+        var settings = new UserSettingsService().Load(uid);
         return settings;
+    }
+
+    /// <summary>
+    /// Gets a translater
+    /// </summary>
+    /// <param name="settings">the user settings</param>
+    /// <returns>the translater</returns>
+    protected Translater GetTranslater(UserSettings settings)
+    {
+        string language = settings.Language?.EmptyAsNull() ??
+                          new SystemSettingsService().Get()?.Language?.EmptyAsNull() ?? "en";
+        return Translater.GetForLanguage(language);
     }
 
     /// <summary>

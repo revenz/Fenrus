@@ -45,6 +45,14 @@ public class Translater
         Init(jsonFiles);
     }
 
+    /// <summary>
+    /// Basic translater used to avoid null exceptions
+    /// </summary>
+    public Translater()
+    {
+        Formatter = new MessageFormatter();
+    }
+
     private static Dictionary<string, string> _AvailableLanguages;
     /// <summary>
     /// Gets all available languages

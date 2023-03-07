@@ -1,5 +1,6 @@
 using Fenrus.Models;
 using Fenrus.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Controllers;
@@ -8,6 +9,7 @@ namespace Fenrus.Controllers;
 /// Controller for Up Time
 /// </summary>
 [Route("settings/up-time")]
+[Authorize]
 public class UpTimeController : BaseController
 {
     /// <summary>

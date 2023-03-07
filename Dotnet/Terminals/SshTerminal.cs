@@ -78,7 +78,7 @@ public class SshTerminal : Terminal
             SshClient? client = null;
             try
             {
-                client = new SshClient(this.Server, this.Port, this.UserName, this.Password);
+                client = new SshClient(this.Server, this.Port, this.UserName ?? string.Empty, this.Password ?? string.Empty);
                 client.Connect();
                 return client;
             }

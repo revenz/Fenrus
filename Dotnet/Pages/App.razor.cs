@@ -38,7 +38,7 @@ public partial class App
     /// <summary>
     /// Gets the Translater used for this app
     /// </summary>
-    public Translater Translater { get; private set; }
+    public Translater Translater { get; private set; } = new Translater();
     
     private string AccentRgb;
     /// <summary>

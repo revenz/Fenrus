@@ -1,0 +1,16 @@
+.notfound {
+  position: fixed;
+  top: -20px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--background);
+  color: var(--color);
+  p {
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background: var(--base);
+    display: flex;
+  }
+}

@@ -6,6 +6,7 @@ namespace Fenrus.Controllers;
 /// <summary>
 /// Controller for user settings
 /// </summary>
+[Authorize]
 public class SettingsController : BaseController
 {
     /// <summary>

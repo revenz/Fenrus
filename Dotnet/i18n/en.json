@@ -73,6 +73,10 @@
       "OpenInSameTab": "Open in same tab"
     }
   },
+  "ErrorMessages": {
+    "404RouteNotKnown": "Sorry, there's nothing at this address.",
+    "DockerServerNotFound": "Docker app server not found: {uid}"
+  },
   "Dialogs": {
     "ImportConfig": {
       "Title": "Import Config",

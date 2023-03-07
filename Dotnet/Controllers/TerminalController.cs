@@ -1,7 +1,7 @@
 using Fenrus.Models;
+using Fenrus.Services;
 using Fenrus.Terminals;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.ClearScript.Util.Web;
 
 namespace Fenrus.Controllers;
 
@@ -9,7 +9,8 @@ namespace Fenrus.Controllers;
 /// Controller for Terminals (docker or SSH)
 /// </summary>
 [Route("terminal")]
-public class TerminalController :Controller
+[Authorize]
+public class TerminalController : BaseController
 {
     /// <summary>
     /// Opens a terminal connection
@@ -20,12 +21,16 @@ public class TerminalController :Controller
     [HttpGet("{uid}")]
     public async Task Get([FromRoute] Guid uid, [FromQuery] int rows = 24, [FromQuery] int cols = 24)
     {
-        // TODO: need to authorize this request
-        var settings = DemoHelper.GetDemoUserSettings();
+        var settings = GetUserSettings();
+        if (settings == null)
+            throw new UnauthorizedAccessException();
+        
         var item = settings.Groups.SelectMany(x => x.Items)?.FirstOrDefault(x => x.Uid == uid);
         if (item == null)
         {
-            // TODO: look for system item
+            // try and find the item from the system groups
+            item = new GroupService().GetSystemGroups(enabledOnly: true)
+                .SelectMany(x => x.Items).FirstOrDefault(x => x.Uid == uid);
         }
 
         if (item == null)
@@ -42,7 +47,12 @@ public class TerminalController :Controller
             {
                 var docker = settings.Docker.FirstOrDefault(x => x.Uid == app.DockerUid);
                 if (docker == null)
-                    throw new Exception($"Docker app server not found: '{app.DockerUid}'");
+                {
+                    var translater = GetTranslater(settings);
+                    throw new Exception(translater.Instant("ErrorMessages.DockerServerNotFound",
+                        new { uid = app }));
+                }
+
                 terminal = new DockerTerminal(ws, rows, cols, docker.Address, docker.Port, app.DockerContainer);
             }
             else if (string.IsNullOrEmpty(app.SshServer) == false)
