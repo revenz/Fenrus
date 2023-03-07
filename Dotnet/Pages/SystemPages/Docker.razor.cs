@@ -20,22 +20,15 @@ public partial class Docker: CommonPage<Models.DockerServer>
     /// </summary>
     private FenrusTable<Models.DockerServer> Table { get; set; }
 
-    /// <summary>
-    /// Gets the page title
-    /// </summary>
-    private string Title => "Docker";
-
-    /// <summary>
-    /// Gets the page description
-    /// </summary>
-    private string Description =>
-        "This page lets you configure Docker instances which can be used in Apps and Links to open terminals into.";
+    private string lblTitle, lblDescription;
     
     /// <summary>
     /// Called after the user has been fetched
     /// </summary>
     protected override async Task PostGotUser()
     {
+        lblTitle = Translater.Instant("Pages.Docker.Title");
+        lblDescription = Translater.Instant("Pages.Docker.Labels.PageDescription");
         Items = new DockerService().GetAll();
     }
 

@@ -132,7 +132,10 @@
       }
     },
     "Docker": {
-      "Title": "Docker"
+      "Title": "Docker",
+      "Labels": {
+        "PageDescription": "This page lets you configure Docker instances which can be used in Apps and Links to open terminals into."
+      }
     },
     "Group": {
       "Title": "Group",
@@ -204,6 +207,15 @@
         "Shortcut": "Shortcut",
         "Shortcut-Help": "The shortcut for this search engine.  Typing this shortcut then space will switch the search to use this search engine",
         "Icon": "Icon"
+      }
+    },
+    "SystemSettings": {
+      "Title": "System Settings",
+      "Fields": {
+        "SmtpServer": "SMTP Server",
+        "SmtpPort": "SMTP Port",
+        "SmtpUser": "SMTP User",
+        "SmtpPassword": "SMTP Password"
       }
     },
     "Users": {

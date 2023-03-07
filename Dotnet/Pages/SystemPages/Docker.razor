@@ -2,14 +2,14 @@
 @namespace Fenrus.Pages
 @inherits CommonPage<Fenrus.Models.DockerServer>
 
-<PageTitle>Fenrus - @Title</PageTitle>
+<PageTitle>Fenrus - @lblTitle</PageTitle>
 
-<FenrusPage Title="@Title" Icon="fa-brands fa-docker" PageDescription="@Description">
+<FenrusPage Title="@lblTitle" Icon="fa-brands fa-docker" PageDescription="@lblDescription">
     <Body>
     
     <FenrusTable @ref=Table TItem="Models.DockerServer" Data=@Items>
         <ToolBar>
-            <FenrusTableButton Label="Add" Icon="fa-solid fa-plus" Clicked="() => Add()" />
+            <FenrusTableButton Label="@lblAdd" Icon="fa-solid fa-plus" Clicked="() => Add()" />
         </ToolBar>
         <Columns>
             <FenrusTableColumn TItem="Models.DockerServer" ColumnName="Name">

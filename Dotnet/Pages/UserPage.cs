@@ -56,7 +56,7 @@ public abstract class UserPage : ComponentBase
     /// <summary>
     /// Gets the system settings
     /// </summary>
-    protected SystemSettings SystemSettings { get; private set; }
+    protected Models.SystemSettings SystemSettings { get; private set; }
 
     /// <summary>
     /// Signs out and redirect to the login

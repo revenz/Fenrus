@@ -64,6 +64,23 @@ public class SystemSettings
     public string OAuthStrategyBaseUrl { get; set; }
     
     
+    /// <summary>
+    /// Gets or sets the SMTP server settings for password resets
+    /// </summary>
+    public string SmtpServer { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the SMTP port settings for password resets
+    /// </summary>
+    public int SmtpPort { get; set; }
+    /// <summary>
+    /// Gets or sets the SMTP user settings for password resets
+    /// </summary>
+    public string SmtpUser { get; set; }
+    /// <summary>
+    /// Gets or sets the SMTP password settings for password resets
+    /// </summary>
+    public string SmtpPassword { get; set; }
 
     /// <summary>
     /// Saves the system settings

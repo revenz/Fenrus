@@ -59,7 +59,8 @@ public partial class MainMenu
                     new () { Name = App.Translater.Instant("Pages.Groups.Title-System"), Link = "/settings/system/groups", Icon = "fa-solid fa-puzzle-piece"},
                     new () { Name = App.Translater.Instant("Pages.SearchEngines.Title-System"), Link = "/settings/system/search-engines", Icon = "fa-solid fa-magnifying-glass"},
                     new () { Name = App.Translater.Instant("Pages.Users.Title"), Link = "/settings/system/users", Icon = "fa-solid fa-user-group"},
-                    new () { Name = App.Translater.Instant("Pages.Docker.Title"), Link = "/settings/system/docker", Icon = "fa-brands fa-docker"}
+                    new () { Name = App.Translater.Instant("Pages.Docker.Title"), Link = "/settings/system/docker", Icon = "fa-brands fa-docker"},
+                    new () { Name = App.Translater.Instant("Pages.SystemSettings.Title"), Link = "/settings/system/system-settings", Icon = "fa-solid fa-gear"},
                 }
             });
         }

@@ -1,0 +1,14 @@
+@page "/settings/system/system-settings"
+@namespace Fenrus.Pages
+@inherits UserPage
+
+<PageTitle>Fenrus - @lblTitle</PageTitle>
+
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-gear" PageDescription="@lblDescription">
+    <Body>
+        <InputText Label="@lblSmtpServer" @bind-Value="@Model.SmtpServer" />
+        <InputNumber Label="@lblSmtpPort" @bind-Value="@Model.SmtpPort" />
+        <InputText Label="@lblSmtpUser" @bind-Value="@Model.SmtpUser" />
+        <InputText Label="@lblSmtpPassword" @bind-Value="@Model.SmtpPassword" Password="true" />
+    </Body>
+</FenrusPage>
