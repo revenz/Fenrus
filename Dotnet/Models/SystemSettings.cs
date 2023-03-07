@@ -9,11 +9,6 @@ namespace Fenrus.Models;
 /// </summary>
 public class SystemSettings
 {
-    /// <summary>
-    /// Gets or sets the revision count
-    /// </summary>
-    public int Revision { get; set; }
-
     // hardcoded UID for settings
     private readonly Guid _Uid = new Guid("e0bbac69-86bf-4b76-b8a6-3e28bf92d37f");
     

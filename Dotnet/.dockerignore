@@ -1,7 +1,11 @@
 .git
 .cache
-bin/*
-obj/*
-Data/*
-data/*
+bin/
+obj/
+Data/
+data/
+Logs/
+logs/
+Docker/
+docker/
 *.sh

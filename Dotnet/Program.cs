@@ -70,6 +70,7 @@ var app = builder.Build();
 
 app.UseWhen(context =>
 {
+    Fenrus.Logger.DLog("Requesting: " + context.Request.Path);
     if (Fenrus.Services.SystemSettingsService.InitConfigDone)
         return false;
     var path = context.Request.Path;
@@ -134,4 +135,6 @@ app.MapFallbackToPage("/_Host");
 // create an uptime service to monitor the uptime status for monitor apps/links
 new Fenrus.Services.UpTimeService();
 
+Fenrus.Logger.ILog($"Fenrus v{Fenrus.Globals.Version} started");
 app.Run();
+Fenrus.Logger.ILog($"Fenrus v{Fenrus.Globals.Version} stopped");

@@ -35,13 +35,20 @@ public class DashboardAppController: BaseController
     [ResponseCache(Duration = 7 * 24 * 60 * 60)]
     public IActionResult Icon([FromRoute] string name, [FromRoute] string iconFile)
     {
+        Logger.ILog("Getting app icon: " + name + ", file: " + iconFile);
         var app = AppService.GetByName(name);
         if (string.IsNullOrEmpty(app?.Icon))
+        {
+            Logger.ILog("Getting app icon: " + name + ", icon not found");
             return new NotFoundResult();
+        }
 
         string appIcon = Path.Combine(app.FullPath, app.Icon);
-        if(System.IO.File.Exists(appIcon) == false)
+        if (System.IO.File.Exists(appIcon) == false)
+        {
+            Logger.ILog("Getting app icon: " + name + ", icon not found: " + appIcon);
             return new NotFoundResult();
+        }
 
         var image = System.IO.File.OpenRead(appIcon);
         string type = "image/" + appIcon.Substring(appIcon.LastIndexOf(".", StringComparison.Ordinal) + 1);

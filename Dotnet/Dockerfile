@@ -12,4 +12,5 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /App
 COPY --from=build-env /App/out .
-ENTRYPOINT ["dotnet", "Fenrus.dll", "--urls", "http://localhost:5000"]
+COPY /Apps /App/Apps
+ENTRYPOINT ["dotnet", "Fenrus.dll", "--urls", "http://+:5000"]

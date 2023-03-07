@@ -54,6 +54,8 @@ public class InitConfigController : Controller
     {
         var service = new SystemSettingsService();
         var settings = service.Get();
+        settings.Strategy = model.Strategy;
+        Logger.ILog("Saving initial config with strategy: " + model.Strategy);
         if (model.Strategy == AuthStrategy.LocalStrategy)
         {
             if (string.IsNullOrWhiteSpace(model.LocalStrategyUsername))
@@ -118,7 +120,7 @@ public class InitConfigController : Controller
             // need to restart the app to use OpenIDConnect
             _ = Task.Run(async () =>
             {
-                await Task.Delay(250);
+                await Task.Delay(500);
                 ApplicationLifetime.StopApplication();
             });
             return View("Restarting");
@@ -165,9 +167,9 @@ public class InitConfigController : Controller
         
         dashboard = new();
         dashboard.Uid = uid;
-        dashboard.Name = "Guest Dashboard";
+        dashboard.Name = "Guest";
         dashboard.AccentColor = "#ff0090";
-        dashboard.Background = "#0a0a0a";
+        dashboard.BackgroundColor = "#009099";
         dashboard.ShowGroupTitles = true;
         dashboard.ShowSearch = true;
         dashboard.ShowStatusIndicators = false;
