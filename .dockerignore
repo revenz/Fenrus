@@ -2,3 +2,7 @@ Dockerfile
 build-docker.ps1
 build-docker.sh
 .github
+.hd
+apps.zip
+.gitignore
+*.md

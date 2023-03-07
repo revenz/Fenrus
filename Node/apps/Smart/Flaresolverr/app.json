@@ -1,9 +1,0 @@
-{
-  "Name": "Flaresolverr",
-  "TestFunction": true,
-  "Interval": 10,
-  "Info":{
-        "Authors": ["Damda58"],
-        "AppUrl": "https://github.com/FlareSolverr/FlareSolverr"
-        }
-}
