@@ -14,7 +14,7 @@ body.initial-config-page
         white-space:pre-wrap;
     }
     
-    input[type=text], input[type=password], input[type=number], select {
+    input[type=text], input[type=password], input[type=number], input[type=email], select {
         width: calc(100% - 1rem);
         padding: 0.5rem;
         background: var(--input-background);

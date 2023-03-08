@@ -22,7 +22,7 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
     /// <summary>
     /// Called after the user has been stored from the authentication token
     /// </summary>
-    protected override async Task PostGotUser()
+    protected override Task PostGotUser()
     {
         lblTitle = Translater.Instant("Pages.SearchEngines.Title" + (IsSystem ? "-System" : string.Empty));
         lblDescription = Translater.Instant("Pages.SearchEngines.Labels.PageDescription" + (IsSystem ? "-System" : string.Empty));
@@ -30,6 +30,7 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
             Items = DbHelper.GetAll<Models.SearchEngine>().OrderBy(x => x.Name).ToList();
         else
             Items = Settings.SearchEngines.OrderBy(x => x.Name).ToList();
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -77,7 +78,7 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
     /// <summary>
     /// Adds a new search engine
     /// </summary>
-    private async Task Add()
+    protected override async Task Add()
     {
         var result = await Popup.OpenEditor<SearchEngineEditor, SearchEngine>(Translater, null, new ()
         {
@@ -89,6 +90,7 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
         Items.Add(result.Data);
         Items = Items.OrderBy(x => x.Name).ToList();
         Table.SetData(Items);
+        
     }
 
     /// <summary>

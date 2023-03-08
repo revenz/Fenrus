@@ -13,7 +13,6 @@ namespace Fenrus.Components;
 /// </summary>
 public partial class PageDashboard : CommonPage<Models.Group>
 {
-    [Inject] private NavigationManager Router { get; set; }
     Models.Dashboard Model { get; set; } = new();
 
     /// <summary>
@@ -64,7 +63,7 @@ public partial class PageDashboard : CommonPage<Models.Group>
 
     private List<ListOption> Themes;
 
-    protected override async Task PostGotUser()
+    protected override Task PostGotUser()
     {
         lblTitle = Translater.Instant(IsGuest
             ? "Pages.Dashboard.Title-Guest"
@@ -124,6 +123,7 @@ public partial class PageDashboard : CommonPage<Models.Group>
         var sysGroups = new GroupService().GetSystemGroups(enabledOnly: true);
         Groups = Settings.Groups.Where(x => Model.GroupUids.Contains(x.Uid))
             .Union(sysGroups.Where(x => Model.GroupUids.Contains(x.Uid))).ToList();
+        return Task.CompletedTask;
     }
 
     /// <summary>

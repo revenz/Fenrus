@@ -48,7 +48,8 @@
     "Confirm": "Confirm",
     "Message": "Message",
     "DeleteItem": "Delete {typeName} ''{name}''?",
-    "DeletedItem": "Deleted {typeName} ''{name}''"
+    "DeletedItem": "Deleted {typeName} ''{name}''",
+    "Test": "Test"
   },
   "ContextMenu": {
     "EditDashboard": "Edit Dashboard",
@@ -211,11 +212,21 @@
     },
     "SystemSettings": {
       "Title": "System Settings",
+      "Labels": {
+        "PageDescription": "This page allows you to configure system wide settings",
+        "Smtp": "SMTP",
+        "SmtpDescription": "Configure an SMTP server, this will be used to send password reset emails."
+      },      
+      "Messages": {
+        "TestEmailSent": "Test email sent to Sender, check your email to confirm working."
+      },
       "Fields": {
-        "SmtpServer": "SMTP Server",
-        "SmtpPort": "SMTP Port",
-        "SmtpUser": "SMTP User",
-        "SmtpPassword": "SMTP Password"
+        "SmtpServer": "Server",
+        "SmtpPort": "Port",
+        "SmtpUser": "User",
+        "SmtpPassword": "Password",
+        "SmtpSender": "Sender",
+        "SmtpSenderHelp": "The email address Fenrus will send emails from."
       }
     },
     "Users": {

@@ -42,7 +42,7 @@ public partial class LinkItemComponent
     private string GetIcon()
     {
         if(string.IsNullOrWhiteSpace(Model.Icon))
-            return "/favicon.svg?version=" + Globals.Version;
+            return $"/favicon?color={@Uri.EscapeDataString(Dashboard.AccentColor)}&version={Globals.Version}";
         if(Model.Icon.StartsWith("db:/image/"))
             return "/fimage/" + Model.Icon["db:/image/".Length..] + "?version=" + Globals.Version;
         return Model.Icon + "?version=" + Globals.Version;

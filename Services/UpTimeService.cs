@@ -83,7 +83,7 @@ public class UpTimeService
             .SelectMany(x => x.Items ?? new List<GroupItem>())
             .Select(x =>
             {
-                string url = null;
+                string? url = null;
                 if (x is AppItem app)
                     url = app.Url;
                 else if(x is LinkItem link)

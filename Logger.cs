@@ -43,6 +43,38 @@ public class Logger
     /// <param name="message">the message to write</param>
     private static void Log(LogLevel level, string message)
     {
+        // LogCustomConsole(level, message);
+        switch (level)
+        {
+            case LogLevel.Debug:
+                NLogger.Debug(message);
+                break;
+            case LogLevel.Information:
+                NLogger.Info(message);
+                break;
+            case LogLevel.Warning:
+                NLogger.Warn(message);
+                break;
+            case LogLevel.Error:
+                NLogger.Error(message);
+                break;
+            case LogLevel.Trace:
+                NLogger.Trace(message);
+                break;
+            case LogLevel.Critical:
+                NLogger.Fatal(message);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Constructs a custom message and writes it directly to the console
+    /// Use if not using NLogger
+    /// </summary>
+    /// <param name="level">the message level</param>
+    /// <param name="message">the message text</param>
+    private static void LogCustomConsole(LogLevel level, string message)
+    {
         string lvl = level switch
         {
             LogLevel.Information => "INFO",
@@ -60,24 +92,27 @@ public class Logger
     /// </summary>
     public static void Initialize()
     {
-        // var config = new NLog.Config.LoggingConfiguration();
-        //
-        // // Targets where to log to: File and Console
-        // var logfile = new NLog.Targets.FileTarget("logfile")
-        // {
-        //     FileName = Path.Combine("Logs", "Fenrus_${shortdate}.log"),
-        //     MaxArchiveDays = 5, 
-        //     Layout = "${longdate} [${uppercase:${level}}] => ${message}"
-        // };
-        // var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
-        //     
-        // // Rules for mapping loggers to targets            
-        // config.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, logconsole);
-        // config.AddRule(NLog.LogLevel.Info, NLog.LogLevel.Fatal, logfile);
-        //     
-        // // Apply config           
-        // NLog.LogManager.Configuration = config;
-        //
-        // NLogger = NLog.LogManager.LogFactory.GetLogger(string.Empty);
+        var config = new NLog.Config.LoggingConfiguration();
+        
+        // Targets where to log to: File and Console
+        var logfile = new NLog.Targets.FileTarget("logfile")
+        {
+            FileName = Path.Combine("Logs", "Fenrus_${shortdate}.log"),
+            MaxArchiveDays = 5, 
+            Layout = "${longdate} [${uppercase:${level:format=TriLetter}}] => ${message}"
+        };
+        var logconsole = new NLog.Targets.ConsoleTarget("logconsole")
+        {
+            Layout = "${longdate} [${uppercase:${level:format=TriLetter}}] => ${message}"
+        };
+            
+        // Rules for mapping loggers to targets            
+        config.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, logconsole);
+        config.AddRule(NLog.LogLevel.Info, NLog.LogLevel.Fatal, logfile);
+            
+        // Apply config           
+        NLog.LogManager.Configuration = config;
+        
+        NLogger = NLog.LogManager.LogFactory.GetLogger(string.Empty);
     }
 }

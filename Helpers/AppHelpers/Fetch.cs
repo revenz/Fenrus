@@ -103,7 +103,7 @@ public class Fetch
                     var parsed = engine.Evaluate("JSON.parse(temp_json)").ToObject();
                     return parsed;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return content;
                 }
@@ -115,7 +115,7 @@ public class Fetch
                 return dbl;
             return content;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // just want to see the exception
             throw;

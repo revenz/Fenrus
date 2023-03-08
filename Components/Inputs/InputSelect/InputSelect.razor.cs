@@ -96,7 +96,7 @@ public partial class InputSelect<TItem> : Input<TItem>
         }
     }
 
-    private bool ValueMatches(object other)
+    private bool ValueMatches(object? other)
     {
         if (other == null && Value == null)
             return true;

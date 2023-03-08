@@ -125,7 +125,7 @@ public class FenrusAppProperty
     /// Gets or sets the default value
     /// </summary>
     [JsonPropertyName("default")]
-    public object DefaultValue { get; set; }
+    public object? DefaultValue { get; set; }
     
     /// <summary>
     /// Gets or sets list options for a Select input

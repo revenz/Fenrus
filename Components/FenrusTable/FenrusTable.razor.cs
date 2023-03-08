@@ -41,7 +41,6 @@ public partial class FenrusTable<TItem>: FenrusTableBase, INotifyPropertyChanged
     private readonly string ContextMenuUid = "ctxMenu-" + Guid.NewGuid();
     private Dictionary<TItem, string> DataDictionary;
     private List<TItem> _Data;
-    private string lblResetLayout;
 
     //private ContextMenu ContextMenu;
 
@@ -108,11 +107,11 @@ public partial class FenrusTable<TItem>: FenrusTableBase, INotifyPropertyChanged
     /// <param name="value">the data to set</param>
     /// <param name="clearSelected">if the selected items should be cleared</param>
     /// <param name="filter">[Optional] text for the filter</param>
-    public void SetData(List<TItem> value, bool clearSelected = true, string filter = null)
+    public void SetData(List<TItem> value, bool clearSelected = true, string? filter = null)
     {
         this._FilterText = filter ?? string.Empty;
         this._Data = value ?? new();
-        var jsonOptions = new System.Text.Json.JsonSerializerOptions()
+        var jsonOptions = new JsonSerializerOptions()
         {   
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
@@ -360,7 +359,7 @@ public partial class FenrusTable<TItem>: FenrusTableBase, INotifyPropertyChanged
         await InvokeAsync(this.StateHasChanged);
     }
 
-    private async Task OnClick(MouseEventArgs e, TItem item)
+    private void OnClick(MouseEventArgs e, TItem item)
     {
         bool changed = false;
         bool wasSelected = this.SelectedItems.Contains(item);
@@ -446,12 +445,13 @@ public partial class FenrusTable<TItem>: FenrusTableBase, INotifyPropertyChanged
         NotifySelectionChanged(SelectedItems.Cast<object>().ToList());
     }
 
-    private async Task FilterKeyDown(KeyboardEventArgs args)
+    private Task FilterKeyDown(KeyboardEventArgs args)
     {
         if(args.Key == "Escape")
         {
             this.FilterText = String.Empty;
         }
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -481,9 +481,10 @@ public partial class FenrusTable<TItem>: FenrusTableBase, INotifyPropertyChanged
         return true;
     }
 
-    private async Task ContextButton(FenrusTableButton btn)
+    private Task ContextButton(FenrusTableButton btn)
     {
         _ = btn.OnClick();
+        return Task.CompletedTask;
     }
 }
 public enum SelectionMode

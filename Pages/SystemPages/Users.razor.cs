@@ -81,10 +81,10 @@ public partial class Users: CommonPage<User>
     /// <summary>
     /// Add a suer
     /// </summary>
-    private async Task Add()
+    protected override async Task Add()
     {
-        var result = await Popup.OpenEditor<UserEditor, User>(Translater, null);
-        if (result.Success == false)
+        var result = await Popup.OpenEditor<UserEditor, User?>(Translater, null);
+        if (result.Success == false || result.Data == null)
             return;
         Items.Add(result.Data);
         Items = Items.OrderBy(x => x.Name).ToList();

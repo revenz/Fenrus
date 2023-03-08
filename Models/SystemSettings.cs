@@ -81,6 +81,10 @@ public class SystemSettings
     /// Gets or sets the SMTP password settings for password resets
     /// </summary>
     public string SmtpPassword { get; set; }
+    /// <summary>
+    /// Gets or sets the email address emails are sent from
+    /// </summary>
+    public string SmtpSender { get; set; }
 
     /// <summary>
     /// Saves the system settings

@@ -25,4 +25,14 @@ public class Globals
     /// Gets if this app is running inside a docker container
     /// </summary>
     public static readonly bool IsDocker = Environment.GetEnvironmentVariable("Docker") == "1";
+
+    /// <summary>
+    /// Gets the default accent color
+    /// </summary>
+    public const string DefaultAccentColor = "#FF0090";
+    
+    /// <summary>
+    /// Gets the default background color
+    /// </summary>
+    public const string DefaultBackgroundColor = "#111111";
 }

@@ -95,7 +95,11 @@ public partial class PageGroup: CommonPage<Models.Group>
         return Settings.Groups;
     }
 
-    Models.Group GetById()
+    /// <summary>
+    /// Gets the group by the Uid
+    /// </summary>
+    /// <returns>the group if found</returns>
+    Models.Group? GetById()
     {
         if (IsSystem)
             return new Services.GroupService().GetByUid(Uid);

@@ -13,8 +13,8 @@ public partial class FileInputDialog
 
     private readonly string Uid = Guid.NewGuid().ToString();
 
-    private string Filename;
-    private IBrowserFile browserFile;
+    private string? Filename;
+    private IBrowserFile? browserFile;
     
     /// <summary>
     /// Gets or sets the translater used

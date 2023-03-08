@@ -1,9 +1,6 @@
 using Fenrus.Models;
-using Fenrus.Services;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Group = Fenrus.Pages.Group;
-using IApplicationLifetime = Microsoft.Extensions.Hosting.IApplicationLifetime;
 
 namespace Fenrus.Controllers;
 
@@ -16,13 +13,13 @@ public class InitConfigController : Controller
     /// <summary>
     /// Gets or sets the application lifetime instance used to restart the application
     /// </summary>
-    private IApplicationLifetime ApplicationLifetime { get; set; }
+    private IHostApplicationLifetime ApplicationLifetime { get; set; }
     
     /// <summary>
     /// Constructs an instance of the init config controller
     /// </summary>
     /// <param name="appLifetime">the application lifetime used to restart the application</param>
-    public InitConfigController(IApplicationLifetime appLifetime)
+    public InitConfigController(IHostApplicationLifetime appLifetime)
     {
         ApplicationLifetime = appLifetime;
     }
@@ -174,8 +171,8 @@ public class InitConfigController : Controller
         dashboard = new();
         dashboard.Uid = uid;
         dashboard.Name = "Guest";
-        dashboard.AccentColor = "#ff0090";
-        dashboard.BackgroundColor = "#009099";
+        dashboard.AccentColor = Globals.DefaultAccentColor;
+        dashboard.BackgroundColor = Globals.DefaultBackgroundColor;;
         dashboard.ShowGroupTitles = true;
         dashboard.ShowSearch = true;
         dashboard.ShowStatusIndicators = false;

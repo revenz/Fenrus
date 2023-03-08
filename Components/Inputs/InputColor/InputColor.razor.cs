@@ -56,7 +56,7 @@ public partial class InputColor : Input<string>
         int c1r = 0, c1g = 0, c1b = 0, c2r = 0, c2g = 0, c2b = 0, start = 0, end = 100;
         var gradients = new[]
         {
-            (r: 204, g:0, b:0, percent:0), (153, 153, 0, 17),
+            (204, 0, 0, 0), (153, 153, 0, 17),
             (51, 204, 0, 33), (0, 204, 204, 50),
             (0, 0, 204, 66), (204, 0, 204, 83),
             (204, 0, 0, 100)

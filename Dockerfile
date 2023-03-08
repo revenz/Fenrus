@@ -14,11 +14,10 @@ WORKDIR /App
 COPY --from=build-env /App/out .
 COPY /Apps /App/Apps
 ENV Docker=1
-RUN printf "#!/bin/bash \
-\n# Resets the initial configuration \
-\ndotnet Fenrus.dll --init-config\nkill 1\n" > /App/reset.sh && chmod +x /App/reset.sh 
+COPY /reset.sh /App/reset.sh
+RUN chmod +x /App/reset.sh
 
 # make sh open bash
 RUN ln -sf /bin/bash /bin/sh
     
-ENTRYPOINT ["dotnet", "Fenrus.dll", "--urls", "http://+:5000"]
+ENTRYPOINT ["dotnet", "Fenrus.dll", "--urls", "http://+:3000"]

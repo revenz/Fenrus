@@ -258,7 +258,7 @@ public class ConfigImporter
     private Dictionary<string, object> ProcessDictionary(Dictionary<string, object> dict)
     {
         if (dict?.Any() != true)
-            return dict;
+            return dict ?? new ();
         var toRemove = new List<string>();
         foreach (var key in dict.Keys)
         {

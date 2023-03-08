@@ -361,7 +361,7 @@ class GroupItemEditorModel : GroupItem
     /// </summary>
     /// <param name="prop">the property to lookup</param>
     /// <returns>the value, or the FenrusAppProperty.DefaultValue if not set</returns>
-    public object GetValue(FenrusAppProperty prop)
+    public object? GetValue(FenrusAppProperty prop)
     {
         if (Properties.ContainsKey(prop.Id) == false)
         {
@@ -380,7 +380,7 @@ class GroupItemEditorModel : GroupItem
                 Properties.Add(prop.Id, prop.DefaultValue);
             }
 
-            return prop.DefaultValue;
+            return prop?.DefaultValue;
         }
 
         return Properties[prop.Id];

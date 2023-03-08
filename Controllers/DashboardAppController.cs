@@ -57,7 +57,7 @@ public class DashboardAppController: BaseController
         return File(image, type);
     }
 
-    private AppInstance GetAppInstance(string name, Guid uid)
+    private AppInstance? GetAppInstance(string name, Guid uid)
     {
         string key = name + "_" + uid;
         if (Cache.TryGetValue<AppInstance>(key, out AppInstance value))

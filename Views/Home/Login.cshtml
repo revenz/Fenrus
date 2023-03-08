@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
     <link id="theme-style" rel="stylesheet" href="/themes/Default/theme.css?version=@Globals.Version" />
     <style>
+        body {
+            --background-color:@Model.BackgroundColor;
+            --accent: @Model.AccentColor;
+        }
+        
         .hidden {
             display: none;
         }
@@ -20,7 +25,7 @@
             width: 100%;
             display: block;
             text-align: right;
-            color: #ff0090;
+            color: var(--accent);
         }
         .field a:hover {
             text-decoration: underline;
@@ -37,7 +42,7 @@
     <div class="login-box">
         <div class="header">
             <span class="logo">
-                <img src="/favicon.svg?version=@Globals.Version" />
+                <img src="/favicon?color=@Uri.EscapeDataString(Model.AccentColor)&version=@Globals.Version" />
             </span>
             <span class="title">Fenrus</span>
         </div>
@@ -51,13 +56,13 @@
             <div class="field">
                 <span class="label">@Model.Translater.Instant("Pages.Login.Fields.Username")</span>
                 <span class="value">
-                    <input type="text" id="username" name="username" autofocus required />
+                    <input type="text" id="username" name="username" autofocus required autocomplete="username" />
                 </span>
             </div>
             <div class="field">
                 <span class="label">@Model.Translater.Instant("Pages.Login.Fields.Password")</span>
                 <span class="value">
-                    <input type="password" name="password" id="password" required />
+                    <input type="password" name="password" id="password" required autocomplete="current-password"  />
                 </span>
             </div>
             <div class="field">
@@ -122,6 +127,7 @@
     }
 </script>
 
+<script src="/backgrounds/default.js"></script>
 <script src="/js/_fenrus.js?version=@Globals.Version" defer></script>
 </body>
 </html>

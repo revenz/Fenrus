@@ -208,7 +208,7 @@ public class Translater
     /// <param name="parameters">any translation parameters</param>
     /// <param name="supressWarnings">if translation warnings should be suppressed and not printed to the log</param>
     /// <returns>the translated string</returns>
-    public string Instant(string key, object parameters = null, bool supressWarnings = false)
+    public string Instant(string key, object? parameters = null, bool supressWarnings = false)
         => Instant(new[] { key }, parameters, supressWarnings: supressWarnings);
 
     /// <summary>
@@ -219,7 +219,7 @@ public class Translater
     /// <param name="parameters">any translation parameters</param>
     /// <param name="supressWarnings">if translation warnings should be suppressed and not printed to the log</param>
     /// <returns>the translated string</returns>
-    public string Instant(string[] possibleKeys, object parameters = null, bool supressWarnings = false)
+    public string Instant(string[] possibleKeys, object? parameters = null, bool supressWarnings = false)
     {
         try
         {

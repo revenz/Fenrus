@@ -79,10 +79,10 @@ public partial class GroupAddDialog: ComponentBase
         await Task.CompletedTask;
     }
     
-    private async Task CheckItem(ListOption option, ChangeEventArgs changeEventArgs)
+    private Task CheckItem(ListOption option, ChangeEventArgs changeEventArgs)
     {
         if (changeEventArgs.Value is bool bValue == false)
-            return;
+            return Task.CompletedTask;
         if (bValue)
         {
             // add to list
@@ -95,5 +95,6 @@ public partial class GroupAddDialog: ComponentBase
             if(CheckedItems.Contains(option) == false)
                 CheckedItems.Remove(option);
         }
+        return Task.CompletedTask;
     }
 }

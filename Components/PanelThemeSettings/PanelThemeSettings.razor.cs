@@ -46,8 +46,8 @@ private bool GetThemeValue(ThemeSetting setting, out object? value)
     
     string GetStringValue(ThemeSetting setting)
     {
-        if (GetThemeValue(setting, out object value) && value != null)
-            return value.ToString();
+        if (GetThemeValue(setting, out object? value) && value != null)
+            return value?.ToString() ?? string.Empty;
         return setting.DefaultValue?.ToString() ?? string.Empty;
     }
 

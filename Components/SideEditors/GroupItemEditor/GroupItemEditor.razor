@@ -63,7 +63,7 @@
                             if (Model.Type == "DashboardApp" && string.IsNullOrEmpty(Model.AppName) == false)
                                 icon = "/apps/" + Model.AppName + "/app.png";
                             else
-                                icon = "/favicon.svg";
+                                icon = "/favicon";
                         }
                         else if (icon.StartsWith("db:/image/"))
                             icon = "/fimage/" + icon["db:/image/".Length..];

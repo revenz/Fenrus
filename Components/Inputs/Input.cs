@@ -26,8 +26,6 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
 {
     [Inject] protected IJSRuntime jsRuntime { get; set; }
     protected string Uid = System.Guid.NewGuid().ToString();
-    private string _Label;
-    private string _LabelOriginal;
     private string _Help;
     public EventHandler<bool> ValidStateChanged { get; set; }
 
@@ -91,38 +89,28 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
     }
 
     protected T _Value;
-    private bool _ValueUpdating = false;
     [Parameter]
     public T Value
     {
         get => _Value;
         set
         {
-            try
-            {
-                if (Disposed) return;
-                _ValueUpdating = true;
+            if (Disposed) return;
 
-                if (_Value == null && value == null)
-                    return;
+            if (_Value == null && value == null)
+                return;
 
-                if (_Value != null && value != null && _Value.Equals(value)) return;
+            if (_Value != null && value != null && _Value.Equals(value)) return;
 
-                bool areEqual = System.Text.Json.JsonSerializer.Serialize(_Value) ==
-                                System.Text.Json.JsonSerializer.Serialize(value);
-                if (areEqual ==
-                    false) // for lists/arrays if they haven't really changed, empty to empty, dont clear validation
-                    ErrorMessage = ""; // clear the error
+            bool areEqual = System.Text.Json.JsonSerializer.Serialize(_Value) ==
+                            System.Text.Json.JsonSerializer.Serialize(value);
+            if (areEqual ==
+                false) // for lists/arrays if they haven't really changed, empty to empty, dont clear validation
+                ErrorMessage = ""; // clear the error
 
-                _Value = value;
-                ValueUpdated();
-                ValueChanged.InvokeAsync(value);
-                
-            }
-            finally
-            {
-                _ValueUpdating = false;
-            }
+            _Value = value;
+            ValueUpdated();
+            ValueChanged.InvokeAsync(value);
         }
     }
 

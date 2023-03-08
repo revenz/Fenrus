@@ -35,11 +35,6 @@ public partial class DockerServerEditor : SideEditorBase
     private string Title;
     
     /// <summary>
-    /// Gets or sets if this is an editor for a new item
-    /// </summary>
-    private bool IsNew;
-    
-    /// <summary>
     /// Gets or sets the side editor instance
     /// </summary>
     private SideEditor Editor { get; set; }
@@ -48,7 +43,6 @@ public partial class DockerServerEditor : SideEditorBase
     protected override void OnInitialized()
     {
         Model = new();
-        IsNew = false;
         if (Item != null)
         {
             Title = "Edit Docker";
@@ -64,7 +58,6 @@ public partial class DockerServerEditor : SideEditorBase
             Model.Name = string.Empty;
             Model.Uid = Guid.NewGuid();
             Model.Port = 2375;
-            IsNew = true;
         }
     }
 

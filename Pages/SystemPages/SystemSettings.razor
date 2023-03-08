@@ -5,10 +5,20 @@
 <PageTitle>Fenrus - @lblTitle</PageTitle>
 
 <FenrusPage Title="@lblTitle" Icon="fa-solid fa-gear" PageDescription="@lblDescription">
+    <Buttons>
+        <button class="btn" @onclick="() => Save()">@lblSave</button>
+    </Buttons>
     <Body>
-        <InputText Label="@lblSmtpServer" @bind-Value="@Model.SmtpServer" />
-        <InputNumber Label="@lblSmtpPort" @bind-Value="@Model.SmtpPort" />
-        <InputText Label="@lblSmtpUser" @bind-Value="@Model.SmtpUser" />
-        <InputText Label="@lblSmtpPassword" @bind-Value="@Model.SmtpPassword" Password="true" />
+
+    <div class="setting-group">
+        <h3>@lblSmtp</h3>
+        <span class="label">@lblSmtpDescription</span>
+        <InputText Label="@lblSmtpServer" @bind-Value="@Model.SmtpServer"/>
+        <InputNumber Label="@lblSmtpPort" @bind-Value="@Model.SmtpPort" Minimum="1" Maximum="65535"/>
+        <InputText Label="@lblSmtpUser" @bind-Value="@Model.SmtpUser"/>
+        <InputText Label="@lblSmtpPassword" @bind-Value="@Model.SmtpPassword" Password="true"/>
+        <InputText Label="@lblSmtpSender" @bind-Value="@Model.SmtpSender" Help="@lblStmpSenderHelp" Email="true"/>
+        <button disabled="@(CanTestSmtp() == false)" class="btn test-button" @onclick="() => TestSmtp()">@lblTest</button>
+    </div>
     </Body>
 </FenrusPage>

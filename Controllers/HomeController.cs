@@ -1,9 +1,7 @@
 using System.Security.Claims;
 using Fenrus.Models;
-using Fenrus.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Controllers;
@@ -27,7 +25,7 @@ public class HomeController : BaseController
     
     public HomeController()
     {
-        string language = new SystemSettingsService().Get()?.Language;
+        var language = new SystemSettingsService().Get()?.Language;
         if (string.IsNullOrWhiteSpace(language))
             language = "en";
         Translater = Translater.GetForLanguage(language);
@@ -119,7 +117,7 @@ public class HomeController : BaseController
     /// <param name="msg">[Optional] message to show on the login page</param>
     /// <returns>the login page</returns>
     [HttpGet("login")]
-    public IActionResult Login([FromQuery] string msg = null)
+    public IActionResult Login([FromQuery] string? msg = null)
     {
         if (SystemSettingsService.InitConfigDone == false)
             return Redirect("/init-config");
@@ -153,16 +151,19 @@ public class HomeController : BaseController
     /// </summary>
     /// <param name="error">[Optional] error to show on the login page</param>
     /// <returns>the login page response object</returns>
-    private IActionResult LoginPage(string error)
+    private IActionResult LoginPage(string? error)
     {
         var settings = GetSystemSettings();
+        var guestDashboard = new DashboardService().GetGuestDashboard();
         ViewBag.Translater = Translater;
         LoginPageModel model = new LoginPageModel()
         {
             Error = error,
             AllowGuest = settings.AllowGuest,
             AllowRegister = settings.AllowRegister,
-            Translater = Translater
+            Translater = Translater,
+            BackgroundColor = guestDashboard?.BackgroundColor?.EmptyAsNull() ?? Globals.DefaultBackgroundColor,
+            AccentColor = guestDashboard?.AccentColor?.EmptyAsNull() ?? Globals.DefaultAccentColor
         };
         return View("Login", model);
     }
@@ -178,14 +179,10 @@ public class HomeController : BaseController
     [HttpPost("login")]
     public async Task<IActionResult> LoginPost([FromForm] string action, [FromForm] string username, [FromForm] string password, [FromForm] string usernameOrEmail)
     {
-        Console.WriteLine("Action: " + action);
-        Console.WriteLine("Username: " + username);
-        Console.WriteLine("Password: " + password);
+        Logger.ILog($"Login[{action}]: {username}");
 
         if (action == "Reset")
-        {
-            return await Reset(usernameOrEmail);
-        }
+            return Reset(usernameOrEmail);
 
         if(action == "Login")
             return await Login(username, password);
@@ -215,7 +212,7 @@ public class HomeController : BaseController
         return Redirect("/");
     }
 
-    private async Task<IActionResult> Reset(string usernameOrEmail)
+    private IActionResult Reset(string usernameOrEmail)
     {
         var user = new UserService().FindUser(usernameOrEmail);
         if (user != null)
@@ -232,6 +229,16 @@ public class HomeController : BaseController
                               HttpContext.Request.Path;
             resetUrl = resetUrl.Substring(0, resetUrl.IndexOf("/login"));
             resetUrl += "/reset-password/" + token;
+
+            if (string.IsNullOrEmpty(user.Email) == false)
+            {
+                Emailer.Send(
+                    recipient: user.Email,
+                    subject: "Fenrus Password Reset",
+                    plainTextBody: "Here is your password reset link from Fenrus\n\n" + resetUrl
+                );
+            }
+
             Console.WriteLine("Password Reset Url: " + resetUrl);
         }
         
@@ -256,11 +263,22 @@ public class HomeController : BaseController
             return Redirect("/login?msg=" + MSG_PasswordResetTokenInvalid);
 
         var newPassword = Helpers.PasswordGenerator.Generate(20, 4);
-        var changed = new Services.UserService().ChangePassword(reset.UserUid, newPassword);
+        var service = new UserService();
+        var changed = service.ChangePassword(reset.UserUid, newPassword);
 
         if (changed == false)
             return Redirect("/login?msg=" + MSG_PasswordResetFailed);
+
+        var user = service.GetByUid(reset.UserUid);
         
+        if (string.IsNullOrEmpty(user?.Email) == false)
+        {
+            Emailer.Send(
+                recipient: user.Email,
+                subject: "New Fenrus Password",
+                plainTextBody: "Here is your password for Fenrus\n\n" + newPassword + "\n\nYou should change this immediately after logging in."
+            );
+        }
         Console.WriteLine("New Password: " + newPassword);
         return Redirect("/login?msg=" + MSG_PasswordReset);
     }
@@ -366,7 +384,7 @@ public class LoginPageModel
     /// <summary>
     /// Gets or sets if there is an error to show
     /// </summary>
-    public string Error { get; set; }
+    public string? Error { get; set; }
     /// <summary>
     /// Gets or sets if registrations are allowed
     /// </summary>
@@ -380,4 +398,14 @@ public class LoginPageModel
     /// Gets the translater to use for the page
     /// </summary>
     public Translater Translater { get; init; }
+
+    /// <summary>
+    /// Gets or sets the background color
+    /// </summary>
+    public string BackgroundColor { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the accent color
+    /// </summary>
+    public string AccentColor { get; set; }
 }

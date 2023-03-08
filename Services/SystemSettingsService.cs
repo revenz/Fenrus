@@ -129,4 +129,19 @@ public class SystemSettingsService
         collection.DeleteAll();
         InitConfigDone = false;
     }
+
+    /// <summary>
+    /// Saves the available options from the UI editor
+    /// </summary>
+    /// <param name="model">the UI system settings model</param>
+    public void SaveFromEditor(SystemSettings model)
+    {
+        var existing = Get();
+        existing.SmtpServer = model.SmtpServer;
+        existing.SmtpPort = model.SmtpPort;
+        existing.SmtpUser = model.SmtpUser;
+        existing.SmtpPassword = model.SmtpPassword;
+        existing.SmtpSender = model.SmtpSender;
+        DbHelper.Update(existing);
+    }
 }

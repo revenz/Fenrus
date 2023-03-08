@@ -45,7 +45,7 @@ public partial class SearchComponent
                 Uid = x.Uid,
                 Url = x.Url,
                 IsSystem = x.IsSystem,
-                Icon = string.IsNullOrEmpty(x.Icon) ? "/favicon.svg" : "/fimage/" + x.Icon.Substring(x.Icon.LastIndexOf("/") + 1)
+                Icon = string.IsNullOrEmpty(x.Icon) ? "/favicon" : "/fimage/" + x.Icon.Substring(x.Icon.LastIndexOf("/") + 1)
             }).ToList();
         if (SearchEngines.Any(x => x.IsDefault) == false)
             SearchEngines[0].IsDefault = true;

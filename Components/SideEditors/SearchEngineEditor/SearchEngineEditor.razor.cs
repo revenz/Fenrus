@@ -154,7 +154,7 @@ public partial class SearchEngineEditor: SideEditorBase
     /// Gets the search engine
     /// </summary>
     /// <returns>the search engine</returns>
-    private SearchEngine GetSearchEngine()
+    private SearchEngine? GetSearchEngine()
     {
         if (IsSystem)
             return new SearchEngineService().GetByUid(this.Model.Uid);

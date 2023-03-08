@@ -6,3 +6,5 @@ build-docker.sh
 apps.zip
 .gitignore
 *.md
+docker.sh
+publish.sh

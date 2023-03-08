@@ -83,3 +83,6 @@ body
     }
 }
 window.BackgroundType = DefaultBackground;
+
+if(document.querySelector('body.login-page, body.initial-config-page'))
+    new DefaultBackground().init();

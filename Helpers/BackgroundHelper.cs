@@ -38,7 +38,7 @@ public class BackgroundHelper
     {
         return new []
         {
-            hasCustomBackground ? "image.js" : null,
+            hasCustomBackground ? "image.js" : string.Empty,
             "image-picker",
             "default.js",
             "color.js",
@@ -48,6 +48,6 @@ public class BackgroundHelper
             "vanta.fog.js",
             "vanta.net.js",
             "vanta.waves.js"
-        }.Where(x => x != null).ToArray();
+        }.Where(x => x != string.Empty).ToArray();
     }
 }
