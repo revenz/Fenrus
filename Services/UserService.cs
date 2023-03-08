@@ -104,6 +104,31 @@ public class UserService
         DbHelper.Update(user);
         return true;
     }
+    
+    
+    /// <summary>
+    /// Changes a users password
+    /// </summary>
+    /// <param name="uid">The UID of the user to change the password to</param>
+    /// <param name="oldPassword">the old password</param>
+    /// <param name="newPassword">the new password</param>
+    /// <returns>true if the password was changed, otherwise false</returns>
+    public bool ChangePassword(Guid uid, string oldPassword, string newPassword)
+    {
+        if (string.IsNullOrWhiteSpace(newPassword))
+            return false; // need a password!
+
+        var user = DbHelper.GetByUid<User>(uid);
+        if (user == null)
+            return false; // user doesnt exist
+
+        if (BCrypt.Net.BCrypt.Verify(oldPassword, user.Password) == false)
+            return false;
+        
+        user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
+        DbHelper.Update(user);
+        return true;
+    }
 
     /// <summary>
     /// Gets a user by its UID

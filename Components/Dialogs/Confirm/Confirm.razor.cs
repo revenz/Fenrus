@@ -15,9 +15,9 @@ public partial class Confirm: ComponentBase, IDisposable
     [Inject] public IJSRuntime jsRuntime { get; set; }
     
     /// <summary>
-    /// Gets or sets the translater to use
+    /// Gets or sets the translator to use
     /// </summary>
-    [CascadingParameter] public Translater Translater { get; set; }
+    [CascadingParameter] public Translator Translator { get; set; }
     
     
     private string lblYes, lblNo, lblConfirm;
@@ -36,9 +36,9 @@ public partial class Confirm: ComponentBase, IDisposable
 
     protected override void OnInitialized()
     {
-        this.lblYes = Translater.Instant("Labels.Yes");
-        this.lblNo = Translater.Instant("Labels.No");
-        this.lblConfirm = Translater.Instant("Labels.Confirm");
+        this.lblYes = Translator.Instant("Labels.Yes");
+        this.lblNo = Translator.Instant("Labels.No");
+        this.lblConfirm = Translator.Instant("Labels.Confirm");
         // App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
         Instance = this;
     }

@@ -27,12 +27,27 @@ public partial class PanelThemeSettings : ComponentBase
     public bool IsGuest { get; set; }
 
     /// <summary>
+    /// Gets if the users password can be changed
+    /// </summary>
+    public bool CanChangePassword
+    {
+        get
+        {
+            if (IsGuest)
+                return false;
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Gets or sets the page helper
     /// </summary>
     [Parameter]
     public PageHelper PageHelper { get; set; }
 
-private bool GetThemeValue(ThemeSetting setting, out object? value)
+    private Translator Translator => PageHelper.Translator;
+
+    private bool GetThemeValue(ThemeSetting setting, out object? value)
     {
         if (Settings.ThemeSettings == null || Settings.ThemeSettings.ContainsKey(Theme.Name) == false)
         {

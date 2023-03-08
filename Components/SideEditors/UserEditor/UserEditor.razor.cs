@@ -56,20 +56,20 @@ public partial class UserEditor: SideEditorBase
     
     protected override void OnInitialized()
     {
-        lblSave = Translater.Instant("Labels.Save");
-        lblCancel = Translater.Instant("Labels.Cancel");
-        lblFullName = Translater.Instant("Pages.User.Fields.FullName");
-        lblFullNameHelp = Translater.Instant("Pages.User.Fields.FullName-Help");
-        lblUsername = Translater.Instant("Pages.User.Fields.Username");
-        lblEmail = Translater.Instant("Pages.User.Fields.Email");
-        lblPassword = Translater.Instant("Pages.User.Fields.Password");
-        lblIsAdmin = Translater.Instant("Pages.User.Fields.IsAdmin");
+        lblSave = Translator.Instant("Labels.Save");
+        lblCancel = Translator.Instant("Labels.Cancel");
+        lblFullName = Translator.Instant("Pages.User.Fields.FullName");
+        lblFullNameHelp = Translator.Instant("Pages.User.Fields.FullName-Help");
+        lblUsername = Translator.Instant("Pages.User.Fields.Username");
+        lblEmail = Translator.Instant("Pages.User.Fields.Email");
+        lblPassword = Translator.Instant("Pages.User.Fields.Password");
+        lblIsAdmin = Translator.Instant("Pages.User.Fields.IsAdmin");
         Model = new();
         IsNew = false;
         
         if (Item != null)
         {
-            Title = Translater.Instant("Pages.User.Labels.EditUser");
+            Title = Translator.Instant("Pages.User.Labels.EditUser");
             Model.Uid = Item.Uid;
             Model.IsAdmin = Item.IsAdmin;
             Model.Username = Item.Username;
@@ -79,7 +79,7 @@ public partial class UserEditor: SideEditorBase
         }
         else
         {
-            Title = Translater.Instant("Pages.User.Labels.NewUser");
+            Title = Translator.Instant("Pages.User.Labels.NewUser");
             Model.Uid = Guid.NewGuid();
             Model.Username = string.Empty;
             Model.FullName = string.Empty;

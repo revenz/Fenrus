@@ -9,17 +9,17 @@ public class BackgroundHelper
     /// <summary>
     /// Gets the names for the background
     /// </summary>
-    /// <param name="translater">The translater to use for translations</param>
+    /// <param name="translator">The translator to use for translations</param>
     /// <param name="hasCustomBackground">if the user has a custom background image available as an option</param>
     /// <returns>the background names</returns>
-    public static string[] GetBackgroundNames(Translater translater, bool hasCustomBackground)
+    public static string[] GetBackgroundNames(Translator translator, bool hasCustomBackground)
     {
         return new []
         {
-            hasCustomBackground ? translater.Instant("Labels.CurrentImage") : null,
-            translater.Instant("Labels.ChooseImage"),
-            translater.Instant("Labels.Default"),
-            translater.Instant("Labels.ColorBackground"),
+            hasCustomBackground ? translator.Instant("Labels.CurrentImage") : null,
+            translator.Instant("Labels.ChooseImage"),
+            translator.Instant("Labels.Default"),
+            translator.Instant("Labels.ColorBackground"),
             "Vanta Birds",
             "Vanta Cells",
             "Vanta Dots",

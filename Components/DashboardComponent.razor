@@ -17,9 +17,9 @@
                 <div class="title">
                     <span x-text="@group.Name">@group.Name</span>
                     <div class="group-controls">
-                        <span class="move-up fa-solid fa-angle-up" title="@Translater.Instant("Labels.MoveUp")" onclick="moveGroup('@group.Uid', true)"></span>
-                        <span class="move-down fa-solid fa-angle-down" title="@Translater.Instant("Labels.MoveDown")" onclick="moveGroup('@group.Uid', false)"></span>
-                        <span class="remove-group fa-solid fa-trash" title="@Translater.Instant("Labels.RemoveGroup")" onclick="removeGroup('@group.Uid', '@group.Name.Replace("'", "\\'")')"></span>
+                        <span class="move-up fa-solid fa-angle-up" title="@Translator.Instant("Labels.MoveUp")" onclick="moveGroup('@group.Uid', true)"></span>
+                        <span class="move-down fa-solid fa-angle-down" title="@Translator.Instant("Labels.MoveDown")" onclick="moveGroup('@group.Uid', false)"></span>
+                        <span class="remove-group fa-solid fa-trash" title="@Translator.Instant("Labels.RemoveGroup")" onclick="removeGroup('@group.Uid', '@group.Name.Replace("'", "\\'")')"></span>
                     </div>
                 </div>
             }
@@ -44,7 +44,7 @@
 else 
 {
     <div class="no-dashboard">
-        @Translater.Instant("NoGroupAddedToDashboard")
+        @Translator.Instant("NoGroupAddedToDashboard")
     </div>
 }
 </CascadingValue>

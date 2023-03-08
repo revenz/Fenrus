@@ -28,12 +28,12 @@ public partial class Users: CommonPage<User>
     /// </summary>
     protected override async Task PostGotUser()
     {
-        lblUsername = Translater.Instant("Pages.Users.Columns.Username");
-        lblFullName = Translater.Instant("Pages.Users.Columns.FullName");
-        lblTitle = Translater.Instant("Pages.Users.Title");
-        lblDescription = Translater.Instant("Pages.Users.Labels.PageDescription");
-        lblAllowRegistrations = Translater.Instant("Pages.Users.Fields.AllowRegistrations");
-        lblAdmin = Translater.Instant("Pages.Users.Columns.Admin");
+        lblUsername = Translator.Instant("Pages.Users.Columns.Username");
+        lblFullName = Translator.Instant("Pages.Users.Columns.FullName");
+        lblTitle = Translator.Instant("Pages.Users.Title");
+        lblDescription = Translator.Instant("Pages.Users.Labels.PageDescription");
+        lblAllowRegistrations = Translator.Instant("Pages.Users.Fields.AllowRegistrations");
+        lblAdmin = Translator.Instant("Pages.Users.Columns.Admin");
         Items = new UserService().GetAll();
     }
 
@@ -49,7 +49,7 @@ public partial class Users: CommonPage<User>
                 return;
             SystemSettings.AllowRegister = value;
             SystemSettings.Save();
-            ToastService.ShowSuccess(Translater.Instant("Labels.UpdatedSuccessfully"));
+            ToastService.ShowSuccess(Translator.Instant("Labels.UpdatedSuccessfully"));
         }
     }
     
@@ -83,7 +83,7 @@ public partial class Users: CommonPage<User>
     /// </summary>
     protected override async Task Add()
     {
-        var result = await Popup.OpenEditor<UserEditor, User?>(Translater, null);
+        var result = await Popup.OpenEditor<UserEditor, User?>(Translator, null);
         if (result.Success == false || result.Data == null)
             return;
         Items.Add(result.Data);
@@ -98,11 +98,11 @@ public partial class Users: CommonPage<User>
     {
         if (user.Uid == Settings.Uid)
         {
-            ToastService.ShowWarning(Translater.Instant("Pages.Users.Message.CannotEditSelf"));
+            ToastService.ShowWarning(Translator.Instant("Pages.Users.Message.CannotEditSelf"));
             return;
         }
 
-        var result = await Popup.OpenEditor<UserEditor, User>(Translater, user);
+        var result = await Popup.OpenEditor<UserEditor, User>(Translator, user);
         if (result.Success == false)
             return;
         user.Name = result.Data.Name;

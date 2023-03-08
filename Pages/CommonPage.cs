@@ -35,10 +35,10 @@ where T : IModal
     protected async Task Remove(T item)
     {
         string typeName = GetTypeName();
-        if (await Confirm.Show(Translater.Instant("Labels.Delete"), Translater.Instant("Labels.DeleteItem", new { typeName, name = item.Name})) == false)
+        if (await Confirm.Show(Translator.Instant("Labels.Delete"), Translator.Instant("Labels.DeleteItem", new { typeName, name = item.Name})) == false)
             return;
         if (DoDelete(item))
-            ToastService.ShowSuccess(Translater.Instant("Labels.DeletedItem", new { typeName, name = item.Name}));
+            ToastService.ShowSuccess(Translator.Instant("Labels.DeletedItem", new { typeName, name = item.Name}));
     }
 
     /// <summary>

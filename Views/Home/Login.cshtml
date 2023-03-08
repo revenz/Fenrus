@@ -54,43 +54,43 @@
         }
         <form method="post" id="login-fields">
             <div class="field">
-                <span class="label">@Model.Translater.Instant("Pages.Login.Fields.Username")</span>
+                <span class="label">@Model.Translator.Instant("Pages.Login.Fields.Username")</span>
                 <span class="value">
                     <input type="text" id="username" name="username" autofocus required autocomplete="username" />
                 </span>
             </div>
             <div class="field">
-                <span class="label">@Model.Translater.Instant("Pages.Login.Fields.Password")</span>
+                <span class="label">@Model.Translator.Instant("Pages.Login.Fields.Password")</span>
                 <span class="value">
                     <input type="password" name="password" id="password" required autocomplete="current-password"  />
                 </span>
             </div>
             <div class="field">
-                <a href="#" onclick="ForgotPassword(event);">@Model.Translater.Instant("Pages.Login.Fields.ForgotPassword")</a>
+                <a href="#" onclick="ForgotPassword(event);">@Model.Translator.Instant("Pages.Login.Fields.ForgotPassword")</a>
             </div>
             <div class="buttons">
-                <button class="btn" type="submit" name="action" value="Login">@Model.Translater.Instant("Pages.Login.Buttons.Login")</button>
+                <button class="btn" type="submit" name="action" value="Login">@Model.Translator.Instant("Pages.Login.Buttons.Login")</button>
                 @if(Model.AllowRegister) { 
-                    <button type="submit" name="action" value="Register" class="btn">@Model.Translater.Instant("Pages.Login.Buttons.Register")</button>
+                    <button type="submit" name="action" value="Register" class="btn">@Model.Translator.Instant("Pages.Login.Buttons.Register")</button>
                 }
                 @if(Model.AllowGuest) { 
-                    <button type="button" value="Guest" class="btn" onclick="document.location = 'guest';">@Model.Translater.Instant("Pages.Login.Buttons.Guest")</button>
+                    <button type="button" value="Guest" class="btn" onclick="document.location = 'guest';">@Model.Translator.Instant("Pages.Login.Buttons.Guest")</button>
                 }
             </div>
         </form>
         <form method="post" id="forgot-password-fields" class="hidden">
             <p class="description">
-                @Model.Translater.Instant("Pages.Login.Labels.ForgotPasswordDescription")
+                @Model.Translator.Instant("Pages.Login.Labels.ForgotPasswordDescription")
             </p>
             <div class="field" style="margin-bottom:4rem;">
                 <span class="value">
                     <input type="text" name="usernameOrEmail" id="usernameOrEmail" autofocus
-                           placeholder="@Model.Translater.Instant("Pages.Login.Fields.UsernameOrEmailAddress")" />
+                           placeholder="@Model.Translator.Instant("Pages.Login.Fields.UsernameOrEmailAddress")" />
                 </span>
             </div>
             <div class="buttons">
-                <button id="btnReset" class="btn" type="submit" name="action" value="Reset">@Model.Translater.Instant("Pages.Login.Buttons.Reset")</button>
-                <button class="btn" onclick="LoginForm()">@Model.Translater.Instant("Pages.Login.Buttons.Cancel")</button>
+                <button id="btnReset" class="btn" type="submit" name="action" value="Reset">@Model.Translator.Instant("Pages.Login.Buttons.Reset")</button>
+                <button class="btn" onclick="LoginForm()">@Model.Translator.Instant("Pages.Login.Buttons.Cancel")</button>
             </div>
         </form>
     </div>

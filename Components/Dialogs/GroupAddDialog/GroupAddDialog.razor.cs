@@ -12,9 +12,9 @@ public partial class GroupAddDialog: ComponentBase
     [Inject] public IJSRuntime jsRuntime { get; set; }
 
     /// <summary>
-    /// Gets or sets the translater used
+    /// Gets or sets the translator used
     /// </summary>
-    [Parameter] public Translater Translater { get; set; }
+    [Parameter] public Translator Translator { get; set; }
 
     TaskCompletionSource<List<ListOption>> ShowTask;
 
@@ -35,9 +35,9 @@ public partial class GroupAddDialog: ComponentBase
     {
         // App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
         Instance = this;
-        lblTitle = Translater.Instant("Labels.AddGroup");
-        lblAdd = Translater.Instant("Labels.Add");
-        lblCancel = Translater.Instant("Labels.Cancel");
+        lblTitle = Translator.Instant("Labels.AddGroup");
+        lblAdd = Translator.Instant("Labels.Add");
+        lblCancel = Translator.Instant("Labels.Cancel");
     }
     
     /// <summary>

@@ -8,7 +8,7 @@
     <link rel="icon" type="image/x-icon" href="/favicon?color=@Uri.EscapeDataString(AccentColor ?? string.Empty)&version=@Globals.Version">
 </HeadContent>
 
-<CascadingValue Value="Translater" IsFixed="true">
+<CascadingValue Value="Translator" IsFixed="true">
     <CascadingValue Value="this" IsFixed="true">
         <Router AppAssembly="@typeof(App).Assembly">
             <Found Context="routeData">
@@ -18,7 +18,7 @@
             <NotFound>
                 <PageTitle>Not found</PageTitle>
                 <div class="notfound">
-                    <p role="alert">@Translater.Instant("ErrorMessages.404RouteNotKnown")</p>
+                    <p role="alert">@Translator.Instant("ErrorMessages.404RouteNotKnown")</p>
                 </div>
             </NotFound>
         </Router>

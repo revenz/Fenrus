@@ -5,8 +5,8 @@ namespace Fenrus.Components.SideEditors;
 public class SideEditorBase : ComponentBase
 {
     /// <summary>
-    /// Gets or sets the translater to use
+    /// Gets or sets the translator to use
     /// </summary>
-    [Parameter] public Translater Translater { get; set; }
+    [Parameter] public Translator Translator { get; set; }
     
 }

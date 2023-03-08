@@ -21,17 +21,17 @@ public partial class SystemSettings:UserPage
         if (Model.SmtpPort < 1 || Model.SmtpPort > 65535)
             Model.SmtpPort = 25;
         
-        lblTitle = Translater.Instant("Pages.SystemSettings.Title");
-        lblDescription = Translater.Instant("Pages.SystemSettings.Labels.PageDescription");
-        lblSmtp = Translater.Instant("Pages.SystemSettings.Label.Smtp");
-        lblSmtpDescription = Translater.Instant("Pages.SystemSettings.Labels.SmtpDescription");
-        lblSmtpServer = Translater.Instant("Pages.SystemSettings.Fields.SmtpServer");
-        lblSmtpPort = Translater.Instant("Pages.SystemSettings.Fields.SmtpPort");
-        lblSmtpUser = Translater.Instant("Pages.SystemSettings.Fields.SmtpUser");
-        lblSmtpPassword = Translater.Instant("Pages.SystemSettings.Fields.SmtpPassword");
-        lblSmtpSender = Translater.Instant("Pages.SystemSettings.Fields.SmtpSender");
-        lblStmpSenderHelp = Translater.Instant("Pages.SystemSettings.Fields.SmtpSenderHelp");
-        lblTest = Translater.Instant("Labels.Test");
+        lblTitle = Translator.Instant("Pages.SystemSettings.Title");
+        lblDescription = Translator.Instant("Pages.SystemSettings.Labels.PageDescription");
+        lblSmtp = Translator.Instant("Pages.SystemSettings.Label.Smtp");
+        lblSmtpDescription = Translator.Instant("Pages.SystemSettings.Labels.SmtpDescription");
+        lblSmtpServer = Translator.Instant("Pages.SystemSettings.Fields.SmtpServer");
+        lblSmtpPort = Translator.Instant("Pages.SystemSettings.Fields.SmtpPort");
+        lblSmtpUser = Translator.Instant("Pages.SystemSettings.Fields.SmtpUser");
+        lblSmtpPassword = Translator.Instant("Pages.SystemSettings.Fields.SmtpPassword");
+        lblSmtpSender = Translator.Instant("Pages.SystemSettings.Fields.SmtpSender");
+        lblStmpSenderHelp = Translator.Instant("Pages.SystemSettings.Fields.SmtpSenderHelp");
+        lblTest = Translator.Instant("Labels.Test");
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public partial class SystemSettings:UserPage
     private void Save()
     {
         new SystemSettingsService().SaveFromEditor(this.Model);
-        ToastService.ShowSuccess(Translater.Instant("Labels.Saved"));
+        ToastService.ShowSuccess(Translator.Instant("Labels.Saved"));
     }
 
     /// <summary>
@@ -74,7 +74,7 @@ public partial class SystemSettings:UserPage
                 Subject = "Test email from Fenrus",
                 PlainTextBody = "This is a test email from Fenrus.  Sent to your Sender address."
             });
-            ToastService.ShowInfo(Translater.Instant($"Pages.{nameof(SystemSettings)}.Messages.TestEmailSent"));
+            ToastService.ShowInfo(Translator.Instant($"Pages.{nameof(SystemSettings)}.Messages.TestEmailSent"));
         }
         catch (Exception ex)
         {

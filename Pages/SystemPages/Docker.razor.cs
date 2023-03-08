@@ -27,8 +27,8 @@ public partial class Docker: CommonPage<Models.DockerServer>
     /// </summary>
     protected override async Task PostGotUser()
     {
-        lblTitle = Translater.Instant("Pages.Docker.Title");
-        lblDescription = Translater.Instant("Pages.Docker.Labels.PageDescription");
+        lblTitle = Translator.Instant("Pages.Docker.Title");
+        lblDescription = Translator.Instant("Pages.Docker.Labels.PageDescription");
         Items = new DockerService().GetAll();
     }
 
@@ -37,7 +37,7 @@ public partial class Docker: CommonPage<Models.DockerServer>
     /// </summary>
     protected async override Task Add()
     {
-        var result = await Popup.OpenEditor<DockerServerEditor, DockerServer>(Translater, null);
+        var result = await Popup.OpenEditor<DockerServerEditor, DockerServer>(Translator, null);
         if (result.Success == false)
             return;
         Items.Add(result.Data);
@@ -51,7 +51,7 @@ public partial class Docker: CommonPage<Models.DockerServer>
     /// <param name="item"></param>
     async Task Edit(DockerServer item)
     {
-        var result = await Popup.OpenEditor<DockerServerEditor, DockerServer>(Translater, item);
+        var result = await Popup.OpenEditor<DockerServerEditor, DockerServer>(Translator, item);
         if (result.Success == false)
             return;
         item.Address = result.Data.Address;

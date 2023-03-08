@@ -11,9 +11,9 @@ public class PageHelper
     public List<string> ScriptBlocks { get; private set; } = new();
     
     /// <summary>
-    /// Gets or sets the translater to use
+    /// Gets or sets the translator to use
     /// </summary>
-    public Translater Translater { get; init; }
+    public Translator Translator { get; init; }
     
     public void RegisterScriptBlock(string script)
     {
@@ -23,9 +23,9 @@ public class PageHelper
     /// <summary>
     /// Constructs a page helper
     /// </summary>
-    /// <param name="translater">the translater to use for translations</param>
-    public PageHelper(Translater translater)
+    /// <param name="translator">the translator to use for translations</param>
+    public PageHelper(Translator translator)
     {
-        this.Translater = translater;
+        this.Translator = translator;
     }
 }

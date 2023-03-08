@@ -5,7 +5,7 @@
     Layout = "_Layout";
     bool isGuest = false;
     UserSettings settings = Model.Settings;
-    var pageHelper = new PageHelper(Model.Translater);
+    var pageHelper = new PageHelper(Model.Translator);
 
     string dashboardClass = "dashboard ";
     if (Model?.Dashboard?.ShowGroupTitles == false)
@@ -20,29 +20,34 @@
 
     string translations = JsonSerializer.Serialize(new
     {
-        Ok = Model.Translater.Instant("Labels.Ok"),
-        Cancel = Model.Translater.Instant("Labels.Cancel"),
-        Edit = Model.Translater.Instant("Labels.Edit"),
-        Delete = Model.Translater.Instant("Labels.Delete"),
-        EditDashboard = Model.Translater.Instant("ContextMenu.EditDashboard"),
-        EditGroup = Model.Translater.Instant("ContextMenu.EditGroup"),
-        Terminal = Model.Translater.Instant("ContextMenu.Terminal"),
-        UpTime = Model.Translater.Instant("ContextMenu.UpTime"),
-        Log = Model.Translater.Instant("ContextMenu.Log"),
-        Resize  = Model.Translater.Instant("ContextMenu.Resize"),
-        RemoveGroupTitle = Model.Translater.Instant("Pages.Dashboard.Messages.RemoveGroupTitle"),
-        RemoveGroupMessage = Model.Translater.Instant("Pages.Dashboard.Messages.RemoveGroupMessage", new { name = "#NAME#"}),
-        Success = Model.Translater.Instant("Dialogs.UpTime.Labels.Success"),
-        UpTimeColumnDate = Model.Translater.Instant("Dialogs.UpTime.Columns.Date"),
-        UpTimeColumnUp = Model.Translater.Instant("Dialogs.UpTime.Columns.Up"),
-        UpTimeNoData = Model.Translater.Instant("Dialogs.UpTime.Labels.NoData"),
-        UpTimeColumnMessage = Model.Translater.Instant("Dialogs.UpTime.Columns.Message"),
-        Size_Small = Model.Translater.Instant("Enums.ItemSize.Small"),
-        Size_Medium = Model.Translater.Instant("Enums.ItemSize.Medium"),
-        Size_Large = Model.Translater.Instant("Enums.ItemSize.Large"),
-        Size_Larger = Model.Translater.Instant("Enums.ItemSize.Larger"),
-        Size_XLarge = Model.Translater.Instant("Enums.ItemSize.XLarge"),
-        Size_XXLarge = Model.Translater.Instant("Enums.ItemSize.XXLarge"),
+        Ok = Model.Translator.Instant("Labels.Ok"),
+        Cancel = Model.Translator.Instant("Labels.Cancel"),
+        Edit = Model.Translator.Instant("Labels.Edit"),
+        Delete = Model.Translator.Instant("Labels.Delete"),
+        EditDashboard = Model.Translator.Instant("ContextMenu.EditDashboard"),
+        EditGroup = Model.Translator.Instant("ContextMenu.EditGroup"),
+        Terminal = Model.Translator.Instant("ContextMenu.Terminal"),
+        UpTime = Model.Translator.Instant("ContextMenu.UpTime"),
+        Log = Model.Translator.Instant("ContextMenu.Log"),
+        Resize  = Model.Translator.Instant("ContextMenu.Resize"),
+        RemoveGroupTitle = Model.Translator.Instant("Pages.Dashboard.Messages.RemoveGroupTitle"),
+        RemoveGroupMessage = Model.Translator.Instant("Pages.Dashboard.Messages.RemoveGroupMessage", new { name = "#NAME#"}),
+        Success = Model.Translator.Instant("Dialogs.UpTime.Labels.Success"),
+        UpTimeColumnDate = Model.Translator.Instant("Dialogs.UpTime.Columns.Date"),
+        UpTimeColumnUp = Model.Translator.Instant("Dialogs.UpTime.Columns.Up"),
+        UpTimeNoData = Model.Translator.Instant("Dialogs.UpTime.Labels.NoData"),
+        UpTimeColumnMessage = Model.Translator.Instant("Dialogs.UpTime.Columns.Message"),
+        Size_Small = Model.Translator.Instant("Enums.ItemSize.Small"),
+        Size_Medium = Model.Translator.Instant("Enums.ItemSize.Medium"),
+        Size_Large = Model.Translator.Instant("Enums.ItemSize.Large"),
+        Size_Larger = Model.Translator.Instant("Enums.ItemSize.Larger"),
+        Size_XLarge = Model.Translator.Instant("Enums.ItemSize.Large"),
+        Size_XXLarge = Model.Translator.Instant("Enums.ItemSize.XXLarge"),
+        ChangePassword = Model.Translator.Instant("Dialogs.ChangePassword.Button"),
+        ChangePasswordCurrent = Model.Translator.Instant("Dialogs.ChangePassword.Current"),
+        ChangePasswordNew = Model.Translator.Instant("Dialogs.ChangePassword.New"),
+        ChangePasswordConfirm = Model.Translator.Instant("Dialogs.ChangePassword.Confirm"),
+        ChangePasswordMismatch = Model.Translator.Instant("Dialogs.ChangePassword.Mismatch")
     });
 }
 
@@ -53,7 +58,7 @@
     @(await Html.RenderComponentAsync<SearchComponent>(RenderMode.Static, new
     {
         Settings = settings,
-        Model.Translater,
+        Model.Translator,
         SystemSearchEngines = systemSearchEngines
     }))
 }
@@ -89,14 +94,14 @@
         Model.Groups,
         Settings = settings,
         PageHelper = pageHelper,
-        Model.Translater
+        Model.Translator
     }))
 
 </div>
 
 @(await Html.RenderComponentAsync<UpTimeComponent>(RenderMode.Static, new
 {
-    Model.Translater
+    Model.Translator
 }))
 
 <div id="launching-app">

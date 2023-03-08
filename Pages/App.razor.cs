@@ -36,9 +36,9 @@ public partial class App
     public string AccentColor { get; private set; }
 
     /// <summary>
-    /// Gets the Translater used for this app
+    /// Gets the Translator used for this app
     /// </summary>
-    public Translater Translater { get; private set; } = new Translater();
+    public Translator Translator { get; private set; } = new Translator();
     
     private string AccentRgb;
     /// <summary>
@@ -82,6 +82,6 @@ public partial class App
         
         string language = settings.Language?.EmptyAsNull() ??
                           new SystemSettingsService().Get()?.Language?.EmptyAsNull() ?? "en";
-        Translater = Translater.GetForLanguage(language);
+        Translator = Translator.GetForLanguage(language);
     }
 }

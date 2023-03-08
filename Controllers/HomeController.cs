@@ -12,7 +12,7 @@ namespace Fenrus.Controllers;
 [Route("/")]
 public class HomeController : BaseController
 {
-    private Translater Translater;
+    private Translator Translator;
 
     /// <summary>
     /// In memory password reset tokens
@@ -28,7 +28,7 @@ public class HomeController : BaseController
         var language = new SystemSettingsService().Get()?.Language;
         if (string.IsNullOrWhiteSpace(language))
             language = "en";
-        Translater = Translater.GetForLanguage(language);
+        Translator = Translator.GetForLanguage(language);
     }
 
     /// <summary>
@@ -43,7 +43,7 @@ public class HomeController : BaseController
             return Redirect("/login");
 
         if (string.IsNullOrWhiteSpace(settings.Language) == false)
-            Translater = Helpers.Translater.GetForLanguage(settings.Language); 
+            Translator = Helpers.Translator.GetForLanguage(settings.Language); 
 
         var dashboard = settings.Dashboards.FirstOrDefault() ?? new();
         return ShowDashboard(dashboard, settings);
@@ -84,9 +84,9 @@ public class HomeController : BaseController
             Settings = settings,
             Theme = theme,
             Groups = groups,
-            Translater = Translater
+            Translator = Translator
         };
-        ViewBag.Translater = Translater;
+        ViewBag.Translator = Translator;
         ViewBag.IsGuest = false;
         ViewBag.Dashboard = dashboard;
         ViewBag.UserSettings = settings;
@@ -126,11 +126,11 @@ public class HomeController : BaseController
             return Redirect("/sso");
         
         if (msg == MSG_PasswordResetTokenInvalid)
-            return LoginPage(Translater.Instant("Pages.Login.Labels.PasswordResetTokenInvalid"));
+            return LoginPage(Translator.Instant("Pages.Login.Labels.PasswordResetTokenInvalid"));
         if (msg == MSG_PasswordReset)
-            return LoginPage(Translater.Instant("Pages.Login.Labels.PasswordReset"));
+            return LoginPage(Translator.Instant("Pages.Login.Labels.PasswordReset"));
         if (msg == MSG_PasswordResetFailed)
-            return LoginPage(Translater.Instant("Pages.Login.Labels.PasswordResetFailed"));
+            return LoginPage(Translator.Instant("Pages.Login.Labels.PasswordResetFailed"));
         return LoginPage(null);
     }
 
@@ -155,13 +155,13 @@ public class HomeController : BaseController
     {
         var settings = GetSystemSettings();
         var guestDashboard = new DashboardService().GetGuestDashboard();
-        ViewBag.Translater = Translater;
+        ViewBag.Translator = Translator;
         LoginPageModel model = new LoginPageModel()
         {
             Error = error,
             AllowGuest = settings.AllowGuest,
             AllowRegister = settings.AllowRegister,
-            Translater = Translater,
+            Translator = Translator,
             BackgroundColor = guestDashboard?.BackgroundColor?.EmptyAsNull() ?? Globals.DefaultBackgroundColor,
             AccentColor = guestDashboard?.AccentColor?.EmptyAsNull() ?? Globals.DefaultAccentColor
         };
@@ -196,7 +196,7 @@ public class HomeController : BaseController
     {
         var user = new Services.UserService().Validate(username, password);
         if (user == null)
-            return LoginPage(Translater.Instant("Pages.Login.ErrorMessages.LoginFailed"));
+            return LoginPage(Translator.Instant("Pages.Login.ErrorMessages.LoginFailed"));
         
         await CreateClaim(user.Uid, user.Name, user.IsAdmin);
         return Redirect("/");
@@ -206,7 +206,7 @@ public class HomeController : BaseController
     {
         var settings = GetSystemSettings();
         if (settings.AllowRegister == false)
-            return LoginPage(Translater.Instant("Pages.Login.ErrorMessages.RegistrationNotAllowed"));
+            return LoginPage(Translator.Instant("Pages.Login.ErrorMessages.RegistrationNotAllowed"));
         var user = new Services.UserService().Register(username, password);
         await CreateClaim(user.Uid, user.Name, user.IsAdmin);
         return Redirect("/");
@@ -242,7 +242,7 @@ public class HomeController : BaseController
             Console.WriteLine("Password Reset Url: " + resetUrl);
         }
         
-        return LoginPage(Translater.Instant("Pages.Login.Labels.PasswordResetSent"));
+        return LoginPage(Translator.Instant("Pages.Login.Labels.PasswordResetSent"));
     }
 
     /// <summary>
@@ -395,9 +395,9 @@ public class LoginPageModel
     public bool AllowGuest { get; set; }
     
     /// <summary>
-    /// Gets the translater to use for the page
+    /// Gets the translator to use for the page
     /// </summary>
-    public Translater Translater { get; init; }
+    public Translator Translator { get; init; }
 
     /// <summary>
     /// Gets or sets the background color

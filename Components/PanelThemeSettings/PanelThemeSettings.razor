@@ -42,18 +42,16 @@
         {
             showSettings = true;
         }
-        @if (false)
-        {
-            <div class="setting">
-                <span class="label">Accent</span>
-                <span class="value color-picker">
-                    <input type="text" click.stop="toggleAccentColorPicker" id="accent-color-picker"
-                           x-model="model.AccentColor" data-jscolor="accentSettings"/>
-                </span>
-            </div>
-        }
     }
-    <div class="setting logout @(showSettings ? "has-settings" : "no-settings")">
-        <a href="/@(IsGuest ? "login" : "logout")" class="btn">@(IsGuest ? "Login" : "Logout")</a>
+    <div class="setting profile-buttons @(showSettings ? "has-settings" : "no-settings")">
+        @if (CanChangePassword)
+        {
+            <a href="#" onclick="changePassword(event)" class="btn">
+                @Translator.Instant("Dialogs.ChangePassword.Button")
+            </a>
+        }
+        <a href="/@(IsGuest ? "login" : "logout")" class="btn">
+            @Translator.Instant("Labels." + (IsGuest ? "Login" : "Logout"))
+        </a>
     </div>
 </div>

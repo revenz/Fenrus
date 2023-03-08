@@ -55,13 +55,13 @@ public partial class SearchEngine: UserPage
 
     protected override Task PostGotUser()
     {
-        lblTitle = Translater.Instant("Pages.SearchEngine.Title" + (IsSystem ? "-System": string.Empty));
-        lblNameHelp = Translater.Instant("Pages.SearchEngine.Fields.Name-Help");
-        lblUrl = Translater.Instant("Pages.SearchEngine.Fields.Url");
-        lblUrlHelp = Translater.Instant("Pages.SearchEngine.Fields.Url-Help");
-        lblShortcut = Translater.Instant("Pages.SearchEngine.Fields.Shortcut");
-        lblShortcutHelp = Translater.Instant("Pages.SearchEngine.Fields.Shortcut-Help");
-        lblIcon = Translater.Instant("Pages.SearchEngine.Fields.Icon");
+        lblTitle = Translator.Instant("Pages.SearchEngine.Title" + (IsSystem ? "-System": string.Empty));
+        lblNameHelp = Translator.Instant("Pages.SearchEngine.Fields.Name-Help");
+        lblUrl = Translator.Instant("Pages.SearchEngine.Fields.Url");
+        lblUrlHelp = Translator.Instant("Pages.SearchEngine.Fields.Url-Help");
+        lblShortcut = Translator.Instant("Pages.SearchEngine.Fields.Shortcut");
+        lblShortcutHelp = Translator.Instant("Pages.SearchEngine.Fields.Shortcut-Help");
+        lblIcon = Translator.Instant("Pages.SearchEngine.Fields.Icon");
         
         if (Uid == Guid.Empty)
         {

@@ -26,7 +26,7 @@ public class DashboardPageModel
     public List<Group> Groups { get; set; }
     
     /// <summary>
-    /// Gets or sets the translater to use
+    /// Gets or sets the translator to use
     /// </summary>
-    public Translater Translater { get; init; }
+    public Translator Translator { get; init; }
 }

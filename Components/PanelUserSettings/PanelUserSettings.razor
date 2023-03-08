@@ -4,7 +4,7 @@
     @if(Dashboards?.Any() == true) 
     {
         <div class="setting">
-            <span class="label">@Translater.Instant("Labels.Dashboard")</span>
+            <span class="label">@Translator.Instant("Labels.Dashboard")</span>
             <span class="value">
                 <JavaScriptSelect Value="@Dashboard.Uid.ToString()" 
                                   Options="@Dashboards.Select(x => x.Uid.ToString()).ToArray()"
@@ -15,7 +15,7 @@
     }
     
     <div class="setting">
-        <span class="label">@Translater.Instant("Labels.Language")</span>
+        <span class="label">@Translator.Instant("Labels.Language")</span>
         <span class="value">
             <JavaScriptSelect Value="@Settings.Language" 
                               Options="@Languages.Select(x => (string)x.Value).ToArray()"
@@ -25,7 +25,7 @@
     </div>
     
     <div class="setting">
-        <span class="label">@Translater.Instant("Labels.Theme")</span>
+        <span class="label">@Translator.Instant("Labels.Theme")</span>
         <span class="value">
             <JavaScriptSelect Value="@Dashboard.Theme" 
                               Options="@Themes.ToArray()"
@@ -33,35 +33,35 @@
         </span>
     </div>
     <div class="setting">
-        <span class="label">@Translater.Instant("Labels.AccentColor")</span>
+        <span class="label">@Translator.Instant("Labels.AccentColor")</span>
         <span class="value">
             <JavaScriptColorPicker Value="@Dashboard.AccentColor" Code="ChangeAccentColor(event, color)" PageHelper=@PageHelper />
         </span>
     </div>
     <div class="setting">
-        <span class="label">@Translater.Instant("Labels.Background")</span>
+        <span class="label">@Translator.Instant("Labels.Background")</span>
         <span class="value">
             <JavaScriptSelect Id="DashboardBackgroundSelect" Value="@Dashboard.Background" 
                               Options="@BackgroundHelper.GetBackgroundValues(string.IsNullOrEmpty(Dashboard.BackgroundImage) == false)"
-                              Labels="@BackgroundHelper.GetBackgroundNames(Translater, string.IsNullOrEmpty(Dashboard.BackgroundImage) == false)"
+                              Labels="@BackgroundHelper.GetBackgroundNames(Translator, string.IsNullOrEmpty(Dashboard.BackgroundImage) == false)"
                               Code="ChangeBackground(event)" />
         </span>
     </div>
     <div class="setting">
-        <span class="label">@Translater.Instant("Labels.BackgroundColor")</span>
+        <span class="label">@Translator.Instant("Labels.BackgroundColor")</span>
         <span class="value">
             <JavaScriptColorPicker Value="@Dashboard.BackgroundColor" Code="ChangeBackgroundColor(event, color)" PageHelper=@PageHelper />
         </span>
     </div>
     
     <div class="setting">
-        <span class="label">@Translater.Instant("Labels.LinkTarget")</span>
+        <span class="label">@Translator.Instant("Labels.LinkTarget")</span>
         <span class="value">
             <JavaScriptSelect Value="@Dashboard.LinkTarget" 
                               Options="@(new [] { "_self", "_this", "fenrus-popup"})"
-                              Labels="@(new [] { Translater.Instant("Enums.LinkTarget.OpenInThisTab"), 
-                                          Translater.Instant("Enums.LinkTarget.OpenInNewTab"),
-                                          Translater.Instant("Enums.LinkTarget.OpenInSameTab")
+                              Labels="@(new [] { Translator.Instant("Enums.LinkTarget.OpenInThisTab"), 
+                                          Translator.Instant("Enums.LinkTarget.OpenInNewTab"),
+                                          Translator.Instant("Enums.LinkTarget.OpenInSameTab")
                                       })"
                               Code="UpdateDashboardSetting('LinkTarget', event)" />
         </span>
@@ -69,20 +69,20 @@
     @if (Settings.SearchEngines?.Any() == true || SystemSearchEngines?.Any() == true)
     {
         <div class="setting">
-            <span class="label">@Translater.Instant("Labels.ShowSearch")</span>
+            <span class="label">@Translator.Instant("Labels.ShowSearch")</span>
             <span class="value">
                 <JavaScriptSwitch Value="Dashboard.ShowSearch" Code="UpdateDashboardSetting('ShowSearch', event)"/>
             </span>
         </div>
     }
     <div class="setting">
-        <span class="label">@Translater.Instant("Labels.GroupTitles")</span>
+        <span class="label">@Translator.Instant("Labels.GroupTitles")</span>
         <span class="value">
             <JavaScriptSwitch Value="Dashboard.ShowGroupTitles" Code="UpdateDashboardSetting('ShowGroupTitles', event)" />
         </span>
     </div>
     <div class="setting">
-        <span class="label">@Translater.Instant("Labels.StatusIndicators")</span>
+        <span class="label">@Translator.Instant("Labels.StatusIndicators")</span>
         <span class="value">
             <JavaScriptSwitch Value="Dashboard.ShowStatusIndicators" Code="UpdateDashboardSetting('ShowStatusIndicators', event)" />
         </span>

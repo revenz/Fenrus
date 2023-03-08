@@ -20,8 +20,8 @@ public partial class PageGroups : CommonPage<Models.Group>
 
     protected override async Task PostGotUser()
     {
-        lblTitle = Translater.Instant("Pages.Groups.Title" + (IsSystem ? "-System" : string.Empty));
-        lblDescription = Translater.Instant("Pages.Groups.Labels.PageDescription" + (IsSystem ? "-System" : string.Empty));
+        lblTitle = Translator.Instant("Pages.Groups.Title" + (IsSystem ? "-System" : string.Empty));
+        lblDescription = Translator.Instant("Pages.Groups.Labels.PageDescription" + (IsSystem ? "-System" : string.Empty));
         if (IsSystem)
             Items = DbHelper.GetAll<Models.Group>();
         else

@@ -18,9 +18,9 @@ public abstract class UserPage : ComponentBase
         lblMoveDown, lblCopy, lblName, lblAdd, lblEnabled, lblActions, lblDefault;
 
     /// <summary>
-    /// Gets the translater to use for this page
+    /// Gets the translator to use for this page
     /// </summary>
-    protected Translater Translater => App.Translater;
+    protected Translator Translator => App.Translator;
     
     /// <summary>
     /// Gets or sets the Authentication state provider
@@ -90,19 +90,19 @@ public abstract class UserPage : ComponentBase
             return;
         }
 
-        lblCancel = Translater.Instant("Labels.Cancel");
-        lblSave = Translater.Instant("Labels.Save");
-        lblHelp = Translater.Instant("Labels.Help");
-        lblDelete = Translater.Instant("Labels.Delete");
-        lblEdit = Translater.Instant("Labels.Edit");
-        lblMoveDown = Translater.Instant("Labels.MoveDown");
-        lblMoveUp = Translater.Instant("Labels.MoveUp");
-        lblCopy = Translater.Instant("Labels.Copy");
-        lblName = Translater.Instant("Labels.Name");
-        lblAdd = Translater.Instant("Labels.Add");
-        lblEnabled = Translater.Instant("Labels.Enabled");
-        lblActions = Translater.Instant("Labels.Actions");
-        lblDefault  = Translater.Instant("Labels.Default");
+        lblCancel = Translator.Instant("Labels.Cancel");
+        lblSave = Translator.Instant("Labels.Save");
+        lblHelp = Translator.Instant("Labels.Help");
+        lblDelete = Translator.Instant("Labels.Delete");
+        lblEdit = Translator.Instant("Labels.Edit");
+        lblMoveDown = Translator.Instant("Labels.MoveDown");
+        lblMoveUp = Translator.Instant("Labels.MoveUp");
+        lblCopy = Translator.Instant("Labels.Copy");
+        lblName = Translator.Instant("Labels.Name");
+        lblAdd = Translator.Instant("Labels.Add");
+        lblEnabled = Translator.Instant("Labels.Enabled");
+        lblActions = Translator.Instant("Labels.Actions");
+        lblDefault  = Translator.Instant("Labels.Default");
         
         SystemSettings = new Services.SystemSettingsService().Get();
 

@@ -65,23 +65,23 @@ public partial class PageDashboard : CommonPage<Models.Group>
 
     protected override Task PostGotUser()
     {
-        lblTitle = Translater.Instant(IsGuest
+        lblTitle = Translator.Instant(IsGuest
             ? "Pages.Dashboard.Title-Guest"
             : "Pages.Dashboard.Title");
-        lblNameHelp = Translater.Instant("Pages.Dashboard.Fields.Name-Help");
-        lblShowSearch = Translater.Instant("Pages.Dashboard.Fields.ShowSearch");
-        lblShowGroupTitles = Translater.Instant("Pages.Dashboard.Fields.ShowGroupTitles");
-        lblTheme = Translater.Instant("Pages.Dashboard.Fields.Theme");
-        lblAccentColor = Translater.Instant("Pages.Dashboard.Fields.AccentColor");
-        lblBackgroundColor = Translater.Instant("Pages.Dashboard.Fields.BackgroundColor");
-        lblLinkTarget = Translater.Instant("Pages.Dashboard.Fields.LinkTarget");
-        lblOpenInThisTab = Translater.Instant("Enums.LinkTarget.OpenInThisTab");
-        lblOpenInNewTab = Translater.Instant("Enums.LinkTarget.OpenInNewTab");
-        lblOpenInSameTab = Translater.Instant("Enums.LinkTarget.OpenInSameTab");
-        lblLanguage = Translater.Instant("Labels.Language");
+        lblNameHelp = Translator.Instant("Pages.Dashboard.Fields.Name-Help");
+        lblShowSearch = Translator.Instant("Pages.Dashboard.Fields.ShowSearch");
+        lblShowGroupTitles = Translator.Instant("Pages.Dashboard.Fields.ShowGroupTitles");
+        lblTheme = Translator.Instant("Pages.Dashboard.Fields.Theme");
+        lblAccentColor = Translator.Instant("Pages.Dashboard.Fields.AccentColor");
+        lblBackgroundColor = Translator.Instant("Pages.Dashboard.Fields.BackgroundColor");
+        lblLinkTarget = Translator.Instant("Pages.Dashboard.Fields.LinkTarget");
+        lblOpenInThisTab = Translator.Instant("Enums.LinkTarget.OpenInThisTab");
+        lblOpenInNewTab = Translator.Instant("Enums.LinkTarget.OpenInNewTab");
+        lblOpenInSameTab = Translator.Instant("Enums.LinkTarget.OpenInSameTab");
+        lblLanguage = Translator.Instant("Labels.Language");
 
         Language = new SystemSettingsService().Get().Language?.EmptyAsNull() ?? "en";
-        Languages = Translater.GetLanguages().Select(x => new ListOption(){ Value = x.Value, Label = x.Key}).ToList();
+        Languages = Translator.GetLanguages().Select(x => new ListOption(){ Value = x.Value, Label = x.Key}).ToList();
 
         Themes = new ThemeService().GetThemes().Select(x => new ListOption()
         {
@@ -166,7 +166,7 @@ public partial class PageDashboard : CommonPage<Models.Group>
             existing.BackgroundColor = Model.BackgroundColor;
             existing.GroupUids = Groups?.Select(x => x.Uid)?.ToList() ?? new ();
             service.Update(existing);
-            ToastService.ShowSuccess(Translater.Instant("Labels.Saved"));
+            ToastService.ShowSuccess(Translator.Instant("Labels.Saved"));
             return;
         }
         
@@ -196,7 +196,7 @@ public partial class PageDashboard : CommonPage<Models.Group>
         var available = GetAllAvailableGroups(notInUse: true);
         if (available.Any() == false)
         {
-            ToastService.ShowWarning(Translater.Instant("Pages.Dashboard.Messages.NoAvailableGroups"));
+            ToastService.ShowWarning(Translator.Instant("Pages.Dashboard.Messages.NoAvailableGroups"));
             return;
         }
         var adding = await GroupAddDialog.Show(available.Select(x => new ListOption

@@ -13,22 +13,22 @@ public partial class About: UserPage
 
     protected override Task PostGotUser()
     {
-        lblTitle = Translater.Instant("Pages.About.Title");
-        lblImporting = Translater.Instant("Pages.About.Labels.Importing");
-        lblImportConfig = Translater.Instant("Pages.About.Buttons.ImportConfig");
-        lblAuthor = Translater.Instant("Labels.Author");
-        lblVersion = Translater.Instant("Labels.Version");
-        lblWebsite = Translater.Instant("Labels.Website");
-        lblThirdParty = Translater.Instant("Pages.About.Labels.ThirdParty");
+        lblTitle = Translator.Instant("Pages.About.Title");
+        lblImporting = Translator.Instant("Pages.About.Labels.Importing");
+        lblImportConfig = Translator.Instant("Pages.About.Buttons.ImportConfig");
+        lblAuthor = Translator.Instant("Labels.Author");
+        lblVersion = Translator.Instant("Labels.Version");
+        lblWebsite = Translator.Instant("Labels.Website");
+        lblThirdParty = Translator.Instant("Pages.About.Labels.ThirdParty");
         return Task.CompletedTask;
     }
 
     async Task ImportConfig()
     {
         var result = await FileInputDialog.Show(
-            Translater.Instant("Dialogs.ImportConfig.Title"),
-            Translater.Instant("Dialogs.ImportConfig.Description"),
-            Translater.Instant("Labels.Import"),
+            Translator.Instant("Dialogs.ImportConfig.Title"),
+            Translator.Instant("Dialogs.ImportConfig.Description"),
+            Translator.Instant("Labels.Import"),
             ".json"
         );
         if (string.IsNullOrWhiteSpace(result))
@@ -43,7 +43,7 @@ public partial class About: UserPage
         this.StateHasChanged();
 
         await MessageBox.Show(
-            title: Translater.Instant("Dialogs.ImportConfig.Result"),
+            title: Translator.Instant("Dialogs.ImportConfig.Result"),
             message: log
         );
     }

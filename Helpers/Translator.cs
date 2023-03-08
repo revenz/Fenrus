@@ -6,35 +6,35 @@ using Jeffijoe.MessageFormat;
 namespace Fenrus.Helpers;
 
 /// <summary>
-/// Translater is responsible for language translations
+/// Translator is responsible for language translations
 /// </summary>
-public class Translater
+public class Translator
 {
     private MessageFormatter Formatter;
     private Dictionary<string, string> Language { get; set; } = new Dictionary<string, string>();
     private static Regex rgxNeedsTranslating = new Regex(@"^([\w\d_\-]+\.)+[\w\d_\-]+$");
 
-    private static Dictionary<string, Translater> Translaters = new();
+    private static Dictionary<string, Translator> Translators = new();
     /// <summary>
-    /// Gets a translater for a given language
+    /// Gets a translator for a given language
     /// </summary>
     /// <param name="language">the language</param>
-    /// <returns>an instance of the translater</returns>
-    public static Translater GetForLanguage(string language)
+    /// <returns>an instance of the translator</returns>
+    public static Translator GetForLanguage(string language)
     {
         language ??= "en";
-        if (Translaters.ContainsKey(language))
-            return Translaters[language];
-        var translater = new Translater(language);
-        Translaters.TryAdd(language, translater);
-        return translater;
+        if (Translators.ContainsKey(language))
+            return Translators[language];
+        var translator = new Translator(language);
+        Translators.TryAdd(language, translator);
+        return translator;
     }
 
     /// <summary>
-    /// Constructs a new translater
+    /// Constructs a new translator
     /// </summary>
-    /// <param name="language">the translater</param>
-    public Translater(string language)
+    /// <param name="language">the translator</param>
+    public Translator(string language)
     {
         string[] jsonFiles;
         if (language != "en" && Regex.IsMatch(language, "^[a-z]+$") && File.Exists("i18n/" + language + ".json"))
@@ -46,9 +46,9 @@ public class Translater
     }
 
     /// <summary>
-    /// Basic translater used to avoid null exceptions
+    /// Basic translator used to avoid null exceptions
     /// </summary>
-    public Translater()
+    public Translator()
     {
         Formatter = new MessageFormatter();
     }

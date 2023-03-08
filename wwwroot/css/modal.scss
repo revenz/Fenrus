@@ -80,3 +80,24 @@
 .fenrus-modal-body {
   margin: 1rem 0;
 }
+
+.fenrus-modal.change-password
+{
+  .field {
+    display:flex;
+    flex-direction: column;
+    .label {
+      margin-bottom:0.25rem;
+    }
+    + .field {
+      margin-top:1rem;
+    }
+    input[type=password] {
+      width:calc(100% - 0.5rem);
+      padding: 0.5rem;
+      background: var(--input-background);
+      border: solid 1px var(--input-border);
+      color: var(--input-color);
+    }
+  }
+}

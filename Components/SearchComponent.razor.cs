@@ -14,9 +14,9 @@ public partial class SearchComponent
     [Parameter] public UserSettings Settings { get; set; }
     
     /// <summary>
-    /// Gets or sets the translater to use
+    /// Gets or sets the translator to use
     /// </summary>
-    [Parameter] public Translater Translater { get; set; }
+    [Parameter] public Translator Translator { get; set; }
 
     private List<SearchEngine> _SystemSearchEngines = new();
 

@@ -17,8 +17,8 @@ public partial class Dashboards: CommonPage<Models.Dashboard>
     /// </summary>
     protected override async Task PostGotUser()
     {
-        lblTitle = Translater.Instant("Pages.Dashboards.Title");
-        lblDescription = Translater.Instant("Pages.Dashboards.Labels.PageDescription");
+        lblTitle = Translator.Instant("Pages.Dashboards.Title");
+        lblDescription = Translator.Instant("Pages.Dashboards.Labels.PageDescription");
         if (IsSystem)
             Items = DbHelper.GetAll<Models.Dashboard>();
         else

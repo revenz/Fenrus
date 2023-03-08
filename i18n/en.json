@@ -79,6 +79,16 @@
     "DockerServerNotFound": "Docker app server not found: {uid}"
   },
   "Dialogs": {
+    "ChangePassword": {
+      "Button": "Change Password",
+      "Current": "Current Password",
+      "New": "New Password",
+      "Confirm": "Confirm New Password",
+      "Mismatch": "New and Confirm password do not match",
+      "MinimumPasswordError": "Password must be at least 4 characters long",
+      "PasswordChanged": "Password Changed",
+      "PasswordChangeFailed": "Failed to change password, check current password."
+    },
     "ImportConfig": {
       "Title": "Import Config",
       "Description": "This allows you to import a configuration from an older Fenrus install into the new .NET version.",

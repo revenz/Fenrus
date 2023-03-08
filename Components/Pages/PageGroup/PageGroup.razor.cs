@@ -56,11 +56,11 @@ public partial class PageGroup: CommonPage<Models.Group>
     /// </summary>
     protected override async Task PostGotUser()
     {
-        lblPageTitle = Translater.Instant("Pages.Group.Title");
-        lblAddItem = Translater.Instant("Pages.Group.Buttons.AddItem");
-        lblShowGroupTitle = Translater.Instant("Pages.Group.Fields.ShowGroupTitle");
-        lblShowGroupTitleHelp = Translater.Instant("Pages.Group.Fields.ShowGroupTitle-Help");
-        lblNameHelp = Translater.Instant("Pages.Group.Fields.Name-Help");
+        lblPageTitle = Translator.Instant("Pages.Group.Title");
+        lblAddItem = Translator.Instant("Pages.Group.Buttons.AddItem");
+        lblShowGroupTitle = Translator.Instant("Pages.Group.Fields.ShowGroupTitle");
+        lblShowGroupTitleHelp = Translator.Instant("Pages.Group.Fields.ShowGroupTitle-Help");
+        lblNameHelp = Translator.Instant("Pages.Group.Fields.Name-Help");
         if (Uid == Guid.Empty)
         {
             // new item
@@ -174,7 +174,7 @@ public partial class PageGroup: CommonPage<Models.Group>
     /// </summary>
     async Task AddItem()
     {
-        await foreach(var result in Popup.GroupItemEditorNew(Translater))
+        await foreach(var result in Popup.GroupItemEditorNew(Translator))
         {
             if (result.Success)
             {
@@ -224,7 +224,7 @@ public partial class PageGroup: CommonPage<Models.Group>
     async Task Edit(GroupItem item)
     {
         var index = Model.Items.IndexOf(item);
-        var result = await Popup.GroupItemEditor(Translater, item);
+        var result = await Popup.GroupItemEditor(Translator, item);
         if (result.Success == false)
             return;
         Model.Items[index] = result.Data;

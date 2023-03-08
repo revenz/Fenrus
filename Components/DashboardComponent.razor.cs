@@ -29,7 +29,7 @@ public partial class DashboardComponent
     [Parameter] public List<Group> Groups { get; set; }
 
     /// <summary>
-    /// Gets or sets the Translater to use
+    /// Gets or sets the Translator to use
     /// </summary>
-    [Parameter] public Translater Translater { get; set; }
+    [Parameter] public Translator Translator { get; set; }
 }

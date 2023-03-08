@@ -16,9 +16,9 @@ public partial class FenrusPopup
     /// Opens a group item editor for new items
     /// This differs from the other editor as this will yield multiple items back if kept open
     /// </summary>
-    /// <param name="translater">The translater to use</param>
+    /// <param name="translator">The translator to use</param>
     /// <returns>a async list of items being added, each item is returned as it is added</returns>
-    public async IAsyncEnumerable<PopupResult<GroupItem>> GroupItemEditorNew(Translater translater)
+    public async IAsyncEnumerable<PopupResult<GroupItem>> GroupItemEditorNew(Translator translator)
     {
         bool done = false;
         TaskCompletionSource<PopupResult<GroupItem>> task = new ();
@@ -28,7 +28,7 @@ public partial class FenrusPopup
             Type = typeof(GroupItemEditor),
             Parameters = new()
             {
-                { nameof(SideEditors.GroupItemEditor.Translater), translater },
+                { nameof(SideEditors.GroupItemEditor.Translator), translator },
                 { nameof(SideEditors.GroupItemEditor.Item), null },
                 {
                     // this event fires, but keeps the editor opened, so we're not done yet
@@ -80,10 +80,10 @@ public partial class FenrusPopup
     /// <summary>
     /// Opens a group item editor
     /// </summary> 
-    /// <param name="translater">The translater to use</param>
+    /// <param name="translator">The translator to use</param>
     /// <param name="item">the group item to edit/param>
     /// <returns>the result of the editor</returns>
-    public Task<PopupResult<GroupItem>> GroupItemEditor(Translater translater, GroupItem item)
+    public Task<PopupResult<GroupItem>> GroupItemEditor(Translator translator, GroupItem item)
     {
         TaskCompletionSource<PopupResult<GroupItem>> task = new ();
         FenrusPopupItem popup = null;
@@ -92,7 +92,7 @@ public partial class FenrusPopup
             Type = typeof(GroupItemEditor),
             Parameters = new()
             {
-                { nameof(SideEditors.GroupItemEditor.Translater), translater },
+                { nameof(SideEditors.GroupItemEditor.Translator), translator },
                 { nameof(SideEditors.GroupItemEditor.Item), item },
                 {
                     nameof(SideEditors.GroupItemEditor.OnSaved),
@@ -124,19 +124,19 @@ public partial class FenrusPopup
     /// Opens a generic editor
     /// </summary>
     /// <param name="item">the item to edit</param>
-    /// <param name="translater">The translater to use</param>
+    /// <param name="translator">The translator to use</param>
     /// <typeparam name="T">the type of editor to open</typeparam>
     /// <typeparam name="U">the type of model being edited</typeparam>
     /// <param name="additionalParameters">[Optional] additional parameters to pass to the popup</param>
     /// <returns>the open result</returns>
-    public Task<PopupResult<U>> OpenEditor<T, U>(Translater translater, U item, Dictionary<string, object> additionalParameters = null)
+    public Task<PopupResult<U>> OpenEditor<T, U>(Translator translator, U item, Dictionary<string, object> additionalParameters = null)
     {
         TaskCompletionSource<PopupResult<U>> task = new ();
         FenrusPopupItem popup = null;
         
         var parameters = additionalParameters ?? new ();
         parameters.Add("Item", item);
-        parameters.Add(nameof(SideEditorBase.Translater), translater);
+        parameters.Add(nameof(SideEditorBase.Translator), translator);
         parameters.Add("OnSaved",
             EventCallback.Factory.Create<U>(this, model =>
             {

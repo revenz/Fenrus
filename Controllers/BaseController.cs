@@ -24,15 +24,15 @@ public class BaseController : Controller
     }
 
     /// <summary>
-    /// Gets a translater
+    /// Gets a translator
     /// </summary>
     /// <param name="settings">the user settings</param>
-    /// <returns>the translater</returns>
-    protected Translater GetTranslater(UserSettings settings)
+    /// <returns>the translator</returns>
+    protected Translator GetTranslator(UserSettings settings)
     {
         string language = settings.Language?.EmptyAsNull() ??
                           new SystemSettingsService().Get()?.Language?.EmptyAsNull() ?? "en";
-        return Translater.GetForLanguage(language);
+        return Translator.GetForLanguage(language);
     }
 
     /// <summary>

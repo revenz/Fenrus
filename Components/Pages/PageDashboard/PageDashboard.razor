@@ -17,7 +17,7 @@
     }
     else
     {
-        <div class="page-description">@Translater.Instant("Pages.Dashboard.Messages.GuestPageDescription")</div>
+        <div class="page-description">@Translator.Instant("Pages.Dashboard.Messages.GuestPageDescription")</div>
         <div class="top-fields">
             <InputSwitch Label="@lblEnabled" @bind-Value="@Model.Enabled" />
             <InputSwitch Label="@lblShowSearch" @bind-Value="@Model.ShowSearch" />
@@ -63,4 +63,4 @@
     </Body>
 </FenrusPage>
 
-<Fenrus.Components.Dialogs.GroupAddDialog @ref="GroupAddDialog" Translater="Translater" />
+<Fenrus.Components.Dialogs.GroupAddDialog @ref="GroupAddDialog" Translator="Translator" />

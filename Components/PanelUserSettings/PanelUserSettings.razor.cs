@@ -45,11 +45,14 @@ public partial class PanelUserSettings : ComponentBase
     /// </summary>
     [Parameter] public PageHelper PageHelper { get; set; }
 
-    private Translater Translater => PageHelper.Translater;
+    /// <summary>
+    /// Gets the translator
+    /// </summary>
+    private Translator Translator => PageHelper.Translator;
 
     private List<ListOption> Languages;
     protected override void OnInitialized()
     {
-        Languages = Translater.GetLanguages().Select(x => new ListOption(){ Value = x.Value, Label = x.Key}).ToList();
+        Languages = Translator.GetLanguages().Select(x => new ListOption(){ Value = x.Value, Label = x.Key}).ToList();
     }
 }

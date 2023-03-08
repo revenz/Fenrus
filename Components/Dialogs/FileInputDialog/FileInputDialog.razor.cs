@@ -17,9 +17,9 @@ public partial class FileInputDialog
     private IBrowserFile? browserFile;
     
     /// <summary>
-    /// Gets or sets the translater used
+    /// Gets or sets the translator used
     /// </summary>
-    [Parameter] public Translater Translater { get; set; }
+    [Parameter] public Translator Translator { get; set; }
 
     private string lblTitle, lblOk, lblCancel, lblDescription, lblBrowse;
 
@@ -27,8 +27,8 @@ public partial class FileInputDialog
     {
         // App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
         Instance = this;
-        lblCancel = Translater.Instant("Labels.Cancel");
-        lblBrowse = Translater.Instant("Labels.Browse");
+        lblCancel = Translator.Instant("Labels.Cancel");
+        lblBrowse = Translator.Instant("Labels.Browse");
     }
     /// <summary>
     /// Shows a modal window

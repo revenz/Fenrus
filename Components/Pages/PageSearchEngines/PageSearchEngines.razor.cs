@@ -24,8 +24,8 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
     /// </summary>
     protected override Task PostGotUser()
     {
-        lblTitle = Translater.Instant("Pages.SearchEngines.Title" + (IsSystem ? "-System" : string.Empty));
-        lblDescription = Translater.Instant("Pages.SearchEngines.Labels.PageDescription" + (IsSystem ? "-System" : string.Empty));
+        lblTitle = Translator.Instant("Pages.SearchEngines.Title" + (IsSystem ? "-System" : string.Empty));
+        lblDescription = Translator.Instant("Pages.SearchEngines.Labels.PageDescription" + (IsSystem ? "-System" : string.Empty));
         if (IsSystem)
             Items = DbHelper.GetAll<Models.SearchEngine>().OrderBy(x => x.Name).ToList();
         else
@@ -60,7 +60,7 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
     /// <param name="engine">the search engine being editted</param>
     private async Task Edit(SearchEngine engine)
     {
-        var result = await Popup.OpenEditor<SearchEngineEditor, SearchEngine>(Translater, engine, new ()
+        var result = await Popup.OpenEditor<SearchEngineEditor, SearchEngine>(Translator, engine, new ()
         {
             { nameof(SearchEngineEditor.IsSystem), IsSystem },
             { nameof(SearchEngineEditor.Settings), Settings }
@@ -80,7 +80,7 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
     /// </summary>
     protected override async Task Add()
     {
-        var result = await Popup.OpenEditor<SearchEngineEditor, SearchEngine>(Translater, null, new ()
+        var result = await Popup.OpenEditor<SearchEngineEditor, SearchEngine>(Translator, null, new ()
         {
             { nameof(SearchEngineEditor.IsSystem), IsSystem },
             { nameof(SearchEngineEditor.Settings), Settings }

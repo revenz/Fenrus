@@ -65,7 +65,7 @@ public partial class SearchEngineEditor: SideEditorBase
         
         if (Item != null)
         {
-            Title = Translater.Instant("Pages.SearchEngines.Labels.EditSearchEngine");
+            Title = Translator.Instant("Pages.SearchEngines.Labels.EditSearchEngine");
             Model.Name = Item.Name;
             Model.Uid = Item.Uid;
             Model.Shortcut = Item.Shortcut;
@@ -86,7 +86,7 @@ public partial class SearchEngineEditor: SideEditorBase
         }
         else
         {
-            Title = Translater.Instant("Pages.SearchEngines.Labels.NewSearchEngine");
+            Title = Translator.Instant("Pages.SearchEngines.Labels.NewSearchEngine");
             Model.Name = string.Empty;
             Model.Uid = Guid.NewGuid();
             Model.Url = string.Empty;

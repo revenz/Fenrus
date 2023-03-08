@@ -9,9 +9,9 @@ public partial class MessageBox: ComponentBase, IDisposable
 {
     
     /// <summary>
-    /// Gets or sets the translater to use
+    /// Gets or sets the translator to use
     /// </summary>
-    [CascadingParameter] public Translater Translater { get; set; }
+    [CascadingParameter] public Translator Translator { get; set; }
     
     private string lblOk, lblTitle;
     private string Message, Title;
@@ -23,8 +23,8 @@ public partial class MessageBox: ComponentBase, IDisposable
 
     protected override void OnInitialized()
     {
-        this.lblOk = Translater.Instant("Labels.Ok");
-        this.lblTitle = Translater.Instant("Labels.Message");
+        this.lblOk = Translator.Instant("Labels.Ok");
+        this.lblTitle = Translator.Instant("Labels.Message");
         Instance = this;
     }
 

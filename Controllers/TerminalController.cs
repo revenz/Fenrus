@@ -48,8 +48,8 @@ public class TerminalController : BaseController
                 var docker = settings.Docker.FirstOrDefault(x => x.Uid == app.DockerUid);
                 if (docker == null)
                 {
-                    var translater = GetTranslater(settings);
-                    throw new Exception(translater.Instant("ErrorMessages.DockerServerNotFound",
+                    var translator = GetTranslator(settings);
+                    throw new Exception(translator.Instant("ErrorMessages.DockerServerNotFound",
                         new { uid = app }));
                 }
 
