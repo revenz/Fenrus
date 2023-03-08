@@ -44,12 +44,6 @@
         }
     }
     <div class="setting profile-buttons @(showSettings ? "has-settings" : "no-settings")">
-        @if (CanChangePassword)
-        {
-            <a href="#" onclick="changePassword(event)" class="btn">
-                @Translator.Instant("Dialogs.ChangePassword.Button")
-            </a>
-        }
         <a href="/@(IsGuest ? "login" : "logout")" class="btn">
             @Translator.Instant("Labels." + (IsGuest ? "Login" : "Logout"))
         </a>

@@ -27,19 +27,6 @@ public partial class PanelThemeSettings : ComponentBase
     public bool IsGuest { get; set; }
 
     /// <summary>
-    /// Gets if the users password can be changed
-    /// </summary>
-    public bool CanChangePassword
-    {
-        get
-        {
-            if (IsGuest)
-                return false;
-            return true;
-        }
-    }
-
-    /// <summary>
     /// Gets or sets the page helper
     /// </summary>
     [Parameter]

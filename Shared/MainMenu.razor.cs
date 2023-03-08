@@ -23,19 +23,25 @@ public partial class MainMenu
 
     private string lblAbout, lblVersion;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         lblAbout = App.Translator.Instant("Pages.About.Title");
         lblVersion = App.Translator.Instant("Labels.VersionNumber", new { version = Globals.Version });
         
         Router.LocationChanged += (obj, e) => this.StateHasChanged();
+
+        var home = new MenuItem() { Name = App.Translator.Instant("Labels.Home"), Link = "/", Icon = "fa-solid fa-house" };
+        var profile = new MenuItem()
+        {
+            Name = App.Translator.Instant("Pages.Profile.Title"), Link = "/settings/profile",
+            Icon = "fa-solid fa-id-badge"
+        };
         Menu.Add(new MenuGroup()
         {
-            Name = App.Translator.Instant("Labels.General"), 
-            Items = new List<MenuItem>()
-            {
-                new () { Name = "Home", Link = "/", Icon = "fa-solid fa-house"}
-            }
+            Name = App.Translator.Instant("Labels.General"),
+            Items = SystemSettingsService.UsingOAuth
+                ? new List<MenuItem>() { home }
+                : new List<MenuItem>() { home, profile }
         });
         Menu.Add(new MenuGroup()
         {

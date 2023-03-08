@@ -14,9 +14,9 @@
         @if (Input?.HideLabel != true)
         {
             <div class="input-label">
-                @if (string.IsNullOrEmpty(Input?.Label) == false)
+                @if (string.IsNullOrEmpty(Input?.TranslatedLabel) == false)
                 {
-                    <label>@Input.Label</label>
+                    <label>@Input.TranslatedLabel</label>
                 }
             </div>
         }

@@ -166,4 +166,23 @@ public class UserService
             .FirstOrDefault();
         return user;
     }
+
+    /// <summary>
+    /// Gets a user by their username
+    /// </summary>
+    /// <param name="username">the username</param>
+    /// <returns>the user if one exists</returns>
+    public User? GetByUsername(string username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+            return null;
+        username = username.ToLowerInvariant().Trim();
+        using var db = DbHelper.GetDb();
+        
+        var collection = db.GetCollection<User>(nameof(User));
+        var user = collection.Query().Where(x => x.Username.ToLower() == username)
+            .FirstOrDefault();
+        return user;
+        
+    }
 }

@@ -54,6 +54,11 @@ public abstract class UserPage : ComponentBase
     protected UserSettings Settings { get; private set; }
     
     /// <summary>
+    /// Gets the Users UID
+    /// </summary>
+    protected Guid UserUid { get; private set; }
+    
+    /// <summary>
     /// Gets the system settings
     /// </summary>
     protected Models.SystemSettings SystemSettings { get; private set; }
@@ -82,6 +87,7 @@ public abstract class UserPage : ComponentBase
             return;
         }
 
+        this.UserUid = uid.Value;
         Settings = new UserSettingsService().Load(uid.Value);
         if (Settings.Uid != uid.Value)
         {

@@ -13,6 +13,8 @@ public interface IInput
     bool HideLabel { get; set; }
     bool Disabled { get; set; }
     bool Visible { get; set; }
+    
+    string TranslatedLabel { get; }
 
     void Dispose();
 
@@ -32,13 +34,36 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
     public string Suffix { get; set; }
     public string Prefix { get; set; }
     
+    /// <summary>
+    /// Gets or sets the page this control is on, used for translations
+    /// </summary>
+    [Parameter] public string Page { get; set; }
+    
     [Parameter] public EventCallback OnSubmit { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
 
     [Parameter]
     public bool HideLabel { get; set; }
 
-    [Parameter] public string Label { get; set; }
+    private string _Label;
+    private string _OriginalLabel;
+    
+    [Parameter]
+    public string Label
+    {
+        get => _Label;
+        set
+        {
+            _Label = value;
+            _OriginalLabel = value;
+        }
+    }
+
+    private string _TranslatedLabel;
+    /// <summary>
+    /// Gets the translated label
+    /// </summary>
+    public string TranslatedLabel => _TranslatedLabel?.EmptyAsNull() ?? this.Label;
 
     [Parameter]
     public bool ReadOnly { get; set; }
@@ -48,6 +73,12 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
     [Parameter]
     public bool Disabled { get; set; }
     public bool Visible { get; set; }
+
+    /// <summary>
+    /// Gets the translator to use for this page
+    /// </summary>
+    [CascadingParameter]
+    protected Translator Translator { get; set; }
 
     [Parameter]
     public string Help 
@@ -124,8 +155,23 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
         base.OnInitialized();
         if(this.Editor != null)
             this.Editor.RegisterControl(this);
+
+        if (string.IsNullOrEmpty(this.Page) == false)
+            UseTranslationLabel($"Pages.{Page}.Fields");
+        
         this.Visible = true;
 
+    }
+
+    private void UseTranslationLabel(string prefix)
+    {
+        string field = this._OriginalLabel;
+        if(string.IsNullOrEmpty(_Help))
+            _Help = Translator.Instant($"{prefix}.{field}-Help");
+        if(string.IsNullOrEmpty(_Placeholder))
+            _Placeholder = Translator.Instant($"{prefix}.{field}-Placeholder");
+        _TranslatedLabel = Translator.Instant($"Pages.{Page}.Fields.{Label}");
+        _Placeholder = _Placeholder.EmptyAsNull() ?? _Label;
     }
 
     public virtual bool Focus() => false;

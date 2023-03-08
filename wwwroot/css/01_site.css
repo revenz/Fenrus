@@ -24,7 +24,7 @@ body {
   --input-background-rgb: 49, 49, 49;
   --input-background: rgb(var(--input-background-rgb));
   --input-color: white;
-  --error-rgb: 255,0,0;
+  --error-rgb: 255,100,100;
   --error: rgb(var(--error-rgb));
   --base: rgb(17, 18, 20);
   --base-rgb: 7, 18, 20;

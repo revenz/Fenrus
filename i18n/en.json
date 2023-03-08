@@ -49,7 +49,8 @@
     "Message": "Message",
     "DeleteItem": "Delete {typeName} ''{name}''?",
     "DeletedItem": "Deleted {typeName} ''{name}''",
-    "Test": "Test"
+    "Test": "Test",
+    "Home": "Home"
   },
   "ContextMenu": {
     "EditDashboard": "Edit Dashboard",
@@ -79,16 +80,6 @@
     "DockerServerNotFound": "Docker app server not found: {uid}"
   },
   "Dialogs": {
-    "ChangePassword": {
-      "Button": "Change Password",
-      "Current": "Current Password",
-      "New": "New Password",
-      "Confirm": "Confirm New Password",
-      "Mismatch": "New and Confirm password do not match",
-      "MinimumPasswordError": "Password must be at least 4 characters long",
-      "PasswordChanged": "Password Changed",
-      "PasswordChangeFailed": "Failed to change password, check current password."
-    },
     "ImportConfig": {
       "Title": "Import Config",
       "Description": "This allows you to import a configuration from an older Fenrus install into the new .NET version.",
@@ -168,16 +159,6 @@
         "PageDescription-System": "This page lets you configure groups that will be available to all users and will be available to use on the Guest dashboard.\n\nIf you disable a group here that group will become unavailable to all users using it."
       }
     },
-    "SearchEngines": {
-      "Title": "Search Engines",
-      "Title-System": "System Search Engines",
-      "Labels": {
-        "AddSearchEngine": "Add Search Engine",
-        "EditSearchEngine": "Edit Search Engine",
-        "PageDescription": "This page lets you configure search engines that can be used on the home screen.\n\nIf you do not configure any and have no system search engines configured, the search box will not appear on the home screen.\n\nTo switch to an non-default search engine on the home screen type in the search engine Shortcut followed by a space.",
-        "PageDescription-System": "This page lets you configure system wide search engines that will be available to all users and guests on the system."
-      }
-    },
     "Login": {
       "Title": "Login",
       "ErrorMessages": {
@@ -206,6 +187,40 @@
         "Password": "Password",
         "ForgotPassword": "Forgot Password?",
         "UsernameOrEmailAddress": "Username or Email Address"
+      }
+    },
+    "Profile": {
+      "Title": "Profile",
+      "Labels": {
+        "PageDescription": "This page allows you to change your user profile settings.",
+        "General": "General",
+        "ChangePassword": "Change Password",
+      },
+      "Messages": {
+        "InvalidEmail": "Invalid email address",
+        "PasswordValidationError": "Password must be at least 4 characters long",
+        "PasswordMismatch": "New and Confirm password do not match",
+        "PasswordChanged": "Password Changed",
+        "PasswordIncorrect": "Current password is incorrect",
+        "OtherUserExists": "Another user with this username already exists"
+      },
+      "Fields": {        
+        "Username": "Username",
+        "Email": "Email",
+        "Email-Help": "This email address will be used for password resets",
+        "PasswordCurrent": "Current Password",
+        "PasswordNew": "New Password",
+        "PasswordConfirm": "Confirm New Password"
+      }
+    },
+    "SearchEngines": {
+      "Title": "Search Engines",
+      "Title-System": "System Search Engines",
+      "Labels": {
+        "AddSearchEngine": "Add Search Engine",
+        "EditSearchEngine": "Edit Search Engine",
+        "PageDescription": "This page lets you configure search engines that can be used on the home screen.\n\nIf you do not configure any and have no system search engines configured, the search box will not appear on the home screen.\n\nTo switch to an non-default search engine on the home screen type in the search engine Shortcut followed by a space.",
+        "PageDescription-System": "This page lets you configure system wide search engines that will be available to all users and guests on the system."
       }
     },
     "SearchEngine": {
