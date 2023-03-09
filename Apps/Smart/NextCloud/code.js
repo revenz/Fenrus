@@ -1,6 +1,8 @@
 ﻿class NextCloud
 {
     doFetch (args) {
+        args.log('NextCloud Username: ' + args.properties['username']);
+        args.log('NextCloud Password: ' + args.properties['password']);
         return args.fetch({
             url: `ocs/v1.php/cloud/users/${args.properties['username']}?format=json`, timeout: 10, headers: {
                 'Authorization': 'Basic ' + args.Utils.btoa(args.properties['username'] + ':' + args.properties['password']),

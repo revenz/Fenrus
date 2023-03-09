@@ -14,6 +14,7 @@ if (args?.Any() == true && args[0] == "--init-config")
     return;
 }
 
+
 Console.WriteLine("Starting Fenrus...");
 Logger.Initialize();
 AppService.Initialize();
@@ -44,6 +45,8 @@ builder.Services.AddTransient<Fenrus.Middleware.InitialConfigMiddleware>();
 var dataDir = DirectoryHelper.GetDataDirectory();
 if (Directory.Exists(dataDir) == false)
     Directory.CreateDirectory(dataDir);
+
+EncryptionHelper.Init(dataDir);
 
 bool oAuth = SystemSettingsService.InitConfigDone && SystemSettingsService.UsingOAuth;
 

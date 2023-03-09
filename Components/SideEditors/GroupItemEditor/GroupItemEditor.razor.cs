@@ -161,7 +161,8 @@ public partial class GroupItemEditor : SideEditorBase
             Model.DockerContainer = app.DockerContainer;
             Model.DockerUid = app.DockerUid;
             Model.DockerCommand = app.DockerCommand;
-            Model.SshPassword = app.SshPassword;
+            Model.SshPasswordOriginal = app.SshPassword;
+            Model.SshPassword = string.IsNullOrEmpty(app.SshPassword) ? string.Empty : Globals.DUMMY_PASSWORD;
             Model.SshServer = app.SshServer;
             Model.SshUserName = app.SshUserName;
             Model.Icon = app.Icon;
@@ -224,7 +225,9 @@ public partial class GroupItemEditor : SideEditorBase
                     app.DockerContainer = Model.DockerContainer;
                     app.DockerUid = Model.DockerUid;
                     app.DockerCommand = Model.DockerCommand;
-                    app.SshPassword = Model.SshPassword;
+                    app.SshPassword = Model.SshPassword == Globals.DUMMY_PASSWORD
+                        ? Model.SshPasswordOriginal
+                        : EncryptionHelper.Encrypt(Model.SshPassword);
                     app.SshServer = Model.SshServer;
                     app.SshUserName = Model.SshUserName;
                     app.Icon = Model.Icon;
@@ -339,6 +342,10 @@ class GroupItemEditorModel : GroupItem
     /// </summary>
     public string SshPassword { get; set; }
     /// <summary>
+    /// Gets or sets the original SSH password
+    /// </summary>
+    public string SshPasswordOriginal { get; set; }
+    /// <summary>
     /// Gets or sets the Docker UID for this item
     /// </summary>
     public Guid? DockerUid { get; set; }
@@ -383,6 +390,13 @@ class GroupItemEditorModel : GroupItem
             return prop?.DefaultValue;
         }
 
+        if (prop.Type == AppPropertyType.Password)
+        {
+            if(string.IsNullOrEmpty(Properties[prop.Id]?.ToString()))
+                return string.Empty;
+            return Globals.DUMMY_PASSWORD;
+        }
+
         return Properties[prop.Id];
     }
 
@@ -393,6 +407,13 @@ class GroupItemEditorModel : GroupItem
     /// <param name="value">the value being set</param>
     public void SetValue(FenrusAppProperty prop, object value)
     {
+        if (prop.Type == AppPropertyType.Password)
+        {
+            if (value?.ToString() == Globals.DUMMY_PASSWORD)
+                return; // dont update
+            value = EncryptionHelper.Encrypt(value?.ToString() ?? string.Empty);
+        }
+        
         if (Properties.ContainsKey(prop.Id))
             Properties[prop.Id] = value;
         else

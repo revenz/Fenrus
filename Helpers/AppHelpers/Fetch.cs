@@ -28,7 +28,10 @@ public class Fetch
             var appUrl = args.AppUrl;
             var parameters = args.Parameters;
 
-            using HttpClient client = new HttpClient();
+            var handler = new HttpClientHandler();
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+            using HttpClient client = new HttpClient(handler);
             var request = new HttpRequestMessage();
             request.Method = HttpMethod.Get;
             string url;

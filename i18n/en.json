@@ -80,6 +80,13 @@
     "DockerServerNotFound": "Docker app server not found: {uid}"
   },
   "Dialogs": {
+    "CopyItem": {
+      "Title": "Copy Item",
+      "Description": "Select a group to copy this item to",
+      "ThisGroup": "This Group",
+      "System": "System",
+      "User": "User"
+    },
     "ImportConfig": {
       "Title": "Import Config",
       "Description": "This allows you to import a configuration from an older Fenrus install into the new .NET version.",
@@ -145,6 +152,9 @@
       "Buttons": {
         "AddItem": "Add Item"
       },
+      "Messages": {
+        "ItemCopied": "Item ''{itemName}'' copied to group ''{groupName}''"
+      },
       "Fields": {
         "Name-Help": "The Name of the group",
         "ShowGroupTitle": "Show Group Title",
@@ -194,7 +204,7 @@
       "Labels": {
         "PageDescription": "This page allows you to change your user profile settings.",
         "General": "General",
-        "ChangePassword": "Change Password",
+        "ChangePassword": "Change Password"
       },
       "Messages": {
         "InvalidEmail": "Invalid email address",

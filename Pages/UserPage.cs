@@ -49,6 +49,11 @@ public abstract class UserPage : ComponentBase
     [Inject] protected IToastService ToastService { get; set; }
     
     /// <summary>
+    /// Gets the user 
+    /// </summary>
+    protected User User { get; private set; }
+    
+    /// <summary>
     /// Gets the user settings
     /// </summary>
     protected UserSettings Settings { get; private set; }
@@ -62,6 +67,11 @@ public abstract class UserPage : ComponentBase
     /// Gets the system settings
     /// </summary>
     protected Models.SystemSettings SystemSettings { get; private set; }
+
+    /// <summary>
+    /// Gets if the current user is an admin
+    /// </summary>
+    protected bool IsAdmin => User.IsAdmin;
 
     /// <summary>
     /// Signs out and redirect to the login
@@ -88,6 +98,13 @@ public abstract class UserPage : ComponentBase
         }
 
         this.UserUid = uid.Value;
+        this.User = new UserService().GetByUid(uid.Value);
+        if (this.User == null)
+        {
+            SignOut();
+            return;
+        }
+        
         Settings = new UserSettingsService().Load(uid.Value);
         if (Settings.Uid != uid.Value)
         {

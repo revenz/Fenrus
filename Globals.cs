@@ -11,6 +11,16 @@ public class Globals
     public const string Version = "1.0.0.0";
     
     /// <summary>
+    /// Gets or sets the encryption key used for data
+    /// </summary>
+    public static string EncryptionKey { get; set; }
+
+    /// <summary>
+    /// A dummy password to use in forms to show a password is set, but does not expose the actual password 
+    /// </summary>
+    public const string DUMMY_PASSWORD = "************";
+    
+    /// <summary>
     /// Gets the UID for the guest dashboard, this is a fixed UID that never changes
     /// </summary>
     public static readonly Guid GuestDashbardUid = new Guid("a8b0858a-aa8d-432a-9e32-e85adf1dfb67");

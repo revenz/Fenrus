@@ -11,6 +11,8 @@ public partial class SystemSettings:UserPage
         lblSmtpSender, lblStmpSenderHelp, lblTest;
 
     private Models.SystemSettings Model;
+    private string SmtpPassword;
+    
 
     /// <summary>
     /// Called after the user has been fetched
@@ -20,6 +22,7 @@ public partial class SystemSettings:UserPage
         Model = new SystemSettingsService().Get();
         if (Model.SmtpPort < 1 || Model.SmtpPort > 65535)
             Model.SmtpPort = 25;
+        SmtpPassword = string.IsNullOrEmpty(Model.SmtpPasswordEncrypted) ? string.Empty : Globals.DUMMY_PASSWORD; 
         
         lblTitle = Translator.Instant("Pages.SystemSettings.Title");
         lblDescription = Translator.Instant("Pages.SystemSettings.Labels.PageDescription");
@@ -39,6 +42,9 @@ public partial class SystemSettings:UserPage
     /// </summary>
     private void Save()
     {
+        if (SmtpPassword != Globals.DUMMY_PASSWORD)
+            Model.SmtpPasswordEncrypted = EncryptionHelper.Encrypt(SmtpPassword);
+        
         new SystemSettingsService().SaveFromEditor(this.Model);
         ToastService.ShowSuccess(Translator.Instant("Labels.Saved"));
     }
@@ -63,12 +69,16 @@ public partial class SystemSettings:UserPage
     {
         try
         {
+            string password = SmtpPassword == Globals.DUMMY_PASSWORD
+                ? EncryptionHelper.Decrypt(Model.SmtpPasswordEncrypted)
+                : SmtpPassword;
+            
             Emailer.Send(new EmailOptions()
             {
                 Server = Model.SmtpServer,
                 Port = Model.SmtpPort,
                 Username = Model.SmtpUser,
-                Password = Model.SmtpPassword,
+                Password = password,
                 Sender = Model.SmtpSender,
                 Recipient = Model.SmtpSender,
                 Subject = "Test email from Fenrus",

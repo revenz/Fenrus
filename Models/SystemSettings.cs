@@ -78,9 +78,9 @@ public class SystemSettings
     /// </summary>
     public string SmtpUser { get; set; }
     /// <summary>
-    /// Gets or sets the SMTP password settings for password resets
+    /// Gets or sets the encrypted SMTP password settings for password resets
     /// </summary>
-    public string SmtpPassword { get; set; }
+    public string SmtpPasswordEncrypted { get; set; }
     /// <summary>
     /// Gets or sets the email address emails are sent from
     /// </summary>

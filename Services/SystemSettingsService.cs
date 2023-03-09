@@ -140,7 +140,7 @@ public class SystemSettingsService
         existing.SmtpServer = model.SmtpServer;
         existing.SmtpPort = model.SmtpPort;
         existing.SmtpUser = model.SmtpUser;
-        existing.SmtpPassword = model.SmtpPassword;
+        existing.SmtpPasswordEncrypted = model.SmtpPasswordEncrypted;
         existing.SmtpSender = model.SmtpSender;
         DbHelper.Update(existing);
     }

@@ -57,7 +57,8 @@ public class TerminalController : BaseController
             }
             else if (string.IsNullOrEmpty(app.SshServer) == false)
             {
-                terminal = new SshTerminal(ws, rows, cols, app.SshServer, 0, app.SshUserName, app.SshPassword);
+                terminal = new SshTerminal(ws, rows, cols, app.SshServer, 0, app.SshUserName, 
+                    EncryptionHelper.Decrypt(app.SshPassword));
             }
         }
         

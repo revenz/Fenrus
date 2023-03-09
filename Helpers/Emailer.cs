@@ -27,7 +27,7 @@ public class Emailer
             Server = settings.SmtpServer,
             Port = settings.SmtpPort,
             Username = settings.SmtpUser,
-            Password = settings.SmtpPassword,
+            Password = EncryptionHelper.Decrypt(settings.SmtpPasswordEncrypted),
             Sender = settings.SmtpSender,
             Recipient = recipient,
             Subject = subject,

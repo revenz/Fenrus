@@ -12,6 +12,7 @@ namespace Fenrus.Components;
 /// </summary>
 public partial class PageGroup: CommonPage<Models.Group>
 {
+    private CopyItemDialog CopyDialog { get; set; }
 
     /// <summary>
     /// Gets or sets if this is a new group or not
@@ -111,11 +112,6 @@ public partial class PageGroup: CommonPage<Models.Group>
     /// </summary>
     void Save()
     {
-        if (IsSystem)
-        {
-            
-        }
-        else{}
         if (isNew)
         {
             Model.Uid = Guid.NewGuid();
@@ -154,7 +150,8 @@ public partial class PageGroup: CommonPage<Models.Group>
         }
         else
         {
-            Settings.Groups.Add(Model);
+            if(isNew)
+                Settings.Groups.Add(Model);
             Settings.Save();
             this.Router.NavigateTo("/settings/groups");
         }
@@ -248,11 +245,89 @@ public partial class PageGroup: CommonPage<Models.Group>
 
     async Task Move(GroupItem item, bool up)
     {
+        var source = Model.Items.IndexOf(item);
+        var dest = up ? source - 1 : source + 1;
+        if (dest < 0 || dest >= Model.Items.Count)
+            return;
+        Model.Items[source] = Model.Items[dest];
+        Model.Items[dest] = item;
         await UpdatePreview();
     }
 
     async Task Copy(GroupItem item)
     {
-        await UpdatePreview();
+        var result = await CopyDialog.Show();
+        if (result == null)
+            return; // was canceled
+
+        var cloned = CloneItem(item);
+        if (cloned == null)
+            return;
+
+        Guid dest = result.Value;
+
+        if (dest == this.Uid || dest == Guid.Empty)
+        {
+            // copy to this group
+            this.Model.Items.Add(cloned);
+            await UpdatePreview();
+        }
+        else
+        {
+            // copy to another group
+            if (IsAdmin)
+            {
+                var service = new GroupService();
+                var sysGroup = service.GetByUid(dest);
+                if (sysGroup != null)
+                {
+                    sysGroup.Items.Add(cloned);
+                    service.Update(sysGroup);
+                    ToastService.ShowSuccess(Translator.Instant("Pages.Group.Messages.ItemCopied", new
+                    {
+                        groupName = sysGroup.Name,
+                        itemName = cloned.Name
+                    }));
+                    return;
+                }
+            }
+
+            var grp = Settings.Groups.FirstOrDefault(x => x.Uid == dest);
+            if (grp == null)
+            {
+                // shouldn't happen
+                ToastService.ShowError("Failed to locate group");
+                return;
+            }
+
+            grp.Items.Add(cloned);
+            Settings.Save();
+            ToastService.ShowSuccess(Translator.Instant("Pages.Group.Messages.ItemCopied", new
+            {
+                groupName = grp.Name,
+                itemName = cloned.Name
+            }));
+        }
+    }
+
+
+    private GroupItem CloneItem(GroupItem item)
+    {
+        if (item is AppItem app)
+        {
+            var json = JsonSerializer.Serialize(app);
+            var newApp = JsonSerializer.Deserialize<AppItem>(json);
+            newApp.Uid = Guid.NewGuid();
+            return newApp;
+        }
+        if (item is LinkItem link)
+        {
+            var json = JsonSerializer.Serialize(link);
+            var newLink = JsonSerializer.Deserialize<LinkItem>(json);
+            newLink.Uid = Guid.NewGuid();
+            return newLink;
+        }
+        ToastService.ShowError("Item type not implemented yet");
+        return null;
     }
 }
