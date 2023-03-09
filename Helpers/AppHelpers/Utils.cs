@@ -57,7 +57,10 @@ public class Utils
 
     public string formatBytes(object bytes)
     {
-        if (long.TryParse(bytes?.ToString() ?? string.Empty, out long b))
+        long b;
+        if (bytes is double d)
+            b = (long)d;
+        else if (long.TryParse(bytes?.ToString() ?? string.Empty, out b) == false)
             return "0 B";
         var order = 0;
         var sizes = new[] { "B", "KB", "MB", "GB", "TB" };

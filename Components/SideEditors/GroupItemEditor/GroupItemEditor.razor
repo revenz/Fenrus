@@ -7,17 +7,17 @@
         @if (IsNew)
         {
             <div class="keep-open">
-                <span class="label">Keep Open</span>
+                <span class="label">@lblKeepOpen</span>
                 <FenrusSwitch @bind-Value="KeepOpen" />
             </div>
         }
-        <button class="btn" @onclick="() => Save()">@(IsNew ? "Add" : "Save")</button>
-        <button class="btn" @onclick="() => Cancel()">Cancel</button>
+        <button class="btn" @onclick="() => Save()">@(IsNew ? lblAdd : lblSave)</button>
+        <button class="btn" @onclick="() => Cancel()">@lblCancel</button>
     </Buttons>
     <Body>
     <FenrusTabs>
-        <FenrusTab Title="General">
-            <InputSelect TItem="string" Label="Type" @bind-Value="@Model.ItemType">
+        <FenrusTab Title="@lblGeneral">
+            <InputSelect Page="GroupItem"  TItem="string" Label="Type" @bind-Value="@Model.ItemType">
                 <InputSelectOption TItem="string" StringValue="DashboardApp" Label="App" />
                 <InputSelectOption TItem="string" StringValue="DashboardLink" Label="Link" />
                 <InputSelectOption TItem="string" StringValue="Dashboard" Label="Dashboard" />
@@ -25,28 +25,28 @@
             </InputSelect>
             @if (Model.Type == "DashboardApp")
             {
-                <InputSelect @ref="AppSelector" TItem="string" Label="App" @bind-Value="@SelectedAppName" Placeholder="Select An App" AllowClear="true" Required="true">
+                <InputSelect Page="GroupItem" @ref="AppSelector" TItem="string" Label="App" @bind-Value="@SelectedAppName" Placeholder="Select An App" AllowClear="true" Required="true">
                     <InputSelectGroup TItem="string" Label="Smart Apps" Items="SmartApps" />
                     <InputSelectGroup TItem="string" Label="Basic Apps" Items="BasicApps" />
                 </InputSelect>
             }
             else if (Model.Type == "DashboardTerminal")
             {
-                <InputSelect TItem="string" Label="Terminal" @bind-Value="@Model.TerminalType">
+                <InputSelect Page="GroupItem"  TItem="string" Label="Terminal" @bind-Value="@Model.TerminalType">
                     <InputSelectOption TItem="string" StringValue="SSH" Label="SSH" />
                     <InputSelectOption TItem="string" StringValue="Docker" Label="Docker" />
                 </InputSelect>
             }
-            <InputText @bind-Value="@Model.Name" Label="Name" Required="true"></InputText>
+            <InputText Page="GroupItem" @bind-Value="@Model.Name" Label="Name" Required="true"></InputText>
             @if (Model.Type == "DashboardApp" || Model.Type == "DashboardLink")
             {
-                <InputSelect TItem="string" Label="Target" @bind-Value="@Model.Target">
+                <InputSelect Page="GroupItem" TItem="string" Label="Target" @bind-Value="@Model.Target">
                     <InputSelectOption TItem="string" StringValue="Default" Label="Default" />
                     <InputSelectOption TItem="string" StringValue="IFrame" Label="IFrame" />
                 </InputSelect>
                 <InputText @bind-Value="@Model.Url" Label="URL" Required="true" Pattern="^[^:]+://."></InputText>
             }
-            <InputSelect TItem="string" Label="Size" @bind-Value="@Model.SizeString">
+            <InputSelect Page="GroupItem" TItem="string" Label="Size" @bind-Value="@Model.SizeString">
                 <InputSelectOption TItem="string" Value="nameof(ItemSize.Small)" Label="Small" />
                 <InputSelectOption TItem="string" Value="nameof(ItemSize.Medium)" Label="Medium" />
                 <InputSelectOption TItem="string" Value="nameof(ItemSize.Large)" Label="Large" />
@@ -54,7 +54,7 @@
                 <InputSelectOption TItem="string" Value="nameof(ItemSize.XLarge)" Label="X-Large" />
                 <InputSelectOption TItem="string" Value="nameof(ItemSize.XXLarge)" Label="XX-Large" />
             </InputSelect>
-            <InputImage @bind-value="Model.Icon" Label="Icon">
+            <InputImage Page="GroupItem" @bind-value="Model.Icon" Label="Icon">
                 <PreviewTemplate Context="previewIcon">
                     @{
                         string icon = previewIcon;
@@ -118,9 +118,8 @@
             </InputImage>
         </FenrusTab>
             
-        <FenrusTab Title="Properties" Visible="@(Model.Type == "DashboardApp" && SelectedApp != null)">
-            <InputText @bind-Value="@Model.ApiUrl" Label="API URL" Help="Optional URL to use to contact the API if different that the URL above.
-The main URL will be where the user is taken when the item is clicked."></InputText>
+        <FenrusTab Title="@lblProperties" Visible="@(Model.Type == "DashboardApp" && SelectedApp != null)">
+            <InputText Page="GroupItem" @bind-Value="@Model.ApiUrl" Label="ApiUrl" ></InputText>
             @if (SelectedApp?.Properties != null)
             {
                 foreach (var prop in SelectedApp.Properties)
@@ -145,44 +144,47 @@ The main URL will be where the user is taken when the item is clicked."></InputT
                     }
                 }
             }
-        </FenrusTab>
             
-        <FenrusTab Title="SSH" Visible="@(Model.Type != "DashboardTerminal" || Model.TerminalType == "SSH")">
-            <p>By configuring SSH for this item, this will allow you to terminal into the item.
-                                                       
-                If username or password is blank, you will be prompted for this information.</p>
-            <InputText @bind-Value="@Model.SshServer" Label="Address" Placeholder="1.2.3.4" Help="Optional address for connecting to a SSH terminal." />
-            <InputText @bind-Value="@Model.SshUserName" Label="Username" Placeholder="username" Help="Optional Username for connecting to a SSH terminal." />
-            <InputText @bind-Value="@Model.SshPassword" Label="Password" Placeholder="password" Help="Optional Password for connecting to a SSH terminal." />
-        </FenrusTab>
-            
-        <FenrusTab Title="Docker" Visible="@(Model.Type != "DashboardTerminal" || Model.TerminalType == "Docker")">
-            <p>Here you can configure Docker settings for this item, which will allow you to terminal into the docker container.</p>
-            @if(Model.Type != "DashboardTerminal"){
-                <p>Note: If SSH is configured you will not be able to connect user this Docker connection.</p>
+            @if (SelectedApp?.TestFunction == true)
+            {
+                <button disabled="@Testing" class="btn test-button" @onclick="() => TestApp()">@(Testing ? lblTesting : lblTest)</button>
             }
-            <InputSelect @bind-Value="@Model.DockerUid" Label="Docker" Help="The Docker instance this connects to." />
-            <InputText @bind-Value="@Model.DockerContainer" Label="Name" Placeholder="Name" Help="The name of the Docker container to connect to" />
-            <InputSelect TItem="string" Label="Command" @bind-Value="@Model.DockerCommand" Help="The command to connect to.">
+        </FenrusTab>
+            
+        <FenrusTab Title="@lblSsh" Visible="@(Model.Type != "DashboardTerminal" || Model.TerminalType == "SSH")">
+            <p>@lblSshDescription</p>
+            <InputText Page="GroupItem" @bind-Value="@Model.SshServer" Label="SshAddress" />
+            <InputText Page="GroupItem" @bind-Value="@Model.SshUserName" Label="SshUsername"/>
+            <InputText Page="GroupItem" @bind-Value="@Model.SshPassword" Label="SshPassword" />
+        </FenrusTab>
+            
+        <FenrusTab Title="@lblDocker" Visible="@(Model.Type != "DashboardTerminal" || Model.TerminalType == "Docker")">
+            <p>@lblDockerDescription</p>
+            @if(Model.Type != "DashboardTerminal"){
+                <p>@lblDockerTerminalDescription</p>
+            }
+            <InputSelect Page="GroupItem" @bind-Value="@Model.DockerUid" Label="DockerUid" />
+            <InputText Page="GroupItem" @bind-Value="@Model.DockerContainer" Label="DockerContainer" />
+            <InputSelect Page="GroupItem" TItem="string" Label="DockerCommand" @bind-Value="@Model.DockerCommand">
                 <InputSelectOption TItem="string" StringValue="/bin/ash" Label="/bin/ash" />
                 <InputSelectOption TItem="string" StringValue="/bin/bash" Label="/bin/bash" />
                 <InputSelectOption TItem="string" StringValue="/bin/sh" Label="/bin/sh" />
             </InputSelect>
         </FenrusTab>
             
-        <FenrusTab Title="Info" Visible="@(Model.Type == "DashboardApp" && SelectedApp?.Info != null)">
+        <FenrusTab Title="@lblInfo" Visible="@(Model.Type == "DashboardApp" && SelectedApp?.Info != null)">
             @if (SelectedApp?.Info != null)
             {
                 <table>
                     @if (SelectedApp?.Info?.Authors?.Any() == true)
                     {
                         <tr>
-                            <td>Author</td>
+                            <td>@lblAuthor</td>
                             <td>@string.Join(", ", SelectedApp.Info.Authors)</td>
                         </tr>
                     }
                     <tr>
-                        <td>Application URL</td>
+                        <td>@lblApplicationUrl</td>
                         <td>
                             <a href="@SelectedApp.Info.AppUrl" rel="noreferrer" target="_blank">@SelectedApp.Info.AppUrl</a>
                         </td>

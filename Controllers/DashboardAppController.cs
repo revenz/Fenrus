@@ -57,47 +57,31 @@ public class DashboardAppController: BaseController
         return File(image, type);
     }
 
+    /// <summary>
+    /// Gets a app instance and caches it
+    /// </summary>
+    /// <param name="name">the name of the app</param>
+    /// <param name="uid">the users instance of the application</param>
+    /// <returns>the app</returns>
     private AppInstance? GetAppInstance(string name, Guid uid)
     {
         string key = name + "_" + uid;
         if (Cache.TryGetValue<AppInstance>(key, out AppInstance value))
             return value;
         
-        var app = AppService.GetByName(name);
-        if (app?.IsSmart != true)
-            return null;
-        
         var settings = GetUserSettings();
         if(settings == null)
+            return null;
+        
+        var ai = AppHeler.GetAppInstance(name);
+        if (ai == null)
             return null;
 
         if (settings.Groups.SelectMany(x => x.Items).FirstOrDefault(x => x.Uid == uid) is AppItem userApp == false)
             return null;
 
-        string codeFile = Path.Combine(app.FullPath, "code.js");
-        if (System.IO.File.Exists(codeFile) == false)
-            return null;
+        ai.UserApp = userApp;
         
-        string appName = app.Name.Dehumanize();
-        string code = System.IO.File.ReadAllText(codeFile);
-        code += $"\n\nlet instance = new {appName}()\nexport {{ instance }};";
-        
-        var engine = new Engine(options =>
-        {
-        });
-        engine.AddModule(appName, code);
-        var module = engine.ImportModule(appName);
-        
-        var instance = module.Get("instance").AsObject();
-
-        engine.SetValue("instance", instance);
-
-        var ai = new AppInstance
-        {
-            App = app,
-            UserApp = userApp,
-            Engine = engine
-        };
         Cache.Set(key, ai, TimeSpan.FromMinutes(30));
         return ai;
     }
@@ -118,83 +102,14 @@ public class DashboardAppController: BaseController
 
         List<string> log = new();
         var utils = new Utils();
-        
-        var statusArgs = JsObject.FromObject(engine, new
-        {
-            url = ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url, 
-            size,
-            properties = ai.UserApp.Properties ?? new (),
-            humanizer = new Helpers.AppHelpers.Humanizer(),   
-            // doesnt work if await, returns a Task to jint for some reason
-            // fetch = new Func<object, Task<object>>(async (parameters) =>
-            //     await Fetch.Execute(new ()
-            //     {
-            //         Engine = engine,
-            //         AppUrl = ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
-            //         Parameters = parameters,
-            //         Log = text =>
-            //         {
-            //             log.Add(text);
-            //         }
-            //     })
-            // ),
-            proxy = new Func<string, string>(url =>
-                "/proxy/" + utils.base64Encode(url).Replace("/", "-")
-            ),
-            chart = new Chart(),
-            fetch = new Func<object, object>((parameters) =>
-                Fetch.Execute(new ()
-                {
-                    Engine = engine,
-                    AppUrl = ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
-                    Parameters = parameters,
-                    Log = text =>
-                    {
-                        #if(DEBUG)
-                        Console.WriteLine(name + ": " + text);
-                        #endif
-                        log.Add(text);
-                    }
-                }).Result
-            ),
-            log = new Action<string>(text =>
-            {
-                log.Add(text);
-            }),
-            carousel = Carousel.Instance,
-            barInfo = new Func<BarInfo.BarInfoItem[], string>(items =>
-                BarInfo.Generate(utils, items)
-            ),
-            liveStats = new Func<string[][], string>(items => 
-                LiveStats.Generate(utils, items)
-            ),
-            changeIcon = new Action<string>(icon =>
-            {
-                Response.Headers.TryAdd("x-icon", utils.base64Encode(icon));
-            }),
-            imageSearch = new Func<string, string[]>(ImageSearch.Search ),
-            setStatusIndicator = new Action<string>(indicator =>
-            {
-                try
-                {
-                    indicator = (indicator ?? string.Empty).ToLower();
-                    if (indicator.StartsWith("pause"))
-                        indicator = "/common/status-icons/paused.png";
-                    else if (indicator.StartsWith("record"))
-                        indicator = "/common/status-icons/recording.png";
-                    else if (indicator.StartsWith("stop"))
-                        indicator = "/common/status-icons/stop.png";
-                    else if (indicator.StartsWith("update"))
-                        indicator = "/common/status-icons/update.png";
-                    Response.Headers.TryAdd("x-status-indicator",
-                        indicator == "" ? indicator : utils.base64Encode(indicator));
-                }
-                catch (Exception)
-                {
-                    // can fail if request is aborted
-                } 
-            })
-        });
+
+        var statusArgs = AppHeler.GetApplicationArgs(engine,
+            ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
+            AppHeler.DecryptProperties(ai.UserApp.Properties),
+            log: log,
+            size: size,
+            response: Response);
+                
         engine.SetValue("statusArgs", statusArgs);
         engine.SetValue("statusArgsUtils", utils);
         engine.Execute(@"
@@ -205,6 +120,8 @@ var status = instance.status(statusArgs);");
         if (result == null)
             result = string.Empty;
         var str = result.ToString();
+        if(log.Any())
+            Logger.DLog($"[{uid}] {name}\n" + string.Join("\n", log));
         
         return Content(str ?? string.Empty);
     }

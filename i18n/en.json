@@ -50,6 +50,7 @@
     "DeleteItem": "Delete {typeName} ''{name}''?",
     "DeletedItem": "Deleted {typeName} ''{name}''",
     "Test": "Test",
+    "Testing": "Testing",
     "Home": "Home"
   },
   "ContextMenu": {
@@ -159,6 +160,49 @@
         "Name-Help": "The Name of the group",
         "ShowGroupTitle": "Show Group Title",
         "ShowGroupTitle-Help": "Whether or not to show the group title"
+      }
+    },
+    "GroupItem": {
+      "Title": "Group Item",
+      "Labels": {
+        "KeepOpen": "Keep Open",
+        "Author": "Author",
+        "ApplicationUrl": "Application URL",
+        "SshDescription": "By configuring SSH for this item, this will allow you to terminal into the item.\n\nIf username or password is blank, you will be prompted for this information.",
+        "DockerDescription": "Here you can configure Docker settings for this item, which will allow you to terminal into the docker container.",
+        "DockerTerminalDescription": "Note: If SSH is configured you will not be able to connect user this Docker connection.",
+        "TestSuccessful": "Test Successful",
+        "TestFailed": "Test Failed"
+      },
+      "Tabs": {
+        "General": "General",
+        "Properties": "Properties",
+        "Info": "Info",
+        "Docker": "Docker",
+        "SSH": "SSH"
+      },
+      "Fields": {
+        "Type": "Type",
+        "App": "App",
+        "Name": "Name",
+        "Terminal": "Terminal",
+        "Target": "Target",
+        "Size": "Size",
+        "Icon": "Icon",
+        "SshAddress": "Address",
+        "SshAddress-Help": "Optional address for connecting to a SSH terminal.",
+        "SshUsername": "Username",
+        "SshUsername-Help": "Optional Username for connecting to a SSH terminal.",
+        "SshPassword": "Password",
+        "SshPassword-Help": "Optional Password for connecting to a SSH terminal.",
+        "ApiUrl": "API URL",
+        "ApiUrl-Help": "Optional URL to use to contact the API if different that the URL above.\nThe main URL will be where the user is taken when the item is clicked.",
+        "DockerUid": "Docker",
+        "DockerUid-Help": "The Docker instance this connects to.",
+        "DockerContainer": "Name",
+        "DockerContainer-Help": "The name of the Docker container to connect to",
+        "DockerCommand": "Command",
+        "DockerCommand-Help": "The command to connect to"
       }
     },
     "Groups": {

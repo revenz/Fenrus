@@ -1,6 +1,9 @@
+using Blazored.Toast.Services;
+using Fenrus.Controllers;
+using Fenrus.Helpers.AppHelpers;
 using Fenrus.Models;
 using Fenrus.Models.UiModels;
-using Fenrus.Services;
+using Jint;
 using Microsoft.AspNetCore.Components;
 
 namespace Fenrus.Components.SideEditors;
@@ -8,12 +11,16 @@ namespace Fenrus.Components.SideEditors;
 /// <summary>
 /// Group Item Editor
 /// </summary>
-public partial class GroupItemEditor : SideEditorBase
+public partial class GroupItemEditor : SideEditorBase, IDisposable
 {
     /// <summary>
     /// Gets if this item is has loaded, and if not, some setting should not be overriden, eg Size
     /// </summary>
     private bool Loaded { get; set; }
+    /// <summary>
+    /// Gets or sets the toast service
+    /// </summary>
+    [Inject] protected IToastService ToastService { get; set; }
     /// <summary>
     /// Gets or sets the item this is editing, leave null for a new item
     /// </summary>
@@ -136,8 +143,33 @@ public partial class GroupItemEditor : SideEditorBase
         }
     }
 
+    private string lblKeepOpen, lblAdd, lblCancel, lblSave, lblSshDescription, 
+        lblDockerDescription, lblDockerTerminalDescription, 
+        lblGeneral, lblProperties, lblDocker, lblInfo, lblSsh,
+        lblAuthor, lblApplicationUrl, lblTest, lblTesting,
+        lblTestSuccesful, lblTestFailed;
+
     protected override void OnInitialized()
     {
+        lblAdd = Translator.Instant("Labels.Add");
+        lblSave = Translator.Instant("Labels.Save");
+        lblCancel = Translator.Instant("Labels.Cancel");
+        lblGeneral = Translator.Instant("Pages.GroupItem.Tabs.General");
+        lblProperties = Translator.Instant("Pages.GroupItem.Tabs.Properties");
+        lblSsh = Translator.Instant("Pages.GroupItem.Tabs.SSH");
+        lblDocker = Translator.Instant("Pages.GroupItem.Tabs.Docker");
+        lblInfo = Translator.Instant("Pages.GroupItem.Tabs.Info");
+        lblKeepOpen = Translator.Instant("Pages.GroupItem.Labels.KeepOpen");  
+        lblSshDescription = Translator.Instant("Pages.GroupItem.Labels.SshDescription");  
+        lblDockerDescription = Translator.Instant("Pages.GroupItem.Labels.DockerDescription"); 
+        lblDockerTerminalDescription = Translator.Instant("Pages.GroupItem.Labels.DockerTerminalDescription");  
+        lblAuthor = Translator.Instant("Pages.GroupItem.Labels.Author");  
+        lblApplicationUrl = Translator.Instant("Pages.GroupItem.Labels.ApplicationUrl");  
+        lblTest = Translator.Instant("Labels.Test");  
+        lblTesting = Translator.Instant("Labels.Testing");
+        lblTestSuccesful = Translator.Instant("Pages.GroupItem.Labels.TestSuccessful");
+        lblTestFailed = Translator.Instant("Pages.GroupItem.Labels.TestFailed");
+            
         Apps = AppService.Apps;
         SmartApps = Apps.Where(x => x.Value.IsSmart == true).OrderBy(x => x.Key)
             .Select(x => new ListOption() { Label = x.Key, Value = x.Key }).ToList();
@@ -280,6 +312,82 @@ public partial class GroupItemEditor : SideEditorBase
     /// <returns>a task to await</returns>
     Task Cancel()
         => OnCanceled.InvokeAsync();
+
+    /// <summary>
+    /// The current app instance, used for testing the app
+    /// </summary>
+    private AppInstance? AppInstance;
+
+    private bool Testing = false;
+    
+    /// <summary>
+    /// Tests the application
+    /// </summary>
+    async Task TestApp()
+    {
+        if (AppInstance?.App?.Name != SelectedAppName)
+        {
+            AppInstance?.Engine?.Dispose();
+            AppInstance = null;
+            AppInstance = AppHeler.GetAppInstance(SelectedAppName);
+            if (AppInstance == null)
+                return;
+        }
+
+        Testing = true;
+        await Task.Delay(1);
+        try
+        {
+            var engine = AppInstance.Engine;
+
+            var utils = new Utils();
+
+            var properties = AppHeler.DecryptProperties(Model.Properties);
+            var log = new List<string>();
+            var args = AppHeler.GetApplicationArgs(engine,
+                Model.ApiUrl?.EmptyAsNull() ?? Model.Url,
+                properties, log: log);
+
+            engine.SetValue("testArgs", args);
+            engine.SetValue("testArgsUtils", utils);
+            engine.Execute(@"
+testArgs.Utils = testArgsUtils;
+var test = instance.test(testArgs);");
+            var result = engine.GetValue("test");
+            result = result.UnwrapIfPromise();
+            if (result == null)
+                result = string.Empty;
+            var str = result.ToString();
+            
+            if(str?.ToLowerInvariant() == "true")
+                ToastService.ShowSuccess(lblTestSuccesful);
+            else if (str?.ToLowerInvariant() == "false")
+            {
+                if (log?.Any() == true)
+                    ToastService.ShowError(message: String.Join("\n", log), heading: lblTestFailed);
+                else
+                    ToastService.ShowError(lblTestFailed);
+            }
+            else
+                ToastService.ShowInfo(str?.EmptyAsNull() ?? "Test Unknown");
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            Testing = false;
+            this.StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        AppSelector.Dispose();
+        AppInstance?.Engine?.Dispose();
+        AppInstance = null;
+    }
 }
 
 /// <summary>

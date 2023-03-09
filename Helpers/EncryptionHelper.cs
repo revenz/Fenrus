@@ -51,6 +51,26 @@ public class EncryptionHelper
 
         return Convert.ToBase64String(output.ToArray());
     }
+
+    /// <summary>
+    /// Tries to decrypt a string
+    /// </summary>
+    /// <param name="text">the text to decrypt</param>
+    /// <param name="decrypted">the decrypted text</param>
+    /// <returns>true if decrypted, otherwise false</returns>
+    public static bool TryDecrypt(string text, out string decrypted)
+    {
+        decrypted = string.Empty;
+        try
+        {
+            decrypted = Decrypt(text);
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
     
     /// <summary>
     /// Decrypts a string

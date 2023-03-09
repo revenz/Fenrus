@@ -20,7 +20,7 @@ public class Fetch
     /// <summary>
     /// Gets an instance of the fetch helper
     /// </summary>
-    public static async Task<object> Execute(FetchArgs args)
+    public static object Execute(FetchArgs args)
     {
         try
         {
@@ -35,6 +35,7 @@ public class Fetch
             var request = new HttpRequestMessage();
             request.Method = HttpMethod.Get;
             string url;
+            int timeout = 10;
             if (parameters is string str)
             {
                 url = str;
@@ -49,6 +50,10 @@ public class Fetch
                         PropertyNameCaseInsensitive = true
                     });
                 url = fp.Url;
+                if (fp.Timeout > 0)
+                {
+                    timeout = fp.Timeout;
+                }
 
                 if (string.IsNullOrEmpty(fp.Body) == false)
                 {
@@ -91,10 +96,12 @@ public class Fetch
                     url = appUrl + url;
             }
 
-            args.Log("URL: " + url);
             request.RequestUri = new Uri(url);
-            var result = await client.SendAsync(request);
-            string content = await result.Content.ReadAsStringAsync();
+            
+            client.Timeout = TimeSpan.FromSeconds(timeout);
+            var cts = new CancellationTokenSource();
+            var result = client.SendAsync(request, cts.Token).Result;
+            string content = result.Content.ReadAsStringAsync().Result;
             //return content;
 
             var trimmed = content.Trim();

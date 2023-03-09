@@ -725,6 +725,12 @@ a[class*="fa-"] {
     text-decoration: none !important;
 }
 
+.blazored-toast-container {
+    z-index:10000 !important;
+    .blazored-toast-message {
+        white-space:pre-wrap;
+    }
+}
 .blazored-toast-header h5 {
     margin:0;
 }
