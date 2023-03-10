@@ -171,26 +171,27 @@ public class ConfigImporter
         {
             if (existing.Contains(old.Username.ToLowerInvariant()))
                 continue;
-            var se = new User();
-            se.Name = old.Username;
-            se.Uid = old.Uid != Guid.Empty ? old.Uid : Guid.NewGuid();
-            se.IsAdmin = old.IsAdmin;
-            se.Password = old.Password;
+            var user = new User();
+            user.Name = old.Username;
+            user.Uid = old.Uid != Guid.Empty ? old.Uid : Guid.NewGuid();
+            user.IsAdmin = old.IsAdmin;
+            user.Password = old.Password;
             
-            service.Add(se);
-            Log.AppendLine($"User '{se.Name}' imported");
+            service.Add(user);
+            Log.AppendLine($"User '{user.Name}' imported");
 
             if (old.Config == null)
             {
                 continue;
             }
             var settings = new UserSettings();
-            settings.Uid = se.Uid;
+            settings.Uid = user.Uid;
             settings.Language = "en";
 
             settings.SearchEngineUids = old.Config.SearchEngines.Select(x =>
             {
                 var se = new SearchEngine();
+                se.UserUid = user.Uid;
                 if (string.IsNullOrEmpty(x.IconBase64) == false)
                     se.Icon = ImageHelper.SaveImageFromBase64(x.IconBase64);
                 else
@@ -208,6 +209,7 @@ public class ConfigImporter
             settings.GroupUids = old.Config.Groups.Select(x =>
             {
                 var group = new Group();
+                group.UserUid = user.Uid;
                 group.Enabled = x.Enabled;
                 group.Name = x.Name;
                 group.Uid = x.Uid != Guid.Empty ? x.Uid : Guid.NewGuid();
@@ -219,6 +221,7 @@ public class ConfigImporter
             settings.DashboardUids = old.Config.Dashboards.Select(x =>
             {
                 var db = new Dashboard();
+                db.UserUid = user.Uid;
                 db.Name = x.Name;
                 db.Enabled = x.Enabled;
                 db.Uid = x.Uid != Guid.Empty ? x.Uid : Guid.NewGuid();
