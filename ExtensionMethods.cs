@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Fenrus;
@@ -22,8 +23,16 @@ public static class ExtensionMethods
     /// <param name="state">the users authentication state</param>
     /// <returns>the users SID</returns>
     public static Guid? GetUserUid(this AuthenticationState state)
+        => state?.User?.GetUserUid();
+    
+    /// <summary>
+    /// Gets the users SID from their claims principal
+    /// </summary>
+    /// <param name="user">the claims principal</param>
+    /// <returns>the users SID</returns>
+    public static Guid? GetUserUid(this ClaimsPrincipal user)
     {
-        var sid = state?.User?.Claims
+        var sid = user?.Claims
             ?.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid")?.Value;
         if (sid == null)
             return null;

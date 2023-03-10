@@ -3,13 +3,18 @@ namespace Fenrus.Models;
 /// <summary>
 /// Group
 /// </summary>
-public class Group: IModal
+public class Group: IModal, IUserModal
 {
     /// <summary>
     /// Gets or sets the Uid of the group
     /// </summary>
     [LiteDB.BsonId]
     public Guid Uid { get; set; }
+
+    /// <summary>
+    /// Gets or sets the users UID
+    /// </summary>
+    public Guid UserUid { get; set; }
 
     /// <summary>
     /// Gets or sets the groups name

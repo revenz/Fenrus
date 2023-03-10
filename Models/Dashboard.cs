@@ -3,13 +3,23 @@ namespace Fenrus.Models;
 /// <summary>
 /// Dashboard
 /// </summary>
-public class Dashboard: IModal
+public class Dashboard: IModal, IUserModal
 {
     /// <summary>
     /// Gets or sets the Uid of the dashboard
     /// </summary>
     [LiteDB.BsonId]
     public Guid Uid { get; set; }
+
+    /// <summary>
+    /// Gets or sets the users UID
+    /// </summary>
+    public Guid UserUid { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this is the default dashboard for the user
+    /// </summary>
+    public bool IsDefault { get; set; }
     
     /// <summary>
     /// Gets or sets the name of the dashboard

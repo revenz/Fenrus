@@ -129,7 +129,7 @@ public abstract class UserPage : ComponentBase
         
         SystemSettings = new Services.SystemSettingsService().Get();
 
-        var accent = Settings.Dashboards?.FirstOrDefault(x => x.Enabled)?.AccentColor ?? "#FF0090";
+        var accent = new DashboardService().GetAccentColorForUser(UserUid);
         App.UpdateAccentColor(accent);
 
         await PostGotUser();

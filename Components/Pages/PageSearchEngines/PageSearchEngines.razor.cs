@@ -26,10 +26,9 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
     {
         lblTitle = Translator.Instant("Pages.SearchEngines.Title" + (IsSystem ? "-System" : string.Empty));
         lblDescription = Translator.Instant("Pages.SearchEngines.Labels.PageDescription" + (IsSystem ? "-System" : string.Empty));
-        if (IsSystem)
-            Items = DbHelper.GetAll<Models.SearchEngine>().OrderBy(x => x.Name).ToList();
-        else
-            Items = Settings.SearchEngines.OrderBy(x => x.Name).ToList();
+        var service = new SearchEngineService();
+        Items = (IsSystem ? service.GetAllSystem() : service.GetAllForUser(UserUid))
+            .OrderBy(x => x.Name).ToList();
         return Task.CompletedTask;
     }
 
@@ -41,15 +40,7 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
     protected override bool DoDelete(Models.SearchEngine item)
     {
         Items.RemoveAll(x => x.Uid == item.Uid);
-        if (IsSystem)
-        {
-            new SearchEngineService().Delete(item.Uid);
-        }
-        else
-        {
-            Settings.SearchEngines.RemoveAll(x => x.Uid == item.Uid);
-            Settings.Save();
-        }
+        new SearchEngineService().Delete(item.Uid);
         Table.SetData(Items);
         return true;
     }
@@ -100,47 +91,25 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
     /// <param name="isDefault">the default state</param>
     private void SetDefault(SearchEngine engine, bool isDefault)
     {
-        if (IsSystem)
+        var service = new SearchEngineService();
+        if (isDefault) 
         {
-            var service = new SearchEngineService();
-            if (isDefault) 
+            // only clear other defaults when setting this one as a default
+            foreach (var item in this.Items)
             {
-                // only clear other defaults when setting this one as a default
-                foreach (var item in this.Items)
+                if (item.IsDefault && item.Uid != engine.Uid)
                 {
-                    if (item.IsDefault && item.Uid != engine.Uid)
-                    {
-                        // remove the default
-                        item.IsDefault = false;
-                        service.Update(item);
-                    }
+                    // remove the default
+                    item.IsDefault = false;
+                    service.Update(item);
                 }
-            }
-
-            if (engine.IsDefault != isDefault)
-            {
-                engine.IsDefault = isDefault;
-                service.Update(engine);
             }
         }
-        else
-        {
-            if (isDefault)
-            {
-                // only clear other defaults when setting this one as a default
-                foreach (var item in Settings.SearchEngines)
-                {
-                    if (item.IsDefault && item.Uid != engine.Uid)
-                    {
-                        // remove the default
-                        item.IsDefault = false;
-                    }
-                }
-            }
 
-            if (engine.IsDefault != isDefault)
-                engine.IsDefault = isDefault;
-            Settings.Save();
+        if (engine.IsDefault != isDefault)
+        {
+            engine.IsDefault = isDefault;
+            service.Update(engine);
         }
         Table.TriggerStateHasChanged();
     }
@@ -155,10 +124,7 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
         if (engine.Enabled == enabled)
             return; // nothing to do
         engine.Enabled = enabled;
-        if (IsSystem)
-            new SearchEngineService().Update(engine);
-        else
-            Settings.Save();
+        new SearchEngineService().Update(engine);
         Table.TriggerStateHasChanged();
     }
 }

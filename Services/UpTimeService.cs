@@ -77,7 +77,7 @@ public class UpTimeService
 
     public void Monitor()
     {
-        var userGroups = new UserSettingsService().GetAllGroups() ?? new();
+        var userGroups = new GroupService().GetAll() ?? new();
         var systemGroups = new GroupService().GetSystemGroups() ?? new();
         var items = userGroups.Union(systemGroups).Where(x => x.Enabled)
             .SelectMany(x => x.Items ?? new List<GroupItem>())
@@ -112,7 +112,7 @@ public class UpTimeService
         entry.Message = reachable.Message;
         entry.Status = reachable.Reachable;
         
-        DbHelper.Insert(entry);
+        DbHelper.InsertBasic(entry);
     }
     
     public static DateTime RoundDown(DateTime dt, TimeSpan d)

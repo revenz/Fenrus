@@ -1,5 +1,6 @@
 using Fenrus.Models;
 using Microsoft.AspNetCore.Components.Routing;
+using NLog;
 
 namespace Fenrus.Services;
 
@@ -60,48 +61,38 @@ public class UserSettingsService
             // create basic dashboard
             defaultDashboard= new ()
             {
-                Uid = Guid.NewGuid(),
-                AccentColor = "#FF0090",
+                AccentColor = Globals.DefaultAccentColor,
                 Background = "default.js",
                 Theme = "Default",
                 LinkTarget = "_self",
                 ShowGroupTitles = true,
                 ShowSearch = true,
                 ShowStatusIndicators = true,
-                BackgroundColor = "#009099",
+                BackgroundColor = Globals.DefaultBackgroundColor,
                 GroupUids = new ()
             };
         }
 
         defaultDashboard.Name = "Default";
         defaultDashboard.Uid = Guid.NewGuid();
+        defaultDashboard.UserUid = uid;
         defaultDashboard.Enabled = true;
-        if (string.IsNullOrWhiteSpace(guestDashboard.AccentColor)) guestDashboard.AccentColor = "#ff0090";
-        if (string.IsNullOrWhiteSpace(guestDashboard.BackgroundColor)) guestDashboard.BackgroundColor = "#009099";
+        if (string.IsNullOrWhiteSpace(guestDashboard.AccentColor)) guestDashboard.AccentColor = Globals.DefaultAccentColor;
+        if (string.IsNullOrWhiteSpace(guestDashboard.BackgroundColor)) guestDashboard.BackgroundColor = Globals.DefaultBackgroundColor;
         if (string.IsNullOrWhiteSpace(guestDashboard.Background)) guestDashboard.Background = "default.js";
         if (string.IsNullOrWhiteSpace(guestDashboard.Theme)) guestDashboard.Theme = "Default";
         if (string.IsNullOrWhiteSpace(guestDashboard.LinkTarget)) guestDashboard.LinkTarget = "_self";
 
         if (defaultDashboard.GroupUids?.Any() != true)
             defaultDashboard.GroupUids = new GroupService().GetSystemGroups(enabledOnly: true).Select(x => x.Uid).ToList();
-        settings.Dashboards = new List<Dashboard>()
+        new DashboardService().Add(defaultDashboard);
+        settings.DashboardUids = new List<Guid>()
         {
-            defaultDashboard
+            defaultDashboard.Uid
         };
 
         DbHelper.Insert(settings);
         return settings;
-    }
-
-    /// <summary>
-    /// Gets all the groups from every user
-    /// This is used for the up time service 
-    /// </summary>
-    /// <returns>all the groups for all the users</returns>
-    public List<Group> GetAllGroups()
-    {
-        var users = DbHelper.GetAll<UserSettings>();
-        return users.SelectMany(x => x.Groups).ToList();
     }
 
     /// <summary>
@@ -110,6 +101,7 @@ public class UserSettingsService
     /// <param name="settings">the user settings</param>
     public void Save(UserSettings settings)
         => DbHelper.Update(settings);
+        
 
     /// <summary>
     /// Adds users settings

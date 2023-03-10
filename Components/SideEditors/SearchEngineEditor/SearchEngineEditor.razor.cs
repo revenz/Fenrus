@@ -110,23 +110,19 @@ public partial class SearchEngineEditor: SideEditorBase
 
         string saveImage = ImageHelper.SaveImageFromBase64(Icon);
         
+        var service = new SearchEngineService();
         if (IsNew)
         {
             Model.Icon = saveImage;
             Model.Uid = Guid.NewGuid();
             Model.IsSystem = IsSystem;
             
-            if (IsSystem)
-                new SearchEngineService().Add(Model);
-            else
-            {
-                Settings.SearchEngines.Add(Model);
-                Settings.Save();
-            }
+            Model.UserUid = IsSystem ? Guid.Empty : Settings.UserUid; 
+            service.Add(Model);
         }
         else
         {
-            var existing = GetSearchEngine();
+            var existing = service.GetByUid(this.Model.Uid);
             existing.Enabled = Model.Enabled;
             existing.IsDefault = Model.IsDefault;
             existing.IsSystem = IsSystem;
@@ -141,25 +137,12 @@ public partial class SearchEngineEditor: SideEditorBase
             existing.Name = Model.Name;
             existing.Shortcut = Model.Shortcut;
             existing.Url = Model.Url;
-            if (IsSystem)
-                new SearchEngineService().Update(existing);
-            else
-                Settings.Save();
+            service.Update(existing);
         }
         
         await OnSaved.InvokeAsync(Model);
     }
 
-    /// <summary>
-    /// Gets the search engine
-    /// </summary>
-    /// <returns>the search engine</returns>
-    private SearchEngine? GetSearchEngine()
-    {
-        if (IsSystem)
-            return new SearchEngineService().GetByUid(this.Model.Uid);
-        return Settings.SearchEngines.FirstOrDefault(x => x.Uid == Model.Uid);
-    }
 
     /// <summary>
     /// Cancels the editor

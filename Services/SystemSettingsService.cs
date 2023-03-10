@@ -48,7 +48,7 @@ public class SystemSettingsService
     {
         var existing = DbHelper.FirstOrDefault<SystemSettings>();
         if(existing == null)
-            DbHelper.Insert(Settings);
+            DbHelper.InsertBasic(Settings);
         else
             DbHelper.Update(Settings);
         if (InitConfigDone == false)

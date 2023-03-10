@@ -35,7 +35,11 @@ public partial class SearchComponent
 
     protected override void OnInitialized()
     {
-        SearchEngines = (Settings.SearchEngines ?? new()).Union(SystemSearchEngines)
+        List<Models.SearchEngine> userSearchEngines =
+            Settings.UserUid == Globals.GuestDashbardUid || Settings.UserUid == Guid.Empty
+                ? new()
+                : new SearchEngineService().GetAllForUser(Settings.UserUid);
+        SearchEngines = userSearchEngines.Union(SystemSearchEngines)
             .Select(x => new SearchEngine()
             {
                 IsDefault = x.IsDefault,

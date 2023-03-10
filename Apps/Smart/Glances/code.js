@@ -14,11 +14,13 @@ class Glances {
 
     async status(args) {
         let mode = args.properties['mode'] || (
-                        args.size === 'large' ? 'cpu' : 
+                        args.size === 'large' ? 'cpu' :
+                        args.size === 'larger' ? 'overview' :
                         args.size === 'x-large' ? 'overview' : 
                         args.size === 'xx-large' ? 'overview' : 
                         'basic'
                    );
+        args.log('mode: ' + mode);
 
         if(mode === 'overview')                   
             return await this.systemInfo(args);
@@ -190,16 +192,21 @@ class Glances {
         let firstQueryValue = firstQuery.split(/[/]+/).pop();
         let secondQueryValue = secondQuery.split(/[/]+/).pop();
 
-        const [ first, second ] = await Promise.all([
-            await this.doFetch(args, firstQuery),
-            await this.doFetch(args, secondQuery)
-        ]);
+        let first = await this.doFetch(args, firstQuery);
+        let second = await this.doFetch(args, secondQuery);
+        
+        args.log('first: ' + first);
+        args.log('second: ' + second);
+        args.log('first: ' + JSON.stringify(first));
+        args.log('second: ' + JSON.stringify(second));
 
         if(!first || !second)
             return;
-        
+
         let firstQueryResult = first[firstQueryValue];
         let secondQueryResult = second[secondQueryValue];
+        args.log('firstQueryResult: ' + firstQueryResult);
+        args.log('secondQueryResult: ' + secondQueryResult);
 
         return args.liveStats([
             [firstTitle, firstQueryResult],
@@ -208,8 +215,7 @@ class Glances {
     }
 
     async test(args) {
-        let data = await this.doFetch(args, 'cpu');
-        console.log('data', data);
+        let data = await this.doFetch(args, 'cpu');        
         return isNaN(data?.total) === false;
     }
 }

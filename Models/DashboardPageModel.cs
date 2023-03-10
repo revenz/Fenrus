@@ -16,6 +16,16 @@ public class DashboardPageModel
     public Dashboard Dashboard { get; init; }
     
     /// <summary>
+    /// Gets a list of dashboards for the user
+    /// </summary>
+    public List<Dashboard> Dashboards { get; init; }
+    
+    /// <summary>
+    /// Gets a list of search engines for the user
+    /// </summary>
+    public List<SearchEngine> SearchEngines { get; init; }
+    
+    /// <summary>
     /// Gets the theme
     /// </summary>
     public Theme Theme { get; init; }

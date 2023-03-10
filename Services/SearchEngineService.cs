@@ -12,6 +12,21 @@ public class SearchEngineService
     /// </summary>
     /// <returns>the search engines</returns>
     public List<SearchEngine> GetAll() => DbHelper.GetAll<SearchEngine>();
+    
+    /// <summary>
+    /// Gets all system search engines for a user
+    /// </summary>
+    /// <returns>all system search engines</returns>
+    public List<SearchEngine> GetAllSystem()
+        => DbHelper.GetAllForUser<SearchEngine>(Guid.Empty);
+    
+    /// <summary>
+    /// Gets all search engines for a user
+    /// </summary>
+    /// <param name="uid">The UID of the user</param>
+    /// <returns>all search engines</returns>
+    public List<SearchEngine> GetAllForUser(Guid uid)
+        => DbHelper.GetAllForUser<SearchEngine>(uid);
 
     /// <summary>
     /// Gets a search engine by its UID

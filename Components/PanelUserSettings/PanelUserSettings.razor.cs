@@ -21,9 +21,14 @@ public partial class PanelUserSettings : ComponentBase
     [Parameter] public UserSettings Settings { get; set; }
     
     /// <summary>
+    /// Gets or sets the user search engines
+    /// </summary>
+    [Parameter] public List<SearchEngine> SearchEngines { get; set; }
+    
+    /// <summary>
     /// Gets or sets the system search engines
     /// </summary>
-    [Parameter] public List<Models.SearchEngine> SystemSearchEngines { get; set; }
+    [Parameter] public List<SearchEngine> SystemSearchEngines { get; set; }
     
     /// <summary>
     /// Gets or sets the current dashboard

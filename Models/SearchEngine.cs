@@ -3,13 +3,18 @@ namespace Fenrus.Models;
 /// <summary>
 /// Search Engine
 /// </summary>
-public class SearchEngine: IModal
+public class SearchEngine: IModal, IUserModal
 {
     /// <summary>
     /// Gets or sets the Uid
     /// </summary>
     [LiteDB.BsonId]
     public Guid Uid { get; set; }
+
+    /// <summary>
+    /// Gets or sets the users UID
+    /// </summary>
+    public Guid UserUid { get; set; }
 
     /// <summary>
     /// Gets or sets the name

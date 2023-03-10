@@ -162,6 +162,9 @@ public class ConfigImporter
             return;
         Log.AppendLine("Users: " + users.Count);
         var service = new UserService();
+        var searchEngineService = new SearchEngineService();
+        var dashboardService = new DashboardService();
+        var groupService = new GroupService();
         var settingsService = new UserSettingsService();
         var existing = service.GetAll().Select(x => x.Name.ToLowerInvariant()).ToArray();
         foreach (var old in users)
@@ -185,7 +188,7 @@ public class ConfigImporter
             settings.Uid = se.Uid;
             settings.Language = "en";
 
-            settings.SearchEngines = old.Config.SearchEngines.Select(x =>
+            settings.SearchEngineUids = old.Config.SearchEngines.Select(x =>
             {
                 var se = new SearchEngine();
                 if (string.IsNullOrEmpty(x.IconBase64) == false)
@@ -198,20 +201,22 @@ public class ConfigImporter
                 se.Url = x.Url;
                 se.Name = x.Name;
                 se.Uid = x.Uid != Guid.Empty ? x.Uid : Guid.NewGuid();
-                return se;
+                searchEngineService.Add(se);
+                return se.Uid;
             }).ToList();
 
-            settings.Groups = old.Config.Groups.Select(x =>
+            settings.GroupUids = old.Config.Groups.Select(x =>
             {
                 var group = new Group();
                 group.Enabled = x.Enabled;
                 group.Name = x.Name;
                 group.Uid = x.Uid != Guid.Empty ? x.Uid : Guid.NewGuid();
                 group.Items = x.Items.Select(ParseGroupItem).Where(y => y != null).ToList();
-                return group;
+                groupService.Add(group);
+                return group.Uid;
             }).ToList();
 
-            settings.Dashboards = old.Config.Dashboards.Select(x =>
+            settings.DashboardUids = old.Config.Dashboards.Select(x =>
             {
                 var db = new Dashboard();
                 db.Name = x.Name;
@@ -226,7 +231,8 @@ public class ConfigImporter
                 db.ShowSearch = true;
                 db.ShowGroupTitles = old.Config.ShowGroupTitles;
                 db.ShowStatusIndicators = old.Config.ShowStatusIndicators;
-                return db;
+                dashboardService.Add(db);
+                return db.Uid;
             }).ToList();
             
             settingsService.Add(settings);

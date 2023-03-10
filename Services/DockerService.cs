@@ -8,11 +8,27 @@ namespace Fenrus.Services;
 public class DockerService
 {
     /// <summary>
+    /// Gets a docker server by its UID
+    /// </summary>
+    /// <param name="uid">The UID of the docker server</param>
+    /// <returns>the docker server</returns>
+    public DockerServer GetByUid(Guid uid)
+        => DbHelper.GetByUid<DockerServer>(uid);
+    
+    /// <summary>
     /// Gets all the docker servers in the system
     /// </summary>
     /// <returns>all the docker servers in the system</returns>
     public List<DockerServer> GetAll()
         => DbHelper.GetAll<DockerServer>();
+    
+    /// <summary>
+    /// Gets all the docker servers for a user
+    /// </summary>
+    /// <param name="uid">The users UID</param>
+    /// <returns>a list of docker servers</returns>
+    public List<DockerServer> GetAllForUser(Guid uid)
+        => DbHelper.GetAllForUser<DockerServer>(uid);
 
     /// <summary>
     /// Saves a docker server to the database

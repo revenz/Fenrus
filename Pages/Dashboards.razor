@@ -6,7 +6,7 @@
 <FenrusPage Title="@lblTitle" Icon="fa-solid fa-table-cells-large" PageDescription="@lblDescription">
     <Body>
     
-    <FenrusTable TItem="Models.Dashboard" Data=@Items>
+    <FenrusTable @ref=Table TItem="Models.Dashboard" Data=@Items>
         <ToolBar>
             <FenrusTableButton Label="@lblAdd" Icon="fa-solid fa-plus" Clicked="() => Add()" />
         </ToolBar>
@@ -16,6 +16,12 @@
                 <Cell Context="item">
                     <i class="fa-solid fa-table-cells-large"></i>
                     <a href="/settings/dashboards/@item.Uid">@item.Name</a>
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.Dashboard" ColumnName="IsDefault" Width="10rem">
+                <Header>@lblDefault</Header>
+                <Cell Context="item">
+                    <FenrusSwitch Value="@item.IsDefault" ValueChanged="(value) => SetDefault(item, value)"></FenrusSwitch>
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.Dashboard" ColumnName="Enabled" Width="10rem">
@@ -28,8 +34,6 @@
                 <Header></Header>
                 <Cell Context="item">
                     <div class="actions">
-                        <span title="@lblMoveUp" class="fa-solid fa-angle-up" @onclick="() => Move(item, true)"></span>
-                        <span title="@lblMoveDown" class="fa-solid fa-angle-down" @onclick="() => Move(item, false)"></span>
                         <a title="@lblEdit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
                         <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
                     </div>

@@ -2,6 +2,7 @@
   "Name": "NextCloud",
   "TestFunction": true,
   "Interval": 30,
+  "DefaultSize":"large",
   "Info":{
     "Authors": ["John Andrews"],
     "AppUrl":"https://nextcloud.com"
