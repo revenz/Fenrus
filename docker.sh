@@ -25,7 +25,7 @@ else
   dirLogs=$path/temp/data/logs
   mkdir -p $dirLogs
   
-  docker run -d -p 3000:3000 -v $dirData:/app/data --restart unless-stopped --name fenrus fenrus 
+  docker run -d -p 3000:3000 -v $dirData:/app/data -e puid=1000 -e pgid=1000 --restart unless-stopped --name fenrus fenrus 
   
   hyperlink 'Data Directory' file://$dirData $dirData
   hyperlink 'Logs Directory' file://$dirLogs $dirLogs 
