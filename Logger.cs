@@ -97,7 +97,7 @@ public class Logger
         // Targets where to log to: File and Console
         var logfile = new NLog.Targets.FileTarget("logfile")
         {
-            FileName = Path.Combine("Logs", "Fenrus_${shortdate}.log"),
+            FileName = Path.Combine(DirectoryHelper.GetLogsDirectory(), "Fenrus_${shortdate}.log"),
             MaxArchiveDays = 5, 
             Layout = "${longdate} [${uppercase:${level:format=TriLetter}}] => ${message}"
         };

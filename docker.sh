@@ -9,8 +9,8 @@ hyperlink(){
 }
 
 path="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-dirData=$path/temp/Data
-dirLogs=$path/temp/Logs
+dirData=$path/temp/data
+dirLogs=$path/temp/logs
 
 mkdir -p $dirData
 mkdir -p $dirLogs
@@ -24,7 +24,7 @@ if [ "$1" = "--publish" ]; then
   docker push revenz/fenrus:dotnet
 else
   echo Running docker image
-  docker run -d -p 3000:3000 -v $dirData:/App/Data -v $dirLogs:/App/Logs --restart unless-stopped --name fenrus fenrus 
+  docker run -d -p 3000:3000 -v $dirData:/app/data -v $dirLogs:/app/logs --restart unless-stopped --name fenrus fenrus 
   
   hyperlink 'Data Directory' file://$dirData $dirData
   hyperlink 'Logs Directory' file://$dirLogs $dirLogs 

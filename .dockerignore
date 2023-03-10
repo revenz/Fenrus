@@ -11,8 +11,6 @@ apps.zip
 **/*.md
 docker.sh
 publish.sh
-**/*.scss
-**/*.map
 **/temp
 **/Temp
 **/Data

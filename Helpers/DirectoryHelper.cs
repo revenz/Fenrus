@@ -27,22 +27,15 @@ public class DirectoryHelper
     /// </summary>
     /// <returns>the root data directory</returns>
     public static string GetDataDirectory()
-        => Path.Combine(GetBaseDirectory(), "Data");
-    
-    /// <summary>
-    /// Gets the up time root directory
-    /// </summary>
-    /// <returns>the root up time directory</returns>
-    public static string GetUpTimeDirectory()
-        => Path.Combine(GetDataDirectory(), "UpTime");
-    
-    /// <summary>
-    /// Gets the user root directory
-    /// </summary>
-    /// <returns>the root user directory</returns>
-    public static string GetUserDirectory()
-        => Path.Combine(GetDataDirectory(), "Users");
+        => Path.Combine(GetBaseDirectory(), "data");
 
+    /// <summary>
+    /// Gets the logs root directory
+    /// </summary>
+    /// <returns>the root logs directory</returns>
+    public static string GetLogsDirectory()
+        => Path.Combine(GetBaseDirectory(), "logs");
+    
     /// <summary>
     /// Gets the apps root directory
     /// </summary>
