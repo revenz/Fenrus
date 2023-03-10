@@ -4,10 +4,8 @@
         return `api/v2?apikey=${args.properties['apikey']}&cmd=${endpoint}`;
     }
     async status(args) {
-        const [ dr, topUsers ] = await Promise.all([
-            await args.fetch(this.getUrl(args, 'get_activity')),
-            await args.fetch(this.getUrl(args, 'get_home_stats&stat_id=top_users'))
-        ]);
+        let dr = await args.fetch(this.getUrl(args, 'get_activity'));
+        let topUsers = await args.fetch(this.getUrl(args, 'get_home_stats&stat_id=top_users'));
 
         let data = dr?.response?.data;
                 

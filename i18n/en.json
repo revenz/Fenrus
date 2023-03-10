@@ -189,6 +189,8 @@
         "Target": "Target",
         "Size": "Size",
         "Icon": "Icon",
+        "Monitor": "Monitor",
+        "Monitor-Help": "When enabled this item will have its up-time monitored",
         "SshAddress": "Address",
         "SshAddress-Help": "Optional address for connecting to a SSH terminal.",
         "SshUsername": "Username",

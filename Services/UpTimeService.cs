@@ -81,6 +81,7 @@ public class UpTimeService
         var systemGroups = new GroupService().GetSystemGroups() ?? new();
         var items = userGroups.Union(systemGroups).Where(x => x.Enabled)
             .SelectMany(x => x.Items ?? new List<GroupItem>())
+            .Where(x => x.Monitor)
             .Select(x =>
             {
                 string? url = null;

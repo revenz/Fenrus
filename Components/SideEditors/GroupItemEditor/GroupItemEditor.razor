@@ -15,9 +15,9 @@
         <button class="btn" @onclick="() => Cancel()">@lblCancel</button>
     </Buttons>
     <Body>
-    <FenrusTabs>
+    <FenrusTabs @ref=Tabs>
         <FenrusTab Title="@lblGeneral">
-            <InputSelect Page="GroupItem"  TItem="string" Label="Type" @bind-Value="@Model.ItemType">
+            <InputSelect Page="GroupItem" TItem="string" Label="Type" @bind-Value="@Model.ItemType">
                 <InputSelectOption TItem="string" StringValue="DashboardApp" Label="App" />
                 <InputSelectOption TItem="string" StringValue="DashboardLink" Label="Link" />
                 <InputSelectOption TItem="string" StringValue="Dashboard" Label="Dashboard" />
@@ -116,6 +116,10 @@
                     }
                 </PreviewTemplate>
             </InputImage>
+            @if (Model.Type == "DashboardApp" || Model.Type == "DashboardLink")
+            {
+                <InputSwitch Page="GroupItem" @bind-Value="@Model.Monitor" Label="Monitor" />
+            }
         </FenrusTab>
             
         <FenrusTab Title="@lblProperties" Visible="@(Model.Type == "DashboardApp" && SelectedApp != null)">

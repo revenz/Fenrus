@@ -222,7 +222,8 @@ public partial class PageGroup: CommonPage<Models.Group>
             return;
         Model.Items[source] = Model.Items[dest];
         Model.Items[dest] = item;
-        await UpdatePreview();
+        this.StateHasChanged();
+        await UpdatePreview(100);
     }
 
     async Task Copy(GroupItem item)

@@ -57,21 +57,4 @@ where T : IModal
         Router.NavigateTo($"/settings/{GetTypeNameRoute()}/" + Guid.Empty + 
                           (IsSystem ? "isSystem=true" : string.Empty));   
     }
-
-    protected virtual async Task Move(T item, bool up)
-    {
-        // if (item == null)
-        //     return Task.CompletedTask;
-        // var index = Items.IndexOf(item);
-        // if (index < 0)
-        //     return Task.CompletedTask;
-        // if (up && index < 1)
-        //     return Task.CompletedTask;
-        // if (up == false && index >= Items.Count - 1)
-        //     return Task.CompletedTask;
-        // int dest = index + (up ? -1 : 1);
-        //
-        // Items[index] = Items[dest];
-        // Items[dest] = item;
-    }
 }

@@ -8,7 +8,7 @@ public class Globals
     /// <summary>
     /// Gets the version number of Fenrus
     /// </summary>
-    public const string Version = "1.0.0.0";
+    public const string Version = "0.9.0.0";
     
     /// <summary>
     /// Gets or sets the encryption key used for data

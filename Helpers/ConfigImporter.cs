@@ -128,6 +128,7 @@ public class ConfigImporter
             app.DockerCommand = oldItem.DockerCommand;
             app.DockerContainer = oldItem.DockerContainer;
             app.DockerCommand = oldItem.DockerCommand;
+            app.Monitor = true;
             if (string.IsNullOrEmpty(oldItem.IconBase64) == false)
                 app.Icon = ImageHelper.SaveImageFromBase64(oldItem.IconBase64);
             else

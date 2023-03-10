@@ -238,4 +238,26 @@ public partial class PageDashboard : CommonPage<Models.Group>
         Table.SetData(Groups);
         return true;
     }
+
+    /// <summary>
+    /// Moves a group in the dashboard
+    /// </summary>
+    /// <param name="item">the group to move</param>
+    /// <param name="up">true if moving up, otherwise false for moving down</param>
+    protected void Move(Models.Group item, bool up)
+    {
+        var index = Groups.IndexOf(item);
+        if (index < 0)
+            return;
+        if (up && index < 1)
+            return;
+        if (up == false && index >= Groups.Count - 1)
+            return;
+        
+        int dest = index + (up ? -1 : 1);
+        
+        Groups[index] = Groups[dest];
+        Groups[dest] = item;
+        Table.SetData(Groups);
+    }
 }

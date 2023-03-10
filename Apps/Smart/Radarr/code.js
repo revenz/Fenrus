@@ -10,26 +10,18 @@ class Radarr {
 		args.setStatusIndicator(updateAvailable ? 'Update' : '');
         let filter = args.properties['filters'];
 
-        let data = []
-        let queueData = []
-
-        if (args.properties['fetchWarnings'] == 'true') {
-            [data, queueData] = await Promise.all([
-                await args.fetch({
-                    url: this.getUrl(args, 'movie'),
-                    timeout: 10000
-                }),
-                await args.fetch({
-                    url: this.getUrl(args, 'queue') + '&pageSize=10000',
-                    timeout: 5000
-                })
-            ]);
-        } else {
-            data = await args.fetch({
-                url: this.getUrl(args, 'movie'),
-                timeout: 10000
+        
+        let data = await args.fetch({
+            url: this.getUrl(args, 'movie'),
+            timeout: 10000
+        });
+        let queueData = [];
+        if (args.properties['fetchWarnings'] == 'true') {      
+            queueData = await args.fetch({
+                url: this.getUrl(args, 'queue') + '&pageSize=10000',
+                timeout: 5000
             });
-        }
+        } 
 
         args.log('about to filter data');
         let filteredData = !data || !data.filter ? [] : data.filter((x, index, arr) => {

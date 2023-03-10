@@ -35,4 +35,9 @@ public abstract class GroupItem: IModal
     /// Gets or sets the item size
     /// </summary>
     public ItemSize Size { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this item should be monitored for up-time
+    /// </summary>
+    public bool Monitor { get; set; }
 }

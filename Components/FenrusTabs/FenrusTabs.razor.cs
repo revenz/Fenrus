@@ -29,6 +29,18 @@ public partial class FenrusTabs : ComponentBase
     }
 
     /// <summary>
+    /// Selects the first tab
+    /// </summary>
+    public void SelectFirstTab()
+    {
+        var tab = Tabs.FirstOrDefault(x => x.Visible);
+        if (tab == null)
+            return;
+        this.ActiveTab = tab;
+        this.StateHasChanged();
+    }
+
+    /// <summary>
     /// Triggers state has changed
     /// </summary>
     public void TriggerStateChanged()

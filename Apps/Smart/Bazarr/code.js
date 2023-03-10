@@ -9,10 +9,8 @@
 	
     async status(args) {
 		
-		const [ data, historyData] = await Promise.all([
-          await this.doFetch(args,'badges'),
-          await this.doFetch(args,'history/stats')
-        ]);
+		let data = await this.doFetch(args,'badges');
+        let historyData = await this.doFetch(args,'history/stats');
 		
 		let movieCount = 0;
 		let seriesCount = 0;
