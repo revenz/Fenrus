@@ -34,7 +34,7 @@ public class DirectoryHelper
     /// </summary>
     /// <returns>the root logs directory</returns>
     public static string GetLogsDirectory()
-        => Path.Combine(GetBaseDirectory(), "logs");
+        => Path.Combine(GetDataDirectory(), "logs");
     
     /// <summary>
     /// Gets the apps root directory
