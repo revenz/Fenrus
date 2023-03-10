@@ -10,7 +10,9 @@ body {
         --columns: 1;
     }
 }
+
 $columnWidth:300;
+
 
 @for $i from 1 through 10 {
     $min: 600 + ($i - 1) * $columnWidth;
@@ -87,8 +89,6 @@ $columnWidth:300;
     }
 }
 
-
-
 .db-group {
     border-radius:0.5rem;
     background: rgba(0,0,0,0.5);
@@ -97,7 +97,7 @@ $columnWidth:300;
     grid-row-start: span 1;
     grid-column-start: span 1;
     width: -webkit-fill-available;
-
+    
     &.hide-labels {
         .items > a{
             width:4.1rem !important;

@@ -17,8 +17,16 @@ mkdir -p $dirLogs
 docker container stop fenrus  >/dev/null 2>&1
 docker container rm fenrus >/dev/null 2>&1
 docker build -t fenrus -f Dockerfile .
-docker run -d -p 3000:3000 -v $dirData:/App/Data -v $dirLogs:/App/Logs --restart unless-stopped --name fenrus fenrus
- 
-hyperlink 'Data Directory' file://$dirData $dirData
-hyperlink 'Logs Directory' file://$dirLogs $dirLogs 
-hyperlink 'Fenrus App URL' http://localhost:3000 http://localhost:3000
+
+if [ "$1" = "--publish" ]; then
+  echo Publishing docker image
+  docker tag fenrus revenz/fenrus:dotnet
+  docker push revenz/fenrus:dotnet
+else
+  echo Running docker image
+  docker run -d -p 3000:3000 -v $dirData:/App/Data -v $dirLogs:/App/Logs --restart unless-stopped --name fenrus fenrus 
+  
+  hyperlink 'Data Directory' file://$dirData $dirData
+  hyperlink 'Logs Directory' file://$dirLogs $dirLogs 
+  hyperlink 'Fenrus App URL' http://localhost:3000 http://localhost:3000
+fi
