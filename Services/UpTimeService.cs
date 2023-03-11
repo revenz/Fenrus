@@ -115,6 +115,7 @@ public class UpTimeService
 
         var upTimeSite = new UpTimeSite(this.HttpClient, url);
         var reachable = await upTimeSite.IsReachable();
+        entry.Uid = Guid.NewGuid();
         entry.Message = reachable.Message;
         entry.Status = reachable.Reachable;
 
