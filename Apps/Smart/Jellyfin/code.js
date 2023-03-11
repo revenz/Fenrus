@@ -17,7 +17,6 @@
             })
         });
         if(typeof(data) === 'string') data = JSON.parse(data);
-        args.log('getTokenResult: ' + JSON.stringify(data));
         return {token: data.AccessToken, userId: data?.User?.Id };
     }
     

@@ -6,9 +6,10 @@ class Glances {
             url: `api/3/` + endpoint,
             timeout: 10
         });
-        args.log('response: ' + result);
         if(typeof(result) === 'string')
-            result = JSON.parse(result);        
+            result = JSON.parse(result);    
+        if(result.exception)
+            throw result.message || 'Fetch failed for an unknown reason';
         return result;
     }
 

@@ -145,6 +145,8 @@
                 }
             }
             
+            <InputSwitch Page="GroupItem" @bind-Value="Model.Debug" Label="@nameof(Model.Debug)" />
+            
             @if (SelectedApp?.TestFunction == true)
             {
                 <button disabled="@Testing" class="btn test-button" @onclick="() => TestApp()">@(Testing ? lblTesting : lblTest)</button>

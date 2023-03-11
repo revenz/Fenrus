@@ -189,6 +189,8 @@
         "Target": "Target",
         "Size": "Size",
         "Icon": "Icon",
+        "Debug": "Debug",
+        "Debug-Help": "Turns excess debug logging on for this application.",
         "SshAddress": "Address",
         "SshAddress-Help": "Optional address for connecting to a SSH terminal.",
         "SshUsername": "Username",

@@ -201,6 +201,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             Model.Name = app.Name;
             Model.Size = app.Size;
             Model.Uid = app.Uid;
+            Model.Debug = app.Debug;
             Model.Properties = app.Properties ?? new ();
             // SelectedApp = Apps.ContainsKey(app.AppName) ? Apps[app.AppName] : null;
         }
@@ -224,6 +225,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             Model.Name = string.Empty;
             Model.Size = ItemSize.Medium;
             Model.Uid = Guid.Empty;
+            Model.Debug = false;
             IsNew = true;
         }
 
@@ -266,6 +268,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
                     app.Name = Model.Name;
                     app.Size = Model.Size;
                     app.Uid = Model.Uid;
+                    app.Debug = Model.Debug;
                     var appPropertes = SelectedApp.Properties?.Select(x => x.Id).ToList() ?? new() { };
                     app.Properties = appPropertes?.Any() == true && Model.Properties?.Any() == true
                         ? Model.Properties.Where(x => appPropertes.Contains(x.Key))
@@ -300,6 +303,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             Model.AppName = string.Empty;
             Model.Url = "https://";
             Model.Icon = string.Empty;
+            Model.Debug = false;
         }
         else
             await OnSaved.InvokeAsync(result);
@@ -470,6 +474,11 @@ class GroupItemEditorModel : GroupItem
     /// Gets or sets any additional smart app properties for this item
     /// </summary>
     public Dictionary<string, object> Properties { get; set; } = new();
+    
+    /// <summary>
+    /// Gets or sets if this app has debug logging turned on
+    /// </summary>
+    public bool Debug { get; set; }
 
     /// <summary>
     /// Gets a smart app property value

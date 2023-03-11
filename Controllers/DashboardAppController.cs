@@ -1,11 +1,8 @@
-using Fenrus.Services;
 using Jint;
-using Jint.Native;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Fenrus.Helpers.AppHelpers;
 using Fenrus.Models;
-using Humanizer;
 
 namespace Fenrus.Controllers;
 
@@ -120,7 +117,7 @@ var status = instance.status(statusArgs);");
         if (result == null)
             result = string.Empty;
         var str = result.ToString();
-        if(log.Any())
+        if(log.Any() && ai.UserApp.Debug)
             Logger.DLog($"[{uid}] {name}\n" + string.Join("\n", log));
         
         return Content(str ?? string.Empty);
