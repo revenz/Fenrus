@@ -90,6 +90,9 @@ public class DbHelper
     /// <typeparam name="T">the type being inserted</typeparam>
     internal static void InsertBasic<T>(T item)
     {
+        if (item == null)
+            return;
+        
         using var db = GetDb();
         var collection = db.GetCollection<T>(typeof(T).Name);
         collection.Insert(item);
