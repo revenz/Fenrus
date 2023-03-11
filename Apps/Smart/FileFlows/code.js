@@ -31,7 +31,7 @@
         let data = await this.fetch(args, 'api/status/update-available');
         if(data.exception)
         {
-            args.wlog('Exception fetching update-available: ' + (data.message || 'Unknown reason'));
+            args.log('Exception fetching update-available: ' + (data.message || 'Unknown reason'));
             return false;
         }
         let result = data?.UpdateAvailable === true;
