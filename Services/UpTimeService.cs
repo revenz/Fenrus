@@ -53,7 +53,7 @@ public class UpTimeService
     {
         using var db = DbHelper.GetDb();
         var collection = db.GetCollection<UpTimeEntry>(nameof(UpTimeEntry));
-        return collection.Query().Where(x => x.Url == url)
+        return collection.Query().Where(x => x.Name == url)
             .OrderByDescending(x => x.Date).Limit(100).ToList();
     }
 
@@ -108,7 +108,7 @@ public class UpTimeService
     private async Task MonitorUptime(string url)
     {
         UpTimeEntry entry = new();
-        entry.Url = url;
+        entry.Name = url;
         entry.Date = RoundDown(DateTime.Now, new TimeSpan(0, 10, 0));
         if (AlreadyExists(url, entry.Date))
             return; // already monitored for this period

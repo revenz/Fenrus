@@ -15,16 +15,6 @@ public class UpTimeEntry : IModal
     /// Gets or sets the URL for the uptime
     /// </summary>
     public string Name { get; set; }
-
-    /// <summary>
-    /// Gets or sets the URL for the uptime
-    /// </summary>
-    [LiteDB.BsonIgnore]
-    public string Url
-    {
-        get =>Name;
-        set => Name = value;
-    }
     
     /// <summary>
     /// Gets or sets the time when the up time was logged at
