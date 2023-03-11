@@ -25,6 +25,9 @@ public partial class About: UserPage
 
     async Task ImportConfig()
     {
+        if (IsAdmin == false)
+            return;
+        
         var result = await FileInputDialog.Show(
             Translator.Instant("Dialogs.ImportConfig.Title"),
             Translator.Instant("Dialogs.ImportConfig.Description"),

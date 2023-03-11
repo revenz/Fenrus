@@ -121,7 +121,6 @@ public class SystemSettingsService
     /// Deletes the system configuration from the database.
     /// Use this to reset initial configuration
     /// </summary>
-    /// <exception cref="NotImplementedException"></exception>
     public void Delete()
     {
         using var db = DbHelper.GetDb();

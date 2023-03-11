@@ -98,14 +98,19 @@ public class UpTimeService
         }
     }
 
+    private bool AlreadyExists(string url, DateTime date)
+    {
+        using var db = DbHelper.GetDb();
+        var collection = db.GetCollection<UpTimeEntry>(nameof(UpTimeEntry));
+        return collection.Exists(x => x.Url == url && x.Date == date);
+    }
+
     private async Task MonitorUptime(string url)
     {
         UpTimeEntry entry = new();
         entry.Url = url;
         entry.Date = RoundDown(DateTime.Now, new TimeSpan(0, 10, 0));
-        using var db = DbHelper.GetDb();
-        var collection = db.GetCollection<UpTimeEntry>(nameof(UpTimeEntry));
-        if (collection.Exists(x => x.Url == url && x.Date == entry.Date))
+        if (AlreadyExists(url, entry.Date))
             return; // already monitored for this period
 
         var upTimeSite = new UpTimeSite(this.HttpClient, url);

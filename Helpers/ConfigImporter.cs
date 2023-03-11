@@ -1,6 +1,7 @@
 using System.Text;
 using Fenrus.Models;
 using Fenrus.Services;
+using NUglify.JavaScript.Syntax;
 
 namespace Fenrus.Helpers;
 
@@ -167,19 +168,33 @@ public class ConfigImporter
         var dashboardService = new DashboardService();
         var groupService = new GroupService();
         var settingsService = new UserSettingsService();
-        var existing = service.GetAll().Select(x => x.Name.ToLowerInvariant()).ToArray();
+        var existingUers = service.GetAll().ToDictionary(x => x.Name.ToLowerInvariant(), x => x);
+        var systemGroupUids = groupService.GetSystemGroups().Select(x => x.Uid).ToList();
         foreach (var old in users)
         {
-            if (existing.Contains(old.Username.ToLowerInvariant()))
-                continue;
-            var user = new User();
-            user.Name = old.Username;
-            user.Uid = old.Uid != Guid.Empty ? old.Uid : Guid.NewGuid();
-            user.IsAdmin = old.IsAdmin;
-            user.Password = old.Password;
-            
-            service.Add(user);
-            Log.AppendLine($"User '{user.Name}' imported");
+            User user;
+            string key = old.Username.ToLowerInvariant();
+            var existingSearchEngines = new List<SearchEngine>();
+            var existingGroups = new List<Group>();
+            var existingDashboards = new List<Dashboard>();
+            if (existingUers.ContainsKey(key))
+            {
+                user = existingUers[key];
+                existingSearchEngines = new SearchEngineService().GetAllForUser(user.Uid);
+                existingGroups = new GroupService().GetAllForUser(user.Uid);
+                existingDashboards = new DashboardService().GetAllForUser(user.Uid);
+            }
+            else
+            {
+                user = new User();
+                user.Name = old.Username;
+                user.Uid = old.Uid != Guid.Empty ? old.Uid : Guid.NewGuid();
+                user.IsAdmin = old.IsAdmin;
+                user.Password = old.Password;
+
+                service.Add(user);
+                Log.AppendLine($"User '{user.Name}' imported");
+            }
 
             if (old.Config == null)
             {
@@ -191,6 +206,10 @@ public class ConfigImporter
 
             settings.SearchEngineUids = old.Config.SearchEngines.Select(x =>
             {
+                var existing = existingSearchEngines.FirstOrDefault(y => x.Uid == y.Uid || x.Name == y.Name);
+                if (existing != null)
+                    return existing.Uid;
+                
                 var se = new SearchEngine();
                 se.UserUid = user.Uid;
                 if (string.IsNullOrEmpty(x.IconBase64) == false)
@@ -209,6 +228,16 @@ public class ConfigImporter
 
             settings.GroupUids = old.Config.Groups.Select(x =>
             {
+                // only search for UID match here because dashboards reference by UIDs and if they UIDs dont match
+                // the item cannot be seen on the dashboard
+                var existing = existingGroups.FirstOrDefault(y => x.Uid == y.Uid);
+                if (existing != null)
+                {
+                    existing.Items = x.Items.Select(ParseGroupItem).Where(y => y != null).ToList();
+                    groupService.Update(existing);
+                    return existing.Uid;
+                }
+
                 var group = new Group();
                 group.UserUid = user.Uid;
                 group.Enabled = x.Enabled;
@@ -219,18 +248,27 @@ public class ConfigImporter
                 return group.Uid;
             }).ToList();
 
+            var allowGroupUids = systemGroupUids.Union(settings.GroupUids).ToList();
             settings.DashboardUids = old.Config.Dashboards.Select(x =>
             {
+                var existing = existingDashboards.FirstOrDefault(y => x.Uid == y.Uid || x.Name == y.Name);
+                var groupUids = x.Groups.Select(x => x.Uid).Where(x => allowGroupUids.Contains(x)).ToList();
+                if (existing != null)
+                {
+                    existing.GroupUids = groupUids;
+                    dashboardService.Update(existing);
+                    return existing.Uid;
+                }
                 var db = new Dashboard();
                 db.UserUid = user.Uid;
                 db.Name = x.Name;
                 db.Enabled = x.Enabled;
                 db.Uid = x.Uid != Guid.Empty ? x.Uid : Guid.NewGuid();
-                db.AccentColor = x.AccentColor?.EmptyAsNull() ?? old.Config.AccentColor?.EmptyAsNull() ?? "#ff0090";
+                db.AccentColor = x.AccentColor?.EmptyAsNull() ?? old.Config.AccentColor?.EmptyAsNull() ?? Globals.DefaultAccentColor;
                 db.Theme = old.Config.Theme?.EmptyAsNull() ?? "Default";
                 db.Background = "default.js";
-                db.BackgroundColor = "#009099";
-                db.GroupUids = x.Groups.Select(x => x.Uid).ToList();
+                db.BackgroundColor = Globals.DefaultBackgroundColor;
+                db.GroupUids = groupUids;
                 db.LinkTarget = old.Config.LinkTarget?.EmptyAsNull() ?? "_self";
                 db.ShowSearch = true;
                 db.ShowGroupTitles = old.Config.ShowGroupTitles;
