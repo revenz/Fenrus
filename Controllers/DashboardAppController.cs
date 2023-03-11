@@ -135,7 +135,10 @@ var status = instance.status(statusArgs);");
         }
         catch (Exception ex)
         {
-            Logger.WLog("Error in DashboardApp.Status: " + name + " -> " + ex.Message  +
+            string exception = ex.Message;
+            if (exception.StartsWith("Promise was rejected with value "))
+                exception = exception.Substring("Promise was rejected with value ".Length);
+            Logger.WLog("Error in DashboardApp.Status: " + name + " -> " + exception  +
                         (log.Any() ? "\n" + string.Join("\n", log) : string.Empty));
             return Content(string.Empty);
         }
