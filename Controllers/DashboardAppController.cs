@@ -97,42 +97,51 @@ public class DashboardAppController: BaseController
     [ResponseCache(NoStore = true)]
     public IActionResult Status([FromRoute] string name, [FromRoute] Guid uid, [FromQuery] string size)
     {
-        var ai = GetAppInstance(name, uid);
-        if (ai == null)
-            return new NotFoundResult();
-        var engine = ai.Engine;
+        try
+        {
+            var ai = GetAppInstance(name, uid);
+            if (ai == null)
+                return new NotFoundResult();
+            var engine = ai.Engine;
 
-        List<string> log = new();
-        var utils = new Utils();
+            List<string> log = new();
+            var utils = new Utils();
 
-        var statusArgs = AppHeler.GetApplicationArgs(engine,
-            ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
-            AppHeler.DecryptProperties(ai.UserApp.Properties),
-            log: log,
-            size: size,
-            response: Response);
-                
-        engine.SetValue("statusArgs", statusArgs);
-        engine.SetValue("statusArgsUtils", utils);
-        engine.Execute(@"
+            var statusArgs = AppHeler.GetApplicationArgs(engine,
+                ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
+                AppHeler.DecryptProperties(ai.UserApp.Properties),
+                log: log,
+                size: size,
+                response: Response);
+
+            engine.SetValue("statusArgs", statusArgs);
+            engine.SetValue("statusArgsUtils", utils);
+            engine.Execute(@"
 statusArgs.Utils = statusArgsUtils;
 var status = instance.status(statusArgs);");
-        var result = engine.GetValue("status");
-        result = result.UnwrapIfPromise();
-        if (result == null)
-            result = string.Empty;
-        var str = result.ToString();
-        if (log.Any())
-        {
-            string header = $" [{uid}] ";
-            int pad = (100 - header.Length) / 2;
-            if (pad < 3)
-                pad = 3;
-            header = new string('-', pad) + header + new string('-', pad);
-            Logger.DLog($"\n" + header + "\nApplication: " + name + "\n" + string.Join("\n", log) + "\n" + new string('-', header.Length));
-        }
+            var result = engine.GetValue("status");
+            result = result.UnwrapIfPromise();
+            if (result == null)
+                result = string.Empty;
+            var str = result.ToString();
+            if (log.Any())
+            {
+                string header = $" [{uid}] ";
+                int pad = (100 - header.Length) / 2;
+                if (pad < 3)
+                    pad = 3;
+                header = new string('-', pad) + header + new string('-', pad);
+                Logger.DLog($"\n" + header + "\nApplication: " + name + "\n" + string.Join("\n", log) + "\n" +
+                            new string('-', header.Length));
+            }
 
-        return Content(str ?? string.Empty);
+            return Content(str ?? string.Empty);
+        }
+        catch (Exception ex)
+        {
+            Logger.WLog("Error in DashboardApp.Status: " + name + " -> " + ex.Message);
+            return Content(string.Empty);
+        }
     }
 }
 
