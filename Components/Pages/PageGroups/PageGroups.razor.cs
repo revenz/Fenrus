@@ -18,14 +18,13 @@ public partial class PageGroups : CommonPage<Models.Group>
 
     private string lblTitle, lblDescription;
 
-    protected override async Task PostGotUser()
+    protected override Task PostGotUser()
     {
         lblTitle = Translator.Instant("Pages.Groups.Title" + (IsSystem ? "-System" : string.Empty));
         lblDescription = Translator.Instant("Pages.Groups.Labels.PageDescription" + (IsSystem ? "-System" : string.Empty));
-        if (IsSystem)
-            Items = DbHelper.GetAll<Models.Group>();
-        else
-            Items = Settings.Groups;
+        var service = new GroupService();
+        Items = IsSystem ? service.GetSystemGroups() : service.GetAllForUser(UserUid);
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -36,24 +35,13 @@ public partial class PageGroups : CommonPage<Models.Group>
     private void ItemEnabled(Models.Group item, bool enabled)
     {
         item.Enabled = enabled;
-        if (IsSystem)
-            new Services.GroupService().Enable(item.Uid, enabled);
-        else
-            Settings.Save();
+        new GroupService().Enable(item.Uid, enabled);
     }
 
     protected override bool DoDelete(Group item)
     {
-        if (IsSystem)
-        {
-            new Services.GroupService().Delete(item.Uid);
-        }
-        else
-        {
-            Settings.Groups = Settings.Groups.Where(x => x.Uid != item.Uid).ToList();
-            Settings.Save();
-        }
-
+        var service = new GroupService();
+        service.Delete(item.Uid);
         Items = Items.Where(x => x.Uid != item.Uid).ToList();
         Table.SetData(Items);
         return true;

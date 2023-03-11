@@ -115,6 +115,8 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
         }
     }
 
+    private FenrusTabs Tabs;
+
     private void InitSelectedApp()
     {
         if (SelectedApp == null)
@@ -201,6 +203,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             Model.Name = app.Name;
             Model.Size = app.Size;
             Model.Uid = app.Uid;
+            Model.Monitor = app.Monitor;
             Model.Debug = app.Debug;
             Model.Properties = app.Properties ?? new ();
             // SelectedApp = Apps.ContainsKey(app.AppName) ? Apps[app.AppName] : null;
@@ -214,17 +217,19 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             Model.Name = link.Name;
             Model.Size = link.Size;
             Model.Uid = link.Uid;
+            Model.Monitor = link.Monitor;
         }
         else
         {
             Title = "New Item";
             Model.ItemType = "DashboardApp";
             Model.Target = string.Empty;
-            Model.Url = "https://";
+            Model.Url = "http://";
             Model.Icon = string.Empty;
             Model.Name = string.Empty;
             Model.Size = ItemSize.Medium;
             Model.Uid = Guid.Empty;
+            Model.Monitor = true;
             Model.Debug = false;
             IsNew = true;
         }
@@ -254,6 +259,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
                     var app  = new AppItem();
                     app.Target = Model.Target;
                     app.Url = Model.Url;
+                    app.Monitor = Model.Monitor;
                     app.ApiUrl = Model.ApiUrl;
                     app.AppName = Model.AppName;
                     app.DockerContainer = Model.DockerContainer;
@@ -281,6 +287,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
                 {
                     var link = new LinkItem();
                     link.Target = Model.Target;
+                    link.Monitor = Model.Monitor;
                     link.Url = Model.Url;
                     link.Icon = Model.Icon;
                     link.Name = Model.Name;
@@ -301,9 +308,23 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             AppSelector?.Clear();
             Model.Name = string.Empty;
             Model.AppName = string.Empty;
+            Model.Uid = Guid.Empty;
             Model.Url = "https://";
             Model.Icon = string.Empty;
             Model.Debug = false;
+            Model.Properties = new();
+            Model.ApiUrl = string.Empty;
+            Model.SshPassword = string.Empty;
+            Model.SshServer = string.Empty;
+            Model.SshPasswordOriginal = string.Empty;
+            Model.SshUserName = string.Empty;
+            Model.DockerCommand = string.Empty;
+            Model.DockerContainer = string.Empty;
+            Model.DockerUid = null;
+            Model.Target = string.Empty;
+            Model.Size = ItemSize.Medium;
+            Model.Monitor = true;
+            Tabs.SelectFirstTab();
         }
         else
             await OnSaved.InvokeAsync(result);

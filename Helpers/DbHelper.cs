@@ -71,15 +71,33 @@ public class DbHelper
     /// <summary>
     /// Inserts an item in the database
     /// </summary>
-    /// <param name="item">the item to update</param>
+    /// <param name="item">the item to insert</param>
     /// <typeparam name="T">the type being inserted</typeparam>
-    internal static void Insert<T>(T item)
+    internal static void Insert<T>(T item) where T : IModal
     {
+        using var db = GetDb();
+        var collection = db.GetCollection<T>(typeof(T).Name);
+        if(collection.Exists(x => x.Uid == item.Uid))
+            collection.Update(item);
+        else
+            collection.Insert(item);
+    }
+    
+    /// <summary>
+    /// Inserts a basic item in the database
+    /// </summary>
+    /// <param name="item">the item to insert</param>
+    /// <typeparam name="T">the type being inserted</typeparam>
+    internal static void InsertBasic<T>(T item)
+    {
+        if (item == null)
+            return;
+        
         using var db = GetDb();
         var collection = db.GetCollection<T>(typeof(T).Name);
         collection.Insert(item);
     }
-    
+
     /// <summary>
     /// Updates an item in the database
     /// </summary>
@@ -114,5 +132,18 @@ public class DbHelper
         using var db = GetDb();
         var collection = db.GetCollection<T>(typeof(T).Name);
         return collection.Query().ToList();
+    }
+
+    /// <summary>
+    /// Gets all items in the database for a user
+    /// </summary>
+    /// <typeparam name="T">the type of items to get</typeparam>
+    /// <param name="uid">the users UID</param>
+    /// <returns>a list of all the items</returns>
+    public static List<T> GetAllForUser<T>(Guid uid) where T : IUserModal
+    {
+        using var db = GetDb();
+        var collection = db.GetCollection<T>(typeof(T).Name);
+        return collection.Query().Where(x => x.UserUid == uid).ToList();
     }
 }

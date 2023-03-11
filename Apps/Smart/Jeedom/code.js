@@ -40,10 +40,8 @@ class Jeedom {
 
     async status(args) 
 	{
-        const [ dataUpdate, dataMessage ] = await Promise.all([
-			await this.getDataUpdate(args),
-			await this.getDataMessage(args)
-		]);
+		let dataUpdate = await this.getDataUpdate(args);
+		let dataMessage = await this.getDataMessage(args);
 
 		if(!dataUpdate?.result)
 			return;

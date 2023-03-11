@@ -48,7 +48,7 @@ public class SystemSettingsService
     {
         var existing = DbHelper.FirstOrDefault<SystemSettings>();
         if(existing == null)
-            DbHelper.Insert(Settings);
+            DbHelper.InsertBasic(Settings);
         else
             DbHelper.Update(Settings);
         if (InitConfigDone == false)
@@ -121,7 +121,6 @@ public class SystemSettingsService
     /// Deletes the system configuration from the database.
     /// Use this to reset initial configuration
     /// </summary>
-    /// <exception cref="NotImplementedException"></exception>
     public void Delete()
     {
         using var db = DbHelper.GetDb();

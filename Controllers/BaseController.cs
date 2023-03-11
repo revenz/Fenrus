@@ -15,13 +15,19 @@ public class BaseController : Controller
     /// <returns>the user settings, or null if user not logged in</returns>
     protected UserSettings? GetUserSettings()
     {
-        var sid = User?.Claims?.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid")?.Value;
-        if (string.IsNullOrEmpty(sid) || Guid.TryParse(sid, out Guid uid) == false)
+        var uid = User.GetUserUid();
+        if (uid == null)
             return null;
         
-        var settings = new UserSettingsService().Load(uid);
+        var settings = new UserSettingsService().Load(uid.Value);
         return settings;
     }
+
+    /// <summary>
+    /// Gets the user uid
+    /// </summary>
+    /// <returns>the users UID, or null if couldn't be found</returns>
+    protected Guid? GetUserUid() => User.GetUserUid();
 
     /// <summary>
     /// Gets a translator

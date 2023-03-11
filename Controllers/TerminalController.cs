@@ -24,8 +24,10 @@ public class TerminalController : BaseController
         var settings = GetUserSettings();
         if (settings == null)
             throw new UnauthorizedAccessException();
+
+        var groups = new GroupService().GetAllForUser(settings.UserUid);
         
-        var item = settings.Groups.SelectMany(x => x.Items)?.FirstOrDefault(x => x.Uid == uid);
+        var item = groups?.SelectMany(x => x.Items)?.FirstOrDefault(x => x.Uid == uid);
         if (item == null)
         {
             // try and find the item from the system groups
@@ -43,9 +45,9 @@ public class TerminalController : BaseController
         using var ws = await HttpContext.WebSockets.AcceptWebSocketAsync();
         if (item is AppItem app)
         {
-            if (string.IsNullOrEmpty(app.DockerContainer) == false)
+            if (string.IsNullOrEmpty(app.DockerContainer) == false && app.DockerUid != null)
             {
-                var docker = settings.Docker.FirstOrDefault(x => x.Uid == app.DockerUid);
+                var docker = new DockerService().GetByUid(app.DockerUid.Value);
                 if (docker == null)
                 {
                     var translator = GetTranslator(settings);

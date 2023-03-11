@@ -79,8 +79,8 @@ public partial class PageGroup: CommonPage<Models.Group>
         else
         {
             isNew = false;
-            Model = GetById();
-            if (Model == null)
+            Model = new GroupService().GetByUid(Uid);
+            if (Model == null || Model.UserUid != (IsSystem ? Guid.Empty : UserUid))
             {
                 Router.NavigateTo(IsSystem ? "/settings/system/groups" : "/settings/groups");
                 return;
@@ -90,22 +90,8 @@ public partial class PageGroup: CommonPage<Models.Group>
     }
 
     List<Models.Group> GetAll()
-    {
-        if (IsSystem)
-            return new Services.GroupService().GetSystemGroups();
-        return Settings.Groups;
-    }
+        => IsSystem ? new GroupService().GetSystemGroups() : new GroupService().GetAllForUser(UserUid);
 
-    /// <summary>
-    /// Gets the group by the Uid
-    /// </summary>
-    /// <returns>the group if found</returns>
-    Models.Group? GetById()
-    {
-        if (IsSystem)
-            return new Services.GroupService().GetByUid(Uid);
-        return Settings.Groups.FirstOrDefault(x => x.Uid == Uid);
-    }
 
     /// <summary>
     /// Saves the group and returns to the group page
@@ -117,21 +103,16 @@ public partial class PageGroup: CommonPage<Models.Group>
             Model.Uid = Guid.NewGuid();
             Model.Enabled = true; // default to being enabled
             Model.IsSystem = IsSystem;
+            Model.UserUid = IsSystem ? Guid.Empty : UserUid;
         }
-        else if (IsSystem)
+        else
         {
             var existing = new GroupService().GetByUid(Uid);
             existing.Name = Model.Name;
             existing.HideGroupTitle = Model.HideGroupTitle;
             existing.Items = Model.Items ?? new();
         }
-        else
-        {
-            var existing = Settings.Groups.First(x => x.Uid == Uid);
-            existing.Name = Model.Name;
-            existing.HideGroupTitle = Model.HideGroupTitle;
-            existing.Items = Model.Items ?? new();
-        }
+            
 
         foreach (var item in Model.Items)
         {
@@ -139,22 +120,12 @@ public partial class PageGroup: CommonPage<Models.Group>
                 item.Uid = Guid.NewGuid();
         }
 
-        if (IsSystem)
-        {
-            if (isNew)
-                new GroupService().Add(Model);
-            else
-                new GroupService().Update(Model);
-            
-            this.Router.NavigateTo("/settings/system/groups");
-        }
+        if (isNew)
+            new GroupService().Add(Model);
         else
-        {
-            if(isNew)
-                Settings.Groups.Add(Model);
-            Settings.Save();
-            this.Router.NavigateTo("/settings/groups");
-        }
+            new GroupService().Update(Model);
+        
+        this.Router.NavigateTo(IsSystem ? "/settings/system/groups" : "/settings/groups");
 
     }
 
@@ -251,7 +222,8 @@ public partial class PageGroup: CommonPage<Models.Group>
             return;
         Model.Items[source] = Model.Items[dest];
         Model.Items[dest] = item;
-        await UpdatePreview();
+        this.StateHasChanged();
+        await UpdatePreview(100);
     }
 
     async Task Copy(GroupItem item)
@@ -270,38 +242,23 @@ public partial class PageGroup: CommonPage<Models.Group>
         {
             // copy to this group
             this.Model.Items.Add(cloned);
+            this.StateHasChanged();
+            await Task.Delay(100);
             await UpdatePreview();
         }
         else
         {
             // copy to another group
-            if (IsAdmin)
+            var service = new GroupService();
+            var grp = service.GetByUid(dest);
+            if (grp == null || (IsAdmin == false && grp.IsSystem) ||
+                (grp.IsSystem == false && grp.UserUid != UserUid) )
             {
-                var service = new GroupService();
-                var sysGroup = service.GetByUid(dest);
-                if (sysGroup != null)
-                {
-                    sysGroup.Items.Add(cloned);
-                    service.Update(sysGroup);
-                    ToastService.ShowSuccess(Translator.Instant("Pages.Group.Messages.ItemCopied", new
-                    {
-                        groupName = sysGroup.Name,
-                        itemName = cloned.Name
-                    }));
-                    return;
-                }
-            }
-
-            var grp = Settings.Groups.FirstOrDefault(x => x.Uid == dest);
-            if (grp == null)
-            {
-                // shouldn't happen
-                ToastService.ShowError("Failed to locate group");
+                ToastService.ShowError("Cannot copy to this group");
                 return;
             }
-
             grp.Items.Add(cloned);
-            Settings.Save();
+            service.Update(grp);
             ToastService.ShowSuccess(Translator.Instant("Pages.Group.Messages.ItemCopied", new
             {
                 groupName = grp.Name,
@@ -317,6 +274,12 @@ public partial class PageGroup: CommonPage<Models.Group>
         {
             var json = JsonSerializer.Serialize(app);
             var newApp = JsonSerializer.Deserialize<AppItem>(json);
+            // cant use the serialized properties as these will be deserialized as:
+            // "mode": {
+            //     "_type": "System.Text.Json.JsonElement, System.Text.Json",
+            //     "ValueKind": "String"
+            // } 
+            newApp.Properties = app.Properties.ToDictionary(x => x.Key, x => x.Value);
             newApp.Uid = Guid.NewGuid();
             return newApp;
         }

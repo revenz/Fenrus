@@ -16,8 +16,7 @@ if (args?.Any() == true && args[0] == "--init-config")
 
 
 Console.WriteLine("Starting Fenrus...");
-Logger.Initialize();
-AppService.Initialize();
+StartUpHelper.Run();
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -42,11 +41,6 @@ builder.Services.AddSignalR(hubOptions =>
 });
 builder.Services.AddTransient<Fenrus.Middleware.InitialConfigMiddleware>();
 
-var dataDir = DirectoryHelper.GetDataDirectory();
-if (Directory.Exists(dataDir) == false)
-    Directory.CreateDirectory(dataDir);
-
-EncryptionHelper.Init(dataDir);
 
 bool oAuth = SystemSettingsService.InitConfigDone && SystemSettingsService.UsingOAuth;
 
@@ -113,18 +107,6 @@ app.UseWhen(context => SystemSettingsService.InitConfigDone,
         appBuild.UseWebSockets();
     });
 
-// app.UseWhen(context => Fenrus.Services.SystemSettingsService.InitConfigDone && Fenrus.Services.SystemSettingsService.UsingOAuth,
-//     appBuild =>
-//     {
-//     });
-
-if (oAuth)
-{
-    // app.MapGet("/login", (HttpContent ctx) =>
-    // {
-    // });
-}
-
 app.UseWebOptimizer();
 app.UseWhen(
     context => context.Request.Path.StartsWithSegments("/apps") == false,
@@ -162,7 +144,7 @@ app.MapBlazorHub(options =>
 app.MapFallbackToPage("/_Host");
 
 // create an uptime service to monitor the uptime status for monitor apps/links
-new UpTimeService();
+_ = new UpTimeService();
 
 Logger.ILog($"Fenrus v{Fenrus.Globals.Version} started");
 app.Run();

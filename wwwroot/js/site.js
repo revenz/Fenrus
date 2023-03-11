@@ -134,9 +134,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
         divLaunchingApp.style.display = 'none';
 });
 
-function changeDashboard(uid){    
-    document.cookie = 'dashboard=' + uid + '; expires=Tue, 19 Jan 2038 04:14:07 GMT';
-    window.location.reload(true);
+function changeDashboard(uid){     
+    let expires = new Date();
+    expires.setFullYear(expires.getFullYear() + 1);
+    document.cookie = 'dashboard=' + uid + ';expires=' + expires.toUTCString() + ';';
+    window.location.reload();
 }
 
 function moveGroup(groupUid, up){

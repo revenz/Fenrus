@@ -16,7 +16,7 @@
     </Buttons>
     <Body>
     <InputText Label="@lblName" @bind-Value="@Model.Name" Help="@lblNameHelp"/>
-    <InputSwitch Label="@lblShowGroupTitle" @bind-Value="@Model.HideGroupTitle" Help="@lblShowGroupTitleHelp"></InputSwitch>
+    <InputSwitch Label="@lblShowGroupTitle" @bind-Value="@Model.HideGroupTitle" Help="@lblShowGroupTitleHelp" Invert="true" />
 
     <div class="preview-dashboard">
         <div class="db-group @(Model.HideGroupTitle ? "hide-labels" : string.Empty)" style="width: unset; min-width: unset; height: unset; min-height: unset;">

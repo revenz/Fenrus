@@ -40,7 +40,19 @@
             <FenrusTableColumn TItem="Models.Group" ColumnName="@lblName">
                 <Header>@lblName</Header>
                 <Cell Context="item">
-                    <a href="/settings/groups/@item.Uid">@item.Name</a>
+                    <i class="fa-solid fa-puzzle-piece"></i>
+                    @if (item.IsSystem && IsAdmin == false)
+                    {
+                        <span>@item.Name</span>
+                    }
+                    else if (item.IsSystem)
+                    {
+                        <a href="/settings/system/groups/@item.Uid">@item.Name</a>
+                    }
+                    else
+                    {
+                        <a href="/settings/groups/@item.Uid">@item.Name</a>
+                    }
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.Group" ColumnName="@lblEnabled" Width="10rem">
@@ -53,6 +65,8 @@
                 <Header></Header>
                 <Cell Context="item">
                     <div class="actions">
+                        <span title="@lblMoveUp" class="fa-solid fa-angle-up" @onclick="() => Move(item, true)"></span>
+                        <span title="@lblMoveDown" class="fa-solid fa-angle-down" @onclick="() => Move(item, false)"></span>
                         <a title="@lblEdit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
                         <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
                     </div>

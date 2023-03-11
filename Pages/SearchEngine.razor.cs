@@ -2,6 +2,7 @@ using Fenrus.Models;
 using Fenrus.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace Fenrus.Pages;
 
@@ -46,12 +47,6 @@ public partial class SearchEngine: UserPage
 
     private bool isNew = false;
 
-    private Models.SearchEngine GetSearchEngine()
-    {
-        if (IsSystem)
-            return DbHelper.GetByUid<Models.SearchEngine>(Uid);
-        return Settings.SearchEngines.FirstOrDefault(x => x.Uid == Uid);
-    }
 
     protected override Task PostGotUser()
     {
@@ -74,8 +69,8 @@ public partial class SearchEngine: UserPage
         else
         {
             isNew = false;
-            Model = GetSearchEngine();
-            if (Model == null)
+            Model = new SearchEngineService().GetByUid(Uid);
+            if (Model == null || Model.UserUid != (IsSystem ? Guid.Empty : UserUid))
             {
                 Router.NavigateTo(IsSystem ? "/settings/system/search-engines" : "/settings/search-engines");
                 return Task.CompletedTask;
@@ -101,22 +96,19 @@ public partial class SearchEngine: UserPage
     void Save()
     {
         string saveImage = ImageHelper.SaveImageFromBase64(Icon);
-        
+
+        var service = new SearchEngineService();
         if (isNew)
         {
             Model.Icon = saveImage;
             Model.Uid = Guid.NewGuid();
             Model.IsSystem = IsSystem;
-            if (IsSystem)
-            {
-                DbHelper.Insert(Model);
-                return;
-            }
-            Settings.SearchEngines.Add(Model);
+            Model.UserUid = IsSystem ? Guid.Empty : UserUid;
+            service.Add(Model);
         }
         else
         {
-            var existing = GetSearchEngine();
+            var existing = service.GetByUid(Model.Uid);
             existing.Enabled = Model.Enabled;
             existing.IsDefault = Model.IsDefault;
             existing.IsSystem = IsSystem;
@@ -131,14 +123,10 @@ public partial class SearchEngine: UserPage
             existing.Name = Model.Name;
             existing.Shortcut = Model.Shortcut;
             existing.Url = Model.Url;
-            if (IsSystem)
-            {
-                DbHelper.Update(existing);
-                return;
-            }
+            service.Update(Model);
         }
-        Settings.Save();
-        Router.NavigateTo("/settings/search-engines");
+        if(IsSystem == false)
+            Router.NavigateTo("/settings/search-engines");  
     }
 
     void Cancel()

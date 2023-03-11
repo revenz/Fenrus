@@ -48,7 +48,7 @@
 
 <input type="hidden" id="translations" value="@translations" />
 
-@if (settings.SearchEngines?.Any() == true || systemSearchEngines?.Any() == true)
+@if (Model.SearchEngines?.Any() == true || systemSearchEngines?.Any() == true)
 {
     @(await Html.RenderComponentAsync<SearchComponent>(RenderMode.Static, new
     {
@@ -69,7 +69,7 @@
             <button>@Model.Dashboard.Name</button>
             <div>
                 @{
-                    var dbs = settings.Dashboards.Where(x => x.Name != Model.Dashboard.Name).OrderBy(x => x.Name);
+                    var dbs = Model.Dashboards.Where(x => x.Name != Model.Dashboard.Name).OrderBy(x => x.Name);
                     foreach (var db in dbs)
                     {
                         <a href="#" onclick="changeDashboard('@db.Uid');return false;">@db.Name</a>

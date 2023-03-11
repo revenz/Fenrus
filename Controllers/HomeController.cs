@@ -42,10 +42,15 @@ public class HomeController : BaseController
         if(settings == null)
             return Redirect("/login");
 
-        if (string.IsNullOrWhiteSpace(settings.Language) == false)
-            Translator = Helpers.Translator.GetForLanguage(settings.Language); 
+        var dashboards = new DashboardService().GetAllForUser(settings.Uid);
 
-        var dashboard = settings.Dashboards.FirstOrDefault() ?? new();
+        if (string.IsNullOrWhiteSpace(settings.Language) == false)
+            Translator = Translator.GetForLanguage(settings.Language);
+
+        Dashboard dashboard = null;
+        if (Guid.TryParse(Request.Cookies["dashboard"] ?? string.Empty, out Guid uid))
+            dashboard = dashboards.FirstOrDefault(x => x.Uid == uid);
+        dashboard ??= dashboards.MinBy(x => x.IsDefault ? 0 : 1) ?? new();
         return ShowDashboard(dashboard, settings);
     }
 
@@ -57,24 +62,24 @@ public class HomeController : BaseController
         var themeService = new Services.ThemeService();
         var theme = themeService.GetTheme(dashboard.Theme?.EmptyAsNull() ?? "Default");
         var themes = themeService.GetThemes();
+
+        bool isGuest = settings.UserUid == Guid.Empty || settings.UserUid == Globals.GuestDashbardUid;
+        var dashboards = isGuest ? new List<Dashboard>() 
+            : new DashboardService().GetAllForUser(settings.UserUid).Where(x => x.Enabled).ToList();
+        var searchEngines =
+            isGuest ? new List<Models.SearchEngine>() :
+                new SearchEngineService().GetAllForUser(settings.UserUid).Where(x => x.Enabled).ToList();
         
-        // load groups form the dashboard uids
-        // should move this into a service
-        var systemGroups = DbHelper.GetAll<Models.Group>().Where(x => x.Enabled && x.IsSystem)
-            .DistinctBy(x => x.Uid)
-            .ToDictionary(x => x.Uid, x => x);
+        
         var groups = new List<Models.Group>();
+        var groupService = new GroupService();
         foreach (var gUid in dashboard.GroupUids)
         {
-            var grp = settings.Groups.FirstOrDefault(x => x.Uid == gUid);
+            var grp = groupService.GetByUid(gUid);
             if (grp != null)
             {
                 if (grp.Enabled)
                     groups.Add(grp);
-            }
-            else if (systemGroups.ContainsKey(gUid))
-            {
-                groups.Add(systemGroups[gUid]);
             }
         }
         
@@ -84,13 +89,16 @@ public class HomeController : BaseController
             Settings = settings,
             Theme = theme,
             Groups = groups,
-            Translator = Translator
+            Translator = Translator,
+            Dashboards = dashboards,
+            SearchEngines = searchEngines
         };
         ViewBag.Translator = Translator;
         ViewBag.IsGuest = false;
         ViewBag.Dashboard = dashboard;
         ViewBag.UserSettings = settings;
-        ViewBag.Dashboards = settings.Dashboards;
+        ViewBag.Dashboards = dashboards;
+        ViewBag.SearchEngines = searchEngines;
         ViewBag.Themes = themes;
         ViewBag.Theme = theme;
         ViewBag.SystemSearchEngines = DbHelper.GetAll<Models.SearchEngine>();

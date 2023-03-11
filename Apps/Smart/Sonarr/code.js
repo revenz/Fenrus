@@ -7,17 +7,11 @@
 
         let url = this.getUrl(args, 'wanted/missing') + '&sortKey=airDateUtc&sortDir=desc';
         let queueUrl = this.getUrl(args, 'queue') + '&pageSize=10000';
-        let data = []
+        let data = await args.fetch(url);
         let queueData = []
-        if (args.properties['fetchWarnings'] == 'true') {
-            [data, queueData] = await Promise.all([
-                await args.fetch(url),
-                await args.fetch(queueUrl)
-            ]);
-        } else {
-            data = await args.fetch(url);
-        }
-
+        
+        if (args.properties['fetchWarnings'] == 'true')
+            queueData = await args.fetch(queueUrl);
 
         let missing = data?.totalRecords ?? 0;
         data = await args.fetch(this.getUrl(args, ('queue')))

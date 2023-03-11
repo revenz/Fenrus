@@ -5,10 +5,12 @@ namespace Fenrus;
 /// </summary>
 public class Globals
 {
+
+    private const string BuildNumber = "0";
     /// <summary>
     /// Gets the version number of Fenrus
     /// </summary>
-    public const string Version = "1.0.0.0";
+    public const string Version = "0.9.0." + BuildNumber;
     
     /// <summary>
     /// Gets or sets the encryption key used for data

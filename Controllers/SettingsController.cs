@@ -18,11 +18,8 @@ public class SettingsController : BaseController
     [HttpPost("settings/groups/{groupUid}/resize/{itemUid}/{size}")]
     public IActionResult ResizeItem([FromRoute] Guid groupUid, [FromRoute] Guid itemUid, [FromRoute] ItemSize size)
     {
-        var settings = GetUserSettings();
-        if (settings == null)
-            throw new UnauthorizedAccessException();
-
-        var group = settings.Groups.FirstOrDefault(x => x.Uid == groupUid);
+        var service = new GroupService();
+        var group = service.GetByUid(groupUid);
         if (group == null)
             return NotFound();
 
@@ -30,11 +27,11 @@ public class SettingsController : BaseController
         if (item == null)
             return NotFound();
         if (item.Size == size)
-            return Content(""); // nothing to do
+            return Content(string.Empty); // nothing to do
         
         item.Size = size;
-        settings.Save();
-        return Content("");
+        service.Update(group);
+        return Content(string.Empty);
     }
 
     /// <summary>
@@ -45,21 +42,18 @@ public class SettingsController : BaseController
     [HttpDelete("settings/groups/{groupUid}/delete/{itemUid}")]
     public IActionResult DeleteItem([FromRoute] Guid groupUid, [FromRoute] Guid itemUid)
     {
-        var settings = GetUserSettings();
-        if (settings == null)
-            throw new UnauthorizedAccessException();
-
-        var group = settings.Groups.FirstOrDefault(x => x.Uid == groupUid);
+        var service = new GroupService();
+        var group = service.GetByUid(groupUid);
         if (group == null)
             return NotFound();
 
         var item = group.Items.FirstOrDefault(x => x.Uid == itemUid);
         if (item == null)
-            return Content("");
+            return Content(string.Empty);
         
         group.Items.Remove(item);
-        settings.Save();
-        return Content("");
+        service.Update(group);
+        return Content(string.Empty);
     }
 
 
@@ -124,8 +118,16 @@ public class SettingsController : BaseController
             });
         }
         bool reload = false;
-        var settings = GetUserSettings();
-        var dashboard = settings.Dashboards?.FirstOrDefault(x => x.Uid == uid);
+        var service = new DashboardService();
+        var dashboard = service.GetByUid(uid);
+        if (dashboard?.UserUid != GetUserUid())
+        {
+            Response.StatusCode = 500;
+            return Json(new
+            {
+                Error = "Invalid dashboard"
+            });
+        }
         switch (setting)
         {
             case nameof(dashboard.AccentColor):
@@ -164,7 +166,7 @@ public class SettingsController : BaseController
             default:
                 return NotFound();
         }
-        settings.Save();
+        service.Update(dashboard);
         
         return Json(new
         {
@@ -181,12 +183,12 @@ public class SettingsController : BaseController
     [HttpPost("settings/dashboard/{uid}/remove-group/{groupUid}")]
     public void RemoveGroup([FromRoute] Guid uid, [FromRoute] Guid groupUid)
     {
-        var settings = GetUserSettings();
-        var dashboard = settings.Dashboards.FirstOrDefault(x => x.Uid == uid);
-        if (dashboard == null)
+        var service = new DashboardService();
+        var dashboard = service.GetByUid(uid);;
+        if (dashboard?.UserUid != GetUserUid())
             return;
         dashboard.GroupUids = dashboard.GroupUids.Where(x => x != groupUid).ToList();
-        settings.Save();
+        service.Update(dashboard); 
     }
 
     /// <summary>
@@ -198,9 +200,9 @@ public class SettingsController : BaseController
     [HttpPost("settings/dashboard/{uid}/move-group/{groupUid}/{up}")]
     public void MoveGroup([FromRoute] Guid uid, [FromRoute] Guid groupUid, [FromRoute] bool up)
     {
-        var settings = GetUserSettings();
-        var dashboard = settings.Dashboards.FirstOrDefault(x => x.Uid == uid);
-        if (dashboard == null)
+        var service = new DashboardService();
+        var dashboard = service.GetByUid(uid);;
+        if (dashboard?.UserUid != GetUserUid())
             return;
         var index = dashboard.GroupUids.IndexOf(groupUid);
         if (index < 0)
@@ -213,7 +215,7 @@ public class SettingsController : BaseController
         dashboard.GroupUids[index] = dashboard.GroupUids[dest];
         dashboard.GroupUids[dest] = groupUid;
         dashboard.GroupUids = dashboard.GroupUids.Distinct().ToList();
-        settings.Save();
+        service.Update(dashboard); 
     }
 
     /// <summary>

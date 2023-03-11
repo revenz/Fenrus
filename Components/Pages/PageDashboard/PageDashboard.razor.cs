@@ -95,7 +95,7 @@ public partial class PageDashboard : CommonPage<Models.Group>
             isNew = true;
             Model = new();
             Model.Name = "New Dashboard";
-            var usedNames = Settings.Dashboards.Select(x => x.Name).ToArray();
+            var usedNames = new DashboardService().GetAllForUser(UserUid).Select(x => x.Name).ToArray();
             int count = 1;
             while (usedNames.Contains(Model.Name))
             {
@@ -114,14 +114,15 @@ public partial class PageDashboard : CommonPage<Models.Group>
         else
         {
             isNew = false;
-            Model = Settings.Dashboards.FirstOrDefault(x => x.Uid == Uid);
+            Model = new DashboardService().GetByUid(Uid);
             if (Model == null)
             {
                 Router.NavigateTo("/settings/dashboards");
+                return Task.CompletedTask;
             }
         }
         var sysGroups = new GroupService().GetSystemGroups(enabledOnly: true);
-        Groups = Settings.Groups.Where(x => Model.GroupUids.Contains(x.Uid))
+        Groups = new GroupService().GetAllForUser(UserUid).Where(x => Model.GroupUids.Contains(x.Uid))
             .Union(sysGroups.Where(x => Model.GroupUids.Contains(x.Uid))).ToList();
         return Task.CompletedTask;
     }
@@ -134,7 +135,7 @@ public partial class PageDashboard : CommonPage<Models.Group>
     /// <returns> all the groups that are available to this dashboard</returns>
     List<Models.Group> GetAllAvailableGroups(bool notInUse = false)
     {
-        var userGroups = Settings.Groups;
+        var userGroups = new GroupService().GetAllForUser(UserUid);
         var sysGroups = new GroupService().GetSystemGroups(enabledOnly: true);
 
         var result = userGroups.Union(sysGroups);
@@ -148,6 +149,7 @@ public partial class PageDashboard : CommonPage<Models.Group>
     
     void Save()
     {
+        var service = new DashboardService();
         if (IsGuest)
         {
             var ssService = new SystemSettingsService();
@@ -156,7 +158,6 @@ public partial class PageDashboard : CommonPage<Models.Group>
             system.Language = Language?.EmptyAsNull() ?? "en";
             system.Save();
             
-            var service = new DashboardService();
             var existing = service.GetGuestDashboard();
             existing.Enabled = Model.Enabled;
             existing.ShowSearch = Model.ShowSearch;
@@ -173,16 +174,24 @@ public partial class PageDashboard : CommonPage<Models.Group>
         if (isNew)
         {
             Model.Uid = Guid.NewGuid();
+            Model.UserUid = UserUid;
             Model.GroupUids = Groups.Select(x => x.Uid).ToList();
-            Settings.Dashboards.Add(Model);
+            Model.Background = "default.js";
+            Model.Enabled = true;
+            Model.AccentColor = Globals.DefaultAccentColor;
+            Model.BackgroundColor = Globals.DefaultBackgroundColor;
+            Model.LinkTarget = "_self";
+            service.Add(Model);
         } 
         else
         {
-            var existing = Settings.Dashboards.First(x => x.Uid == Uid);
+            var existing = service.GetByUid(Uid);
+            if (existing == null)
+                return; // shouldnt happen
             existing.Name = Model.Name;
             existing.GroupUids = Groups?.Select(x => x.Uid)?.ToList() ?? new ();
+            service.Update(existing);
         }
-        Settings.Save();
         this.Router.NavigateTo("/settings/dashboards");
     }
 
@@ -228,5 +237,27 @@ public partial class PageDashboard : CommonPage<Models.Group>
         Groups.Remove(item);
         Table.SetData(Groups);
         return true;
+    }
+
+    /// <summary>
+    /// Moves a group in the dashboard
+    /// </summary>
+    /// <param name="item">the group to move</param>
+    /// <param name="up">true if moving up, otherwise false for moving down</param>
+    protected void Move(Models.Group item, bool up)
+    {
+        var index = Groups.IndexOf(item);
+        if (index < 0)
+            return;
+        if (up && index < 1)
+            return;
+        if (up == false && index >= Groups.Count - 1)
+            return;
+        
+        int dest = index + (up ? -1 : 1);
+        
+        Groups[index] = Groups[dest];
+        Groups[dest] = item;
+        Table.SetData(Groups);
     }
 }

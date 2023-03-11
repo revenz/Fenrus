@@ -18,3 +18,14 @@ public interface IModal
     /// </summary>
     string Name { get; set; }
 }
+
+/// <summary>
+/// Interface for user items
+/// </summary>
+public interface IUserModal
+{
+    /// <summary>
+    /// Gets or sets the users UID
+    /// </summary>
+    Guid UserUid { get; set; }
+}

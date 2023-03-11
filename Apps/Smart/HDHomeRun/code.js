@@ -32,10 +32,8 @@
     }
 
     async status(args){
-        const [ channels, tuners ] = await Promise.all([
-          await this.getChannelCount(args),
-          await this.getTuners(args)
-        ]);
+        let channels =await this.getChannelCount(args);
+        let tuners = await this.getTuners(args);
 
         if(!channels && !tuners?.total)
             return;

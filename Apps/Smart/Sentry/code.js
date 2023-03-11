@@ -45,11 +45,11 @@
     async status(args) {
         const projects = await this.getProjects(args);
 
-        const promises = [];
+        const counts = [];
         for (const project of projects) {
-            promises.push(this.getEventCounts(args, project));
+            let result = await this.getEventCounts(args, project);
+            counts.push(result);
         }
-        const counts = await Promise.all(promises);
 
         let total = 0;
         for (let i = 0; i < counts.length; i++) {

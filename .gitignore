@@ -12,3 +12,7 @@ obj/
 .idea/
 Data/
 *.map
+logs/
+Logs/
+Temp/
+gitversion.txt

@@ -14,9 +14,13 @@
         let data = await this.doFetch(args);
         let free = data?.ocs?.data?.quota?.free ?? 0;
         let used = data?.ocs?.data?.quota?.used ?? 0;
-        
+        args.log('mode: ' + args.properties['mode']);
+        args.log('free: ' + free);
+        args.log('used: ' + used);
 		if(args.properties['mode'] == 'bar'){
-			return args.barInfo([{label:'Storage', percent: Math.round((used / (free + used)) * 10000)/100  || 0, icon: '/common/hdd.svg'}]);
+            let percent = Math.round((used / (used + free)) * 10000)/100;
+            args.log('Percent: ' + percent);
+			return args.barInfo([{label:'Storage', percent: percent  || 0, icon: '/common/hdd.svg'}]);
         } else {
 			return args.liveStats([
 				['Used', args.Utils.formatBytes(used)],

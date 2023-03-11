@@ -125,10 +125,14 @@ public class Fetch
                 return dbl;
             return content;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // just want to see the exception
-            throw;
+            return new
+            {
+                exception = true,
+                error = true,
+                message = ex.Message
+            };
         }
     }
 

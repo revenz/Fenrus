@@ -65,16 +65,18 @@ public class DashboardAppController: BaseController
         string key = name + "_" + uid;
         if (Cache.TryGetValue<AppInstance>(key, out AppInstance value))
             return value;
-        
-        var settings = GetUserSettings();
-        if(settings == null)
+
+        var userUid = GetUserUid();
+        if(userUid == null)
             return null;
         
         var ai = AppHeler.GetAppInstance(name);
         if (ai == null)
             return null;
 
-        if (settings.Groups.SelectMany(x => x.Items).FirstOrDefault(x => x.Uid == uid) is AppItem userApp == false)
+        var groups = new GroupService().GetAllForUser(userUid.Value) ?? new ();
+
+        if (groups.SelectMany(x => x.Items).FirstOrDefault(x => x.Uid == uid) is AppItem userApp == false)
             return null;
 
         ai.UserApp = userApp;
@@ -92,35 +94,51 @@ public class DashboardAppController: BaseController
     [ResponseCache(NoStore = true)]
     public IActionResult Status([FromRoute] string name, [FromRoute] Guid uid, [FromQuery] string size)
     {
-        var ai = GetAppInstance(name, uid);
-        if (ai == null)
-            return new NotFoundResult();
-        var engine = ai.Engine;
+        try
+        {
+            var ai = GetAppInstance(name, uid);
+            if (ai == null)
+                return new NotFoundResult();
+            var engine = ai.Engine;
 
-        List<string> log = new();
-        var utils = new Utils();
+            List<string> log = new();
+            var utils = new Utils();
 
-        var statusArgs = AppHeler.GetApplicationArgs(engine,
-            ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
-            AppHeler.DecryptProperties(ai.UserApp.Properties),
-            log: log,
-            size: size,
-            response: Response);
-                
-        engine.SetValue("statusArgs", statusArgs);
-        engine.SetValue("statusArgsUtils", utils);
-        engine.Execute(@"
+            var statusArgs = AppHeler.GetApplicationArgs(engine,
+                ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
+                AppHeler.DecryptProperties(ai.UserApp.Properties),
+                log: log,
+                size: size,
+                response: Response);
+
+            engine.SetValue("statusArgs", statusArgs);
+            engine.SetValue("statusArgsUtils", utils);
+            engine.Execute(@"
 statusArgs.Utils = statusArgsUtils;
 var status = instance.status(statusArgs);");
-        var result = engine.GetValue("status");
-        result = result.UnwrapIfPromise();
-        if (result == null)
-            result = string.Empty;
-        var str = result.ToString();
-        if(log.Any() && ai.UserApp.Debug)
-            Logger.DLog($"[{uid}] {name}\n" + string.Join("\n", log));
-        
-        return Content(str ?? string.Empty);
+            var result = engine.GetValue("status");
+            result = result.UnwrapIfPromise();
+            if (result == null)
+                result = string.Empty;
+            var str = result.ToString();
+            if (log.Any() && ai.UserApp.Debug)
+            {
+                string header = $" [{uid}] ";
+                int pad = (100 - header.Length) / 2;
+                if (pad < 3)
+                    pad = 3;
+                header = new string('-', pad) + header + new string('-', pad);
+                Logger.DLog($"\n" + header + "\nApplication: " + name + "\n" + string.Join("\n", log) + "\n" +
+                            new string('-', header.Length));
+            }
+
+            return Content(str ?? string.Empty);
+        }
+        catch (Exception ex)
+        {
+            Logger.WLog("Error in DashboardApp.Status: " + name + " -> " + ex.Message);
+            return Content(string.Empty);
+        }
     }
 }
 

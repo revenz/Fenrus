@@ -75,7 +75,9 @@ class SmartApp
             return false;
         let dt = new Date();
         console.log(`${this.getTimeString()} - SmartApp doing work: ${this.name}`);
-        if(++this.renderCount < 2)
+        
+        let firstRender = ++this.renderCount < 2;
+        if(firstRender)
         {
             let saved = this.getFromLocalStorage();
             if(saved) 
@@ -217,7 +219,7 @@ class SmartApp
             let item = JSON.parse(localStorage.getItem(this.uid + '-' + size));
             if(!item?.date)
                 return;
-            if(item.date < (new Date().getTime() - 60000))
+            if(item.date < (new Date().getTime() - 5000))
                 return { html: item.html, old: true}; // older than a minute reject it
             return { html: item.html, old: false};
         }

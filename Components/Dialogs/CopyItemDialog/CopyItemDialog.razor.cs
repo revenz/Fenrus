@@ -46,8 +46,9 @@ public partial class CopyItemDialog: ComponentBase, IDisposable
         this.lblUser = Translator.Instant("Dialogs.CopyItem.User");
         this.lblThisGroup = Translator.Instant("Dialogs.CopyItem.ThisGroup");
         // App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
-        SystemGroupList = new GroupService().GetSystemGroups(enabledOnly: false).Where(x => x.Uid != GroupUid).OrderBy(x => x.Name).ToList();
-        UserGroupList = Settings?.Groups?.Where(x => x.Uid != GroupUid)?.OrderBy(x => x.Name)?.ToList() ?? new ();
+        var service = new GroupService();
+        SystemGroupList = service.GetSystemGroups(enabledOnly: false).Where(x => x.Uid != GroupUid).OrderBy(x => x.Name).ToList();
+        UserGroupList = service.GetAllForUser(Settings.UserUid)?.Where(x => x.Uid != GroupUid)?.OrderBy(x => x.Name)?.ToList() ?? new ();
     }
 
     // private void InstanceOnOnEscapePushed(OnEscapeArgs args)

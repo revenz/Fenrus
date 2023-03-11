@@ -71,7 +71,7 @@ public abstract class UserPage : ComponentBase
     /// <summary>
     /// Gets if the current user is an admin
     /// </summary>
-    protected bool IsAdmin => User.IsAdmin;
+    protected bool IsAdmin => User?.IsAdmin == true;
 
     /// <summary>
     /// Signs out and redirect to the login
@@ -129,7 +129,7 @@ public abstract class UserPage : ComponentBase
         
         SystemSettings = new Services.SystemSettingsService().Get();
 
-        var accent = Settings.Dashboards?.FirstOrDefault(x => x.Enabled)?.AccentColor ?? "#FF0090";
+        var accent = new DashboardService().GetAccentColorForUser(UserUid);
         App.UpdateAccentColor(accent);
 
         await PostGotUser();

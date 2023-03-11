@@ -33,6 +33,9 @@
         .btn {
             flex-grow: 1;
         }
+        .version {
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 
@@ -45,6 +48,7 @@
                 <img src="/favicon?color=@Uri.EscapeDataString(Model.AccentColor)&version=@Globals.Version" />
             </span>
             <span class="title">Fenrus</span>
+            <span class="version">@Globals.Version</span>
         </div>
         @if (string.IsNullOrEmpty(Model.Error) == false)
         {
