@@ -102,7 +102,7 @@ public class UpTimeService
     {
         using var db = DbHelper.GetDb();
         var collection = db.GetCollection<UpTimeEntry>(nameof(UpTimeEntry));
-        return collection.Exists(x => x.Url == url && x.Date == date);
+        return collection.Exists(x => x.Name == url && x.Date == date);
     }
 
     private async Task MonitorUptime(string url)
@@ -117,8 +117,8 @@ public class UpTimeService
         var reachable = await upTimeSite.IsReachable();
         entry.Message = reachable.Message;
         entry.Status = reachable.Reachable;
-        
-        DbHelper.InsertBasic(entry);
+
+        DbHelper.Insert(entry);
     }
     
     public static DateTime RoundDown(DateTime dt, TimeSpan d)
