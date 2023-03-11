@@ -3,6 +3,8 @@ WORKDIR /app
 
 # Copy everything
 COPY . ./
+# sets the version
+RUN chmod +x ./setversion.sh && ./setversion.sh
 # Restore as distinct layers
 RUN dotnet restore
 # Build and publish a release

@@ -8,6 +8,7 @@ hyperlink(){
   echo
 }
 
+git rev-list --count HEAD > gitversion.txt
 docker container stop fenrus  >/dev/null 2>&1
 docker container rm fenrus >/dev/null 2>&1
 docker build -t fenrus -f Dockerfile .
@@ -25,9 +26,15 @@ else
   dirLogs=$path/temp/data/logs
   mkdir -p $dirLogs
   
-  docker run -d -p 3000:3000 -v $dirData:/app/data -e puid=1000 -e pgid=1000 --restart unless-stopped --name fenrus fenrus 
+  port=3000
+  
+  if [ "$1" = "--port" ]; then
+    port="$2"
+  fi
+  
+  docker run -d -p $port:3000 -v $dirData:/app/data -e puid=1000 -e pgid=1000 --restart unless-stopped --name fenrus fenrus 
   
   hyperlink 'Data Directory' file://$dirData $dirData
   hyperlink 'Logs Directory' file://$dirLogs $dirLogs 
-  hyperlink 'Fenrus App URL' http://localhost:3000 http://localhost:3000
+  hyperlink 'Fenrus App URL' http://localhost:$port http://localhost:$port
 fi

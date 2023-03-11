@@ -71,7 +71,7 @@ public abstract class UserPage : ComponentBase
     /// <summary>
     /// Gets if the current user is an admin
     /// </summary>
-    protected bool IsAdmin => User.IsAdmin;
+    protected bool IsAdmin => User?.IsAdmin == true;
 
     /// <summary>
     /// Signs out and redirect to the login
