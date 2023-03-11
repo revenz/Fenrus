@@ -20,7 +20,7 @@ public class Fetch
     /// <summary>
     /// Gets an instance of the fetch helper
     /// </summary>
-    public static object Execute(FetchArgs args)
+    public static async Task<object> Execute(FetchArgs args)
     {
         try
         {
@@ -100,9 +100,8 @@ public class Fetch
             
             client.Timeout = TimeSpan.FromSeconds(timeout);
             var cts = new CancellationTokenSource();
-            var result = client.SendAsync(request, cts.Token).Result;
-            string content = result.Content.ReadAsStringAsync().Result;
-            //return content;
+            var result = await client.SendAsync(request, cts.Token);
+            string content = await result.Content.ReadAsStringAsync(cts.Token);
 
             var trimmed = content.Trim();
             if (trimmed.StartsWith("{") || trimmed.StartsWith("["))
@@ -113,7 +112,7 @@ public class Fetch
                     var parsed = engine.Evaluate("JSON.parse(temp_json)").ToObject();
                     return parsed;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return content;
                 }

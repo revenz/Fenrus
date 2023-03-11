@@ -1,39 +1,40 @@
 ﻿class FileFlows
 {
+    pfImages = {};
+    
+    async fetch(args, url) {
+        let result = await args.fetch(url);
+        return result?.Result || result;
+    }
     async status(args)
     {
-        args.log('getting status: ' + JSON.stringify(this));
-        args.log('update available type: ' + typeof(this.updateAvailable()));
-        args.log("about to get status");
-        let data = await args.fetch('api/status');
-        let shrinkage = await args.fetch('api/library-file/shrinkage-groups');
-        let updateAvailable = await this.updateAvailable(args);
-        // this no longer works with JINT
-        // const [ data, shrinkage, updateAvailable ] = await Promise.all([
-        //     await args.fetch('api/status'),
-        //     await args.fetch('api/library-file/shrinkage-groups'),
-        //     await this.updateAvailable(args)
-        // ]);
+        const [ data, shrinkage, updateAvailable ] = await Promise.all([
+            await this.fetch(args, 'api/status'),
+            await this.fetch(args, 'api/library-file/shrinkage-groups'),
+            await this.updateAvailable(args)
+        ]);
 
         args.setStatusIndicator(updateAvailable ? 'update' : '');
 
         if (!data || isNaN(data.queue)) {
-            args.log('there is no data: ' + JSON.stringify(data || 'null'));
             throw 'no data';
         }
 
-        if(args.size.indexOf('large') >= 0)
+        if(args.size.indexOf('large') >= 0) {
             return await this.statusXLarge(args, data, shrinkage);
+        }
         else
             return this.statusMedium(args, data);
     }
 
     async updateAvailable(args){
-        args.log('updateAvailable method: ' + args);
-        let data = await args.fetch('api/status/update-available');
-        args.log('args aint null...')
+        let data = await this.fetch(args, 'api/status/update-available');
+        if(data.exception)
+        {
+            args.wlog('Exception fetching update-available: ' + (data.message || 'Unknown reason'));
+            return false;
+        }
         let result = data?.UpdateAvailable === true;
-        args.log('update available result: ' + result);
         return result;
     }
 
@@ -42,20 +43,22 @@
             return 'update';
         return 'recording';
     }
-
-    pfImages = {};
     
 
     async statusXLarge(args, data, shrinkage){
         if(!data.processingFiles?.length){
             if(shrinkage && Object.keys(shrinkage).length)
-                return this.statusShrinkage(args, shrinkage);
+                return this.statusShrinkage(args, shrinkage)
             return this.statusMedium(args, data);
         }
-            
+
+        if(!this.pfImages)
+            this.pfImages = {};
+        
         let items =  [];
-        for(let item of data.processingFiles || [])
+        for(let item of data?.processingFiles || [])
         {
+            
             if(this.pfImages[item.name] === undefined)
             {
                 let searchTerm = item.relativePath.replace(/\\/g, '/');
@@ -74,16 +77,16 @@
                 }
                 args.log('FileFlows search term: ' + searchTerm);
                 let images = await args.imageSearch(searchTerm);
-                this.pfImages[item.name] = images?.length ? images[0] : '';      
+                this.pfImages[item.name] = images?.length ? images[0] : '';
             }
-            let image = this.pfImages[item.name]
+            let image = this.pfImages[item.name];
             items.push({
                 file: item.relativePath,
                 library: item.library,
                 step: item.step,
                 stepPercent: item.stepPercent,
                 image: image
-            })
+            });
         }
         let max = args.size === 'x-large' ? 7 : 10;
         if(items.length > max)
@@ -95,7 +98,6 @@
     }
 
     statusMedium(args, data){
-        args.log('ff medium');
         let secondlbl = 'Time';
         let secondValue = data.time;
 

@@ -94,14 +94,13 @@ public class DashboardAppController: BaseController
     [ResponseCache(NoStore = true)]
     public IActionResult Status([FromRoute] string name, [FromRoute] Guid uid, [FromQuery] string size)
     {
+        List<string> log = new();
         try
         {
             var ai = GetAppInstance(name, uid);
             if (ai == null)
                 return new NotFoundResult();
             var engine = ai.Engine;
-
-            List<string> log = new();
             var utils = new Utils();
 
             var statusArgs = AppHeler.GetApplicationArgs(engine,
@@ -136,7 +135,8 @@ var status = instance.status(statusArgs);");
         }
         catch (Exception ex)
         {
-            Logger.WLog("Error in DashboardApp.Status: " + name + " -> " + ex.Message);
+            Logger.WLog("Error in DashboardApp.Status: " + name + " -> " + ex.Message  +
+                        (log.Any() ? "\n" + string.Join("\n", log) : string.Empty));
             return Content(string.Empty);
         }
     }
