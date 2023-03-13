@@ -122,8 +122,11 @@ public partial class PageDashboard : CommonPage<Models.Group>
             }
         }
         var sysGroups = new GroupService().GetSystemGroups(enabledOnly: true);
-        Groups = new GroupService().GetAllForUser(UserUid).Where(x => Model.GroupUids.Contains(x.Uid))
-            .Union(sysGroups.Where(x => Model.GroupUids.Contains(x.Uid))).ToList();
+        
+        Groups = new GroupService().GetAllForUser(UserUid).Union(sysGroups)
+            .Where(x => Model.GroupUids.Contains(x.Uid))
+            .OrderBy(x => Model.GroupUids.IndexOf(x.Uid))
+            .ToList();
         return Task.CompletedTask;
     }
 
