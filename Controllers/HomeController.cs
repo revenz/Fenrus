@@ -337,12 +337,13 @@ public class HomeController : BaseController
             //AllowRefresh = <bool>,
             // Refreshing the authentication session should be allowed.
 
+            ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7),
             //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
             // The time at which the authentication ticket expires. A 
             // value set here overrides the ExpireTimeSpan option of 
             // CookieAuthenticationOptions set with AddCookie.
 
-            //IsPersistent = true,
+            IsPersistent = true,
             // Whether the authentication session is persisted across 
             // multiple requests. When used with cookies, controls
             // whether the cookie's lifetime is absolute (matching the
