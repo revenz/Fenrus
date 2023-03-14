@@ -373,7 +373,11 @@ function UpdateSettingValue(url, event)
             eleDashboard.classList.remove('status-indicators');
             if(json.showStatusIndicators === true)
                 eleDashboard.classList.add('status-indicators');
-    
+
+            let searchContainer = document.getElementById('search-container');
+            if(searchContainer)
+                searchContainer.style.display = json.showSearch ? '' : 'none';
+            
             if(json.linkTarget){
                 // need to update all the targets
                 for(let a of eleDashboard.querySelectorAll('a'))

@@ -17,6 +17,11 @@ public partial class SearchComponent
     /// Gets or sets the translator to use
     /// </summary>
     [Parameter] public Translator Translator { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if the search should be shown
+    /// </summary>
+    [Parameter] public bool ShowSearch { get; set; }
 
     private List<SearchEngine> _SystemSearchEngines = new();
 

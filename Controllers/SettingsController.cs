@@ -170,6 +170,9 @@ public class SettingsController : BaseController
         
         return Json(new
         {
+            showGroupTitles = dashboard.ShowGroupTitles,
+            showStatusIndicators = dashboard.ShowStatusIndicators,
+            showSearch = dashboard.ShowSearch,
             reload
         });
     }
