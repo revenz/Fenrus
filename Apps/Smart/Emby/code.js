@@ -1,10 +1,10 @@
 ﻿class Emby
 {   
-    async getToken(args){
+    getToken(args){
         let username = args.properties['username'];
         let password = args.properties['password'];
         
-        let data = await args.fetch({
+        let data = args.fetch({
             url: 'Users/AuthenticateByName',
             method: 'POST',
             headers: { 
@@ -19,10 +19,10 @@
         return {token: data.AccessToken, userId: data?.User?.Id };
     }
 
-    async getLibraries(args, token){
+    getLibraries(args, token){
         if(!token)
-            token = await this.getToken(args);        
-        let data = await args.fetch({
+            token = this.getToken(args);        
+        let data = args.fetch({
             url: `Library/MediaFolders`,
             headers: {
                 'X-MediaBrowser-Token': token.token
@@ -31,13 +31,13 @@
         return data?.Items?.map(x => x.Id);
     }
     
-    async getData(args){
-        let token = await this.getToken(args);        
-        let libraries = await this.getLibraries(args, token);
+    getData(args){
+        let token = this.getToken(args);        
+        let libraries = this.getLibraries(args, token);
         let results = [];
         for(let lib of libraries)
         {
-            let data = await args.fetch({
+            let data = args.fetch({
                 url: `Users/${token.userId}/Items/Latest?Limit=7&ParentId=${lib}&Fields=ProductionYear` ,
                 headers: {
                     'X-MediaBrowser-Token': token.token
@@ -60,9 +60,9 @@
         return results;
     }
 
-    async getCounts(args){
-        let token = await this.getToken(args);        
-        let data = await args.fetch({
+    getCounts(args){
+        let token = this.getToken(args);        
+        let data = args.fetch({
             url: `Items/Counts`,
             headers: {
                 'X-MediaBrowser-Token': token.token
@@ -72,16 +72,16 @@
     }
 
 
-    async status(args) {
+    status(args) {
         if(args.size.indexOf('large') >= 0)
-             return await this.statusXLarge(args);
+             return this.statusXLarge(args);
          else
-            return await this.statusMedium(args);
+            return this.statusMedium(args);
     }
 
-    async statusXLarge(args){
+    statusXLarge(args){
         
-        let data = await this.getData(args);
+        let data = this.getData(args);
         if(isNaN(data?.length) || data.length === 0)
             return;
 
@@ -97,8 +97,8 @@
         }));
     }
 
-    async statusMedium(args){
-        let data = await this.getCounts(args);
+    statusMedium(args){
+        let data = this.getCounts(args);
         if(!data || (!data.MovieCount && !SeriesCount))
             return;
         let movies = data.MovieCount || 0;
@@ -126,8 +126,8 @@
 `;
     }
 
-    async test(args) {
-        let data = await this.getToken(args);
+    test(args) {
+        let data = this.getToken(args);
         return !!data?.token;
     }
 }

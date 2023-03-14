@@ -11,8 +11,8 @@ class OctoPrint {
         return data;
     }
 
-    async status(args) {
-        let data = await this.doFetch(args, "job");
+    status(args) {
+        let data = this.doFetch(args, "job");
 
         let percentProgress = data?.progress?.completion;
         let printTimeLeftSecs = data?.progress?.printTimeLeft;
@@ -56,8 +56,8 @@ class OctoPrint {
 
     }
 
-    async test(args) {
-        let data = await this.doFetch(args, "version");
+    test(args) {
+        let data = this.doFetch(args, "version");
         console.log('data', data);
         return isNaN(data?.api) === false;
     }

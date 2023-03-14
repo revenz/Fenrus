@@ -5,19 +5,19 @@ class Radarr {
         return url;
     }
 
-    async status(args) {
-		let updateAvailable = await this.getStatusIndicator(args);
+    status(args) {
+		let updateAvailable = this.getStatusIndicator(args);
 		args.setStatusIndicator(updateAvailable ? 'Update' : '');
         let filter = args.properties['filters'];
 
         
-        let data = await args.fetch({
+        let data = args.fetch({
             url: this.getUrl(args, 'movie'),
             timeout: 10000
         });
         let queueData = [];
         if (args.properties['fetchWarnings'] == 'true') {      
-            queueData = await args.fetch({
+            queueData = args.fetch({
                 url: this.getUrl(args, 'queue') + '&pageSize=10000',
                 timeout: 5000
             });
@@ -36,7 +36,7 @@ class Radarr {
         })
         let missingCount = filteredData?.length ?? 0;
 
-        data = await args.fetch(this.getUrl(args, 'queue'));
+        data = args.fetch(this.getUrl(args, 'queue'));
         let queue = data?.records?.length ?? 0;
 
         if (args.properties['fetchWarnings'] != 'true') {
@@ -62,15 +62,15 @@ class Radarr {
 
     }
 
-	async getStatusIndicator(args){
-        let data = await args.fetch(this.getUrl(args, 'update'));
+	getStatusIndicator(args){
+        let data = args.fetch(this.getUrl(args, 'update'));
         if(data?.length > 0 && data[0].installed === false && data[0].latest === true)
 		    return 'update';
     	return '';
 	}
 	
-    async test(args) {
-        let data = await args.fetch(this.getUrl(args, 'queue'));
+    test(args) {
+        let data = args.fetch(this.getUrl(args, 'queue'));
         return isNaN(data?.records?.length) === false;
     }
 }

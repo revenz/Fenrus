@@ -10,16 +10,16 @@ class Jenkins {
         });
     }
 
-    async status(args) {
-        let xmlStr = await this.doFetch(args);
+    status(args) {
+        let xmlStr = this.doFetch(args);
         var count = (xmlStr.match(/<\/url>/g) || []).length;
         return args.liveStats([
             ['Active jobs', count]
         ]);
     }
 
-    async test(args) {
-        let xmlStr = await this.doFetch(args);
+    test(args) {
+        let xmlStr = this.doFetch(args);
         console.log("xmlStr", xmlStr);
         return xmlStr.includes('<buildUrls');
     }

@@ -1,10 +1,10 @@
 ﻿class Portainer 
 {
-    async authorize(args) {
+    authorize(args) {
         let username = args.properties['username'];
         let password = args.properties['password'];
         try{
-            let res = await args.fetch({
+            let res = args.fetch({
                 url: 'api/auth',
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json'},
@@ -24,9 +24,9 @@
         throw res.body;
     }
 
-    async status(args) {
-        let jwt = await this.authorize(args);
-        let data = await args.fetch({
+    status(args) {
+        let jwt = this.authorize(args);
+        let data = args.fetch({
             url: 'api/endpoints?limit=100&start=0',
             headers: { 'Authorization': 'Bearer ' + jwt}
         });
@@ -49,7 +49,7 @@
         ]);
     }
     
-    async test(args) {
-        return !!(await this.authorize(args));
+    test(args) {
+        return !!(this.authorize(args));
     }
 }

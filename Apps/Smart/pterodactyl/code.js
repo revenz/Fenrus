@@ -10,10 +10,10 @@
         });
     }
 
-    async status(args) {
+    status(args) {
         let data = null
         if (args.properties['serverKey']) {
-            data = await this.doFetch(args, 'servers/' + args.properties['serverKey'] + '/resources');
+            data = this.doFetch(args, 'servers/' + args.properties['serverKey'] + '/resources');
             return args.liveStats([
                 ['State', data?.attributes?.current_state ?? 'Unreachable'],
                 ['CPU', data?.attributes?.resources?.cpu_absolute ?? 0 + '%'],
@@ -24,12 +24,12 @@
         } else {
 			
             console.log("Pterodactyl: serverKey param not provided to grabbing data for first server which can be found");
-            let serverList = await this.doFetch(args, '');
+            let serverList = this.doFetch(args, '');
             if (serverList?.data != null && serverList?.data.length > 0) {
                 const serverObj = serverList?.data[0];
                 let name = serverObj?.attributes?.name;
                 console.log("Name: " + name + ", ID: " + serverObj?.attributes?.identifier)
-                data = await this.doFetch(args, 'servers/' + serverObj?.attributes?.identifier + '/resources');
+                data = this.doFetch(args, 'servers/' + serverObj?.attributes?.identifier + '/resources');
                 let title = (name.length > 18) ? [name] : ['Server Name', name];
                 return args.liveStats([
                     title,
@@ -41,8 +41,8 @@
         }
     }
 
-    async test(args) {
-        let data = await this.doFetch(args, '');
+    test(args) {
+        let data = this.doFetch(args, '');
         return isNaN(data?.meta?.pagination?.total) === false;
     }
 }

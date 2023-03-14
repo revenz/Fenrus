@@ -7,18 +7,18 @@ class SpeedtestTracker {
         });
     }
 
-    async status(args) {
+    status(args) {
         let mode = args.properties['mode'];
 
         if (mode === 'graph') {
-            return await this.chartDownAndUp(args);
+            return this.chartDownAndUp(args);
         } else {
-            return await this.liveStats(args, mode);
+            return this.liveStats(args, mode);
         }
     }
 
-    async chartDownAndUp(args) {
-        let stats = await this.doFetch(args, '');
+    chartDownAndUp(args) {
+        let stats = this.doFetch(args, '');
         if (!stats?.data?.data)
             return;
         let labels = stats.data.data.map(x => new Date(x.created_at));
@@ -40,15 +40,15 @@ class SpeedtestTracker {
         let title = Math.round(+stats.data.data[0].download) + ' Mbit/s     \n' + Math.round(+stats.data.data[0].upload) + ' Mbit/s';
         //let title = 'Speedtest Mb/s';
 
-        return await args.chart.line({
+        return args.chart.line({
             title,
             labels,
             data
         });
     }
 
-    async liveStats(args, mode) {
-        let stats = await this.doFetch(args, 'latest');
+    liveStats(args, mode) {
+        let stats = this.doFetch(args, 'latest');
 
         let ping = 0;
         let download = 0;
@@ -85,8 +85,8 @@ class SpeedtestTracker {
 
     }
 
-    async test(args) {
-        let data = await this.doFetch(args, 'latest');
+    test(args) {
+        let data = this.doFetch(args, 'latest');
         console.log('data', data);
         return isNaN(data?.data?.id) === false;
     }

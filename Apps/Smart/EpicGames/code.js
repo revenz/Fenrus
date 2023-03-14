@@ -10,7 +10,7 @@
         return country;
     }
 
-    async getData(args)
+    getData(args)
     {        
         if(this.data && this.data.length && this.dataAge && this.dataAge >= new Date().getTime() - (10 * 60 * 1000)){
             ++this.dataIndex;
@@ -20,8 +20,8 @@
             return this.data[this.dataIndex];
         }
 
-        let freeGame = await this.getFreeGame(args);
-        let results = await this.getOnSale(args) || [];
+        let freeGame = this.getFreeGame(args);
+        let results = this.getOnSale(args) || [];
         
         if(freeGame)
             results.splice(0, 0, freeGame);
@@ -32,9 +32,9 @@
         return this.data[this.dataIndex];
     }
 
-    async getFreeGame(args)
+    getFreeGame(args)
     {
-        let data = await args.fetch('https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?country=' + this.countryCode);
+        let data = args.fetch('https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?country=' + this.countryCode);
         if (!data?.data?.Catalog?.searchStore?.elements?.length)
             return null;
         let now = new Date().getTime();
@@ -45,8 +45,8 @@
         return this.getItem(sorted[0], args);
     }
 
-    async getOnSale(args){
-        let data = await args.fetch('https://store-site-backend-static-ipv4.ak.epicgames.com/storefrontLayout?country=' + this.countryCode);
+    getOnSale(args){
+        let data = args.fetch('https://store-site-backend-static-ipv4.ak.epicgames.com/storefrontLayout?country=' + this.countryCode);
         if(data && typeof(data) === 'string')
             data = JSON.parse(data);
         if(!data || !data.data || !data.data.Storefront)
@@ -93,12 +93,12 @@
         return item;
     }
 
-    async status(args) {
+    status(args) {
         if(args.size === 'small' || args.size === 'medium')
             return;
         this.countryCode = this.getCountryCode(args);
 
-        let item = await this.getData(args);
+        let item = this.getData(args);
         if(!item) {
             return;
         }

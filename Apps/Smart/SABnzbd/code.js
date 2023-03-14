@@ -12,21 +12,21 @@
         return `api?output=json&apikey=${args.properties['apikey']}&mode=${mode}`;
     }
 
-    async getData(args, mode) {
+    getData(args, mode) {
         let url = this.getUrl(args, mode);
-        return await args.fetch(url); 
+        return args.fetch(url); 
     }
 
-    async status(args) 
+    status(args) 
     {        
         if(args.size.indexOf('large') >= 0)
-            return await this.statusLarge(args);
-        return await this.statusMedium(args);
+            return this.statusLarge(args);
+        return this.statusMedium(args);
     }
 
-    async statusMedium(args)
+    statusMedium(args)
     {        
-        let data = await this.getData(args, 'queue');
+        let data = this.getData(args, 'queue');
         if (isNaN(data?.queue?.mbleft) || isNaN(data?.queue?.kbpersec)){
             return '';
         }
@@ -73,10 +73,10 @@
         ]);
     }
 
-    async statusLarge(args)
+    statusLarge(args)
     {
-        let data = await this.getData(args, 'queue');
-        let history = await this.getData(args, 'history');
+        let data = this.getData(args, 'queue');
+        let history = this.getData(args, 'history');
         
         let mbleft = parseFloat(data?.queue?.mbleft, 10);
         if(isNaN(mbleft))
@@ -104,7 +104,7 @@
             let mbleft = parseFloat(item.mbleft, 10);
             let percent = (mb - mbleft) / mb * 100;
             percent.toFixed(2) + '%'
-            let chartBase64 = await args.chart.line({
+            let chartBase64 = args.chart.line({
                 title: '',
                 min: Math.min(...speeds),   
                 max: Math.max(...speeds),
@@ -112,7 +112,7 @@
                 data: [speeds]
             });
 
-            let image = await this.searchForImage(args, item.filename);
+            let image = this.searchForImage(args, item.filename);
             
             if(image)
             {
@@ -130,7 +130,7 @@
             for(let item of history.history.slots){
                 if(item.status !== 'Completed')
                     continue;
-                let image = await this.searchForImage(args, item.series || item.name);
+                let image = this.searchForImage(args, item.series || item.name);
                 let millisecondsAgo = new Date().getTime() - (item.completed * 1000);
                 args.log('about to push item');
                 items.push(this.getCarouselItemHtml(args, image, item.name, item.size, 
@@ -171,7 +171,7 @@
         ]);
     }
 
-    async searchForImage(args, filename) {
+    searchForImage(args, filename) {
         if(this.pfImages[filename] === undefined)
         {
             let searchTerm = filename.replace(/\\/g, '/');
@@ -191,7 +191,7 @@
 
             args.log('SABnzbd search term: ' + searchTerm);
 
-            let images = await args.imageSearch(searchTerm);
+            let images = args.imageSearch(searchTerm);
             this.pfImages[filename] = images?.length ? images[0] : '';      
         }
         return this.pfImages[filename];
@@ -209,8 +209,8 @@
         `
     }
 
-    async test(args) {
-        let data = await args.fetch(`api?output=json&apikey=${args.properties['apikey']}&mode=queue`);
+    test(args) {
+        let data = args.fetch(`api?output=json&apikey=${args.properties['apikey']}&mode=queue`);
         return isNaN(data?.queue?.mbleft) === false;
     }
 }

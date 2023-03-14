@@ -1,12 +1,12 @@
 class Tdarr {
-    async status(args) {
+    status(args) {
 		
 		
       let url = args.url;
       if(url.endsWith('/'))
         url = url.substring(0, url.length - 1);
 	
-      const data = await args.fetch(
+      const data = args.fetch(
         {
           url: `${url}/api/v2/cruddb/`,
           method: 'POST',
@@ -43,11 +43,11 @@ class Tdarr {
       return args.liveStats(results);
     }
   
-    async test(args) {
+    test(args) {
       let url = args.url;
       if(url.endsWith('/'))
         url = url.substring(0, url.length - 1);
-      const data = await args.fetch(`${url}/api/v2/status`);
+      const data = args.fetch(`${url}/api/v2/status`);
       return (data.status === 'good');
     }
   }

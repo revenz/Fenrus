@@ -1,9 +1,9 @@
 ﻿class HypixelOnlinePlayers {
     static API_URL = "https://api.hypixel.net/counts";
 
-    async status(args) {
+    status(args) {
         const apikey = args.properties.apikey;
-        const data = await args.fetch({
+        const data = args.fetch({
             url: HypixelOnlinePlayers.API_URL,
             headers: {
                 'API-Key': apikey
@@ -16,9 +16,9 @@
         ]);
     }
 
-    async test(args) {
+    test(args) {
         const apikey = args.properties.apikey;
-        const data = await args.fetch({
+        const data = args.fetch({
             url: HypixelOnlinePlayers.API_URL,
             headers: {
                 'API-Key': apikey

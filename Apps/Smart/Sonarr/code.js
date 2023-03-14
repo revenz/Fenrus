@@ -3,18 +3,18 @@
         return `api/v3/${endpoint}?apikey=${args.properties['apikey']}`;
     }
 
-    async status(args) {
+    status(args) {
 
         let url = this.getUrl(args, 'wanted/missing') + '&sortKey=airDateUtc&sortDir=desc';
         let queueUrl = this.getUrl(args, 'queue') + '&pageSize=10000';
-        let data = await args.fetch(url);
+        let data = args.fetch(url);
         let queueData = []
         
         if (args.properties['fetchWarnings'] == 'true')
-            queueData = await args.fetch(queueUrl);
+            queueData = args.fetch(queueUrl);
 
         let missing = data?.totalRecords ?? 0;
-        data = await args.fetch(this.getUrl(args, ('queue')))
+        data = args.fetch(this.getUrl(args, ('queue')))
         let queue = data?.totalRecords ?? 0;
 
         if (args.properties['fetchWarnings'] != 'true') {
@@ -37,8 +37,8 @@
         }
     }
 
-    async test(args) {
-        let data = await args.fetch(this.getUrl(args, 'wanted/missing') + '&sortKey=airDateUtc&sortDir=desc');
+    test(args) {
+        let data = args.fetch(this.getUrl(args, 'wanted/missing') + '&sortKey=airDateUtc&sortDir=desc');
         return isNaN(data?.totalRecords) === false;
     }
 }

@@ -1,7 +1,7 @@
 class Flaresolverr {
 
-async status(args) {
-        const data = await args.fetch(args.url);
+status(args) {
+        const data = args.fetch(args.url);
         
         if(!data?.version)
                 return args.liveStats([
@@ -15,8 +15,8 @@ async status(args) {
                         ['Up',data.msg == 'FlareSolverr is ready!'],
                 ]);
         }
-        async test(args) {
-                const data = await args.fetch(args.url);
+        test(args) {
+                const data = args.fetch(args.url);
                 return data.msg == 'FlareSolverr is ready!';
         }
 }

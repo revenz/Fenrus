@@ -3,7 +3,7 @@
         return `${endpoint}`;
     } 
 
-    async status(args) {
+    status(args) {
 		const defaultLibName = ['Library 1','Library 2','Library 3'];
 		
         let id1 = args.properties['rssID'] ?? '';
@@ -48,13 +48,13 @@
 		);
     }
 	
-    async test(args) {
+    test(args) {
 		let id1 = args.properties['rssID'];
 		if(id1 == null || id1.length < 1) {
 			console.error("Test failed for Gaps, no rssID provided");
 			return false;
 		}
-		let data = await args.fetch(this.getUrl(args, id1));
+		let data = args.fetch(this.getUrl(args, id1));
 		console.log(data)
         return isNaN(data.length) === false;
     }

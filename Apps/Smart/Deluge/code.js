@@ -2,12 +2,12 @@
 {   
     callCount = 0;
 
-    async getToken(args){
+    getToken(args){
         let password = args.properties['password'];
 
         try
         {
-            let res = await args.fetchResponse({
+            let res = args.fetchResponse({
                 url: 'json',
                 method: 'POST',
                 headers: {
@@ -32,9 +32,9 @@
     }
 
     
-    async getData(args){
-        let token = await this.getToken(args);     
-        let data = await args.fetch({
+    getData(args){
+        let token = this.getToken(args);     
+        let data = args.fetch({
             url: 'json', 
             method: 'POST',
             headers: {
@@ -55,8 +55,8 @@
         return data;
     }
 
-    async status(args) {
-        let data = await this.getData(args);
+     status(args) {
+        let data = this.getData(args);
         if(!data)
             return;
 
@@ -76,8 +76,8 @@
         ]);
     }
 
-    async test(args) {
-        let token = await this.getToken(args);
+    test(args) {
+        let token = this.getToken(args);
         return !!token;
     }
 }

@@ -1,6 +1,6 @@
 ﻿class GitHub
 {
-    async status(args) {
+    status(args) {
         let branch = args.properties ? args.properties['branch'] : 'master';
         branch = branch || 'master';
         let url = args.url;
@@ -14,7 +14,7 @@
             url += '/';
         url = `${url}commits/${branch}`;
 
-        let data = await args.fetch({ url: url, headers: { 'User-Agent': 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36'} })
+        let data = args.fetch({ url: url, headers: { 'User-Agent': 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36'} })
                 
         let commit = data?.commit
         let date = commit?.author?.date;

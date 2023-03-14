@@ -1,8 +1,8 @@
 ﻿
 class Steam {
 
-    async getData(args){
-        let data = await args.fetch('https://store.steampowered.com/api/featuredcategories/');
+    getData(args){
+        let data = args.fetch('https://store.steampowered.com/api/featuredcategories/');
         if (!data?.specials)
             return null;
 
@@ -29,11 +29,11 @@ class Steam {
         return item;
     }
 
-    async status(args) {
+    status(args) {
         if(args.size === 'small' || args.size === 'medium')
             return;
             
-        let data = await this.getData(args);
+        let data = this.getData(args);
         if(!data)
             return;
        

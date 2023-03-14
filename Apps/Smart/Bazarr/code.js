@@ -7,10 +7,10 @@
         });
     }  
 	
-    async status(args) {
+    status(args) {
 		
-		let data = await this.doFetch(args,'badges');
-        let historyData = await this.doFetch(args,'history/stats');
+		let data = this.doFetch(args,'badges');
+        let historyData = this.doFetch(args,'history/stats');
 		
 		let movieCount = 0;
 		let seriesCount = 0;
@@ -34,8 +34,8 @@
         ]);
     }
     
-    async test(args) {
-        let data = await this.doFetch(args,'system/status');
+    test(args) {
+        let data = this.doFetch(args,'system/status');
         return data?.data?.bazarr_version != null;
     }
 }

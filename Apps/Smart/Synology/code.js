@@ -1,7 +1,7 @@
 class Synology
 {
 
-	async sessionId(args){
+	sessionId(args){
 		const user = args.properties['username'];
 		const password = args.properties['password'];
         if(!user || !password)
@@ -9,7 +9,7 @@ class Synology
 
         try
         {
-            let res = await args.fetch({
+            let res = args.fetch({
                 url:`${args.url}/webapi/auth.cgi?api=SYNO.API.Auth&version=6&method=login&account=${user}&passwd=${password}`,
                 timeout: 5000,
 			});
@@ -23,13 +23,13 @@ class Synology
             return;
 		}
 	}
-	async getData(args){
-        let sessionId = await this.sessionId(args);
+	getData(args){
+        let sessionId = this.sessionId(args);
 
         if(!sessionId)
         return;
 
-        let data = await args.fetch({
+        let data = args.fetch({
             url: `${args.url}/webapi/entry.cgi?api=SYNO.Core.System.Utilization&method=get&version=1&_sid=${sessionId}`,
             timeout: 10000, // 10 seconds
             method: 'POST',
@@ -48,14 +48,14 @@ class Synology
 		if(data.success == false)
 		return;
 		
-		let logout = await args.fetch({
+		let logout = args.fetch({
 			url:`${args.url}/webapi/auth.cgi?api=SYNO.API.Auth&version=6&method=logout&_sid=${sessionId}`,
 		});
         return data;
 	}
 
-	async status(args) {
-        let data = await this.getData(args);
+	status(args) {
+        let data = this.getData(args);
         if(!data)
 		return;
 		
@@ -65,8 +65,8 @@ class Synology
         return args.barInfo([{label:'CPU', percent: data.data.cpu?.system_load || 0,icon:'common/cpu.svg',},{label:'RAM', percent: data.data.memory?.real_usage || 0,icon:'/common/ram.svg',},]);
 		
 	}
-	async test(args) {
-		let token = await this.sessionId(args);
+	test(args) {
+		let token = this.sessionId(args);
         return !!token;
 	}
 }

@@ -1,13 +1,13 @@
 ﻿class HDHomeRun
 {       
-    async getChannelCount(args){
-        let data = await args.fetch('lineup.json?show=found');
+    getChannelCount(args){
+        let data = args.fetch('lineup.json?show=found');
         if(!data)
             return 0;
         return data.length || 0;
     } 
-    async getTuners(args){
-        let html = await args.fetch({
+    getTuners(args){
+        let html = args.fetch({
             url: 'tuners.html',
             headers: {
                 'Accept': 'text/html'
@@ -31,9 +31,9 @@
         return { total, inUse };
     }
 
-    async status(args){
-        let channels =await this.getChannelCount(args);
-        let tuners = await this.getTuners(args);
+    status(args){
+        let channels =this.getChannelCount(args);
+        let tuners = this.getTuners(args);
 
         if(!channels && !tuners?.total)
             return;
@@ -43,8 +43,8 @@
             ['Tuners In Use', `${tuners.inUse} of ${tuners.total}`]
         ]);
     }
-    async test(args) {
-        let data = await this.getChannelCount(args);
+    test(args) {
+        let data = this.getChannelCount(args);
         return data > 0;
     }
 }

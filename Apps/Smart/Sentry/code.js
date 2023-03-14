@@ -15,7 +15,7 @@
         return url;
     }
 
-    async makeRequest(args, path) {
+    makeRequest(args, path) {
         let url = this.getUrl(args.url);
         if (!url) {
             return null;
@@ -29,11 +29,11 @@
         })
     }
 
-    async getProjects(args) {
+    getProjects(args) {
         return this.makeRequest(args, '/projects/');
     }
 
-    async getEventCounts(args, project) {
+    getEventCounts(args, project) {
         const org = project.organization.slug;
         const projectId = project.slug;
         return this.makeRequest(args, '/projects/' + org + '/' + projectId + '/stats/?stat=received&resolution=1d')
@@ -42,12 +42,12 @@
             });
     }
 
-    async status(args) {
-        const projects = await this.getProjects(args);
+    status(args) {
+        const projects = this.getProjects(args);
 
         const counts = [];
         for (const project of projects) {
-            let result = await this.getEventCounts(args, project);
+            let result = this.getEventCounts(args, project);
             counts.push(result);
         }
 
@@ -61,8 +61,8 @@
         ]);
     }
 
-    async test(args) {
-        let data = await this.makeRequest(args, '/');
+    test(args) {
+        let data = this.makeRequest(args, '/');
         return data?.user;
     }
 }

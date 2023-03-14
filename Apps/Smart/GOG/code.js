@@ -3,7 +3,7 @@
     data;
     dataIndex = 0;
 
-    async getData(args)
+    getData(args)
     {        
         if(this.data?.length && this.dataAge && this.dataAge >= new Date().getTime() - (10 * 60 * 1000)){
             ++this.dataIndex;
@@ -13,7 +13,7 @@
             return this.data[this.dataIndex];
         }
 
-        let results = await this.getOnSale(args) || [];
+        let results = this.getOnSale(args) || [];
         this.data = results;
         this.dataIndex = 0;
         this.dataAge = new Date().getTime();
@@ -21,10 +21,10 @@
     }
 
 
-    async getOnSale(args){
+    getOnSale(args){
         let currency = args.properties['currency'] || 'AUD';
         let country = args.properties['country'] || 'NZ';
-        let data = await args.fetch(`https://menu.gog.com/v1/store/configuration?locale=en-US&currency=${currency}&country=${country}`);
+        let data = args.fetch(`https://menu.gog.com/v1/store/configuration?locale=en-US&currency=${currency}&country=${country}`);
         args.log('data: ' + data);
         if(!data || !data['on-sale-now'] || isNaN(data['on-sale-now'].products?.length))
             return;
@@ -54,7 +54,7 @@
         return item;
     }
 
-    async status(args) {
+    status(args) {
 
         if(args.size === 'small' || args.size === 'medium')
             return;
@@ -64,7 +64,7 @@
         if(!this.getData)
             return 'get data is null';
 
-        let item = await this.getData(args);
+        let item = this.getData(args);
         if(!item) 
         {
             return "item is null";

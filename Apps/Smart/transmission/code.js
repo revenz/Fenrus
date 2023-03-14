@@ -16,12 +16,12 @@ class transmission {
         return data;
     }
 
-    async status(args) {
+    status(args) {
         let sessionId = ""
         if (args.properties['x-transmission-session-id'] != null) {
             sessionId = args.properties['x-transmission-session-id'];
         }
-        let data = await this.doFetch(args, sessionId);
+        let data = this.doFetch(args, sessionId);
         let responseCode = data.status;
         console.log('Transmission: status response code: ' + responseCode);
         if (responseCode == 409) 
@@ -29,7 +29,7 @@ class transmission {
             sessionId = data.headers.get('x-transmission-session-id');
             args.properties['x-transmission-session-id'] = sessionId;
             //if 409 retry query with session ID of previous run
-            data = await this.doFetch(args, sessionId);
+            data = this.doFetch(args, sessionId);
             responseCode = data.status;
         }
         if(!data)
@@ -37,7 +37,7 @@ class transmission {
             console.error('Transmission: Data was null');
             return;
         }
-        let jsonData = await data.json();
+        let jsonData = data.json();
 
         let torrents = jsonData?.arguments.torrents;
         let torrentCount = torrents.length;
@@ -63,16 +63,16 @@ class transmission {
 
     }
 
-    async test(args) {
-        let data = await this.doFetch(args, "");
+    test(args) {
+        let data = this.doFetch(args, "");
         let responseCode = data.status;
         console.log('Transmission: test response code [1]: ' + responseCode);
         let sessionId = data.headers.get('x-transmission-session-id');
 
-        data = await this.doFetch(args, sessionId);
+        data = this.doFetch(args, sessionId);
         responseCode = data.status;
         console.log('Transmission: test response code [2]: ' + responseCode);
-        const jsonData = await data.json();
+        const jsonData = data.json();
         console.log('Transmission: test data', jsonData);
         return jsonData.result == 'success';
     }

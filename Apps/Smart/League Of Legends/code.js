@@ -19,8 +19,8 @@
 
 
 
-    async status(args) {
-        let versionJson = await this.doDataFetch(args, "https://ddragon.leagueoflegends.com/api/versions.json")
+    status(args) {
+        let versionJson = this.doDataFetch(args, "https://ddragon.leagueoflegends.com/api/versions.json")
         if (versionJson == null || versionJson[0] == null) {
             return args.liveStats([
                 ["Result", "Version error"]
@@ -29,14 +29,14 @@
         let versionNumber = versionJson[0]
         let summonerName = args.properties['summonerName']
 
-        let summonerData = await this.doLeagueFetch(args, "summoner/v4/summoners/by-name/" + summonerName)
+        let summonerData = this.doLeagueFetch(args, "summoner/v4/summoners/by-name/" + summonerName)
         let summonerId = summonerData?.id
         let profileIconId = summonerData?.profileIconId
 
         if (profileIconId != null || profileIconId > 0) {
             args.changeIcon("https://ddragon.leagueoflegends.com/cdn/" + versionNumber + "/img/profileicon/" + profileIconId + ".png")
         }
-        let ongoingGameData = await this.doLeagueFetch(args, "spectator/v4/active-games/by-summoner/" + summonerId)
+        let ongoingGameData = this.doLeagueFetch(args, "spectator/v4/active-games/by-summoner/" + summonerId)
         if (ongoingGameData == null || ongoingGameData?.status?.status_code == 404) {
             return args.liveStats([
                 [summonerName, "Not in Game"]
@@ -63,7 +63,7 @@
         }
         let championName = "Unknown Champion"
         let mapName = "Unknown Map"
-        let championJson = await this.doDataFetch(args, "https://ddragon.leagueoflegends.com/cdn/" + versionNumber + "/data/en_US/champion.json")
+        let championJson = this.doDataFetch(args, "https://ddragon.leagueoflegends.com/cdn/" + versionNumber + "/data/en_US/champion.json")
         for (var champion in championJson.data) {
             let championObj = championJson.data[champion]
             if (championObj?.key == championId) {
@@ -73,7 +73,7 @@
 
         }
 
-        let mapJson = await this.doDataFetch(args, "https://static.developer.riotgames.com/docs/lol/maps.json")
+        let mapJson = this.doDataFetch(args, "https://static.developer.riotgames.com/docs/lol/maps.json")
         for (var map in mapJson) {
             let mapObj = mapJson[map]
             if (mapObj?.mapId == mapId) {
@@ -101,9 +101,9 @@
 
     }
 
-    async test(args) {
+    test(args) {
         let summonerName = args.properties['summonerName']
-        let summonerData = await this.doLeagueFetch(args, "summoner/v4/summoners/by-name/" + summonerName)
+        let summonerData = this.doLeagueFetch(args, "summoner/v4/summoners/by-name/" + summonerName)
         console.log("summonerData", summonerData)
         let summonerId = summonerData?.id
         return summonerId != null;

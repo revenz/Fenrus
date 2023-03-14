@@ -15,12 +15,12 @@
         });
     }  
 	
-    async status(args) {
+    status(args) {
         args.log('fetching data');
         args.log('test 2: ' + args.Utils.newGuid());
         let test = args.Utils.btoa('testing');
         args.log('btoa test: ' + test);
-        let data = await this.doFetch(args);
+        let data = this.doFetch(args);
 
         args.log('got data');
         var dns_queries_total=0;
@@ -48,8 +48,8 @@
         ]);
     }
     
-    async test(args) {
-        let data = await this.doFetch(args);
+    test(args) {
+        let data = this.doFetch(args);
         console.log('data', data);
         return isNaN(data?.num_dns_queries) === false;
     }

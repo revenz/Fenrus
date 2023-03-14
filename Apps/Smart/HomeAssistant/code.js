@@ -22,13 +22,13 @@ class HomeAssistant {
             });
         }
     }
-    async status(args) {
+    status(args) {
 
         let firstTemplate = args.properties['firstStatTemplate'];
         let secondTemplate = args.properties['secStatTemplate'];
 
-        let firstTemplateRespText = await this.doFetch(args, firstTemplate, false);
-        let secondTemplateRespText = await this.doFetch(args, secondTemplate, false);
+        let firstTemplateRespText = this.doFetch(args, firstTemplate, false);
+        let secondTemplateRespText = this.doFetch(args, secondTemplate, false);
 
         let firstTitle = args.properties['firstStatTitle'];
         let secondTitle = args.properties['secStatTitle'];
@@ -39,8 +39,8 @@ class HomeAssistant {
         ]);
     }
 
-    async test(args) {
-        let data = await this.doFetch(args, "", true);
+    test(args) {
+        let data = this.doFetch(args, "", true);
         return data?.message == 'API running.';
     }
 }

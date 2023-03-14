@@ -1,10 +1,10 @@
 class ValetudoRE {
 
-	async status(args)
+	status(args)
 	{
 
-        let consumable = await args.fetch(`${args.url}/api/consumable_status`);
-        let state = await args.fetch(`${args.url}/api/current_status`);
+        let consumable = args.fetch(`${args.url}/api/consumable_status`);
+        let state = args.fetch(`${args.url}/api/current_status`);
         if(!consumable?.consumables.main_brush_work_time || !state?.human_state)
 		return args.liveStats([['Status','Error, no data'],]);
 
@@ -32,8 +32,8 @@ class ValetudoRE {
 		]);
 	}
 
-	async test(args) {
-		const data = await args.fetch(`${args.url}/api/current_status`);
+	test(args) {
+		const data = args.fetch(`${args.url}/api/current_status`);
 		return data.error_code == '0';
 	}
 }

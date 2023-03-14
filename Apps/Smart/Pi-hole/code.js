@@ -14,9 +14,9 @@
         return url;
     }
     
-    async status(args) {
+    status(args) {
         let url = this.getUrl(args, args.url);
-        let data = await args.fetch(url);
+        let data = args.fetch(url);
         let blocked = data?.ads_blocked_today ?? 0;
         let percent = data?.ads_percentage_today ?? 0;
         
@@ -29,10 +29,10 @@
         ]);
     }
 
-    async test(args) {
+    test(args) {
         let url = this.getUrl(args);
 
-        let data = await args.fetch(url);
+        let data = args.fetch(url);
         return isNaN(data?.ads_blocked_today) === false;
     }
 }

@@ -10,8 +10,8 @@
         });
     }   
 
-    async status(args) {
-        let data = await this.doFetch(args);
+    status(args) {
+        let data = this.doFetch(args);
         let free = data?.ocs?.data?.quota?.free ?? 0;
         let used = data?.ocs?.data?.quota?.used ?? 0;
         args.log('mode: ' + args.properties['mode']);
@@ -29,8 +29,8 @@
 		}
     }
     
-    async test(args) {
-        let data = await this.doFetch(args);
+    test(args) {
+        let data = this.doFetch(args);
         return isNaN(data?.ocs?.data?.quota?.free) === false;
     }
 }

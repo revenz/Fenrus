@@ -13,7 +13,7 @@ class Glances {
         return result;
     }
 
-    async status(args) {
+    status(args) {
         let mode = args.properties['mode'] || (
                         args.size === 'large' ? 'cpu' :
                         args.size === 'larger' ? 'overview' :
@@ -24,23 +24,23 @@ class Glances {
         args.log('mode: ' + mode);
 
         if(mode === 'overview')                   
-            return await this.systemInfo(args);
+            return this.systemInfo(args);
         if(mode === 'basic')
-            return await this.liveStats(args);
+            return this.liveStats(args);
             
-        return await this.chart(args, mode);
+        return this.chart(args, mode);
     }
 
-    async systemInfo(args){
-        var cpu = await this.doFetch(args, 'cpu');
+    systemInfo(args){
+        var cpu = this.doFetch(args, 'cpu');
         args.log('cpu: ' + JSON.stringify(cpu));
-        var memory = await this.doFetch(args, 'mem');
+        var memory = this.doFetch(args, 'mem');
         args.log('memory: ' + JSON.stringify(cpu));
-        let fileSystem = await this.doFetch(args, 'fs');
+        let fileSystem = this.doFetch(args, 'fs');
         args.log('fs: ' + JSON.stringify(cpu));
-        let gpu = await this.doFetch(args, 'gpu');
+        let gpu = this.doFetch(args, 'gpu');
         args.log('gpu: ' + JSON.stringify(cpu)); 
-        let uptime = await this.doFetch(args, 'uptime');
+        let uptime = this.doFetch(args, 'uptime');
         args.log('uptime: ' + JSON.stringify(cpu));
 
         let items = [];
@@ -127,19 +127,19 @@ class Glances {
         return args.barInfo(items);
     }
 
-    async chart(args, mode) 
+    chart(args, mode) 
     {
         let chartType = mode;
         switch(chartType){
-            case 'cpu': return await this.chartCpu(args);
-            case 'ram': return await this.chartGeneric(args, 'mem', (value) => value + ' %');
-            default: return await this.chartGeneric(args, chartType);
+            case 'cpu': return this.chartCpu(args);
+            case 'ram': return this.chartGeneric(args, 'mem', (value) => value + ' %');
+            default: return this.chartGeneric(args, chartType);
         }
     }
 
-    async chartCpu(args)
+    chartCpu(args)
     {        
-        let cpuStats = await this.doFetch(args, 'cpu/history/50');
+        let cpuStats = this.doFetch(args, 'cpu/history/50');
         if(!cpuStats?.system || !cpuStats?.user)
             return;
         
@@ -150,7 +150,7 @@ class Glances {
         ];
         let title = (cpuStats.system.at(-1)[1] + cpuStats.user.at(-1)[1]).toFixed(0) + ' %';
 
-          return await args.chart.line({
+          return args.chart.line({
             title,
             labels,
             data
@@ -158,9 +158,9 @@ class Glances {
     }
 
     
-    async chartGeneric(args, endpoint, titleFormatter)
+    chartGeneric(args, endpoint, titleFormatter)
     {        
-        let stats = await this.doFetch(args, endpoint + '/history/50');
+        let stats = this.doFetch(args, endpoint + '/history/50');
         if(!stats)
             return;
         let key = Object.keys(stats)[0];
@@ -176,14 +176,14 @@ class Glances {
         if(titleFormatter)
             title = titleFormatter(title);
 
-        return await args.chart.line({
+        return args.chart.line({
             title,
             labels,
             data
         });
     }
 
-    async liveStats(args) 
+    liveStats(args) 
     {        
         let firstQuery = args.properties['firstStatQuery'] || 'cpu/total';
         let secondQuery = args.properties['secStatQuery'] || 'mem/percent';
@@ -193,8 +193,8 @@ class Glances {
         let firstQueryValue = firstQuery.split(/[/]+/).pop();
         let secondQueryValue = secondQuery.split(/[/]+/).pop();
 
-        let first = await this.doFetch(args, firstQuery);
-        let second = await this.doFetch(args, secondQuery);
+        let first = this.doFetch(args, firstQuery);
+        let second = this.doFetch(args, secondQuery);
         
         args.log('first: ' + first);
         args.log('second: ' + second);
@@ -215,8 +215,8 @@ class Glances {
         ]);
     }
 
-    async test(args) {
-        let data = await this.doFetch(args, 'cpu');        
+    test(args) {
+        let data = this.doFetch(args, 'cpu');        
         return isNaN(data?.total) === false;
     }
 }

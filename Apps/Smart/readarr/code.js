@@ -6,14 +6,14 @@
     }
 
 	
-    async status(args) {
+    status(args) {
 		let filter = args.properties['filters'];
 		let now = new Date();
 		let tomorrowText = args.Utils.formatCalanderDate(new Date(now.getTime() + 86400*1000), '-');
 		let nextMonthText = args.Utils.formatCalanderDate(new Date(now.getTime() + (86400*28*1000)), '-');
 
-        let missing = await args.fetch(this.getUrl(args, 'wanted/missing',false));
-		let queue = await args.fetch(this.getUrl(args, 'calendar?start=' +tomorrowText+'&end=' + nextMonthText ,true));
+        let missing = args.fetch(this.getUrl(args, 'wanted/missing',false));
+		let queue = args.fetch(this.getUrl(args, 'calendar?start=' +tomorrowText+'&end=' + nextMonthText ,true));
 		
 		//files that are released in next 4 weeks and we dont have files of
 		let upcoming = queue?.filter((x, index, arr) => {
@@ -31,8 +31,8 @@
         ]);
     }
 
-    async test(args) {
-        let data = await args.fetch(this.getUrl(args, 'system/status',false));
+    test(args) {
+        let data = args.fetch(this.getUrl(args, 'system/status',false));
 		console.log("data",data);
         return data.appName != null;
     }

@@ -8,7 +8,7 @@ class AgentDVR {
         return data;
     }
 
-    async status(args) {
+    status(args) {
 		let resolution = args.properties['resolution'] || (
 						args.size === 'small' ? '44x44' : 
 						args.size === 'medium' ? '104x104' : 
@@ -38,8 +38,8 @@ class AgentDVR {
 
     }
 
-    async test(args) {
-        let data = await this.doFetch(args, "command.cgi?cmd=getStatus");
+    test(args) {
+        let data = this.doFetch(args, "command.cgi?cmd=getStatus");
         console.log('data', data);
         return isNaN(data?.devices) === false;
     }

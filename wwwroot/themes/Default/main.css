@@ -34,6 +34,7 @@ body {
   position: unset;
   place-self: self-end;
   justify-content: center;
+  margin-bottom: 3rem;
 }
 .dashboard.left {
   justify-content: start;

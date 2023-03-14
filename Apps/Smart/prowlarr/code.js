@@ -7,9 +7,9 @@
         return data;
     }
 
-    async status(args) {
-        let indexer = await this.doFetch(args, "indexer");
-        let indexerStatus = await this.doFetch(args, "indexerstatus");
+    status(args) {
+        let indexer = this.doFetch(args, "indexer");
+        let indexerStatus = this.doFetch(args, "indexerstatus");
         
         let indexerEnabled = indexer?.filter((x, index, arr) => {
             return x.enable == true;
@@ -24,8 +24,8 @@
         ]);
     }
 
-    async test(args) {
-        let status = await this.doFetch(args, "system/status");
+    test(args) {
+        let status = this.doFetch(args, "system/status");
         console.log("status", status);
         return status?.appName != null;
     }

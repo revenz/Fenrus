@@ -88,17 +88,15 @@ public class AppHeler
                 "/proxy/" + utils.base64Encode(url).Replace("/", "-")
             ),
             chart = new Chart(),
-            fetch = new Func<object, Task<object>>(async (parameters) =>
-            {
-                var fetchResult = await Fetch.Execute(new()
+            fetch = new Func<object, object>(parameters =>
+                Fetch.Execute(new()
                 {
                     Engine = engine,
                     AppUrl = url,
                     Parameters = parameters,
                     Log = log.Add
-                });
-                return fetchResult;
-            }),
+                }).Result
+            ),
             log = new Action<string>(log.Add),
             carousel = Carousel.Instance,
             barInfo = new Func<BarInfo.BarInfoItem[], string>(items =>

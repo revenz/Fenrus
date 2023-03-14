@@ -1,6 +1,6 @@
 class MJPGStream {
 
-    async status(args) {
+    status(args) {
 		let url = args.url;
 		args.changeIcon(url);
         return;

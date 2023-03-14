@@ -1,6 +1,6 @@
 ﻿class DailyReminder
 {
-    async status(args) {
+    status(args) {
 		let reminderType = args.properties['reminderType'] ?? 'days';
 		let typeIncrement = parseInt(args.properties['typeIncrement'] ?? 1);
 		let dayOffset = parseInt(args.properties['dayOffset'] ?? 0);

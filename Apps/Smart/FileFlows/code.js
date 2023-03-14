@@ -2,17 +2,16 @@
 {
     pfImages = {};
     
-    async fetch(args, url) {
-        let result = await args.fetch(url);
+    fetch(args, url) {
+        let result = args.fetch(url);
         return result?.Result || result;
     }
-    async status(args)
+    
+    status(args)
     {
-        const [ data, shrinkage, updateAvailable ] = await Promise.all([
-            await this.fetch(args, 'api/status'),
-            await this.fetch(args, 'api/library-file/shrinkage-groups'),
-            await this.updateAvailable(args)
-        ]);
+        let data = this.fetch(args, 'api/status');
+        let shrinkage = this.fetch(args, 'api/library-file/shrinkage-groups');
+        let upaateAvailable = this.updateAvailable(args);
 
         args.setStatusIndicator(updateAvailable ? 'update' : '');
 
@@ -21,14 +20,14 @@
         }
 
         if(args.size.indexOf('large') >= 0) {
-            return await this.statusXLarge(args, data, shrinkage);
+            return this.statusXLarge(args, data, shrinkage);
         }
         else
             return this.statusMedium(args, data);
     }
 
-    async updateAvailable(args){
-        let data = await this.fetch(args, 'api/status/update-available');
+    updateAvailable(args){
+        let data = this.fetch(args, 'api/status/update-available');
         if(data.exception)
         {
             args.log('Exception fetching update-available: ' + (data.message || 'Unknown reason'));
@@ -38,14 +37,14 @@
         return result;
     }
 
-    async getStatusIndicator(args){
-        if(await this.updateAvailable(args))
+    getStatusIndicator(args){
+        if(this.updateAvailable(args))
             return 'update';
         return 'recording';
     }
     
 
-    async statusXLarge(args, data, shrinkage){
+    statusXLarge(args, data, shrinkage){
         if(!data.processingFiles?.length){
             if(shrinkage && Object.keys(shrinkage).length)
                 return this.statusShrinkage(args, shrinkage)
@@ -76,7 +75,7 @@
                     searchTerm = searchTerm.substring(searchTerm.lastIndexOf('/') + 1);
                 }
                 args.log('FileFlows search term: ' + searchTerm);
-                let images = await args.imageSearch(searchTerm);
+                let images = args.imageSearch(searchTerm);
                 this.pfImages[item.name] = images?.length ? images[0] : '';
             }
             let image = this.pfImages[item.name];
@@ -117,7 +116,7 @@
             [secondlbl, secondValue]
         ]);    
     }
-    async statusShrinkage(args, shrinkage){
+    statusShrinkage(args, shrinkage){
         let items = [];
             
         Object.keys(shrinkage).forEach(group => 
@@ -163,8 +162,8 @@
 `;
     }
 
-    async test(args){
-        let data = await args.fetch(args.url + '/api/status');
+    test(args){
+        let data = args.fetch(args.url + '/api/status');
         return (data.processed === 0 || data.processed);          
     }
 }

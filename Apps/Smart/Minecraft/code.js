@@ -25,9 +25,9 @@
         });
     }
 
-    async status(args) {
+    status(args) {
 
-        let data = await this.doFetch(args);
+        let data = this.doFetch(args);
         if (!data || data?.status == 'error' || data?.online == 'false') {
             return args.liveStats([
                 ['Server Status', 'Offline']
@@ -51,8 +51,8 @@
         }
     }
 
-    async test(args) {
-        let data = await this.doFetch(args);
+    test(args) {
+        let data = this.doFetch(args);
         console.log('data', data);
         return data?.status == 'success';
     }

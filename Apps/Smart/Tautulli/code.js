@@ -3,9 +3,9 @@
     getUrl(args, endpoint) {
         return `api/v2?apikey=${args.properties['apikey']}&cmd=${endpoint}`;
     }
-    async status(args) {
-        let dr = await args.fetch(this.getUrl(args, 'get_activity'));
-        let topUsers = await args.fetch(this.getUrl(args, 'get_home_stats&stat_id=top_users'));
+    status(args) {
+        let dr = args.fetch(this.getUrl(args, 'get_activity'));
+        let topUsers = args.fetch(this.getUrl(args, 'get_home_stats&stat_id=top_users'));
 
         let data = dr?.response?.data;
                 
@@ -97,8 +97,8 @@
 `;
     }
 
-    async test(args) {
-        let data = await args.fetch(this.getUrl(args, 'arnold'));
+    test(args) {
+        let data = args.fetch(this.getUrl(args, 'arnold'));
         console.log('data', data);
         return data?.response?.result == 'success';
     }

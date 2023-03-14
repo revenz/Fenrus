@@ -1,7 +1,7 @@
 class Jeedom {
-	async getDataUpdate(args)
+	getDataUpdate(args)
 	{
-		return await args.fetch(
+		return args.fetch(
 			{
 				url: `${args.url}/core/api/jeeApi.php`,
 				method: 'POST',
@@ -19,9 +19,9 @@ class Jeedom {
 		);
 	}
 
-	async getDataMessage(args)
+	getDataMessage(args)
 	{
-		return await args.fetch(
+		return args.fetch(
 		{
 			url: `${args.url}/core/api/jeeApi.php`,
 			method: 'POST',
@@ -38,10 +38,10 @@ class Jeedom {
 		});
 	}
 
-    async status(args) 
+    status(args) 
 	{
-		let dataUpdate = await this.getDataUpdate(args);
-		let dataMessage = await this.getDataMessage(args);
+		let dataUpdate = this.getDataUpdate(args);
+		let dataMessage = this.getDataMessage(args);
 
 		if(!dataUpdate?.result)
 			return;
@@ -55,8 +55,8 @@ class Jeedom {
 		]);
 	}
 		
-	async test(args) {
-		const data = await args.fetch(`${args.url}/core/api/jeeApi.php`);
+	test(args) {
+		const data = args.fetch(`${args.url}/core/api/jeeApi.php`);
 		console.log(data.id);
 		return data.id == '99999';
 	}

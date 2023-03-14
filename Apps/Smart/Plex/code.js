@@ -4,19 +4,19 @@
         return `library/${endpoint}?X-Plex-Token=${args.properties['token']}`;
     }
     
-    async status(args) {
+    status(args) {
         if(!args.properties){
             console.log('Error in plex app, no properties set');
             return;
         }
-        let data = await args.fetch(this.getUrl('recentlyAdded', args));
+        let data = args.fetch(this.getUrl('recentlyAdded', args));
 
         if(!data.MediaContainer)
             return;
         if(args.size.indexOf('large') >= 0)
             return this.statusXLarge(args, data);
         else
-            return await this.statusMedium(args, data);
+            return this.statusMedium(args, data);
     }
 
     statusXLarge(args, data){
@@ -44,9 +44,9 @@
         }));
     }
 
-    async statusMedium(args, data){
+    statusMedium(args, data){
         let recent = data?.MediaContainer?.size ?? 0;
-        data = await args.fetch(this.getUrl('onDeck', args));
+        data = args.fetch(this.getUrl('onDeck', args));
         let ondeck = data?.MediaContainer?.size ?? 0;
         return args.liveStats([
             ['Recent', recent],
@@ -70,11 +70,11 @@
 `;
     }
 
-    async test(args) {
+    test(args) {
         if(!args.properties)
             return false;
         let url = this.getUrl('recentlyAdded', args);
-        let data = await args.fetch(url);
+        let data = args.fetch(url);
         return isNaN(data.MediaContainer?.size) === false;
     }
 }
