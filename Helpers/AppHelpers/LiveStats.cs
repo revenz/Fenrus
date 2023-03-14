@@ -19,8 +19,8 @@ public class LiveStats
         {
             for (int i = 0; i < item.Length; i++)
             {
-                if (rgxHtml.IsMatch(item[i]) == false)
-                    item[i] = utils.htmlEncode(item[i]);
+                if (rgxHtml.IsMatch(item[i] ?? string.Empty) == false)
+                    item[i] = utils.htmlEncode(item[i] ?? string.Empty);
                 else
                     item[i] = item[i][6..];
             }
