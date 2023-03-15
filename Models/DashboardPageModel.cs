@@ -39,4 +39,9 @@ public class DashboardPageModel
     /// Gets or sets the translator to use
     /// </summary>
     public Translator Translator { get; init; }
+    
+    /// <summary>
+    /// Gets the up-time states of URLs
+    /// </summary>
+    public Dictionary<string, int> UpTimeStates { get; init; }
 }

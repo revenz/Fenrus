@@ -127,6 +127,27 @@ public class UpTimeService
         var delta = dt.Ticks % d.Ticks;
         return new DateTime(dt.Ticks - delta, dt.Kind);
     }
+
+    /// <summary>
+    /// Gets a list of all URLs and their up states
+    /// </summary>
+    /// <returns>a list of URLs and their up states</returns>
+    public Dictionary<string, int> GetUpStates()
+    {
+        using var db = DbHelper.GetDb();
+        var collection = db.GetCollection<UpTimeEntry>(nameof(UpTimeEntry));
+        var all = collection.Query().ToList();
+        return all
+            .GroupBy(x => x.Name)
+            .Select(x => x.MaxBy(x => x.Date))
+            .ToDictionary(x => x.Name, x =>
+            {
+                if (x.Date < DateTime.Now.AddHours(-1))
+                    return 2; // unknown, too old
+                return x.Status ? 1 : 0;
+            });
+        
+    }
 }
 
 

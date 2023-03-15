@@ -23,8 +23,13 @@ public partial class LinkItemComponent
     /// Gets or sets the current dashboard
     /// </summary>
     [CascadingParameter] public Dashboard Dashboard { get; set; }
+    
+    /// <summary>
+    /// Gets the up-time states of URLs
+    /// </summary>
+    [Parameter] public Dictionary<string, int> UpTimeStates { get; init; }
 
-    private string Target, OnClickCode, SerializedJsSafeModel;
+    private string Target, OnClickCode, SerializedJsSafeModel, Css;
 
     protected override void OnInitialized()
     {
@@ -33,6 +38,10 @@ public partial class LinkItemComponent
         OnClickCode = Target == "IFrame"
             ? $"openIframe(event, '{SerializedJsSafeModel}'); return false;"
             : $"launch(event, '{Model.Uid}')";
+
+        Css = string.Empty;
+        if (UpTimeStates?.TryGetValue(Model.Url, out int state) == true)
+            Css += "is-up-" + (state == 0 ? "false" : state == 1 ? "true" : state) + " ";
     }
 
     /// <summary>

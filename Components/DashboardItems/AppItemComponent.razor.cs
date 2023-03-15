@@ -32,10 +32,16 @@ public partial class AppItemComponent
     /// </summary>
     [CascadingParameter] public Dashboard Dashboard { get; set; }
 
+    /// <summary>
+    /// Gets the up-time states of URLs
+    /// </summary>
+    [Parameter] public Dictionary<string, int> UpTimeStates { get; init; }
+    
     private FenrusApp App { get; set; }
 
     private string Css;
     private string Target, OnClickCode, SerializedJsSafeModel, Icon, Title;
+    private string isUpClass = string.Empty;
 
     protected override void OnInitialized()
     {
@@ -59,6 +65,8 @@ public partial class AppItemComponent
         // if(string.IsNullOrEmpty(Model.DockerUid) == false)
         //     Css += "docker ";
 
+        if (UpTimeStates?.TryGetValue(Model.Url, out int state) == true)
+            Css += "is-up-" + (state == 0 ? "false" : state == 1 ? "true" : state) + " ";
 
         Icon = GetIcon();
 

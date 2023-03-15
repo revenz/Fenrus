@@ -1,11 +1,10 @@
-
 @if (string.IsNullOrEmpty(App.Css) == false)
 {
     <link rel="stylesheet" href="@App.Css" />    
 }
 
 <a id="@Model.Uid" title="@Model.Name" href="@Model.Url" onclick="@OnClickCode" target="@Target"
-   class="db-item db-app db-basic is-up-<%= isUp[model.Uid] %> @Css" 
+   class="db-item db-app db-basic @Css" 
    x-interval="@(App.IsSmart ? App.Interval.ToString() : null)"
    oncontextmenu="openContextMenu(event, '@SerializedJsSafeModel'); return false;"
    x-docker="@(Model.DockerUid != null ? "1" : null)" x-ssh="@(string.IsNullOrWhiteSpace(Model.SshServer) ? null : "1")"

@@ -81,6 +81,8 @@ public class HomeController : BaseController
                     groups.Add(grp);
             }
         }
+
+        var isUp = new UpTimeService().GetUpStates();
         
         DashboardPageModel model = new DashboardPageModel
         {
@@ -90,7 +92,8 @@ public class HomeController : BaseController
             Groups = groups,
             Translator = Translator,
             Dashboards = dashboards,
-            SearchEngines = searchEngines
+            SearchEngines = searchEngines,
+            UpTimeStates = isUp
         };
         ViewBag.Translator = Translator;
         ViewBag.IsGuest = false;

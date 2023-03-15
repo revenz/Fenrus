@@ -32,4 +32,9 @@ public partial class DashboardComponent
     /// Gets or sets the Translator to use
     /// </summary>
     [Parameter] public Translator Translator { get; set; }
+    
+    /// <summary>
+    /// Gets the up-time states of URLs
+    /// </summary>
+    [Parameter] public Dictionary<string, int> UpTimeStates { get; init; }
 }
