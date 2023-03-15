@@ -58,17 +58,12 @@ if (oAuth)
             options.ClientId = system.OAuthStrategyClientId;
             options.ClientSecret = system.OAuthStrategySecret;
             options.Authority = system.OAuthStrategyIssuerBaseUrl;
-            options.Events = new()
-            {
-                OnTokenValidated = async ctx =>
-                {
-                    //var userID = ctx.Principal.FindFirstValue("sub");
 
-                    //var db = ctx.HttpContext.RequestServices.GetRequiredService<MyDb>();
-
-                    //Do things I need to do with the user here.
-                }
-            };
+            options.Scope.Add("email");
+            options.Scope.Add("openid");
+            options.Scope.Add("profile");
+            options.GetClaimsFromUserInfoEndpoint = true;
+            options.DisableTelemetry = true;
         });
 }
 else

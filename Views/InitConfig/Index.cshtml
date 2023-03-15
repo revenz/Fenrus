@@ -100,6 +100,12 @@
                         <input type="text" id="@nameof(Model.OAuthStrategyBaseUrl)" name="@nameof(Model.OAuthStrategyBaseUrl)" value=@Model.OAuthStrategyBaseUrl />
                     </span>
                 </div>
+                <div class="setting">
+                    <span class="label">Redirect URL</span>
+                    <span class="value">
+                        <input type="text" readonly value=@ViewBag.RedirectUrl />
+                    </span>
+                </div>
             </div>
         </form>
     </div>

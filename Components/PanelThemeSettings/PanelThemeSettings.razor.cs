@@ -23,14 +23,17 @@ public partial class PanelThemeSettings : ComponentBase
     /// <summary>
     /// Gets or sets if the current user is a guest or logged in user
     /// </summary>
-    [Parameter]
-    public bool IsGuest { get; set; }
+    [Parameter] public bool IsGuest { get; set; }
 
     /// <summary>
     /// Gets or sets the page helper
     /// </summary>
-    [Parameter]
-    public PageHelper PageHelper { get; set; }
+    [Parameter] public PageHelper PageHelper { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the system settings
+    /// </summary>
+    [Parameter] public SystemSettings SystemSettings { get; set; }
 
     private Translator Translator => PageHelper.Translator;
 

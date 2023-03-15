@@ -1,3 +1,4 @@
+@using Fenrus.Controllers
 @namespace Fenrus.Components
 
 <div class="theme-settings panel" x-data="ThemeSettings">
@@ -43,9 +44,12 @@
             showSettings = true;
         }
     }
-    <div class="setting profile-buttons @(showSettings ? "has-settings" : "no-settings")">
-        <a href="/@(IsGuest ? "login" : "logout")" class="btn">
-            @Translator.Instant("Labels." + (IsGuest ? "Login" : "Logout"))
-        </a>
-    </div>
+    @if (SystemSettings.Strategy != AuthStrategy.OAuthStrategy)
+    {
+        <div class="setting profile-buttons @(showSettings ? "has-settings" : "no-settings")">
+            <a href="/@(IsGuest ? "login" : "logout")" class="btn">
+                @Translator.Instant("Labels." + (IsGuest ? "Login" : "Logout"))
+            </a>
+        </div>
+    }
 </div>
