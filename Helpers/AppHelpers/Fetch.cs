@@ -97,11 +97,10 @@ public class Fetch
             }
 
             request.RequestUri = new Uri(url);
-            
-            client.Timeout = TimeSpan.FromSeconds(timeout);
-            var cts = new CancellationTokenSource();
-            var result = await client.SendAsync(request, cts.Token);
-            string content = await result.Content.ReadAsStringAsync(cts.Token);
+
+            var (success, content) = Send(client, request, timeout);
+            if (success == false)
+                throw new Exception("Timeout");
 
             var trimmed = content.Trim();
             if (trimmed.StartsWith("{") || trimmed.StartsWith("["))
@@ -133,6 +132,35 @@ public class Fetch
                 message = ex.Message
             };
         }
+    }
+
+    /// <summary>
+    /// Sends a request and returns the result
+    /// </summary>
+    /// <param name="client">the HTTP Client</param>
+    /// <param name="request">the message to send</param>
+    /// <param name="timeout">the timeout in seconds for the request</param>
+    /// <returns>the result of the request</returns>
+    private static (bool Success, string Content) Send(HttpClient client, HttpRequestMessage request,
+        int timeout)
+    {
+        bool success = false;
+        string content = string.Empty;
+        bool done = false;
+
+        var send = new Task(() =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(timeout);
+            var cts = new CancellationTokenSource();
+
+            var result = client.SendAsync(request, cts.Token).Result;
+            if(done == false)
+                content = result.Content.ReadAsStringAsync(cts.Token).Result;
+        });
+
+        Task.WhenAny(send, Task.Delay(timeout * 1_000)).Wait();
+        done = true;
+        return (success, content);
     }
 
     /// <summary>
