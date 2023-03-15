@@ -64,6 +64,11 @@ if (oAuth)
             options.Scope.Add("profile");
             options.GetClaimsFromUserInfoEndpoint = true;
             options.DisableTelemetry = true;
+            options.Events.OnRedirectToIdentityProvider = context =>
+            {
+                context.ProtocolMessage.Prompt = "login";
+                return Task.CompletedTask;
+            };
         });
 }
 else

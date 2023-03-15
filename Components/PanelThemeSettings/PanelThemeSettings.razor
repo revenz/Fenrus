@@ -44,12 +44,9 @@
             showSettings = true;
         }
     }
-    @if (SystemSettingsService.UsingOAuth)
-    {
-        <div class="setting profile-buttons @(showSettings ? "has-settings" : "no-settings")">
-            <a href="/@(IsGuest ? "login" : "logout")" class="btn">
-                @Translator.Instant("Labels." + (IsGuest ? "Login" : "Logout"))
-            </a>
-        </div>
-    }
+    <div class="setting profile-buttons @(showSettings ? "has-settings" : "no-settings")">
+        <a href="/@(IsGuest ? "login" : "logout")" class="btn">
+            @Translator.Instant("Labels." + (IsGuest ? "Login" : "Logout"))
+        </a>
+    </div>
 </div>
