@@ -40,7 +40,7 @@ public partial class LinkItemComponent
             : $"launch(event, '{Model.Uid}')";
 
         Css = string.Empty;
-        if (UpTimeStates?.TryGetValue(Model.Url, out int state) == true)
+        if (string.IsNullOrWhiteSpace(Model.Url) == false && UpTimeStates?.TryGetValue(Model.Url, out int state) == true)
             Css += "is-up-" + (state == 0 ? "false" : state == 1 ? "true" : state) + " ";
     }
 
