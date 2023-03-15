@@ -148,14 +148,16 @@ public class Fetch
         string content = string.Empty;
         bool done = false;
 
-        var send = new Task(() =>
+        var send = Task.Run(() =>
         {
             client.Timeout = TimeSpan.FromSeconds(timeout);
             var cts = new CancellationTokenSource();
 
             var result = client.SendAsync(request, cts.Token).Result;
-            if(done == false)
-                content = result.Content.ReadAsStringAsync(cts.Token).Result;
+            if (done)
+                return;
+            content = result.Content.ReadAsStringAsync(cts.Token).Result;
+            success = true;
         });
 
         Task.WhenAny(send, Task.Delay(timeout * 1_000)).Wait();
