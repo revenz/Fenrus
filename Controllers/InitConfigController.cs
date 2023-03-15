@@ -37,7 +37,7 @@ public class InitConfigController : Controller
         string url = HttpContext.Request.GetDisplayUrl();
         url = url[..(url.IndexOf('/', 8) + 1)];
         
-        ViewBag.RedirectUrl = url + "/signin-oidc";
+        ViewBag.RedirectUrl = url + "signin-oidc";
         
         return View("Index", new InitConfigModel()
         {
