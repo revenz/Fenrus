@@ -36,13 +36,19 @@
                     <span>@(item.FullName ?? string.Empty)</span>
                 </Cell>
             </FenrusTableColumn>
-            <FenrusTableColumn TItem="Models.User" ColumnName="Admin" Width="10rem">
+            <FenrusTableColumn TItem="Models.User" ColumnName="Email" Width="14rem">
+                <Header>@lblEmail</Header>
+                <Cell Context="item">
+                    <span>@(item.Email ?? string.Empty)</span>
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.User" ColumnName="Admin" Width="8rem">
                 <Header>@lblAdmin</Header>
                 <Cell Context="item">
                     <FenrusSwitch Value="item.IsAdmin" Disabled="IsSelf(item)" ValueChanged="(value) => AdminUpdated(item, value)"></FenrusSwitch>
                 </Cell>
             </FenrusTableColumn>
-            <FenrusTableColumn TItem="Models.User" ColumnName="Actions" Width="10rem">
+            <FenrusTableColumn TItem="Models.User" ColumnName="Actions" Width="7rem">
                 <Header></Header>
                 <Cell Context="item">
                     @if (IsSelf(item) == false)

@@ -31,11 +31,6 @@ public class DashboardPageModel
     public Theme Theme { get; init; }
     
     /// <summary>
-    /// Gets or sets the system settings
-    /// </summary>
-    public SystemSettings SystemSettings { get; init; }
-    
-    /// <summary>
     /// Gets or sets the groups on this dashboard
     /// </summary>
     public List<Group> Groups { get; set; }

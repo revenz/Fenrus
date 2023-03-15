@@ -17,7 +17,7 @@ public partial class Profile: UserPage
     
     private User Model { get; set; }
 
-    private string Username, Email, PasswordCurrent, PasswordNew, PasswordConfirm;
+    private string Username, Email, FullName, PasswordCurrent, PasswordNew, PasswordConfirm;
 
     protected override Task PostGotUser()
     {
@@ -30,8 +30,9 @@ public partial class Profile: UserPage
         PasswordConfirm = string.Empty;
 
         this.Model = new UserService().GetByUid(this.UserUid);
-        Username = this.Model.Username;
-        Email = this.Model.Email;
+        Username = this.Model.Username ?? string.Empty;
+        Email = this.Model.Email ?? string.Empty;
+        FullName = this.Model.FullName ?? string.Empty;
         
 
         return Task.CompletedTask;
@@ -64,6 +65,7 @@ public partial class Profile: UserPage
 
         Model.Email = Email;
         Model.Username = Username;
+        Model.FullName = FullName;
         service.Update(Model);
         ToastService.ShowSuccess("Labels.Saved");
     }

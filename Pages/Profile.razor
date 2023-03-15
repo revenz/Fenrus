@@ -7,11 +7,15 @@
     <Body>
     <div class="body-content">
         <Editor @ref=GeneralEditor>
-            <h3>
-                <i class="fa-solid fa-circle-user"/>
-                @lblGeneral
-            </h3>
-            <InputText Page="Profile" Label="Name" @bind-Value="@Username" Required="true"/>
+            @if (SystemSettingsService.UsingOAuth == false)
+            {
+                <h3>
+                    <i class="fa-solid fa-circle-user"/>
+                    @lblGeneral
+                </h3>
+            }
+            <InputText Page="Profile" Label="Name" @bind-Value="@Username" Required="true" ReadOnly="@SystemSettingsService.UsingOAuth" />
+            <InputText Page="Profile" Label="FullName" @bind-Value="@FullName" />
             <InputText Page="Profile" Label="Email" @bind-Value="@Email" Required="true" Email="true"/>
             <button class="btn" @onclick="() => Save()">@lblSave</button>
             @if (string.IsNullOrEmpty(ErrorGeneral) == false)
@@ -20,20 +24,23 @@
             }
         </Editor>
 
-        <Editor @ref=PasswordEditor>
-            <h3>
-                <i class="fa-solid fa-lock"/>
-                @lblChangePassword
-            </h3>
-            <InputText Page="Profile" Label="PasswordCurrent" @bind-Value="PasswordCurrent" Password="true" Required="true"></InputText>
-            <InputText Page="Profile" Label="PasswordNew" @bind-Value="PasswordNew" Password="true" Required="true"></InputText>
-            <InputText Page="Profile" Label="PasswordConfirm" @bind-Value="PasswordConfirm" Password="true" Required="true"></InputText>
-            <button class="btn" @onclick="() => ChangePassword()">@lblSave</button>
-            @if (string.IsNullOrEmpty(ErrorChangePassword) == false)
-            {
-                <div class="error">@ErrorChangePassword</div>
-            }
-        </Editor>
+        @if (SystemSettingsService.UsingOAuth == false)
+        {
+            <Editor @ref=PasswordEditor>
+                <h3>
+                    <i class="fa-solid fa-lock"/>
+                    @lblChangePassword
+                </h3>
+                <InputText Page="Profile" Label="PasswordCurrent" @bind-Value="PasswordCurrent" Password="true" Required="true"></InputText>
+                <InputText Page="Profile" Label="PasswordNew" @bind-Value="PasswordNew" Password="true" Required="true"></InputText>
+                <InputText Page="Profile" Label="PasswordConfirm" @bind-Value="PasswordConfirm" Password="true" Required="true"></InputText>
+                <button class="btn" @onclick="() => ChangePassword()">@lblSave</button>
+                @if (string.IsNullOrEmpty(ErrorChangePassword) == false)
+                {
+                    <div class="error">@ErrorChangePassword</div>
+                }
+            </Editor>
+        }
     </div>
     </Body>
 </FenrusPage>

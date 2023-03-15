@@ -44,7 +44,7 @@
             showSettings = true;
         }
     }
-    @if (SystemSettings.Strategy != AuthStrategy.OAuthStrategy)
+    @if (SystemSettingsService.UsingOAuth)
     {
         <div class="setting profile-buttons @(showSettings ? "has-settings" : "no-settings")">
             <a href="/@(IsGuest ? "login" : "logout")" class="btn">

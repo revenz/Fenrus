@@ -70,8 +70,6 @@ public class HomeController : BaseController
             isGuest ? new List<Models.SearchEngine>() :
                 new SearchEngineService().GetAllForUser(settings.UserUid).Where(x => x.Enabled).ToList();
 
-        var system = new SystemSettingsService().Get();
-        
         var groups = new List<Models.Group>();
         var groupService = new GroupService();
         foreach (var gUid in dashboard.GroupUids)
@@ -92,8 +90,7 @@ public class HomeController : BaseController
             Groups = groups,
             Translator = Translator,
             Dashboards = dashboards,
-            SearchEngines = searchEngines,
-            SystemSettings = system
+            SearchEngines = searchEngines
         };
         ViewBag.Translator = Translator;
         ViewBag.IsGuest = false;

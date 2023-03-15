@@ -30,18 +30,18 @@ public partial class MainMenu
         
         Router.LocationChanged += (obj, e) => this.StateHasChanged();
 
-        var home = new MenuItem() { Name = App.Translator.Instant("Labels.Home"), Link = "/", Icon = "fa-solid fa-house" };
-        var profile = new MenuItem()
-        {
-            Name = App.Translator.Instant("Pages.Profile.Title"), Link = "/settings/profile",
-            Icon = "fa-solid fa-id-badge"
-        };
         Menu.Add(new MenuGroup()
         {
             Name = App.Translator.Instant("Labels.General"),
-            Items = SystemSettingsService.UsingOAuth
-                ? new List<MenuItem>() { home }
-                : new List<MenuItem>() { home, profile }
+            Items =  new List<MenuItem>()
+            {
+                new () { Name = App.Translator.Instant("Labels.Home"), Link = "/", Icon = "fa-solid fa-house" }, 
+                new ()
+                {
+                    Name = App.Translator.Instant("Pages.Profile.Title"), Link = "/settings/profile",
+                    Icon = "fa-solid fa-id-badge"
+                }
+            }
         });
         Menu.Add(new MenuGroup()
         {

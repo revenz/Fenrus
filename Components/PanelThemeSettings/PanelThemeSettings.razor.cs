@@ -29,11 +29,6 @@ public partial class PanelThemeSettings : ComponentBase
     /// Gets or sets the page helper
     /// </summary>
     [Parameter] public PageHelper PageHelper { get; set; }
-    
-    /// <summary>
-    /// Gets or sets the system settings
-    /// </summary>
-    [Parameter] public SystemSettings SystemSettings { get; set; }
 
     private Translator Translator => PageHelper.Translator;
 

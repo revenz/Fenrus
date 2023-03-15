@@ -266,6 +266,7 @@
       "Fields": {        
         "Username": "Username",
         "Email": "Email",
+        "FullName": "Full Name",
         "Email-Help": "This email address will be used for password resets",
         "PasswordCurrent": "Current Password",
         "PasswordNew": "New Password",
@@ -327,6 +328,7 @@
       "Columns": {
         "Username": "Username",
         "FullName": "Full Name",
+        "Email": "Email",
         "Admin": "Admin"
       }
     },

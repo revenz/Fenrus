@@ -21,7 +21,8 @@ public partial class Users: CommonPage<User>
     private FenrusTable<User> Table { get; set; }
 
     
-    private string lblTitle, lblDescription, lblAllowRegistrations, lblAdmin, lblUsername, lblFullName;
+    private string lblTitle, lblDescription, lblAllowRegistrations, lblAdmin, 
+        lblEmail, lblUsername, lblFullName;
     
     /// <summary>
     /// Called after the user has been fetched
@@ -30,6 +31,7 @@ public partial class Users: CommonPage<User>
     {
         lblUsername = Translator.Instant("Pages.Users.Columns.Username");
         lblFullName = Translator.Instant("Pages.Users.Columns.FullName");
+        lblEmail = Translator.Instant("Pages.Users.Columns.Email");
         lblTitle = Translator.Instant("Pages.Users.Title");
         lblDescription = Translator.Instant("Pages.Users.Labels.PageDescription");
         lblAllowRegistrations = Translator.Instant("Pages.Users.Fields.AllowRegistrations");
