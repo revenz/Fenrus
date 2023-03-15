@@ -1,10 +1,17 @@
 ﻿class Overseerr
 {
+    fetch(args) {
+        let result = args.fetch({ url: 'api/v1/request/count',
+            headers: { 'X-Api-Key': args.properties['apikey']} 
+        });
+        return result?.Result || result;
+    }
+    
     status(args) {
         if (!args.properties || !args.properties['apikey'])
             throw 'No API Key';
 
-        let data = args.fetch({ url: 'api/v1/request/count', headers: { 'X-Api-Key': args.properties['apikey']} });
+        let data = this.fetch(args);
         if(!data)
             return;
 
