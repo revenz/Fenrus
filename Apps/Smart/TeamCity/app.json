@@ -1,6 +1,6 @@
 ﻿{
   "Name": "TeamCity",
-  "Interval": 3,
+  "Interval": 10,
   "TestFunction":true,
   "Info":{
     "Authors": ["John Andrews"],

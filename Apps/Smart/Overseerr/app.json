@@ -1,7 +1,7 @@
 ﻿{
   "Name": "Overseerr",
   "TestFunction": true,
-  "Interval": 3,
+  "Interval": 10,
   "Info":{
     "Authors": ["John Andrews"],
     "AppUrl":"https://overseerr.dev"

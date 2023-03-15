@@ -1,7 +1,7 @@
 ﻿{
   "Name": "Plex",
   "TestFunction": true,
-  "Interval": 3,
+  "Interval": 10,
   "Carousel":true,
   "Info":{
     "Authors": ["John Andrews"],

@@ -51,7 +51,8 @@
     "DeletedItem": "Deleted {typeName} ''{name}''",
     "Test": "Test",
     "Testing": "Testing",
-    "Home": "Home"
+    "Home": "Home",
+    "Logout": "Logout"
   },
   "ContextMenu": {
     "EditDashboard": "Edit Dashboard",

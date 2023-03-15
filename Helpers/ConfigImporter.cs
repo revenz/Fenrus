@@ -1,7 +1,5 @@
 using System.Text;
 using Fenrus.Models;
-using Fenrus.Services;
-using NUglify.JavaScript.Syntax;
 
 namespace Fenrus.Helpers;
 
@@ -141,6 +139,7 @@ public class ConfigImporter
         if (oldItem._Type == "DashboardLink")
         {
             var link = new Models.LinkItem();
+            link.Name = oldItem.Name;
             link.Size = ParseSize(oldItem.Size);
             link.Uid = oldItem.Uid != Guid.Empty ? oldItem.Uid : Guid.NewGuid();
             if (string.IsNullOrEmpty(oldItem.IconBase64) == false)
