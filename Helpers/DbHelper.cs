@@ -146,4 +146,16 @@ public class DbHelper
         var collection = db.GetCollection<T>(typeof(T).Name);
         return collection.Query().Where(x => x.UserUid == uid).ToList();
     }
+
+    /// <summary>
+    /// Deletes all items in the database for a user
+    /// </summary>
+    /// <typeparam name="T">the type of items to get</typeparam>
+    /// <param name="uid">the users UID</param>
+    public static void DeleteAllForUser<T>(Guid uid) where T : IUserModal
+    {
+        using var db = GetDb();
+        var collection = db.GetCollection<T>(typeof(T).Name);
+        collection.DeleteMany(x => x.UserUid == uid);
+    }
 }

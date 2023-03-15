@@ -144,6 +144,8 @@ public class UserService
     /// <param name="uid">the users UID</param>
     public void Delete(Guid uid)
     {
+        DbHelper.DeleteAllForUser<SearchEngine>(uid);
+        DbHelper.DeleteAllForUser<Group>(uid);
         DbHelper.Delete<UserSettings>(uid);
         DbHelper.Delete<User>(uid);
     }
