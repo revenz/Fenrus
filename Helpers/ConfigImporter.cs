@@ -141,6 +141,8 @@ public class ConfigImporter
             var link = new Models.LinkItem();
             link.Name = oldItem.Name;
             link.Size = ParseSize(oldItem.Size);
+            link.Url = oldItem.Url;
+            link.Monitor = false;
             link.Uid = oldItem.Uid != Guid.Empty ? oldItem.Uid : Guid.NewGuid();
             if (string.IsNullOrEmpty(oldItem.IconBase64) == false)
                 link.Icon = ImageHelper.SaveImageFromBase64(oldItem.IconBase64);
