@@ -2,6 +2,10 @@
     dataAge;
     data;
     dataIndex = 0;
+    fetch(args, url) {
+        let result = args.fetch(url);
+        return result?.Result || result;
+    }
 
     getData(args)
     {        
@@ -24,7 +28,7 @@
     getOnSale(args){
         let currency = args.properties['currency'] || 'AUD';
         let country = args.properties['country'] || 'NZ';
-        let data = args.fetch(`https://menu.gog.com/v1/store/configuration?locale=en-US&currency=${currency}&country=${country}`);
+        let data = this.fetch(args, `https://menu.gog.com/v1/store/configuration?locale=en-US&currency=${currency}&country=${country}`);
         args.log('data: ' + data);
         if(!data || !data['on-sale-now'] || isNaN(data['on-sale-now'].products?.length))
             return;

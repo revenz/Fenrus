@@ -11,7 +11,7 @@
     {
         let data = this.fetch(args, 'api/status');
         let shrinkage = this.fetch(args, 'api/library-file/shrinkage-groups');
-        let upaateAvailable = this.updateAvailable(args);
+        let updateAvailable = this.updateAvailable(args);
 
         args.setStatusIndicator(updateAvailable ? 'update' : '');
 

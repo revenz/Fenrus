@@ -1,7 +1,12 @@
 class HomeAssistant {
+
+    fetch(args, url) {
+        let result = args.fetch(url);
+        return result?.Result || result;
+    }
     doFetch(args, template, isTest) {
         if (isTest) {
-            return args.fetch({
+            return this.fetch(args, {
                 url: `api/`,
                 timeout: 10,
                 method: 'GET',
@@ -10,7 +15,7 @@ class HomeAssistant {
                 }
             });
         } else {
-            return args.fetch({
+            return this.fetch(args, {
                 url: `api/template`,
                 timeout: 10,
                 method: 'POST',

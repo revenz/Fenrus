@@ -4,6 +4,11 @@ class Radarr {
         args.log('radarr url: ' + url);
         return url;
     }
+    
+    fetch(args, url) {
+        let result = args.fetch(url);
+        return result?.Result || result;
+    }
 
     status(args) {
 		let updateAvailable = this.getStatusIndicator(args);
@@ -11,7 +16,7 @@ class Radarr {
         let filter = args.properties['filters'];
 
         
-        let data = args.fetch({
+        let data = this.fetch(args, {
             url: this.getUrl(args, 'movie'),
             timeout: 10000
         });
@@ -63,14 +68,14 @@ class Radarr {
     }
 
 	getStatusIndicator(args){
-        let data = args.fetch(this.getUrl(args, 'update'));
+        let data = this.fetch(args, this.getUrl(args, 'update'));
         if(data?.length > 0 && data[0].installed === false && data[0].latest === true)
 		    return 'update';
     	return '';
 	}
 	
     test(args) {
-        let data = args.fetch(this.getUrl(args, 'queue'));
+        let data = this.fetch(args, this.getUrl(args, 'queue'));
         return isNaN(data?.records?.length) === false;
     }
 }

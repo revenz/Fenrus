@@ -1,10 +1,14 @@
 ﻿class Jellyfin
-{   
+{
+    fetch(args, url) {
+        let result = args.fetch(url);
+        return result?.Result || result;
+    }
     getToken(args){
         let username = args.properties['username'];
         let password = args.properties['password'];
         
-        let data = args.fetch({
+        let data = this.fetch(args, {
             url: 'Users/AuthenticateByName',
             method: 'POST',
             headers: { 
@@ -24,7 +28,7 @@
         if(!token)
             token = this.getToken(args);
         args.log('token: ' + JSON.stringify(token));
-        let data = args.fetch({
+        let data = this.fetch(args, {
             url: `Library/MediaFolders`,
             headers: {
                 'X-MediaBrowser-Token': token.token
@@ -41,7 +45,7 @@
         let results = [];
         for(let lib of libraries)
         {   
-            let data = args.fetch({
+            let data = this.fetch(args, {
                 url: `Users/${token.userId}/Items/Latest?Limit=7&ParentId=${lib}` ,
                 headers: {
                     'X-MediaBrowser-Token': token.token
@@ -66,7 +70,7 @@
 
     getCounts(args){
         let token = this.getToken(args);        
-        let data = args.fetch({
+        let data = this.fetch(args, {
             url: `Items/Counts`,
             headers: {
                 'X-MediaBrowser-Token': token.token

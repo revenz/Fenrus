@@ -3,9 +3,13 @@
     getUrl(args, endpoint) {
         return `api/v2?apikey=${args.properties['apikey']}&cmd=${endpoint}`;
     }
+    fetch(args, url) {
+        let result = args.fetch(url);
+        return result?.Result || result;
+    }
     status(args) {
-        let dr = args.fetch(this.getUrl(args, 'get_activity'));
-        let topUsers = args.fetch(this.getUrl(args, 'get_home_stats&stat_id=top_users'));
+        let dr = this.fetch(args, this.getUrl(args, 'get_activity'));
+        let topUsers = this.fetch(args, this.getUrl(args, 'get_home_stats&stat_id=top_users'));
 
         let data = dr?.response?.data;
                 
@@ -98,7 +102,7 @@
     }
 
     test(args) {
-        let data = args.fetch(this.getUrl(args, 'arnold'));
+        let data = this.fetch(args, this.getUrl(args, 'arnold'));
         console.log('data', data);
         return data?.response?.result == 'success';
     }

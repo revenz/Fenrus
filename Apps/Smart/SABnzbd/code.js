@@ -2,19 +2,22 @@
 {
     history;
     pfImages;
-    
     constructor(){
         this.history = [];
         this.pfImages = {};
     }
-    
+
+    fetch(args, url) {
+        let result = args.fetch(url);
+        return result?.Result || result;
+    }
     getUrl(args, mode) {
         return `api?output=json&apikey=${args.properties['apikey']}&mode=${mode}`;
     }
 
     getData(args, mode) {
         let url = this.getUrl(args, mode);
-        return args.fetch(url); 
+        return this.fetch(args, url); 
     }
 
     status(args) 
@@ -210,7 +213,7 @@
     }
 
     test(args) {
-        let data = args.fetch(`api?output=json&apikey=${args.properties['apikey']}&mode=queue`);
+        let data = this.fetch(args, `api?output=json&apikey=${args.properties['apikey']}&mode=queue`);
         return isNaN(data?.queue?.mbleft) === false;
     }
 }

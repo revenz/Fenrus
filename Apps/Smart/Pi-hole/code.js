@@ -1,5 +1,10 @@
 ﻿class PiHole
 {
+    fetch(args, url) {
+        let result = args.fetch(url);
+        return result?.Result || result;
+    }
+    
     getUrl(args) {
         let url = args.url;
         if (!url)
@@ -16,7 +21,7 @@
     
     status(args) {
         let url = this.getUrl(args, args.url);
-        let data = args.fetch(url);
+        let data = this.fetch(args, url);
         let blocked = data?.ads_blocked_today ?? 0;
         let percent = data?.ads_percentage_today ?? 0;
         
@@ -32,7 +37,7 @@
     test(args) {
         let url = this.getUrl(args);
 
-        let data = args.fetch(url);
+        let data = this.fetch(args, url);
         return isNaN(data?.ads_blocked_today) === false;
     }
 }

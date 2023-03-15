@@ -6,6 +6,8 @@ class Glances {
             url: `api/3/` + endpoint,
             timeout: 10
         });
+        result = result?.Result || result;
+        
         if(typeof(result) === 'string')
             result = JSON.parse(result);    
         if(result.exception)

@@ -4,6 +4,10 @@
     dataIndex = 0;
     countryCode;
 
+    fetch(args, url) {
+        let result = args.fetch(url);
+        return result?.Result || result;
+    }
     getCountryCode(args){
         let country = args.properties['country'] || 'en-NZ';
         country = country.substring(country.indexOf('-') + 1).toUpperCase();
@@ -34,7 +38,7 @@
 
     getFreeGame(args)
     {
-        let data = args.fetch('https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?country=' + this.countryCode);
+        let data = this.fetch(args, 'https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?country=' + this.countryCode);
         if (!data?.data?.Catalog?.searchStore?.elements?.length)
             return null;
         let now = new Date().getTime();
@@ -46,7 +50,7 @@
     }
 
     getOnSale(args){
-        let data = args.fetch('https://store-site-backend-static-ipv4.ak.epicgames.com/storefrontLayout?country=' + this.countryCode);
+        let data = this.fetch(args, 'https://store-site-backend-static-ipv4.ak.epicgames.com/storefrontLayout?country=' + this.countryCode);
         if(data && typeof(data) === 'string')
             data = JSON.parse(data);
         if(!data || !data.data || !data.data.Storefront)
