@@ -2,6 +2,9 @@ using Blazored.Toast;
 using Fenrus;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 
 if (args?.Any() == true && args[0] == "--init-config")
 {
@@ -41,6 +44,12 @@ builder.Services.AddSignalR(hubOptions =>
 });
 builder.Services.AddTransient<Fenrus.Middleware.InitialConfigMiddleware>();
 
+builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(DirectoryHelper.GetDataDirectory()))
+    .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
+    {
+        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+        ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+    });
 
 bool oAuth = SystemSettingsService.InitConfigDone && SystemSettingsService.UsingOAuth;
 
