@@ -6,6 +6,7 @@
 
 <FenrusPage Title="@lblTitle" Icon="fa-solid fa-gear" PageDescription="@lblDescription">
     <Buttons>
+        <button class="btn" @onclick="() => ImportConfig()">@lblImportConfig</button>
         <button class="btn" @onclick="() => Save()">@lblSave</button>
     </Buttons>
     <Body>
@@ -22,3 +23,13 @@
     </div>
     </Body>
 </FenrusPage>
+
+
+@if (Importing)
+{
+    <div class="importing">
+        <span>@lblImporting</span>
+    </div>
+}
+
+<Fenrus.Components.Dialogs.FileInputDialog @ref="FileInputDialog" Translator="Translator" />

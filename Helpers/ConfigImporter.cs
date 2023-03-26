@@ -250,6 +250,10 @@ public class ConfigImporter
             }).ToList();
 
             var allowGroupUids = systemGroupUids.Union(settings.GroupUids).ToList();
+
+            var defaultDashboard = old.Config.Dashboards.OrderBy(x => x.Enabled).ThenBy(x => x.Name.Contains("Default"))
+                .ThenBy(x => x.Name).FirstOrDefault();
+            
             settings.DashboardUids = old.Config.Dashboards.Select(x =>
             {
                 var existing = existingDashboards.FirstOrDefault(y => x.Uid == y.Uid || x.Name == y.Name);
@@ -264,6 +268,7 @@ public class ConfigImporter
                 db.UserUid = user.Uid;
                 db.Name = x.Name;
                 db.Enabled = x.Enabled;
+                db.IsDefault = x == defaultDashboard;
                 db.Uid = x.Uid != Guid.Empty ? x.Uid : Guid.NewGuid();
                 db.AccentColor = x.AccentColor?.EmptyAsNull() ?? old.Config.AccentColor?.EmptyAsNull() ?? Globals.DefaultAccentColor;
                 db.Theme = old.Config.Theme?.EmptyAsNull() ?? "Default";

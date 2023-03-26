@@ -4,12 +4,6 @@
 <PageTitle>Fenrus - @lblTitle</PageTitle>
 
 <FenrusPage Title="@lblTitle" Icon="fa-solid fa-sliders">
-    <Buttons>
-        @if (IsAdmin)
-        {
-            <button class="btn" @onclick="() => ImportConfig()">@lblImportConfig</button>
-        }
-    </Buttons>
     <Body>
     
     <InputLabel Label="@lblAuthor" Value="John Andrews" />
@@ -43,16 +37,3 @@
     
     </Body>
 </FenrusPage>
-
-@if (Importing)
-{
-    <div class="importing">
-        <span>@lblImporting</span>
-    </div>
-}
-
-<Fenrus.Components.Dialogs.FileInputDialog @ref="FileInputDialog" Translator="Translator" />
-
-<div class="message-box">
-    
-</div>

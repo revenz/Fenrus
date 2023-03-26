@@ -80,7 +80,11 @@ public class DbHelper
         if(collection.Exists(x => x.Uid == item.Uid))
             collection.Update(item);
         else
-            collection.Insert(item);
+        {
+            if(item.Uid == Guid.Empty)
+                item.Uid = Guid.NewGuid();
+            collection.Insert(item.Uid, item);
+        }
     }
     
     /// <summary>

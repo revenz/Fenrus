@@ -1,4 +1,7 @@
+using Fenrus.Components.Dialogs;
+
 namespace Fenrus.Pages;
+
 
 /// <summary>
 /// System Settings page
@@ -6,12 +9,15 @@ namespace Fenrus.Pages;
 public partial class SystemSettings:UserPage
 {
     private string lblTitle, lblDescription,
+        lblImportConfig, lblImporting, 
         lblSmtp, lblSmtpDescription, 
         lblSmtpServer, lblSmtpPort, lblSmtpUser, lblSmtpPassword,
         lblSmtpSender, lblStmpSenderHelp, lblTest;
 
     private Models.SystemSettings Model;
     private string SmtpPassword;
+    private bool Importing = false;
+    private Fenrus.Components.Dialogs.FileInputDialog FileInputDialog { get; set; }
     
 
     /// <summary>
@@ -35,6 +41,8 @@ public partial class SystemSettings:UserPage
         lblSmtpSender = Translator.Instant("Pages.SystemSettings.Fields.SmtpSender");
         lblStmpSenderHelp = Translator.Instant("Pages.SystemSettings.Fields.SmtpSenderHelp");
         lblTest = Translator.Instant("Labels.Test");
+        lblImporting = Translator.Instant("Pages.About.Labels.Importing");
+        lblImportConfig = Translator.Instant("Pages.About.Buttons.ImportConfig");
     }
 
     /// <summary>
@@ -90,6 +98,34 @@ public partial class SystemSettings:UserPage
         {
             ToastService.ShowError(ex.Message);
         }
+    }
+
+    async Task ImportConfig()
+    {
+        if (IsAdmin == false)
+            return;
+        
+        var result = await FileInputDialog.Show(
+            Translator.Instant("Dialogs.ImportConfig.Title"),
+            Translator.Instant("Dialogs.ImportConfig.Description"),
+            Translator.Instant("Labels.Import"),
+            ".json"
+        );
+        if (string.IsNullOrWhiteSpace(result))
+            return;
+
+        this.Importing = true;
+        this.StateHasChanged();
+
+        var log = await new ConfigImporter().Import(result);
+
+        this.Importing = false;
+        this.StateHasChanged();
+
+        await MessageBox.Show(
+            title: Translator.Instant("Dialogs.ImportConfig.Result"),
+            message: log
+        );
     }
 
 }
