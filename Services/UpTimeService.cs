@@ -49,12 +49,11 @@ public class UpTimeService
     /// </summary>
     /// <param name="url">the URL </param>
     /// <returns>any data for the URL</returns>
-    public List<UpTimeEntry> GetData(string url)
+    public SiteUpTime GetData(string url)
     {
         using var db = DbHelper.GetDb();
-        var collection = db.GetCollection<UpTimeEntry>(nameof(UpTimeEntry));
-        return collection.Query().Where(x => x.Name == url)
-            .OrderByDescending(x => x.Date).Limit(100).ToList();
+        var collection = db.GetCollection<SiteUpTime>(nameof(SiteUpTime));
+        return collection.FindById(url);
     }
 
     private void TimerOnElapsed(object? sender, ElapsedEventArgs e)
@@ -97,29 +96,49 @@ public class UpTimeService
             _ = MonitorUptime(url);
         }
     }
-
-    private bool AlreadyExists(string url, DateTime date)
-    {
-        using var db = DbHelper.GetDb();
-        var collection = db.GetCollection<UpTimeEntry>(nameof(UpTimeEntry));
-        return collection.Exists(x => x.Name == url && x.Date == date);
-    }
-
     private async Task MonitorUptime(string url)
     {
-        UpTimeEntry entry = new();
-        entry.Name = url;
-        entry.Date = RoundDown(DateTime.Now, new TimeSpan(0, 10, 0));
-        if (AlreadyExists(url, entry.Date))
-            return; // already monitored for this period
-
+        using var db = DbHelper.GetDb();
+        var collection = db.GetCollection<SiteUpTime>(nameof(SiteUpTime));
+        var item = collection.FindById(url);
+        var date = RoundDown(DateTime.Now, new TimeSpan(0, 10, 0));
+        if (item != null)
+        {
+            var last = item.Data.Last();
+            if (last != null && last.Date >= date)
+                return; // already recorded
+        }
         var upTimeSite = new UpTimeSite(this.HttpClient, url);
         var reachable = await upTimeSite.IsReachable();
-        entry.Uid = Guid.NewGuid();
-        entry.Message = reachable.Message;
-        entry.Status = reachable.Reachable;
 
-        DbHelper.Insert(entry);
+        var d = new SiteUpTimeEntry()
+        {
+            Status = reachable.Reachable,
+            Message = reachable.Message,
+            Date = date
+        };
+        if (item != null)
+        {
+            item.Data.Add(d);
+            while (item.Data.Count > 10)
+            {
+                item.Data.RemoveAt(0);
+            }
+
+            collection.Update(item);
+        }
+        else
+        {
+            item = new SiteUpTime()
+            {
+                Data = new List<SiteUpTimeEntry>()
+                {
+                    d
+                },
+                Url = url
+            };
+            collection.Insert(item);
+        }
     }
     
     public static DateTime RoundDown(DateTime dt, TimeSpan d)
@@ -134,19 +153,26 @@ public class UpTimeService
     /// <returns>a list of URLs and their up states</returns>
     public Dictionary<string, int> GetUpStates()
     {
-        using var db = DbHelper.GetDb();
-        var collection = db.GetCollection<UpTimeEntry>(nameof(UpTimeEntry));
-        var all = collection.Query().ToList();
-        return all
-            .GroupBy(x => x.Name)
-            .Select(x => x.MaxBy(x => x.Date))
-            .ToDictionary(x => x.Name, x =>
-            {
-                if (x.Date < DateTime.Now.AddHours(-1))
-                    return 2; // unknown, too old
-                return x.Status ? 1 : 0;
-            });
-        
+        try
+        {
+            using var db = DbHelper.GetDb();
+            var collection = db.GetCollection<SiteUpTime>(nameof(SiteUpTime));
+            var all = collection.Query().ToList();
+            return all
+                .ToDictionary(x => x.Url, x =>
+                {
+                    var last = x.Data?.Last();
+                    if (last == null)
+                        return 2;
+                    if (last.Date < DateTime.Now.AddHours(-1))
+                        return 2; // unknown, too old
+                    return last.Status ? 1 : 0;
+                });
+        }
+        catch (Exception)
+        {
+            return new();
+        }
     }
 }
 

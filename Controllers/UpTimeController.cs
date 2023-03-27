@@ -27,8 +27,10 @@ public class UpTimeController : BaseController
 
         var service = new UpTimeService();
         var data = service.GetData(url);
+        if (data == null)
+            return new object [] { };
         // we dont need to return the URL, so we return an anonymous object to avoid it
-        return data.Select(x => new
+        return data.Data.Select(x => new
         {
             x.Date,
             Up = x.Status,

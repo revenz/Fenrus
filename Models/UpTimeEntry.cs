@@ -1,20 +1,27 @@
 namespace Fenrus.Models;
 
 /// <summary>
-/// Model for an up time recording
+/// Model for a site uptime
 /// </summary>
-public class UpTimeEntry : IModal
+public class SiteUpTime
 {
-    /// <summary>
-    /// Gets or sets the Uid
-    /// </summary>
-    [LiteDB.BsonId]
-    public Guid Uid { get; set; }
-
     /// <summary>
     /// Gets or sets the URL for the uptime
     /// </summary>
-    public string Name { get; set; }
+    [LiteDB.BsonId]
+    public string Url { get; set; }
+
+    /// <summary>
+    /// Gets or sets the data for hte uptime entry
+    /// </summary>
+    public List<SiteUpTimeEntry> Data { get; set; }
+}
+
+/// <summary>
+/// Model for an up time recording
+/// </summary>
+public class SiteUpTimeEntry
+{
     
     /// <summary>
     /// Gets or sets the time when the up time was logged at
@@ -30,4 +37,5 @@ public class UpTimeEntry : IModal
     /// Gets or sets any message for the up time
     /// </summary>
     public string Message { get; set; }
+
 }
