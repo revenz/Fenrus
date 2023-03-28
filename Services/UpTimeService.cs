@@ -1,3 +1,4 @@
+using System.Net;
 using System.Timers;
 using Fenrus.Models;
 using Timer = System.Timers.Timer;
@@ -224,7 +225,9 @@ public class UpTimeSite
             var result = await HttpClient.SendAsync(new (HttpMethod.Get, Url));
             if (result.IsSuccessStatusCode)
                 return (true, string.Empty);
-            return (false, result.ReasonPhrase ?? result.StatusCode.ToString());
+            if (result.StatusCode == HttpStatusCode.Unauthorized || result.StatusCode == HttpStatusCode.Forbidden)
+                return (true, string.Empty); // 401/403 means unauthorized, but is reachable
+            return (false, result.ReasonPhrase?.EmptyAsNull() ?? result.StatusCode.ToString());
         }
         catch(Exception ex) 
         {

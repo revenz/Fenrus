@@ -164,6 +164,10 @@ function changeDashboard(uid){
     window.location.reload();
 }
 
+function editGroup(system, groupUid){
+    window.location.href = system ? '/settings/system/groups/' + groupUid : '/settings/groups/' + groupUid;
+}
+
 function moveGroup(groupUid, up){
     let dashboardUid = document.querySelector('.dashboard').getAttribute('x-uid');
     fetch(`/settings/dashboard/${dashboardUid}/move-group/${groupUid}/${up}`, { method: 'POST'}).then(res => {

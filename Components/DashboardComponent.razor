@@ -19,6 +19,11 @@
                     <div class="group-controls">
                         <span class="move-up fa-solid fa-angle-up" title="@Translator.Instant("Labels.MoveUp")" onclick="moveGroup('@group.Uid', true)"></span>
                         <span class="move-down fa-solid fa-angle-down" title="@Translator.Instant("Labels.MoveDown")" onclick="moveGroup('@group.Uid', false)"></span>
+                        @if (group.IsSystem == false)
+                        {
+                            <span class="edit-group fa-solid fa-pen-to-square" title="@Translator.Instant("Labels.Edit")" 
+                                  onclick="editGroup(@(group.IsSystem ? "true" : "false"), '@group.Uid')"></span>
+                        }
                         <span class="remove-group fa-solid fa-trash" title="@Translator.Instant("Labels.RemoveGroup")" onclick="removeGroup('@group.Uid', '@group.Name.Replace("'", "\\'")')"></span>
                     </div>
                 </div>
