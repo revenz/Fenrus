@@ -151,8 +151,6 @@ class UpTime
                     td.innerText = value;
                 }
             }
-            if(++count >= 10)
-                break;
         }
 
         this.utcContainer = document.getElementById('up-time-chart-container');
