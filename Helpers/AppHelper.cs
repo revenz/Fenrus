@@ -53,6 +53,7 @@ public class AppHeler
     /// </summary>
     /// <param name="engine">The Jint engine</param>
     /// <param name="url">the application URL</param>
+    /// <param name="linkTarget">the link target</param>
     /// <param name="size">the application size</param>
     /// <param name="log">the log</param>
     /// <param name="properties">the application properties</param>
@@ -60,6 +61,7 @@ public class AppHeler
     /// <returns>the args to pass into an application</returns>
     public static JsValue GetApplicationArgs(Engine engine, string url,
         Dictionary<string, object> properties, List<string> log,
+        string linkTarget,
         string? size = null,
         HttpResponse? response = null)
     {
@@ -69,6 +71,7 @@ public class AppHeler
         {
             url,
             size,
+            linkTarget = linkTarget,
             properties = properties ?? new(),
             humanizer = new Helpers.AppHelpers.Humanizer(),
             // doesnt work if await, returns a Task to jint for some reason

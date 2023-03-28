@@ -121,8 +121,21 @@ function launch(event, uid) {
     if(eleApp && divLaunchingApp){
         let target = eleApp.getAttribute('target');
         if(!target || target === '_self'){
-            divLaunchingApp.querySelector('.title').textContent = 'Launching ' + eleApp.querySelector('.content .title').textContent;
-            divLaunchingApp.querySelector('img').src = eleApp.querySelector('.icon img').src;
+            let title = eleApp.querySelector('.content .title');
+            if(title)
+                title = title.textContent;
+            else
+                title = eleApp.getAttribute('title');
+            divLaunchingApp.querySelector('.title').textContent = 'Launching ' + title;
+            
+            let img = eleApp.querySelector('.icon img');
+            if(img)
+                divLaunchingApp.querySelector('img').src = img.src;
+            else{
+                img = eleApp.querySelector('img');
+                if(img)
+                    divLaunchingApp.querySelector('img').src = img.src;
+            }
             divLaunchingApp.style.display = 'unset';
         }
     }

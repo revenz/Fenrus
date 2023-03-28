@@ -153,7 +153,7 @@ app.MapBlazorHub(options =>
 app.MapFallbackToPage("/_Host");
 
 // create an uptime service to monitor the uptime status for monitor apps/links
-_ = new UpTimeService();
+new UpTimeService().Start();
 
 Logger.ILog($"Fenrus v{Fenrus.Globals.Version} started");
 app.Run();

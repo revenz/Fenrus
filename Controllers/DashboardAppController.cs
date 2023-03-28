@@ -102,10 +102,12 @@ public class DashboardAppController: BaseController
                 return new NotFoundResult();
             var engine = ai.Engine;
             var utils = new Utils();
+            string linkTarget = ""; // TODO: get the dashboard so we can feed the link target in here
 
             var statusArgs = AppHeler.GetApplicationArgs(engine,
                 ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,
                 AppHeler.DecryptProperties(ai.UserApp.Properties),
+                linkTarget: linkTarget,
                 log: log,
                 size: size,
                 response: Response);

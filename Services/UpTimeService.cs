@@ -9,10 +9,20 @@ namespace Fenrus.Services;
 /// </summary>
 public class UpTimeService
 {
-    private readonly HttpClient HttpClient;
+    private HttpClient HttpClient;
     private Timer Timer;
 
+    /// <summary>
+    /// Constructs a new instance of the up-time service
+    /// </summary>
     public UpTimeService()
+    {
+    }
+
+    /// <summary>
+    /// Starts the monitoring the up time for the URLs
+    /// </summary>
+    public void Start()
     {
         var handler = new HttpClientHandler();
         handler.ClientCertificateOptions = ClientCertificateOption.Manual;
@@ -91,23 +101,56 @@ public class UpTimeService
                 return url;
             }).Where(x => string.IsNullOrEmpty(x) == false).Distinct().ToList();
 
-        foreach (var url in items)
-        {
-            _ = MonitorUptime(url);
-        }
-    }
-    private async Task MonitorUptime(string url)
-    {
         using var db = DbHelper.GetDb();
         var collection = db.GetCollection<SiteUpTime>(nameof(SiteUpTime));
-        var item = collection.FindById(url);
+        var siteUpTimeItems = collection.FindAll();
         var date = RoundDown(DateTime.Now, new TimeSpan(0, 10, 0));
-        if (item != null)
+        var tasks = new List<Task<(string Url, SiteUpTime Item, SiteUpTimeEntry Entry)>>();
+        foreach (var url in items)
         {
-            var last = item.Data.Last();
-            if (last != null && last.Date >= date)
-                return; // already recorded
+            var item = siteUpTimeItems.FirstOrDefault(x => x.Url == url);
+            if (item != null)
+            {
+                var last = item.Data.Last();
+                if (last != null && last.Date >= date)
+                    continue; // already recorded
+            }
+            tasks.Add(MonitorUptime(url, date, item));
         }
+
+        Task.WhenAll(tasks);
+        db.BeginTrans();
+        foreach (var t in tasks)
+        {
+            var item = t.Result.Item;
+            if (item != null)
+            {
+                item.Data.Add(t.Result.Entry);
+                while (item.Data.Count > 10)
+                {
+                    item.Data.RemoveAt(0);
+                }
+
+                collection.Update(item);
+            }
+            else
+            {
+                item = new SiteUpTime()
+                {
+                    Data = new List<SiteUpTimeEntry>()
+                    {
+                        t.Result.Entry
+                    },
+                    Url = t.Result.Url
+                };
+                collection.Insert(item);
+            }
+        }
+
+        db.Commit();
+    }
+    private async Task<(string Url, SiteUpTime Item, SiteUpTimeEntry Entry)> MonitorUptime(string url, DateTime date, SiteUpTime item)
+    {
         var upTimeSite = new UpTimeSite(this.HttpClient, url);
         var reachable = await upTimeSite.IsReachable();
 
@@ -117,28 +160,7 @@ public class UpTimeService
             Message = reachable.Message,
             Date = date
         };
-        if (item != null)
-        {
-            item.Data.Add(d);
-            while (item.Data.Count > 10)
-            {
-                item.Data.RemoveAt(0);
-            }
-
-            collection.Update(item);
-        }
-        else
-        {
-            item = new SiteUpTime()
-            {
-                Data = new List<SiteUpTimeEntry>()
-                {
-                    d
-                },
-                Url = url
-            };
-            collection.Insert(item);
-        }
+        return (url, item, d);
     }
     
     public static DateTime RoundDown(DateTime dt, TimeSpan d)

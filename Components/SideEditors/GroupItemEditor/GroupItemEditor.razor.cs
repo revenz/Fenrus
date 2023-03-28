@@ -371,7 +371,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             var log = new List<string>();
             var args = AppHeler.GetApplicationArgs(engine,
                 Model.ApiUrl?.EmptyAsNull() ?? Model.Url,
-                properties, log: log);
+                properties, linkTarget: string.Empty, log: log);
 
             engine.SetValue("testArgs", args);
             engine.SetValue("testArgsUtils", utils);

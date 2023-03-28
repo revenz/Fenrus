@@ -35,6 +35,6 @@ public class UpTimeController : BaseController
             x.Date,
             Up = x.Status,
             x.Message
-        });
+        }).OrderByDescending(x => x.Date);
     }
 }
