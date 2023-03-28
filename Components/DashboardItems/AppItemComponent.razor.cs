@@ -16,6 +16,11 @@ public partial class AppItemComponent
     /// Gets or sets the link item model
     /// </summary>
     [Parameter] public AppItem Model { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this is a guest dashboard
+    /// </summary>
+    [Parameter] public bool IsGuest { get; set; }
 
     /// <summary>
     /// Gets or sets the settings

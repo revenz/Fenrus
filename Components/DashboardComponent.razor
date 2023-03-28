@@ -30,12 +30,12 @@
                     if (item is LinkItem link)
                     {
                         <Fenrus.Components.DashboardItems.LinkItemComponent 
-                            Model=@link Settings=@Settings UpTimeStates="@UpTimeStates" />
+                            Model=@link Settings=@Settings UpTimeStates="@UpTimeStates" IsGuest="@IsGuest" />
                     }
                     else if (item is AppItem app)
                     {
                         <Fenrus.Components.DashboardItems.AppItemComponent 
-                            Model=@app Settings=@Settings UpTimeStates="@UpTimeStates" />
+                            Model=@app Settings=@Settings UpTimeStates="@UpTimeStates" IsGuest="@IsGuest" />
                     }
                 }
             </div>

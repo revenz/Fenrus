@@ -34,6 +34,11 @@ public partial class DashboardComponent
     [Parameter] public Translator Translator { get; set; }
     
     /// <summary>
+    /// Gets or sets if this is a guest dashboard
+    /// </summary>
+    [Parameter] public bool IsGuest { get; set; }
+    
+    /// <summary>
     /// Gets the up-time states of URLs
     /// </summary>
     [Parameter] public Dictionary<string, int> UpTimeStates { get; init; }

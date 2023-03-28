@@ -3,7 +3,7 @@
 
 <div class="theme-settings panel" x-data="ThemeSettings">
     @{
-        bool showSettings = Theme.Settings?.Any() == true;   
+        bool showSettings = Theme.Settings?.Any() == true && IsGuest == false;   
     }
     @if(showSettings)
     {
@@ -38,10 +38,6 @@
                     }
                 </span>
             </div>
-        }
-        if (IsGuest)
-        {
-            showSettings = true;
         }
     }
     <div class="setting profile-buttons @(showSettings ? "has-settings" : "no-settings")">

@@ -1,6 +1,6 @@
 <a id="@Model.Uid" title="@Model.Name" href="@Model.Url" onclick="@OnClickCode" target="@Target" x-monitor="@(Model.Monitor ? "1" : null)"
    class="db-item db-link db-basic @Css @Model.Size.ToString().ToLower() @(Target == "IFrame" ? "iframe" : string.Empty)"
-   oncontextmenu="openContextMenu(event, '@SerializedJsSafeModel'); return false;"
+   oncontextmenu="@(IsGuest ? string.Empty : $"openContextMenu(event, '{SerializedJsSafeModel}'); return false;")"
 >
 <div class="inner">
     <div class="icon">

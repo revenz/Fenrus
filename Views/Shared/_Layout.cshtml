@@ -73,7 +73,9 @@
 </head>
 
 <body class="@bodyClass">
-    <ul class="main-menu">
+<ul class="main-menu">
+    @if (isGuest == false)
+    {
         <li><a title="Home" href="/"><span class="fa-solid fa-house"></span></a></li>
         <li>
             <a title="Settings" href="/settings/dashboards"><span class="fa-solid fa-sliders"></span></a>
@@ -89,8 +91,11 @@
                 SystemSearchEngines = systemSearchEngines
             }))
         </li>
-        <li>
-            <a title="About" href="/settings/about"><span class="icon-fenrus"></span></a>
+    }
+    <li>
+        <a title="@(isGuest ? "Login" : "About")" href="@(isGuest ? "/login" : "/settings/about")"><span class="icon-fenrus"></span></a>
+        @if (isGuest == false)
+        {
             @(await Html.RenderComponentAsync<PanelThemeSettings>(RenderMode.Static, new
             {
                 Theme = themeInstance,
@@ -98,8 +103,9 @@
                 IsGuest = isGuest,
                 PageHelper = pageHelper
             }))
-        </li>
-    </ul>
+        }
+    </li>
+</ul>
 
     <div class="main-content">
         @RenderBody()

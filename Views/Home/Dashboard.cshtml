@@ -1,9 +1,9 @@
 @using Fenrus.Components
 @model Fenrus.Models.DashboardPageModel
 @{
-    ViewBag.Title = Model?.Dashboard?.Name?.EmptyAsNull() ?? "Fenrus";
+    ViewBag.Title = string.IsNullOrEmpty(Model?.Dashboard?.Name) ? "Fenrus" : "Fenrus - " + Model.Dashboard.Name;
     Layout = "_Layout";
-    bool isGuest = false;
+    bool isGuest = ViewBag.IsGuest;
     UserSettings settings = Model.Settings;
     var pageHelper = new PageHelper(Model.Translator);
 
@@ -82,7 +82,7 @@
 </div>
     
 <div x-uid="@Model.Dashboard.Uid" class="@dashboardClass"
-     oncontextmenu="openDefaultContextMenu(event); return false">    
+     oncontextmenu="@(isGuest ? string.Empty : "openDefaultContextMenu(event); return false")">    
     
     @(await Html.RenderComponentAsync<DashboardComponent>(RenderMode.Static, new
     {
@@ -91,7 +91,8 @@
         Settings = settings,
         PageHelper = pageHelper,
         Model.Translator,
-        Model.UpTimeStates
+        Model.UpTimeStates,
+        IsGuest = isGuest
     }))
 
 </div>

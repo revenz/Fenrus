@@ -15,6 +15,11 @@ public partial class LinkItemComponent
     [Parameter] public LinkItem Model { get; set; }
 
     /// <summary>
+    /// Gets or sets if this is a guest dashboard
+    /// </summary>
+    [Parameter] public bool IsGuest { get; set; }
+    
+    /// <summary>
     /// Gets or sets the settings
     /// </summary>
     [Parameter] public UserSettings Settings { get; set; }
