@@ -141,11 +141,21 @@ function launch(event, uid) {
     }
 }
 
+window.onpageshow = function(event) {
+    if (event.persisted) 
+        hideLaunchingSplash();
+};
+
 document.addEventListener("DOMContentLoaded", function(event) {
+    hideLaunchingSplash();
+});
+
+function hideLaunchingSplash()
+{
     let divLaunchingApp = document.getElementById('launching-app');
     if(divLaunchingApp)
         divLaunchingApp.style.display = 'none';
-});
+}
 
 function changeDashboard(uid){     
     let expires = new Date();
