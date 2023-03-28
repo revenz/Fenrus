@@ -23,7 +23,7 @@ public partial class PageGroups : CommonPage<Models.Group>
         lblTitle = Translator.Instant("Pages.Groups.Title" + (IsSystem ? "-System" : string.Empty));
         lblDescription = Translator.Instant("Pages.Groups.Labels.PageDescription" + (IsSystem ? "-System" : string.Empty));
         var service = new GroupService();
-        Items = IsSystem ? service.GetSystemGroups() : service.GetAllForUser(UserUid);
+        Items = (IsSystem ? service.GetSystemGroups() : service.GetAllForUser(UserUid)).OrderBy(x => x.Name).ToList();
         return Task.CompletedTask;
     }
 
