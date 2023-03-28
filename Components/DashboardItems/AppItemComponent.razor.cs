@@ -65,7 +65,7 @@ public partial class AppItemComponent
         // if(string.IsNullOrEmpty(Model.DockerUid) == false)
         //     Css += "docker ";
 
-        if (string.IsNullOrWhiteSpace(Model.Url) == false && UpTimeStates?.TryGetValue(Model.Url, out int state) == true)
+        if (string.IsNullOrWhiteSpace(Model.Url) == false && UpTimeStates?.TryGetValue(Model.ApiUrl?.EmptyAsNull() ?? Model.Url, out int state) == true)
             Css += "is-up-" + (state == 0 ? "false" : state == 1 ? "true" : state) + " ";
 
         Icon = GetIcon();

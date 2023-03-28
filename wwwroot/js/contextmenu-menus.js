@@ -57,12 +57,14 @@ function openContextMenu(event, app){
     let groupUid = group.getAttribute('id');
     let dashboardUid = ele.closest('.dashboard').getAttribute('x-uid');
     let ssh = ele.getAttribute('x-ssh') === '1';
+    let monitor = ele.getAttribute('x-monitor') === '1';
     let docker = ele.getAttribute('x-docker');
     let systemGroup = group.className.indexOf('system-group') > 0;
     if(!contextMenus[uid])
     {
         let menuItems = [];
-        if(app._Type !== 'DashboardTerminal'){
+        if(monitor)
+        {
             menuItems.push(
             {
                 content: `${infoIcon}${Translations.UpTime}`,

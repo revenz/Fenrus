@@ -1,5 +1,5 @@
-<a id="@Model.Uid" title="@Model.Name" href="@Model.Url" onclick="@OnClickCode" target="@Target"
-   class="db-item db-link db-basic @Css @Model.Size.ToString().ToLower() @(Target == "IFrame" ? "iframe" : string.Empty) is-up-<%= isUp[model.Uid]%>"
+<a id="@Model.Uid" title="@Model.Name" href="@Model.Url" onclick="@OnClickCode" target="@Target" x-monitor="@(Model.Monitor ? "1" : null)"
+   class="db-item db-link db-basic @Css @Model.Size.ToString().ToLower() @(Target == "IFrame" ? "iframe" : string.Empty)"
    oncontextmenu="openContextMenu(event, '@SerializedJsSafeModel'); return false;"
 >
 <div class="inner">
