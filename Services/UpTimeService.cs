@@ -126,7 +126,7 @@ public class UpTimeService
             if (item != null)
             {
                 item.Data.Add(t.Result.Entry);
-                while (item.Data.Count > 10)
+                while (item.Data.Count > 7 * 24 * 6) // 7 days worth
                 {
                     item.Data.RemoveAt(0);
                 }
