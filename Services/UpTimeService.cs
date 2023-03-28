@@ -95,7 +95,7 @@ public class UpTimeService
             {
                 string? url = null;
                 if (x is AppItem app)
-                    url = app.Url;
+                    url = app.ApiUrl?.EmptyAsNull() ?? app.Url;
                 else if(x is LinkItem link)
                     url = link.Url;
                 return url;

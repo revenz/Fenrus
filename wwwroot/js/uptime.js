@@ -29,9 +29,8 @@ class UpTime
         this.getData();
     }
 
-    getData(){
-            
-        fetch('/settings/up-time?url=' + encodeURIComponent(this.app.Url))
+    getData(){            
+        fetch('/settings/up-time?url=' + encodeURIComponent(this.app.ApiUrl || this.app.Url))
         .then((response) => response.json())
         .then((data) => {
             this.renderChart(data);
