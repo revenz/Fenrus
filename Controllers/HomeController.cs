@@ -96,7 +96,7 @@ public class HomeController : BaseController
             UpTimeStates = isUp
         };
         ViewBag.Translator = Translator;
-        ViewBag.IsGuest = false;
+        ViewBag.IsGuest = isGuest;
         ViewBag.Dashboard = dashboard;
         ViewBag.UserSettings = settings;
         ViewBag.Dashboards = dashboards;
@@ -304,9 +304,7 @@ public class HomeController : BaseController
         if (settings.AllowGuest == false)
             return Redirect("/login");
 
-        ViewBag.IsGuest = true;
         var dashboard = new DashboardService().GetGuestDashboard();
-
         return ShowDashboard(dashboard, new UserSettingsService().SettingsForGuest());
     }
 
