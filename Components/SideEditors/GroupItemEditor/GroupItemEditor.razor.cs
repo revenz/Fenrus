@@ -409,7 +409,7 @@ var test = instance.test(testArgs);");
 
     public void Dispose()
     {
-        AppSelector.Dispose();
+        AppSelector?.Dispose();
         AppInstance?.Engine?.Dispose();
         AppInstance = null;
     }
