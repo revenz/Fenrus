@@ -19,16 +19,17 @@ For support use our [Discord Server](https://discord.gg/xbYK8wFMeU)
 
 ## Installation
 
-### Node
-Fenrus is a Node application and requires NodeJS to run.  
-Once NodeJS is installed you need to download the packages Fenrus uses
-```
-npm install
-```
+### Dotnet
+Fenrus is a Dotnet application and requires [ASP.NET Core Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) to run.  
 
-Then you can run Fenrus 
+Then you can run Fenrus
 ```
-node app.js
+dotnet Fenrus.dll
+```
+Or to specify a port
+
+```
+dotnet Fenrus.dll --urls=http://*:1234
 ```
 
 ### Docker
@@ -38,10 +39,10 @@ docker run -d \
 -name=Fenrus\
 -p 3000:3000 \
 -v /path/to/data:/app/data\
--v /path/to/images:/app/wwwroot/images
 --restart unless-stopped \
 revenz/fenrus:latest
 ```
+
 ```
 services:
   fenrus:
@@ -51,13 +52,13 @@ services:
       - TZ=Pacific/Auckland
     volumes:
       - /path/to/data:/app/data
-      - /path/to/images:/app/wwwroot/images
     ports:
       - 3000:3000
     restart: unless-stopped
 ```
 Fenrus will save all the user configuration data in the folder /app/data so map this folder outside the docker container.  
-Also, it will store custom images under /app/wwwroot/images, so map this folder outside the docker image as well.
+
+All the configuration is saved into LiteDB file, Fenrus.db.   There is an encryption key alongside this database file used to encrypt sensitive data inside the database.  This way if you need to provide the database for support reasons, your sensitive data cannot be read.
 
 ---
 
