@@ -23,5 +23,7 @@ RUN chmod +x /app/docker-entrypoint.sh
 
 # make sh open bash
 RUN ln -sf /bin/bash /bin/sh
+
+RUN dotnet dev-certs https
     
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

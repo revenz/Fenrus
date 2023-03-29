@@ -13,4 +13,5 @@ if [[ -z "${protocol}" ]]; then
     protocol=http 
 fi
 
+printf "Starting Fenrus at ${protocol}://+:${port}"
 exec dotnet Fenrus.dll --urls=${protocol}://+:${port}
