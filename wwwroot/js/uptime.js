@@ -49,9 +49,12 @@ class UpTime
                 x: x.date, //new Date(x.date),
                 y: x.up === true ? 1 : 0
         }));
+        
+        let vh = document.documentElement.clientHeight * 0.35;
+        
         var options = {
             chart: {
-                height: 400,
+                height: Math.min(400, vh),
                 width:'100%',
                 type: "line",
                 stacked: false,
