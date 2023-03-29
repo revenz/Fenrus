@@ -1,0 +1,8 @@
+@namespace Fenrus.Components.Inputs
+@inherits Input<string>
+
+<InputWrapper Input="@this">
+    <div class="fenrus-color-picker" id="@Uid">
+        <input id="@Uid-input" type="text" @bind-value="@Value" />
+    </div>
+</InputWrapper>

@@ -1,7 +1,9 @@
 {
     "Name":"Default",
     "Css":[
-        "theme.min.css"
+        "main.css",
+        "sliding.css",
+        "tiles.css"
     ],
     "Scripts":[
         "packer.growing.min.js",
@@ -54,18 +56,12 @@
         },
         {
             "Name":"Horizontal",
-            "Type":"Boolean"
-        },
-        {
-            "Name":"AnimatedBackground",
-            "Label":"Animated Background",
-            "Type":"Boolean",
-            "Default":true
+            "Type":"Bool"
         },
         {
             "Name":"BackgroundImage",
             "Label":"Overlay Background",
-            "Type":"Boolean",
+            "Type":"Bool",
             "Default":true
         }
     ]

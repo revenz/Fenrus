@@ -1,0 +1,37 @@
+@namespace Fenrus.Shared
+
+<div class="logo">
+    <img src="/favicon?color=@Uri.EscapeDataString(App?.AccentColor ?? string.Empty)&version=@Globals.Version">
+    <span class="title">Fenrus</span>
+</div>
+<ul>
+    @foreach (var group in Menu)
+    {
+        <li class="group">
+            @group.Name
+        </li>
+        foreach (var item in group.Items)
+        {
+            <li class="@(IsActive(item) ? "active" : "")">
+                <a href="@item.Link">
+                    <span class="icon">
+                        <i class="@item.Icon"></i>
+                    </span>
+                    <span>@item.Name</span>
+                </a>
+            </li>
+        }
+    }
+    <li class="@(IsActive("/settings/about") ? "active" :"")">
+        <a href="/settings/about">
+            <span class="icon">
+                <i class="icon-fenrus" />
+            </span>
+            <span>@lblAbout</span>
+        </a> 
+    </li>
+</ul>
+
+<div class="version-info">
+    @lblVersion
+</div>

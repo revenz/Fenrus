@@ -1,0 +1,9 @@
+@page "/settings/dashboards/{uidString}"
+@inherits UserPage
+@code {
+    [Parameter] public string UidString { get;set; }
+}
+
+<PageTitle>Fenrus - @Translator.Instant("Pages.Dashboard.Title")</PageTitle>
+
+<PageDashboard UidString=@UidString />

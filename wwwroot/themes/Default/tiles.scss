@@ -10,7 +10,7 @@ $margin:0;
     display: block;
     background:rgba(0,0,0,0.5);
     position: relative;
-    text-decoration: none;
+    text-decoration: none !important;
     color:rgba(255,255,255,0.8);
     margin:$margin;
     padding:$padding;
@@ -285,7 +285,7 @@ $margin:0;
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden;
+            backface-visibility: hidden;          
         }
                 
         /* Style the back side */
@@ -294,7 +294,7 @@ $margin:0;
         }
     }
 }
-.dashboard, .side
+.dashboard, .side, .preview
 { 
     .db-item.db-basic 
     {
@@ -310,13 +310,25 @@ $margin:0;
                     bottom: 0;
                     background: rgba(0,0,0,0.7);
                 }
+                .icon, .content {
+                  backface-visibility: unset;
+                }
+                .icon img {
+                    display:none;
+                }
                 .content {
-                    display: unset;
+                    display: unset; 
+                    margin-left: 0.15rem !important;
+                    margin-top: -0.4rem;
+                    > div {
+                        padding:0 0.35rem;
+                    }
+                    > div:first-child {
+                        padding-top:0.25rem;
+                    }
                 }
                 .inner {
-                    transform: rotateY(180deg);
-                    top: -0.5rem;
-                    right: -0.5rem;
+                    transform: rotateY(180deg) scale(1.15);
                 }
             }
         }
@@ -336,6 +348,8 @@ $margin:0;
                         left: -8px;
                         top: -7px;
                         height: 106px;
+                        max-width: unset;
+                        max-height: unset;
                     }
                     .icon img {
                         display:none;
@@ -383,7 +397,7 @@ $margin:0;
         }
     }
 }
-.setting .db-item.medium {
+.db-item.medium {
     .inner, .icon {
         max-height:100%;
         max-width: 100%;

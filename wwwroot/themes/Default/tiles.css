@@ -1,0 +1,436 @@
+.separator {
+  display: none;
+}
+
+.db-item {
+  display: block;
+  background: rgba(0, 0, 0, 0.5);
+  position: relative;
+  text-decoration: none !important;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  padding: 0.5rem;
+  transition: transform 0.2s;
+}
+.db-item:hover {
+  background: rgba(var(--accent-rgb), 0.5);
+  z-index: 5;
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.75);
+  transform: scale(1.1);
+}
+.db-item.widget:not(.small):not(.medium) .icon {
+  display: none;
+}
+.db-item .content {
+  justify-content: center;
+  display: flex;
+  margin-left: 0.5rem;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+.db-item .content > .title {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+.db-item .livestats li .title.span {
+  width: 100% !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.db-item.small {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+.db-item.small .content {
+  display: none;
+}
+.db-item.small .icon {
+  width: 100%;
+  height: 100%;
+}
+.db-item.small .icon img {
+  width: 100%;
+  height: 100%;
+}
+.db-item.medium {
+  width: 6.5rem;
+  height: 6.5rem;
+  grid-column-end: span 2;
+  grid-row-end: span 2;
+}
+.db-item.large {
+  width: 21.5rem;
+  height: 6.5rem;
+  grid-column-end: span 6;
+  grid-row-end: span 2;
+}
+.db-item.large .inner {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+.db-item.large .icon {
+  width: 6.50625rem;
+  min-width: 6.50625rem;
+  height: 100%;
+  margin: auto 1rem auto 0;
+}
+.db-item.large .icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.db-item.large:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+.db-item.large:hover::before {
+  content: "";
+  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(var(--accent-rgb), 0.3);
+}
+.db-item.large:hover .inner > * {
+  z-index: 4;
+}
+.db-item.large .status .livestats {
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+}
+.db-item.large .status .livestats li {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex: auto;
+  color: rgba(var(--color-rgb), 0.7);
+}
+.db-item.large .status .livestats li .title {
+  color: var(--accent);
+  padding-bottom: 0.1rem;
+  font-weight: bold;
+  width: 7rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.db-item.large .status .livestats li a {
+  color: var(--color);
+}
+.db-item.larger {
+  width: 21.5rem;
+  height: 6.5rem;
+  grid-row-end: span 4;
+  height: 14rem;
+}
+.db-item.larger .icon {
+  width: 100%;
+  height: 100%;
+}
+.db-item.larger .icon > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.db-item.larger .inner {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.db-item.larger .content > .title {
+  display: none;
+}
+.db-item.x-large {
+  grid-column-end: span 4;
+  grid-row-end: span 4;
+  width: 14rem;
+  height: 14rem;
+}
+@media screen and (max-width: 600px) {
+  .db-item.x-large {
+    grid-column-end: span 6;
+    grid-row-end: span 6;
+    width: 21.5rem;
+  }
+}
+.db-item.x-large .icon > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.db-item.x-large .content > .title {
+  display: none;
+}
+.db-item.xx-large {
+  grid-column-end: span 6;
+  grid-row-end: span 6;
+  width: 21.5rem;
+  height: 21.5rem;
+}
+.db-item.xx-large .icon > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.db-item.xx-large .content > .title {
+  display: none;
+}
+
+.db-item.db-basic {
+  cursor: pointer;
+}
+.db-item.db-basic.medium, .db-item.db-basic.x-large, .db-item.db-basic.xx-large {
+  /* This container is needed to position the front and back side */
+  /* Position the front and back side */
+  /* Style the back side */
+}
+.db-item.db-basic.medium:not(.db-smart) .content, .db-item.db-basic.x-large:not(.db-smart) .content, .db-item.db-basic.xx-large:not(.db-smart) .content {
+  display: flex !important;
+  padding-top: 0.5rem;
+  text-align: -webkit-center;
+}
+.db-item.db-basic.medium .icon, .db-item.db-basic.x-large .icon, .db-item.db-basic.xx-large .icon {
+  width: 100%;
+  height: 100%;
+}
+.db-item.db-basic.medium .icon img, .db-item.db-basic.x-large .icon img, .db-item.db-basic.xx-large .icon img {
+  width: 100%;
+  height: 100%;
+}
+.db-item.db-basic.medium .livestats, .db-item.db-basic.x-large .livestats, .db-item.db-basic.xx-large .livestats {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+}
+.db-item.db-basic.medium .livestats li, .db-item.db-basic.x-large .livestats li, .db-item.db-basic.xx-large .livestats li {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  flex: auto;
+  color: var(--color);
+}
+.db-item.db-basic.medium .livestats li .title, .db-item.db-basic.x-large .livestats li .title, .db-item.db-basic.xx-large .livestats li .title {
+  padding-bottom: 0.1rem;
+  font-weight: bold;
+  width: 5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.db-item.db-basic.medium .livestats li a, .db-item.db-basic.x-large .livestats li a, .db-item.db-basic.xx-large .livestats li a {
+  color: var(--color);
+}
+.db-item.db-basic.medium .livestats li + li, .db-item.db-basic.x-large .livestats li + li, .db-item.db-basic.xx-large .livestats li + li {
+  margin-top: 0.5rem;
+}
+.db-item.db-basic.medium .inner, .db-item.db-basic.x-large .inner, .db-item.db-basic.xx-large .inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.4s;
+  transform-style: preserve-3d;
+}
+.db-item.db-basic.medium .icon, .db-item.db-basic.medium .content, .db-item.db-basic.x-large .icon, .db-item.db-basic.x-large .content, .db-item.db-basic.xx-large .icon, .db-item.db-basic.xx-large .content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+.db-item.db-basic.medium .content, .db-item.db-basic.x-large .content, .db-item.db-basic.xx-large .content {
+  transform: rotateY(180deg);
+}
+
+.dashboard .db-item.db-basic.medium:hover .icon::after, .dashboard .db-item.db-basic.x-large:hover .icon::after, .dashboard .db-item.db-basic.xx-large:hover .icon::after, .side .db-item.db-basic.medium:hover .icon::after, .side .db-item.db-basic.x-large:hover .icon::after, .side .db-item.db-basic.xx-large:hover .icon::after, .preview .db-item.db-basic.medium:hover .icon::after, .preview .db-item.db-basic.x-large:hover .icon::after, .preview .db-item.db-basic.xx-large:hover .icon::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+.dashboard .db-item.db-basic.medium:hover .icon, .dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .icon, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .icon, .dashboard .db-item.db-basic.xx-large:hover .content, .side .db-item.db-basic.medium:hover .icon, .side .db-item.db-basic.medium:hover .content, .side .db-item.db-basic.x-large:hover .icon, .side .db-item.db-basic.x-large:hover .content, .side .db-item.db-basic.xx-large:hover .icon, .side .db-item.db-basic.xx-large:hover .content, .preview .db-item.db-basic.medium:hover .icon, .preview .db-item.db-basic.medium:hover .content, .preview .db-item.db-basic.x-large:hover .icon, .preview .db-item.db-basic.x-large:hover .content, .preview .db-item.db-basic.xx-large:hover .icon, .preview .db-item.db-basic.xx-large:hover .content {
+  backface-visibility: unset;
+}
+.dashboard .db-item.db-basic.medium:hover .icon img, .dashboard .db-item.db-basic.x-large:hover .icon img, .dashboard .db-item.db-basic.xx-large:hover .icon img, .side .db-item.db-basic.medium:hover .icon img, .side .db-item.db-basic.x-large:hover .icon img, .side .db-item.db-basic.xx-large:hover .icon img, .preview .db-item.db-basic.medium:hover .icon img, .preview .db-item.db-basic.x-large:hover .icon img, .preview .db-item.db-basic.xx-large:hover .icon img {
+  display: none;
+}
+.dashboard .db-item.db-basic.medium:hover .content, .dashboard .db-item.db-basic.x-large:hover .content, .dashboard .db-item.db-basic.xx-large:hover .content, .side .db-item.db-basic.medium:hover .content, .side .db-item.db-basic.x-large:hover .content, .side .db-item.db-basic.xx-large:hover .content, .preview .db-item.db-basic.medium:hover .content, .preview .db-item.db-basic.x-large:hover .content, .preview .db-item.db-basic.xx-large:hover .content {
+  display: unset;
+  margin-left: 0.15rem !important;
+  margin-top: -0.4rem;
+}
+.dashboard .db-item.db-basic.medium:hover .content > div, .dashboard .db-item.db-basic.x-large:hover .content > div, .dashboard .db-item.db-basic.xx-large:hover .content > div, .side .db-item.db-basic.medium:hover .content > div, .side .db-item.db-basic.x-large:hover .content > div, .side .db-item.db-basic.xx-large:hover .content > div, .preview .db-item.db-basic.medium:hover .content > div, .preview .db-item.db-basic.x-large:hover .content > div, .preview .db-item.db-basic.xx-large:hover .content > div {
+  padding: 0 0.35rem;
+}
+.dashboard .db-item.db-basic.medium:hover .content > div:first-child, .dashboard .db-item.db-basic.x-large:hover .content > div:first-child, .dashboard .db-item.db-basic.xx-large:hover .content > div:first-child, .side .db-item.db-basic.medium:hover .content > div:first-child, .side .db-item.db-basic.x-large:hover .content > div:first-child, .side .db-item.db-basic.xx-large:hover .content > div:first-child, .preview .db-item.db-basic.medium:hover .content > div:first-child, .preview .db-item.db-basic.x-large:hover .content > div:first-child, .preview .db-item.db-basic.xx-large:hover .content > div:first-child {
+  padding-top: 0.25rem;
+}
+.dashboard .db-item.db-basic.medium:hover .inner, .dashboard .db-item.db-basic.x-large:hover .inner, .dashboard .db-item.db-basic.xx-large:hover .inner, .side .db-item.db-basic.medium:hover .inner, .side .db-item.db-basic.x-large:hover .inner, .side .db-item.db-basic.xx-large:hover .inner, .preview .db-item.db-basic.medium:hover .inner, .preview .db-item.db-basic.x-large:hover .inner, .preview .db-item.db-basic.xx-large:hover .inner {
+  transform: rotateY(180deg) scale(1.15);
+}
+
+@supports (-moz-appearance: none) {
+  .dashboard .db-item.db-basic.medium:hover .inner, .dashboard .db-item.db-basic.x-large:hover .inner, .dashboard .db-item.db-basic.xx-large:hover .inner, .side .db-item.db-basic.medium:hover .inner, .side .db-item.db-basic.x-large:hover .inner, .side .db-item.db-basic.xx-large:hover .inner {
+    width: 106px;
+    left: -8px;
+    top: -7px;
+    height: 106px;
+    max-width: unset;
+    max-height: unset;
+  }
+  .dashboard .db-item.db-basic.medium:hover .icon img, .dashboard .db-item.db-basic.x-large:hover .icon img, .dashboard .db-item.db-basic.xx-large:hover .icon img, .side .db-item.db-basic.medium:hover .icon img, .side .db-item.db-basic.x-large:hover .icon img, .side .db-item.db-basic.xx-large:hover .icon img {
+    display: none;
+  }
+  .dashboard .db-item.db-basic.medium:hover .title, .dashboard .db-item.db-basic.x-large:hover .title, .dashboard .db-item.db-basic.xx-large:hover .title, .side .db-item.db-basic.medium:hover .title, .side .db-item.db-basic.x-large:hover .title, .side .db-item.db-basic.xx-large:hover .title {
+    left: 14px;
+    position: relative;
+    top: 6px;
+  }
+  .dashboard .db-item.db-basic.medium:hover:not(.live-stats) .title, .dashboard .db-item.db-basic.x-large:hover:not(.live-stats) .title, .dashboard .db-item.db-basic.xx-large:hover:not(.live-stats) .title, .side .db-item.db-basic.medium:hover:not(.live-stats) .title, .side .db-item.db-basic.x-large:hover:not(.live-stats) .title, .side .db-item.db-basic.xx-large:hover:not(.live-stats) .title {
+    top: -7px;
+  }
+  .dashboard .db-item.db-basic.medium:hover .status, .dashboard .db-item.db-basic.x-large:hover .status, .dashboard .db-item.db-basic.xx-large:hover .status, .side .db-item.db-basic.medium:hover .status, .side .db-item.db-basic.x-large:hover .status, .side .db-item.db-basic.xx-large:hover .status {
+    position: relative;
+    top: 8px;
+    left: 14px;
+  }
+  .dashboard .db-item.db-basic.medium:hover .livestats, .dashboard .db-item.db-basic.x-large:hover .livestats, .dashboard .db-item.db-basic.xx-large:hover .livestats, .side .db-item.db-basic.medium:hover .livestats, .side .db-item.db-basic.x-large:hover .livestats, .side .db-item.db-basic.xx-large:hover .livestats {
+    position: relative;
+    left: -14px;
+    top: -4px;
+  }
+  .dashboard .db-item.db-basic.medium:hover .value, .dashboard .db-item.db-basic.x-large:hover .value, .dashboard .db-item.db-basic.xx-large:hover .value, .side .db-item.db-basic.medium:hover .value, .side .db-item.db-basic.x-large:hover .value, .side .db-item.db-basic.xx-large:hover .value {
+    position: relative;
+    left: 14px;
+    top: 4px;
+  }
+  .dashboard .db-item.db-basic.medium:hover .inner, .side .db-item.db-basic.medium:hover .inner {
+    width: 106px;
+    height: 106px;
+  }
+  .dashboard .db-item.db-basic.x-large:hover .inner, .side .db-item.db-basic.x-large:hover .inner {
+    width: 212px;
+    height: 212px;
+  }
+  .dashboard .db-item.db-basic.xx-large:hover .inner, .side .db-item.db-basic.xx-large:hover .inner {
+    width: 316px;
+    height: 316px;
+  }
+}
+.db-item.medium .inner, .db-item.medium .icon {
+  max-height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+.db-item.medium .content {
+  display: none;
+}
+.db-item.medium img {
+  object-fit: contain;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.db-item.chart .inner {
+  display: flex;
+}
+.db-item.chart .inner > .icon {
+  display: none;
+}
+.db-item.chart .inner > .content > .title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5rem;
+  text-transform: unset;
+}
+.db-item.chart .inner > .content .status {
+  flex-grow: 1;
+}
+
+.db-item.bar-info.large .content > .title {
+  display: none;
+}
+.db-item.bar-info.large .bar-info:first-of-type {
+  margin-top: 0 !important;
+}
+.db-item.bar-info.xx-large .inner, .db-item.bar-info.x-large .inner, .db-item.bar-info.larger .inner {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+.db-item.bar-info.xx-large .icon, .db-item.bar-info.x-large .icon, .db-item.bar-info.larger .icon {
+  height: 4rem;
+  min-height: 4rem;
+  max-height: 4rem;
+}
+.db-item.bar-info.xx-large .icon > img, .db-item.bar-info.xx-large .icon i, .db-item.bar-info.x-large .icon > img, .db-item.bar-info.x-large .icon i, .db-item.bar-info.larger .icon > img, .db-item.bar-info.larger .icon i {
+  position: absolute;
+  left: 1rem;
+  top: 0.25rem;
+  height: 3.5rem;
+  width: 3.5rem;
+}
+.db-item.bar-info.xx-large .content, .db-item.bar-info.x-large .content, .db-item.bar-info.larger .content {
+  flex-grow: 1;
+  overflow: hidden;
+  padding: 0 1rem 0 0.5rem;
+  justify-content: unset;
+}
+.db-item.bar-info.xx-large .content > .title, .db-item.bar-info.x-large .content > .title, .db-item.bar-info.larger .content > .title {
+  position: absolute;
+  left: 6rem;
+  top: 1.4rem;
+  width: calc(100% - 7rem);
+  display: unset;
+}
+.db-item.bar-info.xx-large .bar-info, .db-item.bar-info.x-large .bar-info, .db-item.bar-info.larger .bar-info {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.db-item.bar-info.medium .content > .title, .db-item.bar-info.medium .status {
+  display: none;
+}
+.db-item.bar-info.larger .bar-info {
+  margin: 0.5rem 0 !important;
+}
+.db-item.bar-info.larger .bar-info:nth-child(n+5) {
+  display: none;
+}
+.db-item.bar-info.x-large .bar-info {
+  margin: 0.5rem 0 !important;
+}
+.db-item.bar-info.x-large .bar-info:nth-child(n+5) {
+  display: none;
+}
+.db-item.bar-info.large .bar-info:nth-child(n+3) {
+  display: none;
+}
+
+.db-item .status-indicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 2rem;
+  width: 2rem;
+  background-size: cover;
+}
+
+/*# sourceMappingURL=tiles.css.map */

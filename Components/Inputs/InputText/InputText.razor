@@ -1,0 +1,8 @@
+@namespace Fenrus.Components.Inputs
+@inherits Input<string>
+
+<InputWrapper Input="@this">
+    <input type="@(Password ? "password" : Email ? "email" : "text")" 
+           @bind-value="@Value" autocomplete="none" 
+           readonly="@ReadOnly" />
+</InputWrapper>

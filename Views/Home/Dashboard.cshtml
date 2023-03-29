@@ -1,0 +1,141 @@
+@using Fenrus.Components
+@model Fenrus.Models.DashboardPageModel
+@{
+    ViewBag.Title = string.IsNullOrEmpty(Model?.Dashboard?.Name) ? "Fenrus" : "Fenrus - " + Model.Dashboard.Name;
+    Layout = "_Layout";
+    bool isGuest = ViewBag.IsGuest;
+    UserSettings settings = Model.Settings;
+    var pageHelper = new PageHelper(Model.Translator);
+
+    string dashboardClass = "dashboard ";
+    if (Model?.Dashboard?.ShowGroupTitles == false)
+        dashboardClass += "hide-group-titles ";
+    if (Model?.Dashboard?.ShowStatusIndicators == true)
+        dashboardClass += "status-indicators ";
+
+    ViewBag.Background = Model.Dashboard.BackgroundImage ?? string.Empty;
+    ViewBag.AccentColor = Model.Dashboard.AccentColor?.EmptyAsNull() ?? "#FF0090";
+    ViewBag.BackgroundCOlor = Model.Dashboard.BackgroundColor?.EmptyAsNull() ?? "#009099";
+    var systemSearchEngines = ViewBag.SystemSearchEngines as List<SearchEngine>;
+
+    string translations = JsonSerializer.Serialize(new
+    {
+        Ok = Model.Translator.Instant("Labels.Ok"),
+        Cancel = Model.Translator.Instant("Labels.Cancel"),
+        Edit = Model.Translator.Instant("Labels.Edit"),
+        Delete = Model.Translator.Instant("Labels.Delete"),
+        EditDashboard = Model.Translator.Instant("ContextMenu.EditDashboard"),
+        EditGroup = Model.Translator.Instant("ContextMenu.EditGroup"),
+        Terminal = Model.Translator.Instant("ContextMenu.Terminal"),
+        UpTime = Model.Translator.Instant("ContextMenu.UpTime"),
+        Log = Model.Translator.Instant("ContextMenu.Log"),
+        Refresh = Model.Translator.Instant("ContextMenu.Refresh"),
+        Resize = Model.Translator.Instant("ContextMenu.Resize"),
+        RemoveGroupTitle = Model.Translator.Instant("Pages.Dashboard.Messages.RemoveGroupTitle"),
+        RemoveGroupMessage = Model.Translator.Instant("Pages.Dashboard.Messages.RemoveGroupMessage", new { name = "#NAME#"}),
+        Success = Model.Translator.Instant("Dialogs.UpTime.Labels.Success"),
+        UpTimeColumnDate = Model.Translator.Instant("Dialogs.UpTime.Columns.Date"),
+        UpTimeColumnUp = Model.Translator.Instant("Dialogs.UpTime.Columns.Up"),
+        UpTimeNoData = Model.Translator.Instant("Dialogs.UpTime.Labels.NoData"),
+        UpTimeColumnMessage = Model.Translator.Instant("Dialogs.UpTime.Columns.Message"),
+        Size_Small = Model.Translator.Instant("Enums.ItemSize.Small"),
+        Size_Medium = Model.Translator.Instant("Enums.ItemSize.Medium"),
+        Size_Large = Model.Translator.Instant("Enums.ItemSize.Large"),
+        Size_Larger = Model.Translator.Instant("Enums.ItemSize.Larger"),
+        Size_XLarge = Model.Translator.Instant("Enums.ItemSize.Large"),
+        Size_XXLarge = Model.Translator.Instant("Enums.ItemSize.XXLarge")
+    });
+}
+
+<input type="hidden" id="translations" value="@translations" />
+
+@if (Model.SearchEngines?.Any() == true || systemSearchEngines?.Any() == true)
+{
+    @(await Html.RenderComponentAsync<SearchComponent>(RenderMode.Static, new
+    {
+        Settings = settings,
+        Model.Translator,
+        Model.Dashboard.ShowSearch, 
+        SystemSearchEngines = systemSearchEngines
+    }))
+}
+
+<div id="dashboard-name">
+    @if(isGuest)
+    {
+        <text>@(Model.Dashboard.Name == "Default" ? "" : Model.Dashboard.Name)</text>
+    }
+    else
+    {
+        <div class="dashboard-dropdown">
+            <button>@Model.Dashboard.Name</button>
+            <div>
+                @{
+                    var dbs = Model.Dashboards.Where(x => x.Name != Model.Dashboard.Name).OrderBy(x => x.Name);
+                    foreach (var db in dbs)
+                    {
+                        <a href="#" onclick="changeDashboard('@db.Uid');return false;">@db.Name</a>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
+    
+<div x-uid="@Model.Dashboard.Uid" class="@dashboardClass"
+     oncontextmenu="@(isGuest ? string.Empty : "openDefaultContextMenu(event); return false")">    
+    
+    @(await Html.RenderComponentAsync<DashboardComponent>(RenderMode.Static, new
+    {
+        Model = Model.Dashboard,
+        Model.Groups,
+        Settings = settings,
+        PageHelper = pageHelper,
+        Model.Translator,
+        Model.UpTimeStates,
+        IsGuest = isGuest
+    }))
+
+</div>
+
+@(await Html.RenderComponentAsync<UpTimeComponent>(RenderMode.Static, new
+{
+    Model.Translator
+}))
+
+<div id="launching-app">
+    <div class="inner">
+        <span class="icon"><img /></span>
+        <span class="title"></span>
+    </div>
+</div>
+
+@if (pageHelper.ScriptBlocks.Any() == true)
+{
+    foreach (var sb in pageHelper.ScriptBlocks)
+    {
+        <script>
+        @Html.Raw(sb)
+        </script>
+    }
+}
+        
+@if (Model.Theme.Scripts?.Any() == true)
+{
+    var dict = settings.ThemeSettings?.ContainsKey(Model.Theme.Name) == true ? settings.ThemeSettings[Model.Theme.Name] : new Dictionary<string, object?>();
+    dict ??= new();
+    <input type="hidden" id="theme-settings" value="@JsonSerializer.Serialize(dict)" />
+    foreach (var script in Model.Theme.Scripts)
+    {
+        <script src="/themes/@Model.Theme.DirectoryName/@script?version=@Globals.Version" defer></script>
+    }
+}
+
+@if (string.IsNullOrEmpty(Model?.Dashboard?.Background) == false)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            InitBackground('@Model.Dashboard.Background');
+        });
+    </script>
+}

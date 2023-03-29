@@ -1,0 +1,8 @@
+.fenrus-tab {
+  display: none;
+}
+.fenrus-tab.active {
+  display: unset;
+}
+
+/*# sourceMappingURL=FenrusTab.razor.css.map */

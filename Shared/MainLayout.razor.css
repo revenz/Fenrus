@@ -1,0 +1,23 @@
+.body-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  background: var(--base);
+  color: var(--color);
+  display: flex;
+  flex-direction: row;
+  overflow: auto; }
+
+.nav-menu {
+  width: 22.5rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.05); }
+
+.main-content {
+  flex-grow: 1; }
+
+/*# sourceMappingURL=MainLayout.razor.css.map */

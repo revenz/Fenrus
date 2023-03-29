@@ -4,9 +4,10 @@
 }
 
 .main-content {    
-    padding:0;
+  padding:0;
+  display:flex;
+  flex-direction: column;
 }
-
 
 .preview-dashboard{
     padding-top:1rem;
@@ -31,8 +32,10 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;    
+    position:unset;
     place-self:self-end;
     justify-content: center;
+    margin-bottom:3rem;
     &.left{
         justify-content: start;
     }
@@ -61,10 +64,11 @@
         position: absolute;
         left:0.5rem;
         top:-1.5rem;
-        right:0.5rem;
+        right:0.5rem;    
+        min-width: 10rem;
 
         span {
-            padding: 0.5rem 0.5rem 0.5rem;
+            padding: 0 0.5rem 0.5rem;
             font-weight:600;
             color: var(--color);
         }

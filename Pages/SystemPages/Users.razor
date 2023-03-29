@@ -1,0 +1,71 @@
+@page "/settings/system/users"
+@namespace Fenrus.Pages
+@using Fenrus.Models
+@inherits CommonPage<Fenrus.Models.User>
+
+<PageTitle>Fenrus - @lblTitle</PageTitle>
+
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-user-group" PageDescription="@lblDescription">
+    <Buttons>
+        <div class="allow-register">
+            <span class="label allow-register-label" style="margin-right:0.5rem">@lblAllowRegistrations:</span>
+            <FenrusSwitch @bind-Value="AllowRegistrations" />
+        </div>
+    </Buttons>
+    <Body>
+
+    <FenrusTable @ref=Table TItem="Models.User" Data=@Items>
+        <Columns>
+            <FenrusTableColumn TItem="Models.User" ColumnName="Name">
+                <Header>@lblUsername</Header>
+                <Cell Context="item">
+                    <i class="fa-solid fa-user"></i>
+                    @if (item.Uid == Settings.Uid)
+                    {
+                        <span>@item.Name</span>
+                    }
+                    else
+                    {
+                        <a href="#" @onclick="() => Edit(item)" @onclick:preventDefault="true">@item.Name</a>
+                    }
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.User" ColumnName="FullName" Width="14rem">
+                <Header>@lblFullName</Header>
+                <Cell Context="item">
+                    <span>@(item.FullName ?? string.Empty)</span>
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.User" ColumnName="Email" Width="14rem">
+                <Header>@lblEmail</Header>
+                <Cell Context="item">
+                    <span>@(item.Email ?? string.Empty)</span>
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.User" ColumnName="Admin" Width="8rem">
+                <Header>@lblAdmin</Header>
+                <Cell Context="item">
+                    <FenrusSwitch Value="item.IsAdmin" Disabled="IsSelf(item)" ValueChanged="(value) => AdminUpdated(item, value)"></FenrusSwitch>
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.User" ColumnName="Actions" Width="7rem">
+                <Header></Header>
+                <Cell Context="item">
+                    @if (IsSelf(item) == false)
+                    {
+                        // only allow deleting of other users, they cannot delete themselves
+                        <div class="actions">
+                            @if (Settings.Uid != item.Uid)
+                            {
+                                <a title="@lblEdit" class="fa-solid fa-pen-to-square" @onclick="() => Edit(item)"></a>
+                            }
+                            <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
+                        </div>
+                    }
+                </Cell>
+            </FenrusTableColumn>
+        </Columns>
+    </FenrusTable>
+
+    </Body>
+</FenrusPage>

@@ -1,0 +1,18 @@
+@page "/settings/search-engines/{uidString}"
+@page "/settings/system/search-engines/{uidString}"
+@inherits UserPage
+
+<PageTitle>Fenrus - @lblTitle</PageTitle>
+
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-magnifying-glass">
+    <Buttons>
+        <button class="btn" @onclick="() => Save()">@lblSave</button>
+        <button class="btn" @onclick="() => Cancel()">@lblCancel</button>
+    </Buttons>
+    <Body>
+        <InputText Label="@lblName" @bind-Value="@Model.Name" Help="@lblNameHelp" />
+        <InputText Label="@lblUrl" @bind-Value="@Model.Url" Help="@lblUrlHelp" />
+        <InputText Label="@lblShortcut" @bind-Value="@Model.Shortcut" Help="@lblShortcutHelp" />
+        <InputImage Label="@lblIcon" @bind-value="@Icon" InitialImage="@InitialImage" />
+    </Body>
+</FenrusPage>

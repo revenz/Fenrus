@@ -7,6 +7,7 @@ const resizeIcon = `<span class="icon fa-solid fa-maximize" style="padding-right
 const dashboardIcon = `<span class="icon fa-solid fa-house" style="padding-right:0.5rem"></span>`;
 const terminalIcon = `<span class="icon fa-solid fa-terminal" style="padding-right:0.5rem"></span>`;
 const logIcon = `<span class="icon fa-solid fa-file-lines" style="padding-right:0.5rem"></span>`;
+const refreshIcon = `<span class="icon fa-solid fa-rotate-right" style="padding-right:0.5rem"></span>`;
 
 function openDefaultContextMenu(event) {
     event?.preventDefault();
@@ -14,10 +15,9 @@ function openDefaultContextMenu(event) {
     if(!contextMenus['DEFAULT'])
     {
         let dashboardUid = document.querySelector('.dashboard').getAttribute('x-uid');
-
         const menuItems = [
             {
-                content: `${dashboardIcon}Edit Dashboard`,
+                content: `${dashboardIcon} ${Translations.EditDashboard}`,
                 events: {
                     click: (e) => {
                         document.location = '/settings/dashboards/' + dashboardUid                
@@ -25,23 +25,25 @@ function openDefaultContextMenu(event) {
                 }
             },
             {
-                content: `${terminalIcon}Terminal`,
+                content: `${terminalIcon} ${Translations.Terminal}`,
                 events: {
                     click: (e) => openTerminal()
                 }
             }
 
-            ];
-            
-            let menu = new ContextMenu({
-                menuItems
-            });
-              
-            menu.init();
-            contextMenus['DEFAULT'] = menu;
-        }
+        ];
+        
+        let menu = new ContextMenu({
+            menuItems
+        });
+          
+        menu.init();
+        contextMenus['DEFAULT'] = menu;
+    }
     
-        contextMenus['DEFAULT'].open(event);
+    console.log('contextMenus[\'DEFAULT\']', contextMenus['DEFAULT']);
+    
+    contextMenus['DEFAULT'].open(event);
 }
 
 function openContextMenu(event, app){
@@ -49,21 +51,25 @@ function openContextMenu(event, app){
     event?.stopPropagation();
     if(typeof(app) === 'string')
         app = JSON.parse(app);
-
         
     let uid = app.Uid;
     let ele = document.getElementById(uid);
-    let groupUid = ele.closest('.db-group').getAttribute('id');
+    let group = ele.closest('.db-group');
+    let groupUid = group.getAttribute('id');
     let dashboardUid = ele.closest('.dashboard').getAttribute('x-uid');
     let ssh = ele.getAttribute('x-ssh') === '1';
+    let monitor = ele.getAttribute('x-monitor') === '1';
     let docker = ele.getAttribute('x-docker');
+    let systemGroup = group.className.indexOf('system-group') > 0;
+    let smart = ele.getAttribute('class').indexOf('db-smart');
     if(!contextMenus[uid])
     {
         let menuItems = [];
-        if(app._Type !== 'DashboardTerminal'){
+        if(monitor)
+        {
             menuItems.push(
             {
-                content: `${infoIcon}Up-Time`,
+                content: `${infoIcon}${Translations.UpTime}`,
                 events: {
                     click: (e) => openUpTime(app)                
                 }
@@ -73,7 +79,7 @@ function openContextMenu(event, app){
             menuItems.push(
             {
                 divider: "top",
-                content: `${terminalIcon}Terminal`,
+                content: `${terminalIcon}${Translations.Terminal}`,
                 events: {
                     click: (e) => openTerminal(1, uid)
                 }
@@ -82,66 +88,113 @@ function openContextMenu(event, app){
         else if(docker){
             menuItems.push(
             {
-                content: `${terminalIcon}Terminal`,
+                content: `${terminalIcon}${Translations.Terminal}`,
                 events: {
                     click: (e) => openTerminal(2, uid)
                 }
             });
             menuItems.push(
             {
-                content: `${logIcon}Log`,
+                content: `${logIcon}${Translations.Log}`,
                 events: {
                     click: (e) => openDockerLog(uid)
                 }
             });
         }
 
-        menuItems = menuItems.concat([
+        if(!systemGroup)
+        {
+            let sizes = [Translations.Size_Small, Translations.Size_Medium, Translations.Size_Large, Translations.Size_Larger,
+                Translations.Size_XLarge, Translations.Size_XXLarge];
+            menuItems = menuItems.concat([
             {
-                content: `${resizeIcon}Resize`,
+                content: `${resizeIcon}${Translations.Resize}`,
                 divider: "top",
-                submenu: ['Small', 'Medium', 'Large', 'Larger', 'X-Large', 'XX-Large'].map((x) =>
+                submenu: sizes.map((x) =>
                 {
                     return { 
                         content: x,
                         events: {
                             click: (e) => {
-                                for(let size of ['Small', 'Medium', 'Large', 'Larger', 'X-Large', 'XX-Large']){
-                                    ele.classList.remove(size.toLowerCase());
+                                let enumSizes = ['small', 'medium', 'large', 'larger', 'x-Large', 'xx-large'];
+                                for(let s of enumSizes){
+                                    ele.classList.remove(s.toLowerCase());
                                 }
+                                let index = sizes.indexOf(x);
+                                let size = enumSizes[index].replace('-', '');
+
                                 ele.classList.add(x.toLowerCase());
                                 document.dispatchEvent(new CustomEvent('fenrus-item-resized', {
                                     detail: { element: ele }
                                 }));
 
-                                fetch(`/settings/groups/${groupUid}/resize/${uid}/${x.toLowerCase()}`, { method: 'POST'});
+                                fetch(`/settings/groups/${groupUid}/resize/${uid}/${size}`, { method: 'POST'});
                             }
                         }
                     };
                 })
-            },
+            }]);
+        }
+        
+        if(smart)
         {
-            content: `${editIcon}Edit Group`,
+            menuItems.push(
+            {
+                content: `${refreshIcon}${Translations.Refresh}`,
+                events: {
+                    click: (e) => {
+                        let smartApp = SmartAppInstances[uid];
+                        if(smartApp)
+                            smartApp.refresh();
+                    }
+                }
+            });
+        }
+
+        menuItems = menuItems.concat([
+        {
+            content: `${editIcon}${Translations.EditGroup}`,
             divider: "top",
             events: {
                 click: (e) => {
-                    document.location = '/settings/groups/' + groupUid                
+                    document.location = systemGroup ? '/settings/system/groups/' + groupUid : '/settings/groups/' + groupUid                
                 }
             }
         },
         {
-            content: `${dashboardIcon}Edit Dashboard`,
+            content: `${dashboardIcon}${Translations.EditDashboard}`,
             events: {
                 click: (e) => {
                     document.location = '/settings/dashboards/' + dashboardUid                
                 }
             }
-        },
-        {
-            divider: "top",
-            content: `${deleteIcon}Delete`
-        },
-        ]);
+        }]);
+
+
+        if(!systemGroup) {
+            menuItems = menuItems.concat([
+                {
+                    divider: "top",
+                    content: `${deleteIcon}${Translations.Delete}`,
+                    events: {
+                        click: async (e) => {
+                            if (await modalConfirm(Translations.Delete, `${Translations.Delete} ${app.Name}?`)) {
+                                ele.remove();
+                                let items = group.querySelectorAll('.items .db-item');
+                                if (items.length === 0) {
+                                    group.remove();
+                                } else {
+                                    document.dispatchEvent(new CustomEvent('fenrus-item-deleted', {
+                                        detail: {group: group}
+                                    }));
+                                }
+                                fetch(`/settings/groups/${groupUid}/delete/${uid}`, {method: 'DELETE'});
+                            }
+                        }
+                    }
+                },
+            ]);
+        }
         
         let menu = new ContextMenu({
             menuItems

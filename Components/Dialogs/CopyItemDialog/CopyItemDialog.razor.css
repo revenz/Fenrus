@@ -1,0 +1,14 @@
+.description {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+select {
+  padding: 0.5rem;
+  background: var(--input-background);
+  border: solid 1px var(--input-border);
+  color: var(--input-color);
+  width: 100%;
+}
+
+/*# sourceMappingURL=CopyItemDialog.razor.css.map */

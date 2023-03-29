@@ -10,7 +10,7 @@
     border: solid 1px var(--accent, #ff0090);
     background-color: transparent;
     color: var(--color, white);
-    width: 8rem;    
+    width: 11rem;    
     cursor: pointer;
     &:hover {
         background-image: linear-gradient(rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.3)) !important;

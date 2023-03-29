@@ -1,0 +1,46 @@
+.fenrus-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.top {
+  height: 3.5rem;
+  min-height: 3.5rem;
+  display: flex !important;
+  flex-direction: row;
+  padding: 0 1.5rem;
+  align-items: center;
+}
+.top .title {
+  font-size: 1.25rem;
+  flex-grow: 1;
+}
+.top .title .icon {
+  margin-right: 0.5rem;
+  color: var(--accent);
+}
+
+.buttons {
+  white-space: nowrap;
+  margin-left: 1rem;
+  margin-right: -0.5rem;
+}
+
+.page-description {
+  white-space: pre-wrap;
+  margin: 1rem;
+}
+
+.fenrus-page-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex-grow: 1;
+}
+
+/*# sourceMappingURL=FenrusPage.razor.css.map */

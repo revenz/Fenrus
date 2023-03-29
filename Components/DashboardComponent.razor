@@ -1,0 +1,58 @@
+@using Fenrus.Models
+
+<input type="hidden" id="hdn-dashboard-name" value="@Model.Name" />
+<input type="hidden" id="hdn-dashboard-background" value="@(Model.BackgroundImage?.EmptyAsNull() ?? Model?.BackgroundImage)" />
+<input type="hidden" id="hdn-dashboard-theme" value="@(Model.Theme?.EmptyAsNull() ?? Model?.Theme?.EmptyAsNull() ?? "Default")" />
+
+<CascadingValue IsFixed="true" Value="PageHelper">
+<CascadingValue IsFixed="true" Value="Model">
+@if(Groups?.Any() == true) 
+{
+    var groupIndex = 0;
+    foreach(var group in Groups)
+    {
+        <div id="@group.Uid" class="db-group @(Model.ShowGroupTitles ? "hide-labels" : string.Empty) @(group.IsSystem ? "system-group" : string.Empty)">
+            @if(group.HideGroupTitle == false) 
+            {
+                <div class="title">
+                    <span x-text="@group.Name">@group.Name</span>
+                    <div class="group-controls">
+                        <span class="move-up fa-solid fa-angle-up" title="@Translator.Instant("Labels.MoveUp")" onclick="moveGroup('@group.Uid', true)"></span>
+                        <span class="move-down fa-solid fa-angle-down" title="@Translator.Instant("Labels.MoveDown")" onclick="moveGroup('@group.Uid', false)"></span>
+                        @if (group.IsSystem == false)
+                        {
+                            <span class="edit-group fa-solid fa-pen-to-square" title="@Translator.Instant("Labels.Edit")" 
+                                  onclick="editGroup(@(group.IsSystem ? "true" : "false"), '@group.Uid')"></span>
+                        }
+                        <span class="remove-group fa-solid fa-trash" title="@Translator.Instant("Labels.RemoveGroup")" onclick="removeGroup('@group.Uid', '@group.Name.Replace("'", "\\'")')"></span>
+                    </div>
+                </div>
+            }
+    
+            <div class="items">
+                @foreach (var item in group.Items)
+                {
+                    if (item is LinkItem link)
+                    {
+                        <Fenrus.Components.DashboardItems.LinkItemComponent 
+                            Model=@link Settings=@Settings UpTimeStates="@UpTimeStates" IsGuest="@IsGuest" />
+                    }
+                    else if (item is AppItem app)
+                    {
+                        <Fenrus.Components.DashboardItems.AppItemComponent 
+                            Model=@app Settings=@Settings UpTimeStates="@UpTimeStates" IsGuest="@IsGuest" />
+                    }
+                }
+            </div>
+        </div>
+        ++groupIndex;
+    }
+} 
+else 
+{
+    <div class="no-dashboard">
+        @Translator.Instant("Labels.NoGroupAddedToDashboard")
+    </div>
+}
+</CascadingValue>
+</CascadingValue>

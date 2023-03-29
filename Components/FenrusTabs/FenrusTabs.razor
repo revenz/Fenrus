@@ -1,0 +1,22 @@
+﻿@namespace Fenrus.Components
+
+<div class="fenrus-tabs">
+
+    <div class="fenrus-tab-buttons">
+        @foreach(var tab in Tabs)
+        {
+            <button class="tab-button @(ActiveTab == @tab ? "active" : "") @(tab.Visible == false ? "hidden" : "")" @onclick="() => SelectTab(tab)">
+                @tab.Title
+            </button>
+        }
+    </div>
+
+    <div class="fenrus-tabs-content">
+
+        <CascadingValue IsFixed=true Value=this>
+            @ChildContent
+        </CascadingValue>
+
+    </div>
+
+</div>

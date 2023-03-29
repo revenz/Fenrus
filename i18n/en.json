@@ -1,0 +1,352 @@
+{
+  "Language": "English",
+  "Labels": {
+    "VersionNumber": "Version: {version}",
+    "Version":"Version",
+    "Cancel": "Cancel",
+    "Close": "Close",
+    "Yes": "Yes",
+    "No": "No",
+    "Ok": "OK",
+    "Add": "Add",
+    "Name": "Name",
+    "MoveUp": "Move Up",
+    "MoveDown": "Move Down",
+    "RemoveGroup": "Remove Group",
+    "Delete": "Delete",
+    "Help": "Help",
+    "Edit": "Edit",
+    "Copy": "Copy",
+    "Save": "Save",
+    "Saved": "Saved",
+    "Actions": "Actions",
+    "Enabled": "Enabled",
+    "Search": "Search",
+    "Dashboard": "Dashboard",
+    "Theme": "Theme",
+    "AccentColor": "Accent Color",
+    "LinkTarget": "Link Target",
+    "Background": "Background",
+    "BackgroundColor": "Background Color",
+    "GroupTitles": "Group Titles",
+    "StatusIndicators": "Status Indicators",
+    "ShowSearch": "Show Search",
+    "Default": "Default",
+    "ChooseImage":"Choose Image...", 
+    "CurrentImage": "Current Image",
+    "ColorBackground": "Solid Color",
+    "Language": "Language",
+    "UpdatedSuccessfully": "Updated Successfully",
+    "General": "General",
+    "Administrator":"Administrator",
+    "AddGroup": "Add Group",
+    "Import": "Import",
+    "Browse": "Browse",
+    "NoGroupAddedToDashboard": "No groups added to dashboard",
+    "Website": "Website",
+    "Author": "Author",
+    "Confirm": "Confirm",
+    "Message": "Message",
+    "DeleteItem": "Delete {typeName} ''{name}''?",
+    "DeletedItem": "Deleted {typeName} ''{name}''",
+    "Test": "Test",
+    "Testing": "Testing",
+    "Home": "Home",
+    "Logout": "Logout"
+  },
+  "ContextMenu": {
+    "EditDashboard": "Edit Dashboard",
+    "EditGroup": "Edit Group",
+    "Terminal": "Terminal",
+    "UpTime": "Up-Time",
+    "Log": "Log",
+    "Resize": "Resize",
+    "Refresh": "Refresh"
+  },
+  "Enums": {
+    "ItemSize": {
+      "Small": "Small",
+      "Medium": "Medium",
+      "Large": "Large",
+      "Larger": "Larger",
+      "XLarge": "X-Large",
+      "XXLarge": "XX-Large"
+    },
+    "LinkTarget": {
+      "OpenInThisTab":"Open in this tab", 
+      "OpenInNewTab": "Open in new tab",
+      "OpenInSameTab": "Open in same tab"
+    }
+  },
+  "ErrorMessages": {
+    "404RouteNotKnown": "Sorry, there's nothing at this address.",
+    "DockerServerNotFound": "Docker app server not found: {uid}"
+  },
+  "Dialogs": {
+    "CopyItem": {
+      "Title": "Copy Item",
+      "Description": "Select a group to copy this item to",
+      "ThisGroup": "This Group",
+      "System": "System",
+      "User": "User"
+    },
+    "ImportConfig": {
+      "Title": "Import Config",
+      "Description": "This allows you to import a configuration from an older Fenrus install into the new .NET version.",
+      "Result": "Import Result"
+    },
+    "UpTime": {
+      "Columns": {
+        "Date": "Date",
+        "Up": "Up",
+        "Message": "Message"
+      },
+      "Labels": {
+        "Success": "Success",
+        "NoData": "No up-time data available"
+      }
+    }
+  },
+  "Pages": {
+    "About": {
+      "Title": "About",
+      "Buttons": {
+        "ImportConfig": "Import Config"
+      },
+      "Labels": {
+        "Importing": "Importing previous configuration, this may take a while, please wait.",
+        "ThirdParty": "Third Party"
+      }
+    },
+    "Dashboards":{
+      "Title": "Dashboards",
+      "Labels": {
+        "PageDescription": "This page lets you create Dashboards.  Having more than one dashboard will let you switch between them on the home screen.\n\nTo add items to your Dashboard, first create a Group containing the items you wish to add.  Then you can add that new Group to a Dashboard."
+      }
+    }, 
+    "Dashboard": {
+      "Title": "Dashboard",
+      "Title-Guest": "Guest Dashboard",
+      "Messages": {
+        "NoAvailableGroups": "No available groups to add",
+        "GuestPageDescription": "This page lets you configure the Guest dashboard, the dashboard that will be shown to users if they have not signed in.  This is also the default dashboard set for new users.\n\nYou can disable this dashboard if you wish for users to login before using Fenrus.",
+        "RemoveGroupTitle": "Remove Group",
+        "RemoveGroupMessage": "Do you want to remove the group ''{name}''?"
+      },
+      "Fields": {
+        "Name-Help": "The Name of the dashboard",
+        "ShowGroupTitles": "Show Group Titles",
+        "ShowSearch": "Show Search",
+        "LinkTarget": "Link Target",
+        "AccentColor": "Accent Color",
+        "BackgroundColor": "Background Color",
+        "Theme": "Theme"
+      }
+    },
+    "Docker": {
+      "Title": "Docker",
+      "Labels": {
+        "PageDescription": "This page lets you configure Docker instances which can be used in Apps and Links to open terminals into."
+      }
+    },
+    "Group": {
+      "Title": "Group",
+      "Title-System": "System Group",
+      "Buttons": {
+        "AddItem": "Add Item"
+      },
+      "Messages": {
+        "ItemCopied": "Item ''{itemName}'' copied to group ''{groupName}''"
+      },
+      "Fields": {
+        "Name-Help": "The Name of the group",
+        "ShowGroupTitle": "Show Group Title",
+        "ShowGroupTitle-Help": "Whether or not to show the group title"
+      }
+    },
+    "GroupItem": {
+      "Title": "Group Item",
+      "Labels": {
+        "KeepOpen": "Keep Open",
+        "Author": "Author",
+        "ApplicationUrl": "Application URL",
+        "SshDescription": "By configuring SSH for this item, this will allow you to terminal into the item.\n\nIf username or password is blank, you will be prompted for this information.",
+        "DockerDescription": "Here you can configure Docker settings for this item, which will allow you to terminal into the docker container.",
+        "DockerTerminalDescription": "Note: If SSH is configured you will not be able to connect user this Docker connection.",
+        "TestSuccessful": "Test Successful",
+        "TestFailed": "Test Failed"
+      },
+      "Tabs": {
+        "General": "General",
+        "Properties": "Properties",
+        "Info": "Info",
+        "Docker": "Docker",
+        "SSH": "SSH"
+      },
+      "Fields": {
+        "Type": "Type",
+        "App": "App",
+        "Name": "Name",
+        "Terminal": "Terminal",
+        "Target": "Target",
+        "Size": "Size",
+        "Icon": "Icon",
+        "Debug": "Debug",
+        "Debug-Help": "Turns excess debug logging on for this application.",
+        "Monitor": "Monitor",
+        "Monitor-Help": "When enabled this item will have its up-time monitored",
+        "SshAddress": "Address",
+        "SshAddress-Help": "Optional address for connecting to a SSH terminal.",
+        "SshUsername": "Username",
+        "SshUsername-Help": "Optional Username for connecting to a SSH terminal.",
+        "SshPassword": "Password",
+        "SshPassword-Help": "Optional Password for connecting to a SSH terminal.",
+        "ApiUrl": "API URL",
+        "ApiUrl-Help": "Optional URL to use to contact the API if different that the URL above.\nThe main URL will be where the user is taken when the item is clicked.",
+        "DockerUid": "Docker",
+        "DockerUid-Help": "The Docker instance this connects to.",
+        "DockerContainer": "Name",
+        "DockerContainer-Help": "The name of the Docker container to connect to",
+        "DockerCommand": "Command",
+        "DockerCommand-Help": "The command to connect to"
+      }
+    },
+    "Groups": {
+      "Title": "Groups",
+      "Title-System": "System Groups",
+      "Labels": {
+        "PageDescription": "This page lets you create groups which can be used on Dashboards.\n\nA group will not appear by itself, it must be added to a dashboard.",
+        "PageDescription-System": "This page lets you configure groups that will be available to all users and will be available to use on the Guest dashboard.\n\nIf you disable a group here that group will become unavailable to all users using it."
+      }
+    },
+    "Login": {
+      "Title": "Login",
+      "ErrorMessages": {
+        "LoginFailed": "Login Failed",
+        "RegistrationNotAllowed": "User registrations are not allowed",
+        "GuestNotAllowed": "Guest access is not allowed"
+      },
+      "Labels": {
+        "PasswordReset": "Password has been reset.  A new email has been email to you and printed to the console.",
+        "PasswordResetFailed": "Failed to reset password",
+        "PasswordResetTokenInvalid": "Invalid password reset token, or password reset has expired.",
+        "PasswordResetSent": "If the user exists, a password reset will have been sent to your email address or printed to the console.",
+        "ForgotPasswordDescription": "Enter your username or email address and a password reset link will be emailed to you and printed to the console log."
+      },
+      "Buttons":
+      {
+        "Login": "Login",
+        "Register": "Register",
+        "Guest": "Guest",
+        "Reset": "Reset",
+        "Cancel": "Cancel"
+      },
+      "Fields":
+      {
+        "Username": "Username",
+        "Password": "Password",
+        "ForgotPassword": "Forgot Password?",
+        "UsernameOrEmailAddress": "Username or Email Address"
+      }
+    },
+    "Profile": {
+      "Title": "Profile",
+      "Labels": {
+        "PageDescription": "This page allows you to change your user profile settings.",
+        "General": "General",
+        "ChangePassword": "Change Password"
+      },
+      "Messages": {
+        "InvalidEmail": "Invalid email address",
+        "PasswordValidationError": "Password must be at least 4 characters long",
+        "PasswordMismatch": "New and Confirm password do not match",
+        "PasswordChanged": "Password Changed",
+        "PasswordIncorrect": "Current password is incorrect",
+        "OtherUserExists": "Another user with this username already exists"
+      },
+      "Fields": {        
+        "Username": "Username",
+        "Email": "Email",
+        "FullName": "Full Name",
+        "Email-Help": "This email address will be used for password resets",
+        "PasswordCurrent": "Current Password",
+        "PasswordNew": "New Password",
+        "PasswordConfirm": "Confirm New Password"
+      }
+    },
+    "SearchEngines": {
+      "Title": "Search Engines",
+      "Title-System": "System Search Engines",
+      "Labels": {
+        "AddSearchEngine": "Add Search Engine",
+        "EditSearchEngine": "Edit Search Engine",
+        "PageDescription": "This page lets you configure search engines that can be used on the home screen.\n\nIf you do not configure any and have no system search engines configured, the search box will not appear on the home screen.\n\nTo switch to an non-default search engine on the home screen type in the search engine Shortcut followed by a space.",
+        "PageDescription-System": "This page lets you configure system wide search engines that will be available to all users and guests on the system."
+      }
+    },
+    "SearchEngine": {
+      "Title": "Search Engine",
+      "Title-System": "System Search Engines",
+      "Fields": {
+        "Name-Help":"The name of the search engine",
+        "Url": "URL",
+        "Url-Help": "The URL of the search engine.  Note %s will be replaced with the search string",
+        "Shortcut": "Shortcut",
+        "Shortcut-Help": "The shortcut for this search engine.  Typing this shortcut then space will switch the search to use this search engine",
+        "Icon": "Icon"
+      }
+    },
+    "SystemSettings": {
+      "Title": "System Settings",
+      "Labels": {
+        "PageDescription": "This page allows you to configure system wide settings",
+        "Smtp": "SMTP",
+        "SmtpDescription": "Configure an SMTP server, this will be used to send password reset emails."
+      },      
+      "Messages": {
+        "TestEmailSent": "Test email sent to Sender, check your email to confirm working."
+      },
+      "Fields": {
+        "SmtpServer": "Server",
+        "SmtpPort": "Port",
+        "SmtpUser": "User",
+        "SmtpPassword": "Password",
+        "SmtpSender": "Sender",
+        "SmtpSenderHelp": "The email address Fenrus will send emails from."
+      }
+    },
+    "Users": {
+      "Title": "Users",      
+      "Labels": {
+        "PageDescription": "This page lets you manage users for Fenrus."
+      },
+      "Messages": {
+        "CannotEditSelf": "You cannot edit yourself"
+      },
+      "Fields": {
+        "AllowRegistrations": "Allow Registrations"
+      },
+      "Columns": {
+        "Username": "Username",
+        "FullName": "Full Name",
+        "Email": "Email",
+        "Admin": "Admin"
+      }
+    },
+    "User": {
+      "Title": "User",
+      "Labels": {
+        "NewUser": "New User",
+        "EditUser": "Edit User"
+      },
+      "Fields": {
+        "FullName": "Full Name",
+        "FullName-Help": "The users full name or the name to display for them, if left blank their username will be their display name",
+        "Username": "Username",
+        "Email": "Email",
+        "Password": "Password",
+        "IsAdmin": "Admin"
+      }
+    }
+  }
+}

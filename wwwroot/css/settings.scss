@@ -1,4 +1,5 @@
-﻿body.settings,
+﻿.fenrus-page-body,
+.side-editor,
 body.initial-config-page
 {
     .main-content{
@@ -8,9 +9,12 @@ body.initial-config-page
             margin:auto;
         }
     }
-
-
-    input[type=text], input[type=password], input[type=number], select {
+    
+    .page-description {
+        white-space:pre-wrap;
+    }
+    
+    input[type=text], input[type=password], input[type=number], input[type=email], select {
         width: calc(100% - 1rem);
         padding: 0.5rem;
         background: var(--input-background);
@@ -331,7 +335,6 @@ body.initial-config-page
     }
     .help-text 
     {
-        padding-top: 0.5rem;
         display: block;
         font-style: italic;
         color: var(--color-darkest);
@@ -368,13 +371,6 @@ body.initial-config-page
                 color: #ff0090;
                 font-style: italic;
             }
-        }
-        .version-info {
-            padding-top:1rem;
-            height: 3rem;
-            text-align: center;
-            color: rgba(var(--color-rgb),.4);
-            font-size: 1.15rem;
         }
         .group {
             margin-top:2rem;
@@ -540,6 +536,7 @@ body.initial-config-page
 
     .preview-dashboard {
         overflow: auto;
+        flex-grow:1;
         .db-item {
             .actions {            
                 display:none;

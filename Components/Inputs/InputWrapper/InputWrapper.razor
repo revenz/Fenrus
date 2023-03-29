@@ -1,0 +1,50 @@
+@namespace Fenrus.Components.Inputs
+
+@if(Input?.Visible == false)
+{
+    return;
+}
+@{
+    bool invalid = string.IsNullOrEmpty(Input?.ErrorMessage) == false;
+
+}
+<div class="input-wrapper-outer">
+    
+    <div class="row @(invalid ? "error" : "") @(Input?.HideLabel == true ? "hide-label" : "") @(Input?.Disabled == true ? "disabled" : "")">
+        @if (Input?.HideLabel != true)
+        {
+            <div class="input-label">
+                @if (string.IsNullOrEmpty(Input?.TranslatedLabel) == false)
+                {
+                    <label>@Input.TranslatedLabel</label>
+                }
+            </div>
+        }
+
+        <div class="input-value">
+            @ChildContent
+        </div>
+    </div>
+    
+    @if (invalid && Input?.Disabled != true)
+    {
+        <div x-id="error" class="row mt-0 error">
+            <div class="input-label"></div>
+            <div class="input-value">
+                <span class="error-text">@Input.ErrorMessage</span>
+            </div>
+        </div>
+    }
+    @if (string.IsNullOrEmpty(HelpHtml) == false)
+    {
+        <div class="row mt-0 @(invalid ? "error" : "") @(Input?.Disabled == true ? "disabled" : "") @(Input?.HideLabel == true ? "hide-label": "")">
+            <div class="input-label"></div>
+            <div class="input-value">
+                <span class="help-text">
+                    @((MarkupString)HelpHtml)
+                </span>
+            </div>
+        </div>
+    }
+
+</div>

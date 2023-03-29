@@ -1,0 +1,25 @@
+@namespace Fenrus.Components
+
+<div class="fenrus-page">
+    <div class="top">
+        <span class="title">
+            @if (string.IsNullOrEmpty(Icon) == false)
+            {
+                <span>
+                    <i class="icon @Icon"></i>
+                </span>
+            }
+            <span>@Title</span>
+        </span>
+        <span class="buttons">
+            @Buttons
+        </span>
+    </div>
+    @if (string.IsNullOrEmpty(PageDescription) == false)
+    {
+        <div class="page-description">@PageDescription</div>
+    }
+    <div class="fenrus-page-body">
+        @Body
+    </div>
+</div>

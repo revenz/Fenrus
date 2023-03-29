@@ -1,0 +1,26 @@
+@if (string.IsNullOrEmpty(App.Css) == false)
+{
+    <link rel="stylesheet" href="@App.Css" />    
+}
+
+<a id="@Model.Uid" title="@Model.Name" href="@Model.Url" onclick="@OnClickCode" target="@Target"
+   class="db-item db-app db-basic @Css" 
+   x-interval="@(App.IsSmart ? App.Interval.ToString() : null)" x-monitor="@(Model.Monitor ? "1" : null)"
+   oncontextmenu="@(IsGuest ? string.Empty : $"openContextMenu(event, '{SerializedJsSafeModel}'); return false;")"
+   x-docker="@(Model.DockerUid != null ? "1" : null)" x-ssh="@(string.IsNullOrWhiteSpace(Model.SshServer) ? null : "1")"
+>
+    <div class="inner">
+        <div class="icon">
+            <img src="@Icon" />
+            @if (Dashboard?.ShowStatusIndicators == true)
+            {
+                <div class="status-indicator"></div>
+            }
+        </div>
+        <div class="content">
+            <div class="title">@Title</div>
+            <div class="status"></div>
+        </div>
+        <div class="arrow"></div>
+    </div>
+</a>

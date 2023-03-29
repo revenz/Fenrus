@@ -1,0 +1,60 @@
+.login-page {
+  background: #0a0a0a;
+}
+.login-page .main-content {
+  flex-direction: column;
+}
+.login-page .login-box {
+  width: min(400px, 70vw);
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+.login-page .header {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  text-align: center;
+}
+.login-page .header .logo img {
+  width: 6rem;
+}
+.login-page .header .title {
+  font-size: 1.5rem;
+  flex-grow: 1;
+  margin: 1rem auto 0;
+}
+.login-page .field {
+  margin: 1rem 0;
+}
+.login-page .field .label {
+  text-transform: uppercase;
+}
+.login-page input {
+  width: calc(100% - 1rem);
+  padding: 0.5rem;
+  background: var(--input-background);
+  border: solid 1px var(--input-border);
+  color: var(--input-color);
+}
+.login-page input:focus {
+  outline: solid 1px var(--accent);
+}
+.login-page .buttons {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.login-page .buttons .btn + .btn {
+  margin-right: 1rem;
+}
+.login-page .error {
+  text-align: center;
+  color: #ff8484;
+}
+
+/*# sourceMappingURL=login.css.map */

@@ -1,0 +1,13 @@
+.keep-open {
+  margin: 0.5rem 0.5rem 0 0;
+}
+.keep-open ::deep .fenrus-switch {
+  position: relative;
+  top: -3px;
+}
+
+.test-button {
+  margin-left: 15rem;
+}
+
+/*# sourceMappingURL=GroupItemEditor.razor.css.map */

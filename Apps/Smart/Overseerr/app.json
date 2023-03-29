@@ -1,0 +1,17 @@
+﻿{
+  "Name": "Overseerr",
+  "TestFunction": true,
+  "Interval": 10,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://overseerr.dev"
+  },
+  "Properties": [
+    {
+      "Name": "API Key",
+      "Id": "apikey",
+      "Type": "string",
+	  "Help" : "Found at Overseer Settings -> General -> API Key"
+    }
+  ]
+}

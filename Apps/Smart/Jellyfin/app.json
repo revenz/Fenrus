@@ -1,0 +1,25 @@
+{
+  "Name": "Jellyfin",
+  "Icon": "icon.png",
+  "TestFunction": true,
+  "Interval": 10,
+  "DefaultSize":"x-large",
+  "Carousel": true,
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://jellyfin.org"
+  },
+  "Properties": [
+    {
+      "Name": "Username",
+      "Id": "username",
+      "Type": "string"
+    },
+    {
+      "Name": "Password",
+      "Id": "password",
+      "Type": "password"
+    }
+  ]
+
+}

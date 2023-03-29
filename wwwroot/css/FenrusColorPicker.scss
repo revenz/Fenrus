@@ -1,0 +1,15 @@
+.fenrus-color-picker
+{
+  input {
+    background: var(--input-background);
+    border: solid 1px var(--input-border);
+    color: var(--color);
+    padding: 0.43rem;
+    width:calc(100% - 3.25rem);
+    outline:none;
+  }
+}
+.jscolor-border {
+  border: solid 1px var(--input-border) !important;
+  background: var(--input-background) !important;
+}

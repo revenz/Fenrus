@@ -1,0 +1,7 @@
+@namespace Fenrus.Components.Inputs
+@inherits Input<TItem>
+@typeparam TItem
+
+<InputWrapper Input="@this">
+    <input type="number" @bind-value="@Value" min="@Minimum" max="@Maximum" placeholder="@Placeholder" />
+</InputWrapper>
