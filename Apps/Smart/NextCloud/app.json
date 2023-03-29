@@ -1,0 +1,38 @@
+﻿{
+  "Name": "NextCloud",
+  "TestFunction": true,
+  "Interval": 30,
+  "DefaultSize":"large",
+  "Info":{
+    "Authors": ["John Andrews"],
+    "AppUrl":"https://nextcloud.com"
+  },
+  "Properties": [
+    {
+      "Name": "Username",
+      "Id": "username",
+      "Type": "string"
+    },
+    {
+      "Name": "Application Password",
+      "Id": "password",
+      "Type": "password"
+    },
+	{
+      "Name": "Display Mode",
+      "Id": "mode",
+      "Type": "select",
+      "Options":
+      [
+        { 
+            "Label": "Text",
+            "Value":"text"
+        },
+        { 
+            "Label": "Progress Bar",
+            "Value":"bar"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+@using System.Text.RegularExpressions
+@using Fenrus.Components
+@using Fenrus.Services
+@{
+    bool home = Context.Request.Path == "/" || Context.Request.Path.StartsWithSegments("/dashboard");
+    string bodyClass = home ? "home " : "not-home ";
+    if (ViewBag.CustomBackground != null)
+        bodyClass += "custom-background ";
+    else
+        bodyClass += "no-custom-background ";
+    var themeInstance = ViewBag.Theme;
+    var theme = themeInstance.Name;
+    bool isGuest = ViewBag.IsGuest;
+    var userSettings = ViewBag.UserSettings;
+    var dashboards = ViewBag.Dashboards;
+    var dashboard = ViewBag.Dashboard;
+    var searchEngines = ViewBag.SearchEngines;
+    var themes = ViewBag.Themes;
+    var systemSearchEngines = ViewBag.SystemSearchEngines;
+    var pageHelper = new PageHelper((Fenrus.Helpers.Translator)ViewBag.Translator);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <link rel="icon" type="image/x-icon" href="/favicon?color=@Uri.EscapeDataString(ViewBag.Accent ?? string.Empty)&version=@Globals.Version">
+    <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
+    <link id="theme-style" rel="stylesheet" href="/themes/@theme/theme.css?version=@Globals.Version" />
+    
+    @if (string.IsNullOrEmpty(ViewBag.Background) == false)
+    {
+        string bkg = ViewBag.Background;
+        if (bkg.StartsWith("db:/image/"))
+        {
+            bkg = "/fimage/" + bkg[10..];
+        }
+        <style>
+            body {
+                background-image: url(@bkg);
+            }
+        </style>
+    }
+    
+    @{
+        var accentColor = ViewBag.AccentColor ?? "#FF0090";
+        var bkgColor = ViewBag.BackgroundColor ?? "#009099";
+        if (Regex.IsMatch(accentColor, "^#[a-fA-F0-9]{6}"))
+        {
+            var r = accentColor.Substring(1, 2);
+            var g = accentColor.Substring(3, 2);
+            var b = accentColor.Substring(5, 2);
+            var accentRgb = int.Parse(r, System.Globalization.NumberStyles.HexNumber) + "," +
+                            int.Parse(g, System.Globalization.NumberStyles.HexNumber) + "," +
+                            int.Parse(b, System.Globalization.NumberStyles.HexNumber);
+            
+            var bgR = bkgColor.Substring(1, 2);
+            var bgG = bkgColor.Substring(3, 2);
+            var bgB = bkgColor.Substring(5, 2);
+            var bkgRgb = int.Parse(bgR, System.Globalization.NumberStyles.HexNumber) + "," +
+                            int.Parse(bgG, System.Globalization.NumberStyles.HexNumber) + "," +
+                            int.Parse(bgB, System.Globalization.NumberStyles.HexNumber);
+            <style>
+                  body {
+                      --accent-rgb:@accentRgb;
+                      --accent:@accentColor;
+                      --background:@bkgColor;
+                      --background-rgb:@bkgRgb;
+                      background: var(--background);
+                  }
+            </style>
+        }
+    }
+</head>
+
+<body class="@bodyClass">
+<ul class="main-menu">
+    @if (isGuest == false)
+    {
+        <li><a title="Home" href="/"><span class="fa-solid fa-house"></span></a></li>
+        <li>
+            <a title="Settings" href="/settings/dashboards"><span class="fa-solid fa-sliders"></span></a>
+            @(await Html.RenderComponentAsync<PanelUserSettings>(RenderMode.Static, new
+            {
+                Theme = themeInstance,
+                Themes = themes,
+                Settings = userSettings,
+                Dashboards = dashboards,
+                Dashboard = dashboard,
+                PageHelper = pageHelper,
+                SearchEngines = searchEngines,
+                SystemSearchEngines = systemSearchEngines
+            }))
+        </li>
+    }
+    <li>
+        <a title="@(isGuest ? "Login" : "About")" href="@(isGuest ? "/login" : "/settings/about")"><span class="icon-fenrus"></span></a>
+        @if (isGuest == false)
+        {
+            @(await Html.RenderComponentAsync<PanelThemeSettings>(RenderMode.Static, new
+            {
+                Theme = themeInstance,
+                Settings = userSettings,
+                IsGuest = isGuest,
+                PageHelper = pageHelper
+            }))
+        }
+    </li>
+</ul>
+
+    <div class="main-content">
+        @RenderBody()
+    </div>
+
+    <script src="/js/_fenrus.js?version=@Globals.Version"></script>
+
+    @if (pageHelper.ScriptBlocks.Any() == true)
+    {
+        foreach (var sb in pageHelper.ScriptBlocks)
+        {
+            <script>
+            @Html.Raw(sb)
+            </script>
+        }
+    }
+</body>
+</html>

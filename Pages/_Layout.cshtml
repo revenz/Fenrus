@@ -1,0 +1,58 @@
+﻿@using Fenrus.Services
+@using Microsoft.AspNetCore.Components.Web
+@namespace Fenrus.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    string theme = ViewBag.Theme?.ToString()?.EmptyAsNull() ?? "Default"; 
+    var themeInstance = new ThemeService().GetTheme(theme);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="~/" />
+    <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
+    <link href="Fenrus.styles.css?v=@Globals.Version" rel="stylesheet" />
+    <link id="theme-style" rel="stylesheet" href="/themes/@theme/theme.css?version=@Globals.Version" />
+    <link href="_content/Blazored.Toast/blazored-toast.min.css?v=@Globals.Version" rel="stylesheet" />
+    <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
+    <style>
+        .body-inner {
+            height: 100%;
+            width: 100%;;
+        }
+    </style>
+</head>
+<body>
+
+@RenderBody()
+
+<div id="blazor-error-ui">
+    <environment include="Staging,Production">
+        An error has occurred. This application may no longer respond until reloaded.
+    </environment>
+    <environment include="Development">
+        An unhandled exception has occurred. See browser dev tools for details.
+    </environment>
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+<script defer src="js/_fenrus.js?v=@Globals.Version"></script>
+<script defer src="~/_framework/blazor.server.js?v=@Globals.Version"></script>
+
+@{
+    @if (themeInstance?.Scripts?.Any() == true)
+    {
+        <input type="hidden" id="theme-settings" value="{}" />
+        foreach (var script in themeInstance.Scripts)
+        {
+            <script src="/themes/@themeInstance.DirectoryName/@script?version=@Globals.Version" defer></script>
+        }
+    }
+}
+</body>
+</html>

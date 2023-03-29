@@ -1,0 +1,79 @@
+@namespace Fenrus.Components
+@inherits Fenrus.Pages.CommonPage<Fenrus.Models.Group>
+
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-house">
+    <Buttons>
+        <button class="btn" @onclick="() => Save()">@lblSave</button>
+        @if (IsGuest == false)
+        {
+            <button class="btn" @onclick="() => Cancel()">@lblCancel</button>
+        }
+    </Buttons>
+    <Body>
+    @if (IsGuest == false)
+    {   
+        <InputText Label="@lblName" @bind-Value="@Model.Name" Help="@lblNameHelp"/>
+    }
+    else
+    {
+        <div class="page-description">@Translator.Instant("Pages.Dashboard.Messages.GuestPageDescription")</div>
+        <div class="top-fields">
+            <InputSwitch Label="@lblEnabled" @bind-Value="@Model.Enabled" />
+            <InputSwitch Label="@lblShowSearch" @bind-Value="@Model.ShowSearch" />
+            <InputSelect TItem="string" Label="@lblLanguage" Options="@Languages" @bind-Value="@Language" />
+            <InputSelect TItem="string" Label="@lblTheme" Options="@Themes" @bind-Value="@Model.Theme" />
+            <InputSelect TItem="string" Label="@lblLinkTarget" @bind-Value="@Model.LinkTarget">
+                <InputSelectOption TItem="string" StringValue="_self" Label="@lblOpenInThisTab" />
+                <InputSelectOption TItem="string" StringValue="_this" Label="@lblOpenInNewTab" />
+                <InputSelectOption TItem="string" StringValue="fenrus-popup" Label="@lblOpenInSameTab" />
+            </InputSelect>          
+            <InputColorJs Label="@lblAccentColor" @bind-Value="@Model.AccentColor" />
+            <InputColorJs Label="@lblBackgroundColor" @bind-Value="@Model.BackgroundColor" />
+        </div>
+    }
+    <FenrusTable TItem="Models.Group" Data=@Groups @ref=Table>
+        <ToolBar>
+            <FenrusTableButton Label="@lblAdd" Icon="fa-solid fa-plus" Clicked="() => AddGroup()"/>
+        </ToolBar>
+        <Columns>
+            <FenrusTableColumn TItem="Models.Group" ColumnName="@lblName">
+                <Header>@lblName</Header>
+                <Cell Context="item">
+                    <i class="fa-solid fa-puzzle-piece"></i>
+                    @if (item.IsSystem && IsAdmin == false)
+                    {
+                        <span>@item.Name</span>
+                    }
+                    else if (item.IsSystem)
+                    {
+                        <a href="/settings/system/groups/@item.Uid">@item.Name</a>
+                    }
+                    else
+                    {
+                        <a href="/settings/groups/@item.Uid">@item.Name</a>
+                    }
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.Group" ColumnName="@lblEnabled" Width="10rem">
+                <Header>@lblEnabled</Header>
+                <Cell Context="item">
+                    <FenrusSwitch @bind-Value="@item.Enabled"></FenrusSwitch>
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.Group" ColumnName="@lblActions" Width="10rem">
+                <Header></Header>
+                <Cell Context="item">
+                    <div class="actions">
+                        <span title="@lblMoveUp" class="fa-solid fa-angle-up" @onclick="() => Move(item, true)"></span>
+                        <span title="@lblMoveDown" class="fa-solid fa-angle-down" @onclick="() => Move(item, false)"></span>
+                        <a title="@lblEdit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
+                        <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
+                    </div>
+                </Cell>
+            </FenrusTableColumn>
+        </Columns>
+    </FenrusTable>
+    </Body>
+</FenrusPage>
+
+<Fenrus.Components.Dialogs.GroupAddDialog @ref="GroupAddDialog" Translator="Translator" />

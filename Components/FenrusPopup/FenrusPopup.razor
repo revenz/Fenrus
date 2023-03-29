@@ -1,0 +1,16 @@
+@namespace Fenrus.Components
+
+<CascadingValue IsFixed="true" Value="this">
+    <div class="fenrus-popups">
+    @{
+        int level = 0;
+        foreach (var popup in Popups)
+        {
+            popup.Level = ++level;
+            <div class="popup popup-level-@level">
+                <DynamicComponent Type="popup.Type" Parameters="popup.Parameters"></DynamicComponent>
+            </div>
+        }
+    }
+    </div>    
+</CascadingValue>

@@ -1,0 +1,46 @@
+@page "/settings/dashboards"
+@inherits CommonPage<Models.Dashboard>
+
+<PageTitle>Fenrus - @lblTitle</PageTitle>
+
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-table-cells-large" PageDescription="@lblDescription">
+    <Body>
+    
+    <FenrusTable @ref=Table TItem="Models.Dashboard" Data=@Items>
+        <ToolBar>
+            <FenrusTableButton Label="@lblAdd" Icon="fa-solid fa-plus" Clicked="() => Add()" />
+        </ToolBar>
+        <Columns>
+            <FenrusTableColumn TItem="Models.Dashboard" ColumnName="Name">
+                <Header>@lblName</Header>
+                <Cell Context="item">
+                    <i class="fa-solid fa-table-cells-large"></i>
+                    <a href="/settings/dashboards/@item.Uid">@item.Name</a>
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.Dashboard" ColumnName="IsDefault" Width="10rem">
+                <Header>@lblDefault</Header>
+                <Cell Context="item">
+                    <FenrusSwitch Value="@item.IsDefault" ValueChanged="(value) => SetDefault(item, value)"></FenrusSwitch>
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.Dashboard" ColumnName="Enabled" Width="10rem">
+                <Header>@lblEnabled</Header>
+                <Cell Context="item">
+                    <FenrusSwitch Value="@item.Enabled" ValueChanged="(enabled) => Enable(item, enabled)"></FenrusSwitch>
+                </Cell>
+            </FenrusTableColumn>
+            <FenrusTableColumn TItem="Models.Dashboard" ColumnName="Actions" Width="10rem">
+                <Header></Header>
+                <Cell Context="item">
+                    <div class="actions">
+                        <a title="@lblEdit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
+                        <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
+                    </div>
+                </Cell>
+            </FenrusTableColumn>
+        </Columns>
+    </FenrusTable>
+        
+    </Body>
+</FenrusPage>

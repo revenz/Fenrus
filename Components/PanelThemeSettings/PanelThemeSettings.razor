@@ -1,0 +1,48 @@
+@using Fenrus.Controllers
+@namespace Fenrus.Components
+
+<div class="theme-settings panel" x-data="ThemeSettings">
+    @{
+        bool showSettings = Theme.Settings?.Any() == true && IsGuest == false;   
+    }
+    @if(showSettings)
+    {
+        @foreach (var setting in Theme.Settings)
+        {
+            <div class="setting @setting.Type.ToString().ToLower()">
+                <span class="label">@(setting.Label?.EmptyAsNull() ?? setting.Name)</span>
+                <span class="value">
+                    @{
+                        string jsCode = $"UpdateThemeSetting('{Theme.Name}', '{setting.Name}', event)";
+                        if (setting.Type == AppPropertyType.Bool)
+                        {
+                            <JavaScriptSwitch Value="GetBoolValue(setting)" Code="@jsCode"/>
+                        }
+                        else if (setting.Type == AppPropertyType.Select)
+                        {
+                            <JavaScriptSelect Value="@GetStringValue(setting)"
+                                              Options="@(setting.Options.Select(x => x.Value.ToString()).ToArray())"
+                                              Labels="@(setting.Options.Select(x => x.Label).ToArray())"
+                                              Code="@jsCode"/>
+                        }
+                        else if (setting.Type == AppPropertyType.Integer)
+                        {
+                            var value = GetIntValue(setting);
+                            int min = setting.Minimum ?? 0;
+                            int max = setting.Maximum ?? 100;
+                            var percent = (double)(value - min) / (max - min) * 100;
+                            var style = $"background-size: {percent}% 100%";
+                            <input onchange="@jsCode" id="slider-@setting.Name" style="@style" type="range" min="@min" max="@max" value="@value" />
+                            <span class="range-value">@value</span>
+                        }
+                    }
+                </span>
+            </div>
+        }
+    }
+    <div class="setting profile-buttons @(showSettings ? "has-settings" : "no-settings")">
+        <a href="/@(IsGuest ? "login" : "logout")" class="btn">
+            @Translator.Instant("Labels." + (IsGuest ? "Login" : "Logout"))
+        </a>
+    </div>
+</div>

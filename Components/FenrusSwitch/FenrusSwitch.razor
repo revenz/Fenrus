@@ -1,0 +1,6 @@
+@namespace Fenrus.Components
+
+<label class="fenrus-switch @(Disabled ? "disabled" : "")" @onclick:preventDefault @onclick:stopPropagation @onclick="ToggleValue">
+    <input disabled="@Disabled" class="switch-checkbox" type="checkbox" checked=@(Value ? "checked" : null) @onchange="OnChange" @onclick:stopPropagation>
+    <span class="slider round"></span>
+</label>

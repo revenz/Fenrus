@@ -1,0 +1,19 @@
+@namespace Fenrus.Components.Dialogs
+
+<Modal Title="@Title" Visible="Visible">
+
+    <Body>
+    <span class="confirm-message">@Message</span>
+    @if (ShowSwitch)
+    {
+        <div class="switch">
+            <FenrusSwitch @bind-Value=@SwitchState />
+            <span>@SwitchMessage</span>
+        </div>
+    }
+    </Body>
+    <Footer>
+        <button class="btn" id="@btnYesUid" @onclick=@Yes>@lblYes</button>
+        <button class="btn" @onclick=@No>@lblNo</button>
+    </Footer>
+</Modal>

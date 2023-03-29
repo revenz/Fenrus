@@ -1,0 +1,9 @@
+<div class="search" id="search-container" style="@(ShowSearch ? string.Empty : "display:none")">
+    <div class="search-inner">
+        <img id="search-icon" src="@Default.Icon" />
+        <input id="search-text" onkeydown="SearchKeyDown(event)" autofocus autocomplete="off" />
+        <button click="SearchPerform()">@Translator.Instant("Labels.Search")</button>
+    </div>
+</div>
+<style id="styleFilter"></style>
+<input type="hidden" id="search-engines" value="@JsonSerializer.Serialize(SearchEngines)" />

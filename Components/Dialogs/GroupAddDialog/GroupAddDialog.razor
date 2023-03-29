@@ -1,0 +1,25 @@
+@using Fenrus.Models.UiModels
+@namespace Fenrus.Components.Dialogs
+
+<Modal Title="@lblTitle" Visible="Visible">
+
+    <Body>
+    <div>
+        <ul class="add-group-list">
+            @foreach (var option in Options)
+            {
+                <li>
+                    <label>
+                        <input type="checkbox" @onchange="(e) => CheckItem(option, e)"/>
+                        <span>@option.Label</span>
+                    </label>
+                </li>
+            }
+        </ul>
+    </div>
+    </Body>
+    <Footer>
+        <button class="btn" id="@btnAddUid" @onclick=@Add>@lblAdd</button>
+        <button class="btn" @onclick=@Cancel>@lblCancel</button>
+    </Footer>
+</Modal>

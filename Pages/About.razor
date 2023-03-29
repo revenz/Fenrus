@@ -1,0 +1,39 @@
+@page "/settings/about"
+@inherits UserPage
+
+<PageTitle>Fenrus - @lblTitle</PageTitle>
+
+<FenrusPage Title="@lblTitle" Icon="fa-solid fa-sliders">
+    <Body>
+    
+    <InputLabel Label="@lblAuthor" Value="John Andrews" />
+    <InputLabel Label="@lblVersion" Value="@Globals.Version" />
+    <InputLabel Label="@lblWebsite" Value="https://github.com/revenz/fenrus" Link="true" Target="_blank" />
+    
+    <InputHtml Label="@lblThirdParty">
+        <ul class="third-party">
+            @foreach (var item in new[]
+            {
+                ("LiteDB", "https://www.litedb.org"),
+                ("Jint", "https://github.com/sebastienros/jint"),
+                ("Docker.DotNet", "https://github.com/dotnet/Docker.DotNet"),
+                ("Blazored Toast", "https://github.com/Blazored/Toast"),
+                ("jscolor.js", "https://jscolor.com"),
+                ("Markdig", "https://github.com/xoofx/markdig"),
+                ("MessageFormatter for .NET", "https://github.com/jeffijoe/messageformat.net"),
+                ("SSH.NET", "https://github.com/sshnet/SSH.NET"),
+                ("ApexCharts", "https://apexcharts.com"),
+                ("Biin-Packing", "https://github.com/jakesgordon/bin-packing/"),
+                ("Vanta.js", "https://www.vantajs.com"),
+                ("Heimdall Application Dashboard", "https://heimdall.site")
+            })
+            {
+                <li>
+                    <a href="@item.Item2" target="_blank" rel="noreferrer">@item.Item1</a>
+                </li>
+            }
+        </ul>
+    </InputHtml>
+    
+    </Body>
+</FenrusPage>

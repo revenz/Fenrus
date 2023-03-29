@@ -2,9 +2,10 @@ class ContextMenu {
     contextMenu;
     static otherMenus = [];
 
-    constructor({ target = null, menuItems = [] }) {
-      this.target = target;
-      this.menuItems = menuItems;
+    constructor(args) { //{ target = null, menuItems = [] }) {
+      this.target = args.target;
+      this.menuItems = args.menuItems;
+      console.log('menuItems:', JSON.parse(JSON.stringify(args.menuItems)));
       this.menuItemsNode = this.getMenuItemsNode();
       this.isOpened = false;
       ContextMenu.otherMenus.push(this);

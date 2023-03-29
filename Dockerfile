@@ -1,54 +1,25 @@
-FROM alpine:3.15
-
-# Create app directory
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 
-# Bundle app source
-COPY apps/ apps/
-COPY helpers/ helpers/
-COPY middleware/ middleware/
-COPY models/ models/
-COPY node_modules/ node_modules/
-COPY routes/ routes/
-COPY services/ services/
-COPY strategies/ strategies/
-COPY views/ views/
-COPY wwwroot/ wwwroot/
-COPY app.js app.js
-COPY buildnum.txt buildnum.txt
-COPY defaultconfig.json defaultconfig.json
-COPY Globals.js Globals.js
-COPY package-lock.json package-lock.json
-COPY package.json package.json
+# Copy everything
+COPY . ./
+# sets the version
+RUN chmod +x ./setversion.sh && ./setversion.sh
+# Restore as distinct layers
+RUN dotnet restore
+# Build and publish a release
+RUN dotnet publish -c Release -o out
 
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+WORKDIR /app
+COPY --from=build-env /app/out .
+COPY /Apps /app/Apps
+ENV Docker=1
+COPY /reset.sh /app/reset.sh
+RUN chmod +x /app/reset.sh
 
-# Add what to need for build/compose deps to build-dependencies
-RUN apk -U --update --no-cache add --virtual=build-dependencies \
-      npm \
-      build-base \
-      g++ \
-      cairo-dev \
-      jpeg-dev \
-      pango-dev \
-      giflib-dev && \
-      # Runtime deps
-      apk -U --update --no-cache add \
-      bash \
-      nodejs \
-      cairo \
-      jpeg \
-      pango \
-      giflib \
-      msttcorefonts-installer \
-      fontconfig && \
-      update-ms-fonts && \
-      fc-cache -f &&\
-      rm -rf ./.git && \
-      npm install && \
-      npm ci --only=production && \
-      mkdir -p ./data && \
-      # Removal build-dependencies
-      apk del --purge build-dependencies
-
-EXPOSE 3000
-CMD [ "node", "app.js" ]
+# make sh open bash
+RUN ln -sf /bin/bash /bin/sh
+    
+ENTRYPOINT ["dotnet", "Fenrus.dll", "--urls", "http://+:3000"]

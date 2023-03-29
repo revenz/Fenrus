@@ -1,0 +1,36 @@
+﻿<HeadContent>
+    <style>
+    body {
+        --accent-rgb:@AccentRgb;
+        --accent:@AccentColor;
+    }
+    </style>
+    <link rel="icon" type="image/x-icon" href="/favicon?color=@Uri.EscapeDataString(AccentColor ?? string.Empty)&version=@Globals.Version">
+</HeadContent>
+
+<CascadingValue Value="Translator" IsFixed="true">
+    <CascadingValue Value="this" IsFixed="true">
+        <Router AppAssembly="@typeof(App).Assembly">
+            <Found Context="routeData">
+                <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+                <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
+            </Found>
+            <NotFound>
+                <PageTitle>Not found</PageTitle>
+                <div class="notfound">
+                    <p role="alert">@Translator.Instant("ErrorMessages.404RouteNotKnown")</p>
+                </div>
+            </NotFound>
+        </Router>
+
+        <FenrusPopup @ref="Popup"/>
+    </CascadingValue>
+
+    <Fenrus.Components.Dialogs.Confirm />
+    <Fenrus.Components.Dialogs.MessageBox />
+    <BlazoredToasts IconType="IconType.FontAwesome"
+                    SuccessClass="success-toast-override"
+                    SuccessIcon="fa fa-thumbs-up"
+                    ErrorIcon="fa fa-bug"
+                    RemoveToastsOnNavigation="true" />
+</CascadingValue>

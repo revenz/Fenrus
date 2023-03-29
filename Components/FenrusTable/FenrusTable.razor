@@ -1,0 +1,108 @@
+@namespace Fenrus.Components
+@inherits Fenrus.Components.FenrusTableBase
+@using Humanizer
+@typeparam TItem
+
+@{
+    string style = string.IsNullOrEmpty(MinWidth) ? "" : $"min-width:{MinWidth};";
+}
+<div class="fenrus-table">
+    <div class="fenrus-table-inner" style="@style">
+
+        <CascadingValue Value="this">
+            @Columns
+
+            <div class="fenrus-table-toolbar">
+        
+                <div class="fenrus-table-toolbar-buttons">
+                    @ToolBar
+                </div>
+                <div class="fenrus-table-toolbar-filter">
+                    <input @ref="eleFilter" type="text" @bind-value="FilterText" @bind-value:event="oninput" @onkeydown="FilterKeyDown" placeholder="@lblFilterPlaceholder" autocomplete="off" />
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+        </CascadingValue>
+        
+        
+        
+    <style> 
+        @foreach(var col in this.ColumnList)
+        {
+            string hashcode = ".col-" + col.GetHashCode();
+            <text>
+            @hashcode { 
+                @if(string.IsNullOrEmpty(col.Width) == false)
+                {
+                    <text>
+                        min-width:@col.Width;
+                        max-width:@col.Width;
+                        width:@col.Width;
+                    </text>
+                }
+            }
+            </text>
+            @if(string.IsNullOrEmpty(col.MobileWidth) == false)
+            {
+                <text>
+                    @@media screen and (max-width: 578px) {
+                        @hashcode {
+                            min-width:@(col.MobileWidth == "auto" ? "unset" : col.MobileWidth);
+                            max-width:@(col.MobileWidth == "auto" ? "unset" : col.MobileWidth);
+                            width:@(col.MobileWidth == "auto" ? "unset" : col.MobileWidth);
+
+                        }
+                    }
+                </text>
+            }
+        }
+    </style>
+
+    <div id="@Uid" class="fenrus-table-data">
+
+        <div class="fenrus-table-header">
+            <div class="fenrus-table-row fenrus-table-header-row">
+                @if(Selection != SelectionMode.None)
+                {
+                    <span class="fenrus-table-select" style="width:2rem;min-width:2rem;max-width:2rem">
+                        <input type="checkbox" @onchange="(e) => SelectAll(e)" checked="@(DisplayData.Any(i => SelectedItems != null && SelectedItems.Contains(i.Key)))"  />                        
+                    </span>
+                }
+                @foreach(var col in ColumnList)
+                {
+                    string hashcode = "col-" + col.GetHashCode();
+                    <span class="@col.ClassName @hashcode @(col.Hidden ? "hidden" : "")" data-width="@col.Width" style="@col.Style">
+                        @col.Header
+                    </span>
+                }
+            </div>
+        </div>
+        @if (DisplayData?.Any() == true)
+        {
+                <Virtualize Items="@DisplayData" Context="item" ItemSize="25"  OverscanCount="4">
+                    @{
+                        bool selected = Selection != SelectionMode.None && SelectedItems?.Contains(item.Key) == true;
+                    }
+                    <div class="fenrus-table-row @(selected ? "selected" : "")" @ondblclick="() => OnDoubleClick(item.Key)" @onclick="(e) => OnClick(e, item.Key)">
+                        @if(Selection!= SelectionMode.None)
+                        {
+                            <span class="fenrus-table-select" style="width:2rem;min-width:2rem;max-width:2rem">
+                                <input type="checkbox" @onchange="(e) => CheckItem(e, item.Key)" checked="@(SelectedItems?.Contains(item.Key) == true)"
+                                       onclick="ff.stopSelectPropagation(event)" />                        
+                            </span>
+                        }
+                        @foreach (var col in ColumnList)
+                        {
+                            string hashcode = "col-" + col.GetHashCode();
+                            <span class="@col.ClassName @col.ColumnName?.Dehumanize()?.ToLower() @hashcode @(col.Pre ? "pre-text" : "") @(col.Hidden ? "hidden": "")" style="@col.Style">
+                                @col.Cell(item.Key)
+                            </span>
+                        }
+                    </div>                        
+                </Virtualize>
+        }
+    </div>
+    
+
+    </div>
+</div>

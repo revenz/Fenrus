@@ -1,0 +1,153 @@
+{
+  "Language": "Deutsch",
+  "Labels": {
+    "VersionNumber": "Ausführung: {version}",
+    "Version":"Ausführung",
+    "Cancel": "Stornieren",
+    "Close": "Schließen",
+    "Yes": "Ja",
+    "No": "Nein",
+    "Add": "Hinzufügen",
+    "MoveUp": "Nach Oben Bewegen",
+    "MoveDown": "Sich Abwärts Bewegen",
+    "Delete": "Löschen",
+    "Help": "Hilfe",
+    "Edit": "Bearbeiten",
+    "Copy": "Kopieren",
+    "Save": "Speichern",
+    "Saved": "Gerettet",
+    "Actions": "Aktionen",
+    "Enabled": "Ermöglicht",
+    "Search": "Suchen",
+    "Dashboard": "Armaturenbrett",
+    "Theme": "Thema",
+    "AccentColor": "Akzentfarbe",
+    "LinkTarget": "Linkziel",
+    "Background": "Hintergrund",
+    "BackgroundColor": "Hintergrundfarbe",
+    "GroupTitles": "Gruppentitel",
+    "StatusIndicators": "Statusanzeigen",
+    "ShowSearch": "Suche Anzeigen",
+    "Default": "Standard",
+    "ChooseImage":"Wählen Sie Bild...", 
+    "CurrentImage": "Aktuelles Bild",
+    "ColorBackground": "Einfarbig",
+    "Language": "Sprache",
+    "UpdatedSuccessfully": "Erfolgreich Geupdated",
+    "General": "Allgemein",
+    "AddGroup": "Gruppe hinzufügen",
+    "Import": "Importieren",
+    "Browse": "Durchsuche",
+    "NoGroupAddedToDashboard": "Keine Gruppen zum Dashboard hinzugefügt",
+    "Website": "Webseite",
+    "Author": "Autor",
+    "Confirm": "Bestätigen",
+    "Message": "Nachricht",
+    "DeleteItem": "Löschen Sie {typeName} ''{name}''?",
+    "DeletedItem": "{typeName} ''{name}'' gelöscht"
+  },
+  "ContextMenu": {
+    "EditDashboard": "Dashboard bearbeiten",
+    "EditGroup": "Gruppe bearbeiten",
+    "Terminal": "Terminal",
+    "UpTime": "Betriebszeit",
+    "Resize": "Größe ändern"
+  },
+  "Enums": {
+    "ItemSize": {
+      "Small": "Klein",
+      "Medium": "Mittel",
+      "Large": "Groß",
+      "Larger": "Größer"
+    },
+    "LinkTarget": {
+      "OpenInThisTab":"In diesem Tab öffnen", 
+      "OpenInNewTab": "In neuem Tab öffnen",
+      "OpenInSameTab": "In derselben Registerkarte öffnen"
+    }
+  },
+  "Dialogs": {
+    "ImportConfig": {
+      "Title": "Konfig importieren",
+      "Description": "Dadurch können Sie eine Konfiguration aus einer älteren Fenrus-Installation in die neue .NET-Version importieren."
+    },
+    "UpTime": {
+      "Columns": {
+        "Date": "Datum",
+        "Up": "Hoch",
+        "Message": "Nachricht"
+      },
+      "Labels": {
+        "Success": "Erfolg",
+        "NoData": "Keine Verfügbarkeitsdaten verfügbar"
+      }
+    }
+  },
+  "Pages": {
+    "About": {
+      "Title": "Um",
+      "Buttons": {
+        "ImportConfig": "Konfig importieren"
+      },
+      "Labels": {
+        "Importing": "Vorherige Konfiguration wird importiert, dies kann eine Weile dauern, bitte warten.",
+        "ThirdParty": "Dritte Seite"
+      }
+    },
+    "Dashboards":{
+      "Title": "Dashboards",
+      "Labels": {
+        "PageDescription": "Auf dieser Seite können Sie Dashboards erstellen. Wenn Sie mehr als ein Dashboard haben, können Sie auf dem Startbildschirm zwischen ihnen wechseln.\n\nUm Elemente zu Ihrem Dashboard hinzuzufügen, erstellen Sie zunächst eine Gruppe mit den Elementen, die Sie hinzufügen möchten. Anschließend können Sie diese neue Gruppe zu einem Dashboard hinzufügen."
+      }
+    }, 
+    "Dashboard": {
+      "Title": "Dashboard",
+      "Title-Guest": "Gast-Dashboard",
+      "Messages": {
+        "NoAvailableGroups": "Keine verfügbaren Gruppen zum Hinzufügen",
+        "GuestPageDescription": "Auf dieser Seite können Sie das Gast-Dashboard konfigurieren, das Dashboard, das Benutzern angezeigt wird, wenn sie sich nicht angemeldet haben. Dies ist auch das Standard-Dashboard für neue Benutzer.\n\nSie können dieses Dashboard deaktivieren, wenn Sie möchten, dass sich Benutzer anmelden, bevor Sie Fenrus verwenden.",
+        "RemoveGroupTitle": "Gruppe entfernen",
+        "RemoveGroupMessage": "Möchten Sie die Gruppe ''{name}'' entfernen?"
+      },
+      "Fields": {
+        "Name-Help": "Der Name des Dashboards",
+        "ShowGroupTitles": "Gruppentitel anzeigen",
+        "ShowSearch": "Suche anzeigen",
+        "LinkTarget": "Linkziel",
+        "AccentColor": "Akzentfarbe",
+        "BackgroundColor": "Hintergrundfarbe",
+        "Theme": "Thema"
+      }
+    },
+    "Login": {
+      "Title": "Anmeldung",
+      "ErrorMessages": {
+        "LoginFailed": "Fehler bei der Anmeldung",
+        "RegistrationNotAllowed": "Benutzerregistrierungen sind nicht zulässig\n",
+        "GuestNotAllowed": "Gastzugang ist nicht erlaubt"
+      },
+      "Labels": {
+        "PasswordReset": "Passwort wurde zurückgesetzt. Eine neue E-Mail wurde an Sie gesendet und auf der Konsole gedruckt.",
+        "PasswordResetFailed": "Kennwort konnte nicht zurückgesetzt werden",
+        "PasswordResetTokenInvalid": "Ungültiger Token zum Zurücksetzen des Kennworts oder Zurücksetzen des Kennworts ist abgelaufen.",
+        "PasswordResetSent": "Wenn der Benutzer existiert, wurde ein Passwort-Reset an Ihre E-Mail-Adresse gesendet oder auf der Konsole ausgedruckt.",
+        "ForgotPasswordDescription": "Geben Sie Ihren Benutzernamen oder Ihre E-Mail-Adresse ein und ein Link zum Zurücksetzen des Passworts wird Ihnen per E-Mail zugesendet und in das Konsolenprotokoll gedruckt."
+      },
+      "Buttons":
+      {
+        "Login": "Anmeldung",
+        "Register": "Registrieren",
+        "Guest": "Gast",
+        "Reset": "Zurücksetzen",
+        "Cancel": "Stornieren"
+      },
+      "Fields":
+      {
+        "Username": "Nutzername",
+        "Password": "Passwort",
+        "ForgotPassword": "Passwort vergessen?",
+        "UsernameOrEmailAddress": "Benutzername oder E-mail Adresse"
+      }
+    }
+  }
+}

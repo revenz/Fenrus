@@ -1,0 +1,16 @@
+@namespace Fenrus.Components.SideEditors
+@inherits SideEditorBase
+
+<SideEditor Title=@Title @ref=Editor>
+    <Buttons>
+        <button class="btn" @onclick="() => Save()">@lblSave</button>
+        <button class="btn" @onclick="() => Cancel()">@lblCancel</button>
+    </Buttons>
+    <Body>
+    <InputText Label="@lblUsername" @bind-Value="@Model.Username" Required="true" />
+    <InputText Label="@lblFullName" @bind-Value="@Model.FullName" Help="@lblFullNameHelp" />
+    <InputText Label="@lblEmail" @bind-Value="@Model.Email" Required="true" />
+    <InputText Label="@lblPassword" @bind-Value="@Model.Password" Password="true" Required="true" />
+    <InputSwitch Label="@lblIsAdmin" @bind-Value="@Model.IsAdmin" />
+    </Body>
+</SideEditor>

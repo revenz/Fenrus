@@ -34,8 +34,17 @@
         transform: scale(1) !important;
     }
 
-    .logout.has-settings {
-        padding-left: 8rem;
+    .profile-buttons {
+        margin-left:auto;
+        .btn {
+            width:10rem;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+        .btn + .btn {
+            margin-left:0.5rem;
+        }
     }
 
     li {
@@ -74,8 +83,12 @@
                     align-items: center;
                     .label {
                         width: 10rem;
+                        max-width: 10rem;
+                        min-width: 10rem;
                         text-align: right;
                         margin-right:1rem;
+                        margin-top: 0.25rem;
+                        margin-bottom:auto;
                     }
                     + .setting {
                         margin-top:1rem;
@@ -95,7 +108,7 @@
                     }
                     .value {
                         flex-grow:1;
-                        min-width:10rem;
+                        min-width:18rem;
                     }                    
                     select {
                         width:100%;

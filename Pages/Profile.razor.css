@@ -1,0 +1,27 @@
+.body-content {
+  max-width: 60rem;
+}
+.body-content .btn {
+  margin-left: 15rem;
+}
+.body-content .error {
+  margin-left: 15rem;
+  margin-top: 1rem;
+  color: var(--error);
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: normal;
+  margin-left: 0rem;
+  margin-top: 4rem;
+  border-bottom: solid 1px var(--accent);
+  padding-bottom: 0.5rem;
+  padding-left: 0.8rem;
+}
+h3 i {
+  color: var(--accent);
+  margin-right: 0.5rem;
+}
+
+/*# sourceMappingURL=Profile.razor.css.map */

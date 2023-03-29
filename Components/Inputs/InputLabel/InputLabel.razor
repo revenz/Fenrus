@@ -1,0 +1,13 @@
+@namespace Fenrus.Components.Inputs
+@inherits Input<string>
+
+<InputWrapper Input="@this">
+    @if (Link)
+    {
+        <a href="@Value" target="@Target">@Value</a>
+    }
+    else
+    {
+        <span>@Value</span>
+    }
+</InputWrapper>

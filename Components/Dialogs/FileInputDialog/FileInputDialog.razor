@@ -1,0 +1,24 @@
+@namespace Fenrus.Components.Dialogs
+
+
+<Modal Title="@lblTitle" Visible="Visible">
+
+    <Body>
+    <div>
+        <div class="help" style="margin-bottom: 1rem">@lblDescription</div>
+        <label>
+            <Microsoft.AspNetCore.Components.Forms.InputFile OnChange="@LoadFiles" accept="@Accept" id="@Uid"  
+                                                             style="display:none"  />
+            @if (browserFile != null)
+            {
+                <div style="margin-bottom:1rem">@Filename</div>
+            }
+            <button class="btn" onclick="document.getElementById('@Uid').click()">@lblBrowse</button>
+        </label>
+    </div>
+    </Body>
+    <Footer>
+        <button disabled="@(browserFile == null)" class="btn" @onclick=@OkAction>@lblOk</button>
+        <button class="btn" @onclick=@Cancel>@lblCancel</button>
+    </Footer>
+</Modal>

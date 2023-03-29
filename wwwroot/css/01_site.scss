@@ -1,4 +1,9 @@
-﻿html {
+﻿.fenrus-table-row > .name > i {
+  margin-right:0.25rem;
+  color:var(--accent);
+}
+
+html {
     font-size: 14px;
     font-family:sans-serif;
     position: relative;
@@ -18,9 +23,8 @@ body {
     --color-secondary: rgb(var(--color-secondary-rgb));
     --input-background-rgb: 49, 49, 49;
     --input-background: rgb(var(--input-background-rgb));
-    --input-border: rgba(50,50,50);
     --input-color: white;
-    --error-rgb: 255,0,0;
+    --error-rgb: 255,100,100;
     --error: rgb(var(--error-rgb));
     
     --base: rgb(17, 18, 20);
@@ -56,6 +60,22 @@ body {
     background-position: center;
 }
 
+#components-reconnect-modal
+{
+    background: rgba(0,0,0,0.65) !important;
+    color:var(--color) !important;
+    > div {
+        top: calc(50% - 50px) !important;
+        position:absolute !important;
+    }
+}
+a {
+  color:var(--accent);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
 .main-content {
     flex-grow:1;
     justify-content: center;
@@ -88,7 +108,7 @@ body {
 }
 
 option {
-    /* need so our styles dont make these imposssible to read */
+    /* need so our styles dont make these impossible to read */
     color: white;
     background: #222;
 }
@@ -121,7 +141,6 @@ option {
     cursor:pointer;
 }
 
-
 .hide-group-titles .db-group > .title {
     display:none;
 }
@@ -129,7 +148,10 @@ option {
 .search {    
     text-align: center;
     margin:1rem;
+    z-index:2;
+    height:3rem;
     .search-inner {
+        z-index:2;
         border:solid 1px rgba(255,255,255,.15);
         height:3rem;
         display:flex;
@@ -166,6 +188,8 @@ option {
             padding:0 1rem;
             background:rgba(0,0,0,.8);
             color:var(--color);            
+            flex-grow:1;
+            max-width:9rem;
             &:hover {
                 background:var(--accent);
                 color:var(--color);
@@ -377,7 +401,6 @@ body.not-home {
         overflow:auto;
         flex-grow:1;
     }
-
     
     h2 {
         margin: 0;
@@ -435,7 +458,8 @@ body.not-home {
 
 .db-group > .title {
     .group-controls{
-        display:none;
+        display:inline-block;
+        visibility: hidden;
         span {
             cursor:pointer;
             color:rgba(var(--color-rgb), 0.5);
@@ -446,7 +470,7 @@ body.not-home {
     }
     &:hover {
         .group-controls{
-            display:unset;
+            visibility: unset;
         }
     }
 }
@@ -482,9 +506,9 @@ body.terminal .main-content {
             text-align: center;
             width: 4rem;
             top: 4px;
-            font-family: "Font Awesome 5 Free"; font-weight: 900; 
+            font-family: "Font Awesome 5 Free"; 
+            font-weight: 900; 
         }
-
     }
     .close
     {        
@@ -516,7 +540,7 @@ body.terminal .main-content {
 
 
 table {
-    border: solid 1px var(--input-background);
+    border: none;
     padding:0;
     margin:0;
     width:100%;
@@ -595,7 +619,7 @@ table {
         white-space: pre-line;
     }
     .date {
-        width:4.5rem;
+        width:7.5rem;
     }
     th {
         background:#131B1C;
@@ -699,4 +723,25 @@ table {
 a[class*="fa-"] {
     color:var(--color);
     text-decoration: none !important;
+}
+
+.blazored-toast-container {
+    z-index:10000 !important;
+    .blazored-toast-message {
+        white-space:pre-wrap;
+    }
+}
+.blazored-toast-header h5 {
+    margin:0;
+}
+
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px var(--input-background) inset !important;
+}
+input:-webkit-autofill{
+    -webkit-text-fill-color: var(--color) !important;
 }

@@ -1,0 +1,14 @@
+.setting-group {
+  max-width: 50rem;
+}
+
+.label {
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.test-button {
+  margin-left: 15rem;
+}
+
+/*# sourceMappingURL=SystemSettings.razor.css.map */

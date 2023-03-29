@@ -1,0 +1,6 @@
+﻿.fenrus-tab{
+    display:none;
+    &.active {
+        display:unset;
+    }
+}

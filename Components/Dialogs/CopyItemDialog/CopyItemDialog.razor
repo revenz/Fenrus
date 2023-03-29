@@ -1,0 +1,33 @@
+@namespace Fenrus.Components.Dialogs
+
+<Modal Title="@lblTitle" Visible="Visible">
+
+    <Body>
+    <span class="description">@lblDescription</span>
+    <select @onchange="SelectionChanged">
+        
+        <option value="@Guid.Empty">@lblThisGroup</option>
+        @if (UserGroupList.Any())
+        {
+            <optgroup label="@lblUser" />
+            @foreach (var grp in UserGroupList)
+            {
+                <option value="@grp.Uid">@grp.Name</option>
+            }
+        }
+
+        @if (SystemGroups && SystemGroupList?.Any() == true)
+        {
+            <optgroup label="@lblSystem" />
+            @foreach (var grp in SystemGroupList)
+            {
+                <option value="@grp.Uid">@grp.Name</option>
+            }
+        }
+    </select>
+    </Body>
+    <Footer>
+        <button class="btn" @onclick=@Ok>@lblOk</button>
+        <button class="btn" @onclick=@Cancel>@lblCancel</button>
+    </Footer>
+</Modal>

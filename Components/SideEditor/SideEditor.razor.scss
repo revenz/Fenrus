@@ -1,0 +1,17 @@
+.side-editor {
+  
+}
+.content {
+  padding:1rem 0.5rem 0;
+  ::deep .fenrus-tab-buttons {
+    margin-bottom: 1rem !important;
+  }
+}
+
+.header {
+  display:flex;
+  flex-direction: row;
+  .title {
+    flex-grow:1;
+  }
+}

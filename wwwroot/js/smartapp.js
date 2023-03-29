@@ -19,8 +19,7 @@ class SmartApp
         this.interval = args.interval;
         this.ele = document.getElementById(this.uid)
         this.icon = document.getElementById(this.uid).querySelector('.icon img')?.getAttribute('src');
-        if(this.interval === 0)
-            this.interval = 3000;
+        console.log(`app ${args.name} interval: ${this.interval}`);
         this.dashboardIntanceUid = this.getDashboardInstanceUid();
         document.addEventListener('disposeDashboard', (e) => this.dispose(), false);
         this.trigger();
@@ -61,12 +60,24 @@ class SmartApp
         }
         return true;
     }
+    
+    getTimeString(){
+        let dt = new Date();
+        return String(dt.getHours()).padStart(2, '0') + ':' +
+               String(dt.getMinutes()).padStart(2, '0') + ':' +
+               String(dt.getSeconds()).padStart(2, '0') + '.' +
+               String(dt.getMilliseconds()).padStart(4, '0');
+    }
 
     async doWork() 
     {
         if(!this.stillActive())
-            return false;        
-        if(++this.renderCount < 2)
+            return false;
+        let dt = new Date();
+        console.log(`${this.getTimeString()} - SmartApp doing work: ${this.name}`);
+        
+        let firstRender = ++this.renderCount < 2;
+        if(firstRender)
         {
             let saved = this.getFromLocalStorage();
             if(saved) 
@@ -144,7 +155,7 @@ class SmartApp
                 let currentDashboard = this.getDashboardInstanceUid();
                 if(currentDashboard != this.dashboardInstanceUid)
                     return; // if they changed dashboards
-                console.log(name + ' error: ', error);    
+                // console.log(name + ' error: ', error);    
             }).finally(() => { 
                 resolve(success);
             });
@@ -208,7 +219,7 @@ class SmartApp
             let item = JSON.parse(localStorage.getItem(this.uid + '-' + size));
             if(!item?.date)
                 return;
-            if(item.date < (new Date().getTime() - 60000))
+            if(item.date < (new Date().getTime() - 5000))
                 return { html: item.html, old: true}; // older than a minute reject it
             return { html: item.html, old: false};
         }
@@ -238,7 +249,7 @@ class SmartApp
             else
                 this.carouselWaitingUpdate = content;
             return;
-        }  
+        }
 
         let ele = eleItem.querySelector('.status');
         if(!ele)
@@ -250,6 +261,15 @@ class SmartApp
         else if(/^data:/.test(content)){
             content = `<img class="app-chart" src="${content}" />`;
             this.setItemClass(eleItem, 'chart');
+        }
+        else if(/^chart:/.test(content))
+        {
+            content = content.substring(7);
+            let colonIndex = content.indexOf(':')
+            let chart = content.substring(0, colonIndex);
+            content = content.substring(colonIndex + 1)
+            this.renderChart(chart, JSON.parse(content), ele);
+            return;
         }
         else if(content.indexOf('livestats') > 0){
             this.setItemClass(eleItem, 'db-basic live-stats');
@@ -351,5 +371,79 @@ class SmartApp
                 this.carouselItem(null, id, index);
             }
         }, 5000);
+    }
+    
+    renderChart(type, args, ele){
+        let title = args.title;
+        let labels = args.labels;
+        let datasets = args.data;
+        let min = args.min;
+        let max = args.max;
+        var data = {
+            labels: labels,
+            datasets: datasets.map((x, index) => {
+                return {
+                    data: x,
+                    fill: false,
+                    borderColor: ['green', 'blue', 'yellow', 'red', 'purple', 'orange', 'cornflowerblue'][index],
+                    lineTension: 0.1
+                };
+            })
+        };
+        //options
+        var options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+                title: {
+                    display:true,
+                    color:'white',
+                    align:'end',
+                    position:'top',
+                    text: title.indexOf('\n') > 0 ? title : ('   ' + title + '   '),
+                },
+                legend: {
+                    display:false
+                }
+            },
+            elements: {
+                point: {
+                    radius:0
+                }
+            },
+            scales: {
+                yAxes: {
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    min: min == -1 ? null : min || 0,
+                    max: max == -1 ? null : max || 100,
+                    display: false,
+                    ticks: {
+                        display:false
+                    }
+                },
+                xAxes: {
+                    grid: {
+                        display: true
+                    },
+                    ticks: {
+                        display:false
+                    }
+                }
+            }
+        };
+        ele.innerHTML = '<canvas></canvas>';
+        let canvas = ele.querySelector('canvas');
+        let eleDbItem = ele.parentNode.parentNode.parentNode;
+        if(eleDbItem.classList.contains('chart') === false)
+            eleDbItem.classList.add('chart');               
+        new Chart(canvas, {
+            type: 'line',
+            data: data,
+            options: options
+        });
     }
 }
