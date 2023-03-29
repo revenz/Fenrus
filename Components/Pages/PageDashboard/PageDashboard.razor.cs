@@ -205,13 +205,13 @@ public partial class PageDashboard : CommonPage<Models.Group>
 
     async Task AddGroup()
     {
-        var available = GetAllAvailableGroups(notInUse: true);
+        var available = GetAllAvailableGroups(notInUse: true).Where(x => x.Enabled).ToList();
         if (available.Any() == false)
         {
             ToastService.ShowWarning(Translator.Instant("Pages.Dashboard.Messages.NoAvailableGroups"));
             return;
         }
-        var adding = await GroupAddDialog.Show(available.Select(x => new ListOption
+        var adding = await GroupAddDialog.Show(available.OrderBy(x => x.Name).Select(x => new ListOption
         {
             Label = x.Name, 
             Value = x.Uid

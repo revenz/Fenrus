@@ -93,9 +93,11 @@ else
 
 var app = builder.Build();
 
+bool debug = Environment.GetEnvironmentVariable("DEBUG") == "1";
 app.UseWhen(context =>
 {
-    Logger.DLog("Requesting: " + context.Request.Path);
+    if(debug)
+        Logger.DLog("Requesting: " + context.Request.Path);
     if (SystemSettingsService.InitConfigDone)
         return false;
     var path = context.Request.Path;

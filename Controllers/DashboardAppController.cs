@@ -62,21 +62,34 @@ public class DashboardAppController: BaseController
     /// <returns>the app</returns>
     private AppInstance? GetAppInstance(string name, Guid uid)
     {
-        string key = name + "_" + uid;
-        if (Cache.TryGetValue<AppInstance>(key, out AppInstance value))
-            return value;
-
         var userUid = GetUserUid();
         if(userUid == null)
             return null;
+
+        List<Group> groups;
+        string groupKey = userUid + "_Groups";
+        if (Cache.TryGetValue<List<Group>>(groupKey, out groups) == false)
+        {
+            groups = new GroupService().GetAllForUser(userUid.Value) ?? new();
+            // short cache of ths, just so if many apps are requesting at once
+            Cache.Set(groupKey, groups, TimeSpan.FromSeconds(30));
+        }
+
+
+        if (groups.SelectMany(x => x.Items).FirstOrDefault(x => x.Uid == uid) is AppItem userApp == false)
+            return null;
+        
+        string key = name + "_" + uid;
+        if (Cache.TryGetValue<AppInstance>(key, out AppInstance value))
+        {
+            // need to check updated settings
+            value.UserApp = userApp;
+            return value;
+        }
+
         
         var ai = AppHeler.GetAppInstance(name);
         if (ai == null)
-            return null;
-
-        var groups = new GroupService().GetAllForUser(userUid.Value) ?? new ();
-
-        if (groups.SelectMany(x => x.Items).FirstOrDefault(x => x.Uid == uid) is AppItem userApp == false)
             return null;
 
         ai.UserApp = userApp;

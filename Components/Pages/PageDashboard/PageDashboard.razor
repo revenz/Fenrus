@@ -57,7 +57,7 @@
             <FenrusTableColumn TItem="Models.Group" ColumnName="@lblEnabled" Width="10rem">
                 <Header>@lblEnabled</Header>
                 <Cell Context="item">
-                    <FenrusSwitch @bind-Value="@item.Enabled"></FenrusSwitch>
+                    <FenrusSwitch @bind-Value="@item.Enabled" Disabled="true"></FenrusSwitch>
                 </Cell>
             </FenrusTableColumn>
             <FenrusTableColumn TItem="Models.Group" ColumnName="@lblActions" Width="10rem">
