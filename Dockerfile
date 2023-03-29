@@ -18,8 +18,10 @@ COPY /Apps /app/Apps
 ENV Docker=1
 COPY /reset.sh /app/reset.sh
 RUN chmod +x /app/reset.sh
+COPY /docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
 
 # make sh open bash
 RUN ln -sf /bin/bash /bin/sh
     
-ENTRYPOINT ["dotnet", "Fenrus.dll", "--urls", "http://+:3000"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
