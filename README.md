@@ -36,11 +36,17 @@ dotnet Fenrus.dll --urls=http://*:1234
 Docker is the preferred method of installing Fenrus
 ```
 docker run -d \
--name=Fenrus\
+-name=Fenrus \
+-e TZ=Pacific/Auckland \
 -p 3000:3000 \
--v /path/to/data:/app/data\
+-v /path/to/data:/app/data \
 --restart unless-stopped \
 revenz/fenrus:latest
+```
+
+Note: You can customise the port used by using the environmental variable "Port"
+```
+-e Port=1234
 ```
 
 ```
