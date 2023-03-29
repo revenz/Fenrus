@@ -144,8 +144,11 @@ class UpTime
                 }
                 else
                 {
-                    if(col === 'Date')
-                        value = new Date(value).toLocaleTimeString();                    
+                    if(col === 'Date') {
+                        let dt = new Date(value);
+                        value = dt.toLocaleString('default', { day: 'numeric', month: 'short' }) 
+                                + " " + dt.toLocaleTimeString();
+                    }
                     if(!value && col === 'Message' && d.up)
                         value = Translations.Success;
                     td.innerText = value;
