@@ -29,7 +29,7 @@ function getDashboardInstanceUid()
     return document.getElementById('dashboard-instance')?.value;
 }
 
-
+var SmartAppInstances = {};
 function LiveApp(name, instanceUid, interval) 
 {    
     if(typeof(name) !== 'string')
@@ -37,7 +37,7 @@ function LiveApp(name, instanceUid, interval)
     
     console.log(`Live App ${name}: ${interval}`);
 
-    new SmartApp({
+    SmartAppInstances[instanceUid] = new SmartApp({
         name: name,
         uid: instanceUid,
         interval: interval,

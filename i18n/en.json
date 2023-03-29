@@ -60,7 +60,8 @@
     "Terminal": "Terminal",
     "UpTime": "Up-Time",
     "Log": "Log",
-    "Resize": "Resize"
+    "Resize": "Resize",
+    "Refresh": "Refresh"
   },
   "Enums": {
     "ItemSize": {

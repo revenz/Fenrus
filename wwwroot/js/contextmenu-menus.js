@@ -7,6 +7,7 @@ const resizeIcon = `<span class="icon fa-solid fa-maximize" style="padding-right
 const dashboardIcon = `<span class="icon fa-solid fa-house" style="padding-right:0.5rem"></span>`;
 const terminalIcon = `<span class="icon fa-solid fa-terminal" style="padding-right:0.5rem"></span>`;
 const logIcon = `<span class="icon fa-solid fa-file-lines" style="padding-right:0.5rem"></span>`;
+const refreshIcon = `<span class="icon fa-solid fa-rotate-right" style="padding-right:0.5rem"></span>`;
 
 function openDefaultContextMenu(event) {
     event?.preventDefault();
@@ -60,6 +61,7 @@ function openContextMenu(event, app){
     let monitor = ele.getAttribute('x-monitor') === '1';
     let docker = ele.getAttribute('x-docker');
     let systemGroup = group.className.indexOf('system-group') > 0;
+    let smart = ele.getAttribute('class').indexOf('db-smart');
     if(!contextMenus[uid])
     {
         let menuItems = [];
@@ -132,6 +134,21 @@ function openContextMenu(event, app){
                     };
                 })
             }]);
+        }
+        
+        if(smart)
+        {
+            menuItems.push(
+            {
+                content: `${refreshIcon}${Translations.Refresh}`,
+                events: {
+                    click: (e) => {
+                        let smartApp = SmartAppInstances[uid];
+                        if(smartApp)
+                            smartApp.refresh();
+                    }
+                }
+            });
         }
 
         menuItems = menuItems.concat([
