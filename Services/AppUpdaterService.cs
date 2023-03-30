@@ -55,6 +55,8 @@ public class AppUpdaterService
             
             foreach (var entry in archive.Entries)
             {
+                if (entry.FullName == "apps.json")
+                    continue; // dont extract this file
                 var path = Path.Combine(appsDir, entry.FullName);
                 if (entry.Length == 0)
                     Directory.CreateDirectory(path);
