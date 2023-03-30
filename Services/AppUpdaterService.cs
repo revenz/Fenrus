@@ -11,19 +11,19 @@ public class AppUpdaterService
     /// Update the apps
     /// </summary>
     /// <returns>the result as a string</returns>
-    public async Task<(bool Success, int Original, int Updated, int TotalApps)> Update()
+    public async Task<(string Error, int Original, int Updated, int TotalApps)> Update()
     {
         int original = GetAppCount();
-        bool success = await DownloadAndExtract();
-        if (success == false)
-            return (false, original, 0, AppService.Apps.Count);
+        var error = await DownloadAndExtract();
+        if (string.IsNullOrEmpty(error) == false)
+            return (error, original, 0, AppService.Apps.Count);
         int updated = GetAppCount();
         
         // reinitialize the apps
         AppService.Initialize();
         Logger.ILog(
             $"Updated {AppService.Apps.Count} applications (${updated - original} new app{(updated - original == 1 ? string.Empty : "s")})");
-        return (true, original, updated, AppService.Apps.Count);
+        return (string.Empty, original, updated, AppService.Apps.Count);
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public class AppUpdaterService
     /// Downloads the apps.zip and extracts it to the apps directory
     /// </summary>
     /// <returns>true if successful, otherwise false</returns>
-    private async Task<bool> DownloadAndExtract()
+    private async Task<string> DownloadAndExtract()
     {
         try
         {
@@ -47,6 +47,12 @@ public class AppUpdaterService
             string appsDir = DirectoryHelper.GetAppsDirectory();
 
             using var archive = new ZipArchive(stream);
+            var appJsonEntry = archive.Entries.First(x => x.FullName == "apps.json");
+            var appJson = GetStringContent(appJsonEntry);
+            var appInfo = JsonSerializer.Deserialize<AppsInfo>(appJson);
+            if (appInfo.MinimumVersion > new Version(Globals.Version))
+                return "UpdateRequired";
+            
             foreach (var entry in archive.Entries)
             {
                 var path = Path.Combine(appsDir, entry.FullName);
@@ -57,12 +63,30 @@ public class AppUpdaterService
             }
             Logger.ILog($"Extracted {archive.Entries.Count} entries");
 
-            return true;
+            return string.Empty;
         }
         catch (Exception ex)
         {
             Logger.WLog("Failed extracting apps.zip from github: " + ex.Message);
-            return false;
+            return "FailedToDownload";
         }
+    }
+
+    private string GetStringContent(ZipArchiveEntry entry)
+    {
+        using StreamReader reader = new StreamReader(entry.Open());
+        string result = reader.ReadToEnd();
+        return result;
+    }
+
+    /// <summary>
+    /// Information about the apps that are downloaded
+    /// </summary>
+    class AppsInfo
+    {
+        /// <summary>
+        /// Gets the minimum version supported for these plugins
+        /// </summary>
+        public Version MinimumVersion { get; init; }
     }
 }

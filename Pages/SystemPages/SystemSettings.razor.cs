@@ -138,10 +138,10 @@ public partial class SystemSettings:UserPage
         var result = await new AppUpdaterService().Update();
         this.Updating = false;
         this.StateHasChanged();
-        if(result.Success)
+        if(string.IsNullOrEmpty(result.Error))
             ToastService.ShowSuccess(Translator.Instant("Pages.SystemSettings.Messages.AppsUpdated", new { total = result.TotalApps, newCount = (result.Updated - result.Original)}));
         else
-            ToastService.ShowError(Translator.Instant("Pages.SystemSettings.Messages.FailedToDownload"));
+            ToastService.ShowError(Translator.Instant("Pages.SystemSettings.Messages." + result.Error));
     }
 
 }

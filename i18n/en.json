@@ -308,6 +308,7 @@
       "Messages": {
         "TestEmailSent": "Test email sent to Sender, check your email to confirm working.",
         "FailedToDownload": "Apps failed to download",
+        "UpdateRequired": "Your version of Fenrus is out of date.  You must update Fenrus to get the latest apps.",
         "AppsUpdated": "Updated {total} applications {newCount, plural, zero {} one {(1 new app)} other {({newCount} new apps)}}"
       },
       "Fields": {
