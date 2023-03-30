@@ -7,6 +7,7 @@
 <FenrusPage Title="@lblTitle" Icon="fa-solid fa-gear" PageDescription="@lblDescription">
     <Buttons>
         <button class="btn" @onclick="() => ImportConfig()">@lblImportConfig</button>
+        <button class="btn" @onclick="() => UpdateApps()">@lblUpdateApps</button>
         <button class="btn" @onclick="() => Save()">@lblSave</button>
     </Buttons>
     <Body>
@@ -29,6 +30,12 @@
 {
     <div class="importing">
         <span>@lblImporting</span>
+    </div>
+}
+@if (Updating)
+{
+    <div class="updating">
+        <span>@lblUpdatingApps</span>
     </div>
 }
 

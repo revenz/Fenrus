@@ -9,7 +9,7 @@ namespace Fenrus.Pages;
 public partial class SystemSettings:UserPage
 {
     private string lblTitle, lblDescription,
-        lblImportConfig, lblImporting, 
+        lblImportConfig, lblImporting, lblUpdateApps, lblUpdatingApps, 
         lblSmtp, lblSmtpDescription, 
         lblSmtpServer, lblSmtpPort, lblSmtpUser, lblSmtpPassword,
         lblSmtpSender, lblStmpSenderHelp, lblTest;
@@ -17,6 +17,7 @@ public partial class SystemSettings:UserPage
     private Models.SystemSettings Model;
     private string SmtpPassword;
     private bool Importing = false;
+    private bool Updating;
     private Fenrus.Components.Dialogs.FileInputDialog FileInputDialog { get; set; }
     
 
@@ -41,8 +42,10 @@ public partial class SystemSettings:UserPage
         lblSmtpSender = Translator.Instant("Pages.SystemSettings.Fields.SmtpSender");
         lblStmpSenderHelp = Translator.Instant("Pages.SystemSettings.Fields.SmtpSenderHelp");
         lblTest = Translator.Instant("Labels.Test");
-        lblImporting = Translator.Instant("Pages.About.Labels.Importing");
-        lblImportConfig = Translator.Instant("Pages.About.Buttons.ImportConfig");
+        lblImporting = Translator.Instant("Pages.SystemSettings.Labels.Importing");
+        lblImportConfig = Translator.Instant("Pages.SystemSettings.Buttons.ImportConfig");
+        lblUpdateApps = Translator.Instant("Pages.SystemSettings.Labels.UpdateApps");
+        lblUpdatingApps = Translator.Instant("Pages.SystemSettings.Labels.UpdatingApps");
     }
 
     /// <summary>
@@ -126,6 +129,19 @@ public partial class SystemSettings:UserPage
             title: Translator.Instant("Dialogs.ImportConfig.Result"),
             message: log
         );
+    }
+
+    async Task UpdateApps()
+    {
+        this.Updating = true;
+        this.StateHasChanged();
+        var result = await new AppUpdaterService().Update();
+        this.Updating = false;
+        this.StateHasChanged();
+        if(result.Success)
+            ToastService.ShowSuccess(Translator.Instant("Pages.SystemSettings.Messages.AppsUpdated", new { total = result.TotalApps, newCount = (result.Updated - result.Original)}));
+        else
+            ToastService.ShowError(Translator.Instant("Pages.SystemSettings.Messages.FailedToDownload"));
     }
 
 }

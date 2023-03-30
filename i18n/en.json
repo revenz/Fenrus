@@ -110,11 +110,7 @@
   "Pages": {
     "About": {
       "Title": "About",
-      "Buttons": {
-        "ImportConfig": "Import Config"
-      },
       "Labels": {
-        "Importing": "Importing previous configuration, this may take a while, please wait.",
         "ThirdParty": "Third Party"
       }
     },
@@ -301,10 +297,18 @@
       "Labels": {
         "PageDescription": "This page allows you to configure system wide settings",
         "Smtp": "SMTP",
-        "SmtpDescription": "Configure an SMTP server, this will be used to send password reset emails."
-      },      
+        "SmtpDescription": "Configure an SMTP server, this will be used to send password reset emails.",
+        "Importing": "Importing previous configuration, this may take a while, please wait.",
+        "UpdateApps": "Update Apps",
+        "UpdatingApps": "Updating apps, please wait"
+      },
+      "Buttons": {
+        "ImportConfig": "Import Config"
+      },
       "Messages": {
-        "TestEmailSent": "Test email sent to Sender, check your email to confirm working."
+        "TestEmailSent": "Test email sent to Sender, check your email to confirm working.",
+        "FailedToDownload": "Apps failed to download",
+        "AppsUpdated": "Updated {total} applications ({newCount} {newCount, plural, one {app} other {apps}}"
       },
       "Fields": {
         "SmtpServer": "Server",

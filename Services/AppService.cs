@@ -20,6 +20,7 @@ public class AppService
     /// </summary>
     public static void Initialize()
     {
+        _Apps.Clear();
         LoadApps(DirectoryHelper.GetSmartAppsDirectory(), true);
         LoadApps(DirectoryHelper.GetBasicAppsDirectory(), false);
     }
