@@ -308,7 +308,7 @@
       "Messages": {
         "TestEmailSent": "Test email sent to Sender, check your email to confirm working.",
         "FailedToDownload": "Apps failed to download",
-        "AppsUpdated": "Updated {total} applications ({newCount} {newCount, plural, one {app} other {apps}}"
+        "AppsUpdated": "Updated {total} applications {newCount, plural, zero {} one {(1 new app)} other {({newCount} new apps)}}"
       },
       "Fields": {
         "SmtpServer": "Server",

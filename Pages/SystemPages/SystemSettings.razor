@@ -28,14 +28,20 @@
 
 @if (Importing)
 {
-    <div class="importing">
-        <span>@lblImporting</span>
+    <div class="blocker visible">
+        <div class="blocker-indicator">
+            <div class="blocker-spinner"></div>
+            <div class="blocker-message">@lblImporting</div>
+        </div>
     </div>
 }
 @if (Updating)
 {
-    <div class="updating">
-        <span>@lblUpdatingApps</span>
+    <div class="blocker visible">
+        <div class="blocker-indicator">
+            <div class="blocker-spinner"></div>
+            <div class="blocker-message">@lblUpdatingApps</div>
+        </div>
     </div>
 }
 
