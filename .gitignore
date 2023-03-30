@@ -17,3 +17,5 @@ Logs/
 Temp/
 publish/
 gitversion.txt
+
+*.user
