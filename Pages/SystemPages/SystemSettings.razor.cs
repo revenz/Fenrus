@@ -33,7 +33,7 @@ public partial class SystemSettings:UserPage
         
         lblTitle = Translator.Instant("Pages.SystemSettings.Title");
         lblDescription = Translator.Instant("Pages.SystemSettings.Labels.PageDescription");
-        lblSmtp = Translator.Instant("Pages.SystemSettings.Label.Smtp");
+        lblSmtp = Translator.Instant("Pages.SystemSettings.Labels.Smtp");
         lblSmtpDescription = Translator.Instant("Pages.SystemSettings.Labels.SmtpDescription");
         lblSmtpServer = Translator.Instant("Pages.SystemSettings.Fields.SmtpServer");
         lblSmtpPort = Translator.Instant("Pages.SystemSettings.Fields.SmtpPort");
