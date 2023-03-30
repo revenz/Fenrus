@@ -32,9 +32,12 @@
             }
             else if (Model.Type == "DashboardTerminal")
             {
-                <InputSelect Page="GroupItem"  TItem="string" Label="Terminal" @bind-Value="@Model.TerminalType">
+                <InputSelect Page="GroupItem" TItem="string" Label="Terminal" @bind-Value="@Model.TerminalType">
                     <InputSelectOption TItem="string" StringValue="SSH" Label="SSH" />
-                    <InputSelectOption TItem="string" StringValue="Docker" Label="Docker" />
+                    @if (DockerServers.Any())
+                    {
+                        <InputSelectOption TItem="string" StringValue="Docker" Label="Docker"/>
+                    }
                 </InputSelect>
             }
             <InputText Page="GroupItem" @bind-Value="@Model.Name" Label="Name" Required="true"></InputText>
@@ -164,19 +167,26 @@
             <InputText Page="GroupItem" @bind-Value="@Model.SshPassword" Label="SshPassword" />
         </FenrusTab>
             
-        <FenrusTab Title="@lblDocker" Visible="@(Model.Type != "DashboardTerminal" || Model.TerminalType == "Docker")">
-            <p>@lblDockerDescription</p>
-            @if(Model.Type != "DashboardTerminal"){
-                <p>@lblDockerTerminalDescription</p>
-            }
-            <InputSelect Page="GroupItem" @bind-Value="@Model.DockerUid" Label="DockerUid" />
-            <InputText Page="GroupItem" @bind-Value="@Model.DockerContainer" Label="DockerContainer" />
-            <InputSelect Page="GroupItem" TItem="string" Label="DockerCommand" @bind-Value="@Model.DockerCommand">
-                <InputSelectOption TItem="string" StringValue="/bin/ash" Label="/bin/ash" />
-                <InputSelectOption TItem="string" StringValue="/bin/bash" Label="/bin/bash" />
-                <InputSelectOption TItem="string" StringValue="/bin/sh" Label="/bin/sh" />
-            </InputSelect>
-        </FenrusTab>
+        @if (DockerServers.Any())
+        {
+            <FenrusTab Title="@lblDocker" Visible="@(Model.Type != "DashboardTerminal" || Model.TerminalType == "Docker")">
+                <p>@lblDockerDescription</p>
+                @if (Model.Type != "DashboardTerminal")
+                {
+                    <p>@lblDockerTerminalDescription</p>
+                }
+                <InputSelect Page="GroupItem" @bind-Value="@Model.DockerUid" Label="DockerUid" Options="DockerServers"/>
+                @if (Model.DockerUid != null && Model.DockerUid != Guid.Empty)
+                {
+                    <InputText Page="GroupItem" @bind-Value="@Model.DockerContainer" Label="DockerContainer"/>
+                    <InputSelect Page="GroupItem" TItem="string" Label="DockerCommand" @bind-Value="@Model.DockerCommand">
+                        <InputSelectOption TItem="string" StringValue="/bin/ash" Label="/bin/ash"/>
+                        <InputSelectOption TItem="string" StringValue="/bin/bash" Label="/bin/bash"/>
+                        <InputSelectOption TItem="string" StringValue="/bin/sh" Label="/bin/sh"/>
+                    </InputSelect>
+                }
+            </FenrusTab>
+        }
             
         <FenrusTab Title="@lblInfo" Visible="@(Model.Type == "DashboardApp" && SelectedApp?.Info != null)">
             @if (SelectedApp?.Info != null)

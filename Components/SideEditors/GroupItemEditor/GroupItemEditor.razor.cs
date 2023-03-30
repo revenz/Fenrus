@@ -151,6 +151,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
         lblAuthor, lblApplicationUrl, lblTest, lblTesting,
         lblTestSuccesful, lblTestFailed;
 
+    private List<ListOption> DockerServers;
     protected override void OnInitialized()
     {
         lblAdd = Translator.Instant("Labels.Add");
@@ -180,6 +181,20 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             .Select(x => new ListOption() { Label = x.Key, Value = x.Key }).ToList();
 
         var settings = new SystemSettingsService().Get();
+
+        DockerServers = new DockerService().GetAll()?.OrderBy(x => x.Name)?.Select(x => new ListOption()
+        {
+            Label = x.Name,
+            Value = x.Uid
+        })?.ToList() ?? new ();
+        if (DockerServers.Any())
+        {
+            DockerServers.Insert(0, new ListOption()
+            {
+                Label = Translator.Instant("Labels.None"),
+                Value = Guid.Empty
+            });
+        }
         
         this.Model = new();
         Title = "Edit Item";
@@ -263,7 +278,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
                     app.ApiUrl = Model.ApiUrl;
                     app.AppName = Model.AppName;
                     app.DockerContainer = Model.DockerContainer;
-                    app.DockerUid = Model.DockerUid;
+                    app.DockerUid = Model.DockerUid == Guid.Empty ? null : Model.DockerUid;
                     app.DockerCommand = Model.DockerCommand;
                     app.SshPassword = Model.SshPassword == Globals.DUMMY_PASSWORD
                         ? Model.SshPasswordOriginal
