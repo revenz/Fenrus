@@ -27,7 +27,7 @@ jobs:
         uses: montudor/action-zip@v1
       - name: Zip output
         run: zip -r ../apps.zip *
-        working-directory: apps
+        working-directory: Apps
 
 
       # Commits the updated apps.zip      
