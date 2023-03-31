@@ -124,3 +124,7 @@ Icon: The icon to show when using this search engine
 Q: What is the default username/password?
 
 A: There is no default user.  Enter a username and password, then click the "Register" button.  This will create a new administrator user.   You can then go ot "System" and turn off registrations if you do not wish to allow open registrations.
+
+Q: Why was Fenrus rewritten in .NET?
+A: Fenrus was original a much smaller application and was written in NodeJS.  This was simple when Fenrus was a simple dashboard application.  But as features were added (Docker Terminals/Logs, SSH, Up-Time Recording), the app become more complicated.   To ease development, it was rewritten in  .NET using Blazor Server Side.  This drastically simplifies the code for system configuration/settings, and makes it easier to add more features.
+.NET has the added benefit of being a faster rendering engine than Node, resulting in faster page loading.
