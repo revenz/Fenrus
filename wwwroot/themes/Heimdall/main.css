@@ -5,6 +5,8 @@ body {
 .dashboard {
   align-items: center;
   justify-content: center;
+  margin-top: 5rem;
+  height: calc(100% - 5rem);
 }
 
 .db-item {
@@ -16,13 +18,18 @@ body {
   position: relative;
   overflow: hidden;
   border: solid 1px #333;
-  text-decoration: none;
+  text-decoration: none !important;
   margin: 0.75rem;
+  height: 5.5rem;
 }
 .db-item .inner {
   display: inline-flex;
   flex-direction: row;
   width: 100%;
+}
+.db-item .status .bar-info-label-value,
+.db-item .status .bar-info {
+  display: none;
 }
 .db-item:hover {
   border-color: var(--accent);

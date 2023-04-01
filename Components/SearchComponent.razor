@@ -6,4 +6,11 @@
     </div>
 </div>
 <style id="styleFilter"></style>
-<input type="hidden" id="search-engines" value="@JsonSerializer.Serialize(SearchEngines)" />
+<input type="hidden" id="search-engines" value="@JsonSerializer.Serialize(SearchEngines.Select(x => new {
+    x.Icon,
+    x.Uid,
+    x.Name,
+    x.Url,
+    x.Shortcut,
+    x.IsDefault
+}))" />

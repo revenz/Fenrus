@@ -1,5 +1,6 @@
 {
     "Name":"Default",
+    "SupportsCarousel": false,
     "Css":[
         "main.css",
         "sliding.css",

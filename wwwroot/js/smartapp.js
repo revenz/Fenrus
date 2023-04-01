@@ -11,6 +11,7 @@ class SmartApp
     ele;
     carouselCanUpdate = true;
     carouselWaitingUpdate = null;
+    dashboardUid;
 
     constructor(args)
     {
@@ -20,6 +21,8 @@ class SmartApp
         this.ele = document.getElementById(this.uid)
         this.icon = document.getElementById(this.uid).querySelector('.icon img')?.getAttribute('src');
         this.dashboardIntanceUid = this.getDashboardInstanceUid();
+        this.dashboardUid = document.querySelector('.dashboard').getAttribute('x-uid');
+        console.log('dashboardIntanceUid:', this.dashboardIntanceUid);
         document.addEventListener('disposeDashboard', (e) => this.dispose(), false);
         this.trigger();
     }
@@ -111,7 +114,7 @@ class SmartApp
             let timeoutId = setTimeout(() => this.controller.abort(), Math.min(Math.max(this.interval, 3000), 5000));
 
             let success = true;
-            let url = `/apps/${encodeURIComponent(this.name)}/${encodeURIComponent(this.uid)}/status?name=` + encodeURIComponent(this.name) + '&size=' + encodeURIComponent(this.getItemSize()) + '&t=' + new Date().getTime();
+            let url = `/apps/dashboard/${this.dashboardUid}/${encodeURIComponent(this.name)}/${encodeURIComponent(this.uid)}/status?name=` + encodeURIComponent(this.name) + '&size=' + encodeURIComponent(this.getItemSize()) + '&t=' + new Date().getTime();
             fetch(url, {
                 signal: this.controller.signal
             })

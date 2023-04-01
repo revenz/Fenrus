@@ -1,0 +1,8 @@
+{
+  "Name":"Heimdall",
+  "ForcedSize": "Medium",
+  "Css":[
+    "main.css"
+  ],
+  "Scripts":[]
+}

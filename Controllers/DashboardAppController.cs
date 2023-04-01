@@ -57,20 +57,18 @@ public class DashboardAppController: BaseController
     /// <summary>
     /// Gets a app instance and caches it
     /// </summary>
+    /// <param name="userUid">the UID of hte user</param>
     /// <param name="name">the name of the app</param>
     /// <param name="uid">the users instance of the application</param>
     /// <returns>the app</returns>
-    private AppInstance? GetAppInstance(string name, Guid uid)
+    private AppInstance? GetAppInstance(Guid userUid, string name, Guid uid)
     {
-        var userUid = GetUserUid();
-        if(userUid == null)
-            return null;
 
         List<Group> groups;
         string groupKey = userUid + "_Groups";
         if (Cache.TryGetValue<List<Group>>(groupKey, out groups) == false)
         {
-            groups = new GroupService().GetAllForUser(userUid.Value) ?? new();
+            groups = new GroupService().GetAllForUser(userUid) ?? new();
             // short cache of ths, just so if many apps are requesting at once
             Cache.Set(groupKey, groups, TimeSpan.FromSeconds(30));
         }
@@ -102,20 +100,35 @@ public class DashboardAppController: BaseController
     /// Gets the status of a smart app
     /// </summary>
     /// <param name="name">The app name</param>
+    /// <param name="dashboardUid">The UID of the dashboard this app is updating on</param>
+    /// <param name="uid">the UID of the smart app instance</param>
+    /// <param name="size">the size of the app being updated</param>
     /// <returns>the app status</returns>
-    [HttpGet("{name}/{uid}/status")]
+    [HttpGet("dashboard/{dashboardUid}/{name}/{uid}/status")]
     [ResponseCache(NoStore = true)]
-    public IActionResult Status([FromRoute] string name, [FromRoute] Guid uid, [FromQuery] string size)
+    public IActionResult Status([FromRoute] Guid dashboardUid, [FromRoute] string name, [FromRoute] Guid uid, [FromQuery] string size)
     {
         List<string> log = new();
         try
         {
-            var ai = GetAppInstance(name, uid);
+            var userUid = GetUserUid();
+            if(userUid == null)
+                return null;
+            
+            var ai = GetAppInstance(userUid.Value, name, uid);
             if (ai == null)
                 return new NotFoundResult();
             var engine = ai.Engine;
             var utils = new Utils();
-            string linkTarget = ""; // TODO: get the dashboard so we can feed the link target in here
+            var dashboard = new DashboardService().GetByUid(dashboardUid);
+            if (dashboard.Uid != Globals.GuestDashbardUid && dashboard.UserUid != userUid.Value)
+                return null;
+
+            var theme = new ThemeService().GetTheme(dashboard.Theme);
+            if (theme?.ForcedSize != null)
+                size = theme.ForcedSize.Value.ToString().ToLower();
+            
+            string linkTarget = dashboard.LinkTarget;
 
             var statusArgs = AppHeler.GetApplicationArgs(engine,
                 ai.UserApp.ApiUrl?.EmptyAsNull() ?? ai.UserApp.Url,

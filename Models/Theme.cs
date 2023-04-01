@@ -18,6 +18,11 @@ public class Theme
     public string Name { get; set; }
 
     /// <summary>
+    /// Gets or sets a size to force apps to, can be null
+    /// </summary>
+    public ItemSize? ForcedSize { get; set; }
+
+    /// <summary>
     /// Gets or sets any CSS files for the theme
     /// </summary>
     public List<string> Css
