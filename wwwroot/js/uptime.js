@@ -1,5 +1,6 @@
 function closeUpTime(){
     document.getElementById('up-time-wrapper').style.display = '';
+    document.getElementById('up-time-chart-container').innerHTML = '';
 }
 
 function openUpTime(app) {
@@ -13,7 +14,6 @@ class UpTime
     utcContainer;
 
     constructor(app){
-        console.log('uptime', app);
         this.app = app;
         this.init();
     }

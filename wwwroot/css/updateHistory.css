@@ -1,0 +1,102 @@
+.update-history-table {
+  user-select: none;
+}
+.update-history-table .date {
+  width: unset;
+}
+.update-history-table .success {
+  width: 10rem;
+  text-align: center;
+}
+.update-history-table tbody tr:hover td {
+  background: rgba(var(--accent-rgb), 0.3);
+}
+.update-history-table tr.selected {
+  background: rgba(var(--accent-rgb), 0.5);
+}
+
+#update-history-data-wrapper.expanded {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+#update-history-log-wrapper.expanded, #update-history-response-wrapper.expanded {
+  height: 30vh;
+}
+
+#update-history-data {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+#update-history-data > div {
+  overflow: auto;
+  flex-grow: 1;
+}
+#update-history-data .table-header {
+  padding: 0.5rem 1rem;
+  overflow: unset;
+  display: flex;
+  flex-direction: row;
+  font-weight: bold;
+  flex-grow: unset;
+  color: var(--color);
+  background: rgba(51, 58, 59, 0.3803921569);
+}
+#update-history-data .table-header .Date {
+  flex-grow: 1;
+}
+#update-history-data .table-header .Success {
+  width: 8.5rem;
+  text-align: center;
+}
+
+.css-collapsible {
+  display: flex;
+  flex-direction: column;
+}
+.css-collapsible input[type=checkbox] {
+  display: none;
+}
+.css-collapsible .lbl-toggle {
+  display: block;
+  font-weight: bold;
+  padding: 1rem;
+  color: var(--color);
+  background: #131B1C;
+  cursor: pointer;
+  transition: all 0.25s ease-out;
+}
+.css-collapsible .lbl-toggle:hover {
+  background: rgba(var(--accent-rgb), 0.3);
+}
+.css-collapsible .lbl-toggle::before {
+  content: " ";
+  display: inline-block;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid currentColor;
+  vertical-align: middle;
+  margin-right: 0.7rem;
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-out;
+}
+.css-collapsible.expanded .lbl-toggle::before {
+  transform: rotate(90deg) translateX(-3px);
+}
+.css-collapsible.collapsed .collapsible-content {
+  display: none;
+}
+.css-collapsible .collapsible-content {
+  overflow: auto;
+  transition: max-height 0.25s ease-in-out;
+  height: 100%;
+}
+.css-collapsible .collapsible-content .content-inner {
+  padding: 0.5rem 1rem;
+  white-space: pre-wrap;
+  overflow: auto;
+  height: calc(100% - 1rem);
+}
+
+/*# sourceMappingURL=updateHistory.css.map */

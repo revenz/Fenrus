@@ -19,7 +19,6 @@ class SmartApp
         this.interval = args.interval;
         this.ele = document.getElementById(this.uid)
         this.icon = document.getElementById(this.uid).querySelector('.icon img')?.getAttribute('src');
-        console.log(`app ${args.name} interval: ${this.interval}`);
         this.dashboardIntanceUid = this.getDashboardInstanceUid();
         document.addEventListener('disposeDashboard', (e) => this.dispose(), false);
         this.trigger();
@@ -28,13 +27,18 @@ class SmartApp
     async trigger(){
         if(this.stillActive() === false)
             return;
-        let result = await this.doWork();
         
-        if(this.stillActive() === false)
-            return;
+        let historyOpen = !!document.getElementById('update-history-data-wrapper');
+        if(historyOpen === false) 
+        {
+            let result = await this.doWork();
 
-        if(this.interval <= 0)
-            return; // nothing more to do
+            if (this.stillActive() === false)
+                return;
+
+            if (this.interval <= 0)
+                return; // nothing more to do
+        }
         
         setTimeout(()=> this.trigger(), this.interval);
     }
@@ -46,7 +50,6 @@ class SmartApp
 
     dispose()
     {
-        console.log('disposing of smart app!', this.name);
         if(this.timerCarousel)
             clearInterval(this.timerCarousel);
         this.controller?.abort();
@@ -54,10 +57,8 @@ class SmartApp
 
     stillActive(){
         let dashboard = this.getDashboardInstanceUid();
-        if(dashboard != this.dashboardIntanceUid){
-            console.log('No longer active: ' + this.name);
+        if(dashboard != this.dashboardIntanceUid)
             return false;
-        }
         return true;
     }
     
@@ -74,7 +75,6 @@ class SmartApp
         if(!this.stillActive())
             return false;
         let dt = new Date();
-        console.log(`${this.getTimeString()} - SmartApp doing work: ${this.name}`);
         
         let firstRender = ++this.renderCount < 2;
         if(firstRender)
@@ -154,8 +154,7 @@ class SmartApp
 
                 let currentDashboard = this.getDashboardInstanceUid();
                 if(currentDashboard != this.dashboardInstanceUid)
-                    return; // if they changed dashboards
-                // console.log(name + ' error: ', error);    
+                    return; // if they changed dashboards    
             }).finally(() => { 
                 resolve(success);
             });

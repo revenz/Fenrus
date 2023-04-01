@@ -145,6 +145,8 @@ var status = instance.status(statusArgs);");
                 Logger.DLog($"\n" + header + "\nApplication: " + name + "\n" + string.Join("\n", log) + "\n" +
                             new string('-', header.Length));
             }
+            
+            SmartAppCache.AddData(uid, true, log?.Any() == true ? string.Join("\n", log) : string.Empty, str ?? string.Empty);
 
             return Content(str ?? string.Empty);
         }
@@ -153,10 +155,42 @@ var status = instance.status(statusArgs);");
             string exception = ex.Message;
             if (exception.StartsWith("Promise was rejected with value "))
                 exception = exception.Substring("Promise was rejected with value ".Length);
-            Logger.WLog("Error in DashboardApp.Status: " + name + " -> " + exception  +
-                        (log.Any() ? "\n" + string.Join("\n", log) : string.Empty));
+            string msg = exception + (log.Any() ? "\n" + string.Join("\n", log) : string.Empty);
+            Logger.WLog("Error in DashboardApp.Status: " + name + " -> " + msg);
+
+
+            SmartAppCache.AddData(uid, false, msg, string.Empty);
+            
             return Content(string.Empty);
         }
+    }
+
+    /// <summary>
+    /// Gets a list of smart update requests
+    /// </summary>
+    /// <param name="uid">The UID of the smart app</param>
+    /// <returns>a list of historic update requests</returns>
+    [HttpGet("{uid}/history/list")]
+    public IEnumerable<object> GetAppUpdateHistoryList([FromRoute] Guid uid)
+        => SmartAppCache.GetData(uid).OrderByDescending(x => x.Date).Select(x => new 
+        {
+            date = x.Date,
+            success = x.Success
+        });
+
+    /// <summary>
+    /// Gets a single of smart update requests
+    /// </summary>
+    /// <param name="uid">The UID of the smart app</param>
+    /// <param name="dateUtc">The date of the update</param>
+    /// <returns>a single update historic record, if exists</returns>
+    [HttpGet("{uid}/history/{date}")]
+    public SmartAppCacheItemData? GetAppUpdateHistoryItem([FromRoute] Guid uid, [FromRoute] DateTime date)
+    {
+        var list =  SmartAppCache.GetData(uid);
+        
+        var item = list.FirstOrDefault(x => x.Date == date);
+        return item;
     }
 }
 

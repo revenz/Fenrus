@@ -1,0 +1,103 @@
+.update-history-table {
+  user-select: none;
+  .date {
+    width:unset;
+  }
+  .success {
+    width:10rem;
+    text-align:center;
+  }
+  tbody tr:hover td {
+    background:rgba(var(--accent-rgb), 0.3);
+  }
+  tr.selected {
+    background:rgba(var(--accent-rgb), 0.5);    
+  }
+}
+#update-history-data-wrapper.expanded {
+  flex-grow:1;
+  overflow: hidden;
+}
+#update-history-log-wrapper, #update-history-response-wrapper {
+  &.expanded {
+    height: 30vh;
+  }
+}
+#update-history-data {
+  display:flex;
+  flex-direction:column;
+  padding:0;
+  > div {
+    overflow:auto;
+    flex-grow:1;
+  }
+  .table-header {
+    padding:0.5rem 1rem;
+    overflow:unset;
+    display:flex;
+    flex-direction: row;
+    font-weight:bold;
+    flex-grow:unset;
+    color: var(--color);
+    background: #333a3b61;
+    .Date { flex-grow: 1; }
+    .Success {width: 8.5rem; text-align:center}
+  }
+}
+
+.css-collapsible {
+  display:flex;
+  flex-direction:column;
+  
+  input[type='checkbox'] {
+    display: none;
+  }
+
+  .lbl-toggle {
+    display: block;
+    font-weight: bold;
+    padding: 1rem;
+    color: var(--color);
+    background: #131B1C;
+    cursor: pointer;
+    transition: all 0.25s ease-out;
+    &:hover {
+      background:rgba(var(--accent-rgb), 0.3);
+    }
+    &::before {
+      content: ' ';
+      display: inline-block;
+
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 5px solid currentColor;
+      vertical-align: middle;
+      margin-right: .7rem;
+      transform: translateY(-2px);
+
+      transition: transform .2s ease-out;
+    }
+
+  }
+
+  &.expanded .lbl-toggle::before {
+    transform: rotate(90deg) translateX(-3px);
+  }
+  
+  &.collapsed .collapsible-content {
+    display:none;
+  } 
+
+  .collapsible-content {
+    overflow: auto;
+    transition: max-height .25s ease-in-out;
+    height:100%;
+  }
+
+  .collapsible-content .content-inner {
+    padding: .5rem 1rem;
+    white-space: pre-wrap;
+    overflow: auto;
+    height: calc(100% - 1rem);
+  }
+}

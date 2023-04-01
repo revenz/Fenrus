@@ -35,8 +35,6 @@ function LiveApp(name, instanceUid, interval)
     if(typeof(name) !== 'string')
         throw 'Name is not a string';
     
-    console.log(`Live App ${name}: ${interval}`);
-
     SmartAppInstances[instanceUid] = new SmartApp({
         name: name,
         uid: instanceUid,

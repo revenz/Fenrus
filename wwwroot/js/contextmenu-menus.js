@@ -8,6 +8,7 @@ const dashboardIcon = `<span class="icon fa-solid fa-house" style="padding-right
 const terminalIcon = `<span class="icon fa-solid fa-terminal" style="padding-right:0.5rem"></span>`;
 const logIcon = `<span class="icon fa-solid fa-file-lines" style="padding-right:0.5rem"></span>`;
 const refreshIcon = `<span class="icon fa-solid fa-rotate-right" style="padding-right:0.5rem"></span>`;
+const historyIcon = `<span class="icon fa-solid fa-clock-rotate-left" style="padding-right:0.5rem"></span>`;
 
 function openDefaultContextMenu(event) {
     event?.preventDefault();
@@ -194,6 +195,17 @@ function openContextMenu(event, app){
                     }
                 },
             ]);
+        }
+
+        if(smart){
+            menuItems.push(
+                {
+                    divider: "top",
+                    content: `${historyIcon}${Translations.UpdateHistory}`,
+                    events: {
+                        click: (e) => openUpdateHistory(app)
+                    }
+                });
         }
         
         let menu = new ContextMenu({

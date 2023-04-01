@@ -61,7 +61,8 @@
     "UpTime": "Up-Time",
     "Log": "Log",
     "Resize": "Resize",
-    "Refresh": "Refresh"
+    "Refresh": "Refresh",
+    "UpdateHistory": "Update History"
   },
   "Enums": {
     "ItemSize": {
@@ -99,7 +100,8 @@
       "Columns": {
         "Date": "Date",
         "Up": "Up",
-        "Message": "Message"
+        "Message": "Message",
+        "Success": "Success"
       },
       "Labels": {
         "Success": "Success",
