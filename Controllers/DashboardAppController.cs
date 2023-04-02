@@ -148,16 +148,16 @@ var status = instance.status(statusArgs);");
             if (result == null)
                 result = string.Empty;
             var str = result.ToString();
-            if (log.Any() && ai.UserApp.Debug)
-            {
-                string header = $" [{uid}] ";
-                int pad = (100 - header.Length) / 2;
-                if (pad < 3)
-                    pad = 3;
-                header = new string('-', pad) + header + new string('-', pad);
-                Logger.DLog($"\n" + header + "\nApplication: " + name + "\n" + string.Join("\n", log) + "\n" +
-                            new string('-', header.Length));
-            }
+            // if (log.Any() && ai.UserApp.Debug)
+            // {
+            //     string header = $" [{uid}] ";
+            //     int pad = (100 - header.Length) / 2;
+            //     if (pad < 3)
+            //         pad = 3;
+            //     header = new string('-', pad) + header + new string('-', pad);
+            //     Logger.DLog($"\n" + header + "\nApplication: " + name + "\n" + string.Join("\n", log) + "\n" +
+            //                 new string('-', header.Length));
+            // }
             
             SmartAppCache.AddData(uid, true, log?.Any() == true ? string.Join("\n", log) : string.Empty, str ?? string.Empty);
 

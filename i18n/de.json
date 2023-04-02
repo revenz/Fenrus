@@ -44,14 +44,21 @@
     "Confirm": "Bestätigen",
     "Message": "Nachricht",
     "DeleteItem": "Löschen Sie {typeName} ''{name}''?",
-    "DeletedItem": "{typeName} ''{name}'' gelöscht"
+    "DeletedItem": "{typeName} ''{name}'' gelöscht",
+    "Test": "Prüfen",
+    "Testing": "Testen",
+    "Home": "Heim",
+    "Logout": "Ausloggen",
+    "None": "Keiner"
   },
   "ContextMenu": {
     "EditDashboard": "Dashboard bearbeiten",
     "EditGroup": "Gruppe bearbeiten",
     "Terminal": "Terminal",
     "UpTime": "Betriebszeit",
-    "Resize": "Größe ändern"
+    "Resize": "Größe ändern",
+    "Refresh": "Aktualisierung",
+    "UpdateHistory": "Verlauf aktualisieren"
   },
   "Enums": {
     "ItemSize": {
@@ -67,15 +74,24 @@
     }
   },
   "Dialogs": {
+    "CopyItem": {
+      "Title": "Artikel kopieren",
+      "Description": "Wählen Sie eine Gruppe aus, in die dieses Element kopiert werden soll",
+      "ThisGroup": "Diese Gruppe",
+      "System": "System",
+      "User": "Benutzer"
+    },
     "ImportConfig": {
       "Title": "Konfig importieren",
-      "Description": "Dadurch können Sie eine Konfiguration aus einer älteren Fenrus-Installation in die neue .NET-Version importieren."
+      "Description": "Dadurch können Sie eine Konfiguration aus einer älteren Fenrus-Installation in die neue .NET-Version importieren.",
+      "Result": "Ergebnis importieren"
     },
     "UpTime": {
       "Columns": {
         "Date": "Datum",
         "Up": "Hoch",
-        "Message": "Nachricht"
+        "Message": "Nachricht",
+        "Success": "Erfolg"
       },
       "Labels": {
         "Success": "Erfolg",
@@ -86,11 +102,7 @@
   "Pages": {
     "About": {
       "Title": "Um",
-      "Buttons": {
-        "ImportConfig": "Konfig importieren"
-      },
       "Labels": {
-        "Importing": "Vorherige Konfiguration wird importiert, dies kann eine Weile dauern, bitte warten.",
         "ThirdParty": "Dritte Seite"
       }
     },
@@ -147,6 +159,34 @@
         "Password": "Passwort",
         "ForgotPassword": "Passwort vergessen?",
         "UsernameOrEmailAddress": "Benutzername oder E-mail Adresse"
+      }
+    },
+    "SystemSettings": {
+      "Title": "Systemeinstellungen",
+      "Labels": {
+        "PageDescription": "Auf dieser Seite können Sie systemweite Einstellungen konfigurieren",
+        "Smtp": "SMTP",
+        "SmtpDescription": "Konfigurieren Sie einen SMTP-Server, dieser wird zum Senden von E-Mails zum Zurücksetzen des Passworts verwendet.",
+        "Importing": "Vorherige Konfiguration wird importiert, dies kann eine Weile dauern, bitte warten.",
+        "UpdateApps": "Apps aktualisieren",
+        "UpdatingApps": "Apps werden aktualisiert, bitte warten"
+      },
+      "Buttons": {
+        "ImportConfig": "Konfig importieren"
+      },
+      "Messages": {
+        "TestEmailSent": "Testen Sie die an den Absender gesendete E-Mail, überprüfen Sie Ihre E-Mail, um zu bestätigen, dass sie funktioniert.",
+        "FailedToDownload": "Apps konnten nicht heruntergeladen werden",
+        "UpdateRequired": "Ihre Version von Fenrus ist veraltet. Sie müssen Fenrus aktualisieren, um die neuesten Apps zu erhalten.",
+        "AppsUpdated": "{total} Anwendungen aktualisiert {newCount, plural, zero {} one {(1 neue app)} other {({newCount} neue apps)}}"
+      },
+      "Fields": {
+        "SmtpServer": "Server",
+        "SmtpPort": "Port",
+        "SmtpUser": "Benutzer",
+        "SmtpPassword": "Passwort",
+        "SmtpSender": "Absender",
+        "SmtpSenderHelp": "Die E-Mail-Adresse, von der Fenrus E-Mails sendet."
       }
     }
   }

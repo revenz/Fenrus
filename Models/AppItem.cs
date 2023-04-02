@@ -67,9 +67,4 @@ public class AppItem:GroupItem
     /// Gets or sets custom properties for this app
     /// </summary>
     public Dictionary<string, object> Properties { get; set; }
-    
-    /// <summary>
-    /// Gets or sets if this app has debug logging turned on
-    /// </summary>
-    public bool Debug { get; set; }
 }

@@ -52,7 +52,8 @@
     "Test": "Test",
     "Testing": "Testing",
     "Home": "Home",
-    "Logout": "Logout"
+    "Logout": "Logout",
+    "None": "None"
   },
   "ContextMenu": {
     "EditDashboard": "Edit Dashboard",
@@ -190,7 +191,7 @@
         "Size": "Size",
         "Icon": "Icon",
         "Debug": "Debug",
-        "Debug-Help": "Turns excess debug logging on for this application.",
+        "Debug-Help": "Will show extra debugging information in the 'Test' result.",
         "Monitor": "Monitor",
         "Monitor-Help": "When enabled this item will have its up-time monitored",
         "SshAddress": "Address",

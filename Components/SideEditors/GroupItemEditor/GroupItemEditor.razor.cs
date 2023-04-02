@@ -82,6 +82,11 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
     private FenrusApp? SelectedApp;
 
     /// <summary>
+    /// Gets or sets if the test of this app should be debugged and shown to the user
+    /// </summary>
+    private bool Debug = false;
+
+    /// <summary>
     /// Gets or sets the selected app name
     /// </summary>
     private string SelectedAppName
@@ -219,7 +224,6 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             Model.Size = app.Size;
             Model.Uid = app.Uid;
             Model.Monitor = app.Monitor;
-            Model.Debug = app.Debug;
             Model.Properties = app.Properties ?? new ();
             // SelectedApp = Apps.ContainsKey(app.AppName) ? Apps[app.AppName] : null;
         }
@@ -245,7 +249,6 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             Model.Size = ItemSize.Medium;
             Model.Uid = Guid.Empty;
             Model.Monitor = true;
-            Model.Debug = false;
             IsNew = true;
         }
 
@@ -289,7 +292,6 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
                     app.Name = Model.Name;
                     app.Size = Model.Size;
                     app.Uid = Model.Uid;
-                    app.Debug = Model.Debug;
                     var appPropertes = SelectedApp.Properties?.Select(x => x.Id).ToList() ?? new() { };
                     app.Properties = appPropertes?.Any() == true && Model.Properties?.Any() == true
                         ? Model.Properties.Where(x => appPropertes.Contains(x.Key))
@@ -326,7 +328,6 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             Model.Uid = Guid.Empty;
             Model.Url = "https://";
             Model.Icon = string.Empty;
-            Model.Debug = false;
             Model.Properties = new();
             Model.ApiUrl = string.Empty;
             Model.SshPassword = string.Empty;
@@ -398,16 +399,24 @@ var test = instance.test(testArgs);");
             if (result == null)
                 result = string.Empty;
             var str = result.ToString();
-            
-            if(str?.ToLowerInvariant() == "true")
-                ToastService.ShowSuccess(lblTestSuccesful);
+            string logStr = string.Join("\n", log);
+
+            if (str?.ToLowerInvariant() == "true")
+            {
+                if(Debug && string.IsNullOrEmpty(logStr) == false)
+                    ToastService.ShowSuccess(message: logStr, heading: lblTestSuccesful);
+                else
+                    ToastService.ShowSuccess(lblTestSuccesful);
+            }
             else if (str?.ToLowerInvariant() == "false")
             {
-                if (log?.Any() == true)
-                    ToastService.ShowError(message: String.Join("\n", log), heading: lblTestFailed);
+                if (string.IsNullOrEmpty(logStr))
+                    ToastService.ShowError(message: logStr, heading: lblTestFailed);
                 else
                     ToastService.ShowError(lblTestFailed);
             }
+            else if (str?.ToLowerInvariant() == "false")
+                ToastService.ShowInfo(message: logStr, heading: str?.EmptyAsNull() ?? "Test Unknown");
             else
                 ToastService.ShowInfo(str?.EmptyAsNull() ?? "Test Unknown");
         }
@@ -510,11 +519,6 @@ class GroupItemEditorModel : GroupItem
     /// Gets or sets any additional smart app properties for this item
     /// </summary>
     public Dictionary<string, object> Properties { get; set; } = new();
-    
-    /// <summary>
-    /// Gets or sets if this app has debug logging turned on
-    /// </summary>
-    public bool Debug { get; set; }
 
     /// <summary>
     /// Gets a smart app property value
