@@ -101,7 +101,7 @@ body {
   text-transform: uppercase;
   margin-bottom: 0.25rem;
 }
-.db-group > .title span {
+.db-group > .title > span {
   font-weight: 600;
   padding: 0.5rem 0.5rem 0.5rem;
   min-width: 10rem;
@@ -111,7 +111,10 @@ body {
 }
 .db-group .group-controls {
   position: absolute;
-  right: 0;
+  right: 1rem;
+}
+.db-group .group-controls span {
+  margin: 0 0.5rem;
 }
 .db-group > .items {
   flex-direction: row;

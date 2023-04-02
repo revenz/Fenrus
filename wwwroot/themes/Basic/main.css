@@ -742,6 +742,17 @@ body {
   display: grid;
   gap: 0.5rem;
   grid-template-columns: repeat(var(--columns), calc(var(--column-width) - 6px));
+  margin-top: 5rem;
+  height: calc(100% - 6rem);
+}
+
+.group-controls {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.6rem;
+}
+.group-controls span {
+  margin: 0 0.35rem;
 }
 
 .db-item {
@@ -786,12 +797,6 @@ body {
   grid-column-start: span 1;
   width: -webkit-fill-available;
 }
-.db-group.hide-labels .items > a {
-  width: 4.1rem !important;
-}
-.db-group.hide-labels .content {
-  display: none;
-}
 .db-group .items {
   overflow: hidden;
   padding: 1px;
@@ -806,8 +811,9 @@ body {
   text-align: center;
   text-transform: uppercase;
   margin-bottom: 0.25rem;
+  position: relative;
 }
-.db-group > .title span {
+.db-group > .title > span {
   background: rgba(0, 0, 0, 0.5);
   padding: 0.5rem 0.5rem 0.5rem;
   min-width: 10rem;
@@ -826,6 +832,9 @@ body {
   flex-wrap: wrap;
 }
 
+.db-item {
+  text-decoration: none !important;
+}
 .db-item.xx-large {
   height: 14rem;
   position: relative;
