@@ -168,6 +168,7 @@
       "Labels": {
         "KeepOpen": "Keep Open",
         "Author": "Author",
+        "Description": "Description",
         "ApplicationUrl": "Application URL",
         "SshDescription": "By configuring SSH for this item, this will allow you to terminal into the item.\n\nIf username or password is blank, you will be prompted for this information.",
         "DockerDescription": "Here you can configure Docker settings for this item, which will allow you to terminal into the docker container.",

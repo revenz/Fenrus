@@ -94,6 +94,11 @@ public class FenrusAppInfo
     /// Gets or sets the app URL
     /// </summary>
     public string AppUrl { get; set; }
+    
+    /// <summary>
+    /// Gets or sets an optional description for the application
+    /// </summary>
+    public string Description { get; set; }
 }
 
 /// <summary>

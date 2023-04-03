@@ -153,7 +153,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
     private string lblKeepOpen, lblAdd, lblCancel, lblSave, lblSshDescription, 
         lblDockerDescription, lblDockerTerminalDescription, 
         lblGeneral, lblProperties, lblDocker, lblInfo, lblSsh,
-        lblAuthor, lblApplicationUrl, lblTest, lblTesting,
+        lblAuthor, lblApplicationUrl, lblTest, lblTesting, lblDescription,
         lblTestSuccesful, lblTestFailed;
 
     private List<ListOption> DockerServers;
@@ -171,7 +171,8 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
         lblSshDescription = Translator.Instant("Pages.GroupItem.Labels.SshDescription");  
         lblDockerDescription = Translator.Instant("Pages.GroupItem.Labels.DockerDescription"); 
         lblDockerTerminalDescription = Translator.Instant("Pages.GroupItem.Labels.DockerTerminalDescription");  
-        lblAuthor = Translator.Instant("Pages.GroupItem.Labels.Author");  
+        lblAuthor = Translator.Instant("Pages.GroupItem.Labels.Author");
+        lblDescription = Translator.Instant("Pages.GroupItem.Labels.Description");
         lblApplicationUrl = Translator.Instant("Pages.GroupItem.Labels.ApplicationUrl");  
         lblTest = Translator.Instant("Labels.Test");  
         lblTesting = Translator.Instant("Labels.Testing");

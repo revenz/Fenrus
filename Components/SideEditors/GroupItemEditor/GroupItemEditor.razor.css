@@ -10,4 +10,17 @@
   margin-left: 15rem;
 }
 
+.app-info tr td:first-child {
+  min-width: 12rem;
+  max-width: 12rem;
+  width: 12rem;
+}
+.app-info tr td:nth-child(2) {
+  white-space: pre-wrap;
+}
+.app-info td {
+  vertical-align: top;
+  line-height: unset;
+}
+
 /*# sourceMappingURL=GroupItemEditor.razor.css.map */

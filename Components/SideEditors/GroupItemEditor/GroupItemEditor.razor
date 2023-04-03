@@ -191,7 +191,7 @@
         <FenrusTab Title="@lblInfo" Visible="@(Model.Type == "DashboardApp" && SelectedApp?.Info != null)">
             @if (SelectedApp?.Info != null)
             {
-                <table>
+                <table class="app-info">
                     @if (SelectedApp?.Info?.Authors?.Any() == true)
                     {
                         <tr>
@@ -205,6 +205,13 @@
                             <a href="@SelectedApp.Info.AppUrl" rel="noreferrer" target="_blank">@SelectedApp.Info.AppUrl</a>
                         </td>
                     </tr>
+                    @if (string.IsNullOrWhiteSpace(SelectedApp?.Info?.Description) == false)
+                    {
+                        <tr>
+                            <td>@lblAuthor</td>
+                            <td>@SelectedApp.Info.Description</td>
+                        </tr>
+                    }
                 </table>
             }
         </FenrusTab>
