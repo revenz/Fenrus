@@ -53,7 +53,8 @@
     "Testing": "Testing",
     "Home": "Home",
     "Logout": "Logout",
-    "None": "None"
+    "None": "None",
+    "Notes": "Notes"
   },
   "ContextMenu": {
     "EditDashboard": "Edit Dashboard",

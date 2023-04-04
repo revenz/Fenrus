@@ -22,7 +22,6 @@ class SmartApp
         this.icon = document.getElementById(this.uid).querySelector('.icon img')?.getAttribute('src');
         this.dashboardIntanceUid = this.getDashboardInstanceUid();
         this.dashboardUid = document.querySelector('.dashboard').getAttribute('x-uid');
-        console.log('dashboardIntanceUid:', this.dashboardIntanceUid);
         document.addEventListener('disposeDashboard', (e) => this.dispose(), false);
         this.trigger();
     }

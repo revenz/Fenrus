@@ -1,0 +1,27 @@
+@namespace Fenrus.Components
+
+<div id="notes-wrapper" class="collapsed">
+    <div class="expander" onclick="notesToggle()">
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>@lblTitle</span>
+    </div>
+    <div class="notes-inner">
+        <div class="content" id="notes-list">
+            @foreach (var note in Notes)
+            {
+                <div class="note" x-uid="@note.Uid">
+                    <div class="controls">
+                        <i onclick="notesMove(event.target, true)" class="up fa-solid fa-caret-up"></i>
+                        <i onclick="notesDelete(event.target)"class="delete fa-sharp fa-solid fa-trash"></i>
+                        <i onclick="notesMove(event.target, false)"class="down fa-solid fa-caret-down"></i>
+                    </div>
+                    <input onchange="notesChanged(event)" type="text" placeholder="Note Title" value="@EncryptionHelper.Decrypt(note.Name)" />
+                    <textarea oninput="notesTextAreaInput(event)" onchange="notesChanged(event)" placeholder="Note Content">@EncryptionHelper.Decrypt(note.Content)</textarea>
+                </div>
+            }
+        </div>
+        <div class="btn-new-note" onclick="notesAdd()">
+            <i class="fa-solid fa-plus"></i>
+        </div>
+    </div>
+</div>

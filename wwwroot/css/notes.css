@@ -1,0 +1,149 @@
+#notes-wrapper {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+}
+#notes-wrapper .expander {
+  position: absolute;
+  user-select: none;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -2rem;
+  width: 2rem;
+  height: 13rem;
+  background: rgba(17, 17, 17, 0.9333333333);
+  cursor: pointer;
+  opacity: 0.75;
+}
+#notes-wrapper .expander:hover {
+  opacity: 1;
+}
+#notes-wrapper .expander > span {
+  transform: rotate(-90deg);
+  display: block;
+  width: 11rem;
+  height: 1.4rem;
+  position: absolute;
+  left: -63px;
+  top: 93px;
+  overflow: hidden;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 0.3rem;
+}
+#notes-wrapper .expander > i {
+  position: relative;
+  top: 0.65rem;
+  left: 0.65rem;
+}
+#notes-wrapper .notes-inner {
+  width: 0;
+  height: 100%;
+  transition: width 0.5s ease-in-out;
+  overflow: hidden;
+  background: rgba(17, 17, 17, 0.9333333333);
+}
+#notes-wrapper.expanded .expander {
+  opacity: 1;
+}
+#notes-wrapper.expanded .expander > i {
+  transform: rotate(-180deg);
+}
+#notes-wrapper.expanded .notes-inner {
+  width: min(90vw, 60rem);
+}
+#notes-wrapper .btn-new-note {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: 1rem;
+  border-radius: 51rem;
+  background: rgba(var(--accent-rgb), 0.3);
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--color);
+  width: 2rem;
+  height: 2rem;
+  margin: auto;
+  -webkit-text-stroke: 0.5rem var(--color);
+}
+#notes-wrapper .btn-new-note:hover {
+  background: rgba(var(--accent-rgb), 0.7);
+  transform: scale(1.1);
+}
+@-moz-document url-prefix() {
+  #notes-wrapper .btn-new-note {
+    text-shadow: -1px -1px 0 var(--color), 1px -1px 0 var(--color), -1px 1px 0 var(--color), 1px 1px 0 var(--color), -2px -2px 0 var(--color), 2px -2px 0 var(--color), -2px 2px 0 var(--color), 2px 2px 0 var(--color);
+  }
+}
+#notes-wrapper .btn-new-note i {
+  position: relative;
+  top: -3px;
+  left: 1px;
+}
+#notes-wrapper .content {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+#notes-wrapper .note {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  border: solid 1px var(--border-color);
+  box-shadow: 2px 1px 7px var(--input-background);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  max-height: 8rem;
+  transition: max-height 0.25s ease-in-out;
+}
+#notes-wrapper .note input, #notes-wrapper .note textarea {
+  width: calc(100% - 3rem);
+  padding: 0.5rem;
+  background: transparent;
+  border: solid 1px transparent;
+  color: var(--input-color);
+  outline: none;
+  font-family: sans-serif;
+}
+#notes-wrapper .note input {
+  font-size: 1.2rem;
+}
+#notes-wrapper .note textarea {
+  resize: none;
+  overflow: hidden;
+}
+#notes-wrapper .note:hover .controls, #notes-wrapper .note:focus-within .controls {
+  display: flex;
+}
+#notes-wrapper .note:focus-within {
+  background: var(--input-background);
+  max-height: 100vh;
+}
+#notes-wrapper .note .controls {
+  display: none;
+  position: absolute;
+  right: 1.25rem;
+  flex-direction: column;
+  min-height: 7rem;
+  width: 2rem;
+  font-size: 1.3rem;
+  text-align: center;
+}
+#notes-wrapper .note .controls > i {
+  height: 2rem;
+  vertical-align: center;
+  cursor: pointer;
+  opacity: 0.6;
+}
+#notes-wrapper .note .controls > i:hover {
+  opacity: 1;
+}
+
+/*# sourceMappingURL=notes.css.map */

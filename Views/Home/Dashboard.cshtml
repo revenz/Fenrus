@@ -105,6 +105,15 @@
     Model.Translator
 }))
 
+@if (isGuest == false)
+{
+    @(await Html.RenderComponentAsync<NotesComponent>(RenderMode.Static, new
+    {
+        Model.Translator,
+        Model.Settings
+    }))
+}
+
 <div id="launching-app">
     <div class="inner">
         <span class="icon"><img /></span>
