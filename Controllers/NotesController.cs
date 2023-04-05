@@ -18,6 +18,8 @@ public class NotesController : BaseController
     public IEnumerable<object> GetAll([FromQuery] NoteType type, [FromQuery(Name = "db")] Guid dashboardUid)
     {
         var uid = User.GetUserUid().Value;
+        if (type == NoteType.Media)
+            return new MediaService().GetAll(uid);
         var notes = GetNotes(uid, type, dashboardUid);
         return notes.OrderBy(x => x.Order).Select(x => new
         {
@@ -94,15 +96,43 @@ public class NotesController : BaseController
             service.Update(note);
         return note;
     }
+
+    /// <summary>
+    /// Uploads a media file
+    /// </summary>
+    /// <param name="file">the file being uploaded</param>
+    /// <returns>the UID of the newly uploaded media</returns>
+    [HttpPost("media")]
+    public async Task<Guid> UploadMedia([FromForm] IFormFile file)
+    {
+        if (file == null || file.Length == 0 || string.IsNullOrWhiteSpace(file.FileName))
+            throw new Exception("file not selected");
+
+        var uid = User.GetUserUid().Value;
+        
+        using var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
+        stream.Seek(0, SeekOrigin.Begin);
+        var data = stream.ToArray();
+        var guid = new MediaService().Add(uid, file.FileName, data);
+        return guid.Value;
+    }
     
     /// <summary>
     /// Deletes a note
     /// </summary>
     /// <param name="uid">the UID of the note</param>
     [HttpDelete("{uid}")]
-    public void Delete([FromRoute] Guid uid)
+    public void Delete([FromRoute] Guid uid, [FromQuery] NoteType type)
     {
         var userUid = User.GetUserUid().Value;
+
+        if (type == NoteType.Media)
+        {
+            new MediaService().Delete(userUid, uid);
+            return;
+        }
+        
         var service = new NotesService();
         var note = service.GetByUid(uid);
         if (note == null || (note.UserUid != Guid.Empty && note.UserUid != userUid))
@@ -156,6 +186,10 @@ public class NotesController : BaseController
         /// <summary>
         /// Shared notes
         /// </summary>
-        Shared
+        Shared,
+        /// <summary>
+        /// Media notes
+        /// </summary>
+        Media
     }
 }

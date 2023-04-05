@@ -16,11 +16,15 @@ function modalConfirm(title, message) {
         modal.className = 'modal';
         modal.querySelector('.fenrus-modal-title').innerText = title;
         modal.querySelector('.fenrus-modal-body').innerText = message;
-        modal.querySelector('.confirm-ok').addEventListener('click', () => {
+        modal.querySelector('.confirm-ok').addEventListener('click', (event) => {
+            event.stopPropagation();
+            event.preventDefault();
             modal.remove();
             resolve(true);
         });
-        modal.querySelector('.confirm-cancel').addEventListener('click', () => {
+        modal.querySelector('.confirm-cancel').addEventListener('click', (event) => {
+            event.stopPropagation();
+            event.preventDefault();
             modal.remove();
             resolve(false);
         });

@@ -14,7 +14,7 @@ public class NotesService
     /// <returns>all the notes for the user</returns>
     public List<Note> GetAllByUser(Guid uid)
         => DbHelper.GetAllForUser<Note>(uid);
-    
+
     /// <summary>
     /// Gets a note by its UID
     /// </summary>

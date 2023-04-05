@@ -56,7 +56,8 @@
     "None": "None",
     "Notes": "Notes",
     "Personal": "Personal",
-    "Shared": "Shared"
+    "Shared": "Shared",
+    "Media": "Media"
   },
   "ContextMenu": {
     "EditDashboard": "Edit Dashboard",

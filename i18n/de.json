@@ -51,7 +51,8 @@
     "Logout": "Ausloggen",
     "None": "Keiner",
     "Personal": "Persönlich",
-    "Shared": "Geteilt"
+    "Shared": "Geteilt",
+    "Media": "Medien"
   },
   "ContextMenu": {
     "EditDashboard": "Dashboard bearbeiten",

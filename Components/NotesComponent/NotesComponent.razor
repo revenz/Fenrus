@@ -7,18 +7,6 @@
     </div>
     <div class="notes-inner">
         <div class="content" id="notes-list">
-            @foreach (var note in Notes)
-            {
-                <div class="note" x-uid="@note.Uid">
-                    <div class="controls">
-                        <i onclick="notesMove(event.target, true)" class="up fa-solid fa-caret-up"></i>
-                        <i onclick="notesDelete(event.target)"class="delete fa-sharp fa-solid fa-trash"></i>
-                        <i onclick="notesMove(event.target, false)"class="down fa-solid fa-caret-down"></i>
-                    </div>
-                    <input onchange="notesChanged(event)" type="text" placeholder="Note Title" value="@EncryptionHelper.Decrypt(note.Name)" />
-                    <div class="content-editor" onfocusout="notesChanged(event)" contenteditable="true" spellcheck="false" onpaste="notesOnPaste(event)">@(new MarkupString(EncryptionHelper.Decrypt(note.Content)))</div>
-                </div>
-            }
         </div>
         <div class="btn-new-note" onclick="notesAdd()">
             <i class="fa-solid fa-plus"></i>
@@ -27,6 +15,7 @@
             <div id="nt-personal" onclick="notesSelectTab('nt-personal')" class="note-tab">@lblPersonal</div>
             <div id="nt-dashboard" onclick="notesSelectTab('nt-dashboard')" class="note-tab">@lblDashboard</div>
             <div id="nt-shared" onclick="notesSelectTab('nt-shared')" class="note-tab">@lblShared</div>
+            <div id="nt-media" onclick="notesSelectTab('nt-media')" class="note-tab">@lblMedia</div>
         </div>
     </div>
 </div>

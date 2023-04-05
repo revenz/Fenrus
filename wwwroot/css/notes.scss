@@ -47,6 +47,16 @@ $notesBackground: #111111ee;
     overflow: hidden;
     background:$notesBackground;
     position: relative;
+    &.nt-media #notes-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 300px);
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
   }
   &.expanded {
     .expander 
@@ -115,6 +125,7 @@ $notesBackground: #111111ee;
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-basis: 0;
       flex-grow: 1;
       font-size: 1.2rem;
       text-transform: uppercase;
@@ -135,8 +146,6 @@ $notesBackground: #111111ee;
     flex-direction: column;
     margin:1rem;
     border: solid 1px var(--border-color);
-    box-shadow: 2px 1px 7px var(--input-background);
-    border-radius: 0.5rem;
     padding: 0.5rem;
     max-height: 8rem;
     transition: max-height 0.25s ease-in-out;
@@ -192,6 +201,28 @@ $notesBackground: #111111ee;
         &:hover {
           opacity: 1;
         }
+      }
+    }
+  }
+  
+  .media {
+    position:relative;
+    opacity:0.5;
+    transition: opacity 0.25s ease-in-out;
+    .controls {
+      position:absolute;
+      bottom:1rem;
+      left:1rem;
+      font-size:2rem;
+      display: none;
+      > i {
+        cursor: pointer;
+      }
+    }
+    &:hover {
+      opacity:1;
+      .controls {
+        display: unset;
       }
     }
   }

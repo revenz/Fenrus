@@ -1,6 +1,7 @@
 var notesLastLoaded = {};
 var noteTab = false;
 var notesDashboardUid;
+var notesMedia = false;
 
 function notesToggle(){
     let ele = document.getElementById('notes-wrapper');
@@ -24,16 +25,19 @@ function notesToggle(){
 }
 
 function notesMouseDownEventListener(event){
-    let wrapper = event.target.closest('#notes-wrapper');
+    let wrapper = event.target.closest('#notes-wrapper, .fenrus-modal');
     if(!wrapper)
         document.getElementById('notes-wrapper').className = 'collapsed';
 }
 
 
 function notesSetActiveTabClass(){
+    notesMedia = noteTab === 'nt-media';
     for(let tab of document.querySelectorAll('.notes-tabs .note-tab')){
         tab.className = 'note-tab' + (tab.getAttribute('id') === noteTab ? ' active' : '');
     }
+    document.getElementById('notes-list').innerHTML = '';
+    document.querySelector('#notes-wrapper .notes-inner').className = 'notes-inner ' + noteTab;
     
 }
 
@@ -72,10 +76,18 @@ async function notesReload(){
         list.innerHTML = '';
         for(let note of data)
         {
-            let ele = notesCreateElement();
-            ele.setAttribute('x-uid', note.uid);
-            ele.querySelector('input').value = note.name;
-            ele.querySelector('.content-editor').innerHTML = note.content;
+            let ele;
+            if(notesMedia)
+            {
+                ele = notesCreateMediaElement(note);
+            }
+            else
+            {
+                ele = notesCreateElement();
+                ele.setAttribute('x-uid', note.uid);
+                ele.querySelector('input').value = note.name;
+                ele.querySelector('.content-editor').innerHTML = note.content;
+            }
             list.appendChild(ele);
         }
         if(!notesLastLoaded)
@@ -88,12 +100,69 @@ async function notesReload(){
     }
 }
 
-function notesAdd(){
-    document.getElementById('notes-list').appendChild(notesCreateElement());
+function notesCreateMediaElement(uid)
+{
+    let ele = notesCreateElement();
+    ele.setAttribute('x-uid', uid);
+    ele.querySelector('img').src = 'fimage/media/' + uid;
+    return ele;
 }
 
+function notesAdd(){
+    if(notesMedia)
+        notesMediaUpload();
+    else
+        document.getElementById('notes-list').appendChild(notesCreateElement());
+}
+function notesMediaUpload() {
+    var input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.style.display = "none";
+    input.name = "file";
+    document.body.appendChild(input);
+
+    input.addEventListener("change", function() {
+        var file = input.files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+        fetch('/notes/media', {
+            method: 'POST',
+            body: formData
+        })
+        .then(async response => {
+            let uid = await response.text();
+            if(uid) {
+                if(/"[^"]+"/.test(uid))
+                    uid = uid.substring(1, uid.length - 1);
+                // give it a brief moment so the image is available
+                setTimeout(()=>{
+                    document.getElementById('notes-list').appendChild(notesCreateMediaElement(uid));                    
+                }, 250);
+            }
+            
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    });
+
+    input.addEventListener("cancel", function() {
+        input.remove();
+    });
+
+    input.click();
+}
 function notesCreateElement(){
     let ele = document.createElement('div');
+    if(notesMedia){
+        ele.className ='media';
+        ele.innerHTML = '<div class="controls">' +
+            '<i onclick="notesDelete(event.target)"class="delete fa-sharp fa-solid fa-trash"></i>' +
+            '</div>' +
+            '<img />';
+        return ele;
+    }
     ele.className = 'note';
     ele.innerHTML = '<div class="controls">' +
         '<i onclick="notesMove(event.target, true)" class="up fa-solid fa-caret-up"></i>' +
@@ -163,7 +232,8 @@ async function notesMove(target, up){
 
 async function notesDelete(target){
     let note = target.parentNode.parentNode;
-    let result = await modalConfirm('Delete Note', 'Are you sure you want to delete this note?');
+    let type = notesMedia ? 'media' : 'note';
+    let result = await modalConfirm('Delete', `Are you sure you want to delete this ${type}?`);
     if(!result)
         return;
     let uid = note.getAttribute('x-uid');
@@ -171,7 +241,7 @@ async function notesDelete(target){
         note.remove();
         return;
     }
-    let success =  await fetch( '/notes/' + uid, { method: 'delete'} );
+    let success =  await fetch( '/notes/' + uid + notesQueryParameters(), { method: 'delete'} );
     if(success)
         note.remove();
 }

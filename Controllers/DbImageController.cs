@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Controllers;
@@ -8,8 +7,13 @@ namespace Fenrus.Controllers;
 /// </summary>
 [Authorize]
 [Route("fimage")]
-public class DbImageController:Controller
+public class DbImageController:BaseController
 {
+    /// <summary>
+    /// Gets a image from the database
+    /// </summary>
+    /// <param name="uid">the UID of the image</param>
+    /// <returns>the binary data of the image</returns>
     [HttpGet("{uid}")]
     [ResponseCache(Duration = 31 * 24 * 60 * 60)] // cache for 31 days
     public IActionResult Get([FromRoute] Guid uid)
@@ -23,5 +27,24 @@ public class DbImageController:Controller
         string extension = file.FileInfo.Filename[(file.FileInfo.Filename.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
         // Or get binary data as Stream and copy to another Stream
         return File(ms, "image/" + extension);
+    }
+    
+    /// <summary>
+    /// Gets a media file for the user
+    /// </summary>
+    /// <param name="uid">The UID of the file</param>
+    /// <returns>the media file binary data if found</returns>
+    [HttpGet("media/{uid}")]
+    [ResponseCache(Duration = 31 * 24 * 60 * 60)] // cache for 31 days
+    public IActionResult GetMedia([FromRoute] Guid uid)
+    {
+        var userUid = User.GetUserUid().Value;
+        var file = new MediaService().GetByUid(userUid, uid);
+        if (file == null)
+            return new NotFoundResult();
+        string filename = file.Value.Filename;
+        string extension = filename[(filename.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
+        // Or get binary data as Stream and copy to another Stream
+        return File(file.Value.Data, file.Value.MimeType?.EmptyAsNull() ?? "image/" + extension);
     }
 }
