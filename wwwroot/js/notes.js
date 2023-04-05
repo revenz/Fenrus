@@ -7,6 +7,10 @@ function notesToggle(){
     let expanding = /expanded/.test(ele.className) === false;
     ele.className =  expanding ? 'expanded' : 'collapsed';
     
+    if(!notesDashboardUid){
+        document.addEventListener('mousedown', notesMouseDownEventListener);
+    }
+    
     if(expanding && !noteTab){
         noteTab = localStorage.getItem('NOTES_TAB');
         if(!noteTab)
@@ -18,6 +22,13 @@ function notesToggle(){
         notesReload();
     }
 }
+
+function notesMouseDownEventListener(event){
+    let wrapper = event.target.closest('#notes-wrapper');
+    if(!wrapper)
+        document.getElementById('notes-wrapper').className = 'collapsed';
+}
+
 
 function notesSetActiveTabClass(){
     for(let tab of document.querySelectorAll('.notes-tabs .note-tab')){
