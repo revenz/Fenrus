@@ -51,6 +51,9 @@ $notesBackground: #111111ee;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: repeat(2, 300px);
+      .media {
+        height:300px;
+      }
       img {
         width: 100%;
         height: 100%;

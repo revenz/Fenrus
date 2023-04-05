@@ -53,6 +53,9 @@
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 300px);
 }
+#notes-wrapper .notes-inner.nt-media #notes-list .media {
+  height: 300px;
+}
 #notes-wrapper .notes-inner.nt-media #notes-list img {
   width: 100%;
   height: 100%;
