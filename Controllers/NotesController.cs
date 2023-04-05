@@ -1,4 +1,3 @@
-using Esprima.Ast;
 using Fenrus.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +11,46 @@ namespace Fenrus.Controllers;
 public class NotesController : BaseController
 {
     /// <summary>
+    /// Gets all the notes for the user
+    /// </summary>
+    /// <returns>the notes</returns>
+    [HttpGet]
+    public IEnumerable<object> GetAll([FromQuery] NoteType type, [FromQuery(Name = "db")] Guid dashboardUid)
+    {
+        var uid = User.GetUserUid().Value;
+        var notes = GetNotes(uid, type, dashboardUid);
+        return notes.OrderBy(x => x.Order).Select(x => new
+        {
+            x.Uid,
+            Name = EncryptionHelper.Decrypt(x.Name),
+            Content = EncryptionHelper.Decrypt(x.Content)
+        });
+    }
+
+    /// <summary>
+    /// Gets the list of notes the user is accessing
+    /// </summary>
+    /// <param name="userUid">the UID of the user</param>
+    /// <param name="type">the type of notes the user is accessing</param>
+    /// <param name="dashboardUid">the UID of the dashboard the user is using</param>
+    /// <returns>the list of notes</returns>
+    List<Note> GetNotes(Guid userUid, NoteType type, Guid dashboardUid)
+    {
+        return new NotesService().GetAllByUser(type == NoteType.Shared ? Guid.Empty : userUid).Where(x =>
+        {
+            if (type == NoteType.Shared) return true;
+            if (type == NoteType.Dashboard) return x.DashboardUid == dashboardUid;
+            return x.DashboardUid == Guid.Empty;
+        }).ToList();
+    }
+
+    /// <summary>
     /// Saves a note
     /// </summary>
     /// <param name="note">the note to save</param>
     /// <returns>the saved note</returns>
     [HttpPost]
-    public Note SaveNote([FromBody] Note note)
+    public Note SaveNote([FromBody] Note note, [FromQuery] NoteType type, [FromQuery(Name = "db")] Guid dashboardUid)
     {
         var uid = User.GetUserUid().Value;
         var service = new NotesService();
@@ -26,7 +59,7 @@ public class NotesController : BaseController
             var existing = service.GetByUid(note.Uid);
             if (existing != null)
             {
-                if (existing.UserUid != uid)
+                if (existing.UserUid != Guid.Empty && existing.UserUid != uid)
                     throw new UnauthorizedAccessException();
                 if(existing.Name != note.Name)
                     existing.Name = EncryptionHelper.Encrypt(note.Name ?? string.Empty);
@@ -44,10 +77,16 @@ public class NotesController : BaseController
         
         note.Name = EncryptionHelper.Encrypt(note.Name ?? string.Empty);
         note.Content = EncryptionHelper.Encrypt(note.Content ?? string.Empty);
+        if (type == NoteType.Shared)
+            note.UserUid = Guid.Empty;
+        else if (type == NoteType.Personal)
+            note.DashboardUid = Guid.Empty;
+        else
+            note.DashboardUid = dashboardUid;
 
         if (note.Uid == Guid.Empty)
         {
-            var items = service.GetAllByUser(uid);
+            var items = GetNotes(uid, type, dashboardUid);
             note.Order = items.Any() ? items.Max(x => x.Order + 1) : 0;
             service.Add(note);
         }
@@ -66,7 +105,7 @@ public class NotesController : BaseController
         var userUid = User.GetUserUid().Value;
         var service = new NotesService();
         var note = service.GetByUid(uid);
-        if (note == null || note.UserUid != userUid)
+        if (note == null || (note.UserUid != Guid.Empty && note.UserUid != userUid))
             return;
         service.Delete(note.Uid);
     }
@@ -76,11 +115,11 @@ public class NotesController : BaseController
     /// </summary>
     /// <param name="uid">the UID of the note</param>
     [HttpPost("{uid}/move/{up}")]
-    public bool Move([FromRoute] Guid uid, [FromRoute] bool up)
+    public bool Move([FromRoute] Guid uid, [FromRoute] bool up, [FromQuery] NoteType type, [FromQuery(Name = "db")] Guid dashboardUid)
     {
         var userUid = User.GetUserUid().Value;
         var service = new NotesService();
-        var notes = service.GetAllByUser(userUid).OrderBy(x => x.Order).ToList();
+        var notes = GetNotes(userUid, type, dashboardUid);
         int index = notes.FindIndex(x => x.Uid == uid);
         if (index < 0)
             return false;  // unknown
@@ -89,9 +128,7 @@ public class NotesController : BaseController
         if (index == notes.Count - 1 && up == false)
             return false;
         int dest = up ? index - 1 : index + 1;
-        var other = notes[dest];
-        notes[dest] = notes[index];
-        notes[index] = other;
+        (notes[dest], notes[index]) = (notes[index], notes[dest]);
         for (int i = 0; i < notes.Count; i++)
         {
             if (notes[i].Order == i)
@@ -101,5 +138,24 @@ public class NotesController : BaseController
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Note types
+    /// </summary>
+    public enum NoteType
+    {
+        /// <summary>
+        /// Personal notes
+        /// </summary>
+        Personal,
+        /// <summary>
+        /// Dashboard notes
+        /// </summary>
+        Dashboard,
+        /// <summary>
+        /// Shared notes
+        /// </summary>
+        Shared
     }
 }

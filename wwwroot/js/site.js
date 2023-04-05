@@ -29,6 +29,11 @@ function getDashboardInstanceUid()
     return document.getElementById('dashboard-instance')?.value;
 }
 
+function getDashboardUid()
+{
+    return document.querySelector('.dashboard').getAttribute('x-uid');
+}
+
 var SmartAppInstances = {};
 function LiveApp(name, instanceUid, interval) 
 {    

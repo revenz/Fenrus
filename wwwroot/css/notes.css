@@ -46,6 +46,7 @@
   transition: width 0.5s ease-in-out;
   overflow: hidden;
   background: rgba(17, 17, 17, 0.9333333333);
+  position: relative;
 }
 #notes-wrapper.expanded .expander {
   opacity: 1;
@@ -58,7 +59,7 @@
 }
 #notes-wrapper .btn-new-note {
   position: absolute;
-  bottom: 1.5rem;
+  bottom: 4.5rem;
   right: 1.5rem;
   padding: 1rem;
   border-radius: 51rem;
@@ -89,8 +90,35 @@
 }
 #notes-wrapper .content {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 3rem);
   overflow: auto;
+}
+#notes-wrapper .notes-tabs {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 3rem;
+  display: flex;
+  flex-direction: row;
+}
+#notes-wrapper .notes-tabs > div {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.3rem;
+  opacity: 0.2;
+  background: #000;
+  user-select: none;
+}
+#notes-wrapper .notes-tabs > div.active {
+  opacity: 1;
+  background: unset;
 }
 #notes-wrapper .note {
   display: flex;
@@ -102,21 +130,24 @@
   padding: 0.5rem;
   max-height: 8rem;
   transition: max-height 0.25s ease-in-out;
+  overflow: hidden;
+  position: relative;
+}
+#notes-wrapper .note input, #notes-wrapper .note .content-editor {
+  padding: 0.5rem;
+  width: calc(100% - 3rem);
+  outline: none;
+  border: solid 1px transparent;
 }
 #notes-wrapper .note input, #notes-wrapper .note textarea {
-  width: calc(100% - 3rem);
-  padding: 0.5rem;
   background: transparent;
-  border: solid 1px transparent;
   color: var(--input-color);
-  outline: none;
   font-family: sans-serif;
 }
 #notes-wrapper .note input {
   font-size: 1.2rem;
 }
-#notes-wrapper .note textarea {
-  resize: none;
+#notes-wrapper .note .content-editor {
   overflow: hidden;
 }
 #notes-wrapper .note:hover .controls, #notes-wrapper .note:focus-within .controls {
@@ -124,12 +155,19 @@
 }
 #notes-wrapper .note:focus-within {
   background: var(--input-background);
-  max-height: 100vh;
+  max-height: 80vh;
+}
+#notes-wrapper .note:focus-within .content-editor {
+  overflow: auto;
+}
+#notes-wrapper .note:focus-within .content-editor > div {
+  overflow: auto;
 }
 #notes-wrapper .note .controls {
   display: none;
   position: absolute;
-  right: 1.25rem;
+  right: 0.5rem;
+  top: 0.5rem;
   flex-direction: column;
   min-height: 7rem;
   width: 2rem;

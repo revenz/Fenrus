@@ -16,12 +16,17 @@
                         <i onclick="notesMove(event.target, false)"class="down fa-solid fa-caret-down"></i>
                     </div>
                     <input onchange="notesChanged(event)" type="text" placeholder="Note Title" value="@EncryptionHelper.Decrypt(note.Name)" />
-                    <textarea oninput="notesTextAreaInput(event)" onchange="notesChanged(event)" placeholder="Note Content">@EncryptionHelper.Decrypt(note.Content)</textarea>
+                    <div class="content-editor" onfocusout="notesChanged(event)" contenteditable="true" spellcheck="false" onpaste="notesOnPaste(event)">@(new MarkupString(EncryptionHelper.Decrypt(note.Content)))</div>
                 </div>
             }
         </div>
         <div class="btn-new-note" onclick="notesAdd()">
             <i class="fa-solid fa-plus"></i>
+        </div>
+        <div class="notes-tabs">
+            <div id="nt-personal" onclick="notesSelectTab('nt-personal')" class="note-tab">@lblPersonal</div>
+            <div id="nt-dashboard" onclick="notesSelectTab('nt-dashboard')" class="note-tab">@lblDashboard</div>
+            <div id="nt-shared" onclick="notesSelectTab('nt-shared')" class="note-tab">@lblShared</div>
         </div>
     </div>
 </div>

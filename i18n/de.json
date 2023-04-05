@@ -49,7 +49,9 @@
     "Testing": "Testen",
     "Home": "Heim",
     "Logout": "Ausloggen",
-    "None": "Keiner"
+    "None": "Keiner",
+    "Personal": "Persönlich",
+    "Shared": "Geteilt"
   },
   "ContextMenu": {
     "EditDashboard": "Dashboard bearbeiten",

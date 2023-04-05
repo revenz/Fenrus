@@ -54,7 +54,9 @@
     "Home": "Home",
     "Logout": "Logout",
     "None": "None",
-    "Notes": "Notes"
+    "Notes": "Notes",
+    "Personal": "Personal",
+    "Shared": "Shared"
   },
   "ContextMenu": {
     "EditDashboard": "Edit Dashboard",

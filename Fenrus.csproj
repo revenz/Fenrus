@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\search-engines\youtube.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <AdditionalFiles Include="Components\Pages\PageGroups\PageGroups.razor" />
     <AdditionalFiles Include="Components\Pages\PageGroup\PageGroup.razor" />
     <AdditionalFiles Include="Components\Pages\PageSearchEngines\PageSearchEngines.razor" />
@@ -48,7 +44,6 @@
     <_ContentIncludedByDefault Remove="Components\Pages\PanelUserSettings\PanelUserSettings.razor" />
     <_ContentIncludedByDefault Remove="Components\PageGroup\PageGroup.razor" />
     <_ContentIncludedByDefault Remove="Components\PageGroups\PageGroups.razor" />
-    <_ContentIncludedByDefault Remove="Apps\Smart\NodeLance\app.json" />
   </ItemGroup>
 
 </Project>

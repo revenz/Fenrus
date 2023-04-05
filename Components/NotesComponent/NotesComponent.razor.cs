@@ -20,13 +20,16 @@ public partial class NotesComponent
     [Parameter]
     public UserSettings Settings { get; set; }
 
-    private List<Note> Notes { get; set; }
+    private List<Note> Notes { get; set; } = new();
 
-    private string lblTitle;
+    private string lblTitle, lblPersonal, lblDashboard, lblShared;
 
     protected override void OnInitialized()
     {
         this.lblTitle = Translator.Instant("Labels.Notes");
-        Notes = new NotesService().GetAllByUser(Settings.UserUid).OrderBy(x => x.Order).ToList();
+        this.lblPersonal = Translator.Instant("Labels.Personal");
+        this.lblDashboard = Translator.Instant("Labels.Dashboard");
+        this.lblShared = Translator.Instant("Labels.Shared");
+        // Notes = new NotesService().GetAllByUser(Settings.UserUid).OrderBy(x => x.Order).ToList();
     }
 }

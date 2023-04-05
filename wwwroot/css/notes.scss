@@ -46,6 +46,7 @@ $notesBackground: #111111ee;
     transition: width 0.5s ease-in-out;
     overflow: hidden;
     background:$notesBackground;
+    position: relative;
   }
   &.expanded {
     .expander 
@@ -62,7 +63,7 @@ $notesBackground: #111111ee;
   
   .btn-new-note {
     position: absolute;
-    bottom: 1.5rem;
+    bottom: 4.5rem;
     right: 1.5rem;
     padding: 1rem;
     border-radius: 51rem;
@@ -98,9 +99,36 @@ $notesBackground: #111111ee;
   }
   .content {
     width:100%;
-    height:100%;
+    height:calc(100% - 3rem);
     overflow:auto;
   }
+  .notes-tabs {
+    position:absolute;
+    bottom:0;
+    right:0;
+    left:0;
+    height:3rem;
+    display:flex;
+    flex-direction: row;
+    > div {
+      cursor:pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-grow: 1;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.3rem;
+      opacity:0.2;
+      background:#000;
+      user-select: none;
+      &.active {
+        opacity:1;
+        background:unset;
+      }
+    }
+  }  
   .note
   {
     display:flex;
@@ -112,20 +140,23 @@ $notesBackground: #111111ee;
     padding: 0.5rem;
     max-height: 8rem;
     transition: max-height 0.25s ease-in-out;
-    input, textarea {
-      width: calc(100% - 3rem);
+    overflow: hidden;
+    position:relative;    
+    input, .content-editor {
       padding: 0.5rem;
-      background: transparent;
-      border: solid 1px transparent;
-      color: var(--input-color);
+      width: calc(100% - 3rem);
       outline: none;
+      border: solid 1px transparent;
+    }
+    input, textarea {
+      background: transparent;
+      color: var(--input-color);
       font-family:sans-serif;
     }
     input {
       font-size:1.2rem;
     }
-    textarea {
-      resize:none; 
+    .content-editor {
       overflow:hidden;
     }
     &:hover, &:focus-within {
@@ -135,12 +166,19 @@ $notesBackground: #111111ee;
     }
     &:focus-within {
       background: var(--input-background);
-      max-height: 100vh;
+      max-height: 80vh;
+      .content-editor {
+        overflow: auto;
+        > div {
+          overflow:auto;
+        }
+      }
     }
     .controls {
       display: none;
       position: absolute;
-      right: 1.25rem;
+      right: 0.5rem;
+      top:0.5rem;
       flex-direction: column;
       min-height: 7rem;
       width: 2rem;
