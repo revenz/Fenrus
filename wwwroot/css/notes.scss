@@ -1,5 +1,7 @@
 $notesBackground: #111111ee;
 $notesMediaScreenSize: 1000px;
+$notesMediaMediaSize: 240px;
+$notesMediaSmallMediaSize: 200px;
 
 #notes-wrapper
 {
@@ -50,10 +52,10 @@ $notesMediaScreenSize: 1000px;
     position: relative;
     &.nt-media #notes-list {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 300px);
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, $notesMediaMediaSize);
       .media {
-        height:300px;
+        height:$notesMediaMediaSize;        
       }
       img {
         width: 100%;
@@ -221,7 +223,6 @@ $notesMediaScreenSize: 1000px;
   
   .media {
     position:relative;
-    opacity:0.5;
     transition: opacity 0.25s ease-in-out;
     .controls {
       position:absolute;
@@ -252,10 +253,30 @@ $notesMediaScreenSize: 1000px;
       }
     }
     &:hover {
-      opacity:1;
       .controls {
         display: unset;
       }
+    }
+  }
+  .media:hover {
+    opacity: 1;
+  }
+
+  #notes-list:hover .media:not(:hover) {
+    opacity: 0.2;
+  }
+
+  #notes-list:hover:not(:has(:hover)) .media {
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width:$notesMediaScreenSize) {
+  .nt-media #notes-list {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(2, $notesMediaSmallMediaSize) !important;
+    .media {
+      height: $notesMediaSmallMediaSize !important;
     }
   }
 }
