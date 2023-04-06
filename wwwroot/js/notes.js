@@ -10,6 +10,21 @@ function notesToggle(){
     
     if(!notesDashboardUid){
         document.addEventListener('mousedown', notesMouseDownEventListener);
+        let notesList = document.getElementById('notes-list');
+        notesList.addEventListener('mousedown', (e) => {
+            if(!notesMedia || e.button !== 2) return;
+            notesList.contentEditable = true;
+            setTimeout(() => notesList.contentEditable = false, 20);  
+        });
+        notesList.addEventListener('drop', notesFileDropEventListener);
+        notesList.addEventListener('dragstart', (e) => {
+            e.dataTransfer.effectAllowed = 'all'; 
+            e.dataTransfer.dropEffect = 'move';
+        });
+        notesList.addEventListener('dragover', (e) => {            
+            e.preventDefault();
+        }, false);
+        notesList.addEventListener('paste', notesListPasteEventListener);
     }
     
     if(expanding && !noteTab){
@@ -114,37 +129,63 @@ function notesAdd(){
     else
         document.getElementById('notes-list').appendChild(notesCreateElement());
 }
+
+function notesFileDropEventListener(event){
+    event.preventDefault();
+    if(!notesMedia)
+        return;
+    const files = event.dataTransfer.files;
+    console.log('event', event);
+    console.log('files length', files.length);
+    console.log('files', files);
+    const formData = new FormData();
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+    let filesAdded = 0;
+    for (let i = 0; i < files.length; i++) {
+        console.log('file', files[i]);
+        console.log('[type', files[i].type);
+        if (allowedTypes.indexOf(files[i].type) !== -1) {
+            console.log('adding file', files[i]);
+            formData.append('file', files[i]);
+            ++filesAdded;
+        }
+    }
+    if(filesAdded === 0)
+        return;
+    notesUploadMediaForm(formData);
+}
+function notesListPasteEventListener(e) {
+    if(!notesMedia)
+        return;
+
+    let cbPayload = [...(e.clipboardData || e.originalEvent.clipboardData).items];
+    cbPayload = cbPayload.filter(i => /image/.test(i.type));
+    if(!cbPayload.length || cbPayload.length === 0) 
+        return;
+
+    const formData = new FormData();
+    let file =  cbPayload[0].getAsFile();
+    formData.append('file', file);
+    notesUploadMediaForm(formData);
+}
+
 function notesMediaUpload() {
     var input = document.createElement("input");
     input.type = "file";
     input.accept = "image/*";
     input.style.display = "none";
     input.name = "file";
+    input.multiple = true;
     document.body.appendChild(input);
 
     input.addEventListener("change", function() {
-        var file = input.files[0];
+        if(!input.files.length)
+            return;
         var formData = new FormData();
-        formData.append('file', file);
-        fetch('/notes/media', {
-            method: 'POST',
-            body: formData
-        })
-        .then(async response => {
-            let uid = await response.text();
-            if(uid) {
-                if(/"[^"]+"/.test(uid))
-                    uid = uid.substring(1, uid.length - 1);
-                // give it a brief moment so the image is available
-                setTimeout(()=>{
-                    document.getElementById('notes-list').appendChild(notesCreateMediaElement(uid));                    
-                }, 250);
-            }
-            
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        for(let file of input.files)
+            formData.append('file', file);
+        notesUploadMediaForm(formData);
     });
 
     input.addEventListener("cancel", function() {
@@ -153,11 +194,31 @@ function notesMediaUpload() {
 
     input.click();
 }
+
+function notesUploadMediaForm(formData) {
+    fetch('/notes/media', {
+        method: 'POST',
+        body: formData
+    })
+    .then(async response => {
+        let text = await response.text();
+        if(!text)
+            return;
+        var uids = JSON.parse(text);
+        for(let uid of uids) 
+            document.getElementById('notes-list').appendChild(notesCreateMediaElement(uid));
+
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
 function notesCreateElement(){
     let ele = document.createElement('div');
     if(notesMedia){
         ele.className ='media';
         ele.innerHTML = '<div class="controls">' +
+            '<i class="fas fa-circle"></i>' +
             '<i onclick="notesDelete(event.target)"class="delete fa-sharp fa-solid fa-trash"></i>' +
             '</div>' +
             '<img />';

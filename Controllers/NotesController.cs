@@ -98,24 +98,34 @@ public class NotesController : BaseController
     }
 
     /// <summary>
-    /// Uploads a media file
+    /// Uploads media files
     /// </summary>
-    /// <param name="file">the file being uploaded</param>
-    /// <returns>the UID of the newly uploaded media</returns>
+    /// <param name="file">the files being uploaded</param>
+    /// <returns>the UIDs of the newly uploaded media</returns>
     [HttpPost("media")]
-    public async Task<Guid> UploadMedia([FromForm] IFormFile file)
+    public async Task<List<Guid>> UploadMedia([FromForm] List<IFormFile> file)
     {
-        if (file == null || file.Length == 0 || string.IsNullOrWhiteSpace(file.FileName))
-            throw new Exception("file not selected");
-
+        List<Guid> guids = new();
+        if (file.Any() != true)
+            return guids;
         var uid = User.GetUserUid().Value;
-        
-        using var stream = new MemoryStream();
-        await file.CopyToAsync(stream);
-        stream.Seek(0, SeekOrigin.Begin);
-        var data = stream.ToArray();
-        var guid = new MediaService().Add(uid, file.FileName, data);
-        return guid.Value;
+        foreach (var f in file)
+        {
+            try
+            {
+                using var stream = new MemoryStream();
+                await f.CopyToAsync(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+                var data = stream.ToArray();
+                var guid = new MediaService().Add(uid, f.FileName, data);
+                guids.Add(guid.Value);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        return guids;
     }
     
     /// <summary>

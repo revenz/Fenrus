@@ -67,8 +67,15 @@
 #notes-wrapper.expanded .expander > i {
   transform: rotate(-180deg);
 }
-#notes-wrapper.expanded .notes-inner {
-  width: min(90vw, 60rem);
+@media screen and (max-width: 1000px) {
+  #notes-wrapper.expanded .notes-inner {
+    width: min(90vw, 40rem);
+  }
+}
+@media screen and (min-width: 1000.001px) {
+  #notes-wrapper.expanded .notes-inner {
+    width: 60rem;
+  }
 }
 #notes-wrapper .btn-new-note {
   position: absolute;
@@ -129,6 +136,11 @@
   opacity: 0.2;
   background: #000;
   user-select: none;
+}
+@media screen and (max-width: 1000px) {
+  #notes-wrapper .notes-tabs > div {
+    font-size: 1rem;
+  }
 }
 #notes-wrapper .notes-tabs > div.active {
   opacity: 1;
@@ -202,13 +214,29 @@
 }
 #notes-wrapper .media .controls {
   position: absolute;
-  bottom: 1rem;
+  bottom: 4rem;
   left: 1rem;
   font-size: 2rem;
   display: none;
 }
 #notes-wrapper .media .controls > i {
   cursor: pointer;
+  position: absolute;
+}
+#notes-wrapper .media .controls .delete {
+  left: 0.85rem;
+  top: 0.7rem;
+  color: rgba(var(--color-rgb), 0.8);
+}
+#notes-wrapper .media .controls .fa-circle {
+  color: rgba(var(--accent-rgb), 0.3);
+  font-size: 3.5rem;
+}
+#notes-wrapper .media .controls:hover .delete {
+  color: var(--color);
+}
+#notes-wrapper .media .controls:hover .fa-circle {
+  color: rgba(var(--accent-rgb), 0.7);
 }
 #notes-wrapper .media:hover {
   opacity: 1;

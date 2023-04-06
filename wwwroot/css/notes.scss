@@ -1,4 +1,5 @@
-$notesBackground: #111111ee; 
+$notesBackground: #111111ee;
+$notesMediaScreenSize: 1000px;
 
 #notes-wrapper
 {
@@ -70,7 +71,14 @@ $notesBackground: #111111ee;
       }
     }
     .notes-inner {
-      width:min(90vw, 60rem);
+      @media screen and (max-width:$notesMediaScreenSize)
+      {
+        width:min(90vw, 40rem);        
+      }
+      @media screen and (min-width:($notesMediaScreenSize + .001))
+      {
+        width:60rem;
+      }
     }
   }
   
@@ -131,6 +139,9 @@ $notesBackground: #111111ee;
       flex-basis: 0;
       flex-grow: 1;
       font-size: 1.2rem;
+      @media screen and (max-width: $notesMediaScreenSize){
+        font-size:1rem;
+      }
       text-transform: uppercase;
       font-weight: 600;
       letter-spacing: 0.3rem;
@@ -214,12 +225,30 @@ $notesBackground: #111111ee;
     transition: opacity 0.25s ease-in-out;
     .controls {
       position:absolute;
-      bottom:1rem;
+      bottom:4rem;
       left:1rem;
       font-size:2rem;
-      display: none;
+      display:none;
       > i {
         cursor: pointer;
+        position:absolute;
+      }
+      .delete {
+        left: 0.85rem;
+        top: 0.7rem;
+        color: rgba(var(--color-rgb), 0.8);
+      }
+      .fa-circle {
+        color: rgba(var(--accent-rgb), 0.3);
+        font-size:3.5rem;
+      }
+      &:hover {
+        .delete {
+          color: var(--color);
+        }
+        .fa-circle {
+          color: rgba(var(--accent-rgb), 0.7);
+        }
       }
     }
     &:hover {
