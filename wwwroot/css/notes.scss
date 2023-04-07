@@ -319,13 +319,13 @@ $notesMediaSmallMediaSize: 200px;
     line-height: 3rem;
     text-transform: uppercase;
     font-size: 1.25rem;
-    letter-spacing: 1.1rem;
+    letter-spacing: 0.5rem;
     font-weight: 600;
   }
 }
 .nt-files .notes-pane-title {
   .notes { display:none; }
-  .files { display:unset; }
+  .files { display:inline-block; }
 }
 
 .notes-inner:not(.nt-files) .notes-pane-title {
@@ -333,6 +333,15 @@ $notesMediaSmallMediaSize: 200px;
   .notes { display:unset; }
   .files { display:none; }
 }
+
+.notes-pane-title .files {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 80%;
+  width: 80%;
+  white-space: nowrap;
+  direction:rtl;
+} 
 
 .nt-files .view-mode {
   display: unset !important;

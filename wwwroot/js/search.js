@@ -56,41 +56,51 @@ function SearchPerform(){
     let searchText = document.getElementById('search-text').value.trim();
     if(!searchText)
         return;
+    
+    
+    let forceSearch = false;
+    if(/^\?/.test(searchText)){
+        forceSearch = true;
+        searchText = searchText.substring(1);
+        if(!searchText) return;
+    }
 
-    if(/^(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}($|\/)/.test(searchText)){
-        // ip address url, lets just go right there
-        window.location = 'http://' + searchText;
-        return;
-    }
-    if(/^lh:[\d]+/i.test(searchText)){
-        // localhost shortcut
-        window.location = 'http://localhost:' + searchText.substring(3);
-        return;
-    }
-    if(/^[a-z][a-z\-]*(:[\d]+)?\//i.test(searchText)){
-        // hostname /
-        window.location = 'http://' + searchText;
-        return;
-    }
-    if(/^[a-z][a-z\-]*:[\d]+/i.test(searchText)){
-        // hostname with port
-        window.location = 'http://' + searchText;
-        return;
-    }
-    if(/^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$/.test(searchText)){
-        // domainname 
-        window.location = 'http://' + searchText;
-        return;
-    }
-    if(/^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})(\/.*)$/.test(searchText)){
-        // domainname with path 
-        window.location = 'http://' + searchText;
-        return;
-    }
-    if(/^(http:\/\/|https:\/\/).*$/.test(searchText)){
-        // full url
-        window.location = searchText;
-        return;
+    if(!forceSearch) {
+        if (/^(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}($|\/)/.test(searchText)) {
+            // ip address url, lets just go right there
+            window.location = 'http://' + searchText;
+            return;
+        }
+        if (/^lh:[\d]+/i.test(searchText)) {
+            // localhost shortcut
+            window.location = 'http://localhost:' + searchText.substring(3);
+            return;
+        }
+        if (/^[a-z][a-z\-]*(:[\d]+)?\//i.test(searchText)) {
+            // hostname /
+            window.location = 'http://' + searchText;
+            return;
+        }
+        if (/^[a-z][a-z\-]*:[\d]+/i.test(searchText)) {
+            // hostname with port
+            window.location = 'http://' + searchText;
+            return;
+        }
+        if (/^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$/.test(searchText)) {
+            // domainname 
+            window.location = 'http://' + searchText;
+            return;
+        }
+        if (/^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})(\/.*)$/.test(searchText)) {
+            // domainname with path 
+            window.location = 'http://' + searchText;
+            return;
+        }
+        if (/^(http:\/\/|https:\/\/).*$/.test(searchText)) {
+            // full url
+            window.location = searchText;
+            return;
+        }
     }
 
     let url = SearchEngine?.Url || SearchEngineDefault?.Url || 'https://duckduckgo.com/?q=%s';

@@ -382,6 +382,27 @@ function notesChangeView(view){
     document.getElementById('notes-list').className = 'content ' + view;
 }
 
+async function notesDelete(){
+    let checked = document.querySelectorAll('#notes-list .file .check:checked');
+    if(!checked.length)
+        return;
+    let files = [];
+    for(let chk of checked)
+        files.push(chk.closest('.file').getAttribute('x-uid'));
+
+    let confirmed = await modalConfirm('Delete', 'Are you sure you want to delete the selected file(s) ?');
+    if(!confirmed)
+        return;
+    await fetch('/files', {
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({files: files})
+    });
+    await notesReload();
+}
+
 function notesChangeFolder(path) {
     filePaths.push(path);
     notesUpdateFilesBackVisiblity();
@@ -414,11 +435,12 @@ function notesLoadFolder(path)
 }
 
 function notesParentPath(){
+    console.log('going to parent', JSON.parse(JSON.stringify(filePaths)));
     let path = filePaths.pop(); // gets rid of current, we want the next
     if(!path)
         return;
     
-    path = filePaths.pop();
+    path = filePaths[filePaths.length - 1];
     console.log('path', path || '');
     notesLoadFolder(path);
     notesUpdateFilesBackVisiblity();

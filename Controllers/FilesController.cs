@@ -95,4 +95,52 @@ public class FilesController : BaseController
 
         return files;
     }
+
+    /// <summary>
+    /// Deletes files
+    /// </summary>
+    /// <param name="model">the files to delete</param>
+    [HttpDelete]
+    public void Delete([FromBody] DeleteModel model)
+    {
+        if (model?.Files?.Any() != true)
+            return; // nothing to delete
+        
+        var uid = User.GetUserUid().Value;
+        var service = new UserFilesService();
+        foreach (var file in model.Files)
+        {
+            try
+            {
+                service.Delete(uid, file);
+            }
+            catch (Exception)
+            {
+                // litedb has some issues
+                // https://github.com/mbdavid/LiteDB/issues/1940
+                // a sleep seems to fix it, so try again
+                Thread.Sleep(250);
+                try
+                {
+                    // if this fails, just silently fail, the UI will refresh and show if it was removed or not
+                    service.Delete(uid, file);
+                }
+                catch (Exception)
+                {
+                }
+            }
+                
+        }
+    }
+
+    /// <summary>
+    /// A delete model
+    /// </summary>
+    public class DeleteModel
+    {
+        /// <summary>
+        /// Gets or sets files to delete
+        /// </summary>
+        public List<string> Files { get; init; }
+    }
 }

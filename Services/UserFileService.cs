@@ -38,7 +38,7 @@ public class UserFilesService
                 if (part.IndexOf("/") < 0)
                     return true;
                 // check if its a folder
-                int slashCount = Regex.Match(part, "/").Length;
+                int slashCount = part.Count(f => f == '/');
                 return slashCount == 1 && x.Filename == ".";
             })
             .Select(x =>
@@ -156,6 +156,22 @@ public class UserFilesService
         var file = db.FileStorage.FindById(fileUid);
         if (file == null)
             return true; // it no longer exists
+
+        if (file.Filename == ".")
+        {
+            // its a directory, we have to then delete all sub files too!
+            var path = file.Id[..^1];
+            db.BeginTrans();
+            var subs = db.FileStorage.Find(x => x.Id != file.Id && x.Id.StartsWith(path)).ToList();
+            foreach (var sub in subs)
+            {
+                db.FileStorage.Delete(sub.Id);
+            }
+            db.FileStorage.Delete(file.Id);
+            db.Commit();
+            return true;
+        }
+        
         db.FileStorage.Delete(fileUid);
         return true;
     }
