@@ -80,5 +80,34 @@
 .fenrus-modal-body {
   margin: 1rem 0;
 }
+.fenrus-modal-body input[type=text] {
+  margin-top: 1rem;
+  width: calc(100% - 1rem);
+  background: var(--input-background);
+  color: var(--input-color);
+  border: solid 1px var(--input-border);
+  padding: 0.5rem;
+}
+.fenrus-modal-body input[type=text]:focus {
+  outline: solid 1px var(--accent);
+}
+
+.fenrus-modal.change-password .field {
+  display: flex;
+  flex-direction: column;
+}
+.fenrus-modal.change-password .field .label {
+  margin-bottom: 0.25rem;
+}
+.fenrus-modal.change-password .field + .field {
+  margin-top: 1rem;
+}
+.fenrus-modal.change-password .field input[type=password] {
+  width: calc(100% - 0.5rem);
+  padding: 0.5rem;
+  background: var(--input-background);
+  border: solid 1px var(--input-border);
+  color: var(--input-color);
+}
 
 /*# sourceMappingURL=modal.css.map */

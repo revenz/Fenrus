@@ -1,18 +1,29 @@
 var notesLastLoaded = {};
 var noteTab = false;
 var notesDashboardUid;
-var notesMedia = false;
+var notesFiles = false;
+var notesAddMenu;
+var userFilesPath = '';
+var lblFiles;
+var filePaths = [];
 
 function notesToggle(){
     let ele = document.getElementById('notes-wrapper');
     let expanding = /expanded/.test(ele.className) === false;
     ele.className =  expanding ? 'expanded' : 'collapsed';
     
+    if(!lblFiles)
+        lblFiles = document.querySelector('.notes-pane-title .files').innerText;
+    
+    
+    if(!notesAddMenu)
+        notesAddMenu = document.getElementById('notes-add-menu');
+    
     if(!notesDashboardUid){
         document.addEventListener('mousedown', notesMouseDownEventListener);
         let notesList = document.getElementById('notes-list');
         notesList.addEventListener('mousedown', (e) => {
-            if(!notesMedia || e.button !== 2) return;
+            if(!notesFiles || e.button !== 2) return;
             notesList.contentEditable = true;
             setTimeout(() => notesList.contentEditable = false, 20);  
         });
@@ -43,11 +54,15 @@ function notesMouseDownEventListener(event){
     let wrapper = event.target.closest('#notes-wrapper, .fenrus-modal');
     if(!wrapper)
         document.getElementById('notes-wrapper').className = 'collapsed';
+    
+    let addMenu = event.target.closest('.btn-new-note');
+    if(!addMenu)
+        notesAddMenu.className = '';
 }
 
 
 function notesSetActiveTabClass(){
-    notesMedia = noteTab === 'nt-media';
+    notesFiles = noteTab === 'nt-files';
     for(let tab of document.querySelectorAll('.notes-tabs .note-tab')){
         tab.className = 'note-tab' + (tab.getAttribute('id') === noteTab ? ' active' : '');
     }
@@ -71,7 +86,7 @@ function notesNeedReload() {
 function notesQueryParameters()
 {
     var dbUid = getDashboardUid();
-    return `?type=${noteTab.substring(3)}&db=${encodeURIComponent(dbUid)}`;
+    return `?type=${noteTab.substring(3)}&db=${encodeURI(dbUid)}`;
 }
 
 function notesSelectTab(tab){
@@ -85,26 +100,13 @@ function notesSelectTab(tab){
 async function notesReload(){
     try 
     {
-        const response = await fetch('/notes' + notesQueryParameters());
+        let url = notesFiles ? '/files/path?path=' + encodeURI(userFilesPath || '') :
+                        '/notes' + notesQueryParameters();
+        const response = await fetch(url);
         const data = await response.json();
         let list = document.getElementById('notes-list');
         list.innerHTML = '';
-        for(let note of data)
-        {
-            let ele;
-            if(notesMedia)
-            {
-                ele = notesCreateMediaElement(note);
-            }
-            else
-            {
-                ele = notesCreateElement();
-                ele.setAttribute('x-uid', note.uid);
-                ele.querySelector('input').value = note.name;
-                ele.querySelector('.content-editor').innerHTML = note.content;
-            }
-            list.appendChild(ele);
-        }
+        notesAddToList(data);
         if(!notesLastLoaded)
             notesLastLoaded = {};
         notesLastLoaded[noteTab] = new Date();
@@ -112,6 +114,47 @@ async function notesReload(){
             notesDashboardUid = getDashboardUid();
     } catch (error) {
         console.log('error', error);
+    }
+}
+
+function notesAddToList(items){
+    if(!items)
+        return;
+    if(Array.isArray(items) === false)
+        items = [items];
+    let list = document.getElementById('notes-list');
+    console.log('notes add to list', items);
+    for(let note of items)
+    {
+        let ele = notesCreateElement();
+        if(notesFiles)
+        {
+            ele.className += ' ' + note.mimeType;
+            ele.setAttribute('x-uid', note.fullPath);
+            ele.querySelector('.name').innerText = note.name;
+            ele.querySelector('.enter').addEventListener('click', (e) => {
+                if(note.mimeType === 'folder'){
+                    notesChangeFolder(note.fullPath);
+                }
+            })
+            ele.querySelector('.download').addEventListener('click', (e) => {
+                notesDownload(note.fullPath);                
+            })
+            if(note.mimeType.startsWith('image'))
+                ele.querySelector('img').src = 'files/media?path=' + encodeURIComponent(note.fullPath);
+            else {
+                ele.className += ' no-img';
+                ele.querySelector('.icon').innerHTML = `<i class="${note.icon}" />`;
+            }
+            ele.querySelector('.size').innerText = humanizeFileSize(note.size);
+        }
+        else
+        {
+            ele.setAttribute('x-uid', note.uid);
+            ele.querySelector('input').value = note.name;
+            ele.querySelector('.content-editor').innerHTML = note.content;
+        }
+        list.appendChild(ele);
     }
 }
 
@@ -124,15 +167,36 @@ function notesCreateMediaElement(uid)
 }
 
 function notesAdd(){
-    if(notesMedia)
-        notesMediaUpload();
+    if(notesFiles) 
+    {
+        notesAddMenu.className = /visible/.test(notesAddMenu.className) ? '' : 'visible';
+        //notesMediaUpload();
+    }
     else
         document.getElementById('notes-list').appendChild(notesCreateElement());
 }
 
+async function notesFilesAdd(mode)
+{
+    notesAddMenu.className = '';
+    if(mode === 'upload')
+        notesMediaUpload();
+    else if(mode === 'folder')
+    {
+        var name = await modalPrompt('New Folder', 'Enter a name of the the folder to create');
+        if(/[~"#%&*:<>?/\\{|}]+/.test(name))
+            return; // invalid
+        if(!name)
+            return;
+        if(!userFilesPath) userFilesPath = '';
+        let result = await fetch('/files/create-folder?path=' + encodeURIComponent(userFilesPath + name), { method: 'POST'});
+        notesReload();
+    }
+}
+
 function notesFileDropEventListener(event){
     event.preventDefault();
-    if(!notesMedia)
+    if(!notesFiles)
         return;
     const files = event.dataTransfer.files;
     console.log('event', event);
@@ -156,7 +220,7 @@ function notesFileDropEventListener(event){
     notesUploadMediaForm(formData);
 }
 function notesListPasteEventListener(e) {
-    if(!notesMedia)
+    if(!notesFiles)
         return;
 
     let cbPayload = [...(e.clipboardData || e.originalEvent.clipboardData).items];
@@ -196,7 +260,7 @@ function notesMediaUpload() {
 }
 
 function notesUploadMediaForm(formData) {
-    fetch('/notes/media', {
+    fetch('/files/path?path=' + encodeURIComponent(userFilesPath || ''), {
         method: 'POST',
         body: formData
     })
@@ -204,10 +268,8 @@ function notesUploadMediaForm(formData) {
         let text = await response.text();
         if(!text)
             return;
-        var uids = JSON.parse(text);
-        for(let uid of uids) 
-            document.getElementById('notes-list').appendChild(notesCreateMediaElement(uid));
-
+        let files = JSON.parse(text);
+        notesAddToList(files);
     })
     .catch(error => {
         console.error(error);
@@ -215,14 +277,23 @@ function notesUploadMediaForm(formData) {
 }
 function notesCreateElement(){
     let ele = document.createElement('div');
-    if(notesMedia){
-        ele.className ='media';
-        ele.innerHTML = '<div class="controls">' +
-            '<i class="fas fa-circle"></i>' +
-            '<i onclick="notesDelete(event.target)"class="delete fa-sharp fa-solid fa-trash"></i>' +
-            '</div>' +
-            '<img />';
+    if(notesFiles){
+        ele.className ='file';
+        ele.innerHTML = '<input class="check" type="checkbox" />' +
+            '<span class="icon"><img /></span>' +
+            '<span class="name"></span>' +
+            '<span class="size"></span>' +
+            '<span class="enter"><i class="fa-solid fa-chevron-right"></i></span>' +
+            '<span class="download"><i class="fa-solid fa-download"></i></span>';
         return ele;
+
+        // ele.className ='media';
+        // ele.innerHTML = '<div class="controls">' +
+        //     '<i class="fas fa-circle"></i>' +
+        //     '<i onclick="notesDelete(event.target)"class="delete fa-sharp fa-solid fa-trash"></i>' +
+        //     '</div>' +
+        //     '<img />';
+        // return ele;
     }
     ele.className = 'note';
     ele.innerHTML = '<div class="controls">' +
@@ -293,7 +364,7 @@ async function notesMove(target, up){
 
 async function notesDelete(target){
     let note = target.parentNode.parentNode;
-    let type = notesMedia ? 'media' : 'note';
+    let type = notesFiles ? 'media' : 'note';
     let result = await modalConfirm('Delete', `Are you sure you want to delete this ${type}?`);
     if(!result)
         return;
@@ -305,4 +376,54 @@ async function notesDelete(target){
     let success =  await fetch( '/notes/' + uid + notesQueryParameters(), { method: 'delete'} );
     if(success)
         note.remove();
+}
+
+function notesChangeView(view){
+    document.getElementById('notes-list').className = 'content ' + view;
+}
+
+function notesChangeFolder(path) {
+    filePaths.push(path);
+    notesUpdateFilesBackVisiblity();
+    notesLoadFolder(path);
+}
+
+function notesDownload(path){
+    var link = document.createElement("a");
+    let url = '/files/download?path=' + encodeURIComponent(path);;
+    link.href = url;
+    link.download = url.split("/").pop();
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);    
+}
+
+function notesLoadFolder(path)
+{
+    path = path || '';
+    if(path.endsWith('/.'))
+        path = path.substring(0, path.length - 1);
+    let lbl = path;
+    if(lbl.endsWith('/'))
+        lbl = lbl.substring(0, lbl.length - 1);
+    if(lbl === '')
+        lbl = lblFiles;
+    document.querySelector('.notes-pane-title .files').innerText = lbl;
+    userFilesPath = path;
+    notesReload();
+}
+
+function notesParentPath(){
+    let path = filePaths.pop(); // gets rid of current, we want the next
+    if(!path)
+        return;
+    
+    path = filePaths.pop();
+    console.log('path', path || '');
+    notesLoadFolder(path);
+    notesUpdateFilesBackVisiblity();
+}
+
+function notesUpdateFilesBackVisiblity(){
+    document.getElementById('files-back').className = filePaths.length === 0 ? '' : 'visible';
 }

@@ -3,19 +3,39 @@
 <div id="notes-wrapper" class="collapsed">
     <div class="expander" onclick="notesToggle()">
         <i class="fa-solid fa-chevron-right"></i>
-        <span>@lblTitle</span>
+        <span>Drive</span>
     </div>
     <div class="notes-inner">
+        <div class="notes-pane-title">
+            <span class="notes">@lblTitle</span>
+            <span class="files">@lblFiles</span>
+            
+            <div id="files-back">
+                <i class="fa-solid fa-circle-left" onclick="notesParentPath()"></i>
+            </div>
+            
+            <div class="view-mode">
+                <i class="view-list fa-solid fa-list" onclick="notesChangeView('list')"></i>
+                <i class="view-thumbnail fa-solid fa-table-cells-large" onclick="notesChangeView('thumbnail')"></i>
+            </div>
+        </div>
         <div class="content" id="notes-list">
         </div>
-        <div class="btn-new-note" onclick="notesAdd()">
-            <i class="fa-solid fa-plus"></i>
+        <div class="btn-new-note">
+            <ul id="notes-add-menu">
+                <li onclick="notesFilesAdd('folder')"><i class="fa-solid fa-folder-plus"></i>New Folder</li>
+                <li class="separator"></li>
+                <li onclick="notesFilesAdd('note')"><i class="fa-regular fa-file-lines"></i>New Note</li>
+                <li class="separator"></li>
+                <li onclick="notesFilesAdd('upload')"><i class="fa-solid fa-upload"></i>Upload File</li>
+            </ul>
+            <i class="fa-solid fa-plus" onclick="notesAdd()"></i>
         </div>
         <div class="notes-tabs">
             <div id="nt-personal" onclick="notesSelectTab('nt-personal')" class="note-tab">@lblPersonal</div>
             <div id="nt-dashboard" onclick="notesSelectTab('nt-dashboard')" class="note-tab">@lblDashboard</div>
             <div id="nt-shared" onclick="notesSelectTab('nt-shared')" class="note-tab">@lblShared</div>
-            <div id="nt-media" onclick="notesSelectTab('nt-media')" class="note-tab">@lblMedia</div>
+            <div id="nt-files" onclick="notesSelectTab('nt-files')" class="note-tab">@lblFiles</div>
         </div>
     </div>
 </div>

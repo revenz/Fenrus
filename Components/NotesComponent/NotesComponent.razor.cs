@@ -12,7 +12,7 @@ public partial class NotesComponent
     /// </summary>
     [Parameter] public Translator Translator { get; set; }
 
-    private string lblTitle, lblPersonal, lblDashboard, lblShared, lblMedia;
+    private string lblTitle, lblPersonal, lblDashboard, lblShared, lblFiles;
 
     protected override void OnInitialized()
     {
@@ -20,6 +20,6 @@ public partial class NotesComponent
         this.lblPersonal = Translator.Instant("Labels.Personal");
         this.lblDashboard = Translator.Instant("Labels.Dashboard");
         this.lblShared = Translator.Instant("Labels.Shared");
-        this.lblMedia= Translator.Instant("Labels.Media");
+        this.lblFiles= Translator.Instant("Labels.Files");
     }
 }
