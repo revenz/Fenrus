@@ -1,0 +1,287 @@
+#fdrive-files .fdrive-pane-title {
+  background: #000;
+  text-align: center;
+}
+#fdrive-files .fdrive-pane-title > span {
+  line-height: 3rem;
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  letter-spacing: 0.5rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.3rem;
+}
+#fdrive-files .fdrive-pane-title .title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 80%;
+  width: 80%;
+  white-space: nowrap;
+  direction: rtl;
+}
+
+#fdrive-add-menu {
+  visibility: hidden;
+  max-height: 0;
+  transition: max-height 0.25s ease-in-out, visibility 0.25s ease-out;
+  padding: 0.5rem;
+  position: absolute;
+  bottom: 8rem;
+  right: 1rem;
+  overflow: hidden;
+  background: black;
+  border: solid 1px var(--border-color);
+}
+#fdrive-add-menu.visible {
+  max-height: 20rem;
+  visibility: visible;
+}
+#fdrive-add-menu li {
+  list-style: none;
+  padding: 0.5rem;
+  text-transform: uppercase;
+  min-width: 10rem;
+  cursor: pointer;
+}
+#fdrive-add-menu li i {
+  margin-right: 0.5rem;
+}
+#fdrive-add-menu li:hover {
+  background: rgba(var(--accent-rgb), 0.3);
+}
+#fdrive-add-menu li.separator {
+  cursor: default;
+  height: 0;
+  border-bottom: solid 1px var(--border-color);
+  display: inline-block;
+  padding: 0 0.5rem;
+  margin: 0;
+  position: relative;
+  top: -0.25rem;
+}
+
+.view-mode, #files-back {
+  position: absolute;
+  top: 0.65rem;
+  right: 1rem;
+  font-size: 1.5rem;
+}
+.view-mode i, #files-back i {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  opacity: 0.5;
+}
+.view-mode i:hover, #files-back i:hover {
+  opacity: 1;
+}
+
+#files-back {
+  display: none;
+  right: unset;
+  left: 1rem;
+}
+#files-back.visible {
+  display: unset;
+}
+
+#fdrive-list:not(.thumbnail) {
+  display: flex;
+  flex-direction: column;
+}
+#fdrive-list:not(.thumbnail) .file {
+  height: 4rem;
+  min-height: 4rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem;
+  background: rgba(var(--color-rgb), 0.05);
+  font-size: 1.3rem;
+  line-height: 100%;
+  position: relative;
+}
+#fdrive-list:not(.thumbnail) .file .enter {
+  display: none;
+}
+#fdrive-list:not(.thumbnail) .file.folder .download {
+  display: none;
+}
+#fdrive-list:not(.thumbnail) .file.folder .enter {
+  display: unset;
+}
+#fdrive-list:not(.thumbnail) .file.folder .enter, #fdrive-list:not(.thumbnail) .file .download {
+  position: absolute;
+  right: 1.5rem;
+  top: 1.65rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+#fdrive-list:not(.thumbnail) .file:hover {
+  background: rgba(var(--color-rgb), 0.2);
+}
+#fdrive-list:not(.thumbnail) .file .check {
+  margin-right: 1rem;
+  margin-top: 1rem;
+}
+#fdrive-list:not(.thumbnail) .file .icon {
+  width: 8rem;
+  height: 100%;
+  margin-right: 1rem;
+  font-size: 4rem;
+  text-align: center;
+}
+#fdrive-list:not(.thumbnail) .file .icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#fdrive-list:not(.thumbnail) .file .name {
+  flex-grow: 1;
+}
+#fdrive-list:not(.thumbnail) .file .name, #fdrive-list:not(.thumbnail) .file .size {
+  display: flex;
+  align-items: center;
+}
+#fdrive-list:not(.thumbnail) .file .size {
+  width: 12rem;
+  justify-content: right;
+  padding-right: 4rem;
+}
+
+#fdrive-list.thumbnail {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 240px);
+  position: relative;
+  transition: opacity 0.25s ease-in-out;
+}
+#fdrive-list.thumbnail .check {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+#fdrive-list.thumbnail .file {
+  height: 240px;
+  position: relative;
+}
+#fdrive-list.thumbnail .size {
+  display: none;
+}
+#fdrive-list.thumbnail .file.no-img .icon {
+  background: #222;
+}
+#fdrive-list.thumbnail .file.no-img .name {
+  display: unset !important;
+}
+#fdrive-list.thumbnail .enter {
+  display: none;
+}
+#fdrive-list.thumbnail .file.folder {
+  cursor: pointer;
+}
+#fdrive-list.thumbnail .file.folder .enter {
+  display: unset;
+  position: absolute;
+  right: 1.5rem;
+  top: 1.5rem;
+  font-size: 2rem;
+  cursor: pointer;
+}
+#fdrive-list.thumbnail .file.folder .download {
+  display: none;
+}
+#fdrive-list.thumbnail .name {
+  position: absolute;
+  display: none;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  line-height: 2rem;
+  background: rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+#fdrive-list.thumbnail .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#fdrive-list.thumbnail .icon, #fdrive-list.thumbnail img {
+  width: 100%;
+  height: 100%;
+}
+#fdrive-list.thumbnail .icon i {
+  font-size: 10rem;
+}
+#fdrive-list.thumbnail img {
+  object-fit: cover;
+}
+#fdrive-list.thumbnail .controls {
+  position: absolute;
+  bottom: 4rem;
+  left: 1rem;
+  font-size: 2rem;
+  display: none;
+}
+#fdrive-list.thumbnail .controls > i {
+  cursor: pointer;
+  position: absolute;
+}
+#fdrive-list.thumbnail .controls .delete {
+  left: 0.85rem;
+  top: 0.7rem;
+  color: rgba(var(--color-rgb), 0.8);
+}
+#fdrive-list.thumbnail .controls .fa-circle {
+  color: rgba(var(--accent-rgb), 0.3);
+  font-size: 3.5rem;
+}
+#fdrive-list.thumbnail .controls:hover .delete {
+  color: var(--color);
+}
+#fdrive-list.thumbnail .controls:hover .fa-circle {
+  color: rgba(var(--accent-rgb), 0.7);
+}
+#fdrive-list.thumbnail .download {
+  display: none;
+}
+#fdrive-list.thumbnail:hover .controls {
+  display: unset;
+}
+#fdrive-list.thumbnail .file:hover {
+  opacity: 1;
+}
+#fdrive-list.thumbnail .file:hover .name {
+  display: unset;
+}
+#fdrive-list.thumbnail .file:hover .download {
+  position: absolute;
+  font-size: 1rem;
+  cursor: pointer;
+  right: 0.75rem;
+  bottom: 0.25rem;
+  display: unset;
+}
+#fdrive-list.thumbnail:hover .file:not(:hover) {
+  opacity: 0.2;
+}
+#fdrive-list.thumbnail:hover:not(:has(:hover)) .file {
+  opacity: 1;
+}
+@media screen and (max-width: 1000px) {
+  #fdrive-list.thumbnail {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(2, 200px) !important;
+  }
+  #fdrive-list.thumbnail .file {
+    height: 200px !important;
+  }
+}
+
+#fdrive-files {
+  display: flex;
+  flex-direction: column;
+}
+
+/*# sourceMappingURL=fdriveFiles.css.map */

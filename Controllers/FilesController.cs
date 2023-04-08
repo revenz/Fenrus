@@ -88,7 +88,7 @@ public class FilesController : BaseController
                 if(userFile != null)
                     files.Add(userFile);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
             }
         }

@@ -107,7 +107,7 @@
 
 @if (isGuest == false)
 {
-    @(await Html.RenderComponentAsync<NotesComponent>(RenderMode.Static, new
+    @(await Html.RenderComponentAsync<DriveComponent>(RenderMode.Static, new
     {
         Model.Translator
     }))

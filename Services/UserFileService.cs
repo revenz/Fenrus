@@ -22,6 +22,8 @@ public class UserFilesService
     public List<UserFile> GetAll(Guid userUid, string folder)
     {
         var db = DbHelper.GetDb();
+        if (folder?.EndsWith("/.") == true)
+            folder = folder[..^1];
         string userMatch = FILES_PREFIX + userUid + "/";
         string folderMatch = userMatch + (folder ?? string.Empty);
         if (folderMatch.EndsWith("/") == false)
@@ -130,7 +132,8 @@ public class UserFilesService
             Extension = extension,
             Name = filename,
             FullPath = path + filename,
-            MimeType = result.MimeType
+            MimeType = result.MimeType,
+            Size = result.Length
         };
     }
     

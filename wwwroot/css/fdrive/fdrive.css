@@ -1,0 +1,191 @@
+#fdrive-wrapper {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+}
+#fdrive-wrapper .expander {
+  position: absolute;
+  user-select: none;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -2rem;
+  width: 2rem;
+  height: 13rem;
+  background: rgba(17, 17, 17, 0.9333333333);
+  cursor: pointer;
+  opacity: 0.75;
+}
+#fdrive-wrapper .expander:hover {
+  opacity: 1;
+}
+#fdrive-wrapper .expander > span {
+  transform: rotate(-90deg);
+  display: block;
+  width: 11rem;
+  height: 1.4rem;
+  position: absolute;
+  left: -63px;
+  top: 93px;
+  overflow: hidden;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 0.3rem;
+}
+#fdrive-wrapper .expander > i {
+  position: relative;
+  top: 0.65rem;
+  left: 0.65rem;
+}
+#fdrive-wrapper .fdrive-inner {
+  width: 0;
+  height: 100%;
+  transition: width 0.5s ease-in-out;
+  overflow: hidden;
+  background: rgba(17, 17, 17, 0.9333333333);
+  position: relative;
+}
+#fdrive-wrapper.expanded .expander {
+  opacity: 1;
+}
+#fdrive-wrapper.expanded .expander > i {
+  transform: rotate(-180deg);
+}
+@media screen and (max-width: 1000px) {
+  #fdrive-wrapper.expanded .fdrive-inner {
+    width: min(90vw, 40rem);
+  }
+}
+@media screen and (min-width: 1000.001px) {
+  #fdrive-wrapper.expanded .fdrive-inner {
+    width: 60rem;
+  }
+}
+#fdrive-wrapper .fdrive-add-button > i {
+  position: absolute;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  padding: 1rem;
+  border-radius: 51rem;
+  background: rgba(var(--accent-rgb), 0.3);
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--color);
+  width: 2rem;
+  height: 2rem;
+  margin: auto;
+  -webkit-text-stroke: 0.5rem var(--color);
+}
+#fdrive-wrapper .fdrive-add-button > i:hover {
+  background: rgba(var(--accent-rgb), 0.7);
+  transform: scale(1.1);
+}
+@-moz-document url-prefix() {
+  #fdrive-wrapper .fdrive-add-button > i {
+    text-shadow: -1px -1px 0 var(--color), 1px -1px 0 var(--color), -1px 1px 0 var(--color), 1px 1px 0 var(--color), -2px -2px 0 var(--color), 2px -2px 0 var(--color), -2px 2px 0 var(--color), 2px 2px 0 var(--color);
+  }
+}
+#fdrive-wrapper .fdrive-add-button > i::before {
+  position: relative;
+  left: 1px;
+}
+#fdrive-wrapper .content {
+  width: 100%;
+  height: calc(100% - 3rem);
+  overflow: auto;
+}
+#fdrive-wrapper .fdrive-tabs {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 3rem;
+  display: flex;
+  flex-direction: row;
+}
+#fdrive-wrapper .fdrive-tabs > div {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-basis: 0;
+  flex-grow: 1;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.3rem;
+  opacity: 0.2;
+  background: #000;
+  user-select: none;
+}
+@media screen and (max-width: 1000px) {
+  #fdrive-wrapper .fdrive-tabs > div {
+    font-size: 1rem;
+  }
+}
+#fdrive-wrapper .fdrive-tabs > div.active {
+  opacity: 1;
+  background: unset;
+}
+#fdrive-wrapper .media {
+  position: relative;
+  transition: opacity 0.25s ease-in-out;
+}
+#fdrive-wrapper .media .controls {
+  position: absolute;
+  bottom: 4rem;
+  left: 1rem;
+  font-size: 2rem;
+  display: none;
+}
+#fdrive-wrapper .media .controls > i {
+  cursor: pointer;
+  position: absolute;
+}
+#fdrive-wrapper .media .controls .delete {
+  left: 0.85rem;
+  top: 0.7rem;
+  color: rgba(var(--color-rgb), 0.8);
+}
+#fdrive-wrapper .media .controls .fa-circle {
+  color: rgba(var(--accent-rgb), 0.3);
+  font-size: 3.5rem;
+}
+#fdrive-wrapper .media .controls:hover .delete {
+  color: var(--color);
+}
+#fdrive-wrapper .media .controls:hover .fa-circle {
+  color: rgba(var(--accent-rgb), 0.7);
+}
+#fdrive-wrapper .media:hover .controls {
+  display: unset;
+}
+#fdrive-wrapper .media:hover {
+  opacity: 1;
+}
+#fdrive-wrapper #fdrive-list:hover .media:not(:hover) {
+  opacity: 0.2;
+}
+#fdrive-wrapper #fdrive-list:hover:not(:has(:hover)) .media {
+  opacity: 1;
+}
+
+.fdrive-modes {
+  height: calc(100% - 3rem);
+}
+.fdrive-modes .fdrive-pane-title {
+  height: 3rem;
+}
+.fdrive-modes > div {
+  height: 100%;
+}
+.fdrive-modes > div:not(.visible) {
+  display: none !important;
+}
+
+/*# sourceMappingURL=fdrive.css.map */

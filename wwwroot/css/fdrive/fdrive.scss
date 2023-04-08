@@ -1,0 +1,211 @@
+$notesBackground: #111111ee;
+$notesMediaScreenSize: 1000px;
+
+#fdrive-wrapper
+{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  z-index:100;
+  .expander {
+    position: absolute;
+    user-select: none;
+    top: 50%;
+    transform: translateY(-50%);
+    right:-2rem;
+    width:2rem;
+    height:13rem;
+    background: $notesBackground;
+    cursor:pointer;
+    opacity: 0.75;
+    &:hover{ opacity: 1;}
+    > span {
+      transform: rotate(-90deg);
+      display: block;
+      width: 11rem;
+      height: 1.4rem;
+      position: absolute;
+      left: -63px;
+      top: 93px;
+      overflow: hidden;
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 1.2rem;
+      letter-spacing: 0.3rem;
+    }
+    > i {
+      position: relative;
+      top: 0.65rem;
+      left: 0.65rem;
+    }
+  }
+  .fdrive-inner {
+    width:0;
+    height:100%;
+    transition: width 0.5s ease-in-out;
+    overflow: hidden;
+    background:$notesBackground;
+    position: relative;
+  }
+  &.expanded {
+    .expander
+    {
+      opacity: 1;
+      > i {
+        transform: rotate(-180deg);
+      }
+    }
+    .fdrive-inner {
+      @media screen and (max-width:$notesMediaScreenSize)
+      {
+        width:min(90vw, 40rem);
+      }
+      @media screen and (min-width:($notesMediaScreenSize + .001))
+      {
+        width:60rem;
+      }
+    }
+  }
+
+  .fdrive-add-button
+  {
+    > i {
+      position: absolute;
+      bottom: 4.5rem;
+      right: 1.5rem;
+      padding: 1rem;
+      border-radius: 51rem;
+      background: rgba(var(--accent-rgb), 0.3);
+      cursor: pointer;
+      transition: transform 0.1s ease-in-out;
+
+      &:hover {
+        background: rgba(var(--accent-rgb), 0.7);
+        transform: scale(1.1);
+      }
+
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--color);
+      width: 2rem;
+      height: 2rem;
+      margin: auto;
+      @-moz-document url-prefix() {
+        text-shadow: -1px -1px 0 var(--color),
+        1px -1px 0 var(--color),
+        -1px 1px 0 var(--color),
+        1px 1px 0 var(--color),
+        -2px -2px 0 var(--color),
+        2px -2px 0 var(--color),
+        -2px 2px 0 var(--color),
+        2px 2px 0 var(--color);
+      }
+      -webkit-text-stroke: 0.5rem var(--color);
+
+      &::before {
+        position: relative;
+        left: 1px;
+      }
+    }
+  }
+  .content {
+    width:100%;
+    height: calc(100% - 3rem);
+    overflow: auto;
+  }
+  .fdrive-tabs {
+    position:absolute;
+    bottom:0;
+    right:0;
+    left:0;
+    height:3rem;
+    display:flex;
+    flex-direction: row;
+    > div {
+      cursor:pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-basis: 0;
+      flex-grow: 1;
+      font-size: 1.2rem;
+      @media screen and (max-width: $notesMediaScreenSize){
+        font-size:1rem;
+      }
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.3rem;
+      opacity:0.2;
+      background:#000;
+      user-select: none;
+      &.active {
+        opacity:1;
+        background:unset;
+      }
+    }
+  }
+
+  .media {
+    position:relative;
+    transition: opacity 0.25s ease-in-out;
+    .controls {
+      position:absolute;
+      bottom:4rem;
+      left:1rem;
+      font-size:2rem;
+      display:none;
+      > i {
+        cursor: pointer;
+        position:absolute;
+      }
+      .delete {
+        left: 0.85rem;
+        top: 0.7rem;
+        color: rgba(var(--color-rgb), 0.8);
+      }
+      .fa-circle {
+        color: rgba(var(--accent-rgb), 0.3);
+        font-size:3.5rem;
+      }
+      &:hover {
+        .delete {
+          color: var(--color);
+        }
+        .fa-circle {
+          color: rgba(var(--accent-rgb), 0.7);
+        }
+      }
+    }
+    &:hover {
+      .controls {
+        display: unset;
+      }
+    }
+  }
+  .media:hover {
+    opacity: 1;
+  }
+
+  #fdrive-list:hover .media:not(:hover) {
+    opacity: 0.2;
+  }
+
+  #fdrive-list:hover:not(:has(:hover)) .media {
+    opacity: 1;
+  }
+}
+
+.fdrive-modes {
+  height: calc(100% - 3rem);
+  .fdrive-pane-title {
+    height:3rem;
+  }
+  > div {
+    height:100%;
+  }
+   > div:not(.visible) {
+     display:none !important;
+   }
+}

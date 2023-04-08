@@ -1,0 +1,86 @@
+#fdrive-notes .fdrive-pane-title {
+  display: flex;
+  flex-direction: row;
+}
+#fdrive-notes .fdrive-pane-title > div {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-basis: 0;
+  flex-grow: 1;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.3rem;
+  background: #000;
+  user-select: none;
+  color: rgba(var(--color-rgb), 0.3);
+}
+#fdrive-notes .fdrive-pane-title > div.active {
+  color: var(--color);
+  background: unset;
+}
+#fdrive-notes .note {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  border: solid 1px var(--border-color);
+  padding: 0.5rem;
+  max-height: 8rem;
+  transition: max-height 0.25s ease-in-out;
+  overflow: hidden;
+  position: relative;
+}
+#fdrive-notes .note input, #fdrive-notes .note .content-editor {
+  padding: 0.5rem;
+  width: calc(100% - 3rem);
+  outline: none;
+  border: solid 1px transparent;
+}
+#fdrive-notes .note input, #fdrive-notes .note textarea {
+  background: transparent;
+  color: var(--input-color);
+  font-family: sans-serif;
+}
+#fdrive-notes .note input {
+  font-size: 1.2rem;
+}
+#fdrive-notes .note .content-editor {
+  overflow: hidden;
+}
+#fdrive-notes .note:hover .controls, #fdrive-notes .note:focus-within .controls {
+  display: flex;
+}
+#fdrive-notes .note:focus-within {
+  background: var(--input-background);
+  max-height: 80vh;
+}
+#fdrive-notes .note:focus-within .content-editor {
+  overflow: auto;
+}
+#fdrive-notes .note:focus-within .content-editor > div {
+  overflow: auto;
+}
+#fdrive-notes .note .controls {
+  display: none;
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  flex-direction: column;
+  min-height: 7rem;
+  width: 2rem;
+  font-size: 1.3rem;
+  text-align: center;
+}
+#fdrive-notes .note .controls > i {
+  height: 2rem;
+  vertical-align: center;
+  cursor: pointer;
+  opacity: 0.6;
+}
+#fdrive-notes .note .controls > i:hover {
+  opacity: 1;
+}
+
+/*# sourceMappingURL=fdriveNotes.css.map */
