@@ -100,8 +100,8 @@ class FenrusDrive
         let lbl = path;
         if(lbl.endsWith('/'))
             lbl = lbl.substring(0, lbl.length - 1);
-        if(lbl === '')
-            lbl = this.lblFiles;
+        
+        lbl = !lbl ? this.lblFiles : '/' + lbl;
         document.querySelector('.fdrive-pane-title .title').innerText = lbl;
         this.filesPath = path;
         
