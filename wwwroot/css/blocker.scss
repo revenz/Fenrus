@@ -1,0 +1,62 @@
+.blocker {
+  background:rgba(var(--base-rgb),0.9);
+  z-index:1000;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: none;
+  &.visible {
+    display:flex;
+  }
+
+  .blocker-indicator {
+    margin:auto;
+  }
+  .blocker-spinner {
+    margin:auto;
+    --border-width: 1.5rem;
+
+    height: 10rem;
+    width: 10rem;
+    border-radius: 50%;
+
+    /* 0.5px's are needed to avoid hard-stopping */
+    --mask: radial-gradient(
+                    farthest-side,
+                    transparent calc(100% - var(--border-width) - 0.5px),
+                    #000 calc(100% - var(--border-width) + 0.5px)
+    );
+    -webkit-mask: var(--mask);
+    mask: var(--mask);
+
+    /* we're using two half linear-gradient which is masked by the radial-gradient */
+    background: linear-gradient(to top, rgba(var(--accent-rgb), 1), rgba(var(--accent-rgb), 0.5)) 100% 0/50% 100% no-repeat,
+    linear-gradient(rgba(var(--accent-rgb), 0.5) 50%, transparent 95%) 0 0/50% 100% no-repeat;
+    animation: blocker-spin 1s linear infinite;
+
+  }
+  .blocker-message {
+    color:var(--accent);
+    border:solid 1px var(--accent);
+    margin-top:2rem;
+    padding:0.5rem 2rem;
+    font-size:1.2rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5rem;
+    &.hidden {
+      display:none;
+    }
+  }
+}
+
+@keyframes blocker-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

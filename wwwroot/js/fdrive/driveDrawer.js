@@ -50,7 +50,7 @@ class FenrusDriveDrawer {
     }
     
     mouseDownEventListener(event) {
-        let wrapper = event.target.closest('#fdrive-wrapper, .fenrus-modal');
+        let wrapper = event.target.closest('#fdrive-wrapper, .fenrus-modal, .blocker');
         if (!wrapper)
             this.eleWrapper.className = 'collapsed';
 

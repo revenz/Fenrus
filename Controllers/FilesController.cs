@@ -28,9 +28,36 @@ public class FilesController : BaseController
     /// <param name="path">The full path of the file</param>
     /// <returns>the media file binary data if found</returns>
     [HttpGet("media")]
-    [HttpGet("download")]
     [ResponseCache(Duration = 31 * 24 * 60 * 60)] // cache for 31 days
     public async Task<IActionResult> GetMedia([FromQuery] string path)
+    {
+        var userUid = User.GetUserUid().Value;
+        var service = new UserFilesService();
+        var file = service.GetFileData(userUid, path);
+        if (file == null)
+        {
+            // might not be found if just added, wait and try again
+            await Task.Delay(500);
+            file = service.GetFileData(userUid, path);
+            if(file == null)
+                return new NotFoundResult();
+        }
+
+        if (file.Value.MimeType?.StartsWith("image") != true)
+            return new NotFoundResult();
+
+        string filename = file.Value.Filename;
+        string extension = filename[(filename.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
+        // Or get binary data as Stream and copy to another Stream
+        return File(file.Value.Data, file.Value.MimeType?.EmptyAsNull() ?? "image/" + extension);
+    }
+    /// <summary>
+    /// Downloads a file for the user
+    /// </summary>
+    /// <param name="path">The full path of the file</param>
+    /// <returns>the file download if found</returns>
+    [HttpGet("download")]
+    public async Task<IActionResult> Download([FromQuery] string path)
     {
         var userUid = User.GetUserUid().Value;
         var service = new UserFilesService();
@@ -69,28 +96,21 @@ public class FilesController : BaseController
     /// <param name="path">the path to get</param>
     /// <returns>the UIDs of the newly uploaded files</returns>
     [HttpPost("path")]
-    public async Task<List<UserFile>> UploadMedia([FromForm] List<IFormFile> file, [FromQuery] string? path = null)
+    [DisableRequestSizeLimit]
+    //[RequestFormLimits(BufferBodyLengthLimit = 10_737_418_240, MultipartBodyLengthLimit = 10_737_418_240)] // 10GiB limit
+    [RequestFormLimits(BufferBodyLengthLimit = 14_737_418_240, MultipartBodyLengthLimit = 14_737_418_240)] // 10GiB limit
+    public async Task<List<UserFile>> Upload([FromForm] List<IFormFile> file, [FromQuery] string? path = null)
     {
         List<UserFile> files = new();
-        if (file.Any() != true)
+        if (file?.Any() != true)
             return files;
         var uid = User.GetUserUid().Value;
         var service = new UserFilesService();
         foreach (var f in file)
         {
-            try
-            {
-                using var stream = new MemoryStream();
-                await f.CopyToAsync(stream);
-                stream.Seek(0, SeekOrigin.Begin);
-                var data = stream.ToArray();
-                var userFile = service.Add(uid, path, f.FileName, data);
-                if(userFile != null)
-                    files.Add(userFile);
-            }
-            catch (Exception ex)
-            {
-            }
+            var userFile = await service.Add(uid, path, f.FileName, f);
+            if (userFile != null)
+                files.Add(userFile);
         }
 
         return files;

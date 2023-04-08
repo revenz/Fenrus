@@ -31,6 +31,10 @@ builder.Services.AddWebOptimizer(pipeline =>
     pipeline.CompileScssFiles(new () { MinifyCss = true, SourceComments = false});
     pipeline.AddScssBundle("/css/_fenrus.css", "css/**/*.scss");
 });
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = long.MaxValue;
+});
 builder.Services.AddBlazoredToast();
 
 builder.Services.AddRazorPages();

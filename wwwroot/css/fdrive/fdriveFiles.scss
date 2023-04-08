@@ -136,8 +136,10 @@ $notesMediaSmallMediaSize: 200px;
       width:8rem;
       height:100%;
       margin-right:1rem;
-      font-size: 4rem;
-      text-align: center;
+      font-size: 3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       i {
 
       }

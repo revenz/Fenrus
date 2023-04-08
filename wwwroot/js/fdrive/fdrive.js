@@ -2,7 +2,7 @@ class FenrusDrive
 {
     eleAddMenu;
     filePaths = [];
-    filesPath;
+    currentPath;
     lastReload;
     container;
     lblFiles;
@@ -65,7 +65,7 @@ class FenrusDrive
     }
     changeView(view, noSave){
         if(!noSave)
-            this.folderViews[this.filePaths || ''] = view;
+            this.folderViews[this.currentPath || ''] = view;
         localStorage.setItem('DRIVE_FOLDER_VIEWS', JSON.stringify(this.folderViews));
         document.getElementById('fdrive-list').className = 'content ' + view;
     }
@@ -96,14 +96,13 @@ class FenrusDrive
         path = path || '';
         if(path.endsWith('/.'))
             path = path.substring(0, path.length - 1);
-        console.log('loading path: ' + path);
         let lbl = path;
-        if(lbl.endsWith('/'))
-            lbl = lbl.substring(0, lbl.length - 1);
+        // if(lbl.endsWith('/'))
+        //     lbl = lbl.substring(0, lbl.length - 1);
         
         lbl = !lbl ? this.lblFiles : '/' + lbl;
         document.querySelector('.fdrive-pane-title .title').innerText = lbl;
-        this.filesPath = path;
+        this.currentPath = path;
         
         if(this.folderViews[path])
             this.changeView(this.folderViews[path], true);
@@ -112,13 +111,11 @@ class FenrusDrive
 
 
     parentPath(){
-        console.log('going to parent', JSON.parse(JSON.stringify(this.filePaths)));
         let path = this.filePaths.pop(); // gets rid of current, we want the next
         if(!path)
             return;
     
         path = this.filePaths[this.filePaths.length - 1];
-        console.log('path', path || '');
         this.loadFolder(path);
         this.updateFilesBackVisiblity();
     }
@@ -134,20 +131,27 @@ class FenrusDrive
         let confirmed = await modalConfirm('Delete', 'Are you sure you want to delete the selected file(s) ?');
         if(!confirmed)
             return;
-        await fetch('/files', {
-            method: 'delete',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({files: files})
-        });
+        showBlocker('Deleting file(s)');
+        try {
+            await fetch('/files', {
+                method: 'delete',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({files: files})
+            });
+        }
+        catch(err)
+        {
+            
+        }
+        hideBlocker();
         await this.reload();
     }
 
     upload() {
         var input = document.createElement("input");
         input.type = "file";
-        input.accept = "image/*";
         input.style.display = "none";
         input.name = "file";
         input.multiple = true;
@@ -157,9 +161,15 @@ class FenrusDrive
             if(!input.files.length)
                 return;
             var formData = new FormData();
-            for(let file of input.files)
+            let count = 0;
+            let size = 0;
+            for(let file of input.files) {
                 formData.append('file', file);
-            this.uploadForm(formData);
+                count++;
+                size += file.size;
+            }
+            if(count > 0)
+                this.uploadForm(formData, count, size);
         });
     
         input.addEventListener("cancel", () => {
@@ -168,6 +178,8 @@ class FenrusDrive
     
         input.click();
     }
+
+
     pasteEventListener(e) {
         let cbPayload = [...(e.clipboardData || e.originalEvent.clipboardData).items];
         cbPayload = cbPayload.filter(i => /image/.test(i.type));
@@ -175,33 +187,34 @@ class FenrusDrive
             return;
     
         const formData = new FormData();
-        let file = cbPayload[0].getAsFile();
-        formData.append('file', file);
-        this.uploadForm(formData);
+        let count = 0;
+        let size = 0;
+        for(let i=0;i<cbPayload.length;i++) {
+            let file = cbPayload[i].getAsFile();
+            if(!file)
+                continue;            
+            formData.append('file', file);
+            size += file.size;
+            count++;
+        }
+        this.uploadForm(formData, count, size);
     }
 
     fileDropEventListener(event){
         event.preventDefault();
         const files = event.dataTransfer.files;
-        console.log('event', event);
-        console.log('files length', files.length);
-        console.log('files', files);
         const formData = new FormData();
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     
+        let size = 0;
         let filesAdded = 0;
         for (let i = 0; i < files.length; i++) {
-            console.log('file', files[i]);
-            console.log('[type', files[i].type);
-            if (allowedTypes.indexOf(files[i].type) !== -1) {
-                console.log('adding file', files[i]);
-                formData.append('file', files[i]);
-                ++filesAdded;
-            }
+            formData.append('file', files[i]);
+            size += files[i].size;
+            ++filesAdded;
         }
         if(filesAdded === 0)
             return;
-        this.uploadForm(formData);
+        this.uploadForm(formData, filesAdded, size);
     }
 
     addClicked(){
@@ -220,34 +233,75 @@ class FenrusDrive
                 return; // invalid
             if(!name)
                 return;
-            if(!this.filePaths) this.filePaths = '';
-            let result = await fetch('/files/create-folder?path=' + encodeURIComponent(this.filePaths + name), { method: 'POST'});
+            if(!this.currentPath) this.currentPath = '';
+            console.log('this.currentPath', this.currentPath);
+            let fullPath = name;
+            if(this.currentPath)
+            {
+                if(this.currentPath.endsWith('/'))
+                    fullPath = this.currentPath + name;
+                else
+                    fullPath = this.currentPath + '/' + name;
+            }
+            let result = await fetch('/files/create-folder?path=' + encodeURIComponent(fullPath), { method: 'POST'});
             this.reload();
         }
     }
 
-    async uploadForm(formData) {
+    async uploadForm(formData, fileCount, size) 
+    {
+        if(size > 10_737_418_240){
+            await modalMessage('Exceeds Limit', 'The file(s) you are attempting to upload exceed to 10GB limit.');
+            return;
+        }
+        showBlocker('Uploading');        
         try 
         {
-            let response = await fetch('/files/path?path=' + encodeURIComponent(this.filesPath || ''), {
-                method: 'POST',
-                body: formData
-            })
-            let text = await response.text();
-            if (!text)
-                return;
-            let files = JSON.parse(text);
-            this.addToList(files);
+            let eleProgress = document.querySelector('.blocker-message');
+            await this.uploadFileWithProgress(formData, eleProgress);
+            await this.reload(); 
         } catch (error) {
+            await modalMessage('Error', error || 'Unexpected upload error');
             console.error(error);
         }
+        hideBlocker();
     }
 
-
+    uploadFileWithProgress(formData, progressDiv) 
+    {
+        return new Promise(async (resolve, reject) => {
+            const url = '/files/path?path=' + encodeURIComponent(this.currentPath || '');
+    
+            const xhr = new XMLHttpRequest();
+    
+            xhr.upload.addEventListener('progress', (event) => {
+                if (event.lengthComputable) {
+                    const percentComplete = (event.loaded / event.total) * 100;
+                    progressDiv.textContent = percentComplete.toFixed(0) + '%';
+                }
+            });
+    
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        progressDiv.textContent = '100%';
+                        resolve(xhr.responseText);
+                    } else {
+                        reject(new Error('Network response was not ok'));
+                    }
+                }
+            };
+    
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send(formData);
+        });
+    }
+    
     async reload(){
         try
         {
-            let url = '/files/path?path=' + encodeURI(this.filePaths || '');
+            let url = '/files/path?path=' + encodeURI(this.currentPath || '');
             const response = await fetch(url);
             const data = await response.json();
             let list = document.getElementById('fdrive-list');
@@ -264,7 +318,6 @@ class FenrusDrive
         if(Array.isArray(items) === false)
             items = [items];
         let list = document.getElementById('fdrive-list');
-        console.log('notes add to list', items);
         for(let note of items)
         {
             let ele = this.createElement();

@@ -53,23 +53,24 @@ public class UserFile
             if (MimeType.Contains("excel") || MimeType.Contains("xls"))
                 return "fa-solid fa-excel";
             if (MimeType.Contains("word") || MimeType.Contains("doc"))
-                return "fa-solid fa-doc";
+                return "fa-solid file-word";
             if (MimeType.Contains("csv"))
-                return "fa-solid fa-csv";
-            if (MimeType.Contains("code"))
-                return "fa-solid fa-file-code";
+                return "fa-solid fa-file-csv";
             if (MimeType.Contains("powerpoint"))
                 return "fa-solid fa-powerpoint";
             if (MimeType.Contains("pdf"))
-                return "fa-solid fa-pdf";
+                return "fa-solid file-pdf";
             if (MimeType.Contains("text"))
-                return "fa-solid fa-memo";
+                return "fa-solid fa-file-lines";
             if (MimeType.Contains("zip") || MimeType.Contains("archive"))
-                return "fa-solid fa-file-zip";
+                return "fa-solid fa-file-archive";
             if (MimeType.Contains("video"))
                 return "fa-solid fa-file-video";
             if (MimeType.Contains("music"))
-                return "fa-solid fa-file-music";
+                return "fa-solid fa-file-audio";
+            
+            if (MimeType.Contains("code") || new [] {"json", "html", "xml", "js", "cs", "cpp", "js", "ts"}.Contains(this.Extension))
+                return "fa-solid fa-file-code";
             
             return "fa-solid fa-file";
         }

@@ -30,7 +30,30 @@ function modalConfirm(title, message) {
         });
     });
 }
-
+function modalMessage(title, message) {
+    return new Promise((resolve, reject) => {
+        let modal = document.createElement('div');
+        modal.innerHTML = '<div class="background-overlay fenrus-modal-background-overlay" />' +
+            '<div class="fenrus-modal confirm">' +
+            '<div class="fenrus-modal-title"></div>' +
+            '<div class="fenrus-modal-body"></div>' +
+            '<div class="fenrus-modal-footer">' +
+            '<button class="btn confirm-ok"></button>' +
+            '</div>'
+        '</div>';
+        modal.querySelector('.confirm-ok').innerText = Translations.Ok;
+        document.body.append(modal);
+        modal.className = 'modal';
+        modal.querySelector('.fenrus-modal-title').innerText = title;
+        modal.querySelector('.fenrus-modal-body').innerText = message;
+        modal.querySelector('.confirm-ok').addEventListener('click', (event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            modal.remove();
+            resolve();
+        });
+    });
+}
 function modalPrompt(title, message) {
     return new Promise((resolve, reject) => {
         let modal = document.createElement('div');
