@@ -96,8 +96,9 @@ class FenrusDriveNotes
             '<i class="down fa-solid fa-caret-down"></i>' +
             '</div>' +
             `<input type="text" placeholder="Note Title" ${(readOnly ? 'disabled' : '')}  />` +
-            `<div class="content-editor" ${(readOnly ? '' : 'contenteditable="true"')} spellcheck="false"></div>` +
-            '';
+            `<div class="content-editor" contenteditable="true" spellcheck="false" ` +
+            (readOnly ? ' oncut="return false" onpaste="return false" onkeydown="if(event.metaKey) return true; return false;" ' : '') +
+            '></div>';
         ele.querySelector('.up').addEventListener('click', (event) => this.move(event.target, true));
         ele.querySelector('.down').addEventListener('click', (event) => this.move(event.target, false));
         if(!readOnly) {
