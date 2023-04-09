@@ -59,6 +59,7 @@
 }
 #fdrive-notes .note .content-editor {
   overflow: hidden;
+  font-size: 1.1rem;
 }
 #fdrive-notes .note:hover .controls, #fdrive-notes .note:focus-within .controls {
   display: flex;
