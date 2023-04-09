@@ -21,10 +21,22 @@ $notesMediaSmallMediaSize: 200px;
     .title {
       text-overflow: ellipsis;
       overflow: hidden;
-      max-width: 80%;
-      width: 80%;
+      max-width: 70%;
+      width: 70%;
       white-space: nowrap;
       direction: rtl;
+      display:inline-block;
+      .path-separator, span:not(:last-child){
+        opacity: 0.5;
+      }
+    }
+  }
+  .file.parent {
+    i {
+      transform: scaleX(-1);
+    }
+    .download {
+      display:none !important;
     }
   }
 }

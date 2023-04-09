@@ -16,10 +16,20 @@
 #fdrive-files .fdrive-pane-title .title {
   text-overflow: ellipsis;
   overflow: hidden;
-  max-width: 80%;
-  width: 80%;
+  max-width: 70%;
+  width: 70%;
   white-space: nowrap;
   direction: rtl;
+  display: inline-block;
+}
+#fdrive-files .fdrive-pane-title .title .path-separator, #fdrive-files .fdrive-pane-title .title span:not(:last-child) {
+  opacity: 0.5;
+}
+#fdrive-files .file.parent i {
+  transform: scaleX(-1);
+}
+#fdrive-files .file.parent .download {
+  display: none !important;
 }
 
 #fdrive-add-menu {

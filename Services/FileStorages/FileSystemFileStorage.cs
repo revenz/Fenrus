@@ -25,7 +25,7 @@ public class FileSystemFileStorage:IFileStorage
     /// <param name="userUid">the UID of the user</param>
     /// <returns>the root path</returns>
     private string GetRootPath(Guid userUid)
-        => Path.Combine(DirectoryHelper.GetDataDirectory(), "Drive", userUid.ToString());
+        => Path.Combine(DirectoryHelper.GetDataDirectory(), "drive", userUid.ToString());
     
     /// <summary>
     /// Gets the physical path on disk for a given user
