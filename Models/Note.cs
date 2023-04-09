@@ -22,6 +22,11 @@ public class Note : IModal, IUserModal
     public Guid UserUid { get; set; }
     
     /// <summary>
+    /// Gets or sets if this note is shared
+    /// </summary>
+    public bool Shared { get; set; }
+    
+    /// <summary>
     /// Gets or sets the UID of the dashboard this note belongs to
     /// </summary>
     public Guid DashboardUid { get; set; }

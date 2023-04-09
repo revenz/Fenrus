@@ -16,6 +16,12 @@ public class NotesService
         => DbHelper.GetAllForUser<Note>(uid);
 
     /// <summary>
+    /// Get all shared notes
+    /// </summary>
+    public List<Note> GetShared()
+        => DbHelper.GetAll<Note>().Where(x => x.Shared).ToList();
+
+    /// <summary>
     /// Gets a note by its UID
     /// </summary>
     /// <param name="uid">the UID of the object to get</param>

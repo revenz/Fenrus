@@ -327,39 +327,39 @@ class FenrusDrive {
         if (Array.isArray(items) === false)
             items = [items];
         let list = document.getElementById('fdrive-list');
-        for (let note of items) {
+        for (let item of items) {
             let ele = this.createElement();
-            ele.className += ' ' + note.mimeType;
-            ele.setAttribute('x-uid', note.fullPath);
-            ele.querySelector('.name').innerText = note.name;
+            ele.className += ' ' + item.mimeType;
+            ele.setAttribute('x-uid', item.fullPath);
+            ele.querySelector('.name').innerText = item.name;
             ele.querySelector('.enter').addEventListener('click', (e) => {
-                if (note.mimeType === 'folder') {
-                    this.changeFolder(note.fullPath);
+                if (item.mimeType === 'folder') {
+                    this.changeFolder(item.fullPath);
                 }
             })
             ele.querySelector('.download').addEventListener('click', (e) => {
-                this.download(note.fullPath);
+                this.download(item.fullPath);
             })
-            if (note.mimeType.startsWith('image')) {
+            if (item.mimeType.startsWith('image')) {
                 let img = ele.querySelector('img');
-                img.src = 'files/media?path=' + encodeURIComponent(note.fullPath);
-                img.setAttribute('x-filename', note.name);
+                img.src = 'files/media?path=' + encodeURIComponent(item.fullPath);
+                img.setAttribute('x-filename', item.name);
                 ele.addEventListener('dblclick', () => {
                     this.openSlideshow(ele);
                 })
             } else {
                 ele.className += ' no-img';
-                ele.querySelector('.icon').innerHTML = `<i class="${note.icon}" />`;
+                ele.querySelector('.icon').innerHTML = `<i class="${item.icon}" />`;
                 ele.addEventListener('dblclick', () => {
-                    if (note.mimeType === 'parent')
+                    if (item.mimeType === 'parent')
                         this.parentPath();
-                    else if (note.mimeType === 'folder')
-                        this.changeFolder(note.fullPath);
+                    else if (item.mimeType === 'folder')
+                        this.changeFolder(item.fullPath);
                     else
-                        this.download(note.fullPath);
+                        this.download(item.fullPath);
                 });
             }
-            ele.querySelector('.size').innerText = humanizeFileSize(note.size);
+            ele.querySelector('.size').innerText = humanizeFileSize(item.size);
             list.appendChild(ele);
         }
     }

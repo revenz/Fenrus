@@ -32,6 +32,17 @@
   overflow: hidden;
   position: relative;
 }
+#fdrive-notes .note.readonly::after {
+  content: "\f502"; /* Font Awesome 6 lock icon unicode */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0.5rem;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 3rem;
+}
 #fdrive-notes .note input, #fdrive-notes .note .content-editor {
   padding: 0.5rem;
   width: calc(100% - 3rem);

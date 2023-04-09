@@ -11,6 +11,36 @@ namespace Fenrus.Controllers;
 public class NotesController : BaseController
 {
     /// <summary>
+    /// Gets if the user is admin
+    /// </summary>
+    /// <param name="userUid"></param>
+    /// <returns></returns>
+    private bool IsAdmin(Guid userUid)
+    {
+        var user = new UserService().GetByUid(userUid);
+        if (user == null)
+            return false;
+        return user.IsAdmin;
+    }
+
+    /// <summary>
+    /// Checks if the user has write access
+    /// </summary>
+    /// <param name="userUid">the UID of the user</param>
+    /// <param name="note">the note to check</param>
+    /// <returns>true if has write access, otherwise false</returns>
+    private bool HasWriteAccess(Guid userUid, Note note)
+    {
+        if (note == null)
+            return false;
+        if (note.UserUid == userUid)
+            return true;
+        if (note.Shared == false)
+            return false;
+        return IsAdmin(userUid);
+    }
+    
+    /// <summary>
     /// Gets all the notes for the user
     /// </summary>
     /// <returns>the notes</returns>
@@ -18,14 +48,13 @@ public class NotesController : BaseController
     public IEnumerable<object> GetAll([FromQuery] NoteType type, [FromQuery(Name = "db")] Guid dashboardUid)
     {
         var uid = User.GetUserUid().Value;
-        if (type == NoteType.Media)
-            return new MediaService().GetAll(uid);
         var notes = GetNotes(uid, type, dashboardUid);
         return notes.OrderBy(x => x.Order).Select(x => new
         {
             x.Uid,
             Name = EncryptionHelper.Decrypt(x.Name),
-            Content = EncryptionHelper.Decrypt(x.Content)
+            Content = EncryptionHelper.Decrypt(x.Content),
+            ReadOnly = IsAdmin(uid) == false && x.UserUid != uid
         });
     }
 
@@ -38,9 +67,11 @@ public class NotesController : BaseController
     /// <returns>the list of notes</returns>
     List<Note> GetNotes(Guid userUid, NoteType type, Guid dashboardUid)
     {
-        return new NotesService().GetAllByUser(type == NoteType.Shared ? Guid.Empty : userUid).Where(x =>
+        if (type == NoteType.Shared)
+            return new NotesService().GetShared();
+        return new NotesService().GetAllByUser(userUid).Where(x =>
         {
-            if (type == NoteType.Shared) return true;
+            if (x.Shared) return false;
             if (type == NoteType.Dashboard) return x.DashboardUid == dashboardUid;
             return x.DashboardUid == Guid.Empty;
         }).ToList();
@@ -61,8 +92,9 @@ public class NotesController : BaseController
             var existing = service.GetByUid(note.Uid);
             if (existing != null)
             {
-                if (existing.UserUid != Guid.Empty && existing.UserUid != uid)
+                if (HasWriteAccess(uid, existing) == false)
                     throw new UnauthorizedAccessException();
+                
                 if(existing.Name != note.Name)
                     existing.Name = EncryptionHelper.Encrypt(note.Name ?? string.Empty);
                 if(existing.Content != note.Content)
@@ -79,9 +111,10 @@ public class NotesController : BaseController
         
         note.Name = EncryptionHelper.Encrypt(note.Name ?? string.Empty);
         note.Content = EncryptionHelper.Encrypt(note.Content ?? string.Empty);
-        if (type == NoteType.Shared)
-            note.UserUid = Guid.Empty;
-        else if (type == NoteType.Personal)
+        note.Shared = type == NoteType.Shared;
+        note.UserUid = uid;
+        
+        if (type == NoteType.Personal || type == NoteType.Shared)
             note.DashboardUid = Guid.Empty;
         else
             note.DashboardUid = dashboardUid;
@@ -97,55 +130,18 @@ public class NotesController : BaseController
         return note;
     }
 
-    /// <summary>
-    /// Uploads media files
-    /// </summary>
-    /// <param name="file">the files being uploaded</param>
-    /// <returns>the UIDs of the newly uploaded media</returns>
-    [HttpPost("media")]
-    public async Task<List<Guid>> UploadMedia([FromForm] List<IFormFile> file)
-    {
-        List<Guid> guids = new();
-        if (file.Any() != true)
-            return guids;
-        var uid = User.GetUserUid().Value;
-        foreach (var f in file)
-        {
-            try
-            {
-                using var stream = new MemoryStream();
-                await f.CopyToAsync(stream);
-                stream.Seek(0, SeekOrigin.Begin);
-                var data = stream.ToArray();
-                var guid = new MediaService().Add(uid, f.FileName, data);
-                guids.Add(guid.Value);
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-        return guids;
-    }
     
     /// <summary>
     /// Deletes a note
     /// </summary>
     /// <param name="uid">the UID of the note</param>
     [HttpDelete("{uid}")]
-    public void Delete([FromRoute] Guid uid, [FromQuery] NoteType type)
+    public void Delete([FromRoute] Guid uid)
     {
         var userUid = User.GetUserUid().Value;
-
-        if (type == NoteType.Media)
-        {
-            new MediaService().Delete(userUid, uid);
-            return;
-        }
-        
         var service = new NotesService();
         var note = service.GetByUid(uid);
-        if (note == null || (note.UserUid != Guid.Empty && note.UserUid != userUid))
+        if (note == null || HasWriteAccess(uid, note) == false)
             return;
         service.Delete(note.Uid);
     }
@@ -196,10 +192,6 @@ public class NotesController : BaseController
         /// <summary>
         /// Shared notes
         /// </summary>
-        Shared,
-        /// <summary>
-        /// Media notes
-        /// </summary>
-        Media
+        Shared
     }
 }

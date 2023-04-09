@@ -75,7 +75,7 @@ class FenrusDriveNotes
         if (Array.isArray(items) === false)
             items = [items];
         for (let note of items) {
-            let ele = this.createElement();
+            let ele = this.createElement(note.readOnly);
             ele.setAttribute('x-uid', note.uid);
             ele.querySelector('input').value = note.name;
             ele.querySelector('.content-editor').innerHTML = note.content;
@@ -84,27 +84,29 @@ class FenrusDriveNotes
     }
 
     add() {
-        this.eleList.appendChild(this.createElement());
+        this.eleList.appendChild(this.createElement(false));
     }
     
-    createElement() {
+    createElement(readOnly) {
         let ele = document.createElement('div');
-        ele.className = 'note';
+        ele.className = 'note'  + (readOnly ? ' readonly' : '');
         ele.innerHTML = '<div class="controls">' +
             '<i class="up fa-solid fa-caret-up"></i>' +
-            '<i class="delete fa-sharp fa-solid fa-trash"></i>' +
+            (readOnly ? '' : '<i class="delete fa-sharp fa-solid fa-trash"></i>') +
             '<i class="down fa-solid fa-caret-down"></i>' +
             '</div>' +
-            '<input type="text" placeholder="Note Title" />' +
-            '<div class="content-editor" contenteditable="true" spellcheck="false"></div>' +
+            `<input type="text" placeholder="Note Title" ${(readOnly ? 'disabled' : '')}  />` +
+            `<div class="content-editor" ${(readOnly ? '' : 'contenteditable="true"')} spellcheck="false"></div>` +
             '';
         ele.querySelector('.up').addEventListener('click', (event) => this.move(event.target, true));
         ele.querySelector('.down').addEventListener('click', (event) => this.move(event.target, false));
-        ele.querySelector('.delete').addEventListener('click', (event) => this.deleteNote(event.target));
-        ele.querySelector('input').addEventListener('change', (event) => this.onChange(event));
-        let contentEditor = ele.querySelector('.content-editor');
-        contentEditor.addEventListener('paste', (event) => this.onPaste(event));
-        contentEditor.addEventListener('focusout', (event) => this.onChange(event));
+        if(!readOnly) {
+            ele.querySelector('.delete').addEventListener('click', (event) => this.deleteNote(event.target));
+            ele.querySelector('input').addEventListener('change', (event) => this.onChange(event));
+            let contentEditor = ele.querySelector('.content-editor');
+            contentEditor.addEventListener('paste', (event) => this.onPaste(event));
+            contentEditor.addEventListener('focusout', (event) => this.onChange(event));
+        }
         return ele;
 
     }
