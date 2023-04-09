@@ -16,9 +16,13 @@ public class ConfigImporter
         try
         {
             OldConfig config = JsonSerializer.Deserialize<OldConfig>(json);
+            config.Docker ??= new();
             Console.WriteLine("Docker Servers: " + config.Docker.Count);
+            config.SearchEngines ??= new();
             Console.WriteLine("Search Engines: " + config.SearchEngines.Count);
+            config.SystemGroups ??= new();
             Console.WriteLine("System Groups: " + config.SystemGroups.Count);
+            config.Users ??= new();
             Console.WriteLine("Users: " + config.Users.Count);
 
             ImportDockers(config.Docker);
