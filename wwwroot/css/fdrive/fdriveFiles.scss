@@ -101,6 +101,12 @@ $notesMediaSmallMediaSize: 200px;
   right: unset;
   left: 0.5rem;
   top: 0.4rem;
+} 
+
+#fdrive-list .file.no-img .icon img {
+  object-fit: contain !important;
+  max-width: 6rem;
+  max-height: 6rem;
 }
 
 #fdrive-list:not(.thumbnail) {
@@ -204,7 +210,7 @@ $notesMediaSmallMediaSize: 200px;
   .file.folder {
     cursor:pointer;
     .enter {
-      display: unset;
+      // display: unset;
       position: absolute;
       right: 1.5rem;
       top: 1.5rem;
@@ -212,7 +218,7 @@ $notesMediaSmallMediaSize: 200px;
       cursor:pointer;
     }
     .download {
-      display:none;
+      display:none !important;
     }
   }
   .name {

@@ -38,13 +38,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Components\PanelThemeSettings\PanelThemeSettings.razor" />
-    <_ContentIncludedByDefault Remove="Components\PanelUserSettings\PanelUserSettings.razor" />
-    <_ContentIncludedByDefault Remove="Components\Pages\PageDashboard\PageDashboard.razor" />
-    <_ContentIncludedByDefault Remove="Components\Pages\PanelThemeSettings\PanelThemeSettings.razor" />
-    <_ContentIncludedByDefault Remove="Components\Pages\PanelUserSettings\PanelUserSettings.razor" />
-    <_ContentIncludedByDefault Remove="Components\PageGroup\PageGroup.razor" />
-    <_ContentIncludedByDefault Remove="Components\PageGroups\PageGroups.razor" />
+    <Compile Remove="data\drive\**" />
+    <Compile Remove="data\logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="data\drive\**" />
+    <EmbeddedResource Remove="data\logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="data\drive\**" />
+    <Content Remove="data\logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="data\drive\**" />
+    <None Remove="data\logs\**" />
   </ItemGroup>
 
 </Project>

@@ -93,6 +93,12 @@
   top: 0.4rem;
 }
 
+#fdrive-list .file.no-img .icon img {
+  object-fit: contain !important;
+  max-width: 6rem;
+  max-height: 6rem;
+}
+
 #fdrive-list:not(.thumbnail) {
   display: flex;
   flex-direction: column;
@@ -191,7 +197,6 @@
   cursor: pointer;
 }
 #fdrive-list.thumbnail .file.folder .enter {
-  display: unset;
   position: absolute;
   right: 1.5rem;
   top: 1.5rem;
@@ -199,7 +204,7 @@
   cursor: pointer;
 }
 #fdrive-list.thumbnail .file.folder .download {
-  display: none;
+  display: none !important;
 }
 #fdrive-list.thumbnail .name {
   position: absolute;
