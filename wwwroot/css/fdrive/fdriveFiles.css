@@ -72,28 +72,25 @@
   top: -0.25rem;
 }
 
-.view-mode, #files-back {
+.view-mode, #files-check-all {
   position: absolute;
   top: 0.65rem;
   right: 1rem;
   font-size: 1.5rem;
 }
-.view-mode i, #files-back i {
+.view-mode i, #files-check-all i {
   margin-left: 0.5rem;
   cursor: pointer;
   opacity: 0.5;
 }
-.view-mode i:hover, #files-back i:hover {
+.view-mode i:hover, #files-check-all i:hover {
   opacity: 1;
 }
 
-#files-back {
-  display: none;
+#files-check-all {
   right: unset;
-  left: 1rem;
-}
-#files-back.visible {
-  display: unset;
+  left: 0.5rem;
+  top: 0.4rem;
 }
 
 #fdrive-list:not(.thumbnail) {

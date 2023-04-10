@@ -83,7 +83,7 @@ $notesMediaSmallMediaSize: 200px;
 }
 
 
-.view-mode, #files-back {
+.view-mode, #files-check-all {
   position: absolute;
   top: 0.65rem;
   right: 1rem;
@@ -97,13 +97,10 @@ $notesMediaSmallMediaSize: 200px;
     }
   }
 }
-#files-back {
-  display: none;
+#files-check-all {
   right: unset;
-  left:1rem;
-  &.visible {
-    display:unset;
-  }
+  left: 0.5rem;
+  top: 0.4rem;
 }
 
 #fdrive-list:not(.thumbnail) {

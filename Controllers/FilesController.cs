@@ -74,7 +74,7 @@ public class FilesController : BaseController
         string filename = file.Value.Filename;
         string extension = filename[(filename.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
         // Or get binary data as Stream and copy to another Stream
-        return File(file.Value.Data, file.Value.MimeType?.EmptyAsNull() ?? "image/" + extension, filename);
+        return File(file.Value.Data,   "application/octet-stream", filename);
     }
     
     /// <summary>

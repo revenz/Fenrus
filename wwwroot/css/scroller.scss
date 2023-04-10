@@ -19,3 +19,14 @@
         background-color: rgba(var(--accent-rgb), 0.8);
     }
 }
+
+
+/* Hide scrollbar track */
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+/* Hide scrollbar corner */
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}

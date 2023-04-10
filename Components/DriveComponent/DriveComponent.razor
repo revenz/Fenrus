@@ -24,8 +24,8 @@
                 <div class="fdrive-pane-title">
                     <span class="title">@lblFiles</span>
 
-                    <div id="files-back">
-                        <i class="fa-solid fa-circle-left" onclick="fDrive.parentPath()"></i>
+                    <div id="files-check-all">
+                        <input type="checkbox" onchange="fDrive.checkAll(event.target.checked)" />
                     </div>
 
                     <div class="view-mode">

@@ -1,0 +1,94 @@
+.fdrive-text-preview-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  font-size: 1.2rem;
+}
+
+.fdrive-text-preview-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 80%;
+  width: 80%;
+  max-height: 90%;
+  height: 90%;
+  background-color: var(--base);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.fdrive-text-preview-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+  opacity: 0.5;
+}
+.fdrive-text-preview-close:hover {
+  opacity: 1;
+}
+
+.fdrive-text-preview-text-container {
+  overflow: auto;
+  flex-grow: 1;
+  padding: 1rem;
+  margin: 2rem;
+  white-space: pre-wrap;
+}
+
+.fdrive-text-preview-footer {
+  position: relative;
+  height: 2rem;
+  min-height: 2rem;
+}
+
+.fdrive-text-preview-filename {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0.5rem 0 0.5rem 2rem;
+  color: var(--color);
+  cursor: pointer;
+}
+.fdrive-text-preview-filename:hover {
+  text-decoration: none;
+}
+.fdrive-text-preview-filename i {
+  margin-right: 0.5rem;
+  color: var(--accent);
+}
+
+.fdrive-text-preview-copy {
+  display: inline-block;
+  position: absolute;
+  bottom: 1.25rem;
+  left: 2rem;
+  color: var(--color);
+  cursor: pointer;
+  opacity: 0.5;
+}
+.fdrive-text-preview-copy:hover {
+  opacity: 1;
+}
+.fdrive-text-preview-copy i {
+  margin-right: 0.5rem;
+  color: var(--accent);
+}
+
+.fdrive-text-preview-filesize {
+  display: block;
+  position: absolute;
+  right: 2rem;
+  bottom: 1.25rem;
+}
+
+/*# sourceMappingURL=textpreview.css.map */

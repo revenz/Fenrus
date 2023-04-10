@@ -1,0 +1,66 @@
+.toast {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 320px;
+  max-height: 120px;
+  overflow: hidden;
+  padding: 16px;
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+.toast.success {
+  background-color: #28a745;
+  color: #fff;
+}
+.toast.success i {
+  color: #fff;
+}
+.toast.warning {
+  background-color: #ffc107;
+  color: #000;
+}
+.toast.warning i {
+  color: #000;
+}
+.toast.info {
+  background-color: #17a2b8;
+  color: #fff;
+}
+.toast.info i {
+  color: #fff;
+}
+.toast.error {
+  background-color: #dc3545;
+  color: #fff;
+}
+.toast.error i {
+  color: #fff;
+}
+.toast i {
+  font-size: 24px;
+  margin-right: 16px;
+  opacity: 0.8;
+}
+.toast .message {
+  flex: 1;
+}
+.toast .close {
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.5;
+  transition: opacity 0.2s ease-in-out;
+}
+.toast .close:hover {
+  opacity: 1;
+}
+
+/*# sourceMappingURL=toast.css.map */

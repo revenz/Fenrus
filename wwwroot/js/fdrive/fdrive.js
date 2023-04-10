@@ -41,7 +41,6 @@ class FenrusDrive {
 
     changeFolder(path) {
         this.filePaths.push(path);
-        this.updateFilesBackVisiblity();
         this.loadFolder(path);
     }
 
@@ -57,8 +56,10 @@ class FenrusDrive {
         return ele;
     }
 
-    updateFilesBackVisiblity() {
-        document.getElementById('files-back').className = this.filePaths.length === 0 ? '' : 'visible';
+    checkAll(checked){
+        for(let ele of this.container.querySelectorAll('input[type=checkbox]')){
+            ele.checked = checked;
+        }
     }
 
     changeView(view, noSave) {
@@ -85,7 +86,6 @@ class FenrusDrive {
             path = path.substring(0, path.length - 1);
         if (path)
             this.filePaths.push(path);
-        this.updateFilesBackVisiblity();
         this.loadFolder(path);
     }
 
@@ -126,7 +126,6 @@ class FenrusDrive {
 
         path = this.filePaths[this.filePaths.length - 1];
         this.loadFolder(path);
-        this.updateFilesBackVisiblity();
     }
 
     async deleteFiles() {
@@ -351,10 +350,15 @@ class FenrusDrive {
                 ele.className += ' no-img';
                 ele.querySelector('.icon').innerHTML = `<i class="${item.icon}" />`;
                 ele.addEventListener('dblclick', () => {
+                    console.log(';item.mimeType', item.mimeType );
                     if (item.mimeType === 'parent')
                         this.parentPath();
                     else if (item.mimeType === 'folder')
                         this.changeFolder(item.fullPath);
+                    else if(/text|json|xmk|csv|html/.test(item.mimeType?.trim() || ''))
+                        this.openTextPreview('/files/download?path=' + encodeURIComponent(item.fullPath));
+                    else if(/\.(js|cs|sh|scss)$/.test(item.fullPath))
+                        this.openTextPreview('/files/download?path=' + encodeURIComponent(item.fullPath));
                     else
                         this.download(item.fullPath);
                 });
@@ -364,66 +368,144 @@ class FenrusDrive {
         }
     }
 
-    openImagePreview(url) {
-        // Create a div to hold the image and background
-        const imageDiv = document.createElement("div");
-        imageDiv.style.position = "fixed";
-        imageDiv.style.top = "0";
-        imageDiv.style.left = "0";
-        imageDiv.style.width = "100%";
-        imageDiv.style.height = "100%";
-        imageDiv.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        imageDiv.style.zIndex = "9999";
-
-        // Create the close button
-        const closeButton = document.createElement("div");
-        closeButton.innerHTML = "X";
-        closeButton.style.position = "absolute";
-        closeButton.style.top = "0";
-        closeButton.style.left = "0";
-        closeButton.style.padding = "10px";
-        closeButton.style.color = "#fff";
-        closeButton.style.cursor = "pointer";
-        closeButton.style.zIndex = "10000";
-
-        // Add event listeners to close the image when clicked or when escape is pressed
-        closeButton.addEventListener("click", closeImage);
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") {
-                closeImage();
+    async openTextPreview(url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
             }
-        });
 
-        // Create the image element
-        const image = new Image();
-        image.src = url;
-        image.style.maxWidth = "80%";
-        image.style.maxHeight = "80%";
-        image.style.position = "absolute";
-        image.style.top = "50%";
-        image.style.left = "50%";
-        image.style.transform = "translate(-50%, -50%)";
+            let filename = this.getFileNameFromContentDisposition(response.headers.get("content-disposition"));
+            const fileSize = response.headers.get("content-length");
 
-        // Add the elements to the div
-        imageDiv.appendChild(closeButton);
-        imageDiv.appendChild(image);
+            const previewContainer = document.createElement("div");
+            previewContainer.className = 'fdrive-text-preview-container fdrive-preview';
 
-        // Add the div to the body
-        document.body.appendChild(imageDiv);
+            const previewBox = document.createElement("div");
+            previewBox.classList.add("fdrive-text-preview-box");
 
-        function closeImage() {
-            // Remove the event listeners
-            closeButton.removeEventListener("click", closeImage);
-            document.removeEventListener("keydown", (event) => {
+            const header = document.createElement("div");
+            header.classList.add("fdrive-text-preview-header");
+
+            const text = await response.text();
+            
+            const filenameLink = document.createElement("a");
+            filenameLink.classList.add("fdrive-text-preview-filename");
+            filenameLink.innerText = filename;
+            filenameLink.innerHTML = '<i class="fas fa-download"></i>' + filenameLink.innerHTML;
+            filenameLink.addEventListener('click', () => {
+                this.download(url);
+            })
+            header.appendChild(filenameLink);
+
+            const keyDownListener = (event) => {
                 if (event.key === "Escape") {
-                    closeImage();
+                    document.body.removeChild(previewContainer);
                 }
-            });
+            };
 
-            // Remove the image div from the body
-            document.body.removeChild(imageDiv);
+            const close = () => {
+                document.body.removeChild(previewContainer);
+                document.removeEventListener("keydown",keyDownListener);
+            }
+            
+            const closeSpan = document.createElement("span");
+            closeSpan.classList.add("fdrive-text-preview-close");
+            closeSpan.innerHTML = '<i class="fas fa-times"></i>';
+            closeSpan.addEventListener("click", () => {
+                close();
+            });
+            header.appendChild(closeSpan);
+
+            const footer = document.createElement("div");
+            footer.classList.add("fdrive-text-preview-footer");
+
+            if (location.protocol === "https:") {
+                const copySpan = document.createElement("span");
+                copySpan.classList.add("fdrive-text-preview-copy");
+                copySpan.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
+                copySpan.addEventListener('click', async() => {
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        Toast.info('Copied to clipboard');
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+                });
+                footer.appendChild(copySpan);
+                
+            }
+
+            const fileSizeSpan = document.createElement("span");
+            fileSizeSpan.classList.add("fdrive-text-preview-filesize");
+            fileSizeSpan.innerText = humanizeFileSize(fileSize);
+            footer.appendChild(fileSizeSpan);
+
+            const textContainer = document.createElement("div");
+            textContainer.classList.add("fdrive-text-preview-text-container");
+            
+            switch(filename.substring(filename.lastIndexOf('.') + 1).toLowerCase()){
+                case 'json':
+                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.json, "json") + "</code></pre>";
+                    break;
+                case "html":
+                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.html, "html") + "</code></pre>";
+                    break;
+                case "xml":
+                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.xml, "xml") + "</code></pre>";
+                    break;
+                case "js":
+                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.javascript, "javascript") + "</code></pre>";
+                    break;
+                case "css":
+                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.css, "stylesheet") + "</code></pre>";
+                    break;
+                case "cs":
+                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.csharp, "csharp") + "</code></pre>";
+                    break;
+                default:
+                    textContainer.textContent = text;
+                    break;
+            }
+
+
+            previewBox.appendChild(header);
+            previewBox.appendChild(textContainer);
+            previewBox.appendChild(footer);
+            previewContainer.appendChild(previewBox);
+
+            document.body.appendChild(previewContainer);
+            document.addEventListener("keydown", keyDownListener);
+            
+        } catch (error) {
+            console.error("There was a problem with the text preview", error);
         }
     }
+
+
+    getFileNameFromContentDisposition(contentDisposition) {
+        if (!contentDisposition) {
+            return null;
+        }
+
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const matches = contentDisposition.match(filenameRegex);
+
+        if (!matches) {
+            return null;
+        }
+
+        let filename = matches[1];
+
+        if (filename.startsWith('"') && filename.endsWith('"')) {
+            filename = filename.slice(1, -1);
+        }
+
+        filename = decodeURIComponent(filename);
+
+        return filename;
+    }
+
 
     openSlideshow( startChild) {
         // Get all the child elements of the container
@@ -489,7 +571,7 @@ class FenrusDrive {
 
         // Create slideshow elements
         const slideshowDiv = document.createElement("div");
-        slideshowDiv.className = "fdrive-slideshow";
+        slideshowDiv.className = "fdrive-slideshow fdrive-preview";
 
         const backgroundDiv = document.createElement("div");
         backgroundDiv.className = "slideshow-background";
