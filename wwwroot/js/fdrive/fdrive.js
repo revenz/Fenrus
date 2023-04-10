@@ -6,6 +6,47 @@ class FenrusDrive {
     container;
     lblFiles;
     folderViews = {};
+    extensions = {
+        plain: "clike",
+        plaintext: "clike",
+        text: "clike",
+        txt: "clike",
+        extend: "markup",
+        insertBefore: "markup",
+        dfs: "markup",
+        markup: "markup",
+        html: "html",
+        mathml: "markup",
+        svg: "markup",
+        xml: "markup",
+        ssml: "markup",
+        atom: "markup",
+        rss: "markup",
+        css: "css",
+        clike: "clike",
+        javascript: "javascript",
+        js: "javascript",
+        bash: "bash",
+        sh: "bash",
+        shell: "bash",
+        batch: "batch",
+        c: "c",
+        csharp: "csharp",
+        cs: "csharp",
+        dotnet: "markup",
+        cpp: "cpp",
+        csv: "csv",
+        docker: "docker",
+        dockerfile: "docker",
+        json: "json",
+        webmanifest: "json",
+        sql: "sql",
+        typescript: "typescript",
+        ts: "typescript",
+        yaml: "yaml",
+        yml: "yaml"
+    };
+
 
     constructor() {
         let container = document.getElementById('fdrive-list');
@@ -350,14 +391,12 @@ class FenrusDrive {
                 ele.className += ' no-img';
                 ele.querySelector('.icon').innerHTML = `<i class="${item.icon}" />`;
                 ele.addEventListener('dblclick', () => {
-                    console.log(';item.mimeType', item.mimeType );
+                    let extension = item.fullPath.substring(item.fullPath.lastIndexOf('.') + 1).toLowerCase();
                     if (item.mimeType === 'parent')
                         this.parentPath();
                     else if (item.mimeType === 'folder')
                         this.changeFolder(item.fullPath);
-                    else if(/text|json|xmk|csv|html/.test(item.mimeType?.trim() || ''))
-                        this.openTextPreview('/files/download?path=' + encodeURIComponent(item.fullPath));
-                    else if(/\.(js|cs|sh|scss)$/.test(item.fullPath))
+                    else if(this.extensions[extension] || extension === 'txt')
                         this.openTextPreview('/files/download?path=' + encodeURIComponent(item.fullPath));
                     else
                         this.download(item.fullPath);
@@ -444,30 +483,7 @@ class FenrusDrive {
             const textContainer = document.createElement("div");
             textContainer.classList.add("fdrive-text-preview-text-container");
             
-            switch(filename.substring(filename.lastIndexOf('.') + 1).toLowerCase()){
-                case 'json':
-                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.json, "json") + "</code></pre>";
-                    break;
-                case "html":
-                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.html, "html") + "</code></pre>";
-                    break;
-                case "xml":
-                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.xml, "xml") + "</code></pre>";
-                    break;
-                case "js":
-                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.javascript, "javascript") + "</code></pre>";
-                    break;
-                case "css":
-                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.css, "stylesheet") + "</code></pre>";
-                    break;
-                case "cs":
-                    textContainer.innerHTML = "<pre><code" + Prism.highlight(text, Prism.languages.csharp, "csharp") + "</code></pre>";
-                    break;
-                default:
-                    textContainer.textContent = text;
-                    break;
-            }
-
+            this.highlightCode(filename, text, textContainer);
 
             previewBox.appendChild(header);
             previewBox.appendChild(textContainer);
@@ -479,6 +495,17 @@ class FenrusDrive {
             
         } catch (error) {
             console.error("There was a problem with the text preview", error);
+        }
+    }
+
+
+    highlightCode(filename, text, textContainer) {
+        const extension = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+
+        if (this.extensions[extension]) {
+            textContainer.innerHTML = `<pre><code class="language-${this.extensions[extension]}">${Prism.highlight(text, Prism.languages[this.extensions[extension]], this.extensions[extension])}</code></pre>`;
+        } else {
+            textContainer.textContent = text;
         }
     }
 
