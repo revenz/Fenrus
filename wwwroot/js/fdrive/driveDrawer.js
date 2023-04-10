@@ -50,13 +50,17 @@ class FenrusDriveDrawer {
     }
     
     mouseDownEventListener(event) {
-        let wrapper = event.target.closest('#fdrive-wrapper, .fenrus-modal, .blocker, .fdrive-preview');
-        if (!wrapper)
-            this.eleWrapper.className = 'collapsed';
+        if(this.eleWrapper) {
+            let wrapper = event.target.closest('#fdrive-wrapper, .fenrus-modal, .blocker, .fdrive-preview');
+            if (!wrapper)
+                this.eleWrapper.className = 'collapsed';
+        }
 
-        let addMenu = event.target.closest('.fdrive-add-button');
-        if (!addMenu)
-            this.eleAddMenu.className = '';
+        if(this.eleAddMenu) {
+            let addMenu = event.target.closest('.fdrive-add-button');
+            if (!addMenu)
+                this.eleAddMenu.className = '';
+        }
     }
 }
 
@@ -65,7 +69,9 @@ var fDrive;
 var fDriveDrawer;
 var fDriveNotes;
 document.addEventListener("DOMContentLoaded", () => {    
-    fDriveDrawer = new FenrusDriveDrawer();
-    fDrive = new FenrusDrive();
-    fDriveNotes = new FenrusDriveNotes();
+    if(document.querySelector('.dashboard')) {
+        fDriveDrawer = new FenrusDriveDrawer();
+        fDrive = new FenrusDrive();
+        fDriveNotes = new FenrusDriveNotes();
+    }
 });

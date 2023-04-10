@@ -64,13 +64,12 @@
                         if (string.IsNullOrEmpty(icon))
                         {
                             if (Model.Type == "DashboardApp" && string.IsNullOrEmpty(Model.AppName) == false)
-                                icon = "/apps/" + Model.AppName + "/app.png";
+                                icon = "/apps/" + Model.AppName + "/app.png?version=" + Globals.Version;
                             else
-                                icon = "/favicon";
+                                icon = "/favicon?version=" + Globals.Version;;
                         }
                         else if (icon.StartsWith("db:/image/"))
-                            icon = "/fimage/" + icon["db:/image/".Length..];
-                        icon += "?version=" + Globals.Version;
+                            icon = "/fimage/" + icon["db:/image/".Length..] + "?version=" + Globals.Version;;
                         bool carousel = (Model.Size < ItemSize.Large || Model.Type != "DashboardApp" || SelectedApp == null || 
                                          SelectedApp.Carousel == false) == false;
                         string iconClass = "db-item " +

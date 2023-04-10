@@ -118,6 +118,11 @@ public partial class PageGroup: CommonPage<Models.Group>
         {
             if (item.Uid == Guid.Empty)
                 item.Uid = Guid.NewGuid();
+            if (item.Icon?.StartsWith("data:") == true)
+            {
+                // base64 encoded file
+                item.Icon = ImageHelper.SaveImageFromBase64(item.Icon);
+            }
         }
 
         if (isNew)
