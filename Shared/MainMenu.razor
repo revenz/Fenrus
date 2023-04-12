@@ -4,7 +4,7 @@
     @{ 
         var imgSrc = "/favicon";
         if (string.IsNullOrWhiteSpace(App?.AccentColor) == false)
-            imgSrc += "?color=" + App.AccentColor + "&version=" + Globals.Version;
+            imgSrc += "?color=" + App.AccentColor.Replace("#", string.Empty) + "&version=" + Globals.Version;
         else
             imgSrc += "?version=" + Globals.Version;
     }
