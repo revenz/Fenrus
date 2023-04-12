@@ -3,7 +3,7 @@
 <div class="logo">
     @{ 
         var imgSrc = "/favicon";
-        if (string.IsNullOrWhiteSpace(App?.AccentColor))
+        if (string.IsNullOrWhiteSpace(App?.AccentColor) == false)
             imgSrc += "?color=" + App.AccentColor + "&version=" + Globals.Version;
         else
             imgSrc += "?version=" + Globals.Version;
