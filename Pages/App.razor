@@ -5,7 +5,7 @@
         --accent:@AccentColor;
     }
     </style>
-    <link rel="icon" type="image/x-icon" href="/favicon?color=@AccentColor&version=@Globals.Version">
+    <link rel="icon" type="image/x-icon" href="/favicon?color=@AccentColor?.Replace("#", string.Empty)&version=@Globals.Version">
 </HeadContent>
 
 <CascadingValue Value="Translator" IsFixed="true">
