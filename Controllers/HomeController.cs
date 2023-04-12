@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using Fenrus.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -117,6 +118,8 @@ public class HomeController : BaseController
     [ResponseCache(Duration = 7 * 24 * 60 * 60)]
     public IActionResult Favicon([FromQuery] string color)
     {
+        if (Regex.IsMatch(color ?? string.Empty, "^[0-9a-fA-F]{6}$"))
+            color = "#" + color;
         string svg = FavIconHelper.GetFavIconSvg(color);
         return Content(svg, "image/svg+xml");
     }

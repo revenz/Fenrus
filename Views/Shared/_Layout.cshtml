@@ -23,7 +23,7 @@
 <html>
 <head>
     <title>@ViewData["Title"]</title>
-    <link rel="icon" type="image/x-icon" href="/favicon?color=@(ViewBag.Accent?.Replace("#", "%23") ?? string.Empty)&version=@Globals.Version">
+    <link rel="icon" type="image/x-icon" href="/favicon?color=@(ViewBag.Accent?.Replace("#", string.Empty) ?? string.Empty)&version=@Globals.Version">
     <link rel="stylesheet" href="/css/_fenrus.css?version=@Globals.Version" />
     <link id="theme-style" rel="stylesheet" href="/themes/@theme/theme.css?version=@Globals.Version" />
     
