@@ -45,7 +45,7 @@
     <div class="login-box">
         <div class="header">
             <span class="logo">
-                <img src="/favicon?color=@Model.AccentColor&version=@Globals.Version" />
+                <img src="/favicon?color=@Model.AccentColor?.Replace("#", "%23")&version=@Globals.Version" />
             </span>
             <span class="title">Fenrus</span>
             <span class="version">@Globals.Version</span>

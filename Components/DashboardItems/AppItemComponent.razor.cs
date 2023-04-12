@@ -102,6 +102,6 @@ public partial class AppItemComponent
 
         if (string.IsNullOrEmpty(App.Icon) == false)
             return $"/apps/{Uri.EscapeDataString(App.Name)}/{App.Icon}?version=" + Globals.Version;
-        return $"/favicon?color={Dashboard.AccentColor}&version={Globals.Version}";
+        return $"/favicon?color={Dashboard.AccentColor?.Replace("#", "%23")}&version={Globals.Version}";
     }
 }

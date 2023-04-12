@@ -56,7 +56,7 @@ public partial class LinkItemComponent
     private string GetIcon()
     {
         if(string.IsNullOrWhiteSpace(Model.Icon))
-            return $"/favicon?color={Dashboard.AccentColor}&version={Globals.Version}";
+            return $"/favicon?color={Dashboard.AccentColor?.Replace("#", "%23")}&version={Globals.Version}";
         if(Model.Icon.StartsWith("db:/image/"))
             return "/fimage/" + Model.Icon["db:/image/".Length..] + "?version=" + Globals.Version;
         return Model.Icon + "?version=" + Globals.Version;

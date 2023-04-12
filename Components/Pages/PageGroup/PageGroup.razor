@@ -34,7 +34,7 @@
                         if (item is AppItem app)
                             icon = $"/apps/{Uri.EscapeDataString(app.AppName)}/app.png";
                         else
-                            icon = "/favicon?color=" + App.AccentColor;
+                            icon = "/favicon?color=" + App.AccentColor?.Replace("#", "%23");
                     }
                     else if (icon.StartsWith("db:/image/"))
                         icon = "/fimage/" + icon["db:/image/".Length..];
