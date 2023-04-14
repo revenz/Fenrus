@@ -87,7 +87,7 @@ class SpeedtestTracker {
 
     test(args) {
         let data = this.doFetch(args, 'latest');
-        console.log('data', data);
+        args.log('data', data);
         return isNaN(data?.data?.id) === false;
     }
 }

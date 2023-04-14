@@ -20,7 +20,7 @@ class Jenkins {
 
     test(args) {
         let xmlStr = this.doFetch(args);
-        console.log("xmlStr", xmlStr);
+        args.log("xmlStr", xmlStr);
         return xmlStr.includes('<buildUrls');
     }
 }

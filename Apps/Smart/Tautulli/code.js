@@ -103,7 +103,7 @@
 
     test(args) {
         let data = this.fetch(args, this.getUrl(args, 'arnold'));
-        console.log('data', data);
+        args.log('data', data);
         return data?.response?.result == 'success';
     }
 }

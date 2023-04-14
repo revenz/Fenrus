@@ -51,11 +51,11 @@
     test(args) {
 		let id1 = args.properties['rssID'];
 		if(id1 == null || id1.length < 1) {
-			console.error("Test failed for Gaps, no rssID provided");
+			args.log("Test failed for Gaps, no rssID provided");
 			return false;
 		}
 		let data = args.fetch(this.getUrl(args, id1));
-		console.log(data)
+		args.log(data)
         return isNaN(data.length) === false;
     }
 }

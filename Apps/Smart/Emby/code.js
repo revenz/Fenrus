@@ -54,7 +54,7 @@
                 url = url.substring(0, url.length - 1);
 
             for(let d of data){
-                console.log(d);
+                args.log(d);
                 results.push({
                     title: d.Name,
                     date: d?.ProductionYear,

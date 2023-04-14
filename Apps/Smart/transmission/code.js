@@ -11,7 +11,7 @@ class transmission {
                 "X-Transmission-Session-Id": sessionId,
                 'Authorization': 'Basic ' + args.Utils.btoa(args.properties['username'] + ':' + args.properties['password'])
             }
-        }).catch(err => console.error('Transmission Error: ', err));
+        }).catch(err => args.error('Transmission Error: ', err));
 
         return data;
     }
@@ -23,7 +23,7 @@ class transmission {
         }
         let data = this.doFetch(args, sessionId);
         let responseCode = data.status;
-        console.log('Transmission: status response code: ' + responseCode);
+        args.log('Transmission: status response code: ' + responseCode);
         if (responseCode == 409) 
         {
             sessionId = data.headers.get('x-transmission-session-id');
@@ -34,7 +34,7 @@ class transmission {
         }
         if(!data)
         {
-            console.error('Transmission: Data was null');
+            args.log('Transmission: Data was null');
             return;
         }
         let jsonData = data.json();
@@ -66,14 +66,14 @@ class transmission {
     test(args) {
         let data = this.doFetch(args, "");
         let responseCode = data.status;
-        console.log('Transmission: test response code [1]: ' + responseCode);
+        args.log('Transmission: test response code [1]: ' + responseCode);
         let sessionId = data.headers.get('x-transmission-session-id');
 
         data = this.doFetch(args, sessionId);
         responseCode = data.status;
-        console.log('Transmission: test response code [2]: ' + responseCode);
+        args.log('Transmission: test response code [2]: ' + responseCode);
         const jsonData = data.json();
-        console.log('Transmission: test data', jsonData);
+        args.log('Transmission: test data', jsonData);
         return jsonData.result == 'success';
     }
 }

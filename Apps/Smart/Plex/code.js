@@ -10,7 +10,7 @@
     }
     status(args) {
         if(!args.properties){
-            console.log('Error in plex app, no properties set');
+            args.log('Error in plex app, no properties set');
             return;
         }
         let data = this.fetch(args, this.getUrl('recentlyAdded', args));

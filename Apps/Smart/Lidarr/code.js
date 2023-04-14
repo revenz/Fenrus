@@ -20,7 +20,7 @@
     
     test(args) {
         let data = args.fetch(this.getUrl(args, 'wanted/missing'));
-        console.log('data', data);
+        args.log('data', data);
         return isNaN(data?.totalRecords) === false;
     }
 }

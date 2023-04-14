@@ -53,7 +53,7 @@
 
     test(args) {
         let data = this.doFetch(args);
-        console.log('data', data);
+        args.log('data', data);
         return data?.status == 'success';
     }
 }

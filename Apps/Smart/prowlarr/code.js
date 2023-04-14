@@ -26,7 +26,7 @@
 
     test(args) {
         let status = this.doFetch(args, "system/status");
-        console.log("status", status);
+        args.log("status", status);
         return status?.appName != null;
     }
 }

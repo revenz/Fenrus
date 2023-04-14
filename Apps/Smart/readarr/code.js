@@ -33,7 +33,7 @@
 
     test(args) {
         let data = args.fetch(this.getUrl(args, 'system/status',false));
-		console.log("data",data);
+		args.log("data",data);
         return data.appName != null;
     }
 }

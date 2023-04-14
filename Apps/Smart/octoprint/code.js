@@ -58,7 +58,7 @@ class OctoPrint {
 
     test(args) {
         let data = this.doFetch(args, "version");
-        console.log('data', data);
+        args.log('data', data);
         return isNaN(data?.api) === false;
     }
 }

@@ -23,12 +23,12 @@
 			
         } else {
 			
-            console.log("Pterodactyl: serverKey param not provided to grabbing data for first server which can be found");
+            args.log("Pterodactyl: serverKey param not provided to grabbing data for first server which can be found");
             let serverList = this.doFetch(args, '');
             if (serverList?.data != null && serverList?.data.length > 0) {
                 const serverObj = serverList?.data[0];
                 let name = serverObj?.attributes?.name;
-                console.log("Name: " + name + ", ID: " + serverObj?.attributes?.identifier)
+                args.log("Name: " + name + ", ID: " + serverObj?.attributes?.identifier)
                 data = this.doFetch(args, 'servers/' + serverObj?.attributes?.identifier + '/resources');
                 let title = (name.length > 18) ? [name] : ['Server Name', name];
                 return args.liveStats([

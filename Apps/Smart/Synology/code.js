@@ -19,7 +19,7 @@ class Synology
 		}
         catch(err)
         {
-            console.log('Failed to retrieve sessionId', err);
+            args.log('Failed to retrieve sessionId', err);
             return;
 		}
 	}

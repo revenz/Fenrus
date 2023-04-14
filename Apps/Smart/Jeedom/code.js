@@ -57,7 +57,7 @@ class Jeedom {
 		
 	test(args) {
 		const data = args.fetch(`${args.url}/core/api/jeeApi.php`);
-		console.log(data.id);
+		args.log(data.id);
 		return data.id == '99999';
 	}
 }		

@@ -40,7 +40,7 @@ class AgentDVR {
 
     test(args) {
         let data = this.doFetch(args, "command.cgi?cmd=getStatus");
-        console.log('data', data);
+        args.log('data', data);
         return isNaN(data?.devices) === false;
     }
 }

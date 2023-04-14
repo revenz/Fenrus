@@ -55,7 +55,7 @@
         let gameLength = ongoingGameData?.gameLength
         for (var playerIndex in players) {
             let playerJson = players[playerIndex]
-            console.log(playerJson, playerJson?.summonerId, summonerId)
+            args.log(playerJson, playerJson?.summonerId, summonerId)
             if (playerJson?.summonerId == summonerId) {
                 championId = playerJson?.championId
                 break;
@@ -104,7 +104,7 @@
     test(args) {
         let summonerName = args.properties['summonerName']
         let summonerData = this.doLeagueFetch(args, "summoner/v4/summoners/by-name/" + summonerName)
-        console.log("summonerData", summonerData)
+        args.log("summonerData", summonerData)
         let summonerId = summonerData?.id
         return summonerId != null;
     }

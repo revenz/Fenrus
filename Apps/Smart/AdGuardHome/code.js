@@ -50,7 +50,7 @@
     
     test(args) {
         let data = this.doFetch(args);
-        console.log('data', data);
+        args.log('data', data);
         return isNaN(data?.num_dns_queries) === false;
     }
 }

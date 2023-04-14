@@ -26,7 +26,7 @@
         }
         catch(err)
         {
-            console.log('Failed to retrieve Deluge access token', err);
+            args.log('Failed to retrieve Deluge access token', err);
             return;
         }
     }
@@ -49,7 +49,7 @@
         });
         if(data.error)
         {
-            console.log('Deluge error: ' + data.error.message);
+            args.log('Deluge error: ' + data.error.message);
             return;
         }
         return data;
