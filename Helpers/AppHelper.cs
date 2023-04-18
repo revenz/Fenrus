@@ -136,7 +136,7 @@ public class AppHeler
     }
 
     /// <summary>
-    /// Decryptes the properties and returns a NEW dictionary
+    /// Decrypts the properties and returns a NEW dictionary
     /// </summary>
     /// <param name="properties">the properties</param>
     /// <returns>a NEW dictionary</returns>

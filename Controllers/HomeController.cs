@@ -315,6 +315,7 @@ public class HomeController : BaseController
     /// Request an OAuth login
     /// </summary>
     [HttpGet("sso")]
+    [HttpGet("signin-oidc")]
     [Authorize]
     public async Task<IActionResult> OAuthLogin()
     {
