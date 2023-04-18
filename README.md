@@ -1,4 +1,4 @@
-![icon_128](https://user-images.githubusercontent.com/958400/154829266-62206846-c6ef-4718-9910-2b83eb6aa41c.png)
+<img src="wwwroot/fenrus.svg" width="170" height="170">
 
 # Fenrus
 
@@ -70,10 +70,9 @@ All the configuration is saved into LiteDB file, Fenrus.db.   There is an encryp
 
 ## Getting Started
 
-First, you need to register a user, you can do this on the login page by entering a username and password and clicking "Register" if no user with that username exists, a new one will be created.  
+First, you need to register a user, you can do this on the login page by entering a username and password and clicking "Register" if no user with that username exists, a new one will be created.
 
-![image](https://user-images.githubusercontent.com/958400/157801936-24eca81b-1ee1-4f28-976c-c9e1ae54f1af.png)
-
+![image](https://user-images.githubusercontent.com/958400/232894085-4d7d90c5-bf23-4e9a-9262-27b3cec5022b.png)
 
 ### Admin
 The first user created in the system will automatically be assigned the admin role.
@@ -103,7 +102,6 @@ This could be as simple as some basic information, or it could be a feature-rich
 
 #### Dashboards
 These link to other dashboards.   You can add a dashboard link to a group or they are also available through the drop down menu at the top of the page.
-![image](https://user-images.githubusercontent.com/958400/157802115-e1eed5f1-ef39-46f5-a719-69e01e0c6df3.png)
 
 
 ---
