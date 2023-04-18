@@ -36,7 +36,7 @@ dotnet Fenrus.dll --urls=http://*:1234
 Docker is the preferred method of installing Fenrus
 ```
 docker run -d \
--name=Fenrus \
+--name=Fenrus \
 -e TZ=Pacific/Auckland \
 -p 3000:3000 \
 -v /path/to/data:/app/data \
