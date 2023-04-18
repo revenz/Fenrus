@@ -3,7 +3,7 @@
 # Fenrus
 
 
-Fenrus personal home page/dasbhoard.  
+Fenrus personal home page/dashboard.  
 
 It allows you to have a custom home page/new tab page with quick access to your personal apps.
 
