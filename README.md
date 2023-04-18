@@ -13,7 +13,8 @@ For support use our [Discord Server](https://discord.gg/xbYK8wFMeU)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=ZJLFMQSQ6WX3J)
 
 ---
-![image](https://user-images.githubusercontent.com/958400/157801403-64cc7b99-f81d-41b6-85f7-47546bd904a9.png)
+
+![image](https://user-images.githubusercontent.com/958400/232895057-f40073d9-5d4a-4324-9ba9-7e837fca7df6.png)
 
 ---
 
@@ -85,7 +86,8 @@ This role allows the user to manage other users.
 ### Groups
 Groups contain applications, links and other dashboards.   
 
-![image](https://user-images.githubusercontent.com/958400/157801996-e94c3406-ff6b-43a2-acfe-7fb6a174b822.png)
+![image](https://user-images.githubusercontent.com/958400/232895199-a4dc5920-8a97-4faa-a842-d950a3834553.png)
+
 
 ### Group Items
 Shortcuts are broken down into 4 types
@@ -113,7 +115,9 @@ URL: The URL for the search query with %s being repalced by the search term
 Shortcut: The shortcut to type to use this search engine (if not the default)
 Icon: The icon to show when using this search engine
 ```
-![image](https://user-images.githubusercontent.com/958400/157802216-44e9f2cf-e874-493c-9d46-3124f771e2af.png)
+
+![image](https://user-images.githubusercontent.com/958400/232895446-9ad716b4-ff22-4431-a21a-9cd809663944.png)
+
 
 ---
 
