@@ -27,7 +27,7 @@
         if(url.endsWith('/'))
             url = url.substring(0, url.length - 1);
         let items =  [];
-        let usingUsers = !data.length;
+        let usingUsers = !data?.sessions?.length;
         if(usingUsers)
         { 
             for(let item of topUsers)
