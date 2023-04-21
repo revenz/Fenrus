@@ -80,7 +80,7 @@
 .fenrus-modal-body {
   margin: 1rem 0;
 
-  input[type=text] {
+  input[type=text], input[type=datetime-local] {
     margin-top:1rem;
     width:calc(100% - 1rem); 
     background:var(--input-background);

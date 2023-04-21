@@ -61,10 +61,17 @@ $notesMediaScreenSize: 1000px;
       @media screen and (max-width:$notesMediaScreenSize)
       {
         width:min(90vw, 40rem);
+
+        #calendar-actual {
+          width: min(90vw, 40rem);
+        }
       }
       @media screen and (min-width:($notesMediaScreenSize + .001))
       {
         width:60rem;
+        #calendar-actual {
+          width: 60rem;
+        }
       }
     }
   }

@@ -1,0 +1,56 @@
+body {
+  --fc-button-bg-color: var(--base);
+  --fc-button-border-color: rgba(var(--accent-rgb), 0.7);
+  --fc-button-text-color: var(--color);
+  --fc-button-hover-bg-color: var(--base);
+  --fc-button-hover-border-color: var(--accent);
+  --fc-button-active-bg-color: var(--base);
+  --fc-button-active-border-color: var(--accent);
+  --fc-non-business-color: rgba(var(--color-rgb), 0.05);
+  --fc-border-color: var(--border-color);
+  --fc-event-bg-color: rgba(var(--accent-rgb), 0.3);
+  --fc-event-border-color: var(--accent);
+  --fc-today-bg-color: rgba(var(--accent-rgb), 0.1);
+  --fc-small-font-size: 1rem;
+  --fc-neutral-bg-color: var(--base);
+  --fc-list-event-hover-bg-color:rgba(var(--accent-rgb), 0.3);
+}
+
+#fdrive-calendar .fdrive-pane-title {
+  background: #000;
+  text-align: center;
+}
+#fdrive-calendar .fdrive-pane-title > span {
+  line-height: 3rem;
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  letter-spacing: 0.5rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.3rem;
+}
+#fdrive-calendar .fdrive-pane-title .title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 70%;
+  width: 70%;
+  white-space: nowrap;
+  direction: rtl;
+  display: inline-block;
+}
+#fdrive-calendar #calendar-actual {
+  padding: 2rem 2rem 7rem;
+}
+#fdrive-calendar #calendar-actual > .fc-view-harness {
+  background: var(--base);
+}
+#fdrive-calendar #calendar-actual .fc-timegrid-event-harness {
+  line-height: 1.1rem !important;
+}
+#fdrive-calendar #calendar-actual table tr > :first-child {
+  padding-left: unset !important;
+}
+
+/*# sourceMappingURL=fdriveCalendar.css.map */

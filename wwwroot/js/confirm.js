@@ -96,3 +96,110 @@ function modalPrompt(title, message) {
         });
     });
 }
+
+
+function modalForm(title, domElement, buttons) {
+    return new Promise((resolve, reject) => {
+        let modal = document.createElement('div');
+        modal.innerHTML = '<div class="background-overlay fenrus-modal-background-overlay" />' +
+            '<div class="fenrus-modal form">' +
+            (title ? '<div class="fenrus-modal-title"></div>' : '') +
+            '<div class="fenrus-modal-body"><form></form></div>' +
+            '<div class="fenrus-modal-footer">' +
+            '</div>'
+        '</div>';
+        let form = modal.querySelector('form');
+        let formValidate = () => {
+            if (form.checkValidity() === false)
+                return false;
+            // Get all form inputs and construct an object from their values
+            const formData = {};
+            const inputs = form.querySelectorAll('input, select');
+            for (let i = 0; i < inputs.length; i++) {
+                const input = inputs[i];
+                const name = input.getAttribute('name');
+                const value = input.type === 'checkbox' ? input.checked : input.value;
+                formData[name] = value;
+            }
+            modal.remove();
+            resolve(formData);
+        }
+        form.addEventListener('submit', (event) => {
+            console.log('form submit!');
+            event.preventDefault();
+            formValidate();
+            return false;
+        })
+        if(typeof(domElement) === 'string')
+            form.innerHTML = domElement;
+        else
+            form.appendChild(domElement);
+
+
+        let footer = modal.querySelector('.fenrus-modal-footer');
+        if(buttons?.length)
+        {
+            for(let btn of buttons){
+                let eleBtn = document.createElement('button');
+                eleBtn.className = 'btn';
+                eleBtn.innerText = btn.label;
+                eleBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    if(btn.action() === true)
+                    {
+                       formValidate();
+                    }
+                });
+                footer.appendChild(eleBtn);
+            }
+        }
+        else
+        {
+            footer.innerHTML = '<button class="btn confirm-ok"></button>' +
+                '<button class="btn confirm-cancel"></button>';
+            let btnOk = modal.querySelector('.confirm-ok');
+            btnOk.innerText = Translations.Ok;
+            let btnCancel = modal.querySelector('.confirm-cancel');
+            btnCancel.innerText = Translations.Cancel;
+            btnOk.addEventListener('click', (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+                formValidate();
+            });
+            btnCancel.addEventListener('click', (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+                modal.remove();
+                resolve();
+            });
+        }
+        document.body.append(modal);
+        modal.className = 'modal';
+        if(title)
+            modal.querySelector('.fenrus-modal-title').innerText = title;
+        let input = modal.querySelector('.fenrus-modal-body input, .fenrus-modal-body select');
+        if(input) {
+            input.focus();
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter')
+                    formValidate();
+            });
+        }
+    });
+}
+
+function modalFormInput({label, name, type, value, required = true}){    
+    let html = '<div class="modal-form-input">' +       
+               `<div class="label">${htmlEncode(label)}</div>` +
+                '<div class="value">';
+    
+    if(type === 'text')
+        html += `<input type=text id="${name}" name="${name}" ${required ? 'required' : ''} ${value ? `value="${htmlEncode(value)}"` : ''} />`;
+    else if(type === 'datetime')
+        html += `<input type=datetime-local id="${name}" name="${name}" ${required ? 'required' : ''} ${value ? `value="${htmlEncode(value)}"` : ''} />`;
+    
+    html += '</div>';
+    return html;
+}
+

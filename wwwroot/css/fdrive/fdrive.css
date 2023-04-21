@@ -58,9 +58,15 @@
   #fdrive-wrapper.expanded .fdrive-inner {
     width: min(90vw, 40rem);
   }
+  #fdrive-wrapper.expanded .fdrive-inner #calendar-actual {
+    width: min(90vw, 40rem);
+  }
 }
 @media screen and (min-width: 1000.001px) {
   #fdrive-wrapper.expanded .fdrive-inner {
+    width: 60rem;
+  }
+  #fdrive-wrapper.expanded .fdrive-inner #calendar-actual {
     width: 60rem;
   }
 }

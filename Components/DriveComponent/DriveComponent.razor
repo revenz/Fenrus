@@ -48,11 +48,22 @@
                 </div>
             </div>
             
+            <div id="fdrive-calendar">
+                <div class="fdrive-pane-title">
+                    <span class="title">@lblCalendar</span>
+                </div>
+                <div class="content" id="calendar-actual">
+                </div>
+                <div class="fdrive-add-button">
+                    <i class="fa-solid fa-plus" onclick="fDriveCalendar.add(event)"></i>
+                </div>
+            </div>
         </div>
 
         <div class="fdrive-tabs">
             <div id="fdrive-mode-notes" onclick="fDriveDrawer.setMode('notes')" class="fdrive-mode">@lblNotes</div>
             <div id="fdrive-mode-files" onclick="fDriveDrawer.setMode('files')" class="fdrive-mode">@lblFiles</div>
+            <div id="fdrive-mode-calendar" onclick="fDriveDrawer.setMode('calendar')" class="fdrive-mode">@lblCalendar</div>
         </div>
     </div>
 </div>

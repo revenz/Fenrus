@@ -23,7 +23,12 @@ public class DbHelper
     /// </summary>
     /// <returns>the database</returns>
     internal static LiteDatabase GetDb()
-        => new LiteDatabase(DbFile);
+    {
+        var db = new LiteDatabase(DbFile);
+        db.Pragma("UTC_DATE", true);
+        
+        return db;
+    }
 
     /// <summary>
     /// Gets the first or default of type

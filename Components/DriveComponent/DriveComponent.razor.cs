@@ -12,7 +12,7 @@ public partial class DriveComponent
     /// </summary>
     [Parameter] public Translator Translator { get; set; }
 
-    private string lblTitle, lblNotes, lblPersonal, lblDashboard, lblShared, lblFiles;
+    private string lblTitle, lblNotes, lblPersonal, lblDashboard, lblShared, lblFiles, lblCalendar;
 
     protected override void OnInitialized()
     {
@@ -21,6 +21,7 @@ public partial class DriveComponent
         this.lblPersonal = Translator.Instant("Labels.Personal");
         this.lblDashboard = Translator.Instant("Labels.Dashboard");
         this.lblShared = Translator.Instant("Labels.Shared");
-        this.lblFiles= Translator.Instant("Labels.Files");
+        this.lblFiles = Translator.Instant("Labels.Files");
+        this.lblCalendar = Translator.Instant("Labels.Calendar");
     }
 }

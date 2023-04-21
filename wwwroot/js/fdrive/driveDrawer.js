@@ -4,8 +4,8 @@ class FenrusDriveDrawer {
     eleInner;eleWrapper;
     visible;
     mode;
-    eleFiles; eleNotes;
-    eleTabFiles; eleTabNotes;
+    eleFiles; eleNotes; eleCalendar;
+    eleTabFiles; eleTabNotes; eleTabCalendar;
 
     constructor() {
         document.addEventListener('mousedown', (event) => this.mouseDownEventListener(event));
@@ -15,8 +15,10 @@ class FenrusDriveDrawer {
         this.eleAddMenu = document.getElementById('fdrive-add-menu');
         this.eleFiles = document.getElementById('fdrive-files');
         this.eleNotes = document.getElementById('fdrive-notes');
+        this.eleCalendar = document.getElementById('fdrive-calendar');
         this.eleTabFiles = document.getElementById('fdrive-mode-files');
         this.eleTabNotes = document.getElementById('fdrive-mode-notes');
+        this.eleTabCalendar = document.getElementById('fdrive-mode-calendar');
         this.mode = localStorage.getItem('DRIVE_MODE') || 'files';
     }
     
@@ -36,13 +38,27 @@ class FenrusDriveDrawer {
         if(mode === 'files') {
             this.eleFiles.className = 'visible';
             this.eleNotes.className = '';
+            this.eleCalendar.className = '';
             this.eleTabFiles.className = 'fdrive-mode active';
             this.eleTabNotes.className = 'fdrive-mode';
+            this.eleTabCalendar.className = 'fdrive-mode';
             fDrive.show();
-        }else{
+        }else if(mode === 'calendar'){
             this.eleFiles.className = '';
+            this.eleNotes.className = '';
+            this.eleCalendar.className = 'visible';
+            this.eleTabFiles.className = 'fdrive-mode';
+            this.eleTabNotes.className = 'fdrive-mode';
+            this.eleTabCalendar.className = 'fdrive-mode active';
+            fDriveCalendar.show();
+        }        
+        else
+        {
+            this.eleFiles.className = '';
+            this.eleCalendar.className = '';
             this.eleNotes.className = 'visible';
             this.eleTabFiles.className = 'fdrive-mode';
+            this.eleTabCalendar.className = 'fdrive-mode';
             this.eleTabNotes.className = 'fdrive-mode active';
             fDriveNotes.show();
         }
@@ -51,7 +67,7 @@ class FenrusDriveDrawer {
     
     mouseDownEventListener(event) {
         if(this.eleWrapper) {
-            let wrapper = event.target.closest('#fdrive-wrapper, .fenrus-modal, .blocker, .fdrive-preview');
+            let wrapper = event.target.closest('#fdrive-wrapper, .fenrus-modal, .blocker, .fdrive-preview, .fc-highlight, .fenrus-modal-background-overlay');
             if (!wrapper)
                 this.eleWrapper.className = 'collapsed';
         }
@@ -68,10 +84,12 @@ class FenrusDriveDrawer {
 var fDrive;
 var fDriveDrawer;
 var fDriveNotes;
+var fDriveCalendar;
 document.addEventListener("DOMContentLoaded", () => {    
     if(document.querySelector('.dashboard')) {
         fDriveDrawer = new FenrusDriveDrawer();
         fDrive = new FenrusDrive();
         fDriveNotes = new FenrusDriveNotes();
+        fDriveCalendar = new FenrusDriveCalendar();
     }
 });
