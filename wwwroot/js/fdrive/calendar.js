@@ -14,6 +14,7 @@ class FenrusDriveCalendar
         let clearTimer = null;
         let doubleClick, clickTimer;
         let eventDoubleClick, eventClickTimer;
+        let popupElement, mouseInPopUp;
         this.calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'timeGridWeek',
             editable: true,
@@ -89,17 +90,100 @@ class FenrusDriveCalendar
                     StartUtc: new Date(info.event.start).toISOString(),
                     EndUtc: new Date(info.event.end).toISOString()
                 };
-                let response = await fetch('/calendar', {
-                    method:'post',
-                    body: JSON.stringify(model),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                await this.saveEvent(model);
+            },
+            eventMouseLeave: (info) => {
+                if (popupElement) {
+                    setTimeout(() => {
+                        if(!mouseInPopUp) {
+                            popupElement.remove();
+                            popupElement = null;
+                        }
+                    }, 100);
+                }
+            },
+            eventMouseEnter: (info) => {
+                console.log('mouse enter', info); 
+                let hoverElement = info.el;
+                let event = info.event;
+                
+                if(popupElement){
+                    popupElement.remove();
+                    mouseInPopUp = false;
+                }
+                // Create the popup element
+                popupElement = document.createElement('div');
+                popupElement.id = 'fdrive-calendar-popover';
+                popupElement.style.width = '300px';
+                popupElement.style.height = '106px';
+                popupElement.style.position = 'absolute';
+
+                // Create the triangle element
+                const triangleElement = document.createElement('div');
+                triangleElement.classList.add('pointer');
+                triangleElement.style.position = 'absolute';
+                popupElement.appendChild(triangleElement);
+
+                // Create the content element
+                const contentElement = document.createElement('div');
+                contentElement.style.padding = '10px';
+                //const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                //const readableDate = info.event.start.toLocaleDateString(navigator.language, options);
+                const readableDate = this.formatDateRange(info.event.start, info.event.end);
+                contentElement.innerHTML = '<div>' +
+                    '<div class="title">' +
+                    `   <span class="name">${htmlEncode(info.event.title)}</span>` +
+                    `   <span class="day">${htmlEncode(readableDate)}</span>` +
+                    '</div>' +
+                    '<div class="controls">' +
+                    ' <i class="fa-solid fa-pen"></i>' +
+                    ' <i class="fa-solid fa-trash"></i>' +
+                    ' <i class="fa-solid fa-xmark"></i>' +
+                    '</div>';
+                popupElement.appendChild(contentElement);
+
+                // Calculate the position of the popup element
+                const hoverRect = hoverElement.getBoundingClientRect();
+                const popupWidth = parseInt(popupElement.style.width);
+                const popupHeight = parseInt(popupElement.style.height);
+                const popupTop = hoverRect.top + (hoverRect.height - popupHeight) / 2;
+                const popupLeft = hoverRect.right;
+                popupElement.style.top = popupTop + 'px';
+                popupElement.style.left = popupLeft + 'px';
+
+                // Calculate the position of the triangle element
+                const triangleTop = hoverRect.top + hoverRect.height / 2 - triangleElement.offsetHeight / 2 - popupTop;
+                const triangleLeft = -triangleElement.offsetWidth;
+                triangleElement.style.top = triangleTop + 'px';
+                triangleElement.style.left = triangleLeft + 'px';
+
+                // Add the popup element to the body
+                document.body.appendChild(popupElement);
+
+                // Add event listener to hide the popup when the mouse leaves it
+                popupElement.addEventListener('mouseenter', () => {
+                    mouseInPopUp = true;
                 });
-                this.calendar.refetchEvents();
+                popupElement.addEventListener('mouseleave', () => {
+                    mouseInPopUp = false;
+                    popupElement.remove();
+                    popupElement = null;
+                });
             }
         });
         this.calendar.render();
+    }
+    
+    formatDateRange(startDate, endDate) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+        const startString = startDate.toLocaleDateString(navigator.language, options);
+
+        let endString;
+        if (endDate.toDateString() === startDate.toDateString())
+            endString = endDate.toLocaleTimeString(navigator.language, { hour: 'numeric', minute: 'numeric' });
+        else
+            endString = endDate.toLocaleDateString(navigator.language, options);        
+        return `${startString} - ${endString}`;
     }
 
     async add() {
@@ -136,15 +220,18 @@ class FenrusDriveCalendar
         
         result.StartUtc = new Date(result.StartUtc).toISOString();
         result.EndUtc = new Date(result.EndUtc).toISOString();
+        await this.saveEvent(result);
+    }
+    
+    async saveEvent(event) {
         let response = await fetch('/calendar', {
             method:'post',
-            body: JSON.stringify(result),
+            body: JSON.stringify(event),
             headers: {
                 'Content-Type': 'application/json'
             }
         });
         this.calendar.refetchEvents();
-        
     }
 
     createElement(readOnly) {

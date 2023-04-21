@@ -67,7 +67,7 @@ class FenrusDriveDrawer {
     
     mouseDownEventListener(event) {
         if(this.eleWrapper) {
-            let wrapper = event.target.closest('#fdrive-wrapper, .fenrus-modal, .blocker, .fdrive-preview, .fc-highlight, .fenrus-modal-background-overlay');
+            let wrapper = event.target.closest('#fdrive-wrapper, .fenrus-modal, .blocker, .fdrive-preview, .fc-highlight, .fenrus-modal-background-overlay, #fdrive-calendar-popover');
             if (!wrapper)
                 this.eleWrapper.className = 'collapsed';
         }

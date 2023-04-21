@@ -58,3 +58,52 @@ body {
     }
   }
 }
+
+#fdrive-calendar-popover {
+  background: rgba(var(--base-rgb), 0.9);
+  border: solid 1px var(--accent);
+  padding: 0.5rem;
+  z-index:1000;
+  position:relative;
+  .pointer {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 1rem 0 1rem 1rem;
+    border-color: transparent transparent transparent var(--accent);
+    transform: translateX(-100%) translateY(-50%) rotate(180deg);
+    position: absolute;
+  }
+  .title {
+    display:flex;
+    flex-direction: column;    
+    .name {
+      font-size:1.2rem;
+      font-weight:600;
+      max-height:5rem;
+      text-overflow:ellipsis;
+      overflow: hidden;
+    }
+    .day {
+      color:var(--accent);
+    }
+  }
+  .controls {
+    position:absolute;
+    top:0.5rem;
+    right:0.5rem;
+    display:flex;
+    flex-direction: column-reverse;
+    i {
+      opacity:0.5;
+      margin:0.5rem 0;
+      cursor:pointer;
+      font-size:1.2rem;
+      width:2rem;
+      text-align: center;
+      &:hover {
+        opacity:1;
+      }
+    }
+  }
+}
