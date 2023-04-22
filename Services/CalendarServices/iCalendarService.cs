@@ -48,6 +48,9 @@ public class iCalendarService
             }
         }
 
+        if (string.IsNullOrWhiteSpace(icalSource))
+            return new();
+
         // Parse the iCal source into a Calendar object
         Calendar calendar = Calendar.Load(icalSource);
 

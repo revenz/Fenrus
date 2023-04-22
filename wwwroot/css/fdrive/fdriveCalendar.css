@@ -14,6 +14,7 @@ body {
   --fc-small-font-size: 1rem;
   --fc-neutral-bg-color: var(--base);
   --fc-list-event-hover-bg-color:rgba(var(--accent-rgb), 0.3);
+  --fc-highlight-color: rgba(var(--accent-rgb), 0.2);
 }
 
 #fdrive-calendar .fdrive-pane-title {
@@ -51,6 +52,36 @@ body {
 }
 #fdrive-calendar #calendar-actual table tr > :first-child:not(.fc-list-event-time) {
   padding-left: unset !important;
+}
+#fdrive-calendar .fc-daygrid-day-events {
+  position: absolute;
+  width: 100%;
+}
+#fdrive-calendar .fc-daygrid-day-events .fc-daygrid-event-dot {
+  display: none;
+}
+#fdrive-calendar .fc-daygrid-day-events .fc-daygrid-event-harness a {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: rgba(var(--accent-rgb), 0.1);
+  padding: 0.5rem 0.25rem;
+}
+#fdrive-calendar .fc-daygrid-day-events .fc-daygrid-event-harness a b {
+  margin-right: 0.5rem;
+}
+#fdrive-calendar .fc .fc-daygrid-day-frame {
+  overflow: hidden;
+}
+#fdrive-calendar .fc-timeGridWeek-view .fc-event-main b {
+  display: block;
+}
+#fdrive-calendar td.fc-day {
+  line-height: 1.1rem;
+}
+#fdrive-calendar .fc-event {
+  overflow: hidden;
 }
 
 #fdrive-calendar-popover {

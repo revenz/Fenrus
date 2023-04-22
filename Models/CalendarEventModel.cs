@@ -28,10 +28,31 @@ public class CalendarEventModel
     /// </summary>
     [JsonPropertyName("end")]
     public string End { get; init; }
+
+    /// <summary>
+    /// Gets if the even is editable
+    /// </summary>
+    [JsonPropertyName("editable")]
+    public bool Editable => !ReadOnly;
+
+    /// <summary>
+    /// Gets or sets the background color for the event
+    /// </summary>
+    [JsonPropertyName("backgroundColor")]
+    public string BackgroundColor
+    {
+        get
+        {
+            if (ReadOnly)
+                return "rgba(var(--danger-rgb), 0.5)";
+            return null;
+        }
+    }
     
     /// <summary>
     /// Gets or sets if this event is read-only
     /// </summary>
+    [JsonIgnore]
     public bool ReadOnly { get; set; }
 
     /// <summary>

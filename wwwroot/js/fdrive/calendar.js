@@ -21,8 +21,9 @@ class FenrusDriveCalendar
         let doubleClick, clickTimer;
         let eventDoubleClick, eventClickTimer;
         let popupElement, mouseInPopUp;
+        
         this.calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'timeGridWeek',
+            initialView: localStorage.getItem('CALENDAR_VIEW') || 'timeGridWeek',
             editable: true,
             selectable: true,
             allDaySlot:false,
@@ -34,8 +35,22 @@ class FenrusDriveCalendar
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
             },
+            viewDidMount: (args) =>
+            {
+              localStorage.setItem('CALENDAR_VIEW', args.view.type);
+            },
+            datesSet: (info) => {
+                this.closeEvent();  
+            },
             events: {
                 url: '/calendar'
+            },
+            eventContent: (arg) => {
+                if (arg.view.type === 'dayGridMonth' && arg.event.start.getHours() === 0) {
+                    return { html: htmlEncode(arg.event.title) };
+                } else {
+                    return { html: '<b>' + htmlEncode(arg.timeText) + '</b> ' + htmlEncode(arg.event.title) };
+                }
             },
             dateClick: (info) => {
                 let singleClick = info.dateStr;
@@ -157,44 +172,42 @@ class FenrusDriveCalendar
         //const options = { year: 'numeric', month: 'long', day: 'numeric' };
         //const readableDate = info.event.start.toLocaleDateString(navigator.language, options);
         const readableDate = this.formatDateRange(info.event.start, info.event.end);
+        let editable = info.event.durationEditable !== false;
         contentElement.innerHTML = '<div>' +
             '<div class="title">' +
             `   <span class="name">${htmlEncode(info.event.title)}</span>` +
             `   <span class="day">${htmlEncode(readableDate)}</span>` +
             '</div>' +
             '<div class="controls">' +
-            ' <i class="edit fa-solid fa-pen"></i>' +
-            ' <i class="delete fa-solid fa-trash"></i>' +
+            (editable ? ' <i class="edit fa-solid fa-pen"></i>' : '') +
+            (editable ? ' <i class="delete fa-solid fa-trash"></i>' : '') +
             ' <i class="close fa-solid fa-xmark"></i>' +
             '</div>';
         this.popupElement.appendChild(contentElement);
         
-        contentElement.querySelector('.edit').addEventListener('click', () =>
-        {
-            this.editEvent({
-                Uid: info.event.id,
-                Name: info.event.title,
-                StartUtc: info.event.start,
-                EndUtc: info.event.end                
-            })
-        });
+        if(editable) {
+            contentElement.querySelector('.edit').addEventListener('click', () => {
+                this.editEvent({
+                    Uid: info.event.id,
+                    Name: info.event.title,
+                    StartUtc: info.event.start,
+                    EndUtc: info.event.end
+                })
+            });
+            contentElement.querySelector('.delete').addEventListener('click', async () => {
+                let result = await modalConfirm('Delete Event', `Are you sure you want to delete the event '${info.event.title}'?`);
+                if(result)
+                    await this.deleteEvent(info.event.id);
+            });
+        }
 
         contentElement.querySelector('.close').addEventListener('click', () => {
             this.closeEvent();
         });
-        contentElement.querySelector('.delete').addEventListener('click', async () => {
-            let result = await modalConfirm('Delete Event', `Are you sure you want to delete the event '${info.event.title}'?`);
-            if(result)
-                await this.deleteEvent(info.event.id);
-        });
-
         // Calculate the position of the popup element
         const hoverRect = hoverElement.getBoundingClientRect();
-        const popupWidth = parseInt(this.popupElement.style.width);
         const popupHeight = parseInt(this.popupElement.style.height);
-        //const popupTop = hoverRect.top + (hoverRect.height - popupHeight) / 2;
-        console.log('info.event', info);
-        let top = info.jsEvent.y;
+        let top = info.jsEvent.y - 10;
         const popupTop = top - (popupHeight / 2);
         const popupLeft = hoverRect.right;
         this.popupElement.style.top = popupTop + 'px';
@@ -209,10 +222,10 @@ class FenrusDriveCalendar
         const startString = startDate.toLocaleDateString(navigator.language, options);
 
         let endString;
-        if (endDate.toDateString() === startDate.toDateString())
+        if (endDate?.toDateString() === startDate?.toDateString())
             endString = endDate.toLocaleTimeString(navigator.language, { hour: 'numeric', minute: 'numeric' });
         else
-            endString = endDate.toLocaleDateString(navigator.language, options);        
+            endString = endDate?.toLocaleDateString(navigator.language, options) || '';        
         return `${startString} - ${endString}`;
     }
 
@@ -337,6 +350,8 @@ class FenrusDriveCalendar
 
 
     dateToString(date){
+        if(!date)
+            return '';
         // get the date components
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // add leading zero if necessary
