@@ -41,7 +41,7 @@ public class LanguageConverter : JsonConverter<object>
     /// <param name="typeToConvert">The <see cref="Type"/> being converted.</param>
     /// <param name="options">The <see cref="JsonSerializerOptions"/> being used.</param>
     /// <returns>The value that was converted.</returns>
-    public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override object? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         switch (reader.TokenType)
         {

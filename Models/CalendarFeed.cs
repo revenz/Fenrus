@@ -30,17 +30,21 @@ public class CalendarFeed: IModal, IUserModal
     /// Gets or sets if this is a system item
     /// </summary>
     public bool IsSystem { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the URL of the feed
     /// </summary>
-    public string Url { get; set; }
+    public EncryptedString Url { get; set; }
     
     /// <summary>
     /// Gets or sets the type of feed
     /// </summary>
     public CalendarFeedType Type { get; set; }
-
+    
+    /// <summary>
+    /// Gets or sets the number of minutes to cache the data 
+    /// </summary>
+    public int CacheMinutes { get; set; }
 }
 
 /// <summary>

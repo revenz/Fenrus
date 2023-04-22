@@ -30,8 +30,15 @@ public static class FileSorter
         /// <param name="fileName1">The first file name to compare.</param>
         /// <param name="fileName2">The second file name to compare.</param>
         /// <returns>A negative integer, zero, or a positive integer, depending on the relative order of the file names.</returns>
-        public int Compare(string fileName1, string fileName2)
+        public int Compare(string? fileName1, string? fileName2)
         {
+            if (fileName1 == null && fileName2 == null)
+                return 0;
+            if (fileName1 == null)
+                return 1;
+            if (fileName2 == null)
+                return -1;
+            
             // Get the file names without extensions
             string fileNameWithoutExtension1 = Path.GetFileNameWithoutExtension(fileName1);
             string fileNameWithoutExtension2 = Path.GetFileNameWithoutExtension(fileName2);

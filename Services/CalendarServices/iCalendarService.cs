@@ -11,15 +11,18 @@ public class iCalendarService
 {
     private readonly string _url;
     private readonly MemoryCache _cache;
+    private readonly int _cacheMinutes;
 
     /// <summary>
     /// Initializes a new instance of the iCalendarService class with the specified iCal feed URL.
     /// </summary>
     /// <param name="url">The URL of the iCal feed to read.</param>
-    public iCalendarService(string url)
+    /// <param name="cacheMinutes">the number of minutes to cache the data for</param>
+    public iCalendarService(string url, int cacheMinutes)
     {
         _url = url;
         _cache = MemoryCache.Default;
+        _cacheMinutes = cacheMinutes < 1 ? 15 : cacheMinutes;
     }
 
     /// <summary>
@@ -42,7 +45,7 @@ public class iCalendarService
             {
                 CacheItemPolicy cachePolicy = new CacheItemPolicy
                 {
-                    AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(15)
+                    AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(_cacheMinutes)
                 };
                 _cache.Set(cacheKey, icalSource, cachePolicy);
             }

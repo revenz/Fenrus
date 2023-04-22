@@ -78,7 +78,7 @@ public partial class CalendarFeedEditor: SideEditorBase
             Title = Translator.Instant("Pages.Calendar.Labels.NewCalendarFeed");
             Model.Name = string.Empty;
             Model.Uid = Guid.NewGuid();
-            Model.Url = string.Empty;
+            Model.Url = (EncryptedString)string.Empty;
             Model.Type = CalendarFeedType.iCal;
             Model.Enabled = true;
             IsNew = true;

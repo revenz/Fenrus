@@ -96,7 +96,8 @@ public class CalendarFeedService
         {
             if (feed.Type == CalendarFeedType.iCal)
             {
-                events.AddRange(new iCalendarService(feed.Url).GetEvents(fromUtc, toUtc));
+                if(string.IsNullOrEmpty(feed.Url) == false)
+                    events.AddRange(new iCalendarService(feed.Url, feed.CacheMinutes).GetEvents(fromUtc, toUtc));
             }
         }
 

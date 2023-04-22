@@ -1,3 +1,4 @@
+using Fenrus.Converters;
 using Fenrus.Models;
 using LiteDB;
 
@@ -26,7 +27,11 @@ public class DbHelper
     {
         var db = new LiteDatabase(DbFile);
         db.Pragma("UTC_DATE", true);
-        
+        BsonMapper.Global.RegisterType<EncryptedString>
+        (
+            serialize: (x) => EncryptionHelper.Encrypt(x.Value),
+            deserialize: (x) => (EncryptedString)EncryptionHelper.Decrypt(x.AsString)
+        );
         return db;
     }
 
