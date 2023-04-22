@@ -17,6 +17,7 @@
     <PackageReference Include="Blazored.Toast" Version="3.2.2" />
     <PackageReference Include="Docker.DotNet" Version="3.125.13" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+    <PackageReference Include="Ical.Net.NetCore" Version="4.1.11" />
     <PackageReference Include="Jint" Version="3.0.0-beta-2047" />
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.380" />
     <PackageReference Include="LigerShark.WebOptimizer.Sass" Version="3.0.91" />
@@ -27,6 +28,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.12" />
     <PackageReference Include="NLog" Version="5.1.2" />
     <PackageReference Include="SSH.NET" Version="2020.0.2" />
+    <PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -50,7 +50,8 @@ public partial class MainMenu
             {
                 new () { Name = App.Translator.Instant("Pages.Dashboards.Title"), Link = "/settings/dashboards", Icon = "fa-solid fa-table-cells-large"},
                 new () { Name = App.Translator.Instant("Pages.Groups.Title"), Link = "/settings/groups", Icon = "fa-solid fa-puzzle-piece"},
-                new () { Name = App.Translator.Instant("Pages.SearchEngines.Title"), Link = "/settings/search-engines", Icon = "fa-solid fa-magnifying-glass"}
+                new () { Name = App.Translator.Instant("Pages.SearchEngines.Title"), Link = "/settings/search-engines", Icon = "fa-solid fa-magnifying-glass"},
+                new () { Name = App.Translator.Instant("Pages.Calendar.Title"), Link = "/settings/calendar", Icon = "fa-solid fa-calendar"}
             }
         });
 
@@ -64,6 +65,7 @@ public partial class MainMenu
                     new () { Name = App.Translator.Instant("Pages.Dashboard.Title-Guest"), Link = "/settings/system/guest-dashboard", Icon = "fa-solid fa-table-cells-large"},
                     new () { Name = App.Translator.Instant("Pages.Groups.Title-System"), Link = "/settings/system/groups", Icon = "fa-solid fa-puzzle-piece"},
                     new () { Name = App.Translator.Instant("Pages.SearchEngines.Title-System"), Link = "/settings/system/search-engines", Icon = "fa-solid fa-magnifying-glass"},
+                    new () { Name = App.Translator.Instant("Pages.Calendar.Title-System"), Link = "/settings/system/calendar", Icon = "fa-solid fa-calendar"},
                     new () { Name = App.Translator.Instant("Pages.Users.Title"), Link = "/settings/system/users", Icon = "fa-solid fa-user-group"},
                     new () { Name = App.Translator.Instant("Pages.Docker.Title"), Link = "/settings/system/docker", Icon = "fa-brands fa-docker"},
                     new () { Name = App.Translator.Instant("Pages.SystemSettings.Title"), Link = "/settings/system/system-settings", Icon = "fa-solid fa-gear"},

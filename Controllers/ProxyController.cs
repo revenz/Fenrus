@@ -7,8 +7,6 @@ namespace Fenrus.Controllers;
 [Route("proxy")]
 public class ProxyController: BaseController
 {
-    private static HttpClient Client = new ();
-    
     /// <summary>
     /// Proxies a resource
     /// </summary>
@@ -48,7 +46,7 @@ public class ProxyController: BaseController
 
         try
         {
-            var result = await Client.SendAsync(new HttpRequestMessage()
+            var result = await Globals.Client.SendAsync(new HttpRequestMessage()
             {
                 RequestUri = new Uri(url),
                 Method = HttpMethod.Get

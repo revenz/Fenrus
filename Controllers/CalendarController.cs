@@ -26,7 +26,9 @@ public class CalendarController : BaseController
         var all = new CalendarService().GetAllForUser(uid);
         var results = all.Where(x => x.StartUtc >= startUtc && x.StartUtc < endUtc)
             .Select(x => CalendarEventModel.From(x)).ToList();
-        return results;
+        // get the feed events
+        var feeds = new CalendarFeedService().GetEvents(uid, start, end);
+        return results.Union(feeds);
     }
 
     /// <summary>
@@ -44,46 +46,22 @@ public class CalendarController : BaseController
         return CalendarEventModel.From(@event);
     }
 
-
     /// <summary>
-    /// Models for a calender event used by the UI control
+    /// Deletes a calendar event
     /// </summary>
-    public class CalendarEventModel
+    /// <param name="uid">the UID of the event to delete</param>
+    [HttpDelete("{uid}")]
+    public IActionResult Delete([FromRoute] Guid uid)
     {
-        /// <summary>
-        /// Gets the UID of the event
-        /// </summary>
-        [JsonPropertyName("id")]
-        public Guid Uid { get; init; }
-        /// <summary>
-        /// Gets the name of the event
-        /// </summary>
-        [JsonPropertyName("title")]
-        public string Title { get; init; }
-        /// <summary>
-        /// Gets the start date of the event
-        /// </summary>
-        [JsonPropertyName("start")]
-        public string Start { get; init; }
-        /// <summary>
-        /// Gets the end date of the event
-        /// </summary>
-        [JsonPropertyName("end")]
-        public string End { get; init; }
-
-        /// <summary>
-        /// Converts a CalendarEvent to a CalendarEventModel
-        /// </summary>
-        /// <param name="event">the CalendarEvent</param>
-        /// <returns>the CalendarEventModel</returns>
-        public static CalendarEventModel From(CalendarEvent @event)
-            => new()
-            {
-                Uid = @event.Uid,
-                Title = @event.Name, 
-                Start = @event.StartUtc.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                End = @event.EndUtc.ToString("yyyy-MM-ddTHH:mm:ssZ")
-            };
+        var userUid = User.GetUserUid().Value;        
+        var service = new CalendarService();
+        var @event = service.GetByUid(uid);
+        if (@event == null)
+            return Ok(); // already deleted
+        if (@event.UserUid != userUid)
+            return Unauthorized();
+        service.Delete(uid);
+        return Ok();
     }
 }
 

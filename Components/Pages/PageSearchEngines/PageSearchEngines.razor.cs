@@ -48,7 +48,7 @@ public partial class PageSearchEngines: CommonPage<Models.SearchEngine>
     /// <summary>
     /// Edits a search engine
     /// </summary>
-    /// <param name="engine">the search engine being editted</param>
+    /// <param name="engine">the search engine being edited</param>
     private async Task Edit(SearchEngine engine)
     {
         var result = await Popup.OpenEditor<SearchEngineEditor, SearchEngine>(Translator, engine, new ()

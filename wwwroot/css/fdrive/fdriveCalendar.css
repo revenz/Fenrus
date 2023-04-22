@@ -49,7 +49,7 @@ body {
 #fdrive-calendar #calendar-actual .fc-timegrid-event-harness {
   line-height: 1.1rem !important;
 }
-#fdrive-calendar #calendar-actual table tr > :first-child {
+#fdrive-calendar #calendar-actual table tr > :first-child:not(.fc-list-event-time) {
   padding-left: unset !important;
 }
 
@@ -68,6 +68,8 @@ body {
   border-color: transparent transparent transparent var(--accent);
   transform: translateX(-100%) translateY(-50%) rotate(180deg);
   position: absolute;
+  left: 0;
+  top: 50%;
 }
 #fdrive-calendar-popover .title {
   display: flex;

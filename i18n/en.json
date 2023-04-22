@@ -122,6 +122,24 @@
         "ThirdParty": "Third Party"
       }
     },
+    "Calendar": {
+      "Title": "Calendar",
+      "Title-System": "System Calendar",
+      "Labels": {
+        "NewCalendarFeed": "New Calendar Feed",
+        "EditCalendarFeed": "Edit Calendar Feed",
+        "PageDescription": "This page lets you manage calendar feeds.  These feeds will appear in your calendar but will not be editable.",
+        "PageDescription-System": "This page lets you manage calendar feeds that will be available to all users.  These feeds will appear in their calendar but will not be editable."
+      },
+      "Fields": {
+        "Name": "Name",
+        "Name-Help": "The name of the calendar feed",
+        "Url": "URL",
+        "Url-Help": "The URL to the calendar feed",
+        "Type": "Type",
+        "Type-Help": "The type of calendar feed this is, if the type you want to use is not in this list, then it is not supported."
+      }
+    },
     "Dashboards":{
       "Title": "Dashboards",
       "Labels": {

@@ -1,0 +1,17 @@
+@namespace Fenrus.Components.SideEditors
+@using Fenrus.Models
+@inherits SideEditorBase
+
+<SideEditor Title=@Title @ref=Editor>
+    <Buttons>
+        <button class="btn" @onclick="() => Save()">@lblSave</button>
+        <button class="btn" @onclick="() => Cancel()">@lblCancel</button>
+    </Buttons>
+    <Body>
+    <InputText Page="Calendar" Label="Name" @bind-Value="@Model.Name" />
+    <InputText Page="Calendar" Label="Url" @bind-Value="@Model.Url" />
+    <InputSelect Page="Calendar" TItem="CalendarFeedType" Label="Type" @bind-Value="@Model.Type">
+        <InputSelectOption TItem="CalendarFeedType" StringValue="iCal" Label="iCal" />
+    </InputSelect>
+    </Body>
+</SideEditor>

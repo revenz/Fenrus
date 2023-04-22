@@ -25,16 +25,22 @@ class FenrusDriveDrawer {
     toggle(){
         this.visible = !this.visible;
         this.eleWrapper.className =  this.visible ? 'expanded' : 'collapsed';
-        if(!this.visible)
+        if(!this.visible){
+            fDriveCalendar.hide();
             return;
+        }
         this.setMode(this.mode);
     }
     
     setMode(mode){
+        let current = this.mode;
         if(this.mode !== mode) {
             this.mode = mode;
             localStorage.setItem('DRIVE_MODE', mode);
         }
+        if(current === 'calendar')
+            fDriveCalendar.hide();
+        
         if(mode === 'files') {
             this.eleFiles.className = 'visible';
             this.eleNotes.className = '';
@@ -68,8 +74,10 @@ class FenrusDriveDrawer {
     mouseDownEventListener(event) {
         if(this.eleWrapper) {
             let wrapper = event.target.closest('#fdrive-wrapper, .fenrus-modal, .blocker, .fdrive-preview, .fc-highlight, .fenrus-modal-background-overlay, #fdrive-calendar-popover');
-            if (!wrapper)
+            if (!wrapper) {
                 this.eleWrapper.className = 'collapsed';
+                fDriveCalendar.hide();
+            }
         }
 
         if(this.eleAddMenu) {

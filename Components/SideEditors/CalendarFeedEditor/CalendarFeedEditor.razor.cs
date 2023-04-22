@@ -4,19 +4,19 @@ using Microsoft.AspNetCore.Components;
 namespace Fenrus.Components.SideEditors;
 
 /// <summary>
-/// Search Engine Editor
+/// Calendar Feed Editor
 /// </summary>
-public partial class SearchEngineEditor: SideEditorBase
+public partial class CalendarFeedEditor: SideEditorBase
 {
     /// <summary>
     /// Gets or sets the item this is editing, leave null for a new item
     /// </summary>
-    [Parameter] public SearchEngine? Item { get; set; }
+    [Parameter] public CalendarFeed? Item { get; set; }
     
     /// <summary>
     /// Gets or sets the callback when this editor is saved
     /// </summary>
-    [Parameter] public EventCallback<SearchEngine> OnSaved { get; set; }
+    [Parameter] public EventCallback<CalendarFeed> OnSaved { get; set; }
     
     /// <summary>
     /// Gets or sets the callback when this editor is canceled
@@ -24,7 +24,7 @@ public partial class SearchEngineEditor: SideEditorBase
     [Parameter] public EventCallback OnCanceled { get; set; }
     
     /// <summary>
-    /// Gets or sets if this is a system search engine
+    /// Gets or sets if this is a system calendar feed
     /// </summary>
     [Parameter] public bool IsSystem { get; set; }
     
@@ -36,7 +36,7 @@ public partial class SearchEngineEditor: SideEditorBase
     /// <summary>
     /// Gets or sets the bound model the user is editing
     /// </summary>
-    private SearchEngine Model;
+    private CalendarFeed Model;
     
     /// <summary>
     /// Gets or sets the title of the editor
@@ -55,41 +55,31 @@ public partial class SearchEngineEditor: SideEditorBase
     
     private string Icon { get; set; }
 
-    private string InitialImage;    
+    private string lblSave, lblCancel;    
     
     protected override void OnInitialized()
     {
         Model = new();
         IsNew = false;
+        this.lblSave = Translator.Instant("Labels.Save");
+        this.lblCancel = Translator.Instant("Labels.Cancel");
         
         if (Item != null)
         {
-            Title = Translator.Instant("Pages.SearchEngines.Labels.EditSearchEngine");
+            Title = Translator.Instant("Pages.Calendar.Labels.EditCalendarFeed");
             Model.Name = Item.Name;
             Model.Uid = Item.Uid;
-            Model.Shortcut = Item.Shortcut;
             Model.Url = Item.Url;
+            Model.Type = Item.Type;
             Model.Enabled = Item.Enabled;
-            if (string.IsNullOrEmpty(Item.Icon) == false)
-            {
-                if (Item.Icon.StartsWith("db:/image/"))
-                {
-                    // db image
-                    InitialImage = "/fimage/" + Item.Icon["db:/image/".Length..];
-                }
-                else
-                {
-                    InitialImage = Item.Icon;
-                }
-            }
         }
         else
         {
-            Title = Translator.Instant("Pages.SearchEngines.Labels.NewSearchEngine");
+            Title = Translator.Instant("Pages.Calendar.Labels.NewCalendarFeed");
             Model.Name = string.Empty;
             Model.Uid = Guid.NewGuid();
             Model.Url = string.Empty;
-            Model.Shortcut = string.Empty;
+            Model.Type = CalendarFeedType.iCal;
             Model.Enabled = true;
             IsNew = true;
         }
@@ -109,10 +99,9 @@ public partial class SearchEngineEditor: SideEditorBase
 
         string saveImage = ImageHelper.SaveImageFromBase64(Icon);
         
-        var service = new SearchEngineService();
+        var service = new CalendarFeedService();
         if (IsNew)
         {
-            Model.Icon = saveImage;
             Model.Uid = Guid.NewGuid();
             Model.IsSystem = IsSystem;
             
@@ -123,18 +112,9 @@ public partial class SearchEngineEditor: SideEditorBase
         {
             var existing = service.GetByUid(this.Model.Uid);
             existing.Enabled = Model.Enabled;
-            existing.IsDefault = Model.IsDefault;
             existing.IsSystem = IsSystem;
-            if (string.IsNullOrEmpty(saveImage) == false)
-            {
-                // delete existing icon
-                ImageHelper.DeleteImage(existing.Icon);
-                // now set the new one
-                existing.Icon = saveImage;
-            }
 
             existing.Name = Model.Name;
-            existing.Shortcut = Model.Shortcut;
             existing.Url = Model.Url;
             service.Update(existing);
         }
