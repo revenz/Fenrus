@@ -1,5 +1,6 @@
 class Toast {
     constructor(type, message, timeout = 5000) {
+        type = (type || 'success').toLowerCase();
         this.type = type;
         this.message = message;
         this.timeout = timeout;
