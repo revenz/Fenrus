@@ -66,6 +66,12 @@ public class CalendarEventWorker:Worker
                 }
             }
         }
+
+        var events = new CalendarService().GetAll();
+        foreach (var ev in events)
+        {
+            NotifyEvent(ev.UserUid, CalendarEventModel.From(ev));
+        }
     }
 
     private void NotifyEvent(Guid userUid, CalendarEventModel ev)
