@@ -1,13 +1,17 @@
 class Toast {
-    constructor(type, message, timeout = 5000) {
+    constructor(type, title, message, timeout = 5000) {
         type = (type || 'success').toLowerCase();
         this.type = type;
+        this.title = title;
         this.message = message;
         this.timeout = timeout;
         this.toast = document.createElement('div');
         this.toast.classList.add('toast');
         this.toast.classList.add(type);
-        this.toast.innerHTML = `<i class="fa ${this.getIconClass()}"></i><div class="message">${message}</div><span class="close"><i class="fa fa-times"></i></span>`;
+        if(message)
+            this.toast.innerHTML = `<i class="fa ${this.getIconClass()}"></i><div class="message"><div class="title">${htmlEncode(title)}</div><div class="content">${htmlEncode(message)}</div></div><span class="close"><i class="fa fa-times"></i></span>`;
+        else
+            this.toast.innerHTML = `<i class="fa ${this.getIconClass()}"></i><div class="message"><div class="title">${htmlEncode(title)}</div></div><span class="close"><i class="fa fa-times"></i></span>`;
         document.body.appendChild(this.toast);
         setTimeout(() => {
             this.close();
@@ -58,19 +62,19 @@ class Toast {
         });
     }
 
-    static success(message, timeout) {
-        new Toast('success', message, timeout);
+    static success(title, message, timeout) {
+        new Toast('success', title, message, timeout);
     }
 
-    static warning(message, timeout) {
-        new Toast('warning', message, timeout);
+    static warning(title, message, timeout) {
+        new Toast('warning', title, message, timeout);
     }
 
-    static info(message, timeout) {
-        new Toast('info', message, timeout);
+    static info(title, message, timeout) {
+        new Toast('info', title, message, timeout);
     }
 
-    static error(message, timeout) {
-        new Toast('error', message, timeout);
+    static error(title, message, timeout) {
+        new Toast('error', title, message, timeout);
     }
 }

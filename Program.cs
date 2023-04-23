@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using NUglify.Helpers;
 
 if (args?.Any() == true && args[0] == "--init-config")
 {
@@ -159,8 +160,16 @@ app.MapBlazorHub(options =>
 app.MapFallbackToPage("/_Host");
 
 // create an uptime service to monitor the uptime status for monitor apps/links
+// move this into a worker...
 new UpTimeService().Start();
+var workers = new Fenrus.Workers.Worker[]
+{
+    new Fenrus.Workers.CalendarEventWorker()
+};
+workers.ForEach(x => x.Start());
+
 
 Logger.ILog($"Fenrus v{Fenrus.Globals.Version} started");
 app.Run();
 Logger.ILog($"Fenrus v{Fenrus.Globals.Version} stopped");
+workers.ForEach(x => x.Stop());

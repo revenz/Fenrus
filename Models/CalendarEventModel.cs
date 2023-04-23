@@ -24,10 +24,20 @@ public class CalendarEventModel
     [JsonPropertyName("start")]
     public string Start { get; init; }
     /// <summary>
+    /// Gets or sets the actual datetime of the start
+    /// </summary>
+    [JsonIgnore]
+    internal DateTime StartDate { get; init; }
+    /// <summary>
     /// Gets the end date of the event
     /// </summary>
     [JsonPropertyName("end")]
     public string End { get; init; }
+    /// <summary>
+    /// Gets or sets the actual datetime of the end
+    /// </summary>
+    [JsonIgnore]
+    internal DateTime EndDate { get; init; }
 
     /// <summary>
     /// Gets if the even is editable
@@ -81,6 +91,8 @@ public class CalendarEventModel
         {
             Uid = uid,
             Title = title, 
+            StartDate = start,
+            EndDate = end,
             Start = start.ToString("yyyy-MM-ddTHH:mm:ssZ"),
             End = end.ToString("yyyy-MM-ddTHH:mm:ssZ"),
             ReadOnly = readOnly

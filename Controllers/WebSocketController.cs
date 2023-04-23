@@ -1,5 +1,6 @@
 using System.Net.WebSockets;
 using System.Text;
+using Fenrus.Workers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Controllers;
@@ -30,21 +31,21 @@ public class WebSocketController : BaseController
             return;
         }
 
-        var timer = new System.Timers.Timer();
-        timer.Interval = 10_000;
-        timer.AutoReset = true;
-        timer.Elapsed += (sender, args) =>
-        {
-            NotificationHelper.Send(uid.Value, NotificationType.Info, "a title", "a message");
-        };
-        timer.Start();
+        // var timer = new System.Timers.Timer();
+        // timer.Interval = 10_000;
+        // timer.AutoReset = true;
+        // timer.Elapsed += (sender, args) =>
+        // {
+        //     NotificationHelper.Send(uid.Value, NotificationType.Info, "a title", "a message");
+        // };
+        // timer.Start();
 
         using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
         var handler = new FenrusSocketHandler(webSocket, uid.Value);
         await handler.WaitForClose();
         handler.Dispose();
-        timer.Stop();
-        timer.Dispose();
+        // timer.Stop();
+        // timer.Dispose();
 
     }
 }
@@ -66,6 +67,7 @@ public class FenrusSocketHandler:IDisposable
     {
         this._socket = socket;
         this._userUid = userUid;
+        CalendarEventWorker.RegisterClient();
         NotificationHelper.NotificationReceived += NotificationHelperOnNotificationReceived; 
     }
 
@@ -83,7 +85,8 @@ public class FenrusSocketHandler:IDisposable
             type = notification.Type.ToString().ToLower(),
             title = notification.Title,
             message = notification.Message,
-            duration = notification.Duration
+            duration = notification.Duration,
+            identifier = notification.Identifier
         }));
     }
 
@@ -128,6 +131,7 @@ public class FenrusSocketHandler:IDisposable
     /// </summary>
     public void Dispose()
     {
+        CalendarEventWorker.UnregisterClient();
         NotificationHelper.NotificationReceived -= NotificationHelperOnNotificationReceived;
     }
 }

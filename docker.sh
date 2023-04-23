@@ -14,9 +14,19 @@ docker container rm fenrus >/dev/null 2>&1
 docker build -t fenrus -f Dockerfile .
 
 if [ "$1" = "--publish" ]; then
-  echo Publishing docker image
-  docker tag fenrus revenz/fenrus:dotnet
-  docker push revenz/fenrus:dotnet
+  read -p "Do you want to publish to Dockerhub? (Y/N) " answer
+  if [ "$answer" == "Y" ] || [ "$answer" == "y" ]; then
+    echo Publishing docker image
+    docker tag fenrus revenz/fenrus:dotnet
+    docker push revenz/fenrus:dotnet
+  else
+      # do something else
+    echo Exited without pushing 
+  fi
+elif [ "$1" = "--dev" ]; then
+  echo Publishing develop docker image
+  docker tag fenrus revenz/fenrus:develop
+  docker push revenz/fenrus:develop
 else
   echo Running docker image
   

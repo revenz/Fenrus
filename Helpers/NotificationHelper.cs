@@ -13,7 +13,8 @@ public class NotificationHelper
     /// <param name="title">the title of the notification</param>
     /// <param name="message">the message of the notification</param>
     /// <param name="duration">the number of seconds to show the notification for</param>
-    public static void Send(Guid userUid, NotificationType type, string title, string message, int duration = 10)
+    /// <param name="identifier">optional identifier for the message to prevent this notification from being seen multiple times</param>
+    public static void Send(Guid userUid, NotificationType type, string title, string message, int duration = 10, string? identifier = null)
     {
         NotificationReceived?.Invoke(new ()
         {
@@ -21,7 +22,8 @@ public class NotificationHelper
             Type = type,
             Title = title,
             Message = message,
-            Duration = duration
+            Duration = duration,
+            Identifier = identifier
         });
     }
 
@@ -61,6 +63,11 @@ public class Notification
     /// Gets or sets the number of seconds to show the notification for
     /// </summary>
     public int Duration { get; set; }
+    
+    /// <summary>
+    /// Gets or sets optional identifier for the message to prevent this notification from being seen multiple times
+    /// </summary>
+    public string? Identifier { get; set; }
 }
 
 
