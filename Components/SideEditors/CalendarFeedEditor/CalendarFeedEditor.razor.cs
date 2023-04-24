@@ -72,6 +72,7 @@ public partial class CalendarFeedEditor: SideEditorBase
             Model.Url = Item.Url;
             Model.Type = Item.Type;
             Model.Enabled = Item.Enabled;
+            Model.Color = Item.Color;
         }
         else
         {
@@ -116,6 +117,7 @@ public partial class CalendarFeedEditor: SideEditorBase
 
             existing.Name = Model.Name;
             existing.Url = Model.Url;
+            existing.Color = Model.Color;
             service.Update(existing);
         }
         

@@ -76,9 +76,8 @@ public class CalendarEventWorker:Worker
 
     private void NotifyEvent(Guid userUid, CalendarEventModel ev)
     {
-        bool allDay = Math.Abs(ev.EndDate.Subtract(ev.StartDate).TotalDays - 1) < 0.01;
         string suffix = "";
-        if (allDay == false)
+        if (ev.AllDay == false)
         {
             var minutes = DateTime.UtcNow.Subtract(ev.StartDate).TotalMinutes;
             if (minutes <= 5)
@@ -100,7 +99,7 @@ public class CalendarEventWorker:Worker
             suffix = "_allday";
         }
 
-        if (allDay)
+        if (ev.AllDay)
             NotificationHelper.Send(userUid, NotificationType.Info, ev.Title, string.Empty, identifier: ev.Uid + suffix);
         else
             NotificationHelper.Send(userUid, NotificationType.Info, ev.Start, ev.Title, identifier: ev.Uid + suffix);

@@ -85,6 +85,18 @@ body {
         display:block;
       }
     }
+    tbody > tr:first-child td {
+      .fc-daygrid-day-frame {
+        height:fit-content;
+        overflow:unset;
+        .fc-daygrid-day-events {
+          position: unset;
+          a {
+            white-space: normal;
+          }
+        }
+      }
+    }
   }
   td.fc-day {
     line-height:1.1rem;

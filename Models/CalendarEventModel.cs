@@ -38,6 +38,11 @@ public class CalendarEventModel
     /// </summary>
     [JsonIgnore]
     internal DateTime EndDate { get; init; }
+    
+    /// <summary>
+    /// Gets if an event is an all day event
+    /// </summary>
+    public bool AllDay =>  Math.Abs(this.EndDate.Subtract(this.StartDate).TotalDays - 1) < 0.01;
 
     /// <summary>
     /// Gets if the even is editable
@@ -45,18 +50,21 @@ public class CalendarEventModel
     [JsonPropertyName("editable")]
     public bool Editable => !ReadOnly;
 
+    private string? _BackgroundColor;
+    
     /// <summary>
     /// Gets or sets the background color for the event
     /// </summary>
     [JsonPropertyName("backgroundColor")]
-    public string BackgroundColor
+    public string? BackgroundColor
     {
         get
         {
-            if (ReadOnly)
+            if (ReadOnly && string.IsNullOrEmpty(_BackgroundColor))
                 return "rgba(var(--danger-rgb), 0.5)";
-            return null;
+            return _BackgroundColor?.EmptyAsNull();
         }
+        set => _BackgroundColor = value;
     }
     
     /// <summary>

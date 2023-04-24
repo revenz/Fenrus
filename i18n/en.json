@@ -137,7 +137,12 @@
         "Url": "URL",
         "Url-Help": "The URL to the calendar feed",
         "Type": "Type",
-        "Type-Help": "The type of calendar feed this is, if the type you want to use is not in this list, then it is not supported."
+        "Type-Help": "The type of calendar feed this is, if the type you want to use is not in this list, then it is not supported.",
+        "CacheMinutes": "Cache",
+        "CacheMinutes-Suffix": "minutes",
+        "CacheMinutes-Help": "The number of minutes to cache this feed for before refreshing it, keep this number high to reduce excess querying of the calendar data.",
+        "Color": "Color",
+        "Color-Help": "The color to show these events in.  Leave blank to use the default color."
       }
     },
     "Dashboards":{

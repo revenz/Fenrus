@@ -45,6 +45,11 @@ public class CalendarFeed: IModal, IUserModal
     /// Gets or sets the number of minutes to cache the data 
     /// </summary>
     public int CacheMinutes { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the color to whose these events in
+    /// </summary>
+    public string Color { get; set; }
 }
 
 /// <summary>

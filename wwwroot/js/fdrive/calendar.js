@@ -22,22 +22,47 @@ class FenrusDriveCalendar
         let eventDoubleClick, eventClickTimer;
         let popupElement, mouseInPopUp;
         
+        let view = localStorage.getItem('CALENDAR_VIEW') || 'timeGridWeek';
+        let scrollTime = null;
+        if(view === 'timeGridWeek' || view === 'timeGridDay') {
+            let sdate= new Date().getHours() < 22 ? new Date(new Date().setHours(new Date().getHours() + 2)) : new Date();
+            scrollTime = sdate.getHours() + ':' + (sdate.getMinutes() < 10 ? '0' : '') + sdate.getMinutes();
+        }
+
+        console.log('scrolltime: ', scrollTime);
+
         this.calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: localStorage.getItem('CALENDAR_VIEW') || 'timeGridWeek',
+            initialView: view,
             editable: true,
             selectable: true,
-            allDaySlot:false,
             businessHours: true,
+            scrollTime: scrollTime,
             nowIndicator: true,
             navLinks: true, // can click day/week names to navigate views
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                //right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                right: 'dgMonth,dgWeek,dgDay,dgList'
             },
-            viewDidMount: (args) =>
+            customButtons:
             {
-              localStorage.setItem('CALENDAR_VIEW', args.view.type);
+                dgMonth: {
+                    text: 'Month',
+                    click: () => this.changeView('dayGridMonth')
+                },
+                dgWeek: {
+                    text: 'Week',
+                    click: () => this.changeView('timeGridWeek')
+                },
+                dgDay: {
+                    text: 'Day',
+                    click: () => this.changeView('timeGridDay')
+                },
+                dgList: {
+                    text: 'List',
+                    click: () => this.changeView('listWeek')
+                },
             },
             datesSet: (info) => {
                 this.closeEvent();  
@@ -129,6 +154,22 @@ class FenrusDriveCalendar
             }
         });
         this.calendar.render();
+        this.changeView(view);
+    }
+    
+    changeView(view){
+        localStorage.setItem('CALENDAR_VIEW', view);
+        this.calendar.changeView(view);
+        let title = view === 'dayGridMonth' ? 'Month' :
+             view === 'timeGridWeek' ? 'Week' :
+             view === 'timeGridDay' ? 'Day' :
+             'List';    
+        let buttons = document.querySelectorAll('#fdrive-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child .fc-button');
+        for(let btn of buttons){
+            btn.classList.remove('fc-button-active');
+            if(btn.getAttribute('title') === title)
+                btn.classList.add('fc-button-active');
+        }
     }
     
     closeEvent(){

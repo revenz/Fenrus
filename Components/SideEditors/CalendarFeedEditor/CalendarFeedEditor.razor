@@ -10,6 +10,8 @@
     <Body>
     <InputText Page="Calendar" Label="Name" @bind-Value="@Model.Name" />
     <InputText Page="Calendar" Label="Url" @bind-Value="@Model.Url.Value" />
+    <InputNumber Page="Calendar" Label="CacheMinutes" @bind-Value="@Model.CacheMinutes" />
+    <InputColor Page="Calendar" Label="Color" @bind-Value="@Model.Color" />
     <InputSelect Page="Calendar" TItem="CalendarFeedType" Label="Type" @bind-Value="@Model.Type">
         <InputSelectOption TItem="CalendarFeedType" StringValue="iCal" Label="iCal" />
     </InputSelect>

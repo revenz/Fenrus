@@ -59,6 +59,8 @@ public partial class PageCalendar : CommonPage<Models.CalendarFeed>
         feed.Name = result.Data.Name;
         feed.Url = result.Data.Url;
         feed.Type = result.Data.Type;
+        feed.Color = result.Data.Color;
+        feed.CacheMinutes = result.Data.CacheMinutes;
         Items = Items.OrderBy(x => x.Name).ToList();
         Table.SetData(Items);
     }

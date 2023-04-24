@@ -69,9 +69,9 @@ public class CalendarFeedService
     /// <summary>
     /// Updates a calendar feed
     /// </summary>
-    /// <param name="group">the calendar feed being updated</param>
-    public void Update(CalendarFeed group)
-        => DbHelper.Update(group);
+    /// <param name="feed">the calendar feed being updated</param>
+    public void Update(CalendarFeed feed)
+        => DbHelper.Update(feed);
 
     /// <summary>
     /// Deletes a calendar feed
@@ -96,8 +96,16 @@ public class CalendarFeedService
         {
             if (feed.Type == CalendarFeedType.iCal)
             {
-                if(string.IsNullOrEmpty(feed.Url) == false)
-                    events.AddRange(new iCalendarService(feed.Url, feed.CacheMinutes).GetEvents(fromUtc, toUtc));
+                if (string.IsNullOrEmpty(feed.Url) == false)
+                {
+                    var feedEvents = new iCalendarService(feed.Url, feed.CacheMinutes).GetEvents(fromUtc, toUtc);
+                    if (string.IsNullOrEmpty(feed.Color) == false)
+                    {
+                        foreach (var fe in feedEvents)
+                            fe.BackgroundColor = feed.Color;
+                    }
+                    events.AddRange(feedEvents);
+                }
             }
         }
 
