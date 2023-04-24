@@ -76,7 +76,12 @@ public class CalendarEventWorker:Worker
 
     private void NotifyEvent(Guid userUid, CalendarEventModel ev)
     {
-        string suffix = "";
+        if (ev.StartDate > DateTime.UtcNow.AddDays(1))
+            return;
+        if (ev.StartDate < DateTime.UtcNow)
+            return;
+     
+        string suffix = string.Empty;   
         if (ev.AllDay == false)
         {
             var minutes = DateTime.UtcNow.Subtract(ev.StartDate).TotalMinutes;
