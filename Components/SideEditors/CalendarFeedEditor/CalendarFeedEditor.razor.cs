@@ -73,6 +73,7 @@ public partial class CalendarFeedEditor: SideEditorBase
             Model.Type = Item.Type;
             Model.Enabled = Item.Enabled;
             Model.Color = Item.Color;
+            Model.CacheMinutes = Item.CacheMinutes;
         }
         else
         {
@@ -82,6 +83,7 @@ public partial class CalendarFeedEditor: SideEditorBase
             Model.Url = (EncryptedString)string.Empty;
             Model.Type = CalendarFeedType.iCal;
             Model.Enabled = true;
+            Model.CacheMinutes = 1440;
             IsNew = true;
         }
     }
@@ -118,6 +120,7 @@ public partial class CalendarFeedEditor: SideEditorBase
             existing.Name = Model.Name;
             existing.Url = Model.Url;
             existing.Color = Model.Color;
+            existing.CacheMinutes = Model.CacheMinutes;
             service.Update(existing);
         }
         
