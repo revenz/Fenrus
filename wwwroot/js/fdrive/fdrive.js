@@ -389,6 +389,7 @@ class FenrusDrive {
             })
             if (item.mimeType.startsWith('image')) {
                 let img = ele.querySelector('img');
+                img.className = 'media';
                 img.src = 'files/media?path=' + encodeURIComponent(item.fullPath);
                 img.setAttribute('x-filename', item.name);
                 ele.addEventListener('dblclick', () => {
@@ -553,7 +554,7 @@ class FenrusDrive {
         // Get all the child elements of the container
         let childElements = [];
         for(let ele of this.container.children){
-            if(ele.querySelector('img'))
+            if(ele.querySelector('img.media'))
                 childElements.push(ele);
         }        
         

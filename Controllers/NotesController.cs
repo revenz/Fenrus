@@ -141,7 +141,7 @@ public class NotesController : BaseController
         var userUid = User.GetUserUid().Value;
         var service = new NotesService();
         var note = service.GetByUid(uid);
-        if (note == null || HasWriteAccess(uid, note) == false)
+        if (note == null || HasWriteAccess(userUid, note) == false)
             return;
         service.Delete(note.Uid);
     }

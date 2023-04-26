@@ -29,8 +29,6 @@ class FenrusDriveCalendar
             scrollTime = sdate.getHours() + ':' + (sdate.getMinutes() < 10 ? '0' : '') + sdate.getMinutes();
         }
 
-        console.log('scrolltime: ', scrollTime);
-
         this.calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: view,
             editable: true,
