@@ -174,12 +174,6 @@
 #fdrive-wrapper .media:hover {
   opacity: 1;
 }
-#fdrive-wrapper #fdrive-list:hover .media:not(:hover) {
-  opacity: 0.2;
-}
-#fdrive-wrapper #fdrive-list:hover:not(:has(:hover)) .media {
-  opacity: 1;
-}
 
 .fdrive-modes {
   height: calc(100% - 3rem);

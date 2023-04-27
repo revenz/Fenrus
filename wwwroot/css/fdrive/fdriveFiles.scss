@@ -113,13 +113,16 @@ $notesMediaSmallMediaSize: 200px;
   display:flex;
   flex-direction: column;
   .file {
-    height:4rem;
-    min-height: 4rem;
+    height:2rem;
+    min-height: 2rem;
     overflow:hidden;
     display:flex;
     flex-direction: row;
     padding:0.5rem;
     background: rgba(var(--color-rgb), 0.05);
+    &:nth-of-type(even) {
+      background: rgba(var(--color-rgb), 0.09);
+    }
     font-size:1.3rem;
     line-height: 100%;
     position: relative;
@@ -136,7 +139,7 @@ $notesMediaSmallMediaSize: 200px;
     &.folder .enter, .download {
       position: absolute;
       right: 1.5rem;
-      top: 1.65rem;
+      top: 0.7rem;
       font-size: 1.5rem;
       cursor:pointer;
     }
@@ -145,10 +148,10 @@ $notesMediaSmallMediaSize: 200px;
     }
     .check {
       margin-right:1rem;
-      margin-top:1rem;
+      margin-top:0;
     }
     .icon {
-      width:8rem;
+      width:2rem;
       height:100%;
       margin-right:1rem;
       font-size: 3rem;
@@ -228,7 +231,7 @@ $notesMediaSmallMediaSize: 200px;
     left:0;
     right:0;
     line-height: 2rem;
-    background: #00000066;
+    background: rgba(var(--base-rgb), 0.8);
     text-align: center;
   }
   .icon {
@@ -307,13 +310,6 @@ $notesMediaSmallMediaSize: 200px;
     }
   }
 
-  &:hover .file:not(:hover) {
-    opacity: 0.2;
-  }
-
-  &:hover:not(:has(:hover)) .file {
-    opacity: 1;
-  }
   @media screen and (max-width:$notesMediaScreenSize) {
     grid-template-columns: repeat(2, 1fr) !important;
     grid-template-rows: repeat(2, $notesMediaSmallMediaSize) !important;

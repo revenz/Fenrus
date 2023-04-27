@@ -104,8 +104,8 @@
   flex-direction: column;
 }
 #fdrive-list:not(.thumbnail) .file {
-  height: 4rem;
-  min-height: 4rem;
+  height: 2rem;
+  min-height: 2rem;
   overflow: hidden;
   display: flex;
   flex-direction: row;
@@ -114,6 +114,9 @@
   font-size: 1.3rem;
   line-height: 100%;
   position: relative;
+}
+#fdrive-list:not(.thumbnail) .file:nth-of-type(even) {
+  background: rgba(var(--color-rgb), 0.09);
 }
 #fdrive-list:not(.thumbnail) .file .enter {
   display: none;
@@ -127,7 +130,7 @@
 #fdrive-list:not(.thumbnail) .file.folder .enter, #fdrive-list:not(.thumbnail) .file .download {
   position: absolute;
   right: 1.5rem;
-  top: 1.65rem;
+  top: 0.7rem;
   font-size: 1.5rem;
   cursor: pointer;
 }
@@ -136,10 +139,10 @@
 }
 #fdrive-list:not(.thumbnail) .file .check {
   margin-right: 1rem;
-  margin-top: 1rem;
+  margin-top: 0;
 }
 #fdrive-list:not(.thumbnail) .file .icon {
-  width: 8rem;
+  width: 2rem;
   height: 100%;
   margin-right: 1rem;
   font-size: 3rem;
@@ -213,7 +216,7 @@
   left: 0;
   right: 0;
   line-height: 2rem;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(var(--base-rgb), 0.8);
   text-align: center;
 }
 #fdrive-list.thumbnail .icon {
@@ -276,12 +279,6 @@
   right: 0.75rem;
   bottom: 0.25rem;
   display: unset;
-}
-#fdrive-list.thumbnail:hover .file:not(:hover) {
-  opacity: 0.2;
-}
-#fdrive-list.thumbnail:hover:not(:has(:hover)) .file {
-  opacity: 1;
 }
 @media screen and (max-width: 1000px) {
   #fdrive-list.thumbnail {

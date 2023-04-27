@@ -194,14 +194,6 @@ $notesMediaScreenSize: 1000px;
   .media:hover {
     opacity: 1;
   }
-
-  #fdrive-list:hover .media:not(:hover) {
-    opacity: 0.2;
-  }
-
-  #fdrive-list:hover:not(:has(:hover)) .media {
-    opacity: 1;
-  }
 }
 
 .fdrive-modes {
