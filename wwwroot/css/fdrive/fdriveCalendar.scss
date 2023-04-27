@@ -21,6 +21,23 @@ body {
   --fc-highlight-color: rgba(var(--accent-rgb), 0.2);
 }
 
+#fdrive-wrapper {
+  &.small {
+    #calendar-actual {
+      padding-top: 0.5rem !important;
+    }
+    .fc-header-toolbar {
+      flex-direction: column;
+      > div + div {
+        margin-top:0.5rem;
+      }
+    }
+    .fc-toolbar-title {
+      font-size:1.2rem;
+    }
+  }
+}
+
 #fdrive-calendar {
   .fdrive-pane-title {
     background: #000;
@@ -47,7 +64,7 @@ body {
     }
   }
   #calendar-actual {
-    padding:2rem 2rem 7rem;
+    padding:1rem 2rem 7rem;
     > .fc-view-harness {
       background: var(--base);
     }

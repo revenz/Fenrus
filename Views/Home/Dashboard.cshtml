@@ -51,53 +51,64 @@
 
 <input type="hidden" id="translations" value="@translations" />
 
-@if (Model.SearchEngines?.Any() == true || systemSearchEngines?.Any() == true)
-{
-    @(await Html.RenderComponentAsync<SearchComponent>(RenderMode.Static, new
+<div class="dashboard-view">
+    @if (isGuest == false)
     {
-        Settings = settings,
-        Model.Translator,
-        Model.Dashboard.ShowSearch, 
-        SystemSearchEngines = systemSearchEngines
-    }))
-}
-
-<div id="dashboard-name">
-    @if(isGuest)
-    {
-        <text>@(Model.Dashboard.Name == "Default" ? "" : Model.Dashboard.Name)</text>
+        @(await Html.RenderComponentAsync<DriveComponent>(RenderMode.Static, new
+        {
+            Model.Translator
+        }))
     }
-    else
-    {
-        <div class="dashboard-dropdown">
-            <button>@Model.Dashboard.Name</button>
-            <div>
-                @{
-                    var dbs = Model.Dashboards.Where(x => x.Name != Model.Dashboard.Name).OrderBy(x => x.Name);
-                    foreach (var db in dbs)
-                    {
-                        <a href="#" onclick="changeDashboard('@db.Uid');return false;">@db.Name</a>
-                    }
-                }
-            </div>
+    <div class="dashboard-main">
+        @if (Model.SearchEngines?.Any() == true || systemSearchEngines?.Any() == true)
+        {
+            @(await Html.RenderComponentAsync<SearchComponent>(RenderMode.Static, new
+            {
+                Settings = settings,
+                Model.Translator,
+                Model.Dashboard.ShowSearch,
+                SystemSearchEngines = systemSearchEngines
+            }))
+        }
+
+        <div id="dashboard-name">
+            @if (isGuest)
+            {
+                <text>@(Model.Dashboard.Name == "Default" ? "" : Model.Dashboard.Name)</text>
+            }
+            else
+            {
+                <div class="dashboard-dropdown">
+                    <button>@Model.Dashboard.Name</button>
+                    <div>
+                        @{
+                            var dbs = Model.Dashboards.Where(x => x.Name != Model.Dashboard.Name).OrderBy(x => x.Name);
+                            foreach (var db in dbs)
+                            {
+                                <a href="#" onclick="changeDashboard('@db.Uid');return false;">@db.Name</a>
+                            }
+                        }
+                    </div>
+                </div>
+            }
         </div>
-    }
-</div>
-    
-<div x-uid="@Model.Dashboard.Uid" class="@dashboardClass"
-     oncontextmenu="@(isGuest ? string.Empty : "openDefaultContextMenu(event); return false")">    
-    
-    @(await Html.RenderComponentAsync<DashboardComponent>(RenderMode.Static, new
-    {
-        Model = Model.Dashboard,
-        Model.Groups,
-        Settings = settings,
-        PageHelper = pageHelper,
-        Model.Translator,
-        Model.UpTimeStates,
-        IsGuest = isGuest
-    }))
 
+        <div x-uid="@Model.Dashboard.Uid" class="@dashboardClass"
+             oncontextmenu="@(isGuest ? string.Empty : "openDefaultContextMenu(event); return false")">
+
+            @(await Html.RenderComponentAsync<DashboardComponent>(RenderMode.Static, new
+            {
+                Model = Model.Dashboard,
+                Model.Groups,
+                Settings = settings,
+                PageHelper = pageHelper,
+                Model.Translator,
+                Model.UpTimeStates,
+                IsGuest = isGuest
+            }))
+
+        </div>
+    </div>
 </div>
 
 @(await Html.RenderComponentAsync<UpTimeComponent>(RenderMode.Static, new
@@ -105,13 +116,6 @@
     Model.Translator
 }))
 
-@if (isGuest == false)
-{
-    @(await Html.RenderComponentAsync<DriveComponent>(RenderMode.Static, new
-    {
-        Model.Translator
-    }))
-}
 
 <div id="launching-app">
     <div class="inner">

@@ -1,0 +1,28 @@
+.dashboard-view {
+  display:flex;
+  flex-direction: row;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+.dashboard-main
+{
+  flex-grow:1;
+  overflow:auto;
+  position: relative;
+  padding-top:3rem !important;
+}
+
+#dashboard-name {
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  z-index:100;
+}
+.dashboard-drive {
+  z-index:1;
+}

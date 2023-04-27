@@ -1,9 +1,12 @@
 #fdrive-wrapper {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 100;
+  position: relative;
+}
+#fdrive-wrapper.init-done {
+  transition: width 0.5s ease-in-out;
+}
+#fdrive-wrapper.is-resizing {
+  transition: none !important;
+  user-select: none;
 }
 #fdrive-wrapper .expander {
   position: absolute;
@@ -14,6 +17,9 @@
   width: 2rem;
   height: 13rem;
   background: rgba(17, 17, 17, 0.9333333333);
+  z-index: 2;
+  border: solid 1px var(--border-color);
+  border-left: solid 7px rgba(17, 17, 17, 0.9333333333);
   cursor: pointer;
   opacity: 0.75;
 }
@@ -40,13 +46,27 @@
   top: 0.65rem;
   left: 0.65rem;
 }
+#fdrive-wrapper .resizer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border-color);
+  z-index: 1;
+  cursor: ew-resize;
+}
+#fdrive-wrapper.is-resizing .resizer, #fdrive-wrapper .resizer:hover {
+  width: 6px;
+}
 #fdrive-wrapper .fdrive-inner {
-  width: 0;
   height: 100%;
-  transition: width 0.5s ease-in-out;
   overflow: hidden;
   background: rgba(17, 17, 17, 0.9333333333);
   position: relative;
+}
+#fdrive-wrapper.collapsed {
+  width: 0 !important;
 }
 #fdrive-wrapper.expanded .expander {
   opacity: 1;
@@ -55,18 +75,18 @@
   transform: rotate(-180deg);
 }
 @media screen and (max-width: 1000px) {
-  #fdrive-wrapper.expanded .fdrive-inner {
+  #fdrive-wrapper.expanded .nope-fdrive-inner {
     width: min(90vw, 40rem);
   }
-  #fdrive-wrapper.expanded .fdrive-inner #calendar-actual {
+  #fdrive-wrapper.expanded .nope-fdrive-inner #calendar-actual {
     width: min(90vw, 40rem);
   }
 }
 @media screen and (min-width: 1000.001px) {
-  #fdrive-wrapper.expanded .fdrive-inner {
+  #fdrive-wrapper.expanded .nope-fdrive-inner {
     width: 60rem;
   }
-  #fdrive-wrapper.expanded .fdrive-inner #calendar-actual {
+  #fdrive-wrapper.expanded .nope-fdrive-inner #calendar-actual {
     width: 60rem;
   }
 }

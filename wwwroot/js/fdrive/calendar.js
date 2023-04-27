@@ -6,6 +6,9 @@ class FenrusDriveCalendar
     popupElement; popupEventId;
     
     constructor(){
+        document.body.addEventListener('driveResizeEvent', (event) => {
+            this.calendar.render();
+        })
     }
     
     hide(){

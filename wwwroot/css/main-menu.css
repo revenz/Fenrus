@@ -7,6 +7,9 @@
   z-index: 10;
   display: flex;
   flex-direction: row;
+  width: 15rem;
+  position: absolute;
+  right: 0;
 }
 .main-menu li:hover .fa-house {
   position: relative;
@@ -29,8 +32,17 @@
 .main-menu .btn {
   transform: scale(1) !important;
 }
-.main-menu .logout.has-settings {
-  padding-left: 8rem;
+.main-menu .profile-buttons {
+  margin-left: auto;
+}
+.main-menu .profile-buttons .btn {
+  width: 10rem;
+}
+.main-menu .profile-buttons .btn:hover {
+  text-decoration: none;
+}
+.main-menu .profile-buttons .btn + .btn {
+  margin-left: 0.5rem;
 }
 .main-menu li {
   width: 3.5rem;

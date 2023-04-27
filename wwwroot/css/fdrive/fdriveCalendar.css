@@ -17,6 +17,19 @@ body {
   --fc-highlight-color: rgba(var(--accent-rgb), 0.2);
 }
 
+#fdrive-wrapper.small #calendar-actual {
+  padding-top: 0.5rem !important;
+}
+#fdrive-wrapper.small .fc-header-toolbar {
+  flex-direction: column;
+}
+#fdrive-wrapper.small .fc-header-toolbar > div + div {
+  margin-top: 0.5rem;
+}
+#fdrive-wrapper.small .fc-toolbar-title {
+  font-size: 1.2rem;
+}
+
 #fdrive-calendar .fdrive-pane-title {
   background: #000;
   text-align: center;
@@ -42,7 +55,7 @@ body {
   display: inline-block;
 }
 #fdrive-calendar #calendar-actual {
-  padding: 2rem 2rem 7rem;
+  padding: 1rem 2rem 7rem;
 }
 #fdrive-calendar #calendar-actual > .fc-view-harness {
   background: var(--base);

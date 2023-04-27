@@ -3,11 +3,15 @@ $notesMediaScreenSize: 1000px;
 
 #fdrive-wrapper
 {
-  position:fixed;
-  left:0;
-  top:0;
-  bottom:0;
-  z-index:100;
+  position: relative;
+  &.init-done {    
+    transition: width 0.5s ease-in-out;
+  }
+  &.is-resizing
+  {
+    transition: none !important;
+    user-select: none;
+  }
   .expander {
     position: absolute;
     user-select: none;
@@ -17,6 +21,9 @@ $notesMediaScreenSize: 1000px;
     width:2rem;
     height:13rem;
     background: $notesBackground;
+    z-index: 2;
+    border:solid 1px var(--border-color);
+    border-left: solid 7px $notesBackground;
     cursor:pointer;
     opacity: 0.75;
     &:hover{ opacity: 1;}
@@ -41,13 +48,27 @@ $notesMediaScreenSize: 1000px;
       left: 0.65rem;
     }
   }
+  .resizer {
+    position:absolute;
+    right:0;
+    top:0;
+    bottom:0;
+    width:2px;
+    background: var(--border-color);
+    z-index:1;
+    cursor:ew-resize;
+  }
+  &.is-resizing .resizer, .resizer:hover {
+    width:6px;
+  }
   .fdrive-inner {
-    width:0;
     height:100%;
-    transition: width 0.5s ease-in-out;
     overflow: hidden;
     background:$notesBackground;
     position: relative;
+  }
+  &.collapsed {
+    width: 0 !important;
   }
   &.expanded {
     .expander
@@ -57,7 +78,7 @@ $notesMediaScreenSize: 1000px;
         transform: rotate(-180deg);
       }
     }
-    .fdrive-inner {
+    .nope-fdrive-inner {
       @media screen and (max-width:$notesMediaScreenSize)
       {
         width:min(90vw, 40rem);
