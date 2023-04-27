@@ -21,13 +21,29 @@ body {
   padding-top: 0.5rem !important;
 }
 #fdrive-wrapper.small .fc-header-toolbar {
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
 }
-#fdrive-wrapper.small .fc-header-toolbar > div + div {
-  margin-top: 0.5rem;
+#fdrive-wrapper.small .fc-header-toolbar > div {
+  text-align: right;
+}
+#fdrive-wrapper.small .fc-header-toolbar > div:nth-child(2n) {
+  grid-row: 1;
+  grid-column: 1/span 2;
+}
+#fdrive-wrapper.small .fc-header-toolbar > div:first-child {
+  grid-row: 2;
+  grid-column: 1;
+  text-align: left;
+}
+#fdrive-wrapper.small .fc-header-toolbar > div:last-child {
+  grid-row: 2;
+  grid-column: 2;
 }
 #fdrive-wrapper.small .fc-toolbar-title {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
 }
 
 #fdrive-calendar .fdrive-pane-title {

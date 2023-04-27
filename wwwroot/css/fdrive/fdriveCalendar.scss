@@ -27,13 +27,30 @@ body {
       padding-top: 0.5rem !important;
     }
     .fc-header-toolbar {
-      flex-direction: column;
-      > div + div {
-        margin-top:0.5rem;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      grid-template-columns: 1fr 1fr;
+      gap:0.5rem;
+      > div {
+        text-align: right;        
+      }
+      > div:nth-child(2n)
+      {
+        grid-row: 1;
+        grid-column: 1 / span 2;
+      }
+      > div:first-child {
+        grid-row: 2;
+        grid-column: 1;
+        text-align:left;
+      }
+      > div:last-child {
+          grid-row: 2;
+          grid-column: 2;
       }
     }
     .fc-toolbar-title {
-      font-size:1.2rem;
+      font-size:1.4rem;
     }
   }
 }

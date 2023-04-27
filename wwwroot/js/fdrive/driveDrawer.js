@@ -21,7 +21,7 @@ class FenrusDriveDrawer {
         this.eleTabCalendar = document.getElementById('fdrive-mode-calendar');
         this.mode = localStorage.getItem('DRIVE_MODE') || 'files';
         this.width = parseInt(localStorage.getItem('DRIVE_WIDTH') || '');
-        let minWidth = 100;
+        let minWidth = 400;
         if(isNaN(this.width) || this.width < 50)
         {
             let max = window.innerWidth;
