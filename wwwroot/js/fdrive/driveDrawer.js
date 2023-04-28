@@ -31,6 +31,7 @@ class FenrusDriveDrawer {
                 this.width = Math.min(max * 0.4);
         }
         this.eleWrapper.style.width = this.width + 'px';
+        this.eleWrapper.style.minWidth = this.width + 'px';
         this.setWidthClass(this.width);
 
         this.visible = localStorage.getItem('DRIVE_VISIBLE') === '1';
@@ -51,17 +52,24 @@ class FenrusDriveDrawer {
             if (isResizing) {
                 this.width = Math.max(minWidth, event.pageX);
                 this.eleWrapper.style.width = this.width + 'px';
+                this.eleWrapper.style.minWidth = this.width + 'px';
                 this.setWidthClass(this.width);
             }
         }); 
+        let saveResize = () => {
+            this.eleWrapper.classList.remove('is-resizing');
+            isResizing = false;
+            let width = parseInt(this.eleWrapper.style.width);
+            localStorage.setItem('DRIVE_WIDTH', '' + width);
+            document.body.dispatchEvent(new CustomEvent('driveResizeEvent', { width: width } ));            
+        }
         document.body.addEventListener('mouseup', (event) => {
-            if(isResizing) {
-                this.eleWrapper.classList.remove('is-resizing');
-                isResizing = false;
-                let width = parseInt(this.eleWrapper.style.width);
-                localStorage.setItem('DRIVE_WIDTH', '' + width);
-                document.body.dispatchEvent(new CustomEvent('driveResizeEvent', { width: width } ));
-            }
+            if(isResizing)
+                saveResize();
+        });
+        document.body.addEventListener('mouseleave', (event) => {
+            if(isResizing)
+                saveResize();
         });
     }
     

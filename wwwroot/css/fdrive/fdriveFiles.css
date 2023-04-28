@@ -140,9 +140,11 @@
 #fdrive-list:not(.thumbnail) .file .check {
   margin-right: 1rem;
   margin-top: 0;
+  min-width: 1.35rem;
 }
 #fdrive-list:not(.thumbnail) .file .icon {
   width: 2rem;
+  min-width: 2rem;
   height: 100%;
   margin-right: 1rem;
   font-size: 3rem;
@@ -157,21 +159,33 @@
 }
 #fdrive-list:not(.thumbnail) .file .name {
   flex-grow: 1;
+  white-space: nowrap;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 11rem);
 }
 #fdrive-list:not(.thumbnail) .file .name, #fdrive-list:not(.thumbnail) .file .size {
-  display: flex;
-  align-items: center;
+  margin: auto;
 }
 #fdrive-list:not(.thumbnail) .file .size {
-  width: 12rem;
+  width: 10rem;
+  min-width: 10rem;
   justify-content: right;
   padding-right: 4rem;
+  text-align: right;
+}
+
+#fdrive-wrapper.small #fdrive-list.thumbnail {
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  grid-template-rows: repeat(auto-fit, 200px);
 }
 
 #fdrive-list.thumbnail {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 240px);
+  grid-template-rows: repeat(auto-fit, 240px);
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  grid-gap: 1rem;
   position: relative;
   transition: opacity 0.25s ease-in-out;
 }
@@ -181,7 +195,7 @@
   left: 1rem;
 }
 #fdrive-list.thumbnail .file {
-  height: 240px;
+  height: 100%;
   position: relative;
 }
 #fdrive-list.thumbnail .size {
@@ -279,15 +293,6 @@
   right: 0.75rem;
   bottom: 0.25rem;
   display: unset;
-}
-@media screen and (max-width: 1000px) {
-  #fdrive-list.thumbnail {
-    grid-template-columns: repeat(2, 1fr) !important;
-    grid-template-rows: repeat(2, 200px) !important;
-  }
-  #fdrive-list.thumbnail .file {
-    height: 200px !important;
-  }
 }
 
 #fdrive-files {

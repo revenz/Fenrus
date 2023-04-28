@@ -5,7 +5,8 @@ $notesMediaScreenSize: 1000px;
 {
   position: relative;
   &.init-done {    
-    transition: width 0.5s ease-in-out;
+    transition: width 0.5s ease-in-out,
+                min-width 0.5s ease-in-out;
   }
   &.is-resizing
   {
@@ -69,6 +70,7 @@ $notesMediaScreenSize: 1000px;
   }
   &.collapsed {
     width: 0 !important;
+    min-width: 0 !important;
   }
   &.expanded {
     .expander

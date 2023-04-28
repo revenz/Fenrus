@@ -2,7 +2,7 @@
   position: relative;
 }
 #fdrive-wrapper.init-done {
-  transition: width 0.5s ease-in-out;
+  transition: width 0.5s ease-in-out, min-width 0.5s ease-in-out;
 }
 #fdrive-wrapper.is-resizing {
   transition: none !important;
@@ -67,6 +67,7 @@
 }
 #fdrive-wrapper.collapsed {
   width: 0 !important;
+  min-width: 0 !important;
 }
 #fdrive-wrapper.expanded .expander {
   opacity: 1;
