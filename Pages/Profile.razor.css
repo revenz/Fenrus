@@ -24,4 +24,15 @@ h3 i {
   margin-right: 0.5rem;
 }
 
+.buttons {
+  margin-left: 15rem;
+}
+.buttons button {
+  margin: 0 0.5rem 0 0 !important;
+}
+
+.page-description {
+  margin-bottom: 1rem;
+}
+
 /*# sourceMappingURL=Profile.razor.css.map */

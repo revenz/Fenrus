@@ -98,7 +98,7 @@ public class CalendarFeedService
             {
                 if (string.IsNullOrEmpty(feed.Url) == false)
                 {
-                    var feedEvents = new iCalendarService(feed.Url, feed.CacheMinutes).GetEvents(fromUtc, toUtc);
+                    var feedEvents = new iCalService(feed.Url, feed.CacheMinutes).GetEvents(fromUtc, toUtc);
                     if (string.IsNullOrEmpty(feed.Color) == false)
                     {
                         foreach (var fe in feedEvents)

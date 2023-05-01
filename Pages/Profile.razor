@@ -6,41 +6,68 @@
 <FenrusPage Title="@lblTitle" PageDescription="@lblPageDescription" Icon="fa-solid fa-id-badge">
     <Body>
     <div class="body-content">
-        <Editor @ref=GeneralEditor>
+        <FenrusTabs>
+            <FenrusTab Title="@lblGeneral">
+                <Editor @ref=GeneralEditor>
+                    @if (string.IsNullOrEmpty(ErrorGeneral) == false)
+                    {
+                        <div class="error">@ErrorGeneral</div>
+                    }
+                    <InputText Page="Profile" Label="Name" @bind-Value="@Username" Required="true" ReadOnly="@SystemSettingsService.UsingOAuth" />
+                    <InputText Page="Profile" Label="FullName" @bind-Value="@FullName" />
+                    <InputText Page="Profile" Label="Email" @bind-Value="@Email" Required="true" Email="true"/>
+                    <div class="buttons">
+                        <button class="btn" @onclick="() => Save()">@lblSave</button>
+                    </div>
+                </Editor>
+            </FenrusTab>
+
             @if (SystemSettingsService.UsingOAuth == false)
             {
-                <h3>
-                    <i class="fa-solid fa-circle-user"/>
-                    @lblGeneral
-                </h3>
+                <FenrusTab Title="@lblChangePassword">
+                    <Editor @ref=PasswordEditor>
+                        @if (string.IsNullOrEmpty(ErrorChangePassword) == false)
+                        {
+                            <div class="error">@ErrorChangePassword</div>
+                        }
+                        <InputText Page="Profile" Label="PasswordCurrent" @bind-Value="PasswordCurrent" Password="true" Required="true"></InputText>
+                        <InputText Page="Profile" Label="PasswordNew" @bind-Value="PasswordNew" Password="true" Required="true"></InputText>
+                        <InputText Page="Profile" Label="PasswordConfirm" @bind-Value="PasswordConfirm" Password="true" Required="true"></InputText>
+                        <div class="buttons">
+                            <button class="btn" @onclick="() => ChangePassword()">@lblSave</button>
+                        </div>
+                    </Editor>
+                </FenrusTab>
             }
-            <InputText Page="Profile" Label="Name" @bind-Value="@Username" Required="true" ReadOnly="@SystemSettingsService.UsingOAuth" />
-            <InputText Page="Profile" Label="FullName" @bind-Value="@FullName" />
-            <InputText Page="Profile" Label="Email" @bind-Value="@Email" Required="true" Email="true"/>
-            <button class="btn" @onclick="() => Save()">@lblSave</button>
-            @if (string.IsNullOrEmpty(ErrorGeneral) == false)
-            {
-                <div class="error">@ErrorGeneral</div>
-            }
-        </Editor>
-
-        @if (SystemSettingsService.UsingOAuth == false)
-        {
-            <Editor @ref=PasswordEditor>
-                <h3>
-                    <i class="fa-solid fa-lock"/>
-                    @lblChangePassword
-                </h3>
-                <InputText Page="Profile" Label="PasswordCurrent" @bind-Value="PasswordCurrent" Password="true" Required="true"></InputText>
-                <InputText Page="Profile" Label="PasswordNew" @bind-Value="PasswordNew" Password="true" Required="true"></InputText>
-                <InputText Page="Profile" Label="PasswordConfirm" @bind-Value="PasswordConfirm" Password="true" Required="true"></InputText>
-                <button class="btn" @onclick="() => ChangePassword()">@lblSave</button>
-                @if (string.IsNullOrEmpty(ErrorChangePassword) == false)
-                {
-                    <div class="error">@ErrorChangePassword</div>
-                }
-            </Editor>
-        }
+            <FenrusTab Title="@lblCalendar">
+                <Editor @ref=CalendarEditor>
+                    <div class="page-description">@lblCalendarPageDescription</div>
+                    @if (string.IsNullOrEmpty(ErrorCalendar) == false)
+                    {
+                        <div class="error">@ErrorCalendar</div>
+                    }
+                    <InputSelect Page="Profile" Label="CalendarProvider" @bind-Value="@CalendarProvider" TItem="string">
+                        <InputSelectOption TItem="string" StringValue="" Label="None" />
+                        <InputSelectOption TItem="string" StringValue="Custom" Label="Custom" />
+                        <InputSelectGroup TItem="string" Label="Providers" Items="CalendarProviders" />
+                    </InputSelect>
+                    @if (string.IsNullOrEmpty(CalendarProvider) == false)
+                    {
+                        <InputText Page="Profile" Label="CalendarUrl" @bind-Value="CalendarUrl"/>
+                        <InputText Page="Profile" Label="CalendarName" @bind-Value="CalendarName"/>
+                        <InputText Page="Profile" Label="CalendarUsername" @bind-Value="CalendarUsername"/>
+                        <InputText Page="Profile" Label="CalendarPassword" @bind-Value="CalendarPassword" Password="true"/>
+                    }
+                    <div class="buttons">
+                        @if (string.IsNullOrEmpty(CalendarProvider) == false)
+                        {
+                            <button class="btn" @onclick="() => CalendarTest()">@lblTest</button>
+                        }
+                        <button class="btn" @onclick="() => CalendarSave()">@lblSave</button>
+                    </div>
+                </Editor>
+            </FenrusTab>
+        </FenrusTabs>
     </div>
     </Body>
 </FenrusPage>

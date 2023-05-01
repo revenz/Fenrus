@@ -2,17 +2,24 @@ using LiteDB;
 
 namespace Fenrus.Models;
 
+
 /// <summary>
-/// Modal interface
+/// Basic modal with no name and just a UID
 /// </summary>
-public interface IModal
+public interface IModalUid
 {
     /// <summary>
     /// Gets or sets the unique identifier
     /// </summary>
     [BsonId]
     Guid Uid { get; set; }
-    
+}
+
+/// <summary>
+/// Modal interface
+/// </summary>
+public interface IModal : IModalUid
+{
     /// <summary>
     /// Gets or sets the name
     /// </summary>

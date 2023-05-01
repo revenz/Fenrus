@@ -14,7 +14,7 @@ body {
 
   --fc-event-bg-color: rgba(var(--accent-rgb), 0.3);
   --fc-event-border-color: var(--accent);
-  --fc-today-bg-color: rgba(var(--accent-rgb), 0.1);
+  --fc-today-bg-color: rgba(var(--accent-rgb), 0.3);
   --fc-small-font-size: 1rem;
   --fc-neutral-bg-color: var(--base);
   --fc-list-event-hover-bg-color:rgba(var(--accent-rgb), 0.3);
@@ -188,5 +188,14 @@ body {
         opacity:1;
       }
     }
+  }
+}
+.fc-daygrid-day-number {
+  color:rgba(var(--color-rgb), 0.8);
+}
+.fc-day-today {
+  .fc-daygrid-day-number {
+    color:var(--color);
+    font-weight:600;
   }
 }

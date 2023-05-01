@@ -1,6 +1,9 @@
 using System.Text.RegularExpressions;
 using Fenrus.Components;
 using Fenrus.Models;
+using Fenrus.Models.UiModels;
+using Fenrus.Services.CalendarServices;
+using Ical.Net;
 using Jint.Runtime.Modules;
 
 namespace Fenrus.Pages;
@@ -10,10 +13,16 @@ namespace Fenrus.Pages;
 /// </summary>
 public partial class Profile: UserPage
 {
-    private string lblTitle, lblPageDescription, lblGeneral, lblChangePassword;
-    private string ErrorGeneral, ErrorChangePassword;
+    private string lblTitle, lblPageDescription, lblGeneral, lblChangePassword, lblCalendar, 
+        CalendarUrl, CalendarProvider, CalendarUsername, CalendarPassword, CalendarName, lblTest;
+    private string ErrorGeneral, ErrorChangePassword, ErrorCalendar, lblCalendarPageDescription;
 
-    private EditorForm GeneralEditor, PasswordEditor;
+    private EditorForm GeneralEditor, PasswordEditor, CalendarEditor;
+
+    private List<ListOption> CalendarProviders = new()
+    {
+        new() { Label = "NextCloud", Value = "NextCloud" }
+    };
     
     private User Model { get; set; }
 
@@ -22,9 +31,12 @@ public partial class Profile: UserPage
     protected override Task PostGotUser()
     {
         lblTitle = Translator.Instant("Pages.Profile.Title");
+        lblTest = Translator.Instant("Labels.Test");
         lblPageDescription = Translator.Instant("Pages.Profile.Labels.PageDescription");
         lblGeneral = Translator.Instant("Pages.Profile.Labels.General");
+        lblCalendar =Translator.Instant("Pages.Profile.Labels.Calendar");
         lblChangePassword = Translator.Instant("Pages.Profile.Labels.ChangePassword");
+        lblCalendarPageDescription = Translator.Instant("Pages.Profile.Labels.PageDescription-Calendar");
         PasswordCurrent = string.Empty;
         PasswordNew = string.Empty;
         PasswordConfirm = string.Empty;
@@ -33,7 +45,23 @@ public partial class Profile: UserPage
         Username = this.Model.Username ?? string.Empty;
         Email = this.Model.Email ?? string.Empty;
         FullName = this.Model.FullName ?? string.Empty;
-        
+        var service = new UserService();
+        var profile = service.GetProfileByUid(this.UserUid);
+        CalendarUrl = string.Empty;
+        CalendarUsername = string.Empty;
+        CalendarPassword = string.Empty;
+        CalendarName = string.Empty; 
+        CalendarProvider = profile.CalendarProvider ?? string.Empty;
+        if (string.IsNullOrEmpty(CalendarProvider) == false)
+        {
+            CalendarUrl = profile.CalendarUrl?.Value ?? string.Empty;
+            CalendarName = profile.CalendarName?.Value ?? string.Empty;
+            CalendarUsername = profile.CalendarUsername?.Value ?? string.Empty;
+            CalendarPassword = string.IsNullOrEmpty(profile.CalendarPassword?.Value)
+                ? string.Empty
+                : Globals.DUMMY_PASSWORD;
+        }
+
 
         return Task.CompletedTask;
     }
@@ -68,6 +96,51 @@ public partial class Profile: UserPage
         Model.FullName = FullName;
         service.Update(Model);
         ToastService.ShowSuccess("Labels.Saved");
+    }
+
+    async Task CalendarSave()
+    {
+        var service = new UserService();
+        var profile = service.GetProfileByUid(this.UserUid);
+        profile.CalendarProvider = CalendarProvider;
+        string url = CalendarUrl ?? string.Empty;
+        if (string.IsNullOrEmpty(profile.CalendarProvider))
+            url = string.Empty;
+        
+        profile.CalendarUrl = (EncryptedString)(url ?? string.Empty);
+        if (string.IsNullOrEmpty(url))
+        {
+            profile.CalendarUsername = (EncryptedString)string.Empty;
+            profile.CalendarPassword = (EncryptedString)string.Empty;
+            profile.CalendarName = (EncryptedString)string.Empty;
+        }
+        else
+        {
+            profile.CalendarName = (EncryptedString)(CalendarName ?? string.Empty);
+            profile.CalendarUsername = (EncryptedString)(CalendarUsername ?? string.Empty);
+            if(CalendarPassword != Globals.DUMMY_PASSWORD) // check if it changed
+                profile.CalendarPassword = (EncryptedString)(CalendarPassword ?? string.Empty);
+        }
+        service.UpdateProfile(profile);
+        ToastService.ShowSuccess("Calendar Saved");
+    }
+    
+    async Task CalendarTest()
+    {
+        if (string.IsNullOrEmpty(CalendarUrl) || string.IsNullOrEmpty(CalendarProvider))
+            return;
+        string password = CalendarPassword;
+        if (password == Globals.DUMMY_PASSWORD)
+        {
+            var service = new UserService();
+            var profile = service.GetProfileByUid(this.UserUid);
+            password = profile.CalendarPassword?.Value ?? string.Empty;
+        }
+        var result = await CalDavCalendarService.TestCalDav(CalendarProvider,CalendarUrl, CalendarUsername, password, CalendarName);
+        if (result.Success)
+            ToastService.ShowSuccess("Successfully connected to CalDAV");
+        else
+            ToastService.ShowError(result.Error);
     }
 
     /// <summary>

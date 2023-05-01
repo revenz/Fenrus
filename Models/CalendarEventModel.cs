@@ -79,7 +79,7 @@ public class CalendarEventModel
     /// <param name="event">the CalendarEvent</param>
     /// <returns>the CalendarEventModel</returns>
     public static CalendarEventModel From(CalendarEvent @event)
-        => From(@event.Uid.ToString(),
+        => From(@event.Uid,
             @event.Name,
             @event.StartUtc,
             @event.EndUtc,

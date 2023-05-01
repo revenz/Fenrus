@@ -282,7 +282,8 @@
       "Labels": {
         "PageDescription": "This page allows you to change your user profile settings.",
         "General": "General",
-        "ChangePassword": "Change Password"
+        "ChangePassword": "Password",
+        "PageDescription-Calendar": "This allows you to customize the calendar source for your personal calendar.\n\nYou can specify a CalDAV source and if so, all events will be saved to that source, otherwise they will be saved into Fenrus directly."
       },
       "Messages": {
         "InvalidEmail": "Invalid email address",
@@ -299,7 +300,14 @@
         "Email-Help": "This email address will be used for password resets",
         "PasswordCurrent": "Current Password",
         "PasswordNew": "New Password",
-        "PasswordConfirm": "Confirm New Password"
+        "PasswordConfirm": "Confirm New Password",
+        "CalendarProvider": "Provider",
+        "CalendarUrl": "URL",
+        "CalendarUrl-Help": "If using a known provider just enter the base URL for the calendar. For example, https://mynextcloud.com",
+        "CalendarName": "Name",
+        "CalendarName-Help": "The name of the calendar, if not set the first calendar found will be used.",
+        "CalendarUsername": "Username",
+        "CalendarPassword": "Password"
       }
     },
     "SearchEngines": {

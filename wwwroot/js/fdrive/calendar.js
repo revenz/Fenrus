@@ -155,16 +155,21 @@ class FenrusDriveCalendar
             }
         });
         this.calendar.render();
-        this.changeView(view);
+        this.setViewButton(view);
     }
     
     changeView(view){
         localStorage.setItem('CALENDAR_VIEW', view);
         this.calendar.changeView(view);
+        this.setViewButton(view)
+    }
+    
+    setViewButton(view)
+    {
         let title = view === 'dayGridMonth' ? 'Month' :
-             view === 'timeGridWeek' ? 'Week' :
-             view === 'timeGridDay' ? 'Day' :
-             'List';    
+            view === 'timeGridWeek' ? 'Week' :
+                view === 'timeGridDay' ? 'Day' :
+                    'List';
         let buttons = document.querySelectorAll('#fdrive-calendar .fc-header-toolbar .fc-toolbar-chunk:last-child .fc-button');
         for(let btn of buttons){
             btn.classList.remove('fc-button-active');

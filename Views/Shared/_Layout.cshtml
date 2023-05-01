@@ -93,7 +93,7 @@
         </li>
     }
     <li>
-        <a title="@(isGuest ? "Login" : "About")" href="@(isGuest ? "/login" : "/settings/about")"><span class="icon-fenrus"></span></a>
+        <a title="@(isGuest ? "Login" : "About")" href="@(isGuest ? "/login" : "/settings/profile")"><span class="icon-fenrus"></span></a>
         @if (isGuest == false)
         {
             @(await Html.RenderComponentAsync<PanelThemeSettings>(RenderMode.Static, new

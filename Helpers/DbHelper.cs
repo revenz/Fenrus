@@ -52,7 +52,7 @@ public class DbHelper
     /// <param name="uid">the UID of the item</param>
     /// <typeparam name="T">the type to get</typeparam>
     /// <returns>the item in the database</returns>
-    internal static T GetByUid<T>(Guid uid) where T: IModal
+    internal static T GetByUid<T>(Guid uid) where T: IModalUid
     {
         using var db = GetDb();
         var collection = db.GetCollection<T>(typeof(T).Name);
@@ -83,12 +83,12 @@ public class DbHelper
     /// </summary>
     /// <param name="item">the item to insert</param>
     /// <typeparam name="T">the type being inserted</typeparam>
-    internal static void Insert<T>(T item) where T : IModal
+    internal static void Insert<T>(T item) where T : IModalUid
     {
         using var db = GetDb();
         var collection = db.GetCollection<T>(typeof(T).Name);
         if(collection.Exists(x => x.Uid == item.Uid))
-            collection.Update(item);
+            collection.Update(item); // UserService.UpdateProfile depends on the update if existing, so if changing this, change that
         else
         {
             if(item.Uid == Guid.Empty)

@@ -3,13 +3,12 @@ namespace Fenrus.Models;
 /// <summary>
 /// An event in the users calendar
 /// </summary>
-public class CalendarEvent:IModal, IUserModal
+public class CalendarEvent
 {
     /// <summary>
     /// Gets or sets the Uid of the item
     /// </summary>
-    [LiteDB.BsonId]
-    public Guid Uid { get; set; }
+    public string Uid { get; set; }
     
     /// <summary>
     /// Gets or sets the name of the event

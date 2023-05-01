@@ -5,9 +5,9 @@ using System.Runtime.Caching;
 namespace Fenrus.Services.CalendarServices;
 
 /// <summary>
-/// A class that reads iCalendar feeds and returns events within a specified date range.
+/// A class that reads iCal feeds and returns events within a specified date range.
 /// </summary>
-public class iCalendarService
+public class iCalService
 {
     private readonly string _url;
     private readonly MemoryCache _cache;
@@ -18,7 +18,7 @@ public class iCalendarService
     /// </summary>
     /// <param name="url">The URL of the iCal feed to read.</param>
     /// <param name="cacheMinutes">the number of minutes to cache the data for</param>
-    public iCalendarService(string url, int cacheMinutes)
+    public iCalService(string url, int cacheMinutes)
     {
         _url = url;
         _cache = MemoryCache.Default;

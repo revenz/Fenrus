@@ -58,7 +58,7 @@ public class CalendarEventWorker:Worker
             {
                 if (string.IsNullOrEmpty(feed.Url) == false)
                 {
-                    foreach (var ev in new iCalendarService(feed.Url, feed.CacheMinutes).GetEvents(DateTime.UtcNow,
+                    foreach (var ev in new iCalService(feed.Url, feed.CacheMinutes).GetEvents(DateTime.UtcNow,
                                  DateTime.UtcNow.AddDays(7)))
                     {
                         NotifyEvent(feed.UserUid, ev);

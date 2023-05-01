@@ -23,7 +23,7 @@ public class EncryptedString
     /// <param name="value">the encrypted string</param>
     /// <returns>the string</returns>
     public static implicit operator string(EncryptedString value)
-        => value.Value;
+        => value?.Value ?? string.Empty;
 
     /// <summary>
     /// Converts a string to an encrypted string

@@ -187,4 +187,20 @@ public class UserService
         return user;
         
     }
+
+
+    /// <summary>
+    /// Gets the users profile
+    /// </summary>
+    /// <param name="uid">the UID of the user</param>
+    /// <returns>their profile</returns>
+    public UserProfile GetProfileByUid(Guid uid)
+        => DbHelper.GetByUid<UserProfile>(uid) ?? new() { Uid = uid };
+
+    /// <summary>
+    /// Updates the users profile
+    /// </summary>
+    /// <param name="profile">the users profile</param>
+    public void UpdateProfile(UserProfile profile)
+        => DbHelper.Insert(profile); // inserts will update if already exists
 }
