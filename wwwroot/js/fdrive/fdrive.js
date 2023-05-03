@@ -205,18 +205,27 @@ class FenrusDrive {
             return;
         showBlocker('Deleting file(s)');
         try {
-            await fetch('/files', {
+            let result = await fetch('/files', {
                 method: 'delete',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({files: files})
             });
+            hideBlocker();
+            if(result.ok) {
+                Toast.success('Deleted');
+                await this.reload();
+            }
+            else
+            {
+                let msg = await result.text();
+                Toast.error(msg || 'Failed to delete file(s)');
+            }
         } catch (err) {
-
+            hideBlocker();
+            Toast.error(err);
         }
-        hideBlocker();
-        await this.reload();
     }
 
     upload() {
@@ -309,8 +318,20 @@ class FenrusDrive {
                 else
                     fullPath = this.currentPath + '/' + name;
             }
-            let result = await fetch('/files/create-folder?path=' + encodeURIComponent(fullPath), {method: 'POST'});
-            this.reload();
+            try {
+                let result = await fetch('/files/create-folder?path=' + encodeURIComponent(fullPath), {method: 'POST'});
+                if(result.ok) {
+                    Toast.success('Folder created');
+                    this.reload();
+                }
+                else
+                {
+                    let msg = await result.text(); 
+                    Toast.error(msg || 'Failed to create folder');
+                }
+            }catch(err){
+                Toast.error(err);
+            }
         }
     }
 

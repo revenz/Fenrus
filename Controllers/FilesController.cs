@@ -84,11 +84,19 @@ public class FilesController : BaseController
     /// </summary>
     /// <param name="path">the full path of the file</param>
     [HttpPost("create-folder")]
-    public void CreateFolder([FromQuery] string path)
+    public async Task<IActionResult> CreateFolder([FromQuery] string path)
     {
-        var uid = User.GetUserUid().Value;
-        var service = IFileStorage.GetService(uid);
-        service.CreateFolder(path);
+        try
+        {
+            var uid = User.GetUserUid().Value;
+            var service = IFileStorage.GetService(uid);
+            await service.CreateFolder(path);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
     
     
@@ -124,10 +132,10 @@ public class FilesController : BaseController
     /// </summary>
     /// <param name="model">the files to delete</param>
     [HttpDelete]
-    public async Task Delete([FromBody] DeleteModel model)
+    public async Task<IActionResult> Delete([FromBody] DeleteModel model)
     {
         if (model?.Files?.Any() != true)
-            return; // nothing to delete
+            return Ok(); // nothing to delete
         
         var uid = User.GetUserUid().Value;
         var service = IFileStorage.GetService(uid);
@@ -137,7 +145,7 @@ public class FilesController : BaseController
             {
                 await service.Delete(file);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // litedb has some issues
                 // https://github.com/mbdavid/LiteDB/issues/1940
@@ -151,9 +159,11 @@ public class FilesController : BaseController
                 // catch (Exception)
                 // {
                 // }
+                return BadRequest(ex.Message);
             }
-                
         }
+
+        return Ok();
     }
 
     /// <summary>
