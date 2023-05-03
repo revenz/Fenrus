@@ -283,6 +283,8 @@
         "PageDescription": "This page allows you to change your user profile settings.",
         "General": "General",
         "ChangePassword": "Password",
+        "Calendar": "Calendar",
+        "FileStorage": "File Storage",
         "PageDescription-Calendar": "This allows you to customize the calendar source for your personal calendar.\n\nYou can specify a CalDAV source and if so, all events will be saved to that source, otherwise they will be saved into Fenrus directly."
       },
       "Messages": {
@@ -307,7 +309,12 @@
         "CalendarName": "Name",
         "CalendarName-Help": "The name of the calendar, if not set the first calendar found will be used.",
         "CalendarUsername": "Username",
-        "CalendarPassword": "Password"
+        "CalendarPassword": "Password",
+        "FileStorageProvider": "Provider",
+        "FileStorageUrl": "URL",
+        "FileStorageUrl-Help": "If using a known provider just enter the base URL for the file storage. For example, https://mynextcloud.com",
+        "FileStorageUsername": "Username",
+        "FileStoragePassword": "Password"
       }
     },
     "SearchEngines": {

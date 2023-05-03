@@ -13,6 +13,7 @@ public class UserProfile:IModalUid
     [BsonId]
     public Guid Uid { get; set; }
     
+    #region Calendar
     /// <summary>
     /// Gets or sets the calendar provider
     /// </summary>
@@ -33,4 +34,24 @@ public class UserProfile:IModalUid
     /// Gets or sets the calendar name
     /// </summary>
     public EncryptedString CalendarName { get; set; }
+    #endregion   
+    
+    #region File Storage
+    /// <summary>
+    /// Gets or sets the file storage provider
+    /// </summary>
+    public string FileStorageProvider { get; set; }
+    /// <summary>
+    /// Gets or sets the file storage URL
+    /// </summary>
+    public EncryptedString FileStorageUrl { get; set; }
+    /// <summary>
+    /// Gets or sets the file storage username
+    /// </summary>
+    public EncryptedString FileStorageUsername { get; set; }
+    /// <summary>
+    /// Gets or sets the file storage password
+    /// </summary>
+    public EncryptedString FileStoragePassword { get; set; }
+    #endregion
 }

@@ -5,6 +5,7 @@ class FenrusDrive {
     lastReload;
     container;
     lblFiles;
+    currentView;
     folderViews = {};
     extensions = {
         plain: "clike",
@@ -55,6 +56,8 @@ class FenrusDrive {
         'crdownload','crt','crypt','cs','csh','cson','csproj','css','csv','cue','cur','dart','dat','data','db',
         'dbf','deb','default','dgn','dist','diz','dll','dmg','dng','doc','docb','docm','docx','dot','dotm','dotx','download','dpj','ds_store','dsn','dtd','dwg','dxf','editorconfig','el','elf','eml','enc','eot','eps','epub','eslintignore','exe','f4v','fax','fb2','fla','flac','flv','fnt','folder','fon','gadget','gdp','gem','gif','gitattributes','gitignore','go','gpg','gpl','gradle','gz','h','handlebars','hbs','heic','hlp','hs','hsl','htm','html','ibooks','icns','ico','ics','idx','iff','ifo','image','img','iml','in','inc','indd','inf','info','ini','inv','iso','j2','jar','java','jpe','jpeg','jpg','js','json','jsp','jsx','key','kf8','kmk','ksh','kt','kts','kup','less','lex','licx','lisp','lit','lnk','lock','log','lua','m','m2v','m3u','m3u8','m4','m4a','m4r','m4v','map','master','mc','md','mdb','mdf','me','mi','mid','midi','mk','mkv','mm','mng','mo','mobi','mod','mov','mp2','mp3','mp4','mpa','mpd','mpe','mpeg','mpg','mpga','mpp','mpt','msg','msi','msu','nef','nes','nfo','nix','npmignore','ocx','odb','ods','odt','ogg','ogv','ost','otf','ott','ova','ovf','p12','p7b','pages','part','pcd','pdb','pdf','pem','pfx','pgp','ph','phar','php','pid','pkg','pl','plist','pm','png','po','pom','pot','potx','pps','ppsx','ppt','pptm','pptx','prop','ps','ps1','psd','psp','pst','pub','py','pyc','qt','ra','ram','rar','raw','rb','rdf','rdl','reg','resx','retry','rm','rom','rpm','rpt','rsa','rss','rst','rtf','ru','rub','sass','scss','sdf','sed','sh','sit','sitemap','skin','sldm','sldx','sln','sol','sphinx','sql','sqlite','step','stl','svg','swd','swf','swift','swp','sys','tar','tax','tcsh','tex','tfignore','tga','tgz','tif','tiff','tmp','tmx','torrent','tpl','ts','tsv','ttf','twig','txt','udf','vb','vbproj','vbs','vcd','vcf','vcs','vdi','vdx','vmdk','vob','vox','vscodeignore','vsd','vss','vst','vsx','vtx','war','wav','wbk','webinfo','webm','webp','wma','wmf','wmv','woff','woff2','wps','wsf','xaml','xcf','xfl','xlm','xls','xlsm','xlsx','xlt','xltm','xltx','xml','xpi','xps','xrb','xsd','xsl','xspf','xz','yaml','yml','z','zip','zsh'];
 
+    virtualizeList;
+    
     constructor() {
         let container = document.getElementById('fdrive-list');
         this.container = container;
@@ -81,6 +84,14 @@ class FenrusDrive {
             this.folderViews = {};
         if (this.folderViews[''])
             this.changeView(this.folderViews[''], true);
+        
+        this.virtualizeList = new VirtualizeList(document.getElementById('fdrive-list'));
+        this.virtualizeList.setItemHeight(40);
+        this.virtualizeList.setNumColumns(1);
+        
+        document.body.addEventListener('driveResizeEvent', (event) => {
+            this.virtualizeList.calculateColumns();
+        })
     }
 
     show() {
@@ -115,6 +126,11 @@ class FenrusDrive {
             this.folderViews[this.currentPath || ''] = view;
         localStorage.setItem('DRIVE_FOLDER_VIEWS', JSON.stringify(this.folderViews));
         document.getElementById('fdrive-list').className = 'content ' + view;
+        this.currentView = view;
+        if(this.virtualizeList) {
+            this.virtualizeList.setItemHeight(view === 'thumbnail' ? 240 : 40);
+            this.virtualizeList.setNumColumns(view === 'thumbnail' ? 3 : 1);
+        }
     }
 
 
@@ -350,7 +366,6 @@ class FenrusDrive {
             let url = '/files/path?path=' + encodeURI(this.currentPath || '');
             const response = await fetch(url);
             const data = await response.json();
-            let list = document.getElementById('fdrive-list');
             if (this.currentPath)
                 data.unshift({
                     extension: '',
@@ -360,7 +375,10 @@ class FenrusDrive {
                     name: '..',
                     size: 0
                 });
-            list.innerHTML = '';
+            //let list = document.getElementById('fdrive-list');
+            //list.innerHTML = '';
+            this.virtualizeList.clear();
+            
             this.addToList(data);
             this.lastReload = new Date();
         } catch (error) {
@@ -373,7 +391,8 @@ class FenrusDrive {
             return;
         if (Array.isArray(items) === false)
             items = [items];
-        let list = document.getElementById('fdrive-list');
+        let count = 0;
+        this.virtualizeList.startBulkUpdates();
         for (let item of items) {
             let ele = this.createElement();
             ele.className += ' ' + item.mimeType;
@@ -390,7 +409,9 @@ class FenrusDrive {
             if (item.mimeType.startsWith('image')) {
                 let img = ele.querySelector('img');
                 img.className = 'media';
-                img.src = 'files/media?path=' + encodeURIComponent(item.fullPath);
+                img.setAttribute('data-src', 'files/media?path=' + encodeURIComponent(item.fullPath));
+                img.src = 'images/placeholder.svg';
+                img.classList.add('lazy');
                 img.setAttribute('x-filename', item.name);
                 ele.addEventListener('dblclick', () => {
                     this.openSlideshow(ele);
@@ -405,8 +426,6 @@ class FenrusDrive {
                 else
                     ele.querySelector('.icon').innerHTML = `<img src="images/filetypes/blank.svg" />`;
 
-                //ele.querySelector('.icon').innerHTML = `<i class="${item.icon}" />`;
-               
                 ele.addEventListener('dblclick', () => {
                     if (item.mimeType === 'parent')
                         this.parentPath();
@@ -419,8 +438,10 @@ class FenrusDrive {
                 });
             }
             ele.querySelector('.size').innerText = humanizeFileSize(item.size);
-            list.appendChild(ele);
+            this.virtualizeList.addItem(ele, true);
+            ++count;
         }
+        this.virtualizeList.completeUpdates();        
     }
 
     async openTextPreview(url) {
@@ -586,7 +607,7 @@ class FenrusDrive {
                 startIndex = numChildren - 1;
             }
             const prevImage = childElements[startIndex].querySelector("img");
-            image.src = prevImage.src;
+            image.src = prevImage.getAttribute('data-src');
             filename.textContent = prevImage.getAttribute('x-filename');
         }
 
@@ -597,7 +618,7 @@ class FenrusDrive {
                 startIndex = 0;
             }
             const nextImage = childElements[startIndex].querySelector("img");
-            image.src = nextImage.src;
+            image.src = nextImage.getAttribute('data-src');
             filename.textContent = nextImage.getAttribute('x-filename');
         }
 
@@ -648,7 +669,7 @@ class FenrusDrive {
             updateDimensions();
         };
         let startImg = startChild.querySelector("img");
-        image.src = startImg.src;
+        image.src = startImg.getAttribute('data-src')
         imageContainer.appendChild(image);
 
         // Display image dimensions below the image

@@ -67,6 +67,34 @@
                     </div>
                 </Editor>
             </FenrusTab>
+            
+            <FenrusTab Title="@lblFileStorage">
+                <Editor @ref=FileStorageEditor>
+                    <div class="page-description">@lblCalendarPageDescription</div>
+                    @if (string.IsNullOrEmpty(ErrorFileStorage) == false)
+                    {
+                        <div class="error">@ErrorFileStorage</div>
+                    }
+                    <InputSelect Page="Profile" Label="FileStorageProvider" @bind-Value="@FileStorageProvider" TItem="string">
+                        <InputSelectOption TItem="string" StringValue="" Label="None" />
+                        <InputSelectOption TItem="string" StringValue="Custom" Label="Custom" />
+                        <InputSelectGroup TItem="string" Label="Providers" Items="FileStorageProviders" />
+                    </InputSelect>
+                    @if (string.IsNullOrEmpty(FileStorageProvider) == false)
+                    {
+                        <InputText Page="Profile" Label="FileStorageUrl" @bind-Value="FileStorageUrl"/>
+                        <InputText Page="Profile" Label="FileStorageUsername" @bind-Value="FileStorageUsername"/>
+                        <InputText Page="Profile" Label="FileStoragePassword" @bind-Value="FileStoragePassword" Password="true"/>
+                    }
+                    <div class="buttons">
+                        @if (string.IsNullOrEmpty(FileStorageProvider) == false)
+                        {
+                            <button class="btn" @onclick="() => FileStorageTest()">@lblTest</button>
+                        }
+                        <button class="btn" @onclick="() => FileStorageSave()">@lblSave</button>
+                    </div>
+                </Editor>
+            </FenrusTab>
         </FenrusTabs>
     </div>
     </Body>

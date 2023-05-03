@@ -11,19 +11,32 @@ public class LiteDbFileStorage : IFileStorage
     /// The prefix in the database for all files files
     /// </summary>
     public const string FILES_PREFIX = "db:/user-file/";
+
+    /// <summary>
+    /// the UID of the user
+    /// </summary>
+    private readonly Guid UserUid;
+
+    /// <summary>
+    /// Constructs a new LiteDbFile storage instance
+    /// </summary>
+    /// <param name="userUid">the UID of the user</param>
+    public LiteDbFileStorage(Guid userUid)
+    {
+        this.UserUid = userUid;
+    }
     
     /// <summary>
     /// Gets all the UID for files for a user
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="path">the users folder path to get</param>
     /// <returns>all the files UIDs for the user</returns>
-    public List<UserFile> GetAll(Guid userUid, string path)
+    public Task<List<UserFile>> GetAll(string path)
     {
         var db = DbHelper.GetDb();
         if (path?.EndsWith("/.") == true)
             path = path[..^1];
-        string userMatch = FILES_PREFIX + userUid + "/";
+        string userMatch = FILES_PREFIX + this.UserUid + "/";
         string folderMatch = userMatch + (path ?? string.Empty);
         if (folderMatch.EndsWith("/") == false)
             folderMatch += "/";
@@ -66,36 +79,47 @@ public class LiteDbFileStorage : IFileStorage
             })
             .OrderBy(x => x.MimeType == "folder" ? 1 :2)
             .ThenBy(x => x.Name).ToList();
-        return results;
+        return Task.FromResult(results);
     }
 
 
     /// <summary>
     /// Gets the file data by its path
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="fullPath">the full path of the file</param>
     /// <returns>the file</returns>
-    public (Stream Data, string Filename, string MimeType)? GetFileData(Guid userUid, string fullPath)
+    public Task<FileData?> GetFileData(string fullPath)
     {
-        var fileUid = GetFileUid(userUid, fullPath);
+        var fileUid = GetFileUid(fullPath);
         var db = DbHelper.GetDb();
         var file = db.FileStorage.FindById(fileUid);
         if(file == null)
-            return null;
+            return Task.FromResult<FileData?>(null);
         var ms = file.OpenRead();
-        return (ms, file.Filename, file.MimeType);
+        return Task.FromResult<FileData?>(new FileData
+        {
+            Data = ms,
+            Filename = file.Filename,
+            MimeType = file.Metadata
+        });
     }
 
     /// <summary>
+    /// Gets a thumbnail for an image
+    /// </summary>
+    /// <param name="fullPath">the full path of the file</param>
+    /// <returns>the file data</returns>
+    public Task<FileData?> GetThumbnail(string fullPath)
+        => GetFileData(fullPath);
+    
+    /// <summary>
     /// Adds a file item to the database for the user
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="path">the path to upload this file to</param>
     /// <param name="filename">the short filename of the file being added</param>
     /// <param name="formFile">the form file being added</param>
     /// <returns>the id of the newly created file</returns>
-    public async Task<UserFile?> Add(Guid userUid, string path, string filename, IFormFile formFile)
+    public async Task<UserFile?> Add(string path, string filename, IFormFile formFile)
     {
         string? tempFile = null;
         try
@@ -113,7 +137,7 @@ public class LiteDbFileStorage : IFileStorage
 
             await formFile.CopyToAsync(stream);
             stream.Seek(0, SeekOrigin.Begin);
-            var result = Add(userUid, path, formFile.FileName, stream);
+            var result = Add(path, formFile.FileName, stream);
             stream.Dispose();
             return result;
         }
@@ -140,14 +164,13 @@ public class LiteDbFileStorage : IFileStorage
     /// <summary>
     /// Adds a file item to the database for the user
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="path">the path to upload this file to</param>
     /// <param name="filename">the short filename of the file being added</param>
     /// <param name="stream">the file stream being added</param>
     /// <returns>the id of the newly created file</returns>
-    private UserFile? Add(Guid userUid, string path, string filename, Stream stream)
+    private UserFile? Add(string path, string filename, Stream stream)
     {
-        if (userUid == Guid.Empty || stream == null || string.IsNullOrWhiteSpace(filename))
+        if (stream == null || string.IsNullOrWhiteSpace(filename))
             return null;
 
         path ??= string.Empty;
@@ -155,12 +178,12 @@ public class LiteDbFileStorage : IFileStorage
             path += "/";
 
         var db = DbHelper.GetDb();
-        var fileUid = GetFileUid(userUid, path + filename);
+        var fileUid = GetFileUid(path + filename);
         string extension = filename.LastIndexOf(".") >= 0
             ? filename.Substring(filename.LastIndexOf(".") + 1)
             : string.Empty;
 
-        string userPrefix = FILES_PREFIX + userUid + "/";
+        string userPrefix = FILES_PREFIX + UserUid + "/";
         var existingFiles = db.FileStorage.Find(x => x.Id.StartsWith(userPrefix)).Select(x => x.Id).ToList();
         if (existingFiles.Contains(fileUid))
         {
@@ -169,7 +192,7 @@ public class LiteDbFileStorage : IFileStorage
             while (existingFiles.Contains(fileUid))
             {
                 filename = originalFileName + "(" + (++count) + ")" + (extension == string.Empty ? string.Empty : "." + extension);
-                fileUid = GetFileUid(userUid, path + filename);
+                fileUid = GetFileUid( path + filename);
             }
         }
 
@@ -188,25 +211,23 @@ public class LiteDbFileStorage : IFileStorage
     /// <summary>
     /// Gets the file UID in the db
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="fullPath">the full path of the file</param>
     /// <returns> the file UID in the db</returns>
-    private string GetFileUid(Guid userUid, string fullPath)
-        => FILES_PREFIX + userUid + "/" + fullPath;
+    private string GetFileUid(string fullPath)
+        => FILES_PREFIX + this.UserUid + "/" + fullPath;
 
     /// <summary>
     /// Deletes a file
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="fullPath">the full path of the file</param>
     /// <returns>true if the files no longer exists afterwards</returns>
-    public bool Delete(Guid userUid, string fullPath)
+    public Task<bool> Delete(string fullPath)
     {
-        var fileUid = GetFileUid(userUid, fullPath);
+        var fileUid = GetFileUid(fullPath);
         var db = DbHelper.GetDb();
         var file = db.FileStorage.FindById(fileUid);
         if (file == null)
-            return true; // it no longer exists
+            return Task.FromResult(true); // it no longer exists
 
         if (file.Filename == ".")
         {
@@ -220,25 +241,25 @@ public class LiteDbFileStorage : IFileStorage
             }
             db.FileStorage.Delete(file.Id);
             db.Commit();
-            return true;
+            return Task.FromResult(true);
         }
         
         db.FileStorage.Delete(fileUid);
-        return true;
+        return Task.FromResult(true);
     }
 
     /// <summary>
     /// Creates a folder
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="path">the full path of the file</param>
-    public void CreateFolder(Guid userUid, string path)
+    public Task CreateFolder(string path)
     {
         if (path.EndsWith("/"))
             path = path[..^1];
         
-        var fileUid = GetFileUid(userUid, path +"/.");
+        var fileUid = GetFileUid(path +"/.");
         var db = DbHelper.GetDb();
         db.FileStorage.Upload(fileUid, ".", new MemoryStream(new byte[] { }));
+        return Task.CompletedTask;
     }
 }

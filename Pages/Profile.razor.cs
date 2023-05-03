@@ -3,6 +3,7 @@ using Fenrus.Components;
 using Fenrus.Models;
 using Fenrus.Models.UiModels;
 using Fenrus.Services.CalendarServices;
+using Fenrus.Services.FileStorages;
 using Ical.Net;
 using Jint.Runtime.Modules;
 
@@ -13,13 +14,19 @@ namespace Fenrus.Pages;
 /// </summary>
 public partial class Profile: UserPage
 {
-    private string lblTitle, lblPageDescription, lblGeneral, lblChangePassword, lblCalendar, 
-        CalendarUrl, CalendarProvider, CalendarUsername, CalendarPassword, CalendarName, lblTest;
-    private string ErrorGeneral, ErrorChangePassword, ErrorCalendar, lblCalendarPageDescription;
+    private string lblTitle, lblPageDescription, lblGeneral, lblChangePassword, lblCalendar, lblFileStorage, 
+        CalendarUrl, CalendarProvider, CalendarUsername, CalendarPassword, CalendarName, lblTest,
+        FileStorageUrl, FileStorageProvider, FileStorageUsername, FileStoragePassword;
+    private string ErrorGeneral, ErrorChangePassword, ErrorCalendar, ErrorFileStorage, lblCalendarPageDescription;
 
-    private EditorForm GeneralEditor, PasswordEditor, CalendarEditor;
+    private EditorForm GeneralEditor, PasswordEditor, CalendarEditor, FileStorageEditor;
 
     private List<ListOption> CalendarProviders = new()
+    {
+        new() { Label = "NextCloud", Value = "NextCloud" }
+    };
+    
+    private List<ListOption> FileStorageProviders = new()
     {
         new() { Label = "NextCloud", Value = "NextCloud" }
     };
@@ -34,7 +41,8 @@ public partial class Profile: UserPage
         lblTest = Translator.Instant("Labels.Test");
         lblPageDescription = Translator.Instant("Pages.Profile.Labels.PageDescription");
         lblGeneral = Translator.Instant("Pages.Profile.Labels.General");
-        lblCalendar =Translator.Instant("Pages.Profile.Labels.Calendar");
+        lblCalendar = Translator.Instant("Pages.Profile.Labels.Calendar");
+        lblFileStorage = Translator.Instant("Pages.Profile.Labels.FileStorage");
         lblChangePassword = Translator.Instant("Pages.Profile.Labels.ChangePassword");
         lblCalendarPageDescription = Translator.Instant("Pages.Profile.Labels.PageDescription-Calendar");
         PasswordCurrent = string.Empty;
@@ -62,6 +70,18 @@ public partial class Profile: UserPage
                 : Globals.DUMMY_PASSWORD;
         }
 
+        FileStorageUrl = string.Empty;
+        FileStorageUsername = string.Empty;
+        FileStoragePassword = string.Empty;
+        FileStorageProvider = profile.FileStorageProvider ?? string.Empty;
+        if (string.IsNullOrEmpty(FileStorageProvider) == false)
+        {
+            FileStorageUrl = profile.FileStorageUrl?.Value ?? string.Empty;
+            FileStorageUsername = profile.FileStorageUsername?.Value ?? string.Empty;
+            FileStoragePassword = string.IsNullOrEmpty(profile.FileStoragePassword?.Value)
+                ? string.Empty
+                : Globals.DUMMY_PASSWORD;
+        }
 
         return Task.CompletedTask;
     }
@@ -139,6 +159,49 @@ public partial class Profile: UserPage
         var result = await CalDavCalendarService.TestCalDav(CalendarProvider,CalendarUrl, CalendarUsername, password, CalendarName);
         if (result.Success)
             ToastService.ShowSuccess("Successfully connected to CalDAV");
+        else
+            ToastService.ShowError(result.Error);
+    }
+
+    async Task FileStorageSave()
+    {
+        var service = new UserService();
+        var profile = service.GetProfileByUid(this.UserUid);
+        profile.FileStorageProvider = FileStorageProvider;
+        string url = FileStorageUrl ?? string.Empty;
+        if (string.IsNullOrEmpty(profile.FileStorageProvider))
+            url = string.Empty;
+        
+        profile.FileStorageUrl = (EncryptedString)(url ?? string.Empty);
+        if (string.IsNullOrEmpty(url))
+        {
+            profile.FileStorageUsername = (EncryptedString)string.Empty;
+            profile.FileStoragePassword = (EncryptedString)string.Empty;
+        }
+        else
+        {
+            profile.FileStorageUsername = (EncryptedString)(FileStorageUsername ?? string.Empty);
+            if(FileStoragePassword != Globals.DUMMY_PASSWORD) // check if it changed
+                profile.FileStoragePassword = (EncryptedString)(FileStoragePassword ?? string.Empty);
+        }
+        service.UpdateProfile(profile);
+        ToastService.ShowSuccess("File Storage Saved");
+    }
+    
+    async Task FileStorageTest()
+    {
+        if (string.IsNullOrEmpty(FileStorageUrl) || string.IsNullOrEmpty(FileStorageProvider))
+            return;
+        string password = FileStoragePassword;
+        if (password == Globals.DUMMY_PASSWORD)
+        {
+            var service = new UserService();
+            var profile = service.GetProfileByUid(this.UserUid);
+            password = profile.FileStoragePassword?.Value ?? string.Empty;
+        }
+        var result = await WebDavFileStorage.Test(FileStorageProvider, FileStorageUrl, FileStorageUsername, password);
+        if (result.Success)
+            ToastService.ShowSuccess("Successfully connected to file storage server");
         else
             ToastService.ShowError(result.Error);
     }

@@ -124,6 +124,7 @@
 #fdrive-wrapper .content {
   width: 100%;
   height: calc(100% - 3rem);
+  min-height: calc(100% - 3rem);
   overflow: auto;
 }
 #fdrive-wrapper .fdrive-tabs {

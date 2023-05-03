@@ -10,31 +10,36 @@ namespace Fenrus.Services.FileStorages;
 public class FileSystemFileStorage:IFileStorage
 {
     private readonly FileExtensionContentTypeProvider MimeProvider;
+
+    /// <summary>
+    /// the UID of the user
+    /// </summary>
+    private readonly Guid UserUid;
     
     /// <summary>
     /// Constructs a new instance of the file system file storage
     /// </summary>
-    public FileSystemFileStorage()
+    /// <param name="UserUid">the UID of the user</param>
+    public FileSystemFileStorage(Guid UserUid)
     {
+        this.UserUid = UserUid;
         MimeProvider = new FileExtensionContentTypeProvider();
     }
     
     /// <summary>
     /// Gets the root path for a user
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <returns>the root path</returns>
-    private string GetRootPath(Guid userUid)
-        => Path.Combine(DirectoryHelper.GetDataDirectory(), "drive", userUid.ToString());
+    private string GetRootPath()
+        => Path.Combine(DirectoryHelper.GetDataDirectory(), "drive", UserUid.ToString());
     
     /// <summary>
     /// Gets the physical path on disk for a given user
     /// </summary>
-    /// <param name="userUid">the user UID</param>
     /// <param name="path">the path</param>
     /// <returns>the physical path</returns>
     /// <exception cref="Exception">if the path contains any invalid characters</exception>
-    private string GetDirectory(Guid userUid, string path)
+    private string GetDirectory(string path)
     {
         char[] invalidChars = Path.GetInvalidFileNameChars();
         var parts = (path ?? string.Empty).Trim().Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
@@ -54,7 +59,7 @@ public class FileSystemFileStorage:IFileStorage
         if (path.EndsWith(Path.DirectorySeparatorChar))
             path = path[..^1];
         
-        var root = GetRootPath(userUid);
+        var root = GetRootPath();
         if (path == string.Empty)
             return root;
         return Path.Combine(root, path);
@@ -63,17 +68,16 @@ public class FileSystemFileStorage:IFileStorage
     /// <summary>
     /// Gets all the UID for files for a user
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="path">the users folder path to get</param>
     /// <returns>all the files UIDs for the user</returns>
-    public List<UserFile> GetAll(Guid userUid, string path)
+    public Task<List<UserFile>> GetAll(string path)
     {
-        var dir = GetDirectory(userUid, path);
+        var dir = GetDirectory(path);
         if (Directory.Exists(dir) == false)
-            return new ();
+            return Task.FromResult(new List<UserFile>());
         List<UserFile> results = new();
         var dirInfo = new DirectoryInfo(dir);
-        var root = GetRootPath(userUid);
+        var root = GetRootPath();
         foreach (var sub in dirInfo.GetDirectories().OrderBy(x => x.Name))
         {
             results.Add(new ()
@@ -87,12 +91,11 @@ public class FileSystemFileStorage:IFileStorage
             });
         }
 
-        
         var sortedFiles = FileSorter.SortFiles(Directory.GetFiles(dir).ToList());
         foreach (var file in sortedFiles)
             results.Add(GetUserFile(root, new FileInfo(file)));
 
-        return results;
+        return Task.FromResult(results);
     }
 
     private UserFile GetUserFile(string root, FileInfo file)
@@ -114,36 +117,49 @@ public class FileSystemFileStorage:IFileStorage
     /// <summary>
     /// Gets the file data by its path
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="fullPath">the full path of the file</param>
     /// <returns>the file</returns>
-    public (Stream Data, string Filename, string MimeType)? GetFileData(Guid userUid, string fullPath)
+    public Task<FileData?> GetFileData(string fullPath)
     {
+        FileData? result = null;
         if (string.IsNullOrWhiteSpace(fullPath))
-            return null;
+            return Task.FromResult(result);
         if (fullPath.Contains(".." + Path.DirectorySeparatorChar))
-            return null;
-        var file = new FileInfo(Path.Combine(GetRootPath(userUid), fullPath));
+            return Task.FromResult(result);
+        var file = new FileInfo(Path.Combine(GetRootPath(), fullPath));
         if (file.Exists == false)
-            return null;
+            return Task.FromResult(result);
 
         string mimeType;
         if (MimeProvider.TryGetContentType(file.Name, out mimeType) == false)
             mimeType = file.Extension;
-        return (file.OpenRead(), file.Name, mimeType);
+        result = new()
+        {
+            Data = file.OpenRead(),
+            Filename = file.Name,
+            MimeType = mimeType
+        };
+        return Task.FromResult<FileData?>(result);
     }
+    
+    /// <summary>
+    /// Gets a thumbnail for an image
+    /// </summary>
+    /// <param name="fullPath">the full path of the file</param>
+    /// <returns>the file data</returns>
+    public Task<FileData?> GetThumbnail(string fullPath)
+        => GetFileData(fullPath);
 
     /// <summary>
     /// Adds a file item to the database for the user
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="path">the path to upload this file to</param>
     /// <param name="filename">the short filename of the file being added</param>
     /// <param name="formFile">the form file being added</param>
     /// <returns>the id of the newly created file</returns>
-    public async Task<UserFile?> Add(Guid userUid, string path, string filename, IFormFile formFile)
+    public async Task<UserFile?> Add(string path, string filename, IFormFile formFile)
     {
-        string directory = GetDirectory(userUid, path);
+        string directory = GetDirectory( path);
         if (Directory.Exists(directory) == false)
             Directory.CreateDirectory(directory);
         if (filename.Contains(".." + Path.DirectorySeparatorChar))
@@ -162,33 +178,32 @@ public class FileSystemFileStorage:IFileStorage
             await formFile.CopyToAsync(stream);
         }
 
-        return GetUserFile(GetRootPath(userUid), new FileInfo(fullPath));
+        return GetUserFile(GetRootPath(), new FileInfo(fullPath));
     }
 
     /// <summary>
     /// Deletes a file
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="fullPath">the full path of the file</param>
     /// <returns>true if the files no longer exists afterwards</returns>
-    public bool Delete(Guid userUid, string fullPath)
+    public Task<bool> Delete(string fullPath)
     {
         if (string.IsNullOrEmpty(fullPath))
-            return true;
+            return Task.FromResult(true);
         if (fullPath.Contains(".." + Path.DirectorySeparatorChar))
-            return false;
-        string path = Path.Combine(GetRootPath(userUid), fullPath);
+            return Task.FromResult(false);
+        string path = Path.Combine(GetRootPath(), fullPath);
         try
         {
             if (File.Exists(path))
                 File.Delete(path);
             else if (Directory.Exists(path))
                 Directory.Delete(path, true);
-            return true;
+            return Task.FromResult(true);
         }
         catch (Exception)
         {
-            return false;
+            return Task.FromResult(false);
         }
 
     }
@@ -196,15 +211,14 @@ public class FileSystemFileStorage:IFileStorage
     /// <summary>
     /// Creates a folder
     /// </summary>
-    /// <param name="userUid">the UID of the user</param>
     /// <param name="path">the full path of the file</param>
-    public void CreateFolder(Guid userUid, string path)
+    public Task CreateFolder(string path)
     {
         if (string.IsNullOrEmpty(path))
-            return;
+            return Task.CompletedTask;
         if (path.Contains(".." + Path.DirectorySeparatorChar))
-            return;
-        string fullPath = GetDirectory(userUid, path);
+            return Task.CompletedTask;
+        string fullPath = GetDirectory(path);
         try
         {
             if (Directory.Exists(fullPath) == false)
@@ -213,5 +227,7 @@ public class FileSystemFileStorage:IFileStorage
         catch (Exception)
         {
         }
+
+        return Task.CompletedTask;
     }
 }

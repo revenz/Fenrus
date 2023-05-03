@@ -7,7 +7,8 @@ class FenrusDriveCalendar
     
     constructor(){
         document.body.addEventListener('driveResizeEvent', (event) => {
-            this.calendar.render();
+            if(this.calendar)
+                this.calendar.render();
         })
     }
     

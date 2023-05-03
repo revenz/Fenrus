@@ -143,6 +143,7 @@ $notesMediaScreenSize: 1000px;
   .content {
     width:100%;
     height: calc(100% - 3rem);
+    min-height: calc(100% - 3rem);
     overflow: auto;
   }
   .fdrive-tabs {

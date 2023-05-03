@@ -1,4 +1,5 @@
 using Fenrus.Models;
+using Fenrus.Services.FileStorages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fenrus.Controllers;
@@ -16,40 +17,41 @@ public class FilesController : BaseController
     /// <param name="path">the path to get</param>
     /// <returns>the files</returns>
     [HttpGet("path")]
-    public IEnumerable<UserFile> GetAll([FromQuery]string? path = null)
+    public async Task<IEnumerable<UserFile>> GetAll([FromQuery]string? path = null)
     {
         var uid = User.GetUserUid().Value;
-        return new UserFilesService().GetAll(uid, path ?? string.Empty);
+        return await IFileStorage.GetService(uid).GetAll(path ?? string.Empty);
     }
     
     /// <summary>
     /// Gets a media file for the user
     /// </summary>
     /// <param name="path">The full path of the file</param>
+    /// <param name="thumbnail">true if requesting thumbnail, otherwise false</param>
     /// <returns>the media file binary data if found</returns>
     [HttpGet("media")]
     [ResponseCache(Duration = 31 * 24 * 60 * 60)] // cache for 31 days
-    public async Task<IActionResult> GetMedia([FromQuery] string path)
+    public async Task<IActionResult> GetMedia([FromQuery] string path, [FromQuery] bool thumbnail = false)
     {
         var userUid = User.GetUserUid().Value;
-        var service = new UserFilesService();
-        var file = service.GetFileData(userUid, path);
-        if (file == null)
-        {
-            // might not be found if just added, wait and try again
-            await Task.Delay(500);
-            file = service.GetFileData(userUid, path);
-            if(file == null)
-                return new NotFoundResult();
-        }
-
-        if (file.Value.MimeType?.StartsWith("image") != true)
+        var service = IFileStorage.GetService(userUid);
+        var file = await (thumbnail ? service.GetThumbnail(path) : service.GetFileData(path));
+        // if (file == null)
+        // {
+        //     // might not be found if just added, wait and try again
+        //     await Task.Delay(500);
+        //     file = await service.GetFileData(path);
+        // }
+        if(file == null)
             return new NotFoundResult();
 
-        string filename = file.Value.Filename;
+        if (file.MimeType?.StartsWith("image") != true)
+            return new NotFoundResult();
+
+        string filename = file.Filename;
         string extension = filename[(filename.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
         // Or get binary data as Stream and copy to another Stream
-        return File(file.Value.Data, file.Value.MimeType?.EmptyAsNull() ?? "image/" + extension);
+        return File(file.Data, file.MimeType?.EmptyAsNull() ?? "image/" + extension);
     }
     /// <summary>
     /// Downloads a file for the user
@@ -60,21 +62,21 @@ public class FilesController : BaseController
     public async Task<IActionResult> Download([FromQuery] string path)
     {
         var userUid = User.GetUserUid().Value;
-        var service = new UserFilesService();
-        var file = service.GetFileData(userUid, path);
-        if (file == null)
-        {
-            // might not be found if just added, wait and try again
-            await Task.Delay(500);
-            file = service.GetFileData(userUid, path);
-            if(file == null)
-                return new NotFoundResult();
-        }
+        var service = IFileStorage.GetService(userUid);
+        var file = await service.GetFileData(path);
+        // if (file == null)
+        // {
+        //     // might not be found if just added, wait and try again
+        //     await Task.Delay(500);
+        //     file = service.GetFileData(path);
+        // }
+        if(file == null)
+            return new NotFoundResult();
 
-        string filename = file.Value.Filename;
+        string filename = file.Filename;
         string extension = filename[(filename.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
         // Or get binary data as Stream and copy to another Stream
-        return File(file.Value.Data,   "application/octet-stream", filename);
+        return File(file.Data,   "application/octet-stream", filename);
     }
     
     /// <summary>
@@ -85,7 +87,8 @@ public class FilesController : BaseController
     public void CreateFolder([FromQuery] string path)
     {
         var uid = User.GetUserUid().Value;
-        new UserFilesService().CreateFolder(uid, path);
+        var service = IFileStorage.GetService(uid);
+        service.CreateFolder(path);
     }
     
     
@@ -105,10 +108,10 @@ public class FilesController : BaseController
         if (file?.Any() != true)
             return files;
         var uid = User.GetUserUid().Value;
-        var service = new UserFilesService();
+        var service = IFileStorage.GetService(uid);
         foreach (var f in file)
         {
-            var userFile = await service.Add(uid, path, f.FileName, f);
+            var userFile = await service.Add(path, f.FileName, f);
             if (userFile != null)
                 files.Add(userFile);
         }
@@ -121,33 +124,33 @@ public class FilesController : BaseController
     /// </summary>
     /// <param name="model">the files to delete</param>
     [HttpDelete]
-    public void Delete([FromBody] DeleteModel model)
+    public async Task Delete([FromBody] DeleteModel model)
     {
         if (model?.Files?.Any() != true)
             return; // nothing to delete
         
         var uid = User.GetUserUid().Value;
-        var service = new UserFilesService();
+        var service = IFileStorage.GetService(uid);
         foreach (var file in model.Files)
         {
             try
             {
-                service.Delete(uid, file);
+                await service.Delete(file);
             }
             catch (Exception)
             {
                 // litedb has some issues
                 // https://github.com/mbdavid/LiteDB/issues/1940
                 // a sleep seems to fix it, so try again
-                Thread.Sleep(250);
-                try
-                {
-                    // if this fails, just silently fail, the UI will refresh and show if it was removed or not
-                    service.Delete(uid, file);
-                }
-                catch (Exception)
-                {
-                }
+                // Thread.Sleep(250);
+                // try
+                // {
+                //     // if this fails, just silently fail, the UI will refresh and show if it was removed or not
+                //     service.Delete(uid, file);
+                // }
+                // catch (Exception)
+                // {
+                // }
             }
                 
         }
