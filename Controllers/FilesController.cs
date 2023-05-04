@@ -19,8 +19,10 @@ public class FilesController : BaseController
     [HttpGet]
     public async Task<IEnumerable<UserFile>> GetAll([FromQuery]string? path = null)
     {
-        var uid = User.GetUserUid().Value;
-        return await IFileStorage.GetService(uid).GetAll(path ?? string.Empty);
+        var userUid = User.GetUserUid();
+        if (userUid == null)
+            throw new UnauthorizedAccessException();
+        return await IFileStorage.GetService(userUid.Value).GetAll(path ?? string.Empty);
     }
     
     /// <summary>
@@ -33,15 +35,11 @@ public class FilesController : BaseController
     [ResponseCache(Duration = 31 * 24 * 60 * 60)] // cache for 31 days
     public async Task<IActionResult> GetMedia([FromQuery] string path, [FromQuery] bool thumbnail = false)
     {
-        var userUid = User.GetUserUid().Value;
-        var service = IFileStorage.GetService(userUid);
+        var userUid = User.GetUserUid();
+        if (userUid == null)
+            throw new UnauthorizedAccessException();
+        var service = IFileStorage.GetService(userUid.Value);
         var file = await (thumbnail ? service.GetThumbnail(path) : service.GetFileData(path));
-        // if (file == null)
-        // {
-        //     // might not be found if just added, wait and try again
-        //     await Task.Delay(500);
-        //     file = await service.GetFileData(path);
-        // }
         if(file == null)
             return new NotFoundResult();
 
@@ -61,20 +59,16 @@ public class FilesController : BaseController
     [HttpGet("download")]
     public async Task<IActionResult> Download([FromQuery] string path)
     {
-        var userUid = User.GetUserUid().Value;
-        var service = IFileStorage.GetService(userUid);
+        var userUid = User.GetUserUid();
+        if (userUid == null)
+            throw new UnauthorizedAccessException();
+        
+        var service = IFileStorage.GetService(userUid.Value);
         var file = await service.GetFileData(path);
-        // if (file == null)
-        // {
-        //     // might not be found if just added, wait and try again
-        //     await Task.Delay(500);
-        //     file = service.GetFileData(path);
-        // }
         if(file == null)
             return new NotFoundResult();
 
         string filename = file.Filename;
-        string extension = filename[(filename.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
         // Or get binary data as Stream and copy to another Stream
         return File(file.Data,   "application/octet-stream", filename);
     }
@@ -86,10 +80,12 @@ public class FilesController : BaseController
     [HttpPost("create-folder")]
     public async Task<IActionResult> CreateFolder([FromQuery] string path)
     {
+        var uid = User.GetUserUid();
+        if (uid == null)
+            throw new UnauthorizedAccessException();
         try
         {
-            var uid = User.GetUserUid().Value;
-            var service = IFileStorage.GetService(uid);
+            var service = IFileStorage.GetService(uid.Value);
             await service.CreateFolder(path);
             return Ok();
         }
@@ -103,15 +99,23 @@ public class FilesController : BaseController
     [DisableRequestSizeLimit]
     //[RequestFormLimits(BufferBodyLengthLimit = 10_737_418_240, MultipartBodyLengthLimit = 10_737_418_240)] // 10GiB limit
     [RequestFormLimits(BufferBodyLengthLimit = 14_737_418_240, MultipartBodyLengthLimit = 14_737_418_240)] // 10GiB limit
-    public async Task<UserFile> Upload([FromForm] IFormFile file, [FromQuery] string? path = null)
+    public async Task<UserFile?> Upload([FromForm] IFormFile file, [FromQuery] string? path = null)
     {
-        var uid = User.GetUserUid().Value;
+        var uid = User.GetUserUid();
         if (uid == null)
             throw new UnauthorizedAccessException();
         
-        var service = IFileStorage.GetService(uid);
-        var userFile = await service.Add(path, file.FileName, file);
-        return userFile;
+        var service = IFileStorage.GetService(uid.Value);
+        try
+        {
+            var userFile = await service.Add(path ?? string.Empty, file.FileName, file);
+            return userFile;
+        }
+        catch (Exception)
+        {
+            // can throw if aborted
+            return null;
+        }
     }
     /// <summary>
     /// Deletes files
@@ -123,8 +127,10 @@ public class FilesController : BaseController
         if (model?.Files?.Any() != true)
             return Ok(); // nothing to delete
         
-        var uid = User.GetUserUid().Value;
-        var service = IFileStorage.GetService(uid);
+        var uid = User.GetUserUid();
+        if (uid == null)
+            throw new UnauthorizedAccessException();
+        var service = IFileStorage.GetService(uid.Value);
         foreach (var file in model.Files)
         {
             try

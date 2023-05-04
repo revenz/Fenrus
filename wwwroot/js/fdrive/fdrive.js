@@ -1,13 +1,14 @@
 class FenrusDrive {
     eleAddMenu;
-    filePaths = [];
-    currentPath;
+    currentPath; // always ends with a / or empty for root
     lastReload;
     container;
     lblFiles;
     currentView;
     uploader;
     folderViews = {};
+    virtualizeList;
+    slideshow;
     extensions = {
         plain: "clike",
         plaintext: "clike",
@@ -57,8 +58,6 @@ class FenrusDrive {
         'crdownload','crt','crypt','cs','csh','cson','csproj','css','csv','cue','cur','dart','dat','data','db',
         'dbf','deb','default','dgn','dist','diz','dll','dmg','dng','doc','docb','docm','docx','dot','dotm','dotx','download','dpj','ds_store','dsn','dtd','dwg','dxf','editorconfig','el','elf','eml','enc','eot','eps','epub','eslintignore','exe','f4v','fax','fb2','fla','flac','flv','fnt','folder','fon','gadget','gdp','gem','gif','gitattributes','gitignore','go','gpg','gpl','gradle','gz','h','handlebars','hbs','heic','hlp','hs','hsl','htm','html','ibooks','icns','ico','ics','idx','iff','ifo','image','img','iml','in','inc','indd','inf','info','ini','inv','iso','j2','jar','java','jpe','jpeg','jpg','js','json','jsp','jsx','key','kf8','kmk','ksh','kt','kts','kup','less','lex','licx','lisp','lit','lnk','lock','log','lua','m','m2v','m3u','m3u8','m4','m4a','m4r','m4v','map','master','mc','md','mdb','mdf','me','mi','mid','midi','mk','mkv','mm','mng','mo','mobi','mod','mov','mp2','mp3','mp4','mpa','mpd','mpe','mpeg','mpg','mpga','mpp','mpt','msg','msi','msu','nef','nes','nfo','nix','npmignore','ocx','odb','ods','odt','ogg','ogv','ost','otf','ott','ova','ovf','p12','p7b','pages','part','pcd','pdb','pdf','pem','pfx','pgp','ph','phar','php','pid','pkg','pl','plist','pm','png','po','pom','pot','potx','pps','ppsx','ppt','pptm','pptx','prop','ps','ps1','psd','psp','pst','pub','py','pyc','qt','ra','ram','rar','raw','rb','rdf','rdl','reg','resx','retry','rm','rom','rpm','rpt','rsa','rss','rst','rtf','ru','rub','sass','scss','sdf','sed','sh','sit','sitemap','skin','sldm','sldx','sln','sol','sphinx','sql','sqlite','step','stl','svg','swd','swf','swift','swp','sys','tar','tax','tcsh','tex','tfignore','tga','tgz','tif','tiff','tmp','tmx','torrent','tpl','ts','tsv','ttf','twig','txt','udf','vb','vbproj','vbs','vcd','vcf','vcs','vdi','vdx','vmdk','vob','vox','vscodeignore','vsd','vss','vst','vsx','vtx','war','wav','wbk','webinfo','webm','webp','wma','wmf','wmv','woff','woff2','wps','wsf','xaml','xcf','xfl','xlm','xls','xlsm','xlsx','xlt','xltm','xltx','xml','xpi','xps','xrb','xsd','xsl','xspf','xz','yaml','yml','z','zip','zsh'];
 
-    virtualizeList;
-    
     constructor() {
         let container = document.getElementById('fdrive-list');
         this.container = container;
@@ -69,7 +68,7 @@ class FenrusDrive {
         });
         this.uploader = new FileUploader();
         this.uploader.onUploaded((event) => this.onUploaded(event));
-        this.container.addEventListener('drop', (event) => this.fileDropEventListener(event));
+        this.container.addEventListener('drop', (event) => this.uploader.handleFileDrop(event, this.currentPath));
         this.container.addEventListener('dragover', (e) => {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'copy';
@@ -86,12 +85,13 @@ class FenrusDrive {
             this.changeView(this.folderViews[''], true);
         
         this.virtualizeList = new VirtualizeList(document.getElementById('fdrive-list'));
-        this.virtualizeList.setItemHeight(40);
+        this.virtualizeList.setItemHeight(30);
         this.virtualizeList.setNumColumns(1);
-        
         document.body.addEventListener('driveResizeEvent', (event) => {
             this.virtualizeList.calculateColumns();
         })
+
+        this.slideshow = new SlideShow();
     }
 
     show() {
@@ -99,7 +99,6 @@ class FenrusDrive {
     }
 
     changeFolder(path) {
-        this.filePaths.push(path);
         this.loadFolder(path);
     }
 
@@ -143,17 +142,8 @@ class FenrusDrive {
         link.click();
         document.body.removeChild(link);
     }
-
-    changeFolder(path) {
-        path = path || '';
-        if (path.endsWith('/.'))
-            path = path.substring(0, path.length - 1);
-        if (path)
-            this.filePaths.push(path);
-        this.loadFolder(path);
-    }
-
     loadFolder(path) {
+        this.virtualizeList.clear();
         path = path || '';
         if (path.endsWith('/.'))
             path = path.substring(0, path.length - 1);
@@ -184,11 +174,11 @@ class FenrusDrive {
 
 
     parentPath() {
-        let path = this.filePaths.pop(); // gets rid of current, we want the next
-        if (!path)
+        if(!this.currentPath)
             return;
-
-        path = this.filePaths[this.filePaths.length - 1];
+        
+        let path = this.currentPath.substring(0, this.currentPath.length - 1);
+        path = path.indexOf('/') > 0 ? path.substring(0, path.indexOf('/') + 1) : '';
         this.loadFolder(path);
     }
 
@@ -279,45 +269,6 @@ class FenrusDrive {
         this.uploadForm(formData, count, size);
     }
 
-    fileDropEventListener(e) {
-        e.preventDefault();
-        const items = Array.from(e.dataTransfer.items);
-        for (let i = 0; i < items.length; i++) {
-            let item = items[i].webkitGetAsEntry ? items[i].webkitGetAsEntry() : items[i].getAsEntry();
-            if (item) {
-                this.traverseFileTree(item);
-            }
-        }
-    }
-    
-    traverseFileTree(item, path) {
-        path = path || "";
-        if (item.isFile) {
-            item.file((file) => {
-                this.uploadFile(file, path);
-            });
-        } else if (item.isDirectory) {
-            var dirReader = item.createReader();
-            dirReader.readEntries((entries) => {
-                for (let i = 0; i < entries.length; i++) {
-                    let entry = entries[i];
-                    if(entry.isFile)
-                        entry.file((file) => {
-                            this.uploadFile(file, path + item.name);
-                        });
-                    else if(entry.isDirectory)
-                        this.traverseFileTree(entries[i], path + item.name + "/");
-                }
-            });
-        }
-    }
-
-    uploadFile(file, path) {
-        path = !path ? this.currentPath : 
-            this.currentPath.endsWith('/') ? this.currentPath + path : 
-            this.currentPath + '/' + path;
-        this.uploader.queueFile(file, path);
-    }
 
     onUploaded(event) {
         console.log('onUploaded', event, this.currentPath);
@@ -404,35 +355,6 @@ class FenrusDrive {
         hideBlocker();
     }
 
-    uploadFileWithProgress(formData, progressDiv) {
-        return new Promise(async (resolve, reject) => {
-            const url = '/files?path=' + encodeURIComponent(this.currentPath || '');
-
-            const xhr = new XMLHttpRequest();
-
-            xhr.upload.addEventListener('progress', (event) => {
-                if (event.lengthComputable) {
-                    const percentComplete = (event.loaded / event.total) * 100;
-                    progressDiv.textContent = percentComplete.toFixed(0) + '%';
-                }
-            });
-
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        progressDiv.textContent = '100%';
-                        resolve(xhr.responseText);
-                    } else {
-                        reject(new Error('Network response was not ok'));
-                    }
-                }
-            };
-
-            xhr.open('POST', url, true);
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            xhr.send(formData);
-        });
-    }
 
     async reload() {
         try {
@@ -448,8 +370,6 @@ class FenrusDrive {
                     name: '..',
                     size: 0
                 });
-            //let list = document.getElementById('fdrive-list');
-            //list.innerHTML = '';
             this.virtualizeList.clear();
             
             this.addToList(data);
@@ -486,8 +406,9 @@ class FenrusDrive {
                 img.src = 'images/placeholder.svg';
                 img.classList.add('lazy');
                 img.setAttribute('x-filename', item.name);
+                ele.classList.add('image');
                 ele.addEventListener('dblclick', () => {
-                    this.openSlideshow(ele);
+                    this.slideshow.open(this.virtualizeList.items, ele);
                 })
             } else {
                 ele.className += ' no-img';
@@ -641,127 +562,6 @@ class FenrusDrive {
         filename = decodeURIComponent(filename);
 
         return filename;
-    }
-
-
-    openSlideshow( startChild) {
-        // Get all the child elements of the container
-        let childElements = [];
-        for(let ele of this.container.children){
-            if(ele.querySelector('img.media'))
-                childElements.push(ele);
-        }        
-        
-        const numChildren = childElements.length;
-
-        // Find the index of the start child
-        let startIndex = 0;
-        for (let i = 0; i < numChildren; i++) {
-            if (childElements[i] === startChild) {
-                startIndex = i;
-                break;
-            }
-        }
-
-        let dimensions, filename, infoContainer;
-        let updateDimensions = () => {
-            dimensions.textContent = `${image.naturalWidth} x ${image.naturalHeight}`;
-            let maxWidth = document.body.clientWidth * 0.8;                
-            infoContainer.style.width =  Math.max(100, (((image.naturalWidth > maxWidth) ? maxWidth : image.naturalWidth) - 30) )+ 'px';
-        };
-        let closeSlideshow = () => {
-            slideshowDiv.remove();
-            document.removeEventListener('keydown', keyDownEvent);
-        }
-        // Function to go to the previous image        
-        let prevImage = () => {
-            startIndex--;
-            if (startIndex < 0) {
-                startIndex = numChildren - 1;
-            }
-            const prevImage = childElements[startIndex].querySelector("img");
-            image.src = prevImage.getAttribute('data-src');
-            filename.textContent = prevImage.getAttribute('x-filename');
-        }
-
-        // Function to go to the next image
-        let nextImage = () => {
-            startIndex++;
-            if (startIndex >= numChildren) {
-                startIndex = 0;
-            }
-            const nextImage = childElements[startIndex].querySelector("img");
-            image.src = nextImage.getAttribute('data-src');
-            filename.textContent = nextImage.getAttribute('x-filename');
-        }
-
-        let keyDownEvent = (event) => {
-            if (event.key === 'ArrowLeft')
-                prevImage();
-            else if (event.key === 'ArrowRight')
-                nextImage();
-            else if (event.key === 'Escape' || event.key === 'Backspace')
-                closeSlideshow();
-        }
-
-        document.addEventListener('keydown', keyDownEvent);
-
-        // Create slideshow elements
-        const slideshowDiv = document.createElement("div");
-        slideshowDiv.className = "fdrive-slideshow fdrive-preview";
-
-        const backgroundDiv = document.createElement("div");
-        backgroundDiv.className = "slideshow-background";
-        backgroundDiv.addEventListener("click", closeSlideshow);
-        slideshowDiv.appendChild(backgroundDiv);
-
-        const imageContainer = document.createElement("div");
-        imageContainer.className = "slideshow-image-container";
-        slideshowDiv.appendChild(imageContainer);
-
-        const closeButton = document.createElement("div");
-        closeButton.className = "slideshow-close";
-        closeButton.innerHTML = "<i class=\"fa-solid fa-xmark\"></i>";
-        closeButton.addEventListener("click", closeSlideshow);
-        slideshowDiv.appendChild(closeButton);
-
-        const prevButton = document.createElement("div");
-        prevButton.className = "slideshow-prev";
-        prevButton.innerHTML = "&#8249;";
-        prevButton.addEventListener("click", prevImage);
-        slideshowDiv.appendChild(prevButton);
-
-        const nextButton = document.createElement("div");
-        nextButton.className = "slideshow-next";
-        nextButton.innerHTML = "&#8250;";
-        nextButton.addEventListener("click", nextImage);
-        slideshowDiv.appendChild(nextButton);
-
-        const image = document.createElement("img");
-        image.onload = function() {
-            updateDimensions();
-        };
-        let startImg = startChild.querySelector("img");
-        image.src = startImg.getAttribute('data-src')
-        imageContainer.appendChild(image);
-
-        // Display image dimensions below the image
-        infoContainer = document.createElement('div');
-        infoContainer.className = 'slideshow-info';
-        imageContainer.appendChild(infoContainer);
-
-        filename = document.createElement("div");
-        filename.textContent = startImg.getAttribute('x-filename');
-        filename.className = "slideshow-filename";
-        infoContainer.appendChild(filename);
-        
-        dimensions = document.createElement("div");
-        dimensions.className = "slideshow-dimensions";
-        infoContainer.appendChild(dimensions);
-
-        updateDimensions();
-        // Add slideshow elements to the page
-        document.body.appendChild(slideshowDiv);        
     }
 
 }
