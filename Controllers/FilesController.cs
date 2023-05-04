@@ -16,7 +16,7 @@ public class FilesController : BaseController
     /// </summary>
     /// <param name="path">the path to get</param>
     /// <returns>the files</returns>
-    [HttpGet("path")]
+    [HttpGet]
     public async Task<IEnumerable<UserFile>> GetAll([FromQuery]string? path = null)
     {
         var uid = User.GetUserUid().Value;
@@ -98,35 +98,21 @@ public class FilesController : BaseController
             return BadRequest(ex.Message);
         }
     }
-    
-    
-    /// <summary>
-    /// Uploads files
-    /// </summary>
-    /// <param name="file">the files being uploaded</param>
-    /// <param name="path">the path to get</param>
-    /// <returns>the UIDs of the newly uploaded files</returns>
-    [HttpPost("path")]
+
+    [HttpPost("upload")]
     [DisableRequestSizeLimit]
     //[RequestFormLimits(BufferBodyLengthLimit = 10_737_418_240, MultipartBodyLengthLimit = 10_737_418_240)] // 10GiB limit
     [RequestFormLimits(BufferBodyLengthLimit = 14_737_418_240, MultipartBodyLengthLimit = 14_737_418_240)] // 10GiB limit
-    public async Task<List<UserFile>> Upload([FromForm] List<IFormFile> file, [FromQuery] string? path = null)
+    public async Task<UserFile> Upload([FromForm] IFormFile file, [FromQuery] string? path = null)
     {
-        List<UserFile> files = new();
-        if (file?.Any() != true)
-            return files;
         var uid = User.GetUserUid().Value;
+        if (uid == null)
+            throw new UnauthorizedAccessException();
+        
         var service = IFileStorage.GetService(uid);
-        foreach (var f in file)
-        {
-            var userFile = await service.Add(path, f.FileName, f);
-            if (userFile != null)
-                files.Add(userFile);
-        }
-
-        return files;
+        var userFile = await service.Add(path, file.FileName, file);
+        return userFile;
     }
-
     /// <summary>
     /// Deletes files
     /// </summary>

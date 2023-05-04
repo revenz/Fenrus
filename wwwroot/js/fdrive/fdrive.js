@@ -6,6 +6,7 @@ class FenrusDrive {
     container;
     lblFiles;
     currentView;
+    uploader;
     folderViews = {};
     extensions = {
         plain: "clike",
@@ -66,13 +67,12 @@ class FenrusDrive {
             container.contentEditable = true;
             setTimeout(() => container.contentEditable = false, 20);
         });
+        this.uploader = new FileUploader();
+        this.uploader.onUploaded((event) => this.onUploaded(event));
         this.container.addEventListener('drop', (event) => this.fileDropEventListener(event));
-        this.container.addEventListener('dragstart', (e) => {
-            e.dataTransfer.effectAllowed = 'all';
-            e.dataTransfer.dropEffect = 'move';
-        });
         this.container.addEventListener('dragover', (e) => {
             e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
         }, false);
         this.container.addEventListener('paste', (event) => this.pasteEventListener(event));
         this.lblFiles = document.querySelector('.fdrive-pane-title .title').innerText;
@@ -279,21 +279,73 @@ class FenrusDrive {
         this.uploadForm(formData, count, size);
     }
 
-    fileDropEventListener(event) {
-        event.preventDefault();
-        const files = event.dataTransfer.files;
-        const formData = new FormData();
-
-        let size = 0;
-        let filesAdded = 0;
-        for (let i = 0; i < files.length; i++) {
-            formData.append('file', files[i]);
-            size += files[i].size;
-            ++filesAdded;
+    fileDropEventListener(e) {
+        e.preventDefault();
+        const items = Array.from(e.dataTransfer.items);
+        for (let i = 0; i < items.length; i++) {
+            let item = items[i].webkitGetAsEntry ? items[i].webkitGetAsEntry() : items[i].getAsEntry();
+            if (item) {
+                this.traverseFileTree(item);
+            }
         }
-        if (filesAdded === 0)
+    }
+    
+    traverseFileTree(item, path) {
+        path = path || "";
+        if (item.isFile) {
+            item.file((file) => {
+                this.uploadFile(file, path);
+            });
+        } else if (item.isDirectory) {
+            var dirReader = item.createReader();
+            dirReader.readEntries((entries) => {
+                for (let i = 0; i < entries.length; i++) {
+                    let entry = entries[i];
+                    if(entry.isFile)
+                        entry.file((file) => {
+                            this.uploadFile(file, path + item.name);
+                        });
+                    else if(entry.isDirectory)
+                        this.traverseFileTree(entries[i], path + item.name + "/");
+                }
+            });
+        }
+    }
+
+    uploadFile(file, path) {
+        path = !path ? this.currentPath : 
+            this.currentPath.endsWith('/') ? this.currentPath + path : 
+            this.currentPath + '/' + path;
+        this.uploader.queueFile(file, path);
+    }
+
+    onUploaded(event) {
+        console.log('onUploaded', event, this.currentPath);
+        if(event?.path === this.currentPath) {
+            if(!document.querySelector(`.file[x-uid='${event.file.fullPath}']`))
+                this.addToList([event.file]);
             return;
-        this.uploadForm(formData, filesAdded, size);
+        }
+        if(event?.path?.startsWith(this.currentPath) === false)
+            return;
+        // its a subfolder.  see if this subfolder exists
+        let folderName = event.path.substring(this.currentPath.length);
+        if(folderName.indexOf('/') > 0)
+            folderName = folderName.substring(0, folderName.indexOf('/'));
+        let fullPath = this.currentPath + folderName + '/';
+        
+        if(document.querySelector(`.file[x-uid='${fullPath}']`))
+            return; // it exists
+        
+        this.addToList([{
+            created: new Date(),
+            extension: '',
+            fullPath: fullPath,
+            icon: "fa-solid fa-folder",
+            mimeType: "folder",
+            name: folderName,
+            size: 0
+        }]);
     }
 
     addClicked() {
@@ -354,7 +406,7 @@ class FenrusDrive {
 
     uploadFileWithProgress(formData, progressDiv) {
         return new Promise(async (resolve, reject) => {
-            const url = '/files/path?path=' + encodeURIComponent(this.currentPath || '');
+            const url = '/files?path=' + encodeURIComponent(this.currentPath || '');
 
             const xhr = new XMLHttpRequest();
 
@@ -384,7 +436,7 @@ class FenrusDrive {
 
     async reload() {
         try {
-            let url = '/files/path?path=' + encodeURI(this.currentPath || '');
+            let url = '/files?path=' + encodeURI(this.currentPath || '');
             const response = await fetch(url);
             const data = await response.json();
             if (this.currentPath)

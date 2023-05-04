@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using System.Web;
 using System.Xml;
@@ -171,6 +172,16 @@ public class WebDavFileStorage : IFileStorage
     public async Task<UserFile?> Add(string path, string filename, IFormFile formFile)
     {
         // Construct the full URL for the WebDAV upload
+        path = path.TrimEnd('/');
+
+        if (path != string.Empty)
+        {
+            if (await FolderExists(path) == false)
+            {
+                // need to create the folder
+                await CreateFolder(path);
+            }
+        }
         string url = $"{serverUrl}/{path}/{filename}";
 
         // Create a new HttpRequestMessage with the PUT method and URL
@@ -295,8 +306,10 @@ public class WebDavFileStorage : IFileStorage
         {
             string prefix = "/remote.php/dav/files/" + username + "/";
             if (path.StartsWith(prefix))
-                return path[prefix.Length..];
+                path = path[prefix.Length..];
         }
+
+        path = path.Replace("%20", " ");
         return path;
     }
 
@@ -358,7 +371,47 @@ public class WebDavFileStorage : IFileStorage
         return result;
     }
 
-    
+    /// <summary>
+    /// Check if a folder exists in WebDAV at the specified path.
+    /// </summary>
+    /// <param name="path">The path to check.</param>
+    /// <returns>True if the folder exists, false otherwise.</returns>
+    public async Task<bool> FolderExists(string path)
+    {
+        string url = serverUrl + "/" + path + "/";
+
+        // Build the PROPFIND request XML.
+        string requestXml = $@"<?xml version=""1.0""?>
+        <D:propfind xmlns:D=""DAV:"">
+            <D:prop>
+                <D:resourcetype/>
+            </D:prop>
+        </D:propfind>";
+
+        // Create a new HttpRequestMessage with the required headers and request XML.
+        var request = new HttpRequestMessage(new CustomHttpMethod("PROPFIND"), url);
+        request.Headers.Add("Depth", "0");
+        request.Content = new StringContent(requestXml, Encoding.UTF8, "text/xml");
+
+        // Send the request using the configured HttpClient and await the response.
+        var response = await client.SendAsync(request);
+
+        // Check if the response indicates the folder exists (a 207 Multi-Status response with a D:collection element).
+        if (response.StatusCode == HttpStatusCode.MultiStatus)
+        {
+            string responseXml = await response.Content.ReadAsStringAsync();
+
+            XDocument doc = XDocument.Parse(responseXml);
+            XNamespace ns = "DAV:";
+
+            XElement collectionElement = doc.Descendants(ns + "collection").FirstOrDefault();
+
+            return collectionElement != null;
+        }
+
+        return false;
+    }
+
     
     /// <summary>
     /// A class that creates a custom HTTP method 

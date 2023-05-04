@@ -2,6 +2,12 @@
 {   
     callCount = 0;
 
+    fetch(args, url) {
+        let result = args.fetch(url);
+        args.log('Fetching URL: ' + url);
+        return result?.Result || result;
+    }
+
     getToken(args){
         let password = args.properties['password'];
 
@@ -19,6 +25,7 @@
                     "params": [password]
                 })
             });
+            res = res?.Result || res;
 
             let cookie = res.headers.get('set-cookie');
             let sessionId = /(?<=(_session_id=))[^;]+/.exec(cookie)[0];
@@ -47,6 +54,8 @@
                 "params": [["none"], {}]
             })
         });
+        data = data?.Result || data;
+        
         if(data.error)
         {
             args.log('Deluge error: ' + data.error.message);
