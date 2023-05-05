@@ -1,6 +1,6 @@
 class VirtualizeList {
     constructor(container) {
-        let wrapper = document.createElement('dom');
+        let wrapper = document.createElement('div');
         wrapper.className = 'vlist';
         wrapper.style.position = 'absolute';
         wrapper.style.top = 0;
@@ -48,6 +48,16 @@ class VirtualizeList {
         this.numColumns = num;
         this.calculateColumns();
     }
+    
+    changeLayout(numColumns, itemHeight){
+        this.itemHeight = itemHeight;
+        if(numColumns === 1)
+            this.numColumns = numColumns;
+        else
+            this.calculateColumns();
+        if(this.updateDOM() === false)
+            this.render();
+    }
 
     startBulkUpdates() {
         this.bulkUpdating = true;
@@ -78,7 +88,9 @@ class VirtualizeList {
 
     updateDOM() {
         const totalRows = Math.ceil(this.items.length / this.numColumns);
+        console.log('totalRows: ' + totalRows);
         const totalHeight = totalRows * this.itemHeight;
+        console.log('totalHeight: ' + totalHeight);
         this.wrapper.style.height = `${totalHeight}px`;
 
         const visibleTop = this.container.scrollTop;
@@ -86,13 +98,17 @@ class VirtualizeList {
 
         const startIndex = Math.floor(visibleTop / this.itemHeight) * this.numColumns;
         const endIndex = Math.min(Math.ceil(visibleBottom /  this.itemHeight) * this.numColumns, this.items.length);
+        console.log('startIndex:' + startIndex);
+        console.log('endIndex:' + endIndex);
 
         if (this.visibleStartIndex !== startIndex || this.visibleEndIndex !== endIndex) {
             this.visibleStartIndex = startIndex;
             this.visibleEndIndex = endIndex;
             this.visibleItems = this.items.slice(startIndex, endIndex);
             this.render();
+            return true;
         }
+        return false;
     }
 
     render() {
@@ -102,8 +118,10 @@ class VirtualizeList {
         let currentColumn = 0;
         let currentRow = this.visibleStartIndex / this.numColumns;
         let currentTop = currentRow * rowHeight;
+        console.log('visibleItems: ' + this.visibleItems.length);
 
         for (let i = 0; i < this.visibleItems.length; i++) {
+            console.log('rednering: ' + i);
             const element = this.visibleItems[i];
             
             let itemIndex = this.visibleStartIndex + i;
@@ -142,11 +160,9 @@ class VirtualizeList {
         this.updateDOM();
     }
 
-    calculateColumns(){
-        if(this.numColumns === 1)
-            return;
-        
+    calculateColumns(){        
         this.numColumns = Math.round(this.container.clientWidth / 240);
+        console.log('numColumns2: ' + this.numColumns);
         this.wrapper.innerHTML = '';
         this.updateDOM();
     }

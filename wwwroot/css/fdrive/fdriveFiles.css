@@ -28,11 +28,12 @@
 #fdrive-files .fdrive-pane-title .title .path-separator, #fdrive-files .fdrive-pane-title .title span:not(:last-child) {
   opacity: 0.5;
 }
-#fdrive-files .file.parent i {
-  transform: scaleX(-1);
-}
-#fdrive-files .file.parent .download {
-  display: none !important;
+
+.file-inner {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 #fdrive-add-menu {
@@ -102,62 +103,67 @@
   max-height: 6rem;
 }
 
-#fdrive-list:not(.thumbnail) {
-  display: flex;
-  flex-direction: column;
+#fdrive-list.list .file .file-inner {
+  background: rgba(var(--color-rgb), 0.01);
 }
-#fdrive-list:not(.thumbnail) .file {
+#fdrive-list.list .file:nth-of-type(even) .file-inner {
+  background: rgba(var(--color-rgb), 0.03);
+}
+#fdrive-list.list .file:nth-of-type(even):hover .file-inner {
+  background: rgba(var(--color-rgb), 0.2);
+}
+#fdrive-list.list .file .enter {
+  display: none;
+}
+#fdrive-list.list .file.folder .download {
+  display: none;
+}
+#fdrive-list.list .file.folder .enter {
+  display: unset;
+}
+#fdrive-list.list .file.folder .enter, #fdrive-list.list .file .download {
+  position: absolute;
+  right: 1.5rem;
+  top: 0.55rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+#fdrive-list.list .file-inner {
+  --margin:2px;
   overflow: hidden;
   display: flex;
   flex-direction: row;
-  background: rgba(var(--color-rgb), 0.05);
-  font-size: 1rem;
-  line-height: 100%;
+  font-size: 1.1rem;
+  margin: var(--margin);
+  height: calc(100% - var(--margin) * 2);
+  width: calc(100% - var(--margin) * 4);
+  border-radius: 5px;
   position: relative;
 }
-#fdrive-list:not(.thumbnail) .file:nth-of-type(even) {
-  background: rgba(var(--color-rgb), 0.09);
-}
-#fdrive-list:not(.thumbnail) .file .enter {
-  display: none;
-}
-#fdrive-list:not(.thumbnail) .file.folder .download {
-  display: none;
-}
-#fdrive-list:not(.thumbnail) .file.folder .enter {
-  display: unset;
-}
-#fdrive-list:not(.thumbnail) .file.folder .enter, #fdrive-list:not(.thumbnail) .file .download {
-  position: absolute;
-  right: 1.5rem;
-  top: 0.7rem;
-  font-size: 1rem;
-  cursor: pointer;
-}
-#fdrive-list:not(.thumbnail) .file:hover {
+#fdrive-list.list .file-inner:hover {
   background: rgba(var(--color-rgb), 0.2);
 }
-#fdrive-list:not(.thumbnail) .file .check {
+#fdrive-list.list .file-inner .check {
   margin-right: 1rem;
   margin-top: 0;
   min-width: 1.35rem;
 }
-#fdrive-list:not(.thumbnail) .file .icon {
+#fdrive-list.list .file-inner .icon {
   width: 1.5rem;
   min-width: 1.5rem;
   height: 100%;
-  margin-right: 0.5rem;
+  margin: 0 0.5rem;
   font-size: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-#fdrive-list:not(.thumbnail) .file .icon img {
+#fdrive-list.list .file-inner .icon img {
   width: 100%;
   height: 65%;
   object-fit: cover;
 }
-#fdrive-list:not(.thumbnail) .file .name {
+#fdrive-list.list .file-inner .name {
   flex-grow: 1;
   white-space: nowrap;
   align-items: center;
@@ -165,10 +171,10 @@
   text-overflow: ellipsis;
   max-width: calc(100% - 11rem);
 }
-#fdrive-list:not(.thumbnail) .file .name, #fdrive-list:not(.thumbnail) .file .size {
+#fdrive-list.list .file-inner .name, #fdrive-list.list .file-inner .size {
   margin: auto;
 }
-#fdrive-list:not(.thumbnail) .file .size {
+#fdrive-list.list .file-inner .size {
   width: 10rem;
   min-width: 10rem;
   justify-content: right;
@@ -180,45 +186,45 @@
   position: relative;
 }
 
-#fdrive-list.thumbnail {
+#fdrive-list.grid {
   position: relative;
   transition: opacity 0.25s ease-in-out;
 }
-#fdrive-list.thumbnail .check {
+#fdrive-list.grid .check {
   position: absolute;
   top: 1rem;
   left: 1rem;
 }
-#fdrive-list.thumbnail .file {
+#fdrive-list.grid .file {
   height: 240px;
   position: relative;
 }
-#fdrive-list.thumbnail .size {
+#fdrive-list.grid .size {
   display: none;
 }
-#fdrive-list.thumbnail .file.no-img .icon {
+#fdrive-list.grid .file.no-img .icon {
   background: #222;
 }
-#fdrive-list.thumbnail .file.no-img .name {
+#fdrive-list.grid .file.no-img .name {
   display: unset !important;
 }
-#fdrive-list.thumbnail .enter {
+#fdrive-list.grid .enter {
   display: none;
 }
-#fdrive-list.thumbnail .file.folder {
+#fdrive-list.grid .file.folder {
   cursor: pointer;
 }
-#fdrive-list.thumbnail .file.folder .enter {
+#fdrive-list.grid .file.folder .enter {
   position: absolute;
   right: 1.5rem;
   top: 1.5rem;
   font-size: 2rem;
   cursor: pointer;
 }
-#fdrive-list.thumbnail .file.folder .download {
+#fdrive-list.grid .file.folder .download {
   display: none !important;
 }
-#fdrive-list.thumbnail .name {
+#fdrive-list.grid .name {
   position: absolute;
   display: none;
   bottom: 0;
@@ -228,60 +234,60 @@
   background: rgba(var(--base-rgb), 0.8);
   text-align: center;
 }
-#fdrive-list.thumbnail .icon {
+#fdrive-list.grid .icon {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-#fdrive-list.thumbnail .icon, #fdrive-list.thumbnail img {
+#fdrive-list.grid .icon, #fdrive-list.grid img {
   width: 100%;
   height: 100%;
 }
-#fdrive-list.thumbnail .icon i {
+#fdrive-list.grid .icon i {
   font-size: 10rem;
 }
-#fdrive-list.thumbnail img {
+#fdrive-list.grid img {
   object-fit: cover;
 }
-#fdrive-list.thumbnail .controls {
+#fdrive-list.grid .controls {
   position: absolute;
   bottom: 4rem;
   left: 1rem;
   font-size: 2rem;
   display: none;
 }
-#fdrive-list.thumbnail .controls > i {
+#fdrive-list.grid .controls > i {
   cursor: pointer;
   position: absolute;
 }
-#fdrive-list.thumbnail .controls .delete {
+#fdrive-list.grid .controls .delete {
   left: 0.85rem;
   top: 0.7rem;
   color: rgba(var(--color-rgb), 0.8);
 }
-#fdrive-list.thumbnail .controls .fa-circle {
+#fdrive-list.grid .controls .fa-circle {
   color: rgba(var(--accent-rgb), 0.3);
   font-size: 3.5rem;
 }
-#fdrive-list.thumbnail .controls:hover .delete {
+#fdrive-list.grid .controls:hover .delete {
   color: var(--color);
 }
-#fdrive-list.thumbnail .controls:hover .fa-circle {
+#fdrive-list.grid .controls:hover .fa-circle {
   color: rgba(var(--accent-rgb), 0.7);
 }
-#fdrive-list.thumbnail .download {
+#fdrive-list.grid .download {
   display: none;
 }
-#fdrive-list.thumbnail:hover .controls {
+#fdrive-list.grid:hover .controls {
   display: unset;
 }
-#fdrive-list.thumbnail .file:hover {
+#fdrive-list.grid .file:hover {
   opacity: 1;
 }
-#fdrive-list.thumbnail .file:hover .name {
+#fdrive-list.grid .file:hover .name {
   display: unset;
 }
-#fdrive-list.thumbnail .file:hover .download {
+#fdrive-list.grid .file:hover .download {
   position: absolute;
   font-size: 1rem;
   cursor: pointer;
@@ -301,6 +307,127 @@
 #fdrive-files {
   display: flex;
   flex-direction: column;
+}
+
+.file.selected .file-inner {
+  background: rgba(var(--accent-rgb), 0.3) !important;
+}
+.file.selected .file-inner:hover {
+  background: rgba(var(--accent-rgb), 0.4) !important;
+}
+
+.fdrive-sorter {
+  display: flex;
+  align-items: center;
+}
+.fdrive-sorter .toggle-view {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 20px;
+  color: #555;
+}
+.fdrive-sorter .toggle-view:hover {
+  color: #000;
+}
+.fdrive-sorter .toggle-view i {
+  display: inline-block;
+  vertical-align: middle;
+}
+.fdrive-sorter .toggle-view .fa-th-list {
+  margin-right: 5px;
+}
+.fdrive-sorter .toggle-view .fa-th-large {
+  margin-left: 5px;
+}
+.fdrive-sorter .dropdown {
+  position: relative;
+}
+.fdrive-sorter .dropdown .caret {
+  font-size: 0.8rem;
+}
+.fdrive-sorter .dropdown .dropdown-toggle {
+  border: solid 1px var(--border-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background: none;
+  cursor: pointer;
+  color: rgba(var(--color-rgb), 0.7);
+  display: flex;
+  align-items: center;
+  height: 2rem;
+}
+.fdrive-sorter .dropdown .dropdown-toggle .view-icon {
+  padding-right: 0.5rem;
+  border-right: solid 2px var(--border-color);
+  width: 1rem;
+  height: 1rem;
+}
+.fdrive-sorter .dropdown .dropdown-toggle .caret {
+  height: 2rem;
+  width: 1rem;
+}
+.fdrive-sorter .dropdown .dropdown-toggle .caret:before {
+  position: relative;
+  top: 0.65rem;
+}
+.fdrive-sorter .dropdown .dropdown-toggle:hover {
+  color: var(--color-rgb);
+}
+.fdrive-sorter .dropdown .dropdown-toggle .dropdown-label {
+  margin-right: 5px;
+  font-size: 14px;
+  color: #777;
+}
+.fdrive-sorter .dropdown .dropdown-toggle i {
+  display: inline-block;
+  vertical-align: middle;
+}
+.fdrive-sorter .dropdown .dropdown-toggle .fa-caret-down {
+  margin-left: 5px;
+}
+.fdrive-sorter .dropdown .dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  display: none;
+  min-width: 9rem;
+  padding: 0.25rem 0.75rem 0.75rem;
+  background-color: var(--base);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  border-radius: 0.5rem;
+}
+.fdrive-sorter .dropdown .dropdown-menu .dropdown-label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  opacity: 0.5;
+}
+.fdrive-sorter .dropdown .dropdown-menu .radio-group {
+  display: flex;
+  flex-direction: column;
+}
+.fdrive-sorter .dropdown .dropdown-menu .radio-group label {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  place-items: flex-end;
+  line-height: 100%;
+}
+.fdrive-sorter .dropdown .dropdown-menu .radio-group label input[type=radio] {
+  margin-right: 5px;
+}
+.fdrive-sorter .dropdown .dropdown-menu .radio-group label:hover {
+  background: rgba(var(--accent-rgb), 0.3);
+  border-radius: 0.5rem;
+}
+.fdrive-sorter .dropdown .dropdown-menu.visible {
+  display: block;
 }
 
 /*# sourceMappingURL=fdriveFiles.css.map */

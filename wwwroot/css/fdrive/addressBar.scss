@@ -1,0 +1,53 @@
+#fdrive-files-address {
+  width: calc(100% - 9rem);
+  direction: rtl;
+  overflow: hidden;
+  background: #1c1c1c;
+  padding: 2px;
+  margin: 5px;
+  height: calc(100% - 12px);
+  border-radius: 7px;
+
+  .breadcrumb {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+    white-space: nowrap;
+  }
+  
+  button {
+    font-size: 0.9rem;
+    background:transparent;
+    border:none;
+    color:rgba(var(--color-rgb), 0.7);
+    height: calc(100% - 0.6rem);
+    margin: 0.25rem;
+    padding: 0 0.75rem;
+    border-radius: 0.35rem;
+    i {
+      margin-right:0.25rem;
+    }
+    &:hover {
+      background:rgba(var(--accent-rgb), 0.3);
+      color:var(--color);
+    }
+    &:first-child {
+      font-weight: bold;
+      color:var(--color);
+    }
+  }
+
+  .breadcrumb button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+  }
+
+  .breadcrumb button:hover {
+    text-decoration: none;
+  }
+
+}

@@ -477,3 +477,17 @@ function htmlEncode(text) {
     element.innerText = text;
     return element.innerHTML;
 }
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+isMouseDown = false;
+
+document.addEventListener('mousedown', () => {
+    isMouseDown = true;
+});
+
+document.addEventListener('mouseup', () => {
+    isMouseDown = false;
+});
