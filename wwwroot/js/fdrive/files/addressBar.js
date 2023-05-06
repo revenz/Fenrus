@@ -1,14 +1,61 @@
 class AddressBar {
     constructor() {
         this.container = document.getElementById('fdrive-files-address');
-        this.container.className = "breadcrumb";
+        let btnSearch = document.createElement('button');
+        btnSearch.className = 'btn-file-search';
+        btnSearch.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>';
+        this.container.insertAdjacentElement('afterend', btnSearch);
+        this.searching = false;
+        btnSearch.addEventListener('click', () => {            
+            if(this.searching){
+                this.doSearch();                                
+            }else {
+                this.searched = false;
+                this.searching = true;
+                this.showSearch();
+            }
+        });        
+        this.container.className = "address-bar";
     }
     
     onClick(action) {
         this.onClickAction = action;
     }
+    onSearch(action) {
+        this.onSearchAction = action;
+    }
+    
+    doSearch(){
+        let searchText = (this.container.querySelector('input[type=text]')?.value || '').trim();
+        if(!searchText)
+            return;
+        this.searched = true;
+        this.onSearchAction(this.currentPath, searchText);        
+    }
+    
+    showSearch(){
+        this.container.classList.add('searching');
+        this.container.innerHTML = '<i class="fa-solid fa-xmark"></i>' +
+            '<input type="text" class="file-search" placeholder="Search files and folders" />' +
+            '<i class="fa-solid fa-magnifying-glass"></i>';
+        this.container.querySelector('.fa-xmark').addEventListener('click', () => {
+            this.searching = false;
+            this.onClickAction(this.currentPath);
+            this.show(this.currentPath);
+        })
+        this.container.querySelector('input').addEventListener('keydown', (event) => {
+            if(event.key === 'Enter') {
+                event.preventDefault();
+                event.stopPropagation();
+                this.doSearch();
+            }
+        })
+        this.container.querySelector('input').focus();
+    }
 
     show(path) {
+        this.container.classList.remove('searching');
+        this.currentPath = path;
         // Trim trailing slash if present
         if (path.endsWith("/")) {
             path = path.slice(0, -1);
@@ -53,28 +100,6 @@ class AddressBar {
         // Add container to DOM if it doesn't exist yet
         if (!this.container.parentNode) {
             document.body.appendChild(this.container);
-        }
-
-        // Position container in center of parent element
-        const parent = this.container.parentNode;
-        const parentRect = parent.getBoundingClientRect();
-        const containerRect = this.container.getBoundingClientRect();
-        const x = parentRect.left + (parentRect.width - containerRect.width) / 2;
-        this.container.style.left = `${x}px`;
-
-        // Check if container overflows to the left
-        const containerLeft = containerRect.left - parentRect.left;
-        if (containerLeft < 0) {
-            const buttons = this.container.querySelectorAll("button");
-            for (let i = buttons.length - 1; i >= 0; i--) {
-                const buttonRect = buttons[i].getBoundingClientRect();
-                if (buttonRect.left < -containerLeft) {
-                    buttons[i].style.overflow = "hidden";
-                    buttons[i].style.textOverflow = "ellipsis";
-                    buttons[i].style.whiteSpace = "nowrap";
-                    break;
-                }
-            }
         }
     }
 

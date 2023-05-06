@@ -8,7 +8,7 @@
   height: calc(100% - 12px);
   border-radius: 7px;
 
-  .breadcrumb {
+  .address-bar {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -38,16 +38,67 @@
     }
   }
 
-  .breadcrumb button {
+  .address-bar button {
     background-color: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
     text-decoration: underline;
-  }
 
-  .breadcrumb button:hover {
-    text-decoration: none;
+    &:hover {
+      text-decoration: none;
+    }
   }
+  
+  &.searching {
+    display:flex;
+    flex-direction: row;
+    i{
+      width:2rem;
+      opacity: 0.3;
+      padding-top: 0.65rem;
+    }
+    i.fa-xmark {
+      cursor: pointer;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    .file-search {
+      flex-grow:1;
+      height: 100%;
+      text-align: left;
+      background: transparent;
+      color: var(--color);
+      border: none;
+      outline: none;
+      direction: ltr;
+      font-size:0.9rem;
+    }
+    
+  }
+}
+#fdrive-files .btn-file-search {
+  position:absolute;
+  background: var(--base);
+  left: calc(80% - 4px);
+  top: 7px;
+  padding: 0.5rem;
 
+  border: solid 1px var(--border-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background: none;
+  cursor: pointer;
+  color: rgba(var(--color-rgb), 0.7);
+  display: flex;
+  align-items: center;
+  height: 2rem;
+  i {
+    opacity: 0.5;
+  }
+  
+  &:hover {
+    color:var(--color);
+  }
 }

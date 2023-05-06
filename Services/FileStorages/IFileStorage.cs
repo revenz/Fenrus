@@ -23,6 +23,14 @@ public interface IFileStorage
     Task<List<UserFile>> GetAll(string path);
 
     /// <summary>
+    /// Searches for files matching a search pattern
+    /// </summary>
+    /// <param name="path">the path to perform the search from</param>
+    /// <param name="searchPattern">the searchPatten</param>
+    /// <returns>a list of matching files</returns>
+    Task<List<UserFile>> SearchFiles(string path, string searchPattern);
+
+    /// <summary>
     /// Gets the file data by its path
     /// </summary>
     /// <param name="fullPath">the full path of the file</param>

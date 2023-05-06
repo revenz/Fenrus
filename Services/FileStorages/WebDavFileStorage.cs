@@ -19,6 +19,9 @@ public class WebDavFileStorage : IFileStorage
     private string username;
     private string password;
     private string renameBase = string.Empty;
+    private string searchUrl = string.Empty;
+    private string searchPrefix = string.Empty;
+    private string searchWildcard = "*";
     private HttpClient client;
 
     public WebDavFileStorage(string provider, string url, string username, string password)
@@ -50,7 +53,7 @@ public class WebDavFileStorage : IFileStorage
         var request = new HttpRequestMessage(new HttpMethod("PROPFIND"), serverUrl + "/" + path);
         request.Content =
             new StringContent(
-                "<?xml version=\"1.0\" encoding=\"utf-8\"?><D:propfind xmlns:D=\"DAV:\"><D:prop><D:getlastmodified/><D:getcontenttype/><D:getcontentlength/></D:prop></D:propfind>");
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?><d:propfind xmlns:d=\"DAV:\"><d:prop><d:getlastmodified/><d:getcontenttype/><d:getcontentlength/></d:prop></d:propfind>");
         request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/xml");
 
         // Send the WebDAV request and await the response
@@ -71,10 +74,10 @@ public class WebDavFileStorage : IFileStorage
         var doc = new XmlDocument();
         doc.LoadXml(responseContent);
         var ns = new XmlNamespaceManager(doc.NameTable);
-        ns.AddNamespace("D", "DAV:");
-        var lastModifiedNode = doc.SelectSingleNode("//D:getlastmodified", ns);
-        var contentTypeNode = doc.SelectSingleNode("//D:getcontenttype", ns);
-        var contentLengthNode = doc.SelectSingleNode("//D:getcontentlength", ns);
+        ns.AddNamespace("d", "DAV:");
+        var lastModifiedNode = doc.SelectSingleNode("//d:getlastmodified", ns);
+        var contentTypeNode = doc.SelectSingleNode("//d:getcontenttype", ns);
+        var contentLengthNode = doc.SelectSingleNode("//d:getcontentlength", ns);
         
         if(DateTime.TryParse(lastModifiedNode?.InnerText ?? string.Empty, out DateTime createdUtc))
             userFile.Created = createdUtc;
@@ -94,6 +97,91 @@ public class WebDavFileStorage : IFileStorage
         return userFile;
     }
 
+    /// <summary>
+    /// Searches for files matching a search pattern
+    /// </summary>
+    /// <param name="path">the path to perform the search from</param>
+    /// <param name="searchPattern">the searchPatten</param>
+    /// <returns>a list of matching files</returns>
+    public async Task<List<UserFile>> SearchFiles(string path, string searchPattern)
+    {
+        // Escape search pattern for XML
+        searchPattern = searchPattern.Replace("*", this.searchWildcard);
+        if (searchPattern.StartsWith(searchWildcard) == false && searchWildcard.EndsWith(searchWildcard))
+            searchPattern = searchWildcard + searchPattern + searchWildcard;
+        
+        string escapedSearchPattern = WebUtility.HtmlEncode(searchPattern);
+        HttpRequestMessage request = new HttpRequestMessage(new HttpMethod("SEARCH"), searchUrl);
+        request.Headers.Add("Depth", "1");
+        request.Content = new StringContent(
+            $@"<?xml version=""1.0"" encoding=""UTF-8"" ?>
+            <d:searchrequest xmlns:d=""DAV:"">
+            <d:basicsearch>
+                <d:select>
+                    <d:prop>
+                        <d:getcontenttype />
+                        <d:getcontentlength />
+                        <d:creationdate />
+                        <d:getlastmodified />
+                    </d:prop>
+                </d:select>
+                <d:from>
+                    <d:scope>
+                        <d:href>{(searchPrefix + path).TrimEnd('/')}</d:href>
+                        <d:depth>infinity</d:depth>
+                    </d:scope>
+                </d:from>
+                <d:where>
+                    <d:like>
+                        <d:prop>
+                            <d:displayname/>
+                        </d:prop>
+                        <d:literal>{escapedSearchPattern}</d:literal>
+                    </d:like>
+                </d:where>
+            </d:basicsearch>
+        </d:searchrequest>", Encoding.UTF8, "application/xml");
+    
+        // Execute the request and parse the response
+        HttpResponseMessage response = await client.SendAsync(request);
+        var content = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode == false)
+        {
+            throw new Exception(content);
+        }
+
+        var xml = XDocument.Parse(content);
+        
+        XNamespace ns = "DAV:";
+
+        List<UserFile> files = new();
+        foreach (var node in xml.Descendants(ns + "response"))
+        {
+            UserFile userFile = new ();
+            userFile.FullPath = CleanFullPath((string)node.Descendants(ns + "href").FirstOrDefault()?.Value);
+            if (string.IsNullOrEmpty(userFile.FullPath))
+                continue;
+            if (userFile.FullPath.EndsWith("/"))
+                continue; // not interested in folders
+            userFile.Name = Path.GetFileName(userFile.FullPath);
+            userFile.Extension = Path.GetExtension(userFile.FullPath).TrimStart('.') ;
+
+            if (DateTime.TryParse(node.Descendants(ns + "creationdate").FirstOrDefault()?.Value  ?? string.Empty, out DateTime dt)) 
+                userFile.Created = dt;
+            
+            userFile.MimeType  = node.Descendants(ns + "getcontenttype")?.FirstOrDefault()?.Value ?? string.Empty;
+            if (long.TryParse(node.Descendants(ns + "getcontentlength").FirstOrDefault()?.Value ?? string.Empty,
+                    out long size))
+                userFile.Size = size;
+            files.Add(userFile);
+        }
+
+        foreach (UserFile file in files)
+        {
+        }
+
+        return files;
+    }
 
     /// <summary>
     /// Gets all the UID for files for a user
@@ -116,7 +204,7 @@ public class WebDavFileStorage : IFileStorage
         }
 
         var propfindContent = new StringContent(
-            "<?xml version=\"1.0\" encoding=\"utf-8\" ?><D:propfind xmlns:D=\"DAV:\"><D:prop><D:displayname/><D:getlastmodified/><D:getcontenttype/><D:getcontentlength/></D:prop></D:propfind>",
+            "<?xml version=\"1.0\" encoding=\"utf-8\" ?><d:propfind xmlns:d=\"DAV:\"><d:prop><d:displayname/><d:getlastmodified/><d:getcontenttype/><d:getcontentlength/></d:prop></d:propfind>",
             Encoding.UTF8, "text/xml");
         var response = await client.SendAsync(new HttpRequestMessage(new HttpMethod("PROPFIND"), url)
             { Content = propfindContent });
@@ -125,21 +213,21 @@ public class WebDavFileStorage : IFileStorage
         var doc = new XmlDocument();
         doc.LoadXml(xmlResponse);
         var nsmgr = new XmlNamespaceManager(doc.NameTable);
-        nsmgr.AddNamespace("D", "DAV:");
-        var nodes = doc.DocumentElement.SelectNodes("//D:response", nsmgr);
+        nsmgr.AddNamespace("d", "DAV:");
+        var nodes = doc.DocumentElement.SelectNodes("//d:response", nsmgr);
 
         var files = new List<UserFile>();
         foreach (XmlNode node in nodes)
         {
-            var displayNameNode = node.SelectSingleNode("D:propstat/D:prop/D:displayname", nsmgr);
-            var contentTypeNode = node.SelectSingleNode("D:propstat/D:prop/D:getcontenttype", nsmgr);
-            var contentLengthNode = node.SelectSingleNode("D:propstat/D:prop/D:getcontentlength", nsmgr);
-            var lastModifiedNode = node.SelectSingleNode("D:propstat/D:prop/D:getlastmodified", nsmgr);
+            var displayNameNode = node.SelectSingleNode("d:propstat/d:prop/d:displayname", nsmgr);
+            var contentTypeNode = node.SelectSingleNode("d:propstat/d:prop/d:getcontenttype", nsmgr);
+            var contentLengthNode = node.SelectSingleNode("d:propstat/d:prop/d:getcontentlength", nsmgr);
+            var lastModifiedNode = node.SelectSingleNode("d:propstat/d:prop/d:getlastmodified", nsmgr);
 
             if (displayNameNode == null || string.IsNullOrEmpty(displayNameNode.InnerText))
                 continue;
             
-            var fullPath = CleanFullPath(node.SelectSingleNode("D:href", nsmgr)?.InnerText);
+            var fullPath = CleanFullPath(node.SelectSingleNode("d:href", nsmgr)?.InnerText);
             if (string.IsNullOrWhiteSpace(fullPath) || fullPath == path)
                 continue;
             
@@ -359,7 +447,7 @@ public class WebDavFileStorage : IFileStorage
         try
         {
             var client = GetClient(username, password);
-            var propfindContent = new StringContent("<?xml version=\"1.0\" encoding=\"utf-8\" ?><D:propfind xmlns:D=\"DAV:\"><D:prop><D:displayname/></D:prop></D:propfind>", Encoding.UTF8, "text/xml");
+            var propfindContent = new StringContent("<?xml version=\"1.0\" encoding=\"utf-8\" ?><d:propfind xmlns:d=\"DAV:\"><d:prop><d:displayname/></d:prop></d:propfind>", Encoding.UTF8, "text/xml");
             var response = await client.SendAsync(new HttpRequestMessage(new HttpMethod("PROPFIND"), serverUrl) { Content = propfindContent });
 
             if (response.IsSuccessStatusCode)
@@ -421,10 +509,16 @@ public class WebDavFileStorage : IFileStorage
         if (this.provider?.ToLowerInvariant() == "nextcloud")
         {
             this.renameBase = "/remote.php/dav/files/" + username + "/";
+            this.searchPrefix = "/files/" + username + "/";
+            this.searchUrl = this.baseUrl + "/remote.php/dav/";
+            this.searchWildcard = "%";
         }
         else
         {
             this.renameBase = string.Empty;
+            this.searchUrl = this.serverUrl;
+            this.searchPrefix = string.Empty;
+            this.searchWildcard = "*";
         }
     }
     
@@ -476,11 +570,11 @@ public class WebDavFileStorage : IFileStorage
 
         // Build the PROPFIND request XML.
         string requestXml = $@"<?xml version=""1.0""?>
-        <D:propfind xmlns:D=""DAV:"">
-            <D:prop>
-                <D:resourcetype/>
-            </D:prop>
-        </D:propfind>";
+        <d:propfind xmlns:d=""DAV:"">
+            <d:prop>
+                <d:resourcetype/>
+            </d:prop>
+        </d:propfind>";
 
         // Create a new HttpRequestMessage with the required headers and request XML.
         var request = new HttpRequestMessage(new CustomHttpMethod("PROPFIND"), url);
@@ -490,7 +584,7 @@ public class WebDavFileStorage : IFileStorage
         // Send the request using the configured HttpClient and await the response.
         var response = await client.SendAsync(request);
 
-        // Check if the response indicates the folder exists (a 207 Multi-Status response with a D:collection element).
+        // Check if the response indicates the folder exists (a 207 Multi-Status response with a d:collection element).
         if (response.StatusCode == HttpStatusCode.MultiStatus)
         {
             string responseXml = await response.Content.ReadAsStringAsync();

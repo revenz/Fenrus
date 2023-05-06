@@ -36,6 +36,17 @@ public class LiteDbFileStorage : IFileStorage
     {
         throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// Searches for files matching a search pattern
+    /// </summary>
+    /// <param name="path">the path to perform the search from</param>
+    /// <param name="searchPattern">the searchPatten</param>
+    /// <returns>a list of matching files</returns>
+    public Task<List<UserFile>> SearchFiles(string path, string searchPattern)
+    {
+        throw new NotImplementedException();
+    }
     
     /// <summary>
     /// Gets all the UID for files for a user

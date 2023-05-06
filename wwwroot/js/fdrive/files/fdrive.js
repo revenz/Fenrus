@@ -37,18 +37,23 @@ class FenrusDrive {
         c: "c",
         csharp: "csharp",
         cs: "csharp",
+        csproj: "xml",
+        sln: 'text',
+        user: 'xml',
         dotnet: "markup",
         cpp: "cpp",
         csv: "csv",
         docker: "docker",
         dockerfile: "docker",
+        dockerignore: 'docker',
         json: "json",
         webmanifest: "json",
         sql: "sql",
         typescript: "typescript",
         ts: "typescript",
         yaml: "yaml",
-        yml: "yaml"
+        yml: "yaml",
+        gitignore: 'txt'
     };
     constructor() {
         this.currentFolderInfo = { 
@@ -58,6 +63,9 @@ class FenrusDrive {
         this.container =  document.getElementById('fdrive-list');
         this.currentPath = localStorage.getItem('DRIVE_FOLDER') || '';
         this.addressBar = new AddressBar();
+        this.addressBar.onSearch((path, searchPattern) => {
+            this.reload('/files/search?path=' + encodeURIComponent(path) + '&searchPattern=' + encodeURIComponent(searchPattern));
+        });
         this.addressBar.onClick((path) => {
             this.changeFolder(path);
         })
@@ -379,9 +387,9 @@ class FenrusDrive {
     }
 
 
-    async reload() {
+    async reload(url) {
         try {
-            let url = '/files?path=' + encodeURI(this.currentPath || '');
+            url = url || '/files?path=' + encodeURI(this.currentPath || '');
             const response = await fetch(url);
             const data = await response.json();
             for(let d of data)
@@ -428,17 +436,17 @@ class FenrusDrive {
             })
             header.appendChild(filenameLink);
 
-            const keyDownListener = (event) => {
-                if (event.key === "Escape") {
-                    document.body.removeChild(previewContainer);
-                }
-            };
-
             const close = () => {
                 document.body.removeChild(previewContainer);
                 document.removeEventListener("keydown",keyDownListener);
             }
-            
+            const keyDownListener = (event) => {
+                if (event.key === "Escape") {
+                    close();
+                }
+            };
+
+
             const closeSpan = document.createElement("span");
             closeSpan.classList.add("fdrive-text-preview-close");
             closeSpan.innerHTML = '<i class="fas fa-times"></i>';

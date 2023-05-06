@@ -132,6 +132,8 @@
   .fdrive-sorter {
     display: flex;
     align-items: center;
+    position: relative; 
+    top:-2px;
 
     .toggle-view {
       background: none;

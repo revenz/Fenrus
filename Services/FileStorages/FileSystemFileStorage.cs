@@ -64,6 +64,33 @@ public class FileSystemFileStorage:IFileStorage
             return root;
         return Path.Combine(root, path);
     }
+
+    /// <summary>
+    /// Searches for files matching a search pattern
+    /// </summary>
+    /// <param name="path">the path to perform the search from</param>
+    /// <param name="searchPattern">the searchPatten</param>
+    /// <returns>a list of matching files</returns>
+    public Task<List<UserFile>> SearchFiles(string path, string searchPattern)
+    {
+        string rootPath = GetRootPath();
+        string fullPath = Path.Combine(rootPath, path);
+        if (fullPath.StartsWith(rootPath) == false)
+            throw new ArgumentException("Invalid path provided");
+        
+        
+        // Search for files using the given search pattern in the rootPath and all subdirectories
+        var files = Directory.EnumerateFiles(rootPath, searchPattern, SearchOption.AllDirectories);
+    
+        // Create a UserFile object for each file found and add it to the result list
+        var result = new List<UserFile>();
+        foreach (var file in files)
+        {
+            result.Add(GetUserFile(rootPath, new FileInfo(file)));
+        }
+    
+        return Task.FromResult(result);
+    }
     
     /// <summary>
     /// Gets information for a single file or folder

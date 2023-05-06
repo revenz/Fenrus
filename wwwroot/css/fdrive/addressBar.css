@@ -8,7 +8,7 @@
   height: calc(100% - 12px);
   border-radius: 7px;
 }
-#fdrive-files-address .breadcrumb {
+#fdrive-files-address .address-bar {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -36,15 +36,64 @@
   font-weight: bold;
   color: var(--color);
 }
-#fdrive-files-address .breadcrumb button {
+#fdrive-files-address .address-bar button {
   background-color: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
   text-decoration: underline;
 }
-#fdrive-files-address .breadcrumb button:hover {
+#fdrive-files-address .address-bar button:hover {
   text-decoration: none;
+}
+#fdrive-files-address.searching {
+  display: flex;
+  flex-direction: row;
+}
+#fdrive-files-address.searching i {
+  width: 2rem;
+  opacity: 0.3;
+  padding-top: 0.65rem;
+}
+#fdrive-files-address.searching i.fa-xmark {
+  cursor: pointer;
+}
+#fdrive-files-address.searching i.fa-xmark:hover {
+  opacity: 1;
+}
+#fdrive-files-address.searching .file-search {
+  flex-grow: 1;
+  height: 100%;
+  text-align: left;
+  background: transparent;
+  color: var(--color);
+  border: none;
+  outline: none;
+  direction: ltr;
+  font-size: 0.9rem;
+}
+
+#fdrive-files .btn-file-search {
+  position: absolute;
+  background: var(--base);
+  left: calc(80% - 4px);
+  top: 7px;
+  padding: 0.5rem;
+  border: solid 1px var(--border-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background: none;
+  cursor: pointer;
+  color: rgba(var(--color-rgb), 0.7);
+  display: flex;
+  align-items: center;
+  height: 2rem;
+}
+#fdrive-files .btn-file-search i {
+  opacity: 0.5;
+}
+#fdrive-files .btn-file-search:hover {
+  color: var(--color);
 }
 
 /*# sourceMappingURL=addressBar.css.map */

@@ -108,6 +108,8 @@
 #fdrive-files .fdrive-sorter {
   display: flex;
   align-items: center;
+  position: relative;
+  top: -2px;
 }
 #fdrive-files .fdrive-sorter .toggle-view {
   background: none;

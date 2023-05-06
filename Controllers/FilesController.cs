@@ -27,6 +27,21 @@ public class FilesController : BaseController
     }
     
     /// <summary>
+    /// Searches for files for the user
+    /// </summary>
+    /// <param name="path">the path to execute the search from</param>
+    /// <param name="searchPattern">the search pattern</param>
+    /// <returns>the files</returns>
+    [HttpGet("search")]
+    public async Task<IEnumerable<UserFile>> Search([FromQuery]string path, [FromQuery] string searchPattern)
+    {
+        var userUid = User.GetUserUid();
+        if (userUid == null)
+            throw new UnauthorizedAccessException();
+        return await IFileStorage.GetService(userUid.Value).SearchFiles(path ?? string.Empty, searchPattern);
+    }
+
+    /// <summary>
     /// Gets a media file for the user
     /// </summary>
     /// <param name="path">The full path of the file</param>
