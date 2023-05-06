@@ -1,0 +1,60 @@
+#fdrive-list.grid {
+  .check {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+  }
+  .file {
+  }
+  .file-inner {
+    position:relative;
+    overflow: hidden;
+    margin:0.25rem;
+    padding:0.25rem;
+    width:calc(100% - 1rem);
+    height:calc(100% - 1rem);
+    border-radius:0.5rem;
+  }
+  .size {
+    display:none;
+  }
+  .enter {
+    display:none;
+  }
+  .file.folder {
+    cursor:pointer;
+    .download {
+      display:none !important;
+    }
+  }
+  .name {
+    text-align: center;
+    word-break: break-all;
+    display: block;
+    font-size:0.9rem;
+    height: calc(45% - 0.5rem);
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .icon {
+    width: calc(100% - 2rem);
+    padding:0 1rem 0.25rem;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    img {
+      border-radius: 0.25rem;
+      object-fit: contain;
+    }
+    i {
+      font-size:10rem;
+    }
+  }
+
+  .controls {
+    display: none;
+  }
+  .download {
+    display:none;
+  }
+}

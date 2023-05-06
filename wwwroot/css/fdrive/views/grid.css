@@ -1,0 +1,57 @@
+#fdrive-list.grid .check {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+#fdrive-list.grid .file-inner {
+  position: relative;
+  overflow: hidden;
+  margin: 0.25rem;
+  padding: 0.25rem;
+  width: calc(100% - 1rem);
+  height: calc(100% - 1rem);
+  border-radius: 0.5rem;
+}
+#fdrive-list.grid .size {
+  display: none;
+}
+#fdrive-list.grid .enter {
+  display: none;
+}
+#fdrive-list.grid .file.folder {
+  cursor: pointer;
+}
+#fdrive-list.grid .file.folder .download {
+  display: none !important;
+}
+#fdrive-list.grid .name {
+  text-align: center;
+  word-break: break-all;
+  display: block;
+  font-size: 0.9rem;
+  height: calc(45% - 0.5rem);
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#fdrive-list.grid .icon {
+  width: calc(100% - 2rem);
+  padding: 0 1rem 0.25rem;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+}
+#fdrive-list.grid .icon img {
+  border-radius: 0.25rem;
+  object-fit: contain;
+}
+#fdrive-list.grid .icon i {
+  font-size: 10rem;
+}
+#fdrive-list.grid .controls {
+  display: none;
+}
+#fdrive-list.grid .download {
+  display: none;
+}
+
+/*# sourceMappingURL=grid.css.map */

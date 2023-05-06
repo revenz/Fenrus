@@ -54,7 +54,7 @@ function modalMessage(title, message) {
         });
     });
 }
-function modalPrompt(title, message) {
+function modalPrompt(title, message, value, validator) {
     return new Promise((resolve, reject) => {
         let modal = document.createElement('div');
         modal.innerHTML = '<div class="background-overlay fenrus-modal-background-overlay" />' +
@@ -66,6 +66,14 @@ function modalPrompt(title, message) {
             '<button class="btn confirm-cancel"></button>' +
             '</div>'
         '</div>';
+        if(validator && typeof(validator) === 'object'){
+            validator = (_v) => {
+                if(validator.test(_v))
+                    return true;
+                Toast.error('Error', 'Invalid input');
+                return false;                
+            } 
+        }
         modal.querySelector('.confirm-ok').innerText = Translations.Ok;
         modal.querySelector('.confirm-cancel').innerText = Translations.Cancel;
         document.body.append(modal);
@@ -74,6 +82,8 @@ function modalPrompt(title, message) {
         modal.querySelector('.fenrus-modal-body .message').innerText = message;
         let input = modal.querySelector('.fenrus-modal-body input');
         input.focus();
+        if(value)
+            input.value = value;
         let btnOk = modal.querySelector('.confirm-ok');
         input.addEventListener('keydown', (event) => {
             if(event.key === 'Enter')
@@ -84,6 +94,8 @@ function modalPrompt(title, message) {
             event.preventDefault();
             let value = input.value.trim();
             if(!value)
+                return;
+            if(validator && !validator(value))
                 return;
             modal.remove();
             resolve(value);

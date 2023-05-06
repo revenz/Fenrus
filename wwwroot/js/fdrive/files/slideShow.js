@@ -12,20 +12,13 @@ class SlideShow
     }
     open(files, startElement) 
     {
-        let images = files.filter(x => x.classList.contains('image'));
-        if(!images || images.length < 1)
+        this.images = files.filter(x => x.mimeType.startsWith('image'));
+        if(!this.images || this.images.length < 1)
             return;
         
-        this.index = images.indexOf(startElement);
+        this.index = this.images.indexOf(startElement);
         if(this.index < 0)
             return;
-        this.items = images.map((x) => {
-            return {
-                url: x.querySelector('img.media').getAttribute('data-src'),
-                name: x.querySelector('.name').innerText,
-                size: x.querySelector('.size').innerText
-            };
-        })
         document.addEventListener('keydown', this.onKeyDown);
         this.createDomElements();
     }
@@ -39,21 +32,21 @@ class SlideShow
     {
         this.index--;
         if (this.index < 0) {
-            this.index = this.items.length - 1;
+            this.index = this.images.length - 1;
         }
         this.initImage();
     }
     nextImage() {
         this.index++;
-        if (this.index >= this.items.length) {
+        if (this.index >= this.images.length) {
             this.index = 0;
         }
         this.initImage();
     }
     
     initImage(){
-        let img = this.items[this.index];
-        this.image.src = img.url;
+        let img = this.images[this.index];
+        this.image.src = 'files/media?path=' + encodeURIComponent(img.fullPath);
         this.filename.textContent = img.name;        
     }
 

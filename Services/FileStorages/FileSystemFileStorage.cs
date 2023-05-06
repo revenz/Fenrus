@@ -66,6 +66,48 @@ public class FileSystemFileStorage:IFileStorage
     }
     
     /// <summary>
+    /// Gets information for a single file or folder
+    /// </summary>
+    /// <param name="path">the file of the file or folder</param>
+    /// <returns>the info</returns>
+    public Task<UserFile?> GetFile(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return Task.FromResult<UserFile?>(null);
+        path = path.Replace("\\", "/");
+        if (path.Contains("../"))
+            return Task.FromResult<UserFile?>(null);
+
+        string root = GetRootPath();
+        string fulLName = Path.Combine(root, path);
+        if (File.Exists(fulLName))
+        {
+            var fileInfo = new FileInfo(fulLName);
+            if (fileInfo.FullName.StartsWith(root) == false)
+                return Task.FromResult<UserFile?>(null);
+            return Task.FromResult<UserFile?>(GetUserFile(root, fileInfo));
+        }
+        if (Directory.Exists(fulLName))
+        {
+            var dirInfo = new DirectoryInfo(fulLName);
+            if (dirInfo.FullName.StartsWith(root) == false)
+                return Task.FromResult<UserFile?>(null);
+            return Task.FromResult<UserFile?>(
+                new UserFile()
+                {
+                    Created = dirInfo.CreationTimeUtc,
+                    MimeType = "folder",
+                    Extension = string.Empty,
+                    FullPath = dirInfo.FullName.Substring(root.Length + 1),
+                    Name = dirInfo.Name,
+                    Size = 0 // we could calculate this, but lets not
+                });
+        }
+
+        return Task.FromResult<UserFile?>(null);
+    }
+    
+    /// <summary>
     /// Gets all the UID for files for a user
     /// </summary>
     /// <param name="path">the users folder path to get</param>
@@ -228,6 +270,18 @@ public class FileSystemFileStorage:IFileStorage
         {
         }
 
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Renames a file or folder
+    /// </summary>
+    /// <param name="path">the full path to the file or folder</param>
+    /// <param name="dest">the new full path for the file or folder</param>
+    /// <returns>an awaited task</returns>
+    public Task Rename(string path, string dest)
+    {
+        File.Move(path, Path.Combine(GetRootPath(), dest));
         return Task.CompletedTask;
     }
 }

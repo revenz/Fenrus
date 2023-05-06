@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Web;
 using System.Xml;
@@ -17,6 +18,7 @@ public class WebDavFileStorage : IFileStorage
     private string serverUrl;
     private string username;
     private string password;
+    private string renameBase = string.Empty;
     private HttpClient client;
 
     public WebDavFileStorage(string provider, string url, string username, string password)
@@ -25,7 +27,7 @@ public class WebDavFileStorage : IFileStorage
         this.provider = provider;
         this.username = username;
         this.password = password;
-        this.serverUrl = GetServerUrl(provider, url, username, password);
+        InitializeProvider();
         this.client = GetClient(username, password);
     }
 
@@ -35,6 +37,61 @@ public class WebDavFileStorage : IFileStorage
         var client = new HttpClient();
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
         return client;
+    }
+
+    /// <summary>
+    /// Gets information for a single file or folder
+    /// </summary>
+    /// <param name="path">the file of the file or folder</param>
+    /// <returns>the info</returns>
+    public async Task<UserFile?> GetFile(string path)
+    {
+        // Build the WebDAV request message
+        var request = new HttpRequestMessage(new HttpMethod("PROPFIND"), serverUrl + "/" + path);
+        request.Content =
+            new StringContent(
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?><D:propfind xmlns:D=\"DAV:\"><D:prop><D:getlastmodified/><D:getcontenttype/><D:getcontentlength/></D:prop></D:propfind>");
+        request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/xml");
+
+        // Send the WebDAV request and await the response
+        var response = await client.SendAsync(request);
+
+        // Parse the WebDAV response XML and extract the file info
+        if (response.IsSuccessStatusCode == false)
+        {
+
+        }
+        var userFile = new UserFile()
+        {
+            FullPath = path,
+            Name = new FileInfo(path).Name,
+        };
+        
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var doc = new XmlDocument();
+        doc.LoadXml(responseContent);
+        var ns = new XmlNamespaceManager(doc.NameTable);
+        ns.AddNamespace("D", "DAV:");
+        var lastModifiedNode = doc.SelectSingleNode("//D:getlastmodified", ns);
+        var contentTypeNode = doc.SelectSingleNode("//D:getcontenttype", ns);
+        var contentLengthNode = doc.SelectSingleNode("//D:getcontentlength", ns);
+        
+        if(DateTime.TryParse(lastModifiedNode?.InnerText ?? string.Empty, out DateTime createdUtc))
+            userFile.Created = createdUtc;
+
+        userFile.MimeType = contentTypeNode?.InnerText ?? string.Empty;
+        if (long.TryParse(contentLengthNode?.InnerText ?? string.Empty, out var size))
+            userFile.Size = size;
+
+        var isFolder = path.EndsWith("/") || path.EndsWith("\\");
+        if (isFolder)
+            userFile.MimeType = "folder";
+        else
+        {
+            userFile.Extension = new FileInfo(path)?.Extension?.TrimStart('.') ?? string.Empty;
+        }
+
+        return userFile;
     }
 
 
@@ -55,7 +112,7 @@ public class WebDavFileStorage : IFileStorage
         string url = serverUrl;
         if (!String.IsNullOrEmpty(folder))
         {
-            url += "/" + folder;
+            url += "/" + Uri.EscapeDataString(folder);
         }
 
         var propfindContent = new StringContent(
@@ -124,7 +181,7 @@ public class WebDavFileStorage : IFileStorage
         if(string.IsNullOrWhiteSpace(fullPath))
             return null;
 
-        string url = serverUrl + "/" + fullPath + "?x=thumbnail";
+        string url = serverUrl + "/" + Uri.EscapeDataString(fullPath) + "?x=thumbnail";
         var response = await client.GetAsync(url);
         if (response.IsSuccessStatusCode == false)
             return null;
@@ -182,7 +239,7 @@ public class WebDavFileStorage : IFileStorage
                 await CreateFolder(path);
             }
         }
-        string url = $"{serverUrl}/{path}/{filename}";
+        string url = $"{serverUrl}/{Uri.EscapeDataString(path)}/{Uri.EscapeDataString(filename)}";
 
         // Create a new HttpRequestMessage with the PUT method and URL
         var request = new HttpRequestMessage(HttpMethod.Put, url);
@@ -220,7 +277,7 @@ public class WebDavFileStorage : IFileStorage
     /// <returns>true if the files no longer exists afterwards</returns>
     public async Task<bool> Delete(string fullPath)
     {
-        string requestUrl = serverUrl + "/" + fullPath;
+        string requestUrl = serverUrl + "/" + Uri.EscapeDataString(fullPath);
         var request = new HttpRequestMessage(HttpMethod.Delete, requestUrl);
     
         try
@@ -263,7 +320,30 @@ public class WebDavFileStorage : IFileStorage
         if (wdr.Error)
             throw new Exception(wdr.ErrorMessage);
     }
-    
+
+    /// <summary>
+    /// Renames a file or folder
+    /// </summary>
+    /// <param name="path">the full path to the file or folder</param>
+    /// <param name="dest">the new full path for the file or folder</param>
+    /// <returns>an awaited task</returns>
+    public async Task Rename(string path, string dest)
+    {
+        // Set up the request message with the appropriate method and headers
+        var request = new HttpRequestMessage(new CustomHttpMethod("MOVE"), serverUrl + "/" + path);
+        request.Headers.Add("Destination", this.renameBase + dest);
+        request.Headers.Add("Overwrite", "F"); // prevents overwriting an existing item with the same name
+
+        // Send the request using the preconfigured HttpClient
+        var response = await client.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+            return; 
+        
+        string body = await response.Content.ReadAsStringAsync();
+        var wdr = ParseWebDavResponse(body);
+        throw new Exception(wdr.ErrorMessage?.EmptyAsNull() ?? "Failed to rename");
+    }
+
 
     /// <summary>
     /// Tests a file storage connection
@@ -332,6 +412,20 @@ public class WebDavFileStorage : IFileStorage
         }
 
         return serverUrl + "/" + path;
+    }
+
+
+    private void InitializeProvider()
+    {
+        this.serverUrl = GetServerUrl(provider, baseUrl, username, password);
+        if (this.provider?.ToLowerInvariant() == "nextcloud")
+        {
+            this.renameBase = "/remote.php/dav/files/" + username + "/";
+        }
+        else
+        {
+            this.renameBase = string.Empty;
+        }
     }
     
     private static string GetServerUrl(string provider, string url, string username, string password)

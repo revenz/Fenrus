@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Fenrus.Models;
 using Fenrus.Services.FileStorages;
 using Microsoft.AspNetCore.Mvc;
@@ -117,6 +118,53 @@ public class FilesController : BaseController
             return null;
         }
     }
+
+    /// <summary>
+    /// Renames a file or folder
+    /// </summary>
+    /// <param name="model">rename model</param>
+    /// <returns>true if successfully renamed</returns>
+    [HttpPut("rename")]
+    public async Task<IActionResult> Rename([FromBody] RenameModel model)
+    {
+        var uid = User.GetUserUid();
+        if (uid == null)
+            throw new UnauthorizedAccessException();
+        string path = model.Path;
+        string newName = model.NewName;
+
+        path = path.Replace("\\", "/");
+        
+        if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(newName))
+            throw new Exception("Invalid data");
+        if (path.Contains("../"))
+            throw new Exception("Invalid data");
+        if(Regex.IsMatch(newName, "^[^<>:\"/\\\\|?*\\x00-\\x1F\\x7F]+$") == false)
+            throw new Exception("Invalid data");
+
+
+        var dest = path;
+        if (dest.EndsWith("/"))
+            dest = dest[..^1];
+        if (dest.LastIndexOf("/") > 0)
+            dest = dest.Substring(0, dest.LastIndexOf("/") + 1) + newName; 
+        else
+            dest = newName;
+        
+        var service = IFileStorage.GetService(uid.Value);
+        try
+        {
+            await service.Rename(path, dest);
+            var item = await service.GetFile(dest);
+            return Ok(item);
+        }
+        catch (Exception ex)
+        {
+            // can throw if aborted
+            return BadRequest(ex.Message);
+        }
+        
+    }
     /// <summary>
     /// Deletes files
     /// </summary>
@@ -167,5 +215,20 @@ public class FilesController : BaseController
         /// Gets or sets files to delete
         /// </summary>
         public List<string> Files { get; init; }
+    }
+
+    /// <summary>
+    /// Model for the rename action
+    /// </summary>
+    public class RenameModel
+    {
+        /// <summary>
+        /// Gets the path of the original file or folder
+        /// </summary>
+        public string Path { get; init; }
+        /// <summary>
+        /// Gets the new name of the file or folder
+        /// </summary>
+        public string NewName { get; init; }
     }
 }

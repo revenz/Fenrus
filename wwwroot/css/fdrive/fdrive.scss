@@ -3,7 +3,7 @@ $notesMediaScreenSize: 1000px;
 
 #fdrive-wrapper
 {
-  position: relative;
+  position: relative;  
   &.init-done {    
     transition: width 0.5s ease-in-out,
                 min-width 0.5s ease-in-out;
@@ -141,7 +141,7 @@ $notesMediaScreenSize: 1000px;
     }
   }
   .content {
-    width:100%;
+    width:calc(100% - 0.5rem);
     height: calc(100% - 3rem);
     min-height: calc(100% - 3rem);
     overflow: auto;
@@ -178,57 +178,62 @@ $notesMediaScreenSize: 1000px;
     }
   }
 
-  .media {
-    position:relative;
-    transition: opacity 0.25s ease-in-out;
-    .controls {
-      position:absolute;
-      bottom:4rem;
-      left:1rem;
-      font-size:2rem;
-      display:none;
-      > i {
-        cursor: pointer;
-        position:absolute;
-      }
-      .delete {
-        left: 0.85rem;
-        top: 0.7rem;
-        color: rgba(var(--color-rgb), 0.8);
-      }
-      .fa-circle {
-        color: rgba(var(--accent-rgb), 0.3);
-        font-size:3.5rem;
-      }
-      &:hover {
-        .delete {
-          color: var(--color);
-        }
-        .fa-circle {
-          color: rgba(var(--accent-rgb), 0.7);
-        }
-      }
+  .fdrive-modes {
+    height: calc(100% - 3rem);
+    .fdrive-pane-title {
+      height:3rem;
     }
-    &:hover {
-      .controls {
-        display: unset;
-      }
+    > div {
+      height:100%;
     }
-  }
-  .media:hover {
-    opacity: 1;
+     > div:not(.visible) {
+       display:none !important;
+     }
   }
 }
 
-.fdrive-modes {
-  height: calc(100% - 3rem);
-  .fdrive-pane-title {
-    height:3rem;
+
+
+
+
+
+.media {
+  position:relative;
+  transition: opacity 0.25s ease-in-out;
+  .controls {
+    position:absolute;
+    bottom:4rem;
+    left:1rem;
+    font-size:2rem;
+    display:none;
+    > i {
+      cursor: pointer;
+      position:absolute;
+    }
+    .delete {
+      left: 0.85rem;
+      top: 0.7rem;
+      color: rgba(var(--color-rgb), 0.8);
+    }
+    .fa-circle {
+      color: rgba(var(--accent-rgb), 0.3);
+      font-size:3.5rem;
+    }
+    &:hover {
+      .delete {
+        color: var(--color);
+      }
+      .fa-circle {
+        color: rgba(var(--accent-rgb), 0.7);
+      }
+    }
   }
-  > div {
-    height:100%;
+  &:hover {
+    .controls {
+      display: unset;
+    }
   }
-   > div:not(.visible) {
-     display:none !important;
-   }
+}
+.media:hover {
+  opacity: 1;
 }

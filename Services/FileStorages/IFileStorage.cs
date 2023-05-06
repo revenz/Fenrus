@@ -7,6 +7,14 @@ namespace Fenrus.Services.FileStorages;
 /// </summary>
 public interface IFileStorage
 {
+
+    /// <summary>
+    /// Gets information for a single file or folder
+    /// </summary>
+    /// <param name="path">the file of the file or folder</param>
+    /// <returns>the info</returns>
+    Task<UserFile?> GetFile(string path);
+    
     /// <summary>
     /// Gets all the UID for files for a user
     /// </summary>
@@ -50,9 +58,15 @@ public interface IFileStorage
     /// </summary>
     /// <param name="path">the full path of the file</param>
     Task CreateFolder(string path);
-    
-    
-    
+
+    /// <summary>
+    /// Renames a file or folder
+    /// </summary>
+    /// <param name="path">the full path to the file or folder</param>
+    /// <param name="dest">the new full path for the file or folder</param>
+    /// <returns>an awaited task</returns>
+    Task Rename(string path, string dest);
+
 
     /// <summary>
     /// Gets the file storage service to use for a user

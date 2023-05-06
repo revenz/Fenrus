@@ -25,6 +25,17 @@ public class LiteDbFileStorage : IFileStorage
     {
         this.UserUid = userUid;
     }
+
+
+    /// <summary>
+    /// Gets information for a single file or folder
+    /// </summary>
+    /// <param name="path">the file of the file or folder</param>
+    /// <returns>the info</returns>
+    public Task<UserFile?> GetFile(string path)
+    {
+        throw new NotImplementedException();
+    }
     
     /// <summary>
     /// Gets all the UID for files for a user
@@ -261,5 +272,16 @@ public class LiteDbFileStorage : IFileStorage
         var db = DbHelper.GetDb();
         db.FileStorage.Upload(fileUid, ".", new MemoryStream(new byte[] { }));
         return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Renames a file or folder
+    /// </summary>
+    /// <param name="path">the full path to the file or folder</param>
+    /// <param name="dest">the new full path for the file or folder</param>
+    /// <returns>an awaited task</returns>
+    public Task Rename(string path, string dest)
+    {
+        throw new NotImplementedException();
     }
 }

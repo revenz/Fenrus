@@ -24,19 +24,13 @@
             <div id="fdrive-files">
                 <div class="fdrive-pane-title">
                     <div id="fdrive-files-address"></div>
-                    <div class="view-mode">
-                        <i class="fa-solid fa-trash" onclick="fDrive.deleteFiles()"></i>
-                        <i class="view-list fa-solid fa-list" onclick="fDrive.changeView('list')"></i>
-                        <i class="view-thumbnail fa-solid fa-table-cells-large" onclick="fDrive.changeView('thumbnail')"></i>
-                    </div>
+                    <div class="toolbar"></div>
                 </div>
                 <div class="content" id="fdrive-list">
                 </div>
                 <div class="fdrive-add-button">
                     <ul id="fdrive-add-menu">
                         <li onclick="fDrive.add('folder')"><i class="fa-solid fa-folder-plus"></i>New Folder</li>
-                        <li class="separator"></li>
-                        <li onclick="fDrive.add('note')"><i class="fa-regular fa-file-lines"></i>New Note</li>
                         <li class="separator"></li>
                         <li onclick="fDrive.add('upload')"><i class="fa-solid fa-upload"></i>Upload File</li>
                     </ul>

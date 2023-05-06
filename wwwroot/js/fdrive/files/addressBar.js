@@ -31,11 +31,10 @@ class AddressBar {
                 fullPath += folder + "/";
 
             const button = document.createElement("button");
-            if(i === 0){
+            if(i === 0)
                 button.innerHTML = 'Home <i class="fa-solid fa-house"></i>';   
-            }else {
-                button.textContent = folder;
-            }
+            else
+                button.textContent = folder.startsWith('.') ? folder.substring(1) + '.' : folder;
             let itemPath = fullPath;
             button.onclick = () => this.handleFolderClick(itemPath);
             items.push(button);

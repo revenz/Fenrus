@@ -122,7 +122,7 @@
   left: 1px;
 }
 #fdrive-wrapper .content {
-  width: 100%;
+  width: calc(100% - 0.5rem);
   height: calc(100% - 3rem);
   min-height: calc(100% - 3rem);
   overflow: auto;
@@ -160,54 +160,55 @@
   opacity: 1;
   background: unset;
 }
-#fdrive-wrapper .media {
+#fdrive-wrapper .fdrive-modes {
+  height: calc(100% - 3rem);
+}
+#fdrive-wrapper .fdrive-modes .fdrive-pane-title {
+  height: 3rem;
+}
+#fdrive-wrapper .fdrive-modes > div {
+  height: 100%;
+}
+#fdrive-wrapper .fdrive-modes > div:not(.visible) {
+  display: none !important;
+}
+
+.media {
   position: relative;
   transition: opacity 0.25s ease-in-out;
 }
-#fdrive-wrapper .media .controls {
+.media .controls {
   position: absolute;
   bottom: 4rem;
   left: 1rem;
   font-size: 2rem;
   display: none;
 }
-#fdrive-wrapper .media .controls > i {
+.media .controls > i {
   cursor: pointer;
   position: absolute;
 }
-#fdrive-wrapper .media .controls .delete {
+.media .controls .delete {
   left: 0.85rem;
   top: 0.7rem;
   color: rgba(var(--color-rgb), 0.8);
 }
-#fdrive-wrapper .media .controls .fa-circle {
+.media .controls .fa-circle {
   color: rgba(var(--accent-rgb), 0.3);
   font-size: 3.5rem;
 }
-#fdrive-wrapper .media .controls:hover .delete {
+.media .controls:hover .delete {
   color: var(--color);
 }
-#fdrive-wrapper .media .controls:hover .fa-circle {
+.media .controls:hover .fa-circle {
   color: rgba(var(--accent-rgb), 0.7);
 }
-#fdrive-wrapper .media:hover .controls {
+.media:hover .controls {
   display: unset;
 }
-#fdrive-wrapper .media:hover {
-  opacity: 1;
-}
 
-.fdrive-modes {
-  height: calc(100% - 3rem);
-}
-.fdrive-modes .fdrive-pane-title {
-  height: 3rem;
-}
-.fdrive-modes > div {
-  height: 100%;
-}
-.fdrive-modes > div:not(.visible) {
-  display: none !important;
+.media:hover {
+  opacity: 1;
 }
 
 /*# sourceMappingURL=fdrive.css.map */
