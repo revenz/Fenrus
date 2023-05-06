@@ -13,9 +13,11 @@ class FileList{
                 this.virtualizeList.changeLayout(view.columns, view.height);
         });
 
+        this.container.addEventListener('contextmenu', (event) => this.onContextMenu(event));
         this.container.addEventListener('mousedown', (e) => {
             //if (!fDriveDrawer.isFiles) return;
-            this.containerOnMouseDown(e);
+            if(e.button === 0) // only want left click button
+                this.containerOnMouseDown(e);
         });
         this.container.tabIndex = 0;
         this.container.style.outline = 'none';
@@ -31,7 +33,6 @@ class FileList{
                     if(index < 0)
                         return;
                     let item = this.items[index];
-                    console.log('item', item);
                     this.onRenameAction(item);
                 }
             }
@@ -162,21 +163,13 @@ class FileList{
             });
     }
 
-    onFileDblClick(action){
-        this.onFileDblClickAction = action;
-    }
-    onFolderDblClick(action){
-        this.onFolderDblClickAction = action;
-    }
-    onFileDownload(action) {
-        this.onFileDownloadAction = action;
-    }
-    onRename(action) {
-        this.onRenameAction = action;
-    }
-    onDelete(action)     {
-        this.onDeleteAction = action;
-    }
+    onFileDblClick(action){ this.onFileDblClickAction = action; }
+    onFolderDblClick(action){ this.onFolderDblClickAction = action; }
+    onFileDownload(action) { this.onFileDownloadAction = action; }
+    onUpload(action) { this.onUploadAction = action; }
+    onNewFolder(action) { this.onNewFolderAction = action; }
+    onRename(action) { this.onRenameAction = action; }
+    onDelete(action)     { this.onDeleteAction = action; }
 
 
 
@@ -185,6 +178,8 @@ class FileList{
             return;
         let count = 0;
         this.virtualizeList.startBulkUpdates();
+        const accentColor = getComputedStyle(document.body).getPropertyValue('--accent');
+        console.log('accentColor', accentColor);
         for (let item of items) {
             let ele = this.eleItems[item.fullPath];
             if(!ele) {
@@ -193,14 +188,7 @@ class FileList{
                 ele.className += ' ' + item.mimeType;
                 ele.setAttribute('x-uid', item.fullPath);
                 ele.querySelector('.name').innerText = item.name;
-                ele.querySelector('.enter').addEventListener('click', (e) => {
-                    if (item.mimeType === 'folder') {
-                        this.onFolderDblClickAction(item);
-                    }
-                })
-                ele.querySelector('.download').addEventListener('click', (e) => {
-                    this.onFileDownloadAction(item);
-                })
+                ele.querySelector('.modified').innerText = this.formatDate(item.modified)
                 if (item.mimeType.startsWith('image')) {
                     let img = ele.querySelector('img');
                     img.className = 'media';
@@ -218,7 +206,7 @@ class FileList{
                     if (this.fileTypeIcons.indexOf(extension) >= 0)
                         ele.querySelector('.icon').innerHTML = `<img src="images/filetypes/${extension}.svg" />`;
                     else if (item.mimeType === 'folder')
-                        ele.querySelector('.icon').innerHTML = `<img src="images/filetypes/folder.svg" />`;
+                        ele.querySelector('.icon').innerHTML = `<img src="images/folder-accent.svg?color=${encodeURIComponent(accentColor)}" />`; // `<img src="images/filetypes/folder.svg" />`;
                     else
                         ele.querySelector('.icon').innerHTML = `<img src="images/filetypes/blank.svg" />`;
 
@@ -242,6 +230,29 @@ class FileList{
         this.virtualizeList.completeUpdates();
     }
     
+    formatDate(date) {
+        if(!date?.getTime)
+            return ''; // not a date object
+        
+        const now = new Date();
+        const isThisYear = date.getFullYear() === now.getFullYear();
+        const isToday = date.toDateString() === now.toDateString();
+        const isYesterday = date.toDateString() === new Date(now - 24 * 60 * 60 * 1000).toDateString();
+
+        let formattedDate = '';
+        if (isToday) {
+            formattedDate = date.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'});
+        } else if (isYesterday) {
+            formattedDate = 'Yesterday';
+        } else {
+            formattedDate = `${date.getDate()} ${date.toLocaleString('default', {month: 'short'})}`;
+            if (!isThisYear) {
+                formattedDate += ` ${date.getFullYear()}`;
+            }
+        }
+
+        return formattedDate;
+    }
 
     createElement() {
         let ele = document.createElement('div');
@@ -250,8 +261,7 @@ class FileList{
             '<span class="icon"><img /></span>' +
             '<span class="name"></span>' +
             '<span class="size"></span>' +
-            '<span class="enter"><i class="fa-solid fa-chevron-right"></i></span>' +
-            '<span class="download"><i class="fa-solid fa-download"></i></span>' +
+            '<span class="modified"></span>' +
             '</div>';
         return ele;
     }
@@ -370,6 +380,82 @@ class FileList{
     }
 
 
+
+    onContextMenu(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        const path = event.composedPath();
+        const fileElement = path.find(element => element.classList?.contains('file'));
+        let selected = this.getSelectedUids();
+        if (fileElement) {
+            let uid = fileElement.getAttribute('x-uid');
+            if(selected.indexOf(uid) < 0) {
+                this.setSelected([fileElement], false);
+                selected = [uid];
+            }
+        }
+        let menuItems = [];
+        let item = null;
+        if(selected.length === 1) {
+            let index = this.items.findIndex(x => x.fullPath === selected[0]);
+            item = index < 0 ? null : this.items[index];
+        }           
+
+        menuItems.push(
+        {
+            divider: 'bottom',
+            content: `<i class="fa-solid fa-folder-plus"></i>&nbsp;&nbsp;New Folder`,
+            events: {
+                click: (e) => this.onNewFolderAction()
+            }
+        });
+        if(item)
+        {
+            menuItems.push(
+            {
+                content: `<i class="fa-solid fa-pencil-alt"></i>&nbsp;&nbsp;Rename`,
+                events: {
+                    click: (e) => this.onRenameAction(item)
+                }
+            });
+            
+        }
+        
+        if(selected.length > 0) 
+        {
+            menuItems.push(
+            {
+                divider: 'bottom',
+                content: `<i class="fa-solid fa-trash"></i>&nbsp;&nbsp;Delete`,
+                events: {
+                    click: (e) => this.onDeleteAction(selected)
+                }
+            });
+        }
+        
+        if(item && item.mimeType !== 'folder')
+        {
+            menuItems.push(
+            {
+                content: `<i class="fa-solid fa-download"></i>&nbsp;&nbsp;Download`,
+                events: {
+                    click: (e) => this.onFileDownloadAction(item)
+                }
+            });
+        }
+        menuItems.push(
+        {
+            content: `<i class="fa-solid fa-upload"></i>&nbsp;&nbsp;Upload`,
+            events: {
+                click: (e) => this.onUploadAction()
+            }
+        });        
+
+        let menu = new ContextMenu({ menuItems });
+        menu.init();
+        menu.open(event);
+    }
 
 
 

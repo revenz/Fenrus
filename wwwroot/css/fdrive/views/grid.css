@@ -12,17 +12,11 @@
   height: calc(100% - 1rem);
   border-radius: 0.5rem;
 }
-#fdrive-list.grid .size {
-  display: none;
-}
-#fdrive-list.grid .enter {
+#fdrive-list.grid .size, #fdrive-list.grid .modified {
   display: none;
 }
 #fdrive-list.grid .file.folder {
   cursor: pointer;
-}
-#fdrive-list.grid .file.folder .download {
-  display: none !important;
 }
 #fdrive-list.grid .name {
   text-align: center;
@@ -46,12 +40,6 @@
 }
 #fdrive-list.grid .icon i {
   font-size: 10rem;
-}
-#fdrive-list.grid .controls {
-  display: none;
-}
-#fdrive-list.grid .download {
-  display: none;
 }
 
 /*# sourceMappingURL=grid.css.map */

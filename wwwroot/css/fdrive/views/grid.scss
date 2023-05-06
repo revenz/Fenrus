@@ -15,17 +15,11 @@
     height:calc(100% - 1rem);
     border-radius:0.5rem;
   }
-  .size {
-    display:none;
-  }
-  .enter {
+  .size, .modified {
     display:none;
   }
   .file.folder {
     cursor:pointer;
-    .download {
-      display:none !important;
-    }
   }
   .name {
     text-align: center;
@@ -49,12 +43,5 @@
     i {
       font-size:10rem;
     }
-  }
-
-  .controls {
-    display: none;
-  }
-  .download {
-    display:none;
   }
 }

@@ -80,6 +80,8 @@ class FenrusDrive {
         this.fileList.onFolderDblClick((folder) => {
             this.changeFolder(folder.fullPath);
         })
+        this.fileList.onNewFolder(() => this.add('folder'));
+        this.fileList.onUpload(() => this.add('upload'));
         this.fileList.onFileDblClick((file) =>
         {   
             if(file.mimeType.startsWith('image')) {
@@ -396,6 +398,8 @@ class FenrusDrive {
             {
                 if(typeof(d.created) === 'string')
                     d.created = new Date(d.created);
+                if(typeof(d.modified) === 'string')
+                    d.modified = new Date(d.modified);
             }
             this.fileList.setItems(data);
             this.lastReload = new Date();

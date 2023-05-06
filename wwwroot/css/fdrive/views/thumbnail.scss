@@ -1,14 +1,9 @@
 #fdrive-list.thumbnail {
-  .check {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-  }
   .file {
     height:240px;
     position:relative;
   }
-  .size {
+  .size, .modified {
     display:none;
   }
   .file.no-img {
@@ -19,21 +14,8 @@
       display: unset !important;
     }
   }
-  .enter {
-    display:none;
-  }
   .file.folder {
     cursor:pointer;
-    .enter {
-      position: absolute;
-      right: 1.5rem;
-      top: 1.5rem;
-      font-size: 2rem;
-      cursor:pointer;
-    }
-    .download {
-      display:none !important;
-    }
   }
   .name {
     position:absolute;
@@ -63,61 +45,10 @@
   position: relative;
   transition: opacity 0.25s ease-in-out;
 
-  .controls {
-    position: absolute;
-    bottom: 4rem;
-    left: 1rem;
-    font-size: 2rem;
-    display: none;
-
-    > i {
-      cursor: pointer;
-      position: absolute;
-    }
-
-    .delete {
-      left: 0.85rem;
-      top: 0.7rem;
-      color: rgba(var(--color-rgb), 0.8);
-    }
-
-    .fa-circle {
-      color: rgba(var(--accent-rgb), 0.3);
-      font-size: 3.5rem;
-    }
-
-    &:hover {
-      .delete {
-        color: var(--color);
-      }
-
-      .fa-circle {
-        color: rgba(var(--accent-rgb), 0.7);
-      }
-    }
-  }
-
-  .download {
-    display:none;
-  }
-  &:hover {
-    .controls {
-      display: unset;
-    }
-  }
-
   .file:hover {
     opacity: 1;
     .name {
       display:unset;
-    }
-    .download {
-      position: absolute;
-      font-size: 1rem;
-      cursor:pointer;
-      right: .75rem;
-      bottom: .25rem;
-      display: unset;
     }
   }
 }

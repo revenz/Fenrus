@@ -1,0 +1,53 @@
+#fdrive-list.thumbnail {
+  position: relative;
+  transition: opacity 0.25s ease-in-out;
+}
+#fdrive-list.thumbnail .file {
+  height: 240px;
+  position: relative;
+}
+#fdrive-list.thumbnail .size, #fdrive-list.thumbnail .modified {
+  display: none;
+}
+#fdrive-list.thumbnail .file.no-img .icon {
+  background: #222;
+}
+#fdrive-list.thumbnail .file.no-img .name {
+  display: unset !important;
+}
+#fdrive-list.thumbnail .file.folder {
+  cursor: pointer;
+}
+#fdrive-list.thumbnail .name {
+  position: absolute;
+  display: none;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  line-height: 2rem;
+  background: rgba(var(--base-rgb), 0.8);
+  text-align: center;
+}
+#fdrive-list.thumbnail .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#fdrive-list.thumbnail .icon, #fdrive-list.thumbnail img {
+  width: 100%;
+  height: 100%;
+}
+#fdrive-list.thumbnail .icon i {
+  font-size: 10rem;
+}
+#fdrive-list.thumbnail img {
+  object-fit: cover;
+}
+#fdrive-list.thumbnail .file:hover {
+  opacity: 1;
+}
+#fdrive-list.thumbnail .file:hover .name {
+  display: unset;
+}
+
+/*# sourceMappingURL=thumbnail.css.map */

@@ -23,9 +23,14 @@ public class UserFile
     public string Extension { get; set; }
     
     /// <summary>
-    /// Gets or sets the date the note was taken
+    /// Gets or sets the date file or folder was created
     /// </summary>
     public DateTime Created { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the date the file or folder was modified
+    /// </summary>
+    public DateTime Modified { get; set; }
 
     /// <summary>
     /// Gets or sets the mime type of the file

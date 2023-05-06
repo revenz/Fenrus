@@ -175,6 +175,7 @@ public class FileSystemFileStorage:IFileStorage
         return new ()
         {
             Created = file.CreationTimeUtc,
+            Modified = file.LastWriteTimeUtc,
             MimeType = mimeType,
             Extension = string.Empty,
             FullPath = file.FullName.Substring(root.Length + 1),

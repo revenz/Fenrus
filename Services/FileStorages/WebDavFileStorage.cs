@@ -76,10 +76,13 @@ public class WebDavFileStorage : IFileStorage
         var ns = new XmlNamespaceManager(doc.NameTable);
         ns.AddNamespace("d", "DAV:");
         var lastModifiedNode = doc.SelectSingleNode("//d:getlastmodified", ns);
+        var creationdateNode = doc.SelectSingleNode("//d:creationdate", ns);
         var contentTypeNode = doc.SelectSingleNode("//d:getcontenttype", ns);
         var contentLengthNode = doc.SelectSingleNode("//d:getcontentlength", ns);
         
-        if(DateTime.TryParse(lastModifiedNode?.InnerText ?? string.Empty, out DateTime createdUtc))
+        if(DateTime.TryParse(lastModifiedNode?.InnerText ?? string.Empty, out DateTime modifiedUtc))
+            userFile.Modified = modifiedUtc;
+        if(DateTime.TryParse(creationdateNode?.InnerText ?? string.Empty, out DateTime createdUtc))
             userFile.Created = createdUtc;
 
         userFile.MimeType = contentTypeNode?.InnerText ?? string.Empty;
@@ -120,6 +123,7 @@ public class WebDavFileStorage : IFileStorage
                 <d:select>
                     <d:prop>
                         <d:getcontenttype />
+                        <d:creationdate />
                         <d:getcontentlength />
                         <d:creationdate />
                         <d:getlastmodified />
@@ -168,6 +172,8 @@ public class WebDavFileStorage : IFileStorage
 
             if (DateTime.TryParse(node.Descendants(ns + "creationdate").FirstOrDefault()?.Value  ?? string.Empty, out DateTime dt)) 
                 userFile.Created = dt;
+            if (DateTime.TryParse(node.Descendants(ns + "getlastmodified").FirstOrDefault()?.Value  ?? string.Empty, out DateTime modified)) 
+                userFile.Modified = modified;
             
             userFile.MimeType  = node.Descendants(ns + "getcontenttype")?.FirstOrDefault()?.Value ?? string.Empty;
             if (long.TryParse(node.Descendants(ns + "getcontentlength").FirstOrDefault()?.Value ?? string.Empty,
@@ -223,6 +229,7 @@ public class WebDavFileStorage : IFileStorage
             var contentTypeNode = node.SelectSingleNode("d:propstat/d:prop/d:getcontenttype", nsmgr);
             var contentLengthNode = node.SelectSingleNode("d:propstat/d:prop/d:getcontentlength", nsmgr);
             var lastModifiedNode = node.SelectSingleNode("d:propstat/d:prop/d:getlastmodified", nsmgr);
+            var creationdateNode = node.SelectSingleNode("d:propstat/d:prop/d:creationdate", nsmgr);
 
             if (displayNameNode == null || string.IsNullOrEmpty(displayNameNode.InnerText))
                 continue;
@@ -231,28 +238,26 @@ public class WebDavFileStorage : IFileStorage
             if (string.IsNullOrWhiteSpace(fullPath) || fullPath == path)
                 continue;
             
-            var name = displayNameNode.InnerText;
-            var extension = Path.GetExtension(name);
-            var createdUtc = DateTime.MinValue;
-            var mimeType = contentTypeNode?.InnerText ?? "";
-            long.TryParse(contentLengthNode?.InnerText ?? string.Empty, out var size);
+            UserFile userFile = new ()
+            {
+                FullPath = fullPath
+            };
+            
+            userFile.Name = displayNameNode.InnerText;
+            userFile.Extension = Path.GetExtension(userFile.Name).TrimStart('.');
+            userFile.MimeType = contentTypeNode?.InnerText ?? string.Empty;
+            if (long.TryParse(contentLengthNode?.InnerText ?? string.Empty, out var size))
+                userFile.Size = size;
             var isFolder = fullPath.EndsWith("/") || fullPath.EndsWith("\\");
             if (isFolder)
-                mimeType = "folder";
+                userFile.MimeType = "folder";
 
-            if (lastModifiedNode != null && string.IsNullOrEmpty(lastModifiedNode.InnerText) == false)
-                DateTime.TryParse(lastModifiedNode.InnerText, out createdUtc);
+            if (DateTime.TryParse(creationdateNode?.InnerText ?? string.Empty, out DateTime dtCreated))
+                userFile.Created = dtCreated;
+            if (DateTime.TryParse(lastModifiedNode?.InnerText ?? string.Empty, out DateTime dtModified))
+                userFile.Modified = dtModified;
 
-            files.Add(new UserFile()
-            {
-                FullPath = fullPath,
-                Name = name,
-                Extension = extension,
-                Created = createdUtc,
-                MimeType = mimeType,
-                Size = size
-            });
-            
+            files.Add(userFile);
         }
 
         return files.OrderBy(x => x.MimeType == "folder" ? 0 : 1).ThenBy(x => x.Name.ToLowerInvariant()).ToList();
@@ -353,6 +358,7 @@ public class WebDavFileStorage : IFileStorage
             Extension = Path.GetExtension(filename),
             MimeType = formFile.ContentType,
             Created = DateTime.UtcNow,
+            Modified = DateTime.UtcNow,
             Name = filename
         };
     }

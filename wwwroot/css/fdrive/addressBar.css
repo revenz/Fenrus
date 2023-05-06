@@ -76,7 +76,7 @@
 #fdrive-files .btn-file-search {
   position: absolute;
   background: var(--base);
-  left: calc(80% - 4px);
+  right: 5.9rem;
   top: 7px;
   padding: 0.5rem;
   border: solid 1px var(--border-color);
