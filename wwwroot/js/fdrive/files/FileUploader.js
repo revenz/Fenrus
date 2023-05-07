@@ -185,6 +185,29 @@ class FileUploader {
         }
     }
 
+    openDialog(path) {
+        let input = document.createElement("input");
+        input.type = "file";
+        input.style.display = "none";
+        input.name = "file";
+        input.multiple = true;
+        document.body.appendChild(input);
+
+        input.addEventListener("change", () => {
+            if (!input.files.length)
+                return;
+            for (let file of input.files) {
+                this.queueFileForUpload(file, '', path);
+            }
+        });
+
+        input.addEventListener("cancel", () => {
+            input.remove();
+        });
+
+        input.click();
+    }
+
     traverseFileTree(item, path, currentPath) {
         path = path || "";
         if (item.isFile) {

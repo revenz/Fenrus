@@ -171,7 +171,6 @@ class FileList {
         let count = 0;
         this.virtualizeList.startBulkUpdates();
         const accentColor = getComputedStyle(document.body).getPropertyValue('--accent');
-        console.log('accentColor', accentColor);
         for (let item of items) {
             let ele = this.eleItems[item.fullPath];
             if (!ele) {
@@ -184,6 +183,7 @@ class FileList {
                 if (item.mimeType.startsWith('image')) {
                     let img = ele.querySelector('img');
                     img.className = 'media';
+                    img.draggable = false;
                     img.setAttribute('data-src', 'files/media?path=' + encodeURIComponent(item.fullPath));
                     img.src = 'images/placeholder.svg';
                     img.classList.add('lazy');
@@ -196,11 +196,11 @@ class FileList {
                     ele.className += ' no-img';
                     let extension = item.fullPath.substring(item.fullPath.lastIndexOf('.') + 1).toLowerCase();
                     if (this.fileTypeIcons.indexOf(extension) >= 0)
-                        ele.querySelector('.icon').innerHTML = `<img src="images/filetypes/${extension}.svg" />`;
+                        ele.querySelector('.icon').innerHTML = `<img draggable="false" src="images/filetypes/${extension}.svg" />`;
                     else if (item.mimeType === 'folder')
-                        ele.querySelector('.icon').innerHTML = `<img src="images/folder-accent.svg?color=${encodeURIComponent(accentColor)}" />`; // `<img src="images/filetypes/folder.svg" />`;
+                        ele.querySelector('.icon').innerHTML = `<img draggable="false" src="images/folder-accent.svg?color=${encodeURIComponent(accentColor)}" />`; // `<img src="images/filetypes/folder.svg" />`;
                     else
-                        ele.querySelector('.icon').innerHTML = `<img src="images/filetypes/blank.svg" />`;
+                        ele.querySelector('.icon').innerHTML = `<img draggable="false" src="images/filetypes/blank.svg" />`;
 
                     ele.addEventListener('dblclick', () => {
 
@@ -250,7 +250,7 @@ class FileList {
         let ele = document.createElement('div');
         ele.className = 'file';
         ele.innerHTML = '<div class="file-inner">' +
-            '<span class="icon"><img /></span>' +
+            '<span class="icon"><img draggable="false" /></span>' +
             '<span class="name"></span>' +
             '<span class="size"></span>' +
             '<span class="modified"></span>' +
@@ -275,13 +275,25 @@ class FileList {
         return this.items[index];
     }
     
+    getFileFromCoords(x, y)
+    {
+        const element = document.elementFromPoint(x, y);
+        let file = element?.closest('.file');
+        if(!file)
+            return null;
+        let uid = file.getAttribute('x-uid');
+        let index = this.items.findIndex(x => x.fullPath === uid);
+        if(index < 0)
+            return null;
+        return this.items[index];
+    }
+    
 
     async containerOnMouseDown(event) {
 
         const fileElement = this.getFileElementFromEvent(event);
-        if(fileElement && fileElement.classList.contains('selected'))
-        {
-            // user is trying to drag a folder somewhere
+        if(fileElement) {
+            // NEED TO HANDLE SHIFT HERE            
             this.onFileDrag(event, fileElement)
             return;
         }
@@ -373,27 +385,54 @@ class FileList {
         document.addEventListener('mouseup', onMouseUp);
     }
 
-    onFileDrag(event, file)
+    onFileDrag(event, fileElement)
     {
-        console.log('on file drag', file);
+        let fileUid = fileElement.getAttribute('x-uid');
         let selected = this.getSelectedUids();
         if(!selected?.length)
             return;
+        if(selected.indexOf(fileUid) < 0) {
+            this.setSelected([fileElement], event.ctrlKey)
+            if(event.ctrlKey)
+                selected.push(fileUid);
+            else
+                selected = [fileUid];
+        }
         let down = new Date().getTime();
+        
+        let eleDrag = document.createElement('div');
+        let html = '';
+        for(let i=0;i<Math.min(selected.length, 3);i++)
+        {
+            let src = document.querySelector(`.file[x-uid='${selected[i]}'] img`).getAttribute('src');
+            html += `<img draggable="false" src="${htmlEncode(src)}" />`;
+        }
+        eleDrag.className = 'file-drag-handle';
+        eleDrag.innerHTML = html;
+        eleDrag.style.left = event.clientX + 'px';
+        eleDrag.style.top = event.clientY + 'px';
+        document.body.appendChild(eleDrag);
+        
+        let onMouseMove = (event) => {
+            eleDrag.style.left = event.clientX + 'px';
+            eleDrag.style.top = event.clientY + 'px';            
+        };
+        
         let onMouseUp = async (event) => {
+            document.removeEventListener('mouseup', onMouseUp);
+            document.removeEventListener('mousemove', onMouseMove);
+            eleDrag.remove();
             let up = new Date().getTime();
             if(Math.abs(down - up) < 500)
                 return;
-            console.log('mouse up');
-            document.removeEventListener('mouseup', onMouseUp);
-            console.log(event);
-            const target = this.getFileItemFromEvent(event);
+            const target = this.getFileFromCoords(event.clientX, event.clientY);
+            
             if(target?.mimeType !== 'folder') // we only want to allow drop on folders
                 return;
-            console.log('move the select into', target);
             this.onMoveAction(target.fullPath, selected);
         };
         document.addEventListener('mouseup', onMouseUp);
+        document.addEventListener('mousemove', onMouseMove);
     }
 
     setSelected(items, append)

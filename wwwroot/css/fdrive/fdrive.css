@@ -211,4 +211,30 @@
   opacity: 1;
 }
 
+.file-drag-handle {
+  transform: translateY(-50%) translateX(-50%);
+  z-index: 10000;
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  cursor: grabbing;
+}
+.file-drag-handle img {
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  object-fit: contain;
+  position: absolute;
+}
+.file-drag-handle img + img {
+  z-index: 2;
+  left: -0.5rem;
+  top: -0.5rem;
+}
+.file-drag-handle img + img + img {
+  z-index: 1;
+  left: -1rem;
+  top: -1rem;
+}
+
 /*# sourceMappingURL=fdrive.css.map */

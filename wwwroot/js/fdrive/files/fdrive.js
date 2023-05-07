@@ -81,7 +81,7 @@ class FenrusDrive {
             this.changeFolder(folder.fullPath);
         })
         this.fileList.onNewFolder(() => this.add('folder'));
-        this.fileList.onUpload(() => this.add('upload'));
+        this.fileList.onUpload(() => this.uploader.openDialog(this.currentPath));
         this.fileList.onFileDblClick((file) =>
         {   
             if(file.mimeType.startsWith('image')) {
@@ -275,38 +275,6 @@ class FenrusDrive {
             Toast.error(err);
         }
     }
-
-    upload() {
-        var input = document.createElement("input");
-        input.type = "file";
-        input.style.display = "none";
-        input.name = "file";
-        input.multiple = true;
-        document.body.appendChild(input);
-
-        input.addEventListener("change", () => {
-            if (!input.files.length)
-                return;
-            var formData = new FormData();
-            let count = 0;
-            let size = 0;
-            for (let file of input.files) {
-                formData.append('file', file);
-                count++;
-                size += file.size;
-            }
-            if (count > 0)
-                this.uploadForm(formData, count, size);
-        });
-
-        input.addEventListener("cancel", () => {
-            input.remove();
-        });
-
-        input.click();
-    }
-
-
     pasteEventListener(e) {
         let cbPayload = [...(e.clipboardData || e.originalEvent.clipboardData).items];
         cbPayload = cbPayload.filter(i => /image/.test(i.type));
@@ -329,10 +297,14 @@ class FenrusDrive {
 
 
     onUploaded(event) {
-        console.log('onUploaded', event, this.currentPath);
         if(event?.path === this.currentPath) {
-            if(!document.querySelector(`.file[x-uid='${event.file.fullPath}']`))
+            if(!document.querySelector(`.file[x-uid='${event.file.fullPath}']`)) {
+                if(typeof(event.file.created) === 'string')
+                    event.file.created = new Date(event.file.created);
+                if(typeof(event.file.modified) === 'string')
+                    event.file.modified = new Date(event.file.modified);
                 this.fileList.addItems([event.file]);
+            }
             return;
         }
         if(event?.path?.startsWith(this.currentPath) === false)
@@ -345,9 +317,11 @@ class FenrusDrive {
         
         if(document.querySelector(`.file[x-uid='${fullPath}']`))
             return; // it exists
-
+        
+        // we want to add a subfolder to the list, the files we uploaded are in a subfolder of the current location
         this.fileList.addItems([{
             created: new Date(),
+            modified: new Date(),
             extension: '',
             fullPath: fullPath,
             icon: "fa-solid fa-folder",
@@ -364,7 +338,7 @@ class FenrusDrive {
     async add(mode) {
         this.eleAddMenu.className = '';
         if (mode === 'upload')
-            this.upload();
+            this.uploader.openDialog(this.currentPath);
         else if (mode === 'folder') {
             var name = await modalPrompt('New Folder', 'Enter a name of the the folder to create');
             if (/[~"#%&*:<>?/\\{|}]+/.test(name))
