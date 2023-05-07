@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Fenrus.Models;
 using Microsoft.AspNetCore.StaticFiles;
 
@@ -45,16 +46,21 @@ public class FileSystemFileStorage:IFileStorage
         
         if (searchPattern.StartsWith("*") == false && searchPattern.EndsWith("*") == false)
             searchPattern = "*" + searchPattern + "*";
+        string patternRegex = Regex.Escape(searchPattern)
+            .Replace("\\*", ".*")
+            .Replace("\\?", ".");
+        Regex regex = new Regex(patternRegex, RegexOptions.IgnoreCase);
         
-        // Search for files using the given search pattern in the rootPath and all subdirectories
-        var files = Directory.EnumerateFiles(GetFullPath(path), searchPattern, SearchOption.AllDirectories);
+        // need to get all files and use a regex as the linux file system will not return File.TXT if txt is the filter
+        var files = new DirectoryInfo(GetFullPath(path)).GetFiles("*", SearchOption.AllDirectories);
+        var filteredFiles = files.Where(file => regex.IsMatch(file.Name));
     
         // Create a UserFile object for each file found and add it to the result list
         var result = new List<UserFile>();
         string rootPath = GetRootPath();
-        foreach (var file in files)
+        foreach (var file in filteredFiles)
         {
-            result.Add(GetUserFile(rootPath, new FileInfo(file)));
+            result.Add(GetUserFile(rootPath, file));
         }
     
         return Task.FromResult(result);
