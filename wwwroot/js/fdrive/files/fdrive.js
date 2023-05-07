@@ -145,10 +145,9 @@ class FenrusDrive {
                         'Content-Type': 'application/json'
                     }
                 });
-                if(result.ok) {
-                    await this.reload();
+                await this.reload();
+                if(result.ok) 
                     return;
-                }
                 Toast.error('Error', (await result.text()) || 'Failed to move');                
             }
             catch(err)

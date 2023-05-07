@@ -389,8 +389,6 @@ class FileList {
     {
         let fileUid = fileElement.getAttribute('x-uid');
         let selected = this.getSelectedUids();
-        if(!selected?.length)
-            return;
         if(selected.indexOf(fileUid) < 0) {
             this.setSelected([fileElement], event.ctrlKey)
             if(event.ctrlKey)
@@ -398,6 +396,8 @@ class FileList {
             else
                 selected = [fileUid];
         }
+        if(!selected?.length)
+            return;
         let down = new Date().getTime();
         
         let eleDrag = document.createElement('div');
@@ -411,7 +411,9 @@ class FileList {
         eleDrag.innerHTML = html;
         eleDrag.style.left = event.clientX + 'px';
         eleDrag.style.top = event.clientY + 'px';
-        document.body.appendChild(eleDrag);
+        let dragHandleTimer = setTimeout(() => {
+            document.body.appendChild(eleDrag);            
+        }, 250);
         
         let onMouseMove = (event) => {
             eleDrag.style.left = event.clientX + 'px';
@@ -419,6 +421,7 @@ class FileList {
         };
         
         let onMouseUp = async (event) => {
+            clearTimeout(dragHandleTimer);
             document.removeEventListener('mouseup', onMouseUp);
             document.removeEventListener('mousemove', onMouseMove);
             eleDrag.remove();

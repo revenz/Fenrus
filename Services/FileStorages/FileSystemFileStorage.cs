@@ -253,10 +253,18 @@ public class FileSystemFileStorage:IFileStorage
     {
         path = GetFullPath(path);
         dest = GetFullPath(dest);
-        if(File.Exists(path))
+        if (File.Exists(path))
+        {
+            if (File.Exists(dest))
+                throw new Exception("File already exists");
             File.Move(path, dest);
+        }
         else if (Directory.Exists(path))
+        {
+            if (Directory.Exists(dest))
+                throw new Exception("Folder already exists");
             Directory.Move(path, dest);
+        }
         else
             throw new Exception("File or file not found.");
         return Task.CompletedTask;
