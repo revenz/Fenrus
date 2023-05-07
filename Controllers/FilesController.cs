@@ -127,7 +127,7 @@ public class FilesController : BaseController
             var userFile = await service.Add(path ?? string.Empty, file.FileName, file);
             return userFile;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // can throw if aborted
             return null;

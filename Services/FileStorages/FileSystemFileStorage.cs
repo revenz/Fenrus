@@ -10,6 +10,8 @@ public class FileSystemFileStorage:IFileStorage
 {
     private readonly FileExtensionContentTypeProvider MimeProvider;
 
+    private static SemaphoreSlim _semaphoreSlim = new(1);
+
     /// <summary>
     /// the UID of the user
     /// </summary>
@@ -189,7 +191,7 @@ public class FileSystemFileStorage:IFileStorage
     /// <returns>the id of the newly created file</returns>
     public async Task<UserFile?> Add(string path, string filename, IFormFile formFile)
     {
-        string directory = GetFullPath(path);
+        string directory = GetFullPath(path, ensuresExists: true);
         string fullPath = Path.Combine(directory, filename);
         
         string fileName = Path.GetFileNameWithoutExtension(fullPath);
@@ -197,7 +199,7 @@ public class FileSystemFileStorage:IFileStorage
         int count = 1;
         while (File.Exists(fullPath))
             fullPath = Path.Combine(directory, $"{fileName} ({count++}){extension}");
-
+        
         using (var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
         {
             await formFile.CopyToAsync(stream);
@@ -299,16 +301,32 @@ public class FileSystemFileStorage:IFileStorage
     /// Gets the full path from the passed in relative path
     /// </summary>
     /// <param name="relative">the relative path</param>
+    /// <param name="ensuresExists">whether or not the folder should be created if does not already exist</param>
     /// <returns>the full path</returns>
     /// <exception cref="ArgumentException">if the relative path is invalid</exception>
-    private string GetFullPath(string relative)
+    private string GetFullPath(string relative, bool ensuresExists = false)
     {
         string rootPath = GetRootPath();
         if (string.IsNullOrEmpty(relative))
             return rootPath;
-        string fullPath = Path.Combine(rootPath, relative);
+        string fullPath = Path.Combine(rootPath, relative.TrimStart('/'));
         if (fullPath.StartsWith(rootPath) == false)
             throw new ArgumentException("Invalid path provided");
+
+        if (ensuresExists)
+        {
+            _semaphoreSlim.Wait();
+            try
+            {
+                if (Directory.Exists(fullPath) == false)
+                    Directory.CreateDirectory(fullPath);
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
+            }
+        }
+        
         return fullPath;
     }
 }

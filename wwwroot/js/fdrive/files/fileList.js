@@ -183,6 +183,9 @@ class FileList {
                 if (item.mimeType.startsWith('image')) {
                     let img = ele.querySelector('img');
                     img.className = 'media';
+                    img.addEventListener('error', () => {
+                        this.replaceImage(img);
+                    })
                     img.draggable = false;
                     img.setAttribute('data-src', 'files/media?path=' + encodeURIComponent(item.fullPath));
                     img.src = 'images/placeholder.svg';
@@ -297,7 +300,7 @@ class FileList {
             this.onFileDrag(event, fileElement)
             return;
         }
-        
+        this.lastSelected = null;
         // Record the starting position of the selection
         const selectionStartX = event.clientX;
         const selectionStartY = event.clientY;
@@ -388,46 +391,88 @@ class FileList {
     onFileDrag(event, fileElement)
     {
         let fileUid = fileElement.getAttribute('x-uid');
+        let previouslySelected = this.lastSelected;
         let selected = this.getSelectedUids();
-        if(selected.indexOf(fileUid) < 0) {
-            this.setSelected([fileElement], event.ctrlKey)
-            if(event.ctrlKey)
-                selected.push(fileUid);
-            else
-                selected = [fileUid];
+        let singleClick = () => {
+            let selected = this.getSelectedUids();
+            let done = false;
+            if (event.shiftKey && previouslySelected) {
+                let index = this.items.findIndex(x => x.fullPath === fileUid);
+                let otherIndex = this.items.findIndex(x => x.fullPath === previouslySelected.uid);
+                let start = Math.min(index, otherIndex);
+                let end = Math.max(index, otherIndex);
+                if (start > 0 && start < end) {
+                    let newItems = this.items.slice(start, end + 1).map(x => this.eleItems[x.fullPath]);
+                    this.setSelected(newItems, true);
+                    done = true;
+                }
+            }
+            if (!done) {
+                if (event.ctrlKey) {
+                    let isSelected = fileElement.classList.contains('selected');
+                    if (isSelected) {
+                        fileElement.classList.remove('selected');
+                        selected = selected.filter(x => x != fileUid);
+                    } else {
+                        this.setSelected([fileElement], true);
+                        selected.push(fileUid);
+                    }
+
+                } else {
+                    this.setSelected([fileElement], false);
+                }
+            }
         }
-        if(!selected?.length)
-            return;
-        let down = new Date().getTime();
+        if(!event.ctrlKey)
+            this.lastSelected = { uid: fileUid, ele: fileElement };
+        else
+            this.lastSelected = null;
         
-        let eleDrag = document.createElement('div');
-        let html = '';
-        for(let i=0;i<Math.min(selected.length, 3);i++)
-        {
-            let src = document.querySelector(`.file[x-uid='${selected[i]}'] img`).getAttribute('src');
-            html += `<img draggable="false" src="${htmlEncode(src)}" />`;
-        }
-        eleDrag.className = 'file-drag-handle';
-        eleDrag.innerHTML = html;
-        eleDrag.style.left = event.clientX + 'px';
-        eleDrag.style.top = event.clientY + 'px';
-        let dragHandleTimer = setTimeout(() => {
-            document.body.appendChild(eleDrag);            
-        }, 250);
-        
-        let onMouseMove = (event) => {
+        let eleDrag = null;
+        let heldAction = () => {
+            if(!selected?.length)
+                return;
+            eleDrag = document.createElement('div');
+            let html = '';
+            for(let i=0;i<Math.min(selected.length, 3);i++)
+            {
+                let src = document.querySelector(`.file[x-uid='${selected[i]}'] img`).getAttribute('src');
+                html += `<img draggable="false" src="${htmlEncode(src)}"  />`;
+            }
+            eleDrag.className = 'file-drag-handle';
+            eleDrag.innerHTML = html;
+            for(let img of eleDrag.querySelectorAll('img'))
+            {
+                img.addEventListener('error', () => {
+                    this.replaceImage(img);
+                })
+            }
             eleDrag.style.left = event.clientX + 'px';
-            eleDrag.style.top = event.clientY + 'px';            
+            eleDrag.style.top = event.clientY + 'px';
+            document.body.appendChild(eleDrag);
+        }
+        let down = new Date().getTime();
+
+        let onMouseMove = (event) => {
+            if(eleDrag != null) {
+                eleDrag.style.left = event.clientX + 'px';
+                eleDrag.style.top = event.clientY + 'px';
+            }
         };
-        
+        let heldTimer = setTimeout(() => {
+            heldAction();   
+        }, 300);
         let onMouseUp = async (event) => {
-            clearTimeout(dragHandleTimer);
+            clearTimeout(heldTimer);          
             document.removeEventListener('mouseup', onMouseUp);
             document.removeEventListener('mousemove', onMouseMove);
-            eleDrag.remove();
+            if(eleDrag)
+                eleDrag.remove();
             let up = new Date().getTime();
-            if(Math.abs(down - up) < 500)
+            if(Math.abs(down - up) < 300) {
+                singleClick();
                 return;
+            }
             const target = this.getFileFromCoords(event.clientX, event.clientY);
             
             if(target?.mimeType !== 'folder') // we only want to allow drop on folders
@@ -538,7 +583,12 @@ class FileList {
         menu.init();
         menu.open(event);
     }
-
+    
+    
+    replaceImage(item)
+    {
+        item.src = '/images/filetypes/image.svg';
+    }
 
 
     fileTypeIcons =['3g2','3ga','3gp','7z','aa','aac','ac','accdb','accdt','ace','adn','ai','aif',
