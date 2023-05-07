@@ -36,6 +36,18 @@ public class LiteDbFileStorage : IFileStorage
     {
         throw new NotImplementedException();
     }
+    
+    
+    /// <summary>
+    /// Moves files and folders to a new location
+    /// </summary>
+    /// <param name="destination">the location to move the items into</param>
+    /// <param name="items">the items to move</param>
+    /// <returns>an awaited task</returns>
+    public Task Move(string destination, string[] items)
+    {
+        throw new NotImplementedException();
+    }
 
     /// <summary>
     /// Searches for files matching a search pattern

@@ -1,5 +1,5 @@
-class FileList{
-    constructor(container){
+class FileList {
+    constructor(container) {
         this.container = container;
         this.items = [];
 
@@ -9,107 +9,103 @@ class FileList{
         this.virtualizeList.setNumColumns(1);
         document.body.addEventListener('driveResizeEvent', (event) => {
             let view = this.views[this.currentView];
-            if(view.columns === 0)
+            if (view.columns === 0)
                 this.virtualizeList.changeLayout(view.columns, view.height);
         });
 
         this.container.addEventListener('contextmenu', (event) => this.onContextMenu(event));
         this.container.addEventListener('mousedown', (e) => {
             //if (!fDriveDrawer.isFiles) return;
-            if(e.button === 0) // only want left click button
+            if (e.button === 0) // only want left click button
                 this.containerOnMouseDown(e);
         });
         this.container.tabIndex = 0;
         this.container.style.outline = 'none';
         this.container.addEventListener('keydown', (e) => {
-            if(e.key === 'F2')
-            {                
+            if (e.key === 'F2') {
                 e.preventDefault();
                 e.stopPropagation();
                 let selected = this.getSelectedUids();
-                if(selected?.length === 1)
-                {
+                if (selected?.length === 1) {
                     let index = this.items.findIndex(x => x.fullPath === selected[0]);
-                    if(index < 0)
+                    if (index < 0)
                         return;
                     let item = this.items[index];
                     this.onRenameAction(item);
                 }
-            }
-            else if(e.key === 'Delete' || e.key === 'Backspace'){
+            } else if (e.key === 'Delete' || e.key === 'Backspace') {
                 e.preventDefault();
                 e.stopPropagation();
                 let selected = this.getSelectedUids();
-                if(selected?.length)
+                if (selected?.length)
                     this.onDeleteAction(selected);
             }
         });
         this.views = [
-            { name: 'List', icon: 'fa-list', columns: 1, height: 32 },
-            { name: 'Grid', icon: 'fa-grip', columns: 0, height: 96 },
-            { name: 'Thumbnail', icon: 'fa-image', columns: 0, height: 240 }
+            {name: 'List', icon: 'fa-list', columns: 1, height: 32},
+            {name: 'Grid', icon: 'fa-grip', columns: 0, height: 96},
+            {name: 'Thumbnail', icon: 'fa-image', columns: 0, height: 240}
         ];
         this.currentView = 0;
         this.sorts = [
-            { name: 'A-Z', sorter: (a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()) },
-            { name: 'Z-A', sorter: (a, b) => b.name.toLowerCase().localeCompare(a.name.toLowerCase()) },
-            { name: 'Oldest', sorter: (a, b) => a.created.getTime() - b.created.getTime() },
-            { name: 'Newest', sorter: (a, b) => b.created.getTime() - a.created.getTime() },
-            { name: 'Size', sorter: (a, b) => a.size - b.size },
-            { name: 'Type', sorter: (a, b) => a.mimeType.toLowerCase().localeCompare(b.mimeType.toLowerCase()) },
+            {name: 'A-Z', sorter: (a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())},
+            {name: 'Z-A', sorter: (a, b) => b.name.toLowerCase().localeCompare(a.name.toLowerCase())},
+            {name: 'Oldest', sorter: (a, b) => a.created.getTime() - b.created.getTime()},
+            {name: 'Newest', sorter: (a, b) => b.created.getTime() - a.created.getTime()},
+            {name: 'Size', sorter: (a, b) => a.size - b.size},
+            {name: 'Type', sorter: (a, b) => a.mimeType.toLowerCase().localeCompare(b.mimeType.toLowerCase())},
         ];
         this.currentSort = 0;
     }
-    
-    setItems(items){
-        if(!items) items = [];
+
+    setItems(items) {
+        if (!items) items = [];
         else if (Array.isArray(items) === false)
             items = [items];
         let sort = this.sorts[this.currentSort];
         this.items = items.sort((a, b) => {
-            let aFolder =a.mimeType === 'folder';
+            let aFolder = a.mimeType === 'folder';
             let bFolder = b.mimeType === 'folder';
-            if(aFolder && bFolder)
+            if (aFolder && bFolder)
                 return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-            if(aFolder)
+            if (aFolder)
                 return -1;
-            if(bFolder)
+            if (bFolder)
                 return 1;
-            return sort.sorter(a,b);
+            return sort.sorter(a, b);
         });
         this.virtualizeList.clear();
         this.eleItems = [];
         this.addToList(items);
     }
-    
-    addItems(items)
-    {
+
+    addItems(items) {
         if (Array.isArray(items) === false)
             items = [items];
         this.items = [...this.items, ...items];
-        this.addToList(items);        
+        this.addToList(items);
     }
-    
-    setShowHidden(show){
+
+    setShowHidden(show) {
         this.showHidden = show;
         this.eleItems = [];
         this.virtualizeList.clear();
         this.addToList(this.items);
     }
-    
-    clear(){
+
+    clear() {
         this.items = [];
         this.eleItems = [];
         this.virtualizeList.clear();
     }
-    
+
     update(file, updated) {
-        if(!file?.fullPath || !updated?.fullPath)
+        if (!file?.fullPath || !updated?.fullPath)
             return;
         let ele = this.eleItems[file.fullPath];
-        if(!ele)
+        if (!ele)
             return;
-        if(file.fullPath !== updated.fullPath) {
+        if (file.fullPath !== updated.fullPath) {
             delete this.eleItems[file.fullPath];
             this.eleItems[updated.fullPath] = ele;
         }
@@ -120,57 +116,53 @@ class FileList{
     }
 
 
-    nextView()
-    {
-        if(++this.currentView  >= this.views.length)
+    nextView() {
+        if (++this.currentView >= this.views.length)
             this.currentView = 0;
         let view = this.views[this.currentView];
         this.changeView(view);
         return view;
     }
-    
-    sort(name)
-    {            
-        let index = typeof(name) === 'number' ? name : this.sorts.findIndex(x => x.name.toLowerCase() === name.toLowerCase());
-        if(index < 0)
+
+    sort(name) {
+        let index = typeof (name) === 'number' ? name : this.sorts.findIndex(x => x.name.toLowerCase() === name.toLowerCase());
+        if (index < 0)
             return false;
         this.currentSort = index;
         this.setItems(this.items); // this resorts the data
         return this.sorts[index].name;
     }
-    
-    changeView(view)
-    {
-        if(typeof(view) === 'string')
+
+    changeView(view) {
+        if (typeof (view) === 'string')
             view = this.views.filter(x => x.name.toLowerCase() === view.toLowerCase())[0];
-        if(!view)
+        if (!view)
             return;
-        
+
         this.container.className = 'content ' + view.name.toLowerCase();
         this.currentView = this.views.indexOf(view);
-        if(this.virtualizeList) {
+        if (this.virtualizeList) {
             this.virtualizeList.changeLayout(view.columns, view.height);
         }
         return view;
     }
 
 
-    getSelectedUids()
-    {
+    getSelectedUids() {
         return this.virtualizeList.items.filter(x => x.classList.contains('selected'))
             .map((x) => {
                 return x.getAttribute('x-uid');
             });
     }
 
-    onFileDblClick(action){ this.onFileDblClickAction = action; }
-    onFolderDblClick(action){ this.onFolderDblClickAction = action; }
+    onFileDblClick(action) { this.onFileDblClickAction = action; }
+    onFolderDblClick(action) { this.onFolderDblClickAction = action; }
     onFileDownload(action) { this.onFileDownloadAction = action; }
     onUpload(action) { this.onUploadAction = action; }
     onNewFolder(action) { this.onNewFolderAction = action; }
     onRename(action) { this.onRenameAction = action; }
-    onDelete(action)     { this.onDeleteAction = action; }
-
+    onMove(action) { this.onMoveAction = action; }
+    onDelete(action) { this.onDeleteAction = action; }
 
 
     addToList(items) {
@@ -182,7 +174,7 @@ class FileList{
         console.log('accentColor', accentColor);
         for (let item of items) {
             let ele = this.eleItems[item.fullPath];
-            if(!ele) {
+            if (!ele) {
                 ele = this.createElement();
                 this.eleItems[item.fullPath] = ele;
                 ele.className += ' ' + item.mimeType;
@@ -220,20 +212,20 @@ class FileList{
                 }
                 ele.querySelector('.size').innerText = humanizeFileSize(item.size);
             }
-            
-            if(item.name.startsWith('.') && this.showHidden === false)
+
+            if (item.name.startsWith('.') && this.showHidden === false)
                 continue; // hidden item
-            
+
             this.virtualizeList.addItem(ele, true);
             ++count;
         }
         this.virtualizeList.completeUpdates();
     }
-    
+
     formatDate(date) {
-        if(!date?.getTime)
+        if (!date?.getTime)
             return ''; // not a date object
-        
+
         const now = new Date();
         const isThisYear = date.getFullYear() === now.getFullYear();
         const isToday = date.toDateString() === now.toDateString();
@@ -266,8 +258,34 @@ class FileList{
         return ele;
     }
 
+    getFileElementFromEvent(event) {
+        const path = event.composedPath();
+        return path.find(element => element.classList?.contains('file'));
+    }
+    
+    getFileItemFromEvent(event)
+    {
+        let ele = this.getFileElementFromEvent(event);
+        if(!ele)return null;
+
+        let uid = ele.getAttribute('x-uid');
+        let index = this.items.findIndex(x => x.fullPath === uid);
+        if(index < 0)
+            return null;
+        return this.items[index];
+    }
+    
 
     async containerOnMouseDown(event) {
+
+        const fileElement = this.getFileElementFromEvent(event);
+        if(fileElement && fileElement.classList.contains('selected'))
+        {
+            // user is trying to drag a folder somewhere
+            this.onFileDrag(event, fileElement)
+            return;
+        }
+        
         // Record the starting position of the selection
         const selectionStartX = event.clientX;
         const selectionStartY = event.clientY;
@@ -355,6 +373,29 @@ class FileList{
         document.addEventListener('mouseup', onMouseUp);
     }
 
+    onFileDrag(event, file)
+    {
+        console.log('on file drag', file);
+        let selected = this.getSelectedUids();
+        if(!selected?.length)
+            return;
+        let down = new Date().getTime();
+        let onMouseUp = async (event) => {
+            let up = new Date().getTime();
+            if(Math.abs(down - up) < 500)
+                return;
+            console.log('mouse up');
+            document.removeEventListener('mouseup', onMouseUp);
+            console.log(event);
+            const target = this.getFileItemFromEvent(event);
+            if(target?.mimeType !== 'folder') // we only want to allow drop on folders
+                return;
+            console.log('move the select into', target);
+            this.onMoveAction(target.fullPath, selected);
+        };
+        document.addEventListener('mouseup', onMouseUp);
+    }
+
     setSelected(items, append)
     {
         if(!items)
@@ -384,9 +425,8 @@ class FileList{
     onContextMenu(event) {
         event.preventDefault();
         event.stopPropagation();
-        
-        const path = event.composedPath();
-        const fileElement = path.find(element => element.classList?.contains('file'));
+
+        const fileElement = this.getFileElementFromEvent(event);
         let selected = this.getSelectedUids();
         if (fileElement) {
             let uid = fileElement.getAttribute('x-uid');

@@ -77,6 +77,14 @@ public interface IFileStorage
 
 
     /// <summary>
+    /// Moves files and folders to a new location
+    /// </summary>
+    /// <param name="destination">the location to move the items into</param>
+    /// <param name="items">the items to move</param>
+    /// <returns>an awaited task</returns>
+    Task Move(string destination, string[] items);
+
+    /// <summary>
     /// Gets the file storage service to use for a user
     /// </summary>
     /// <param name="userUid">the UID of the user</param>

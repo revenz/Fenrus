@@ -178,8 +178,41 @@ public class FilesController : BaseController
             // can throw if aborted
             return BadRequest(ex.Message);
         }
+    }
+    
+    
+    /// <summary>
+    /// Moves files and folders to a new location
+    /// </summary>
+    /// <param name="model">move model</param>
+    /// <returns>true if successfully moved</returns>
+    [HttpPut("move")]
+    public async Task<IActionResult> Move([FromBody] MoveModel model)
+    {
+        var uid = User.GetUserUid();
+        if (uid == null)
+            throw new UnauthorizedAccessException();
+        if (model.Items?.Any() != true)
+            return Ok(); // nothing to do
+        
+        string destination = model.Destination;
+
+        destination = destination.Replace("\\", "/");
+        
+        var service = IFileStorage.GetService(uid.Value);
+        try
+        {
+            await service.Move(destination, model.Items);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            // can throw if aborted
+            return BadRequest(ex.Message);
+        }
         
     }
+    
     /// <summary>
     /// Deletes files
     /// </summary>
@@ -245,5 +278,20 @@ public class FilesController : BaseController
         /// Gets the new name of the file or folder
         /// </summary>
         public string NewName { get; init; }
+    }
+    
+    /// <summary>
+    /// Model for the move action
+    /// </summary>
+    public class MoveModel
+    {
+        /// <summary>
+        /// Gets the path of the destination folder
+        /// </summary>
+        public string Destination { get; init; }
+        /// <summary>
+        /// Gets the items being moved
+        /// </summary>
+        public string[] Items { get; init; }
     }
 }

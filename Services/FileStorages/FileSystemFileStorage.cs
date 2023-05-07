@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Fenrus.Models;
 using Microsoft.AspNetCore.StaticFiles;
 
@@ -32,38 +31,6 @@ public class FileSystemFileStorage:IFileStorage
     /// <returns>the root path</returns>
     private string GetRootPath()
         => Path.Combine(DirectoryHelper.GetDataDirectory(), "drive", UserUid.ToString());
-    
-    /// <summary>
-    /// Gets the physical path on disk for a given user
-    /// </summary>
-    /// <param name="path">the path</param>
-    /// <returns>the physical path</returns>
-    /// <exception cref="Exception">if the path contains any invalid characters</exception>
-    private string GetDirectory(string path)
-    {
-        char[] invalidChars = Path.GetInvalidFileNameChars();
-        var parts = (path ?? string.Empty).Trim().Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
-        path = string.Empty;
-        foreach (var part in parts)
-        {
-            if (part == "..")
-                continue;
-            
-            bool containsInvalidChars = part.IndexOfAny(invalidChars) != -1;
-            if (containsInvalidChars)
-                throw new Exception("Invalid path");
-            
-            path += part + Path.DirectorySeparatorChar;
-        }
-
-        if (path.EndsWith(Path.DirectorySeparatorChar))
-            path = path[..^1];
-        
-        var root = GetRootPath();
-        if (path == string.Empty)
-            return root;
-        return Path.Combine(root, path);
-    }
 
     /// <summary>
     /// Searches for files matching a search pattern
@@ -73,17 +40,16 @@ public class FileSystemFileStorage:IFileStorage
     /// <returns>a list of matching files</returns>
     public Task<List<UserFile>> SearchFiles(string path, string searchPattern)
     {
-        string rootPath = GetRootPath();
-        string fullPath = Path.Combine(rootPath, path);
-        if (fullPath.StartsWith(rootPath) == false)
-            throw new ArgumentException("Invalid path provided");
         
+        if (searchPattern.StartsWith("*") == false && searchPattern.EndsWith("*") == false)
+            searchPattern = "*" + searchPattern + "*";
         
         // Search for files using the given search pattern in the rootPath and all subdirectories
-        var files = Directory.EnumerateFiles(rootPath, searchPattern, SearchOption.AllDirectories);
+        var files = Directory.EnumerateFiles(GetFullPath(path), searchPattern, SearchOption.AllDirectories);
     
         // Create a UserFile object for each file found and add it to the result list
         var result = new List<UserFile>();
+        string rootPath = GetRootPath();
         foreach (var file in files)
         {
             result.Add(GetUserFile(rootPath, new FileInfo(file)));
@@ -101,12 +67,9 @@ public class FileSystemFileStorage:IFileStorage
     {
         if (string.IsNullOrWhiteSpace(path))
             return Task.FromResult<UserFile?>(null);
-        path = path.Replace("\\", "/");
-        if (path.Contains("../"))
-            return Task.FromResult<UserFile?>(null);
 
         string root = GetRootPath();
-        string fulLName = Path.Combine(root, path);
+        string fulLName = GetFullPath(path);
         if (File.Exists(fulLName))
         {
             var fileInfo = new FileInfo(fulLName);
@@ -141,7 +104,7 @@ public class FileSystemFileStorage:IFileStorage
     /// <returns>all the files UIDs for the user</returns>
     public Task<List<UserFile>> GetAll(string path)
     {
-        var dir = GetDirectory(path);
+        var dir = GetFullPath(path);
         if (Directory.Exists(dir) == false)
             return Task.FromResult(new List<UserFile>());
         List<UserFile> results = new();
@@ -152,6 +115,7 @@ public class FileSystemFileStorage:IFileStorage
             results.Add(new ()
             {
                 Created = sub.CreationTimeUtc,
+                Modified = sub.LastWriteTimeUtc,
                 MimeType = "folder",
                 Extension = string.Empty,
                 FullPath = sub.FullName.Substring(root.Length + 1),
@@ -192,11 +156,7 @@ public class FileSystemFileStorage:IFileStorage
     public Task<FileData?> GetFileData(string fullPath)
     {
         FileData? result = null;
-        if (string.IsNullOrWhiteSpace(fullPath))
-            return Task.FromResult(result);
-        if (fullPath.Contains(".." + Path.DirectorySeparatorChar))
-            return Task.FromResult(result);
-        var file = new FileInfo(Path.Combine(GetRootPath(), fullPath));
+        var file = new FileInfo(GetFullPath(fullPath));
         if (file.Exists == false)
             return Task.FromResult(result);
 
@@ -229,12 +189,7 @@ public class FileSystemFileStorage:IFileStorage
     /// <returns>the id of the newly created file</returns>
     public async Task<UserFile?> Add(string path, string filename, IFormFile formFile)
     {
-        string directory = GetDirectory( path);
-        if (Directory.Exists(directory) == false)
-            Directory.CreateDirectory(directory);
-        if (filename.Contains(".." + Path.DirectorySeparatorChar))
-            return null;
-
+        string directory = GetFullPath(path);
         string fullPath = Path.Combine(directory, filename);
         
         string fileName = Path.GetFileNameWithoutExtension(fullPath);
@@ -258,11 +213,7 @@ public class FileSystemFileStorage:IFileStorage
     /// <returns>true if the files no longer exists afterwards</returns>
     public Task<bool> Delete(string fullPath)
     {
-        if (string.IsNullOrEmpty(fullPath))
-            return Task.FromResult(true);
-        if (fullPath.Contains(".." + Path.DirectorySeparatorChar))
-            return Task.FromResult(false);
-        string path = Path.Combine(GetRootPath(), fullPath);
+        string path = GetFullPath(fullPath);
         try
         {
             if (File.Exists(path))
@@ -284,20 +235,11 @@ public class FileSystemFileStorage:IFileStorage
     /// <param name="path">the full path of the file</param>
     public Task CreateFolder(string path)
     {
-        if (string.IsNullOrEmpty(path))
-            return Task.CompletedTask;
-        if (path.Contains(".." + Path.DirectorySeparatorChar))
-            return Task.CompletedTask;
-        string fullPath = GetDirectory(path);
-        try
-        {
-            if (Directory.Exists(fullPath) == false)
-                Directory.CreateDirectory(fullPath);
-        }
-        catch (Exception)
-        {
-        }
-
+        string fullPath = GetFullPath(path);
+        if (Directory.Exists(fullPath))
+            throw new Exception("Folder already exists");
+        
+        Directory.CreateDirectory(fullPath);
         return Task.CompletedTask;
     }
 
@@ -309,7 +251,56 @@ public class FileSystemFileStorage:IFileStorage
     /// <returns>an awaited task</returns>
     public Task Rename(string path, string dest)
     {
-        File.Move(path, Path.Combine(GetRootPath(), dest));
+        path = GetFullPath(path);
+        dest = GetFullPath(dest);
+        if(File.Exists(path))
+            File.Move(path, dest);
+        else if (Directory.Exists(path))
+            Directory.Move(path, dest);
+        else
+            throw new Exception("File or file not found.");
         return Task.CompletedTask;
+    }
+    
+    /// <summary>
+    /// Moves files and folders to a new location
+    /// </summary>
+    /// <param name="destination">the location to move the items into</param>
+    /// <param name="items">the items to move</param>
+    /// <returns>an awaited task</returns>
+    public async Task Move(string destination, string[] items)
+    {
+        destination = destination.Replace("\\", "/");
+        if (destination.EndsWith("/") == false)
+            destination += "/";
+        for (int i=0;i<items.Length;i++)
+        {
+            string item = items[i].Replace("\\", "/");
+            string name = item.Substring(item.LastIndexOf("/", StringComparison.Ordinal) + 1);
+            if (item.EndsWith("/"))
+            {
+                // folder
+                name = item[0..^1];
+                name = name.Substring(name.LastIndexOf("/", StringComparison.Ordinal) + 1);
+            }
+            await this.Rename(item, destination + name);
+        }
+    }
+
+    /// <summary>
+    /// Gets the full path from the passed in relative path
+    /// </summary>
+    /// <param name="relative">the relative path</param>
+    /// <returns>the full path</returns>
+    /// <exception cref="ArgumentException">if the relative path is invalid</exception>
+    private string GetFullPath(string relative)
+    {
+        string rootPath = GetRootPath();
+        if (string.IsNullOrEmpty(relative))
+            return rootPath;
+        string fullPath = Path.Combine(rootPath, relative);
+        if (fullPath.StartsWith(rootPath) == false)
+            throw new ArgumentException("Invalid path provided");
+        return fullPath;
     }
 }

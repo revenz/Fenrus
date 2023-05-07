@@ -110,7 +110,7 @@ public class WebDavFileStorage : IFileStorage
     {
         // Escape search pattern for XML
         searchPattern = searchPattern.Replace("*", this.searchWildcard);
-        if (searchPattern.StartsWith(searchWildcard) == false && searchWildcard.EndsWith(searchWildcard))
+        if (searchPattern.StartsWith(searchWildcard) == false && searchPattern.EndsWith(searchWildcard) == false)
             searchPattern = searchWildcard + searchPattern + searchWildcard;
         
         string escapedSearchPattern = WebUtility.HtmlEncode(searchPattern);
@@ -436,6 +436,30 @@ public class WebDavFileStorage : IFileStorage
         string body = await response.Content.ReadAsStringAsync();
         var wdr = ParseWebDavResponse(body);
         throw new Exception(wdr.ErrorMessage?.EmptyAsNull() ?? "Failed to rename");
+    }
+    
+    
+    /// <summary>
+    /// Moves files and folders to a new location
+    /// </summary>
+    /// <param name="destination">the location to move the items into</param>
+    /// <param name="items">the items to move</param>
+    /// <returns>an awaited task</returns>
+    public async Task Move(string destination, string[] items)
+    {
+        if (destination.EndsWith("/") == false)
+            destination += "/";
+        foreach (var item in items)
+        {
+            string name = item.Substring(item.LastIndexOf("/", StringComparison.Ordinal) + 1);
+            if (item.EndsWith("/"))
+            {
+                // folder
+                name = item[0..^1];
+                name = name.Substring(name.LastIndexOf("/", StringComparison.Ordinal) + 1);
+            }
+            await this.Rename(item, destination + name);
+        }
     }
 
 

@@ -102,11 +102,13 @@ class FenrusDrive {
         });
         this.fileList.onRename(async (file) => {
             let newName = await modalPrompt('Rename', '', file.name, (input) => {
-                if(/[<>:"\/\\|?*\x00-\x1F]/.test(input) === false)
+                if (/[<>:"\/\\|?*\x00-\x1F]/.test(input) === false)
                     return true;
                 Toast.error('Error', 'Invalid characters.');
                 return false;
             });
+            if(!newName)
+                return;
             let isFolder = file.mimeType === 'folder;'
             showBlocker();
             try{
@@ -130,6 +132,29 @@ class FenrusDrive {
                 Toast.error(err || 'Failed to rename');                
             }
             hideBlocker();
+        });
+        this.fileList.onMove(async (destination, items) => {
+            try {
+                let result = await fetch('/files/move', {
+                    method:'PUT',
+                    body: JSON.stringify({
+                        destination: destination,
+                        items: items
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if(result.ok) {
+                    await this.reload();
+                    return;
+                }
+                Toast.error('Error', (await result.text()) || 'Failed to move');                
+            }
+            catch(err)
+            {
+                Toast.error('Error', err);
+            } 
         });
 
         this.createToolbar();

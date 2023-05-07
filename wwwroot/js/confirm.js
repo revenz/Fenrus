@@ -81,9 +81,11 @@ function modalPrompt(title, message, value, validator) {
         modal.querySelector('.fenrus-modal-title').innerText = title;
         modal.querySelector('.fenrus-modal-body .message').innerText = message;
         let input = modal.querySelector('.fenrus-modal-body input');
-        input.focus();
         if(value)
             input.value = value;
+        input.focus();
+        input.select();
+        
         let btnOk = modal.querySelector('.confirm-ok');
         input.addEventListener('keydown', (event) => {
             if(event.key === 'Enter')
