@@ -2,15 +2,20 @@
     background: url('/themes/Heimdall/background.jpg');
 }
 
-.dashboard.main
+.dashboard-main
 {
     overflow:hidden;
+    display: flex;
+    flex-direction: column;
+    padding-top: 4rem !important;
 }
 
-.dashboard:not(.main) {
+.dashboard {
     align-items: center;
     justify-content: center;
     height:100%;
+    position: unset;
+    flex-grow:1;
     .db-group:last-child {
         padding-bottom:2rem;
     }

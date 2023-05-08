@@ -44,12 +44,20 @@ $columnWidth:300;
     }
 }
 
+.dashboard-main
+{
+    overflow:hidden;
+    display: flex;
+    flex-direction: column;
+    padding-top: 4rem !important;
+}
+
 .dashboard {
+    position: unset;
+    flex-grow:1;
     display: grid;
     gap: 0.5rem;
     grid-template-columns: repeat(var(--columns), calc(var(--column-width) - 6px));
-    margin-top:5rem;
-    height:calc(100% - 6rem);
     
 }
 .group-controls {
