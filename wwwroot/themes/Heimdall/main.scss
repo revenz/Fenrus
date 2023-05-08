@@ -2,12 +2,18 @@
     background: url('/themes/Heimdall/background.jpg');
 }
 
+.dashboard.main
+{
+    overflow:hidden;
+}
 
-.dashboard {
+.dashboard:not(.main) {
     align-items: center;
     justify-content: center;
-    margin-top:5rem;
-    height:calc(100% - 5rem);
+    height:100%;
+    .db-group:last-child {
+        padding-bottom:2rem;
+    }
 }
 
 .db-item {
