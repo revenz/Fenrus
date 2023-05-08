@@ -1,10 +1,11 @@
 class AddressBar {
     constructor() {
         this.container = document.getElementById('fdrive-files-address');
+        let toolbar = document.querySelector('#fdrive-files .toolbar');
         let btnSearch = document.createElement('button');
-        btnSearch.className = 'btn-file-search';
+        btnSearch.className = 'fdt-btn';
         btnSearch.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>';
-        this.container.insertAdjacentElement('afterend', btnSearch);
+        toolbar.appendChild(btnSearch);
         this.searching = false;
         btnSearch.addEventListener('click', () => {            
             if(this.searching){

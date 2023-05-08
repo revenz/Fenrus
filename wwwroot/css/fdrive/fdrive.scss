@@ -39,7 +39,7 @@ $notesMediaScreenSize: 1000px;
       justify-content: center;
       text-transform: uppercase;
       font-weight: 600;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       letter-spacing: 0.3rem;
       > i {
         margin-bottom:0.5rem;
@@ -163,9 +163,9 @@ $notesMediaScreenSize: 1000px;
       align-items: center;
       flex-basis: 0;
       flex-grow: 1;
-      font-size: 1.2rem;
+      font-size: 1rem;
       @media screen and (max-width: $notesMediaScreenSize){
-        font-size:1rem;
+        font-size:0.9rem;
       }
       text-transform: uppercase;
       font-weight: 600;

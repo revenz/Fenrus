@@ -1,11 +1,10 @@
 #fdrive-files-address {
-  width: calc(100% - 9rem);
   direction: rtl;
   overflow: hidden;
   background: #1c1c1c;
   padding: 2px;
-  margin: 5px;
-  height: calc(100% - 12px);
+  margin: 0.5rem 0 0.5rem 0.5rem;
+  flex-grow: 1;
   border-radius: 7px;
 }
 #fdrive-files-address .address-bar {

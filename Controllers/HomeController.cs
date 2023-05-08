@@ -136,9 +136,9 @@ public class HomeController : BaseController
     {
         if (Regex.IsMatch(color ?? string.Empty, "^[0-9a-fA-F]{6}$"))
             color = "#" + color;
-        string svg = $@"            
+        string svg = $@"
 <svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 48 48"" enable-background=""new 0 0 48 48"">
-    <path fill=""{color}"" d=""M40,12H22l-4-4H8c-2.2,0-4,1.8-4,4v8h40v-4C44,13.8,42.2,12,40,12z""/>
+    <path fill=""{color}"" d=""m40 10h-18l-4-4h-10c-2.2 0-4 1.8-4 4v8h40v-4c0-2.2-1.8-4-4-4z""/>
     <linearGradient id=""grad"" x1=""0%"" y1=""0%"" x2=""100%"" y2=""0%"">
         <stop offset=""0%"" style=""stop-color:#444444;stop-opacity:1"" />
         <stop offset=""100%"" style=""stop-color:#6c6c6c;stop-opacity:1"" />

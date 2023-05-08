@@ -37,7 +37,7 @@
   justify-content: center;
   text-transform: uppercase;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   letter-spacing: 0.3rem;
 }
 #fdrive-wrapper .expander > span > i {
@@ -145,7 +145,7 @@
   align-items: center;
   flex-basis: 0;
   flex-grow: 1;
-  font-size: 1.2rem;
+  font-size: 1rem;
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.3rem;
@@ -155,7 +155,7 @@
 }
 @media screen and (max-width: 1000px) {
   #fdrive-wrapper .fdrive-tabs > div {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 }
 #fdrive-wrapper .fdrive-tabs > div.active {

@@ -544,6 +544,7 @@ class FenrusDrive {
     createSorter()
     {
         let eleSorter = document.createElement('div');
+        eleSorter.className = 'fdt-btn fdt-btn-dropdown';
         let sorts = '';
         for(let sort of this.fileList.sorts){
             sorts +='<label><input type="radio" name="sort-by" ' +
@@ -551,24 +552,18 @@ class FenrusDrive {
                 ' value="' +htmlEncode(sort.name.toLowerCase()) + '" ' +
                 '>' + htmlEncode(sort.name) + '</label>';
         }
-        eleSorter.innerHTML = '\n' +
-            '  <div class="fdrive-sorter">\n' +
-            '    <div class="dropdown">\n' +
-            '      <button class="dropdown-toggle">\n' +
-            '        <i class="view-icon fa-solid fa-list"></i>\n' +
+        eleSorter.innerHTML = '<i class="view-icon fa-solid fa-list"></i>' +
+            '           <span class="line">|</span>\n' +
             '        <i class="caret fas fa-caret-down"></i>\n' +
-            '      </button>\n' +
             '      <div class="dropdown-menu">\n' +
             '        <span class="dropdown-label">Sort</span>\n' +            
             '        <div class="radio-group">' + sorts + '</div>' +
             '        <div class="advanced">' +
             '           <label><input type="checkbox" class="show-hidden" />Show Hidden</label>'      
             '        </div>' + 
-            '      </div>\n' +
-            '    </div>\n' +
-            '  </div>';
+            '      </div>';
         let eleMenu = eleSorter.querySelector('.dropdown-menu');
-        eleSorter.querySelector('.dropdown-toggle .caret').addEventListener('click', (e) => {
+        eleSorter.querySelector('.caret').addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             
