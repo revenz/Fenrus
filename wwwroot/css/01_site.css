@@ -11,10 +11,15 @@ html {
   position: relative;
   min-height: 100%;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 400;
 }
 
+@media only screen and (min-resolution: 108dpi), only screen and (min-resolution: 1.08dppx) {
+  html {
+    font-size: 13px;
+  }
+}
 body {
   /* variables */
   --color-rgb: 240, 240, 240;

@@ -29,19 +29,21 @@ $notesMediaScreenSize: 1000px;
     opacity: 0.75;
     &:hover{ opacity: 1;}
     > span {
-      transform: rotate(-90deg);
-      display: block;
-      width: 11rem;
-      height: 1.4rem;
-      position: absolute;
-      left: -63px;
-      top: 93px;
-      overflow: hidden;
+      writing-mode: vertical-lr;
+      transform: rotate(-180deg);
       text-align: center;
+      width: 100%;
+      height: calc(100% - 2rem); 
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-transform: uppercase;
       font-weight: 600;
       font-size: 1.2rem;
       letter-spacing: 0.3rem;
+      > i {
+        margin-bottom:0.5rem;
+      }
     }
     > i {
       position: relative;

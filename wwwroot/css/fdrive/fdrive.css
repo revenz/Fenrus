@@ -27,19 +27,21 @@
   opacity: 1;
 }
 #fdrive-wrapper .expander > span {
-  transform: rotate(-90deg);
-  display: block;
-  width: 11rem;
-  height: 1.4rem;
-  position: absolute;
-  left: -63px;
-  top: 93px;
-  overflow: hidden;
+  writing-mode: vertical-lr;
+  transform: rotate(-180deg);
   text-align: center;
+  width: 100%;
+  height: calc(100% - 2rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-transform: uppercase;
   font-weight: 600;
   font-size: 1.2rem;
   letter-spacing: 0.3rem;
+}
+#fdrive-wrapper .expander > span > i {
+  margin-bottom: 0.5rem;
 }
 #fdrive-wrapper .expander > i {
   position: relative;
