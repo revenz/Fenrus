@@ -82,9 +82,9 @@
   align-items: center;
 }
 .main-menu li:hover .panel .setting .label, .main-menu li.force-hover .panel .setting .label {
-  width: 10rem;
-  max-width: 10rem;
-  min-width: 10rem;
+  width: 12rem;
+  max-width: 12rem;
+  min-width: 12rem;
   text-align: right;
   margin-right: 1rem;
   margin-top: 0.25rem;

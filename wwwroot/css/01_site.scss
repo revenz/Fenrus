@@ -3,30 +3,34 @@
   color:var(--accent);
 }
 
-html {
-    font-size: 14px;
-    font-family:sans-serif;
-    position: relative;
-    min-height: 100%;
-}
 
 @font-face {
-  font-family: "Source Sans Pro";
-  src: url("/fonts/SourceSansPro-Regular.woff") format("woff");
+    //font-family: "Source Sans Pro";
+    //src: url("/fonts/SourceSansPro-Regular.woff") format("woff");
+    font-family: "Montserrat";
+    src: url("/fonts/Montserrat-VariableFont_wght.ttf") format("truetype-variations");
+}
+html {
+    position: relative;
+    min-height: 100%;
+    // font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size:13px;
+    font-weight: 400;
 }
 body {
     /* variables */
-    --color-rgb: 240,240,240;
+    --color-rgb: 240, 240, 240;
     --color: rgb(var(--color-rgb));
     --color-darkest: rgb(160, 160, 160);
-    --color-secondary-rgb: 170,170,170;
+    --color-secondary-rgb: 170, 170, 170;
     --color-secondary: rgb(var(--color-secondary-rgb));
     --input-background-rgb: 49, 49, 49;
     --input-background: rgb(var(--input-background-rgb));
     --input-color: white;
-    --error-rgb: 255,100,100;
+    --error-rgb: 255, 100, 100;
     --error: rgb(var(--error-rgb));
-    
+
     --base: rgb(17, 18, 20);
     --base-rgb: 7, 18, 20;
     --base-darker: rgb(6, 17, 19);
@@ -34,8 +38,8 @@ body {
 
     --border-color: rgba(var(--color-rgb), 0.3);
     --input-border: var(---border-color);
-    --button-color:var(--color);
-    --button-background:transparent;
+    --button-color: var(--color);
+    --button-background: transparent;
 
     --success: #28a745;
     --success-rgb: 0, 167, 69;
@@ -45,8 +49,6 @@ body {
     --warning-rgb: 255, 193, 7;
     --danger: #dc3545;
     --danger-rgb: 220, 53, 69;
-
-    font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
 }
 
 body {

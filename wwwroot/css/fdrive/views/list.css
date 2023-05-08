@@ -12,7 +12,6 @@
   overflow: hidden;
   display: flex;
   flex-direction: row;
-  font-size: 1.1rem;
   margin: var(--margin);
   height: calc(100% - var(--margin) * 2);
   width: calc(100% - var(--margin) * 4);
