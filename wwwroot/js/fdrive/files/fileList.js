@@ -450,6 +450,9 @@ class FileList {
             eleDrag.style.left = event.clientX + 'px';
             eleDrag.style.top = event.clientY + 'px';
             document.body.appendChild(eleDrag);
+            while(this.container.classList.contains('file-drag'))
+                this.container.classList.remove('file-drag');
+            this.container.classList.add('file-drag');
         }
         let down = new Date().getTime();
 
@@ -468,6 +471,8 @@ class FileList {
             document.removeEventListener('mousemove', onMouseMove);
             if(eleDrag)
                 eleDrag.remove();
+            while(this.container.classList.contains('file-drag'))
+                this.container.classList.remove('file-drag');
             let up = new Date().getTime();
             if(Math.abs(down - up) < 300) {
                 singleClick();
