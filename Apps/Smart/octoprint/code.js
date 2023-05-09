@@ -16,7 +16,7 @@ class OctoPrint {
 
         let percentProgress = data?.progress?.completion;
         let printTimeLeftSecs = data?.progress?.printTimeLeft;
-        let state = data?.state ?? 'Unknown';
+        let state = data?.state ?? 'Offline';
 
         if(args.properties['webcam'])
         {
