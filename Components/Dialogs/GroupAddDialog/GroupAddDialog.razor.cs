@@ -92,7 +92,7 @@ public partial class GroupAddDialog: ComponentBase
         else
         {
             // remove from list
-            if(CheckedItems.Contains(option) == false)
+            if(CheckedItems.Contains(option))
                 CheckedItems.Remove(option);
         }
         return Task.CompletedTask;

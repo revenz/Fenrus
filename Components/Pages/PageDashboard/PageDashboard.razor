@@ -1,4 +1,5 @@
 @namespace Fenrus.Components
+@using System.Runtime.Serialization
 @inherits Fenrus.Pages.CommonPage<Fenrus.Models.Group>
 
 <FenrusPage Title="@lblTitle" Icon="fa-solid fa-house">
@@ -66,7 +67,14 @@
                     <div class="actions">
                         <span title="@lblMoveUp" class="fa-solid fa-angle-up" @onclick="() => Move(item, true)"></span>
                         <span title="@lblMoveDown" class="fa-solid fa-angle-down" @onclick="() => Move(item, false)"></span>
-                        <a title="@lblEdit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
+                        @if (item.IsSystem && IsAdmin)
+                        {
+                            <a title="@lblEdit" class="fa-solid fa-pen-to-square" href="/settings/system/groups/@item.Uid"></a>
+                        }
+                        else if(item.IsSystem == false)
+                        {
+                            <a title="@lblEdit" class="fa-solid fa-pen-to-square" href="/settings/groups/@item.Uid"></a>
+                        }
                         <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
                     </div>
                 </Cell>

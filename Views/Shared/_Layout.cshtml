@@ -4,6 +4,7 @@
 @{
     bool home = Context.Request.Path == "/" || Context.Request.Path.StartsWithSegments("/dashboard");
     string bodyClass = home ? "home " : "not-home ";
+    bodyClass += " dashboard-page "; // indicates the user is a dashboard page
     if (ViewBag.CustomBackground != null)
         bodyClass += "custom-background ";
     else

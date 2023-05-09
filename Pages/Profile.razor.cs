@@ -17,7 +17,7 @@ public partial class Profile: UserPage
     private string lblTitle, lblPageDescription, lblGeneral, lblChangePassword, lblCalendar, lblFileStorage, 
         CalendarUrl, CalendarProvider, CalendarUsername, CalendarPassword, CalendarName, lblTest,
         FileStorageUrl, FileStorageProvider, FileStorageUsername, FileStoragePassword;
-    private string ErrorGeneral, ErrorChangePassword, ErrorCalendar, ErrorFileStorage, lblCalendarPageDescription;
+    private string ErrorGeneral, ErrorChangePassword, ErrorCalendar, ErrorFileStorage, lblCalendarPageDescription,lblFileStoragePageDescription;
 
     private EditorForm GeneralEditor, PasswordEditor, CalendarEditor, FileStorageEditor;
 
@@ -45,6 +45,7 @@ public partial class Profile: UserPage
         lblFileStorage = Translator.Instant("Pages.Profile.Labels.FileStorage");
         lblChangePassword = Translator.Instant("Pages.Profile.Labels.ChangePassword");
         lblCalendarPageDescription = Translator.Instant("Pages.Profile.Labels.PageDescription-Calendar");
+        lblFileStoragePageDescription = Translator.Instant("Pages.Profile.Labels.PageDescription-FileStorage");
         PasswordCurrent = string.Empty;
         PasswordNew = string.Empty;
         PasswordConfirm = string.Empty;

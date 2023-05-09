@@ -1,7 +1,9 @@
 ﻿window.onpopstate = function(event) {
-    let path = document.location.pathname;
-    path = path.substring(path.lastIndexOf('/') + 1);
-    fetchDashboard(path, true);
+    if(document.querySelector('.dashboard-page')) {
+        let path = document.location.pathname;
+        path = path.substring(path.lastIndexOf('/') + 1);
+        fetchDashboard(path, true);
+    }
 }
 
 var eleTranslations = document.getElementById("translations");
@@ -83,6 +85,9 @@ function fetchDashboard(uid,  backwards) {
             history.pushState({uid:uid}, 'Fenrus', '/dashboard/' + uid);
 
         let eleDashboard = document.querySelector('.dashboard');
+        if(!eleDashboard)
+            return;
+        
         eleDashboard.innerHTML = html;
         if(typeof(themeInstance) !== 'undefined')
             themeInstance.init();
