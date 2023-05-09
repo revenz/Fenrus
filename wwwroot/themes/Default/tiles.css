@@ -341,6 +341,17 @@
   max-width: 100%;
 }
 
+.db-item.update-error::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  pointer-events: none;
+  border: solid 4px var(--error);
+}
+
 .db-item.chart .inner {
   display: flex;
 }

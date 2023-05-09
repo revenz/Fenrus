@@ -7,7 +7,7 @@ class OctoPrint {
             headers: {
                 "X-Api-Key": args.properties['apikey']
             }
-        })
+        }).data;
         return data;
     }
 

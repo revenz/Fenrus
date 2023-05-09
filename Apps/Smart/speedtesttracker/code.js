@@ -4,7 +4,7 @@ class SpeedtestTracker {
         return args.fetch({
             url: `api/speedtest/` + endpoint,
             timeout: 10
-        });
+        }).data;
     }
 
     status(args) {

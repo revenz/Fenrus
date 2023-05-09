@@ -1,6 +1,10 @@
 using System.Diagnostics;
-using System.Net.Http.Headers;
+using System.Net;
 using Jint;
+using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
 
 namespace Fenrus.Helpers.AppHelpers;
 
@@ -20,7 +24,7 @@ public class Fetch
     /// <summary>
     /// Gets an instance of the fetch helper
     /// </summary>
-    public static async Task<object> Execute(FetchArgs args)
+    public static async Task<FetchResult> Execute(FetchArgs args)
     {
         try
         {
@@ -67,7 +71,7 @@ public class Fetch
                 {
                     try
                     {
-                        if (header.Key == "Content-Type")
+                        if (header.Key.Replace("-", "").ToLowerInvariant() == "ContentType".ToLowerInvariant())
                             request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(header.Value);
                         else
                             request.Headers.TryAddWithoutValidation(header.Key, header.Value);
@@ -98,38 +102,38 @@ public class Fetch
 
             request.RequestUri = new Uri(url);
 
-            var (success, content) = Send(client, request, timeout);
+            var (success, result) = Send(client, request, timeout);
             if (success == false)
                 throw new Exception("Timeout");
-
-            var trimmed = content.Trim();
+            
+            var trimmed = result.content.Trim();
             if (trimmed.StartsWith("{") || trimmed.StartsWith("["))
             {
                 try
                 {
-                    engine.SetValue("temp_json", content);
+                    engine.SetValue("temp_json", result.content);
                     var parsed = engine.Evaluate("JSON.parse(temp_json)").ToObject();
-                    return parsed;
+                    result.data = parsed;
                 }
                 catch (Exception ex)
                 {
-                    return content;
                 }
             }
-
-            if (trimmed == "true") return true;
-            if (trimmed == "false") return false;
-            if (double.TryParse(trimmed, out double dbl))
-                return dbl;
-            return content;
+            else if (trimmed == "true") result.data = true;
+            else if (trimmed == "false") result.data = false;
+            else if (double.TryParse(trimmed, out double dbl))
+                result.data = dbl;
+            return result;
         }
         catch (Exception ex)
         {
-            return new
+            return new ()
             {
-                exception = true,
-                error = true,
-                message = ex.Message
+                content = ex.Message,
+                cookies = new (),
+                headers = new (),
+                status = 500,
+                success = false
             };
         }
     }
@@ -141,28 +145,46 @@ public class Fetch
     /// <param name="request">the message to send</param>
     /// <param name="timeout">the timeout in seconds for the request</param>
     /// <returns>the result of the request</returns>
-    private static (bool Success, string Content) Send(HttpClient client, HttpRequestMessage request,
-        int timeout)
+    private static (bool success, FetchResult result) Send(HttpClient client, HttpRequestMessage request, int timeout)
     {
         bool success = false;
-        string content = string.Empty;
         bool done = false;
+        FetchResult sendResult = new();
 
         var send = Task.Run(() =>
         {
             client.Timeout = TimeSpan.FromSeconds(timeout);
             var cts = new CancellationTokenSource();
 
-            var result = client.SendAsync(request, cts.Token).Result;
+            var response = client.SendAsync(request, cts.Token).Result;
             if (done)
                 return;
-            content = result.Content.ReadAsStringAsync(cts.Token).Result;
+            
+            sendResult.content = response.Content.ReadAsStringAsync(cts.Token).Result;
+            sendResult.data = sendResult.content;
             success = true;
+            sendResult.success = response.IsSuccessStatusCode;
+            sendResult.status = (int)response.StatusCode;
+            sendResult.cookies = new();
+            var cookies = new List<Cookie>();
+            if (response.Headers.TryGetValues("Set-Cookie", out var setCookieHeaders))
+            {
+                foreach (var setCookieHeader in setCookieHeaders)
+                {
+                    var setCookie = SetCookieHeaderValue.Parse(setCookieHeader);
+                    var cookie = new Cookie(setCookie.Name.ToString(), setCookie.Value.ToString(), setCookie.Path.ToString(), setCookie.Domain.ToString());
+
+                    sendResult.cookies[cookie.Name] = cookie.Value;
+                }
+            }
+            sendResult.headers = response.Headers.ToDictionary(h => h.Key, h => h.Value.First());
+            
         });
 
         Task.WhenAny(send, Task.Delay(timeout * 1_000)).Wait();
         done = true;
-        return (success, content);
+        
+        return (success, sendResult);
     }
 
     /// <summary>
@@ -193,5 +215,37 @@ public class Fetch
         /// Gets or sets the body of the request
         /// </summary>
         public string Body { get; set; }
+    }
+
+    /// <summary>
+    /// A result from a fetch
+    /// Note: these properties are in camelCase to better match Javascript
+    /// </summary>
+    public class FetchResult
+    {
+        /// <summary>
+        /// Gets the status code from the fetch
+        /// </summary>
+        public int status { get; set; }
+        /// <summary>
+        /// Gets if the request was successful
+        /// </summary>
+        public bool success { get; set; }
+        /// <summary>
+        /// Gets any response headers
+        /// </summary>
+        public Dictionary<string, string> headers { get; set; }
+        /// <summary>
+        /// Gets the response body
+        /// </summary>
+        public string content { get; set; }
+        /// <summary>
+        /// Gets or sets the parsed response of the content
+        /// </summary>
+        public object data { get; set; }
+        /// <summary>
+        /// Gets any response cookies returned
+        /// </summary>
+        public Dictionary<string, string> cookies { get; set; }
     }
 }

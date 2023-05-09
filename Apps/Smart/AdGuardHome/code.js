@@ -12,7 +12,7 @@
 			headers: {
                 'Authorization': auth
             }
-        });
+        }).data;
     }  
 	
     status(args) {

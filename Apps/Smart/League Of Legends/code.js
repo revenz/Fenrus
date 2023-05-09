@@ -6,7 +6,7 @@
             headers: {
                 'X-Riot-Token': args.properties['apiKey']
             }
-        });
+        }).data;
     }
 
     //TODO: cache files based on current ddragon version
@@ -14,7 +14,7 @@
         return args.fetch({
             url: fullUrl,
             timeout: 2500
-        });
+        }).data;
     }
 
 

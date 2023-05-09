@@ -26,7 +26,7 @@
             headers: {
                 Authorization: 'Bearer ' + args.properties.apiToken
             }
-        })
+        }).data;
     }
 
     getProjects(args) {

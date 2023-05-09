@@ -2,7 +2,7 @@
 class Steam {
 
     getData(args){
-        let data = args.fetch('https://store.steampowered.com/api/featuredcategories/');
+        let data = args.fetch('https://store.steampowered.com/api/featuredcategories/').data;
         if (!data?.specials)
             return null;
 

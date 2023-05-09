@@ -2,8 +2,7 @@
 {
 
     fetch(args, url) {
-        let result = args.fetch(url);
-        return result?.Result || result;
+        return args.fetch(url).data;
     }
     getToken(args){
         let username = args.properties['username'];

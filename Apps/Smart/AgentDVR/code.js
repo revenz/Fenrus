@@ -1,11 +1,10 @@
 class AgentDVR {
 
     doFetch(args, endpoint) {
-        var data = args.fetch({
+        return args.fetch({
             url:  endpoint,
             timeout: 5
-        })
-        return data;
+        }).data;
     }
 
     status(args) {

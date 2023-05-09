@@ -6,12 +6,12 @@ class Glances {
             url: `api/3/` + endpoint,
             timeout: 10
         });
-        result = result?.Result || result;
         
+        if(!result.success)
+            throw result.content || 'Fetch failed for an unknown reason';
+        result = result.data;
         if(typeof(result) === 'string')
-            result = JSON.parse(result);    
-        if(result.exception)
-            throw result.message || 'Fetch failed for an unknown reason';
+            result = JSON.parse(result);
         return result;
     }
 

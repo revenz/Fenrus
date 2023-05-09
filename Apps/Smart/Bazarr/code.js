@@ -4,7 +4,7 @@
         return args.fetch({
             url: 'api/' + endpoint + '?apikey=' + args.properties['apiKey'], 
 			timeout: 1500
-        });
+        }).data;
     }  
 	
     status(args) {

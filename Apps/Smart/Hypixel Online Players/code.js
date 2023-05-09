@@ -8,7 +8,7 @@
             headers: {
                 'API-Key': apikey
             }
-        });
+        }).data;
         const online = data?.playerCount ?? 0;
 
         return args.liveStats([

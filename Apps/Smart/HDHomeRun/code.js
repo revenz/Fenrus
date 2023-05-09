@@ -1,7 +1,7 @@
 ﻿class HDHomeRun
 {       
     getChannelCount(args){
-        let data = args.fetch('lineup.json?show=found');
+        let data = args.fetch('lineup.json?show=found').data;
         if(!data)
             return 0;
         return data.length || 0;
@@ -12,7 +12,7 @@
             headers: {
                 'Accept': 'text/html'
             }
-        });
+        }).content;
         if(!html)
             return;
             

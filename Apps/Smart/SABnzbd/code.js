@@ -8,8 +8,7 @@
     }
 
     fetch(args, url) {
-        let result = args.fetch(url);
-        return result?.Result || result;
+        return args.fetch(url).data;
     }
     getUrl(args, mode) {
         return `api?output=json&apikey=${args.properties['apikey']}&mode=${mode}`;

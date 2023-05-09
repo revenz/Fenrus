@@ -110,7 +110,7 @@ class SmartApp
             this.controller?.abort();
 
             this.controller = new AbortController();
-            let timeoutId = setTimeout(() => this.controller.abort(), Math.min(Math.max(this.interval, 3000), 5000));
+            let timeoutId = setTimeout(() => this.controller?.abort(), Math.min(Math.max(this.interval, 3000), 5000));
 
             let success = true;
             let url = `/apps/dashboard/${this.dashboardUid}/${encodeURIComponent(this.name)}/${encodeURIComponent(this.uid)}/status?name=` + encodeURIComponent(this.name) + '&size=' + encodeURIComponent(this.getItemSize()) + '&t=' + new Date().getTime();
@@ -146,17 +146,13 @@ class SmartApp
                 return res.text();
             })
             .then(html => {
-                if(html != undefined)
+                if(html !== undefined)
                     this.appSetStatus(html);  
             }).catch(error => {
                 success = false;
                 if(timeoutId)
                     clearTimeout(timeoutId);
-                this.controller = null;
-
-                let currentDashboard = this.getDashboardInstanceUid();
-                if(currentDashboard != this.dashboardInstanceUid)
-                    return; // if they changed dashboards    
+                this.controller = null; 
             }).finally(() => { 
                 resolve(success);
             });
@@ -240,6 +236,13 @@ class SmartApp
     {
         if(!content)
             return;
+        this.ele.classList.remove('update-error');
+        if(/^ERR:/.test(content))
+        {
+            console.log('error content: ' + content.substring(4));
+            this.ele.classList.add('update-error');
+            return;
+        }
         let eleItem = document.getElementById(this.uid);
         if(!eleItem)
             return;

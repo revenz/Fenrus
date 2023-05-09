@@ -4,7 +4,7 @@
         let result = args.fetch({ url: 'api/v1/request/count',
             headers: { 'X-Api-Key': args.properties['apikey']} 
         });
-        return result?.Result || result;
+        return result.data;
     }
     
     status(args) {

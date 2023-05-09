@@ -9,7 +9,7 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify({ username: username, password: password })
-            });
+            }).data;
             if(!res)
                 return;
             if(res.jwt)
@@ -29,7 +29,7 @@
         let data = args.fetch({
             url: 'api/endpoints?limit=100&start=0',
             headers: { 'Authorization': 'Bearer ' + jwt}
-        });
+        }).data;
         let running = 0;
         let stopped = 0;
 

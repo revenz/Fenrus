@@ -3,9 +3,8 @@
     pfImages = {};
     
     fetch(args, url) {
-        let result = args.fetch(url);
         args.log('Fetching URL: ' + url);
-        return result?.Result || result;
+        return args.fetch(url).data;
     }
     
     status(args)
@@ -164,7 +163,7 @@
     }
 
     test(args){
-        let data = args.fetch(args.url + '/api/status');
+        let data = args.fetch(args.url + '/api/status').data;
         args.log('data: ' + (data === null ? 'null' : JSON.stringify(data)));
         return isNaN(data.processed) === false;          
     }

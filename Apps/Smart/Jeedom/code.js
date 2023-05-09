@@ -16,7 +16,7 @@ class Jeedom {
 					},
 				}),
 			},
-		);
+		).data;
 	}
 
 	getDataMessage(args)
@@ -35,7 +35,7 @@ class Jeedom {
 					apikey: args.properties['apikey'],
 				},
 			}),
-		});
+		}).data;
 	}
 
     status(args) 
@@ -56,7 +56,7 @@ class Jeedom {
 	}
 		
 	test(args) {
-		const data = args.fetch(`${args.url}/core/api/jeeApi.php`);
+		const data = args.fetch(`${args.url}/core/api/jeeApi.php`).data;
 		args.log(data.id);
 		return data.id == '99999';
 	}

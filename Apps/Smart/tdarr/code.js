@@ -22,7 +22,7 @@ class Tdarr {
             },
           }),
         },
-      );
+      ).data;
   
       if (!data) {
         throw 'no data';
@@ -47,7 +47,7 @@ class Tdarr {
       let url = args.url;
       if(url.endsWith('/'))
         url = url.substring(0, url.length - 1);
-      const data = args.fetch(`${url}/api/v2/status`);
+      const data = args.fetch(`${url}/api/v2/status`).data;
       return (data.status === 'good');
     }
   }

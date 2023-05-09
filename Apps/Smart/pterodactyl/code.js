@@ -7,7 +7,7 @@
                 "Accept": "Application/vnd.pterodactyl.v1+json",
                 'Authorization': 'Bearer ' + args.properties['apiKey']
             }
-        });
+        }).data;
     }
 
     status(args) {

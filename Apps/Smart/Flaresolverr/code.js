@@ -1,7 +1,7 @@
 class Flaresolverr {
 
 status(args) {
-        const data = args.fetch(args.url);
+        const data = args.fetch(args.url).data;
         
         if(!data?.version)
                 return args.liveStats([
@@ -12,11 +12,11 @@ status(args) {
 
                 return args.liveStats([
                         ['Version',data.version],
-                        ['Up',data.msg == 'FlareSolverr is ready!'],
+                        ['Up',data.msg === 'FlareSolverr is ready!'],
                 ]);
         }
         test(args) {
-                const data = args.fetch(args.url);
-                return data.msg == 'FlareSolverr is ready!';
+                const data = args.fetch(args.url).data;
+                return data.msg === 'FlareSolverr is ready!';
         }
 }

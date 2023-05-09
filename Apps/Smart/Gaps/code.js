@@ -12,9 +12,9 @@
 
 		let rssData = [null, null, null];
 		
-		rssData[0] = id1.length > 1 ? args.fetch(this.getUrl(args, id1)) : Promise.resolve();
-		rssData[1] = id2.length > 1 ? args.fetch(this.getUrl(args, id2)) : Promise.resolve();
-		rssData[2] = id3.length > 1 ? args.fetch(this.getUrl(args, id3)) : Promise.resolve();
+		rssData[0] = id1.length > 1 ? args.fetch(this.getUrl(args, id1)).data : null;
+		rssData[1] = id2.length > 1 ? args.fetch(this.getUrl(args, id2)).data : null;
+		rssData[2] = id3.length > 1 ? args.fetch(this.getUrl(args, id3)).data : null;
        
 		let totalData = [];
 		let groupStats = args.properties['group'] == "group";
@@ -54,7 +54,7 @@
 			args.log("Test failed for Gaps, no rssID provided");
 			return false;
 		}
-		let data = args.fetch(this.getUrl(args, id1));
+		let data = args.fetch(this.getUrl(args, id1)).data;
 		args.log(data)
         return isNaN(data.length) === false;
     }

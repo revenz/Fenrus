@@ -22,7 +22,7 @@
         return args.fetch({
             url: `https://mcapi.us/server/status?ip=` + this.getMCUrl(args),
             timeout: 10,
-        });
+        }).data;
     }
 
     status(args) {

@@ -7,7 +7,7 @@ class Jenkins {
                 "Accept": "text/html",
                 'Authorization': 'Basic ' + args.Utils.btoa(args.properties['username'] + ':' + args.properties['password'])
             }
-        });
+        }).data;
     }
 
     status(args) {

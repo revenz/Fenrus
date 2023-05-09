@@ -70,6 +70,9 @@ public class Utils
             b /= 1000;
         }
 
+        if (b == 0)
+            return "0 " + sizes[order];
+
         return b.ToString("#.##") + ' ' + sizes[order];
     }
 

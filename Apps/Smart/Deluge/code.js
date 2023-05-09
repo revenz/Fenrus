@@ -5,15 +5,15 @@
     fetch(args, url) {
         let result = args.fetch(url);
         args.log('Fetching URL: ' + url);
-        return result?.Result || result;
+        return result.data;
     }
 
     getToken(args){
         let password = args.properties['password'];
 
         try
-        {
-            let res = args.fetchResponse({
+        {            
+            let res = args.fetch({
                 url: 'json',
                 method: 'POST',
                 headers: {
@@ -25,14 +25,19 @@
                     "params": [password]
                 })
             });
-            res = res?.Result || res;
 
-            let cookie = res.headers.get('set-cookie');
-            let sessionId = /(?<=(_session_id=))[^;]+/.exec(cookie)[0];
+            args.log('trying to get cookie');
+            let sessionId = res.cookies['_session_id'];
+            if(!sessionId) {
+                args.log('Failed to retrieve Deluge access token from cookies');
+                return;
+            }
+            args.log('sessionId: ' + sessionId);
             return sessionId;
         }
         catch(err)
         {
+            args.log('debug 10');
             args.log('Failed to retrieve Deluge access token', err);
             return;
         }
@@ -54,14 +59,13 @@
                 "params": [["none"], {}]
             })
         });
-        data = data?.Result || data;
         
-        if(data.error)
+        if(!data.success)
         {
-            args.log('Deluge error: ' + data.error.message);
+            args.log('Deluge error: ' + data.Content);
             return;
         }
-        return data;
+        return data.Data;
     }
 
      status(args) {
@@ -78,6 +82,7 @@
         let seeding = data.result.filters.state?.find(x => x[0] === 'Seeding');
         if(seeding)
             seeding = seeding[1];
+        args.log(`upload_rate: [${upload_rate}]`);
         
         return args.liveStats([
             ['Downloading', args.Utils.formatBytes(download_rate) + '/s'],

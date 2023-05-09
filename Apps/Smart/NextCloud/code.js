@@ -7,7 +7,7 @@
                 'Authorization': 'Basic ' + args.Utils.btoa(args.properties['username'] + ':' + args.properties['password']),
                 'OCS-APIRequest': 'true'
             }
-        });
+        }).data;
     }   
 
     status(args) {

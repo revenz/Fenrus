@@ -1,7 +1,7 @@
 class transmission {
 
     doFetch(args, sessionId) {
-        var data = args.fetch({
+        return args.fetch({
             url: `transmission/rpc`,
             timeout: 10,
             method: 'POST',
@@ -11,9 +11,7 @@ class transmission {
                 "X-Transmission-Session-Id": sessionId,
                 'Authorization': 'Basic ' + args.Utils.btoa(args.properties['username'] + ':' + args.properties['password'])
             }
-        }).catch(err => args.error('Transmission Error: ', err));
-
-        return data;
+        }).data;
     }
 
     status(args) {

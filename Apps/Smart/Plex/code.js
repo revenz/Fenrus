@@ -5,9 +5,9 @@
     }
 
     fetch(args, url) {
-        let result = args.fetch(url);
-        return result?.Result || result;
+        return args.fetch(url).data;
     }
+    
     status(args) {
         if(!args.properties){
             args.log('Error in plex app, no properties set');

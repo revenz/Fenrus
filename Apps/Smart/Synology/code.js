@@ -12,7 +12,7 @@ class Synology
             let res = args.fetch({
                 url:`${args.url}/webapi/auth.cgi?api=SYNO.API.Auth&version=6&method=login&account=${user}&passwd=${password}`,
                 timeout: 5000,
-			});
+			}).data;
             let sessionId = res.data.sid
 			
             return sessionId;
@@ -45,13 +45,13 @@ class Synology
 			})
 		});
 
-		if(data.success == false)
-		return;
+		if(data.success === false)
+		    return;
 		
 		let logout = args.fetch({
 			url:`${args.url}/webapi/auth.cgi?api=SYNO.API.Auth&version=6&method=logout&_sid=${sessionId}`,
 		});
-        return data;
+        return data.data;
 	}
 
 	status(args) {

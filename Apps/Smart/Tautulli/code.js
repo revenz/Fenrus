@@ -4,8 +4,7 @@
         return `api/v2?apikey=${args.properties['apikey']}&cmd=${endpoint}`;
     }
     fetch(args, url) {
-        let result = args.fetch(url);
-        return result?.Result || result;
+        return args.fetch(url).data;
     }
     status(args) {
         let dr = this.fetch(args, this.getUrl(args, 'get_activity'));

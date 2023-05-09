@@ -3,7 +3,7 @@
         var data = args.fetch({
             url: 'api/v1/' + endpoint + '?apikey=' + args.properties['apikey'],
             timeout: 5
-        })
+        }).data;
         return data;
     }
 

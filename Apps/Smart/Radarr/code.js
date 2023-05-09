@@ -6,8 +6,7 @@ class Radarr {
     }
     
     fetch(args, url) {
-        let result = args.fetch(url);
-        return result?.Result || result;
+        return args.fetch(url).data;
     }
 
     status(args) {
@@ -25,7 +24,7 @@ class Radarr {
             queueData = args.fetch({
                 url: this.getUrl(args, 'queue') + '&pageSize=10000',
                 timeout: 5000
-            });
+            }).data;
         } 
 
         args.log('about to filter data');
@@ -41,7 +40,7 @@ class Radarr {
         })
         let missingCount = filteredData?.length ?? 0;
 
-        data = args.fetch(this.getUrl(args, 'queue'));
+        data = args.fetch(this.getUrl(args, 'queue')).data;
         let queue = data?.records?.length ?? 0;
 
         if (args.properties['fetchWarnings'] != 'true') {

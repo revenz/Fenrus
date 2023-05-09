@@ -173,8 +173,8 @@ var status = instance.status(statusArgs);");
 
 
             SmartAppCache.AddData(uid, false, msg, string.Empty);
-            
-            return Content(string.Empty);
+
+            return Content("ERR:" + msg);
         }
     }
 
