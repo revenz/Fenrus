@@ -3,7 +3,10 @@
     authorize(args) {
         let username = args.properties['username'];
         let password = args.properties['password'];
-        try{
+        if(!username)
+            return;
+        try
+        {
             let res = args.fetch({
                 url: 'api/auth',
                 method: 'POST',
@@ -26,6 +29,10 @@
 
     status(args) {
         let jwt = this.authorize(args);
+        if(!jwt) {
+            args.log('Not configured');
+            return '';
+        }
         let data = args.fetch({
             url: 'api/endpoints?limit=100&start=0',
             headers: { 'Authorization': 'Bearer ' + jwt}
