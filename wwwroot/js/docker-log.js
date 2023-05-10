@@ -39,65 +39,44 @@ function openDockerLog(uid){
             if(newRows == rows && newCols == cols)
                 return;                
             rows = newRows;
-            cols = newCols;
-            console.log('resize', rows, cols);            
+            cols = newCols;    
             socket.emit('resize', { rows: rows, cols: cols});
         }
-
+        window.addEventListener('resize', resizeEvent);
+        
         const connect = function(args){
+            term.write('\r\nConnecting...\r\n');
             let https = document.location.protocol === 'https:';
-            socket = io((https ? 'wss' : 'ws') + '://' + document.location.host, {
-                rejectUnauthorized: false,
-                transports:['polling', 'websocket']
-            });
-            socket.on("connect_error", (err) => {
-                socket.close();
-                console.log('connect_failed');
-                term.write(`\r\nFailed to connect to server\r\n${err}\r\n`);
-            });
-            socket.on('connect_failed', function(){
-                console.log('connect_failed');
-            });
-            socket.emit('docker-log', [term.rows, term.cols].concat(args));;
-            socket.on('connect', function() {});
+            let cUrl = (https ? 'wss' : 'ws') + '://' + document.location.host + `/terminal/log/${uid}?rows=${rows}&cols=${cols}`;
+            console.log('cUrl:' , cUrl);
+            socket = new WebSocket(cUrl);
 
-            // Backend -> Browser
-            socket.on('data', function(data) {
-                if(!paused)
-                {
-                    console.log('index: ' + data.indexOf('[34m'));
-                    if(/\[3[\d]m/.test(data) === false)
-                    {
-                        // if already has [3[\d]m then its already has ansi colors on it
-                        data = data.replace(/(\[[^\]]+\])/g, xtermColor("$1", 'cyan'));
-                        data = data.replace(/(\'[^\']+\')/g, xtermColor("$1", 'magenta'));
-                        data = data.replace(/(`[^`]+`)/g, xtermColor("$1", 'magenta'));
-                        data = data.replace(/("[^"]+")/g, xtermColor("$1", 'magenta'));
-                        data = data.replace(/(\[(GET|POST|PUT|DELETE|OPTIONS)\])/gi, xtermColor("$1", 'red'));
-                        data = data.replace(/(\[(INFO|WARN|DBUG|ERRR|ERROR|WARNING|DEBUG|CRIT|CRITICAL)\])/gi, xtermColor("$1", 'green'));
-                        data = data.replace(/((http(s)?:\/)?\/([\w\d-_\.]+\/)+([\w\d-_\.]+)?)/g, xtermColor("$1", 'green'));
-                        data = data.replace(/((\[)?[\d]{4}-[\d]{2}-[\d]{2}(T)?(\])?)/g, xtermColor("$1", 'blue'));
-                        data = data.replace(/((\[)?[\d]{1,2}:[\d]{2}:[\d]{2}(.[\d]+)?(Z)?(\])?)/g, xtermColor("$1", 'blue'));
-                        data = data.replace('->', xtermColor("->", 'yellow'));
-                    }
+            socket.emit = (ev, msg) => {
+                socket.send(msg);
+            }
 
-                    term.write(data);
-                }
-            });
-            socket.on('terminal-closed', () => {                
-                term.write('\r\closed\r\n');
+            socket.onopen = function(event) {
+                console.log('socket open');
+            }
+            socket.onclose = function(event) {
+                console.log('terminal log close');
                 socket.close();
                 closeTerminal();
-            });
+            }
 
-            socket.on('disconnect', function() {
-                term.write('\r\n*** Disconnected ***\r\n');
-                closeTerminal(5000);
-            });
+            socket.onerror = function(event) {
+                console.log('socket error', event);
+            }
 
-            window.addEventListener('resize', resizeEvent);
+            socket.onmessage = function(event) {
+                if(event.data) {
+                    console.log(event.data);
+                    term.write(event.data);
+                }
+            }
         }
         divClose.addEventListener('click', () => {
+            console.log('socket closed!');
             socket?.close();
             closeTerminal();
         });
@@ -111,6 +90,7 @@ function openDockerLog(uid){
         const closeTerminal = function(timeout) {
             window.removeEventListener('resize', resizeEvent);
             document.body.classList.remove('terminal');
+            console.log('close log terminal');
             const closeActual = () => {                
                 div.className = 'closing';
                 setTimeout(() => {
@@ -122,13 +102,7 @@ function openDockerLog(uid){
             else
                 closeActual();
         }
-            
-        fetch('/terminal/' + uid).then((res) => res.text()).then(text => {
-            if(text)
-                connect([text]);
-            else
-                connect([uid]);
-        });
+        connect([uid]);
 
     }, 750);
 }

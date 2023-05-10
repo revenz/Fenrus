@@ -1,5 +1,6 @@
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 
@@ -22,6 +23,10 @@ public class DockerTerminal: Terminal
     /// Gets the dockers container name
     /// </summary>
     public string ContainerName { get; init; }
+    /// <summary>
+    /// Gets the docker command to run
+    /// </summary>
+    public string Command { get; init; }
     
     /// <summary>
     /// Constructs a new terminal
@@ -32,12 +37,14 @@ public class DockerTerminal: Terminal
     /// <param name="server">the docker server address</param>
     /// <param name="port">the docker server port</param>
     /// <param name="containerName">the dockers container name</param>
-    public DockerTerminal(WebSocket webSocket, int rows, int cols, string server, int port, string containerName) :
+    /// <param name="command">the docker command to run</param>
+    public DockerTerminal(WebSocket webSocket, int rows, int cols, string server, int port, string containerName, string command) :
         base(webSocket, rows, cols)
     {
         this.Server = server;
         this.Port = port < 1 || port > 65535 ? 2375 : port;
         this.ContainerName = containerName;
+        this.Command = command?.EmptyAsNull() ?? "/bin/bash";
     }
 
     /// <summary>
@@ -45,11 +52,11 @@ public class DockerTerminal: Terminal
     /// </summary>
     public override async Task Connect()
     {
-        DockerClient client = new DockerClientConfiguration(new Uri($"http://{Server}:{(Port)}")).CreateClient();
+        using DockerClient client = new DockerClientConfiguration(new Uri($"http://{Server}:{(Port)}")).CreateClient();
 
         var exec = await client.Exec.ExecCreateContainerAsync(ContainerName, new()
         {
-            Cmd = new List<string>() {"/bin/bash"},
+            Cmd = new List<string>() { Command },
             AttachStderr = true,
             AttachStdin = true,
             AttachStdout = true,
@@ -64,8 +71,55 @@ public class DockerTerminal: Terminal
         _ = ReadOutputAsync(this.Socket, multiplexedStream, source, token);
 
         await ReadInputAsync(this.Socket, multiplexedStream, source, token);
+
+        await this.Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+    }
+
+    /// <summary>
+    /// Connects to the console log for a docker container
+    /// </summary>
+    public async Task Log()
+    {
+        using DockerClient client = new DockerClientConfiguration(new Uri($"http://{Server}:{(Port)}")).CreateClient();
+
+        var container = await client.Containers.InspectContainerAsync(ContainerName);
+        using var logs = await client.Containers.GetContainerLogsAsync(ContainerName, true, new ContainerLogsParameters()
+        {
+            Follow = true, // Follow the log output
+            Tail = "100",
+            Timestamps = true,
+            ShowStderr = true,
+            ShowStdout = true
+        });
+        
+        using CancellationTokenSource source = new CancellationTokenSource();
+        CancellationToken token = source.Token;
+        var rgx = new Regex(@"(?<=(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.[\d]+Z\s)).*$", RegexOptions.Singleline);
+        _ = ReadOutputAsync(this.Socket, logs, source, token, fixer: (string input) =>
+        {
+            var match = rgx.Match(input);
+            return match.Success ? match.Value : input;
+        });
+
+        await WaitForLogClose();
         
         await this.Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+    }
+
+    /// <summary>
+    /// Waits for the log to close
+    /// </summary>
+    private async Task WaitForLogClose()
+    {
+        var buffer = new byte[1024 * 4];
+        var receiveResult = await this.Socket.ReceiveAsync(
+            new ArraySegment<byte>(buffer), CancellationToken.None);
+
+        while (!receiveResult.CloseStatus.HasValue)
+        {
+            receiveResult = await this.Socket.ReceiveAsync(
+                new ArraySegment<byte>(buffer), CancellationToken.None);
+        }
     }
     
     
@@ -76,11 +130,14 @@ public class DockerTerminal: Terminal
     /// <param name="multiplexedStream">the docker shell stream</param>
     /// <param name="source">the cancellation token source</param>
     /// <param name="cancellationToken">the cancellation token</param>
-    private async Task ReadOutputAsync(WebSocket webSocket, MultiplexedStream multiplexedStream, CancellationTokenSource source, CancellationToken cancellationToken = default)
+    /// <param name="fixer">{Optional] a action that takes in the string read from the docker stream and can be altered before sending it to the connecting stream</param>
+    private async Task ReadOutputAsync(WebSocket webSocket, MultiplexedStream multiplexedStream, CancellationTokenSource source, CancellationToken cancellationToken = default, 
+        Func<string, string>? fixer = null)
     {
         var dockerBuffer = System.Buffers.ArrayPool<byte>.Shared.Rent(81920);
         try
         {
+            var nonPrintableRegex = new Regex(@"[^\x20-\x7E]");
             while (true)
             {
                 // Clear buffer
@@ -96,7 +153,9 @@ public class DockerTerminal: Terminal
                 if (dockerReadResult.Count > 0)
                 {
                     string str = Encoding.UTF8.GetString(dockerBuffer, 0, dockerReadResult.Count);
-                    Console.WriteLine(str);
+                    if (fixer != null)
+                        str = fixer(str);
+
                     await SendMessage(str);
                 }
                 else

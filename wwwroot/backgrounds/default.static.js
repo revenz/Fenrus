@@ -1,17 +1,16 @@
-class DefaultBackground
+class DefaultStaticBackground
 {    
     dispose(){
-        console.log('disposing default backgorund');
         let removeIfExists = function(id)
         {
             let ele = document.getElementById(id);
             if(ele)
                 ele.remove();
         }
-        removeIfExists('bg1');
-        removeIfExists('bg2');
-        removeIfExists('bg3');
-        removeIfExists('bkg-default-style');
+        removeIfExists('bg1-static');
+        removeIfExists('bg2-static');
+        removeIfExists('bg3-static');
+        removeIfExists('bkg-default-static-style');
     }
     
     init()
@@ -21,14 +20,14 @@ class DefaultBackground
             if(document.getElementById(name))
                 return; // already exists
             let div = document.createElement("div");
-            div.className = 'bg ' + name;
+            div.className = 'bg-static ' + name;
             div.setAttribute('id', name);
             document.body.insertBefore(div, document.body.firstChild);
             
         }
-        createBackground('bg3');
-        createBackground('bg2');
-        createBackground('bg1');
+        createBackground('bg3-static');
+        createBackground('bg2-static');
+        createBackground('bg1-static');
             
         let css = `        
 body
@@ -38,52 +37,40 @@ body
     background:var(--bg-base, rgb(10,10,10));
 }
 
-.bg 
+.bg-static 
 {
     background-image: linear-gradient(-60deg, var(--accent, #ff0090) 50%, var(--bg-base, rgb(10,10,10)) 50%);
     bottom:0;
     left:-50%;
     opacity:.5;
     position:fixed;
-    right:-50%;
+    right:-30%;
     top:0;
     z-index:-1;
-    animation:slide 6s ease-in-out infinite alternate;
 }
 
-.bg1 {
+.bg1-static {
     opacity:0.1 !important;
 }
-.bg2 {
+.bg2-static {
     opacity:0.05 !important;
-    animation-direction:alternate-reverse;
-    animation-duration:8s;
+    right:-80%;
 }
-.bg3 {
+.bg3-static {
     opacity:0.03 !important;
-    animation-duration:10s;
-}
-
-@keyframes slide 
-{
-    0% {
-        transform:translateX(-25%);
-    }
-    100% {
-        transform:translateX(25%);
-    }
+    right:-125%;
 }
 `
-        let styleEle = document.getElementById('bkg-default-style');
+        let styleEle = document.getElementById('bkg-default-static-style');
         if(!styleEle){
             styleEle = document.createElement('style');
-            styleEle.setAttribute('id', 'bkg-default-style');
+            styleEle.setAttribute('id', 'bkg-default-static-style');
             document.body.insertBefore(styleEle, document.body.firstChild);            
         }
         styleEle.innerHTML = css;
     }
 }
-window.BackgroundType = DefaultBackground;
+window.BackgroundType = DefaultStaticBackground;
 
 if(document.querySelector('body.login-page, body.initial-config-page'))
-    new DefaultBackground().init();
+    new DefaultStaticBackground().init();

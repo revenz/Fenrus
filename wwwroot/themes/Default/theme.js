@@ -11,16 +11,8 @@ class DefaultTheme
             this.oneRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
             this.oneUnit = this.oneRem * this.unit;
 
-            for(let i=3;i>=1;i--){
-                let div = document.createElement('div')
-                div.classList.add('bg');
-                div.classList.add('bg' + i);
-                document.body.insertAdjacentElement("afterbegin", div);
-            }
-
             document.addEventListener('fenrus-item-resized', (e) => this.onItemResized(e));
             document.addEventListener('fenrus-item-deleted', (e) => this.onItemDeleted(e));
-
 
             let json = document.getElementById('theme-settings').value;          
             this.settings = json ? JSON.parse(json) : {};

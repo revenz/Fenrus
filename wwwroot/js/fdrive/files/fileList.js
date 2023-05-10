@@ -544,6 +544,41 @@ class FileList {
         });
         if(item)
         {
+            if(item.mimeType.startsWith('image') && false)
+            {
+                // cannot copy an GIF to the clipboard, it is blocked
+                // to copy an animated gif may have to convert to a webp,
+                // that can support animations and could work
+                menuItems.push(
+                {
+                    divider: 'bottom',
+                    content: `<i class="fa-solid fa-copy"></i>&nbsp;&nbsp;Copy`,
+                    events: {
+                        click: (e) => {
+                            const img = new Image();
+
+                            img.src = 'files/media?path=' + encodeURIComponent(item.fullPath);
+                            img.onload = function() {
+                                const canvas = document.createElement('canvas');
+                                canvas.width = this.naturalWidth;
+                                canvas.height = this.naturalHeight;
+
+                                const ctx = canvas.getContext('2d');
+                                ctx.drawImage(this, 0, 0);
+
+                                canvas.toBlob(function(blob) {
+                                    const cbItem = new ClipboardItem({ [item.mimeType]: blob});
+                                    navigator.clipboard.write([cbItem]).then(r => {
+                                        Toast.info('Copied to clipboard');
+                                    });
+                                });
+                            };
+                        }
+                    }
+                });
+                
+            }
+            
             menuItems.push(
             {
                 content: `<i class="fa-solid fa-pencil-alt"></i>&nbsp;&nbsp;Rename`,

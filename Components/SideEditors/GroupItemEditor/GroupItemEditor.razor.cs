@@ -215,7 +215,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             Model.AppName = app.AppName;
             Model.DockerContainer = app.DockerContainer;
             Model.DockerUid = app.DockerUid;
-            Model.DockerCommand = app.DockerCommand;
+            Model.DockerCommand = app.DockerCommand?.EmptyAsNull() ?? "/bin/bash"; // default
             Model.SshPasswordOriginal = app.SshPassword;
             Model.SshPassword = string.IsNullOrEmpty(app.SshPassword) ? string.Empty : Globals.DUMMY_PASSWORD;
             Model.SshServer = app.SshServer;
@@ -281,9 +281,18 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
                     app.Monitor = Model.Monitor;
                     app.ApiUrl = Model.ApiUrl;
                     app.AppName = Model.AppName;
-                    app.DockerContainer = Model.DockerContainer;
                     app.DockerUid = Model.DockerUid == Guid.Empty ? null : Model.DockerUid;
-                    app.DockerCommand = Model.DockerCommand;
+                    if (app.DockerUid == null)
+                    {
+                        app.DockerContainer = string.Empty;
+                        app.DockerCommand = string.Empty;
+                    }
+                    else
+                    {
+                        app.DockerCommand = Model.DockerCommand;
+                        app.DockerContainer = Model.DockerContainer;
+                    }
+
                     app.SshPassword = Model.SshPassword == Globals.DUMMY_PASSWORD
                         ? Model.SshPasswordOriginal
                         : EncryptionHelper.Encrypt(Model.SshPassword);

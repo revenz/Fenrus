@@ -37,6 +37,7 @@
 #fdrive-list.grid .icon img {
   border-radius: 0.25rem;
   object-fit: contain;
+  max-width: 120%;
 }
 #fdrive-list.grid .icon i {
   font-size: 10rem;

@@ -32,6 +32,7 @@
     "StatusIndicators": "Status Indicators",
     "ShowSearch": "Show Search",
     "Default": "Default",
+    "DefaultStatic": "Default (Static)",
     "ChooseImage":"Choose Image...", 
     "CurrentImage": "Current Image",
     "ColorBackground": "Solid Color",

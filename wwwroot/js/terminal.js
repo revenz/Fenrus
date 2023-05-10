@@ -139,98 +139,6 @@ function openTerminal(type, uid){
                 }
             }
             changeMode(3);
-                // socket = io(cUrl, {
-            //     rejectUnauthorized: false,
-            //     transports:['websocket']
-            // });
-            // socket.on("receive", (data) => {
-            //     console.log("socketReceived: ", data);
-            // });
-            // socket.on("connect_error", (err) => {
-            //     socket.close();
-            //     console.log('connect_failed');
-            //     term.write(`\r\nFailed to connect to server\r\n${err}\r\n`);
-            //     mode = 0;
-            //     term.write('Server: ');
-            // });
-            // socket.on('connect_failed', function(err){
-            //     console.log('connect_failed', err);
-            // });
-            // if(Array.isArray(args) === false)
-            //     args = [args];
-            // if(type == 2)
-            //     socket.emit('docker', [term.rows, term.cols].concat(args));
-            // else
-            //     socket.emit('ssh', [term.rows, term.cols].concat(args));
-            // socket.on('connect', function() {});
-            //
-            // // Backend -> Browser
-            // socket.on('data', function(data) {
-            //     console.log('data from socket', data);
-            //     if(mode === 3){
-            //         term.write(data);
-            //         authError = false;
-            //     }
-            // });
-            // socket.on('terminal-closed', () => {
-            //     console.log('got terminal-closed');
-            //     if(authError && (promptForPassword || promptForUser))
-            //         return;
-            //     if(mode === 3)
-            //         term.write('\r\closed\r\n');
-            //     socket.close();
-            //     closeTerminal();
-            // });
-            // socket.on('fenrus-error', (error) => {
-            //     term.write('\r\n' + error + '\r\n');
-            //     socket.close();
-            //     closeTerminal(5000);
-            // });
-            // socket.on('request-user', (args) => {
-            //     server = args[0];
-            //     promptForUser = true;
-            //     term.write(`\r\nServer: ${server}\r\n`);
-            //     changeMode(1)
-            // });
-            // socket.on('request-pwd', (args) => {
-            //     server = args[0];
-            //     username = args[1];
-            //     promptForPassword = true;
-            //     term.write(`\r\nEnter the password for: ${username}\r\n`);
-            //     changeMode(2)
-            // });
-            // socket.on('autherror', (error) => {
-            //     console.log('auth error', error, genericSsh, promptForPassword);
-            //     authError = true;
-            //     if(genericSsh){
-            //         term.write('\r\nFailed to authenticate: ' + error + '\r\n');
-            //         changeMode(1);
-            //     }
-            //     else if(promptForUser) {
-            //         term.write('\r\n' + error + '\r\n');
-            //         changeMode(1);
-            //     }
-            //     else if(promptForPassword){
-            //         term.write('\r\n' + error + '\r\n');
-            //         changeMode(2);
-            //     }
-            //     else
-            //     {
-            //         term.write('\r\n' + error + '\r\n');
-            //         socket.close();
-            //         closeTerminal(5000);
-            //     }
-            // });
-            //
-            // socket.on('disconnect', function() {
-            //     if(mode !== 3)
-            //         return;
-            //     term.write('\r\n*** Disconnected ***\r\n');
-            //     mode = 4;
-            //     closeTerminal(5000);
-            // });
-            //
-            // window.addEventListener('resize', resizeEvent);
         }
         divClose.addEventListener('click', () => {
             socket?.close();
@@ -263,7 +171,6 @@ function openTerminal(type, uid){
                 else
                     connect([uid]);
             })
-            //connect([uid]);
         }
 
     }, 750);
