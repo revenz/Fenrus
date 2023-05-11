@@ -271,7 +271,7 @@ public partial class Profile: UserPage
             password = profile.EmailPassword?.Value ?? string.Empty;
         }
 
-        using var imapService = new ImapService(EmailServer, EmailPort, EmailUsername, password);
+        using var imapService = new ImapService(this.UserUid, EmailServer, EmailPort, EmailUsername, password);
         var result = await imapService.Test();
         if (result.Success)
             ToastService.ShowSuccess("Successfully connected to file storage server");

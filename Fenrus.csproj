@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Folder Include="Apps\Basic" />
-    <Folder Include="wwwroot\icons\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,6 +68,10 @@
     <Reference Include="CalDAV.NET">
       <HintPath>Assemblies\CalDAV.NET.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="data\drive\3109431c-e831-4761-a3c1-c351502a7369\Fenrus-3_11_2023.json" />
   </ItemGroup>
 
 </Project>

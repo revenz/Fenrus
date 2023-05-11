@@ -1,6 +1,4 @@
 using Fenrus.Models;
-using Microsoft.AspNetCore.Connections.Features;
-using MimeKit;
 
 namespace Fenrus.Workers;
 
@@ -12,6 +10,12 @@ public class MailWorker:Worker
     public static readonly MailWorker Instance;
 
     private readonly Dictionary<Guid, UserInbox> UserInboxes = new();
+    public delegate void EmailEventHandler(Guid userUid, string eventName, object data);
+
+    /// <summary>
+    /// Event fired to refresh the inbox when it changes
+    /// </summary>
+    public event EmailEventHandler EmailEvent;
 
     /// <summary>
     /// Static constructor
@@ -42,6 +46,7 @@ public class MailWorker:Worker
             if (string.IsNullOrEmpty(profile.EmailServer))
                 continue;
             UserInboxes[profile.Uid] = new UserInbox(profile);
+            UserInboxes[profile.Uid].ImapService.Refresh += ImapServiceOnRefresh;
         }
     }
 
@@ -52,12 +57,19 @@ public class MailWorker:Worker
             // need to dispose of old and create a new one
             UserInboxes[profile.Uid].Dispose();
             UserInboxes.Remove(profile.Uid);
+            UserInboxes[profile.Uid].ImapService.Refresh -= ImapServiceOnRefresh;
         }
 
         if (string.IsNullOrEmpty(profile.EmailServer))
             return;
 
         UserInboxes[profile.Uid] = new UserInbox(profile);
+        UserInboxes[profile.Uid].ImapService.Refresh += ImapServiceOnRefresh;
+    }
+
+    private void ImapServiceOnRefresh(Guid userUid)
+    {
+        EmailEvent?.Invoke(userUid, "refresh", null);
     }
 
     public Task<List<EmailMessage>> GetLatest(Guid userUid)
@@ -83,7 +95,7 @@ public class MailWorker:Worker
 
         public UserInbox(UserProfile profile)
         {
-            ImapService = new(profile.EmailServer, profile.EmailPort, profile.EmailUsername, profile.EmailPassword);
+            ImapService = new(profile.Uid, profile.EmailServer, profile.EmailPort, profile.EmailUsername, profile.EmailPassword);
         }
 
         public Task<List<EmailMessage>> GetLatest()

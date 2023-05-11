@@ -37,6 +37,7 @@ class FenrusSocket{
     }
     
     onMessage(event) {
+        console.log('websocket on message:' , event);
         const rgxDateTime = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/;
 
         if(event.type === 'message'){
@@ -61,8 +62,18 @@ class FenrusSocket{
                 this.notificationsSaveTimer = setInterval(() => {
                     localStorage.setItem('NOTIFICATIONS', JSON.stringify(this.notificationHistory));
                 }, 3000);
-            }            
-        }
+            }
+            else if(msg.type === 'email')
+            {
+                if(typeof(msg.data) === 'string')
+                    msg.data = JSON.parse(msg.data);
+                console.log('email message!', msg.data);
+                let customEvent = new CustomEvent('fenrusEmail',
+                    { detail: msg.data }
+                );
+                document.dispatchEvent(customEvent);
+            }
+        } 
     }
 }
 

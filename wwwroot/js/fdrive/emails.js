@@ -1,12 +1,19 @@
 class FenrusDriveEmail
 {
     initDone = false;
-
     constructor(){
         this.container = document.getElementById('email-actual');
         this.eleMessage = document.createElement('div');
         this.eleMessage.setAttribute('id', 'fdrive-email-message');
         document.querySelector('.dashboard-main').appendChild(this.eleMessage);
+
+        document.addEventListener('fenrusEmail', (event) => {
+            console.log('received event: ', event);
+            if(event.detail.event === 'refresh') {
+                console.log('refresh emails');
+                this.refresh();
+            }
+        });
     }
 
     hide(){

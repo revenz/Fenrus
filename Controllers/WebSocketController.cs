@@ -69,6 +69,18 @@ public class FenrusSocketHandler:IDisposable
         this._userUid = userUid;
         CalendarEventWorker.RegisterClient();
         NotificationHelper.NotificationReceived += NotificationHelperOnNotificationReceived; 
+        MailWorker.Instance.EmailEvent += InstanceOnEmailEvent;
+    }
+
+    private void InstanceOnEmailEvent(Guid useruid, string eventname, object data)
+    {
+        if (useruid != this._userUid)
+            return;
+        _ = Send("email", JsonSerializer.Serialize(
+        new {
+           @event = eventname,
+           data
+        }));
     }
 
     /// <summary>

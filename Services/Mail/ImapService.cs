@@ -1,13 +1,6 @@
-using System.Drawing.Imaging;
-using HtmlAgilityPack;
 using MailKit;
 using MailKit.Net.Imap;
 using MimeKit;
-using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.Formats.Bmp;
-using SixLabors.ImageSharp.Formats.Gif;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Formats.Webp;
 
 namespace Fenrus.Services;
@@ -17,21 +10,32 @@ namespace Fenrus.Services;
 /// </summary>
 public class ImapService : IDisposable
 {
+    private readonly Guid _userUid;
     private readonly string _server, _username, _password;
     private readonly int _port;
-    private ImapClient _client;
+    private ImapClient _client, _clientWatcher;
+    private CancellationTokenSource _canecellationToken;
+    
+    public delegate void RefreshHandler(Guid userUid);
+
+    /// <summary>
+    /// Event fired to refresh the inbox when it changes
+    /// </summary>
+    public event RefreshHandler Refresh;
     
     /// <summary>
     /// Constructs an instance of the IMAP service
     /// </summary>
+    /// <param name="userUid">the UID of the user this IMAP server belongs to</param>
     /// <param name="server">the IMAP server address</param>
     /// <param name="port">the port used to connect to the server</param>
     /// <param name="username">the username used to for authentication</param>
     /// <param name="password">the password used to for authentication</param>
-    public ImapService(string server, int port, string username, string password)
+    public ImapService(Guid userUid, string server, int port, string username, string password)
     {
         if (port < 1 || port > 65535)
             port = 993;
+        this._userUid = userUid;
         this._server = server;
         this._port = port;
         this._username = username;
@@ -44,6 +48,7 @@ public class ImapService : IDisposable
     /// <returns>the IMAP client used for communication</returns>
     private async Task<ImapClient> GetClient()
     {
+        _ = SetupWatcher();
         if (_client != null)
         {
             if( _client.IsConnected)
@@ -58,6 +63,28 @@ public class ImapService : IDisposable
         return _client;
     }
 
+    private async Task SetupWatcher()
+    {
+        if (_clientWatcher != null)
+        {
+            if( _clientWatcher.IsConnected)
+                return;
+            _clientWatcher.Dispose();
+        }
+        _clientWatcher = new ImapClient();
+        await _clientWatcher.ConnectAsync(this._server, this._port);
+        await _clientWatcher.AuthenticateAsync(this._username, this._password);
+        await _clientWatcher.Inbox.OpenAsync(FolderAccess.ReadOnly);
+        _canecellationToken = new CancellationTokenSource();
+        _ = _clientWatcher.IdleAsync(_canecellationToken.Token);
+        _clientWatcher.Inbox.CountChanged += InboxOnCountChanged;
+    }
+
+    private void InboxOnCountChanged(object? sender, EventArgs e)
+    {
+        Refresh?.Invoke(this._userUid);
+    }
+
     /// <summary>
     /// Gets the latest messages from the server
     /// </summary>
@@ -70,29 +97,42 @@ public class ImapService : IDisposable
         Console.WriteLine("Time taken to open inbound: " + timeInbox);
 
         DateTime dt2 = DateTime.Now;
-        
-        var summaries = client.Inbox.Fetch(0, -1, 
-                 MessageSummaryItems.UniqueId | MessageSummaryItems.Envelope | MessageSummaryItems.InternalDate)
-             .OrderByDescending(summary => summary.Date)
-             .GroupBy(summary => summary.Envelope.MessageId ?? summary.Envelope.Subject) // group by message ID or subject if Message-ID is not available
-             .Select(group => group.OrderByDescending(summary => summary.Date).First()) // select the newest message in each thread
-             .Take(50)
-             .Select(summary => EmailMessage.FromMessageSummary(summary))
-             .ToList();
 
-        var timeMsg = DateTime.Now.Subtract(dt2);
-        var timeMsgTotal = DateTime.Now.Subtract(dtStart);
-        Console.WriteLine("timeMsg: " + timeMsg);
-        Console.WriteLine("timeMsgTotal: " + timeMsgTotal);
-        
-        return summaries;
+        lock (_client.SyncRoot)
+        {
+            var summaries = client.Inbox.Fetch(0, -1,
+                    MessageSummaryItems.UniqueId | MessageSummaryItems.Envelope | MessageSummaryItems.InternalDate)
+                .OrderByDescending(summary => summary.Date)
+                .GroupBy(summary =>
+                    summary.Envelope.MessageId ??
+                    summary.Envelope.Subject) // group by message ID or subject if Message-ID is not available
+                .Select(group =>
+                    group.OrderByDescending(summary => summary.Date)
+                        .First()) // select the newest message in each thread
+                .Take(50)
+                .Select(summary => EmailMessage.FromMessageSummary(summary))
+                .ToList();
+
+            var timeMsg = DateTime.Now.Subtract(dt2);
+            var timeMsgTotal = DateTime.Now.Subtract(dtStart);
+            Console.WriteLine("timeMsg: " + timeMsg);
+            Console.WriteLine("timeMsgTotal: " + timeMsgTotal);
+
+            return summaries;
+        }
     }
 
     public async Task<EmailMessage?> GetByUid(uint uid)
     {
         var client = await GetClient();
-        var message = await client.Inbox.GetMessageAsync(new UniqueId(uid));
-        return await EmailMessage.FromMimeMessage(message);
+        return await Task.Run(() =>
+        {
+            lock (_client.SyncRoot)
+            {
+                var message = client.Inbox.GetMessageAsync(new UniqueId(uid)).Result;
+                return EmailMessage.FromMimeMessage(message).Result;
+            }
+        });
     }
 
     /// <summary>
@@ -118,9 +158,31 @@ public class ImapService : IDisposable
         {
             try
             {
-                if(_client.IsConnected)
+                if (_client.IsConnected)
+                {
+                    _client.Inbox.Close();
                     _client.Disconnect(true);
+                }
+
                 _client.Dispose();
+            }
+            catch (Exception)
+            {
+            }
+        }
+        if (_clientWatcher != null)
+        {
+            _clientWatcher.Inbox.CountChanged -= InboxOnCountChanged; 
+            try
+            {
+                _canecellationToken.Cancel();
+                if (_clientWatcher.IsConnected)
+                {
+                    _clientWatcher.Inbox.Close();
+                    _clientWatcher.Disconnect(true);
+                }
+
+                _clientWatcher.Dispose();
             }
             catch (Exception)
             {
