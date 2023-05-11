@@ -287,7 +287,8 @@
         "Calendar": "Calendar",
         "FileStorage": "File Storage",
         "PageDescription-Calendar": "This allows you to customize the calendar source for your personal calendar.\n\nYou can specify a CalDAV source and if so, all events will be saved to that source, otherwise they will be saved into Fenrus directly.",
-        "PageDescription-FileStorage": "This allows you to customize the file storage source you can either use the built-in locally hosted file system storage or use an external WebDAV source."
+        "PageDescription-FileStorage": "This allows you to customize the file storage source you can either use the built-in locally hosted file system storage or use an external WebDAV source.",
+        "PageDescription-Email": "This allows you to configure an IMAP server to use for retrieving your emails."
       },
       "Messages": {
         "InvalidEmail": "Invalid email address",
@@ -316,7 +317,12 @@
         "FileStorageUrl": "URL",
         "FileStorageUrl-Help": "If using a known provider just enter the base URL for the file storage. For example, https://mynextcloud.com",
         "FileStorageUsername": "Username",
-        "FileStoragePassword": "Password"
+        "FileStoragePassword": "Password",
+        "EmailServer": "Server",
+        "EmailServer-Help": "The IMAP server address",
+        "EmailPort": "Port",
+        "EmailUsername": "Username",
+        "EmailPassword": "Password"
       }
     },
     "SearchEngines": {

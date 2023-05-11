@@ -164,7 +164,8 @@ app.MapFallbackToPage("/_Host");
 new UpTimeService().Start();
 var workers = new Fenrus.Workers.Worker[]
 {
-    new Fenrus.Workers.CalendarEventWorker()
+    new Fenrus.Workers.CalendarEventWorker(),
+    Fenrus.Workers.MailWorker.Instance
 };
 workers.ForEach(x => x.Start());
 

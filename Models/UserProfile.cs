@@ -54,4 +54,23 @@ public class UserProfile:IModalUid
     /// </summary>
     public EncryptedString FileStoragePassword { get; set; }
     #endregion
+    
+    #region Email
+    /// <summary>
+    /// Gets or sets the email server
+    /// </summary>
+    public EncryptedString EmailServer { get; set; }
+    /// <summary>
+    /// Gets or sets the email port
+    /// </summary>
+    public int EmailPort { get; set; }
+    /// <summary>
+    /// Gets or sets the email username
+    /// </summary>
+    public EncryptedString EmailUsername { get; set; }
+    /// <summary>
+    /// Gets or sets the email password
+    /// </summary>
+    public EncryptedString EmailPassword { get; set; }
+    #endregion
 }

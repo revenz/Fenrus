@@ -47,10 +47,20 @@ public class Globals
     /// Gets the default background color
     /// </summary>
     public const string DefaultBackgroundColor = "#111111";
-    
-    
+
     /// <summary>
     /// Gets the common HttpClient to use throughout the application
     /// </summary>
-    public static readonly HttpClient Client = new ();
+    public static readonly HttpClient Client;
+
+    static Globals()
+    {
+        
+        HttpClientHandler handler = new HttpClientHandler()
+        {
+            AllowAutoRedirect = true
+        };
+        Client = new(handler);
+    }
+
 }

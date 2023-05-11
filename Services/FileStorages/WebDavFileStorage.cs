@@ -470,7 +470,7 @@ public class WebDavFileStorage : IFileStorage
     /// <param name="url">the URL to the file storage server</param>
     /// <param name="username">the username for the file storage server</param>
     /// <param name="password">the password for the file storage server</param>
-    /// <returns></returns>
+    /// <returns>a tuple with the success test result and an error message if unsuccessful</returns>
     public static async Task<(bool Success, string Error)> Test(string provider, string url, string username, string password)
     {
         string serverUrl = GetServerUrl(provider, url, username, password);

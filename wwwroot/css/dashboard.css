@@ -21,7 +21,7 @@
   left: 2rem;
   font-size: 1.5rem;
   text-transform: uppercase;
-  z-index: 100;
+  z-index: 5;
 }
 
 .dashboard-drive {

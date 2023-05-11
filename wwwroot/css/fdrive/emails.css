@@ -1,0 +1,292 @@
+#fdrive-email #email-actual .email {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 3rem 1fr 8rem;
+  grid-gap: 10px;
+  align-items: center;
+  margin: 0.5rem 0 0.5rem 1rem;
+  background: #222222;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  user-select: none;
+}
+#fdrive-email #email-actual .email.selected {
+  background: rgba(var(--accent-rgb), 0.4);
+}
+#fdrive-email #email-actual .email:hover {
+  cursor: pointer;
+  background: rgba(var(--accent-rgb), 0.6);
+}
+#fdrive-email #email-actual .email .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-row: 1/span 2;
+  grid-column: 1;
+  border-radius: 50%;
+  background: #1a1a1a;
+  font-size: 1.2rem;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+#fdrive-email #email-actual .email .sender {
+  grid-row: 1;
+  grid-column: 2;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#fdrive-email #email-actual .email .date {
+  grid-row: 1;
+  grid-column: 3;
+  text-align: right;
+  padding-right: 0.5rem;
+}
+#fdrive-email #email-actual .email .subject {
+  grid-row: 2;
+  grid-column: 2/span 2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+body.email-opened ul.main-menu {
+  display: none;
+}
+body.email-opened .expander {
+  display: none;
+}
+
+#fdrive-email-message {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 2rem;
+  height: calc(100% - 4rem);
+  width: calc(100% - 4rem);
+  transition: transform 0.2s ease-in-out;
+  transform: translateX(100%);
+  background: var(--base);
+  flex-direction: column;
+}
+#fdrive-email-message.visible {
+  transform: translateX(0);
+  display: flex;
+  z-index: 5;
+}
+#fdrive-email-message .email-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 10px;
+}
+#fdrive-email-message .email-header-subject {
+  grid-column: 1/span 1;
+  grid-row: 1/span 1;
+  font-size: 1.5rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#fdrive-email-message .email-header-actions {
+  display: flex;
+  grid-column: 2/span 1;
+  grid-row: 1/span 1;
+}
+#fdrive-email-message .email-header-actions button {
+  background-color: #222222;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: var(--color);
+  border-radius: 0.5rem;
+  height: 2.5rem;
+  width: 3rem;
+}
+#fdrive-email-message .email-header-actions button + button {
+  margin-left: 0.5rem;
+}
+#fdrive-email-message .email-header-actions button:hover {
+  background: rgba(var(--accent-rgb), 0.4);
+}
+#fdrive-email-message .email-header-info {
+  grid-column: 1/span 2;
+  grid-row: 2/span 1;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: repeat(4, auto);
+  background: #222222;
+  border-radius: 1rem;
+  padding: 0.5rem;
+}
+#fdrive-email-message .email-header-info .email-header-icon {
+  grid-column: 1/2;
+  grid-row: 1/span 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #1a1a1a;
+  font-size: 1.4rem;
+  height: 3rem;
+  width: 3rem;
+  margin-top: 0.5rem;
+}
+#fdrive-email-message .email-header-info .email-header-from {
+  grid-column: 2/3;
+  grid-row: 1/2;
+  padding: 10px;
+}
+#fdrive-email-message .email-header-info .email-header-to {
+  grid-column: 2/3;
+  grid-row: 2/3;
+  padding: 10px;
+}
+#fdrive-email-message .email-header-info .email-header-date {
+  grid-column: 3/4;
+  grid-row: 1/2;
+  padding: 10px;
+}
+#fdrive-email-message .email-body {
+  flex-grow: 1;
+  white-space: pre-wrap;
+  margin-top: 1rem;
+  border-radius: 1rem;
+  position: relative;
+  background: #222;
+}
+#fdrive-email-message .email-body .email-body-content {
+  margin: 1rem;
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  right: 0;
+  overflow: auto;
+  border-radius: 1rem;
+}
+#fdrive-email-message .email-body .email-body-content > div {
+  background: #ddd;
+  color: #000;
+  filter: invert(1);
+}
+#fdrive-email-message .email-body img {
+  filter: invert(1);
+}
+
+.initials-a {
+  color: #ff6347;
+}
+
+.initials-b {
+  color: #87cefa;
+}
+
+.initials-c {
+  color: #ff69b4;
+}
+
+.initials-d {
+  color: #7fff00;
+}
+
+.initials-e {
+  color: #00bfff;
+}
+
+.initials-f {
+  color: #ff8c00;
+}
+
+.initials-g {
+  color: #4169e1;
+}
+
+.initials-h {
+  color: #ffa07a;
+}
+
+.initials-i {
+  color: #1e90ff;
+}
+
+.initials-j {
+  color: #ff00ff;
+}
+
+.initials-k {
+  color: #008080;
+}
+
+.initials-l {
+  color: #dc143c;
+}
+
+.initials-m {
+  color: #00ff7f;
+}
+
+.initials-n {
+  color: #9932cc;
+}
+
+.initials-o {
+  color: #ffd700;
+}
+
+.initials-p {
+  color: #add8e6;
+}
+
+.initials-q {
+  color: #9400d3;
+}
+
+.initials-r {
+  color: #ffff00;
+}
+
+.initials-s {
+  color: #00ffff;
+}
+
+.initials-t {
+  color: #ffa500;
+}
+
+.initials-u {
+  color: #a0522d;
+}
+
+.initials-v {
+  color: #00fa9a;
+}
+
+.initials-w {
+  color: #b22222;
+}
+
+.initials-x {
+  color: #00ced1;
+}
+
+.initials-y {
+  color: #ff69b4;
+}
+
+.initials-z {
+  color: #8b008b;
+}
+
+.initials-digit {
+  color: #f0e68c;
+}
+
+.initials-other {
+  color: #add8e6;
+}
+
+/*# sourceMappingURL=emails.css.map */

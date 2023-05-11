@@ -14,12 +14,16 @@ namespace Fenrus.Pages;
 /// </summary>
 public partial class Profile: UserPage
 {
-    private string lblTitle, lblPageDescription, lblGeneral, lblChangePassword, lblCalendar, lblFileStorage, 
+    private string lblTitle, lblPageDescription, lblGeneral, lblChangePassword, lblCalendar, lblFileStorage, lblEmail, 
         CalendarUrl, CalendarProvider, CalendarUsername, CalendarPassword, CalendarName, lblTest,
-        FileStorageUrl, FileStorageProvider, FileStorageUsername, FileStoragePassword;
-    private string ErrorGeneral, ErrorChangePassword, ErrorCalendar, ErrorFileStorage, lblCalendarPageDescription,lblFileStoragePageDescription;
+        FileStorageUrl, FileStorageProvider, FileStorageUsername, FileStoragePassword,
+        EmailServer, EmailUsername, EmailPassword,
+        ErrorGeneral, ErrorChangePassword, ErrorCalendar, ErrorFileStorage,
+        lblCalendarPageDescription,lblFileStoragePageDescription, lblEmailPageDescription;
 
-    private EditorForm GeneralEditor, PasswordEditor, CalendarEditor, FileStorageEditor;
+    private int EmailPort;
+
+    private EditorForm GeneralEditor, PasswordEditor, CalendarEditor, FileStorageEditor, EmailEditor;
 
     private List<ListOption> CalendarProviders = new()
     {
@@ -43,9 +47,11 @@ public partial class Profile: UserPage
         lblGeneral = Translator.Instant("Pages.Profile.Labels.General");
         lblCalendar = Translator.Instant("Pages.Profile.Labels.Calendar");
         lblFileStorage = Translator.Instant("Pages.Profile.Labels.FileStorage");
+        lblEmail = Translator.Instant("Pages.Profile.Labels.Email");
         lblChangePassword = Translator.Instant("Pages.Profile.Labels.ChangePassword");
         lblCalendarPageDescription = Translator.Instant("Pages.Profile.Labels.PageDescription-Calendar");
         lblFileStoragePageDescription = Translator.Instant("Pages.Profile.Labels.PageDescription-FileStorage");
+        lblEmailPageDescription  = Translator.Instant("Pages.Profile.Labels.PageDescription-Email");
         PasswordCurrent = string.Empty;
         PasswordNew = string.Empty;
         PasswordConfirm = string.Empty;
@@ -84,6 +90,17 @@ public partial class Profile: UserPage
                 : Globals.DUMMY_PASSWORD;
         }
 
+        EmailServer = profile.EmailServer ?? string.Empty;
+        EmailUsername = string.Empty;
+        EmailPassword = string.Empty;
+        EmailPort = 993;
+        if (string.IsNullOrEmpty(EmailServer) == false)
+        {
+            EmailUsername = profile.EmailUsername?.Value ?? string.Empty;
+            EmailPassword = string.IsNullOrEmpty(profile.EmailPassword?.Value) ? string.Empty : Globals.DUMMY_PASSWORD;
+            EmailPort = profile.EmailPort < 1 || profile.EmailPort > 65535 ? 993 : profile.EmailPort;
+        }
+        
         return Task.CompletedTask;
     }
 
@@ -163,7 +180,10 @@ public partial class Profile: UserPage
         else
             ToastService.ShowError(result.Error);
     }
-
+    
+    /// <summary>
+    /// Saves the file storage settings
+    /// </summary>
     async Task FileStorageSave()
     {
         var service = new UserService();
@@ -189,6 +209,9 @@ public partial class Profile: UserPage
         ToastService.ShowSuccess("File Storage Saved");
     }
     
+    /// <summary>
+    /// Tests the file storage settings
+    /// </summary>
     async Task FileStorageTest()
     {
         if (string.IsNullOrEmpty(FileStorageUrl) || string.IsNullOrEmpty(FileStorageProvider))
@@ -201,6 +224,55 @@ public partial class Profile: UserPage
             password = profile.FileStoragePassword?.Value ?? string.Empty;
         }
         var result = await WebDavFileStorage.Test(FileStorageProvider, FileStorageUrl, FileStorageUsername, password);
+        if (result.Success)
+            ToastService.ShowSuccess("Successfully connected to file storage server");
+        else
+            ToastService.ShowError(result.Error);
+    }
+
+    /// <summary>
+    /// Saves the email settings
+    /// </summary>
+    async Task EmailSave()
+    {
+        var service = new UserService();
+        var profile = service.GetProfileByUid(this.UserUid);
+        profile.EmailServer = (EncryptedString)(EmailServer ?? string.Empty);
+        if (string.IsNullOrEmpty(EmailServer))
+        {
+            profile.EmailUsername = (EncryptedString)string.Empty;
+            profile.EmailPassword = (EncryptedString)string.Empty;
+            profile.EmailPort = 0;
+        }
+        else
+        {
+            profile.EmailUsername = (EncryptedString)(EmailUsername ?? string.Empty);
+            if(EmailPassword != Globals.DUMMY_PASSWORD) // check if it changed
+                profile.EmailPassword = (EncryptedString)(EmailPassword ?? string.Empty);
+            profile.EmailPort = EmailPort;
+        }
+        service.UpdateProfile(profile);
+        Workers.MailWorker.Instance.UserMailServer(profile);
+        ToastService.ShowSuccess("Email Saved");
+    }
+
+    /// <summary>
+    /// Tests the email settings
+    /// </summary>
+    async Task EmailTest()
+    {
+        if (string.IsNullOrEmpty(EmailServer))
+            return;
+        string password = EmailPassword;
+        if (password == Globals.DUMMY_PASSWORD)
+        {
+            var service = new UserService();
+            var profile = service.GetProfileByUid(this.UserUid);
+            password = profile.EmailPassword?.Value ?? string.Empty;
+        }
+
+        using var imapService = new ImapService(EmailServer, EmailPort, EmailUsername, password);
+        var result = await imapService.Test();
         if (result.Success)
             ToastService.ShowSuccess("Successfully connected to file storage server");
         else

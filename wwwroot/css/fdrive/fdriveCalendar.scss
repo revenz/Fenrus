@@ -55,21 +55,20 @@ body {
   }
 }
 
-#fdrive-calendar {
+
+#fdrive-calendar, #fdrive-email {
   .fdrive-pane-title {
     background: #000;
     text-align: center;
+
     > span {
       line-height: 3rem;
       text-transform: uppercase;
-      font-size: 1.25rem;
-      letter-spacing: 0.5rem;
       font-weight: 600;
       font-size: 1.2rem;
-      text-transform: uppercase;
-      font-weight: 600;
       letter-spacing: 0.3rem;
     }
+
     .title {
       text-overflow: ellipsis;
       overflow: hidden;
@@ -77,9 +76,12 @@ body {
       width: 70%;
       white-space: nowrap;
       direction: rtl;
-      display:inline-block;
+      display: inline-block;
     }
   }
+}
+
+#fdrive-calendar {
   #calendar-actual {
     padding:1rem 2rem 7rem;
     > .fc-view-harness {
