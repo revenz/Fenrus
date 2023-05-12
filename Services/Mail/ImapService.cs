@@ -177,9 +177,15 @@ public class ImapService : IDisposable
 
         if (archiveFolder == null)
             throw new Exception("Could not find archive folder: " + ArchiveFolderName);
-        await archiveFolder.OpenAsync(FolderAccess.ReadWrite);
-        await client.Inbox.OpenAsync(FolderAccess.ReadWrite);
-        await client.Inbox.MoveToAsync(new UniqueId(uid), archiveFolder);
+        await Task.Run(() =>
+        {
+            lock (_client.SyncRoot)
+            {
+                archiveFolder.Open(FolderAccess.ReadWrite);
+                client.Inbox.Open(FolderAccess.ReadWrite);
+                client.Inbox.MoveTo(new UniqueId(uid), archiveFolder);
+            }
+        });
     }
 
     /// <summary>
@@ -189,8 +195,14 @@ public class ImapService : IDisposable
     public async Task Delete(uint uid)
     {
         var client = await GetClient();
-        await client.Inbox.AddFlagsAsync(new UniqueId(uid), MessageFlags.Deleted, true);
-        await client.Inbox.ExpungeAsync();
+        await Task.Run(() =>
+        {
+            lock (_client.SyncRoot)
+            {
+                client.Inbox.AddFlags(new UniqueId(uid), MessageFlags.Deleted, true);
+                client.Inbox.Expunge();
+            }
+        });
     }
     
     /// <summary>
