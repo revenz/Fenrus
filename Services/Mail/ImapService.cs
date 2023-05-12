@@ -1,5 +1,6 @@
 using MailKit;
 using MailKit.Net.Imap;
+using Microsoft.ClearScript.Util.Web;
 using MimeKit;
 using SixLabors.ImageSharp.Formats.Webp;
 
@@ -15,7 +16,20 @@ public class ImapService : IDisposable
     private readonly int _port;
     private ImapClient _client, _clientWatcher;
     private CancellationTokenSource _canecellationToken;
+
+    /// <summary>
+    /// Gets if this server is a gmail server
+    /// </summary>
+    private bool IsGmail => _server.ToLowerInvariant().Contains("gmail") || _server.ToLowerInvariant().Contains("google");
+
+    /// <summary>
+    /// Gets the name of the archive folder
+    /// </summary>
+    private string ArchiveFolderName => IsGmail ? "All Mail" : "Archive";
     
+    /// <summary>
+    /// A delegate that is used to trigger a refresh on the client
+    /// </summary>
     public delegate void RefreshHandler(Guid userUid);
 
     /// <summary>
@@ -59,7 +73,7 @@ public class ImapService : IDisposable
         _client = new ImapClient();
         await _client.ConnectAsync(this._server, this._port);
         await _client.AuthenticateAsync(this._username, this._password);
-        await _client.Inbox.OpenAsync(FolderAccess.ReadOnly);
+        await _client.Inbox.OpenAsync(FolderAccess.ReadWrite);
         return _client;
     }
 
@@ -101,7 +115,7 @@ public class ImapService : IDisposable
         lock (_client.SyncRoot)
         {
             var summaries = client.Inbox.Fetch(0, -1,
-                    MessageSummaryItems.UniqueId | MessageSummaryItems.Envelope | MessageSummaryItems.InternalDate)
+                    MessageSummaryItems.UniqueId | MessageSummaryItems.Envelope | MessageSummaryItems.InternalDate | MessageSummaryItems.Flags)
                 .OrderByDescending(summary => summary.Date)
                 .GroupBy(summary =>
                     summary.Envelope.MessageId ??
@@ -122,6 +136,11 @@ public class ImapService : IDisposable
         }
     }
 
+    /// <summary>
+    /// Gets a message by its UID
+    /// </summary>
+    /// <param name="uid">the UID of the message</param>
+    /// <returns>the message if found, otherwise null</returns>
     public async Task<EmailMessage?> GetByUid(uint uid)
     {
         var client = await GetClient();
@@ -130,11 +149,50 @@ public class ImapService : IDisposable
             lock (_client.SyncRoot)
             {
                 var message = client.Inbox.GetMessageAsync(new UniqueId(uid)).Result;
+                client.Inbox.AddFlagsAsync(new UniqueId(uid), MessageFlags.Seen, true);
                 return EmailMessage.FromMimeMessage(message).Result;
             }
         });
     }
 
+    /// <summary>
+    /// Marks a message as read
+    /// </summary>
+    /// <param name="uid">the UID of the message</param>
+    public async Task MarkAsRead(uint uid)
+    {
+        var client = await GetClient();
+        await client.Inbox.AddFlagsAsync(new UniqueId(uid), MessageFlags.Seen, true);
+    }
+
+    /// <summary>
+    /// Archives a message
+    /// </summary>
+    /// <param name="uid">the UID of the message</param>
+    public async Task Archive(uint uid)
+    {
+        var client = await GetClient();
+        IMailFolder? archiveFolder = (await client.GetFoldersAsync(client.PersonalNamespaces[0]))
+            .FirstOrDefault(x => x.Name == ArchiveFolderName);
+
+        if (archiveFolder == null)
+            throw new Exception("Could not find archive folder: " + ArchiveFolderName);
+        await archiveFolder.OpenAsync(FolderAccess.ReadWrite);
+        await client.Inbox.OpenAsync(FolderAccess.ReadWrite);
+        await client.Inbox.MoveToAsync(new UniqueId(uid), archiveFolder);
+    }
+
+    /// <summary>
+    /// Deletes a message
+    /// </summary>
+    /// <param name="uid">the UID of the message</param>
+    public async Task Delete(uint uid)
+    {
+        var client = await GetClient();
+        await client.Inbox.AddFlagsAsync(new UniqueId(uid), MessageFlags.Deleted, true);
+        await client.Inbox.ExpungeAsync();
+    }
+    
     /// <summary>
     /// Tests the connection to the IMAP server
     /// </summary>
@@ -152,6 +210,9 @@ public class ImapService : IDisposable
         }
     }
 
+    /// <summary>
+    /// Disposes of this object
+    /// </summary>
     public void Dispose()
     {
         if (_client != null)
@@ -188,170 +249,5 @@ public class ImapService : IDisposable
             {
             }
         }
-    }
-}
-
-/// <summary>
-/// Represents an email message with a subset of its properties for display in an inbox list.
-/// </summary>
-public class EmailMessage
-{
-    /// <summary>
-    /// Gets or sets the unique identifier of the email message.
-    /// </summary>
-    public uint Uid { get; set; }
-
-    /// <summary>
-    /// Gets or sets the message identifier of the email message.
-    /// </summary>
-    public string MessageId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the sender of the email message.
-    /// </summary>
-    public string From { get; set; }
-
-    /// <summary>
-    /// Gets or sets the recipient(s) of the email message.
-    /// </summary>
-    public string[] To { get; set; }
-
-    /// <summary>
-    /// Gets or sets the subject of the email message.
-    /// </summary>
-    public string Subject { get; set; }
-
-    /// <summary>
-    /// Gets or sets the date and time that the email message was sent, in UTC.
-    /// </summary>
-    public DateTime DateUtc { get; set; }
-
-    /// <summary>
-    /// Gets or sets the body of the email message.
-    /// </summary>
-    public string Body { get; set; }
-
-    /// <summary>
-    /// Gets or sest if the body is HTML
-    /// </summary>
-    public bool IsHtml { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the email message has attachments.
-    /// </summary>
-    public bool HasAttachments { get; set; }
-
-    /// <summary>
-    /// Creates a new <see cref="EmailMessage"/> object from an <see cref="IMessageSummary"/> object.
-    /// </summary>
-    /// <param name="summary">The <see cref="IMessageSummary"/> object to create the email message from.</param>
-    /// <returns>A new <see cref="EmailMessage"/> object with the properties extracted from the <paramref name="summary"/> object.</returns>
-    public static EmailMessage FromMessageSummary(IMessageSummary summary)
-    {
-        return new EmailMessage
-        {
-            Uid = summary.UniqueId.Id,
-            MessageId = summary.Envelope.MessageId,
-            From = summary.Envelope.From?.ToString() ?? string.Empty,
-            To = summary.Envelope.To?.Select(a => a.ToString()).ToArray() ?? new string[] { },
-            Subject = summary.Envelope.Subject ?? string.Empty,
-            DateUtc = summary.Date.UtcDateTime
-        };
-    }
-
-    /// <summary>
-    /// Converts a <see cref="MimeMessage"/> to an <see cref="EmailMessage"/>.
-    /// </summary>
-    /// <param name="message">The <see cref="MimeMessage"/> to convert.</param>
-    /// <returns>The <see cref="EmailMessage"/> representation of the <see cref="MimeMessage"/>.</returns>
-    public static async Task<EmailMessage> FromMimeMessage(MimeMessage message)
-    {
-        var emailMessage = new EmailMessage();
-
-        if (message.Headers.Contains("X-Message-ID"))
-            emailMessage.MessageId = message.Headers["X-Message-ID"];
-
-        emailMessage.MessageId = emailMessage.MessageId?.EmptyAsNull() ?? message.MessageId;
-        emailMessage.DateUtc = message.Date.UtcDateTime;
-        emailMessage.From = message.From.ToString();
-        emailMessage.To = message.To.Select(x => x.ToString()).ToArray();
-        emailMessage.Subject = message.Subject;
-        if(string.IsNullOrEmpty(message.HtmlBody))
-            emailMessage.Body = message.TextBody ?? string.Empty;
-        else
-        {
-            emailMessage.Body = CleanHtml(message);
-            emailMessage.IsHtml = true;
-        }
-
-        emailMessage.HasAttachments = message.Attachments.Any();
-
-
-        return emailMessage;
-    }
-
-    public static byte[] GetImageBytes(Image image, string contentType)
-    {
-        using (var stream = new MemoryStream())
-        {
-            image.Save(stream, new WebpEncoder());
-            return stream.ToArray();
-        }
-    }
-
-    private static string ImageToBase64Converted(Stream stream, string mimeType)
-    {
-        
-        using (var image = Image.Load(stream))
-        {
-            // Resize the image if it's too large
-            if (image.Width > 800 || image.Height > 800)
-            {
-                image.Mutate(x => x.Resize(new ResizeOptions
-                {
-                    Size = new Size(800, 800),
-                    Mode = ResizeMode.Max
-                }));
-            }
-
-            // Convert the image to a Base64-encoded stringar contentType = imageAttachment.ContentType;
-            try
-            {
-                var bytes = GetImageBytes(image, mimeType);
-                string base64String = Convert.ToBase64String(bytes);
-
-                return base64String;
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-        }
-    }
-
-    public static string CleanHtml(MimeMessage message)
-    {
-
-        var html = message.HtmlBody;
-        if (message.Body is Multipart multipart == false)
-            return html;
-
-        
-        foreach (var part in message.BodyParts.OfType<MimePart>())
-        {
-            if (string.IsNullOrEmpty(part.ContentId))
-                continue;
-            if (part.ContentDisposition?.Disposition != ContentDisposition.Inline)
-                continue;
-            
-            using var memoryStream = new MemoryStream();
-            part.Content.DecodeTo(memoryStream);
-            memoryStream.Position = 0;
-            string base64String = ImageToBase64Converted(memoryStream, part.ContentType.MediaSubtype);
-            var cid = part.ContentId.Trim('<', '>');
-            html = html.Replace($"cid:{cid}", $"data:webp;base64,{base64String}");
-        }
-
-        return html;
     }
 }

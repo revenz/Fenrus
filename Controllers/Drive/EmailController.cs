@@ -40,17 +40,72 @@ public class EmailController : BaseController
         return Ok(emails);
     }
 
-    [HttpGet("{messageId}")]
+    /// <summary>
+    /// Gets a message by its UID
+    /// </summary>
+    /// <param name="uid">the message UID</param>
+    /// <returns>the message</returns>
+    /// <exception cref="UnauthorizedAccessException">throw if the user does not have permission</exception>
+    [HttpGet("{uid}")]
     [ResponseCache(Duration = 7 * 24 * 60 * 60)]
-    public async Task<IActionResult> Open([FromRoute] uint messageId)
+    public async Task<IActionResult> GetByUid([FromRoute] uint uid)
     {
         var userUid = User.GetUserUid();
         if (userUid == null)
             throw new UnauthorizedAccessException();
         
-        var message = await Workers.MailWorker.Instance.GetByUid(userUid.Value, messageId);
+        var message = await Workers.MailWorker.Instance.GetByUid(userUid.Value, uid);
         return Ok(message);
-        
     }
 
+    /// <summary>
+    /// Marks a message as read
+    /// </summary>
+    /// <param name="uid">the message UID</param>
+    /// <returns>an awaited task</returns>
+    /// <exception cref="UnauthorizedAccessException">throw if the user does not have permission</exception>
+    [HttpPut("read/{uid}")]
+    public async Task<IActionResult> MarkAsRead([FromRoute] uint uid)
+    {
+        var userUid = User.GetUserUid();
+        if (userUid == null)
+            throw new UnauthorizedAccessException();
+        
+        await Workers.MailWorker.Instance.MarkAsRead(userUid.Value, uid);
+        return Ok();
+    }
+
+    /// <summary>
+    /// Archives a message
+    /// </summary>
+    /// <param name="uid">the message UID</param>
+    /// <returns>an awaited task</returns>
+    /// <exception cref="UnauthorizedAccessException">throw if the user does not have permission</exception>
+    [HttpPut("{uid}/archive")]
+    public async Task<IActionResult> Archive([FromRoute] uint uid)
+    {
+        var userUid = User.GetUserUid();
+        if (userUid == null)
+            throw new UnauthorizedAccessException();
+        
+        await Workers.MailWorker.Instance.Archive(userUid.Value, uid);
+        return Ok();
+    }
+
+    /// <summary>
+    /// Deletes a message
+    /// </summary>
+    /// <param name="uid">the message UID</param>
+    /// <returns>an awaited task</returns>
+    /// <exception cref="UnauthorizedAccessException">throw if the user does not have permission</exception>
+    [HttpDelete("{uid}")]
+    public async Task<IActionResult> Delete([FromRoute] uint uid)
+    {
+        var userUid = User.GetUserUid();
+        if (userUid == null)
+            throw new UnauthorizedAccessException();
+        
+        await Workers.MailWorker.Instance.Delete(userUid.Value, uid);
+        return Ok();
+    }
 }

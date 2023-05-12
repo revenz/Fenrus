@@ -50,6 +50,8 @@ class FenrusDriveEmail
         for(let item of items)
         {
             let ele = this.createElement();
+            if((item.flags & 1) == 1) 
+                ele.classList.add('seen');
             
             if(typeof(item.dateUtc) === 'string')
                 item.dateUtc = new Date(item.dateUtc);
@@ -61,6 +63,12 @@ class FenrusDriveEmail
             ele.querySelector('.date').innerText = this.formatDate(item.dateUtc);
             ele.querySelector('.subject').innerText = item.subject || '(No Subject)';
             ele.addEventListener('click', async () => {
+                if((item.flags & 1) != 1) 
+                {
+                    item.flags += 1;
+                    if(ele.classList.contains('seen') === false)
+                        ele.classList.add('seen');
+                }
                 await this.openMessage(item, ele);
             });
             this.container.appendChild(ele);
@@ -113,7 +121,8 @@ class FenrusDriveEmail
         return date.toLocaleString('default', { day: 'numeric', month: 'short', year: 'numeric' });
     }
     
-    async openMessage(message, ele) {
+    async openMessage(message, ele) 
+    {
         for(let ele of this.container.querySelectorAll('.email.selected'))
             ele.classList.remove('selected');
         
@@ -126,8 +135,8 @@ class FenrusDriveEmail
             '    <div class="email-header-actions">' +
             '       <button class="btn-reply" title="Reply"><i class="fa-solid fa-reply"></i></button>' +
             '       <button class="btn-forward" title="Forward"><i class="fa-solid fa-share"></i></button>' +
+            '       <button class="btn-archive" title="Archive"><i class="fa-solid fa-boxes-packing"></i></button>' +
             '       <button class="btn-delete" title="Delete"><i class="fa-solid fa-trash"></i></button>' +
-            '       <button class="btn-archive" title="Archive"><i class="fa-solid fa-archive"></i></button>' +
             '       <button class="btn-close" title="Close"><i class="fa-solid fa-times"></i></button>' +
             '    </div>' +
             '    <div class="email-header-info">' +
@@ -147,6 +156,12 @@ class FenrusDriveEmail
         
         this.eleMessage.querySelector('.btn-close').addEventListener('click', () => {
             this.closeMessage();
+        });
+        this.eleMessage.querySelector('.btn-delete').addEventListener('click', () => {
+            this.deleteMessage(message);
+        });
+        this.eleMessage.querySelector('.btn-archive').addEventListener('click', () => {
+            this.archiveMessage(message);
         });
         
         this.eleMessage.querySelector('.email-header-from').innerText = json.from;
@@ -208,7 +223,8 @@ class FenrusDriveEmail
             } else if (tag === 'img' && element.src.startsWith('http')) {
                 element.src = '/proxy/safe-image/' + btoa(element.src).replace(/\//g, '-');
             } else if (tag === 'a') {
-                element.removeAttribute('href');
+                // element.removeAttribute('href');
+                element.setAttribute('rel', 'noopener noreferrer');
             }
         });
 
@@ -228,5 +244,37 @@ class FenrusDriveEmail
         sanitizedDiv.style.color = 'inherit';
 
         return sanitizedDiv.innerHTML;
+    }
+    
+    async deleteMessage(message) {
+        let confirmed = await modalConfirm('Delete Message', 'Are you sure you want to delete this message?');
+        if(!confirmed)
+            return;
+        let result = await fetch('/email/' + message.uid, {
+            method: 'DELETE'
+        });
+        if(result.ok)
+        {
+            this.closeMessage();
+            return;            
+        }
+        let msg = await result.text();
+        Toast.error('Failed to delete', msg);
+    }
+
+    async archiveMessage(message) {
+        let confirmed = await modalConfirm('Archive Message', 'Are you sure you want to archive this message?');
+        if(!confirmed)
+            return;
+        let result = await fetch(`/email/${message.uid}/archive`, {
+            method: 'PUT'
+        });
+        if(result.ok)
+        {
+            this.closeMessage();
+            return;
+        }
+        let msg = await result.text();
+        Toast.error('Failed to archive', msg);
     }
 }

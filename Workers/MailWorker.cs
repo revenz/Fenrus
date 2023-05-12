@@ -7,9 +7,15 @@ namespace Fenrus.Workers;
 /// </summary>
 public class MailWorker:Worker
 {
+    /// <summary>
+    /// Gets the singleton instance of this worker
+    /// </summary>
     public static readonly MailWorker Instance;
 
     private readonly Dictionary<Guid, UserInbox> UserInboxes = new();
+    /// <summary>
+    /// An event that is fired regarding emails
+    /// </summary>
     public delegate void EmailEventHandler(Guid userUid, string eventName, object data);
 
     /// <summary>
@@ -33,11 +39,15 @@ public class MailWorker:Worker
         MonitorUsers();
     }
 
+    /// <summary>
+    /// Called when worker is triggered
+    /// </summary>
     protected override void Execute()
-    {
-        MonitorUsers();
-    }
+        => MonitorUsers();
 
+    /// <summary>
+    /// Sets up monitors for configured users email
+    /// </summary>
     private void MonitorUsers()
     {
         var profiles = DbHelper.GetAll<UserProfile>();
@@ -50,6 +60,10 @@ public class MailWorker:Worker
         }
     }
 
+    /// <summary>
+    /// Setups a mail server watcher for a users profile
+    /// </summary>
+    /// <param name="profile">the profile o fhte user</param>
     public void UserMailServer(UserProfile profile)
     {
         if (UserInboxes.ContainsKey(profile.Uid))
@@ -72,6 +86,11 @@ public class MailWorker:Worker
         EmailEvent?.Invoke(userUid, "refresh", null);
     }
 
+    /// <summary>
+    /// Gets the latest emails for a user
+    /// </summary>
+    /// <param name="userUid">the UID of the user</param>
+    /// <returns>the latest emails</returns>
     public Task<List<EmailMessage>> GetLatest(Guid userUid)
     {
         if(UserInboxes.TryGetValue(userUid, out var inbox))
@@ -79,14 +98,54 @@ public class MailWorker:Worker
         return Task.FromResult(new List<EmailMessage>());
     }
 
-    public Task<EmailMessage?> GetByUid(Guid userUid, uint messageId)
+    /// <summary>
+    /// Gets a message by its UID
+    /// </summary>
+    /// <param name="userUid">the UID of the user</param>
+    /// <param name="uid">the message UID</param>
+    /// <returns>the message</returns>
+    public Task<EmailMessage?> GetByUid(Guid userUid, uint uid)
     {
         if(UserInboxes.TryGetValue(userUid, out var inbox))
-            return inbox.GetByUid(messageId);
+            return inbox.GetByUid(uid);
         return Task.FromResult<EmailMessage?>(null);
-        
+    }
+    
+    /// <summary>
+    /// Marks a message as read
+    /// </summary>
+    /// <param name="userUid">the UID of the user</param>
+    /// <param name="uid">the UID of the message</param>
+    public async Task MarkAsRead(Guid userUid, uint uid)
+    {
+        if (UserInboxes.TryGetValue(userUid, out var inbox) == false)
+            return;
+        await inbox.ImapService.MarkAsRead(uid);
     }
 
+    /// <summary>
+    /// Archives a message
+    /// </summary>
+    /// <param name="userUid">the UID of the user</param>
+    /// <param name="uid">the UID of the message</param>
+    public async Task Archive(Guid userUid, uint uid)
+    {
+        if (UserInboxes.TryGetValue(userUid, out var inbox) == false)
+            return;
+        await inbox.ImapService.Archive(uid);
+    }
+
+    /// <summary>
+    /// Deletes a message
+    /// </summary>
+    /// <param name="userUid">the UID of the user</param>
+    /// <param name="uid">the UID of the message</param>
+    public async Task Delete(Guid userUid, uint uid)
+    {
+        if (UserInboxes.TryGetValue(userUid, out var inbox) == false)
+            return;
+        await inbox.ImapService.Delete(uid);
+    }
 
     private class UserInbox: IDisposable
     {

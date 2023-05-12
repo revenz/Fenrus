@@ -9,6 +9,25 @@
   border-radius: 0.5rem;
   padding: 0.5rem;
   user-select: none;
+  color: rgba(var(--color-rgb), 0.7);
+}
+#fdrive-email #email-actual .email:not(.seen) {
+  color: var(--color);
+  font-weight: 600;
+}
+#fdrive-email #email-actual .email:not(.seen) .icon {
+  position: relative;
+}
+#fdrive-email #email-actual .email:not(.seen) .icon::after {
+  content: "NEW";
+  position: absolute;
+  border: solid 1px;
+  border-radius: 0.25rem;
+  font-size: 0.6rem;
+  bottom: -0.25rem;
+  padding: 0.2rem;
+  left: 0.75rem;
+  background: #222;
 }
 #fdrive-email #email-actual .email.selected {
   background: rgba(var(--accent-rgb), 0.4);
