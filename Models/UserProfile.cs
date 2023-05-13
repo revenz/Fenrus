@@ -57,20 +57,36 @@ public class UserProfile:IModalUid
     
     #region Email
     /// <summary>
-    /// Gets or sets the email server
+    /// Gets or sets the email IMAP server
     /// </summary>
-    public EncryptedString EmailServer { get; set; }
+    public EncryptedString EmailImapServer { get; set; }
     /// <summary>
-    /// Gets or sets the email port
+    /// Gets or sets the email IMAP port
     /// </summary>
-    public int EmailPort { get; set; }
+    public int EmailImapPort { get; set; }
     /// <summary>
-    /// Gets or sets the email username
+    /// Gets or sets the email IMAP username
     /// </summary>
-    public EncryptedString EmailUsername { get; set; }
+    public EncryptedString EmailImapUsername { get; set; }
     /// <summary>
-    /// Gets or sets the email password
+    /// Gets or sets the email IMAP password
     /// </summary>
-    public EncryptedString EmailPassword { get; set; }
+    public EncryptedString EmailImapPassword { get; set; }
+    /// <summary>
+    /// Gets or sets the email SMTP server
+    /// </summary>
+    public EncryptedString EmailSmtpServer { get; set; }
+    /// <summary>
+    /// Gets or sets the email SMTP port
+    /// </summary>
+    public int EmailSmtpPort { get; set; }
+    /// <summary>
+    /// Gets or sets the email SMTP username
+    /// </summary>
+    public EncryptedString EmailSmtpUsername { get; set; }
+    /// <summary>
+    /// Gets or sets the email SMTP password
+    /// </summary>
+    public EncryptedString EmailSmtpPassword { get; set; }
     #endregion
 }

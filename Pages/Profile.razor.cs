@@ -17,11 +17,12 @@ public partial class Profile: UserPage
     private string lblTitle, lblPageDescription, lblGeneral, lblChangePassword, lblCalendar, lblFileStorage, lblEmail, 
         CalendarUrl, CalendarProvider, CalendarUsername, CalendarPassword, CalendarName, lblTest,
         FileStorageUrl, FileStorageProvider, FileStorageUsername, FileStoragePassword,
-        EmailServer, EmailUsername, EmailPassword,
+        EmailImapServer, EmailImapUsername, EmailImapPassword,
+        EmailSmtpServer, EmailSmtpUsername, EmailSmtpPassword,
         ErrorGeneral, ErrorChangePassword, ErrorCalendar, ErrorFileStorage,
         lblCalendarPageDescription,lblFileStoragePageDescription, lblEmailPageDescription;
 
-    private int EmailPort;
+    private int EmailImapPort, EmailSmtpPort;
 
     private EditorForm GeneralEditor, PasswordEditor, CalendarEditor, FileStorageEditor, EmailEditor;
 
@@ -90,15 +91,25 @@ public partial class Profile: UserPage
                 : Globals.DUMMY_PASSWORD;
         }
 
-        EmailServer = profile.EmailServer ?? string.Empty;
-        EmailUsername = string.Empty;
-        EmailPassword = string.Empty;
-        EmailPort = 993;
-        if (string.IsNullOrEmpty(EmailServer) == false)
+        EmailImapServer = profile.EmailImapServer ?? string.Empty;
+        EmailImapUsername = string.Empty;
+        EmailImapPassword = string.Empty;
+        EmailImapPort = 993;
+        if (string.IsNullOrEmpty(EmailImapServer) == false)
         {
-            EmailUsername = profile.EmailUsername?.Value ?? string.Empty;
-            EmailPassword = string.IsNullOrEmpty(profile.EmailPassword?.Value) ? string.Empty : Globals.DUMMY_PASSWORD;
-            EmailPort = profile.EmailPort < 1 || profile.EmailPort > 65535 ? 993 : profile.EmailPort;
+            EmailImapUsername = profile.EmailImapUsername?.Value ?? string.Empty;
+            EmailImapPassword = string.IsNullOrEmpty(profile.EmailImapPassword?.Value) ? string.Empty : Globals.DUMMY_PASSWORD;
+            EmailImapPort = profile.EmailImapPort < 1 || profile.EmailImapPort > 65535 ? 993 : profile.EmailImapPort;
+        }
+        EmailSmtpServer = profile.EmailSmtpServer ?? string.Empty;
+        EmailSmtpUsername = string.Empty;
+        EmailSmtpPassword = string.Empty;
+        EmailSmtpPort = 587;
+        if (string.IsNullOrEmpty(EmailSmtpServer) == false)
+        {
+            EmailSmtpUsername = profile.EmailSmtpUsername?.Value ?? string.Empty;
+            EmailSmtpPassword = string.IsNullOrEmpty(profile.EmailSmtpPassword?.Value) ? string.Empty : Globals.DUMMY_PASSWORD;
+            EmailSmtpPort = profile.EmailSmtpPort < 1 || profile.EmailSmtpPort > 65535 ? 587 : profile.EmailSmtpPort;
         }
         
         return Task.CompletedTask;
@@ -237,20 +248,37 @@ public partial class Profile: UserPage
     {
         var service = new UserService();
         var profile = service.GetProfileByUid(this.UserUid);
-        profile.EmailServer = (EncryptedString)(EmailServer ?? string.Empty);
-        if (string.IsNullOrEmpty(EmailServer))
+        profile.EmailImapServer = (EncryptedString)(EmailImapServer ?? string.Empty);
+        if (string.IsNullOrEmpty(EmailImapServer))
         {
-            profile.EmailUsername = (EncryptedString)string.Empty;
-            profile.EmailPassword = (EncryptedString)string.Empty;
-            profile.EmailPort = 0;
+            profile.EmailImapUsername = (EncryptedString)string.Empty;
+            profile.EmailImapPassword = (EncryptedString)string.Empty;
+            profile.EmailImapPort = 0;
         }
         else
         {
-            profile.EmailUsername = (EncryptedString)(EmailUsername ?? string.Empty);
-            if(EmailPassword != Globals.DUMMY_PASSWORD) // check if it changed
-                profile.EmailPassword = (EncryptedString)(EmailPassword ?? string.Empty);
-            profile.EmailPort = EmailPort;
+            profile.EmailImapUsername = (EncryptedString)(EmailImapUsername ?? string.Empty);
+            if(EmailImapPassword != Globals.DUMMY_PASSWORD) // check if it changed
+                profile.EmailImapPassword = (EncryptedString)(EmailImapPassword ?? string.Empty);
+            profile.EmailImapPort = EmailImapPort;
         }
+        
+        
+        profile.EmailSmtpServer = (EncryptedString)(EmailSmtpServer ?? string.Empty);
+        if (string.IsNullOrEmpty(EmailSmtpServer))
+        {
+            profile.EmailSmtpUsername = (EncryptedString)string.Empty;
+            profile.EmailSmtpPassword = (EncryptedString)string.Empty;
+            profile.EmailSmtpPort = 0;
+        }
+        else
+        {
+            profile.EmailSmtpUsername = (EncryptedString)(EmailImapUsername ?? string.Empty);
+            if(EmailSmtpPassword != Globals.DUMMY_PASSWORD) // check if it changed
+                profile.EmailSmtpPassword = (EncryptedString)(EmailSmtpPassword ?? string.Empty);
+            profile.EmailSmtpPort = EmailSmtpPort;
+        }
+        
         service.UpdateProfile(profile);
         Workers.MailWorker.Instance.UserMailServer(profile);
         ToastService.ShowSuccess("Email Saved");
@@ -261,17 +289,23 @@ public partial class Profile: UserPage
     /// </summary>
     async Task EmailTest()
     {
-        if (string.IsNullOrEmpty(EmailServer))
+        if (string.IsNullOrEmpty(EmailImapServer))
             return;
-        string password = EmailPassword;
+        string password = EmailImapPassword;
         if (password == Globals.DUMMY_PASSWORD)
         {
             var service = new UserService();
             var profile = service.GetProfileByUid(this.UserUid);
-            password = profile.EmailPassword?.Value ?? string.Empty;
+            password = profile.EmailImapPassword?.Value ?? string.Empty;
         }
 
-        using var imapService = new ImapService(this.UserUid, EmailServer, EmailPort, EmailUsername, password);
+        using var imapService = new ImapService(new UserProfile()
+        {
+            EmailImapServer = (EncryptedString)EmailImapServer, 
+            EmailImapPort = EmailImapPort,
+            EmailImapUsername = (EncryptedString)EmailImapUsername,
+            EmailImapPassword = (EncryptedString)password   
+        });
         var result = await imapService.Test();
         if (result.Success)
             ToastService.ShowSuccess("Successfully connected to file storage server");

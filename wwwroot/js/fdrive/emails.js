@@ -59,6 +59,9 @@ class FenrusDriveEmail
             let icon = ele.querySelector('.icon');
             let senderName = this.setInitials(item.from, icon);
             
+            if(this.openedMessageUid === item.uid)
+                ele.classList.add('selected');
+            
             ele.querySelector('.sender').innerText = senderName;
             ele.querySelector('.date').innerText = this.formatDate(item.dateUtc);
             ele.querySelector('.subject').innerText = item.subject || '(No Subject)';
@@ -123,6 +126,7 @@ class FenrusDriveEmail
     
     async openMessage(message, ele) 
     {
+        this.openedMessageUid = message.uid;
         for(let ele of this.container.querySelectorAll('.email.selected'))
             ele.classList.remove('selected');
         
@@ -148,11 +152,18 @@ class FenrusDriveEmail
             '  </div>' +
             '  <div class="email-body">' +
             '    <span class="email-body-content"></span>' +
-            '  </div>';        
+            '  </div>' +
+            ' <div class="blocker visible"><div class="blocker-indicator"><div class="blocker-spinner"></div></div>';        
         document.body.classList.add('email-opened');
+        this.setInitials(message.from, this.eleMessage.querySelector('.email-header-icon'));
+        this.eleMessage.querySelector('.email-header-from').innerText = message.from;
+        this.eleMessage.querySelector('.email-header-to').innerText = message.to.join('; ');
+        this.eleMessage.querySelector('.email-header-date').innerText = this.formatDate(message.dateUtc);
+        this.eleMessage.querySelector('.email-header-subject').innerText = message.subject || 'No Subject';
         let url = '/email/' + message.uid;
         const json = await this.fetchData(url);        
         console.log('json', json);
+        let eleBlocker = this.eleMessage.querySelector('.blocker');
         
         this.eleMessage.querySelector('.btn-close').addEventListener('click', () => {
             this.closeMessage();
@@ -176,6 +187,7 @@ class FenrusDriveEmail
         targetChild.appendChild(targetChild2)
         target.appendChild(targetChild)
         this.getSafeHtml(json.body, targetChild2);
+        eleBlocker.remove();
     }
 
     async fetchData(url) {
@@ -196,6 +208,7 @@ class FenrusDriveEmail
 
 
     closeMessage(){
+        this.openedMessageUid = null;
         this.eleMessage.className = '';
         for(let ele of this.container.querySelectorAll('.email.selected'))
             ele.classList.remove('selected');
@@ -255,7 +268,8 @@ class FenrusDriveEmail
         });
         if(result.ok)
         {
-            this.closeMessage();
+            if(this.openedMessageUid === message.uid)
+                this.closeMessage();
             return;            
         }
         let msg = await result.text();
@@ -271,7 +285,8 @@ class FenrusDriveEmail
         });
         if(result.ok)
         {
-            this.closeMessage();
+            if(this.openedMessageUid === message.uid)
+                this.closeMessage();
             return;
         }
         let msg = await result.text();

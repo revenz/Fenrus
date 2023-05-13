@@ -99,10 +99,17 @@
             <FenrusTab Title="@lblEmail">
                 <Editor @ref=EmailEditor>
                     <div class="page-description">@lblEmailPageDescription</div>
-                    <InputText Page="Profile" Label="EmailServer" @bind-Value="EmailServer"/>
-                    <InputNumber Page="Profile" Label="EmailPort" @bind-Value="EmailPort" Minimum="1" Maximum="65535" />
-                    <InputText Page="Profile" Label="EmailUsername" @bind-Value="EmailUsername"/>
-                    <InputText Page="Profile" Label="EmailPassword" @bind-Value="EmailPassword" Password="true"/>
+                    <InputText Page="Profile" Label="EmailImapServer" @bind-Value="EmailImapServer"/>
+                    <InputNumber Page="Profile" Label="EmailImapPort" @bind-Value="EmailImapPort" Minimum="1" Maximum="65535" />
+                    <InputText Page="Profile" Label="EmailImapUsername" @bind-Value="EmailImapUsername"/>
+                    <InputText Page="Profile" Label="EmailImapPassword" @bind-Value="EmailImapPassword" Password="true"/>
+                    <hr />
+                    
+                    <InputText Page="Profile" Label="EmailSmtpServer" @bind-Value="EmailSmtpServer"/>
+                    <InputNumber Page="Profile" Label="EmailSmtpPort" @bind-Value="EmailSmtpPort" Minimum="1" Maximum="65535" />
+                    <InputText Page="Profile" Label="EmailSmtpUsername" @bind-Value="EmailSmtpUsername"/>
+                    <InputText Page="Profile" Label="EmailSmtpPassword" @bind-Value="EmailSmtpPassword" Password="true"/>
+                    
                     <div class="buttons">
                         <button class="btn" @onclick="() => EmailTest()">@lblTest</button>
                         <button class="btn" @onclick="() => EmailSave()">@lblSave</button>

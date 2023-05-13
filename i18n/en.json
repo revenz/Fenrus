@@ -318,11 +318,16 @@
         "FileStorageUrl-Help": "If using a known provider just enter the base URL for the file storage. For example, https://mynextcloud.com",
         "FileStorageUsername": "Username",
         "FileStoragePassword": "Password",
-        "EmailServer": "Server",
-        "EmailServer-Help": "The IMAP server address",
-        "EmailPort": "Port",
-        "EmailUsername": "Username",
-        "EmailPassword": "Password"
+        "EmailImapServer": "IMAP Server",
+        "EmailImapServer-Help": "The IMAP server address used to receive emails",
+        "EmailImapPort": "Port",
+        "EmailImapUsername": "Username",
+        "EmailImapPassword": "Password",
+        "EmailSmtpServer": "SMTP Server",
+        "EmailSmtpServer-Help": "The SMTP server address used to send emails",
+        "EmailSmtpPort": "Port",
+        "EmailSmtpUsername": "Username",
+        "EmailSmtpPassword": "Password"
       }
     },
     "SearchEngines": {

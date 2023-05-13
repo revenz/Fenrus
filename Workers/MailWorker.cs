@@ -53,7 +53,7 @@ public class MailWorker:Worker
         var profiles = DbHelper.GetAll<UserProfile>();
         foreach (var profile in profiles)
         {
-            if (string.IsNullOrEmpty(profile.EmailServer))
+            if (string.IsNullOrEmpty(profile.EmailImapServer))
                 continue;
             UserInboxes[profile.Uid] = new UserInbox(profile);
             UserInboxes[profile.Uid].ImapService.Refresh += ImapServiceOnRefresh;
@@ -74,7 +74,7 @@ public class MailWorker:Worker
             UserInboxes[profile.Uid].ImapService.Refresh -= ImapServiceOnRefresh;
         }
 
-        if (string.IsNullOrEmpty(profile.EmailServer))
+        if (string.IsNullOrEmpty(profile.EmailImapServer))
             return;
 
         UserInboxes[profile.Uid] = new UserInbox(profile);
@@ -154,7 +154,7 @@ public class MailWorker:Worker
 
         public UserInbox(UserProfile profile)
         {
-            ImapService = new(profile.Uid, profile.EmailServer, profile.EmailPort, profile.EmailUsername, profile.EmailPassword);
+            ImapService = new(profile);
         }
 
         public Task<List<EmailMessage>> GetLatest()
