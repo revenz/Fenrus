@@ -1,8 +1,4 @@
 using MailKit;
-using MailKit.Net.Imap;
-using Microsoft.ClearScript.Util.Web;
-using MimeKit;
-using SixLabors.ImageSharp.Formats.Webp;
 
 namespace Fenrus.Services;
 
@@ -14,8 +10,7 @@ public class ImapService : IDisposable
     private readonly Guid _userUid;
     private readonly string _server, _username, _password;
     private readonly int _port;
-    private ImapClient _client, _clientWatcher;
-    private CancellationTokenSource _canecellationToken;
+    //private ImapClient client, _clientWatcher;
 
     /// <summary>
     /// Gets if this server is a gmail server
@@ -36,6 +31,8 @@ public class ImapService : IDisposable
     /// Event fired to refresh the inbox when it changes
     /// </summary>
     public event RefreshHandler Refresh;
+
+    private ImapClientWrapper clientHelper;
     
     /// <summary>
     /// Constructs an instance of the IMAP service
@@ -54,49 +51,8 @@ public class ImapService : IDisposable
         this._port = port;
         this._username = username;
         this._password = password;
-    }
-
-    /// <summary>
-    /// Gets the IMAP client used for communication
-    /// </summary>
-    /// <returns>the IMAP client used for communication</returns>
-    private async Task<ImapClient> GetClient()
-    {
-        _ = SetupWatcher();
-        if (_client != null)
-        {
-            if( _client.IsConnected)
-                return _client;
-            _client.Dispose();
-        }
-
-        _client = new ImapClient();
-        await _client.ConnectAsync(this._server, this._port);
-        await _client.AuthenticateAsync(this._username, this._password);
-        await _client.Inbox.OpenAsync(FolderAccess.ReadWrite);
-        return _client;
-    }
-
-    private async Task SetupWatcher()
-    {
-        if (_clientWatcher != null)
-        {
-            if( _clientWatcher.IsConnected)
-                return;
-            _clientWatcher.Dispose();
-        }
-        _clientWatcher = new ImapClient();
-        await _clientWatcher.ConnectAsync(this._server, this._port);
-        await _clientWatcher.AuthenticateAsync(this._username, this._password);
-        await _clientWatcher.Inbox.OpenAsync(FolderAccess.ReadOnly);
-        _canecellationToken = new CancellationTokenSource();
-        _ = _clientWatcher.IdleAsync(_canecellationToken.Token);
-        _clientWatcher.Inbox.CountChanged += InboxOnCountChanged;
-    }
-
-    private void InboxOnCountChanged(object? sender, EventArgs e)
-    {
-        Refresh?.Invoke(this._userUid);
+        this.clientHelper = new(userUid, server, port, username, password);
+        this.clientHelper.Refresh += (Guid uid) => { Refresh?.Invoke(this._userUid); };
     }
 
     /// <summary>
@@ -105,35 +61,34 @@ public class ImapService : IDisposable
     /// <returns>the latest messages</returns>
     public async Task<List<EmailMessage>> GetLatest()
     {
+        using var operation = await clientHelper.StartOperation();
+        var client = operation.Client;
         DateTime dtStart = DateTime.Now;
-        var client = await GetClient();
         var timeInbox = DateTime.Now.Subtract(dtStart);
         Console.WriteLine("Time taken to open inbound: " + timeInbox);
 
         DateTime dt2 = DateTime.Now;
 
-        lock (_client.SyncRoot)
-        {
-            var summaries = client.Inbox.Fetch(0, -1,
-                    MessageSummaryItems.UniqueId | MessageSummaryItems.Envelope | MessageSummaryItems.InternalDate | MessageSummaryItems.Flags)
-                .OrderByDescending(summary => summary.Date)
-                .GroupBy(summary =>
-                    summary.Envelope.MessageId ??
-                    summary.Envelope.Subject) // group by message ID or subject if Message-ID is not available
-                .Select(group =>
-                    group.OrderByDescending(summary => summary.Date)
-                        .First()) // select the newest message in each thread
-                .Take(50)
-                .Select(summary => EmailMessage.FromMessageSummary(summary))
-                .ToList();
+        var summaries = (await client.Inbox.FetchAsync(0, -1,
+                MessageSummaryItems.UniqueId | MessageSummaryItems.Envelope | MessageSummaryItems.InternalDate | MessageSummaryItems.Flags)
+            )
+            .OrderByDescending(summary => summary.Date)
+            .GroupBy(summary =>
+                summary.Envelope.MessageId ??
+                summary.Envelope.Subject) // group by message ID or subject if Message-ID is not available
+            .Select(group =>
+                group.OrderByDescending(summary => summary.Date)
+                    .First()) // select the newest message in each thread
+            .Take(50)
+            .Select(summary => EmailMessage.FromMessageSummary(summary))
+            .ToList();
 
-            var timeMsg = DateTime.Now.Subtract(dt2);
-            var timeMsgTotal = DateTime.Now.Subtract(dtStart);
-            Console.WriteLine("timeMsg: " + timeMsg);
-            Console.WriteLine("timeMsgTotal: " + timeMsgTotal);
+        var timeMsg = DateTime.Now.Subtract(dt2);
+        var timeMsgTotal = DateTime.Now.Subtract(dtStart);
+        Console.WriteLine("timeMsg: " + timeMsg);
+        Console.WriteLine("timeMsgTotal: " + timeMsgTotal);
 
-            return summaries;
-        }
+        return summaries;
     }
 
     /// <summary>
@@ -143,16 +98,11 @@ public class ImapService : IDisposable
     /// <returns>the message if found, otherwise null</returns>
     public async Task<EmailMessage?> GetByUid(uint uid)
     {
-        var client = await GetClient();
-        return await Task.Run(() =>
-        {
-            lock (_client.SyncRoot)
-            {
-                var message = client.Inbox.GetMessageAsync(new UniqueId(uid)).Result;
-                client.Inbox.AddFlagsAsync(new UniqueId(uid), MessageFlags.Seen, true);
-                return EmailMessage.FromMimeMessage(message).Result;
-            }
-        });
+        using var operation = await clientHelper.StartOperation();
+        var client = operation.Client;
+        var message = await client.Inbox.GetMessageAsync(new UniqueId(uid));
+        await client.Inbox.AddFlagsAsync(new UniqueId(uid), MessageFlags.Seen, true);
+        return EmailMessage.FromMimeMessage(message).Result;
     }
 
     /// <summary>
@@ -161,7 +111,8 @@ public class ImapService : IDisposable
     /// <param name="uid">the UID of the message</param>
     public async Task MarkAsRead(uint uid)
     {
-        var client = await GetClient();
+        using var operation = await clientHelper.StartOperation();
+        var client = operation.Client;
         await client.Inbox.AddFlagsAsync(new UniqueId(uid), MessageFlags.Seen, true);
     }
 
@@ -171,21 +122,17 @@ public class ImapService : IDisposable
     /// <param name="uid">the UID of the message</param>
     public async Task Archive(uint uid)
     {
-        var client = await GetClient();
+        using var operation = await clientHelper.StartOperation();
+        var client = operation.Client;
         IMailFolder? archiveFolder = (await client.GetFoldersAsync(client.PersonalNamespaces[0]))
-            .FirstOrDefault(x => x.Name == ArchiveFolderName);
+                .FirstOrDefault(x => x.Name == ArchiveFolderName);
 
         if (archiveFolder == null)
             throw new Exception("Could not find archive folder: " + ArchiveFolderName);
-        await Task.Run(() =>
-        {
-            lock (_client.SyncRoot)
-            {
-                archiveFolder.Open(FolderAccess.ReadWrite);
-                client.Inbox.Open(FolderAccess.ReadWrite);
-                client.Inbox.MoveTo(new UniqueId(uid), archiveFolder);
-            }
-        });
+        
+        await archiveFolder.OpenAsync(FolderAccess.ReadWrite);
+        await client.Inbox.OpenAsync(FolderAccess.ReadWrite);
+        await client.Inbox.MoveToAsync(new UniqueId(uid), archiveFolder);
     }
 
     /// <summary>
@@ -194,15 +141,10 @@ public class ImapService : IDisposable
     /// <param name="uid">the UID of the message</param>
     public async Task Delete(uint uid)
     {
-        var client = await GetClient();
-        await Task.Run(() =>
-        {
-            lock (_client.SyncRoot)
-            {
-                client.Inbox.AddFlags(new UniqueId(uid), MessageFlags.Deleted, true);
-                client.Inbox.Expunge();
-            }
-        });
+        using var operation = await clientHelper.StartOperation();
+        var client = operation.Client;
+        await client.Inbox.AddFlagsAsync(new UniqueId(uid), MessageFlags.Deleted, true);
+        await client.Inbox.ExpungeAsync();
     }
     
     /// <summary>
@@ -213,7 +155,7 @@ public class ImapService : IDisposable
     {
         try
         {
-            await GetClient();;
+            using var operation = await clientHelper.StartOperation();
             return (true, string.Empty);
         }
         catch (Exception ex)
@@ -227,39 +169,6 @@ public class ImapService : IDisposable
     /// </summary>
     public void Dispose()
     {
-        if (_client != null)
-        {
-            try
-            {
-                if (_client.IsConnected)
-                {
-                    _client.Inbox.Close();
-                    _client.Disconnect(true);
-                }
-
-                _client.Dispose();
-            }
-            catch (Exception)
-            {
-            }
-        }
-        if (_clientWatcher != null)
-        {
-            _clientWatcher.Inbox.CountChanged -= InboxOnCountChanged; 
-            try
-            {
-                _canecellationToken.Cancel();
-                if (_clientWatcher.IsConnected)
-                {
-                    _clientWatcher.Inbox.Close();
-                    _clientWatcher.Disconnect(true);
-                }
-
-                _clientWatcher.Dispose();
-            }
-            catch (Exception)
-            {
-            }
-        }
+        clientHelper.Dispose();
     }
 }

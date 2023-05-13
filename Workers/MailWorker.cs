@@ -34,7 +34,7 @@ public class MailWorker:Worker
     /// <summary>
     /// Constructs a mail worker
     /// </summary>
-    private MailWorker() : base(ScheduleType.Hourly, 2)
+    private MailWorker() : base(ScheduleType.Minute, 20)
     {
         MonitorUsers();
     }

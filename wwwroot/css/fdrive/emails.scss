@@ -208,6 +208,21 @@ body.email-opened {
     border-radius: 1rem;
     position: relative;
     background: #222;
+    * {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      font-size: 100%;
+      font-family: inherit;
+      vertical-align: baseline;
+    }
+
+    /* Optional: set the box-sizing property to border-box to make box sizing more intuitive */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
     .email-body-content
     {
       margin:1rem;
@@ -218,14 +233,17 @@ body.email-opened {
       right:0;
       overflow: auto;
       border-radius: 1rem;
-      > div {
-        background:#ddd;
-        color:#000;
+    }
+    &.dark {
+      .email-body-content > div {
+        background: #ddd;
+        color: #000;
         filter: invert(1);
       }
-    }
-    img {
-      filter:invert(1);
+      img {
+        filter:invert(1);
+      }
+      
     }
   }
 }

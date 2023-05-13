@@ -176,6 +176,20 @@ body.email-opened .expander {
   border-radius: 1rem;
   position: relative;
   background: #222;
+  /* Optional: set the box-sizing property to border-box to make box sizing more intuitive */
+}
+#fdrive-email-message .email-body * {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+}
+#fdrive-email-message .email-body *,
+#fdrive-email-message .email-body *::before,
+#fdrive-email-message .email-body *::after {
+  box-sizing: border-box;
 }
 #fdrive-email-message .email-body .email-body-content {
   margin: 1rem;
@@ -187,12 +201,12 @@ body.email-opened .expander {
   overflow: auto;
   border-radius: 1rem;
 }
-#fdrive-email-message .email-body .email-body-content > div {
+#fdrive-email-message .email-body.dark .email-body-content > div {
   background: #ddd;
   color: #000;
   filter: invert(1);
 }
-#fdrive-email-message .email-body img {
+#fdrive-email-message .email-body.dark img {
   filter: invert(1);
 }
 
