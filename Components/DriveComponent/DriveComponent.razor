@@ -1,3 +1,4 @@
+@using Fenrus.Models
 @namespace Fenrus.Components
 
 <div id="fdrive-wrapper" class="dashboard-drive collapsed">
@@ -56,6 +57,41 @@
                 <div class="content" id="email-actual">
                 </div>
             </div>
+                
+            @if (AppDrawerGroup != null)
+            {
+                <div id="fdrive-apps">
+                    <div class="fdrive-pane-title">
+                        <span class="title">Apps</span>
+                    </div>
+                    <div class="content" id="apps-actual">
+                        @foreach (var app in AppDrawerGroup.Items)
+                        {
+                            string url;
+                            @if (app is AppItem appItem)
+                            {
+                                url = appItem.Url;
+                            }
+                            else if (app is LinkItem linkItem)
+                            {
+                                url = linkItem.Url;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                            <div class="drive-app" data-src="@url">
+                                <div class="drive-app-inner">
+                                    <span class="icon">
+                                        <img draggable="false" src="@GetIcon(app)"/>
+                                    </span>
+                                    <span class="name">@app.Name</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
         </div>
 
         <div class="fdrive-tabs" id="fdrive-tabs">

@@ -1,14 +1,12 @@
-#fdrive-list.grid {
-  .check {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
+#fdrive-apps {
+  #apps-actual {
   }
-  .file {
-    width:240px;
-    height:240px;
+  .drive-app {
+    width:96px;
+    height:96px;
+    display:inline-block;;
   }
-  .file-inner {
+  .drive-app-inner {
     position:relative;
     overflow: hidden;
     margin:0.25rem;
@@ -16,12 +14,6 @@
     width:calc(100% - 1rem);
     height:calc(100% - 1rem);
     border-radius:0.5rem;
-  }
-  .size, .modified {
-    display:none;
-  }
-  .file.folder {
-    cursor:pointer;
   }
   .name {
     text-align: center;
@@ -48,3 +40,31 @@
     }
   }
 }
+
+
+#fdrive-apps-iframe {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 2rem;
+  height: calc(100% - 4rem);
+  width: calc(100% - 4rem);
+  transition: transform 0.2s ease-in-out;
+  transform: translateX(100%);
+  background: var(--base);
+  flex-direction: column;
+  
+  &.visible {
+    transform: translateX(0);
+    display: flex;
+    z-index: 5;
+  }
+  iframe {
+    height: 100%;
+    width: 100%;
+    border: none;
+  }
+}
+
+

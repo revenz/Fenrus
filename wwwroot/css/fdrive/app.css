@@ -1,0 +1,64 @@
+#fdrive-apps .drive-app {
+  width: 96px;
+  height: 96px;
+  display: inline-block;
+}
+#fdrive-apps .drive-app-inner {
+  position: relative;
+  overflow: hidden;
+  margin: 0.25rem;
+  padding: 0.25rem;
+  width: calc(100% - 1rem);
+  height: calc(100% - 1rem);
+  border-radius: 0.5rem;
+}
+#fdrive-apps .name {
+  text-align: center;
+  word-break: break-all;
+  display: block;
+  font-size: 0.9rem;
+  height: calc(45% - 0.5rem);
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#fdrive-apps .icon {
+  width: calc(100% - 2rem);
+  padding: 0 1rem 0.25rem;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+}
+#fdrive-apps .icon img {
+  border-radius: 0.25rem;
+  object-fit: contain;
+  max-width: 120%;
+}
+#fdrive-apps .icon i {
+  font-size: 10rem;
+}
+
+#fdrive-apps-iframe {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 2rem;
+  height: calc(100% - 4rem);
+  width: calc(100% - 4rem);
+  transition: transform 0.2s ease-in-out;
+  transform: translateX(100%);
+  background: var(--base);
+  flex-direction: column;
+}
+#fdrive-apps-iframe.visible {
+  transform: translateX(0);
+  display: flex;
+  z-index: 5;
+}
+#fdrive-apps-iframe iframe {
+  height: 100%;
+  width: 100%;
+  border: none;
+}
+
+/*# sourceMappingURL=app.css.map */

@@ -213,4 +213,11 @@
   opacity: 1;
 }
 
+body.drawer-item-opened ul.main-menu {
+  display: none;
+}
+body.drawer-item-opened .expander {
+  display: none;
+}
+
 /*# sourceMappingURL=fdrive.css.map */

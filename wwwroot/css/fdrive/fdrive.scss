@@ -239,3 +239,15 @@ $notesMediaScreenSize: 1000px;
 .media:hover {
   opacity: 1;
 }
+
+
+
+body.drawer-item-opened {
+  ul.main-menu {
+    display:none;
+  }
+
+  .expander {
+    display:none;
+  }
+}

@@ -70,13 +70,6 @@
   overflow: hidden;
 }
 
-body.email-opened ul.main-menu {
-  display: none;
-}
-body.email-opened .expander {
-  display: none;
-}
-
 #fdrive-email-message {
   display: none;
   position: absolute;

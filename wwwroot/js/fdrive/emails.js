@@ -154,7 +154,7 @@ class FenrusDriveEmail
             '    <span class="email-body-content"></span>' +
             '  </div>' +
             ' <div class="blocker visible"><div class="blocker-indicator"><div class="blocker-spinner"></div></div>';        
-        document.body.classList.add('email-opened');
+        document.body.classList.add('drawer-item-opened');
         this.setInitials(message.from, this.eleMessage.querySelector('.email-header-icon'));
         this.eleMessage.querySelector('.email-header-from').innerText = message.from;
         this.eleMessage.querySelector('.email-header-to').innerText = message.to.join('; ');
@@ -212,7 +212,7 @@ class FenrusDriveEmail
         this.eleMessage.className = '';
         for(let ele of this.container.querySelectorAll('.email.selected'))
             ele.classList.remove('selected');
-        document.body.classList.remove('email-opened');
+        document.body.classList.remove('drawer-item-opened');
     }
     getGmailMessageUrl(message) {
         let messageId = message.messageId;        

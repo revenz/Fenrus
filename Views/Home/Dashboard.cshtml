@@ -56,7 +56,9 @@
     {
         @(await Html.RenderComponentAsync<DriveComponent>(RenderMode.Static, new
         {
-            Model.Translator
+            Model.Translator,
+            ViewBag.AccentColor,
+            settings.UserUid
         }))
     }
     <div class="dashboard-main">

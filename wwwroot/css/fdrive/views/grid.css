@@ -3,6 +3,10 @@
   top: 1rem;
   left: 1rem;
 }
+#fdrive-list.grid .file {
+  width: 240px;
+  height: 240px;
+}
 #fdrive-list.grid .file-inner {
   position: relative;
   overflow: hidden;

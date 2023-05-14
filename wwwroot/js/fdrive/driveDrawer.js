@@ -13,6 +13,11 @@ class FenrusDriveDrawer {
             { name: 'Calendar', instance: fDriveCalendar },
             { name: 'Email', instance: fDriveEmail },
         ];
+        if(document.getElementById('fdrive-apps'))
+        {
+            this.features.push({ name: 'Apps', instance: new FenrusDriveApps()});
+        }
+        
         let ftabs = document.getElementById('fdrive-tabs');
         for(let i=0;i<this.features.length;i++)
         {
