@@ -1,5 +1,6 @@
 using Fenrus.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Fenrus.Controllers;
 
@@ -25,6 +26,18 @@ public class EmailController : BaseController
     //     return new ImapService(profile.EmailServer, profile.EmailPort, profile.EmailUsername, profile.EmailPassword);
     // }
     
+    private readonly IMemoryCache Cache;
+    
+    /// <summary>
+    /// Constructs an instance of Email Controller
+    /// </summary>
+    /// <param name="cache">memory cache</param>
+    public EmailController(IMemoryCache cache)
+    {
+        this.Cache = cache;
+    }
+
+    
     /// <summary>
     /// Gets the latest emails for a user
     /// </summary>
@@ -35,8 +48,27 @@ public class EmailController : BaseController
         var userUid = User.GetUserUid();
         if (userUid == null)
             throw new UnauthorizedAccessException();
+
+        string cacheKey = "EmailGetAll_" + userUid.Value;
         
-        var emails = await Workers.MailWorker.Instance.GetLatest(userUid.Value);
+        Task<List<EmailMessage>> cached = Task.Run(async () =>
+        {
+            await Task.Delay(500);
+            if(Cache.TryGetValue(cacheKey, out object obj) && obj is List<EmailMessage> cached)
+                return cached;
+            await Task.Delay(5000);
+            return new ();
+        });
+        
+        Task<List<EmailMessage>> notCached = Task.Run(async () =>
+        {
+            var result = await Workers.MailWorker.Instance.GetLatest(userUid.Value);
+            Cache.Set(cacheKey, result);
+            return result;
+        });
+        
+        var completedTask = await Task.WhenAny(cached, notCached);
+        var emails = await completedTask;
         return Ok(emails);
     }
 
