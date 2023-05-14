@@ -168,4 +168,11 @@ public class MailWorker:Worker
             ImapService.Dispose();
         }
     }
+
+    /// <summary>
+    /// Used to trigger an email reload for a user
+    /// </summary>
+    /// <param name="userUid">the UID of the user to trigger a reload for</param>
+    public void TriggerEmailReloadEvent(Guid userUid)
+        => EmailEvent?.Invoke(userUid, "refresh", null);
 }

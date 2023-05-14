@@ -1,4 +1,5 @@
 using Fenrus.Models;
+using Fenrus.Workers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -50,6 +51,7 @@ public class EmailController : BaseController
             throw new UnauthorizedAccessException();
 
         string cacheKey = "EmailGetAll_" + userUid.Value;
+        bool done = false;
         
         Task<List<EmailMessage>> cached = Task.Run(async () =>
         {
@@ -64,11 +66,14 @@ public class EmailController : BaseController
         {
             var result = await Workers.MailWorker.Instance.GetLatest(userUid.Value);
             Cache.Set(cacheKey, result);
+            if (done)
+                MailWorker.Instance.TriggerEmailReloadEvent(userUid.Value);
             return result;
         });
         
         var completedTask = await Task.WhenAny(cached, notCached);
         var emails = await completedTask;
+        done = true;
         return Ok(emails);
     }
 
