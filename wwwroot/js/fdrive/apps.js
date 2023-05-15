@@ -4,10 +4,33 @@ class FenrusDriveApps
     constructor(){
         this.container = document.getElementById('apps-actual');
         this.eleIframeContainer = document.createElement('div');
+        this.eleIframeContainer.innerHTML = '<div class="browser-container">' +
+            '  <div class="browser-header">' +
+            '    <div class="browser-address-bar">' +
+            '      <img />' +
+            '      <input type="text" readonly>' +  
+            '    </div>' +
+            '    <div class="browser-controls">' +
+            '      <button class="open-new-tab"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>' +
+            '      <button class="close-button"><i class="fa-solid fa-xmark"></i></button>' +
+            '    </div>' +
+            '  </div>' +
+            '  <div class="browser-iframe-container">' +
+            '    <iframe></iframe>' +
+            '  </div>' +
+            '</div>';
         this.eleIframeContainer.setAttribute('id', 'fdrive-apps-iframe');
-        this.eleIframe = document.createElement('iframe');
+        this.eleIframe = this.eleIframeContainer.querySelector('iframe');
+        this.eleIframeAddress = this.eleIframeContainer.querySelector('.browser-address-bar input[type=text]');
+        this.eleIframeFavicon = this.eleIframeContainer.querySelector('.browser-address-bar img');
+        this.eleIframeContainer.querySelector('.close-button').addEventListener('click', () => this.closeIframe());
+        this.eleIframeContainer.querySelector('.open-new-tab').addEventListener('click', () => {
+            let url = this.eleIframeAddress.value;
+            if(!url)
+                return;
+            window.open(url, "_blank", "noopener,noreferrer");
+        });
         // this.eleIframe.setAttribute('sandbox', 'allow-scripts');
-        this.eleIframeContainer.appendChild(this.eleIframe);
         
         document.querySelector('.dashboard-main').appendChild(this.eleIframeContainer);
         
@@ -44,7 +67,11 @@ class FenrusDriveApps
 
         app.classList.add('selected');
         
-        this.eleIframe.src = app.getAttribute('data-src');
+        let url = app.getAttribute('data-src');
+        this.eleIframe.src = url;
+        this.eleIframeAddress.value = url;
+        
+        this.eleIframeFavicon.src = app.querySelector('img').src;
 
         this.eleIframeContainer.className = 'visible';
         document.body.classList.add('drawer-item-opened');
@@ -52,7 +79,7 @@ class FenrusDriveApps
 
 
     closeIframe(){
-        this.eleIframe.className = '';
+        this.eleIframeContainer.className = '';
         for(let ele of this.container.querySelectorAll('.email.selected'))
             ele.classList.remove('selected');
         document.body.classList.remove('drawer-item-opened');

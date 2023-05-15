@@ -1,5 +1,7 @@
 #fdrive-wrapper {
   position: relative;
+  --tabs-height:5.5rem;
+  --tab-icon-height:2.5rem;
 }
 #fdrive-wrapper.init-done {
   transition: width 0.5s ease-in-out, min-width 0.5s ease-in-out;
@@ -53,7 +55,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-  width: 2px;
+  width: 1px;
   background: var(--border-color);
   z-index: 1;
   cursor: ew-resize;
@@ -95,7 +97,7 @@
 }
 #fdrive-wrapper .fdrive-add-button > i {
   position: absolute;
-  bottom: 4.5rem;
+  bottom: 6.5rem;
   right: 2.5rem;
   padding: 1rem;
   border-radius: 51rem;
@@ -125,7 +127,7 @@
 }
 #fdrive-wrapper .content {
   width: calc(100% - 0.5rem);
-  height: calc(100% - 3rem);
+  height: calc(100% - var(--tabs-height));
   min-height: calc(100% - 3rem);
   overflow: auto;
 }
@@ -134,7 +136,7 @@
   bottom: 0;
   right: 0;
   left: 0;
-  height: 3rem;
+  height: var(--tabs-height);
   display: flex;
   flex-direction: row;
 }
@@ -146,6 +148,7 @@
   flex-basis: 0;
   flex-grow: 1;
   font-size: 1rem;
+  flex-direction: column;
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.3rem;
@@ -162,8 +165,27 @@
   opacity: 1;
   background: unset;
 }
+#fdrive-wrapper .fdrive-tabs i {
+  font-size: 2rem;
+  text-align: center;
+  height: var(--tab-icon-height);
+  display: block;
+}
+#fdrive-wrapper .fdrive-tabs svg {
+  padding-bottom: 0.6rem;
+  height: calc(var(--tab-icon-height) - 0.6rem);
+}
+#fdrive-wrapper .fdrive-tabs img {
+  padding-bottom: 0.6rem;
+  height: calc(var(--tab-icon-height) - 0.6rem);
+}
+#fdrive-wrapper .fdrive-tabs span.label {
+  font-size: 0.7rem;
+  display: block;
+  text-align: center;
+}
 #fdrive-wrapper .fdrive-modes {
-  height: calc(100% - 3rem);
+  height: calc(100% - var(--tabs-height));
 }
 #fdrive-wrapper .fdrive-modes .fdrive-pane-title {
   height: 3rem;

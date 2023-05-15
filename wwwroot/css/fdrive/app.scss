@@ -1,10 +1,25 @@
 #fdrive-apps {
   #apps-actual {
+    padding:1rem;
+    width:calc(100% - 2rem);
+    height:calc(100% - 2rem);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    grid-auto-rows: 96px;
+    grid-gap: 10px; /* optional: add some space between items */
+    user-select: none;
   }
   .drive-app {
     width:96px;
     height:96px;
-    display:inline-block;;
+    max-width: 96px;
+    &.selected .drive-app-inner {
+      background: rgba(var(--accent-rgb), 0.3) !important;
+
+      &:hover {
+        background: rgba(var(--accent-rgb), 0.4) !important;
+      }
+    }
   }
   .drive-app-inner {
     position:relative;
@@ -14,6 +29,9 @@
     width:calc(100% - 1rem);
     height:calc(100% - 1rem);
     border-radius:0.5rem;
+    &:hover {
+      background: rgba(var(--accent-rgb), 0.4) !important;      
+    }
   }
   .name {
     text-align: center;
@@ -54,17 +72,129 @@
   transform: translateX(100%);
   background: var(--base);
   flex-direction: column;
+  background: #1e1e1e;
   
   &.visible {
     transform: translateX(0);
     display: flex;
     z-index: 5;
   }
-  iframe {
-    height: 100%;
+
+  $background-color: #222;
+  $accent-color: #4caf50;
+
+  .browser-container {
+    position: relative;
     width: 100%;
-    border: none;
+    height: 100%;
+    border: 1px solid darken($background-color, 10%);
+    background-color: $background-color;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    color: var(--color);
+    border-radius:1rem;
+
+    .browser-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc(100% - 2rem);
+      height: 50px;
+      background-color: lighten($background-color, 3%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+
+      .browser-controls {
+        display: flex;
+        align-items: center;
+        button + button {
+          margin-left:0.75rem;
+        }
+        
+        button {
+          color: var(--color);
+          border: none;
+          font-size: 1rem;
+          width: 1.5rem;
+          height: 1.5rem;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background-color 0.2s ease-in-out;
+          
+        }
+        .open-new-tab {
+          background: var(--success);
+        }
+
+        .close-button {
+          background-color: var(--danger);
+
+          &:hover {
+            background-color: #ff5555;
+          }
+        }
+      }
+
+      .browser-address-bar {
+        display: flex;
+        align-items: center;
+        flex-grow:1;
+        transition: background-color 0.2s ease-in-out;
+        background-color: #090909;
+        border-radius: 0.75rem;
+        padding: 0.5rem 1rem;
+        margin-right: 10px;
+        width: calc(100% - 3rem);
+        display:flex;
+        flex-direction: row;
+        
+        img {
+          height:90%;
+          width:2rem;
+          margin-right: 0.5rem;
+          object-fit: contain;
+        }
+
+        input[type="text"] {
+          height: 1.5rem;
+          border: none;
+          font-size: 1.1rem;
+          background: transparent;
+          flex-grow:1;
+          color: var(--color);
+
+          &:focus {
+            background-color: darken($background-color, 15%);
+            outline: none;
+          }
+        }
+      }
+    }
+
+    .browser-iframe-container {
+      position: absolute;
+      top: 50px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+      }
+    }
   }
+  
 }
 
 

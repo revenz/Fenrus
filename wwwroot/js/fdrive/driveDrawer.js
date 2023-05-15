@@ -8,14 +8,14 @@ class FenrusDriveDrawer {
     constructor() {
         document.addEventListener('mousedown', (event) => this.mouseDownEventListener(event));
         this.features = [
-            { name: 'Notes', instance: fDriveNotes },
-            { name: 'Files', instance: fDrive },
-            { name: 'Calendar', instance: fDriveCalendar },
-            { name: 'Email', instance: fDriveEmail },
+            { name: 'Notes', instance: fDriveNotes, icon: 'fa-solid fa-file-pen' },
+            { name: 'Files', instance: fDrive, icon: 'fa-solid fa-hard-drive' },
+            { name: 'Calendar', instance: fDriveCalendar, icon: 'fa-solid fa-calendar', displayName: 'Cal' },
+            { name: 'Email', instance: fDriveEmail, icon: 'fa-solid fa-envelope' },
         ];
         if(document.getElementById('fdrive-apps'))
         {
-            this.features.push({ name: 'Apps', instance: new FenrusDriveApps()});
+            this.features.push({ name: 'Apps', instance: new FenrusDriveApps(), icon: '/images/apps.svg'});
         }
         
         let ftabs = document.getElementById('fdrive-tabs');
@@ -29,7 +29,10 @@ class FenrusDriveDrawer {
             });
             f.show = () => { if(f.instance.show) f.instance.show(); }
             f.hide = () => { if(f.instance.hide) f.instance.hide(); }
-            f.tab.textContent = f.name;
+            let faIcon = f.icon.indexOf('fa-') >= 0;
+            let svg = f.icon.startsWith('<svg');
+            f.tab.innerHTML = ( svg ? f.icon : faIcon ? `<i class="${f.icon}"></i>` : `<img src="${f.icon}" />` ) +
+                                `<span class="label">${f.displayName || f.name}</span>`;
             f.container = document.getElementById('fdrive-' + f.name.toLowerCase().replace(/\s/, ''));
             ftabs.appendChild(f.tab);
         }

@@ -46,18 +46,18 @@ body {
   font-size: 1.4rem;
 }
 
-#fdrive-calendar .fdrive-pane-title, #fdrive-email .fdrive-pane-title {
+#fdrive-calendar .fdrive-pane-title, #fdrive-email .fdrive-pane-title, #fdrive-apps .fdrive-pane-title {
   background: #000;
   text-align: center;
 }
-#fdrive-calendar .fdrive-pane-title > span, #fdrive-email .fdrive-pane-title > span {
+#fdrive-calendar .fdrive-pane-title > span, #fdrive-email .fdrive-pane-title > span, #fdrive-apps .fdrive-pane-title > span {
   line-height: 3rem;
   text-transform: uppercase;
   font-weight: 600;
   font-size: 1.2rem;
   letter-spacing: 0.3rem;
 }
-#fdrive-calendar .fdrive-pane-title .title, #fdrive-email .fdrive-pane-title .title {
+#fdrive-calendar .fdrive-pane-title .title, #fdrive-email .fdrive-pane-title .title, #fdrive-apps .fdrive-pane-title .title {
   text-overflow: ellipsis;
   overflow: hidden;
   max-width: 70%;

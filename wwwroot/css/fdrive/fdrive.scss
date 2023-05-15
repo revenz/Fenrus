@@ -4,6 +4,8 @@ $notesMediaScreenSize: 1000px;
 #fdrive-wrapper
 {
   position: relative;  
+  --tabs-height:5.5rem;
+  --tab-icon-height:2.5rem;
   &.init-done {    
     transition: width 0.5s ease-in-out,
                 min-width 0.5s ease-in-out;
@@ -56,7 +58,7 @@ $notesMediaScreenSize: 1000px;
     right:0;
     top:0;
     bottom:0;
-    width:2px;
+    width:1px;
     background: var(--border-color);
     z-index:1;
     cursor:ew-resize;
@@ -105,7 +107,7 @@ $notesMediaScreenSize: 1000px;
   {
     > i {
       position: absolute;
-      bottom: 4.5rem;
+      bottom: 6.5rem;
       right: 2.5rem;
       padding: 1rem;
       border-radius: 51rem;
@@ -144,7 +146,7 @@ $notesMediaScreenSize: 1000px;
   }
   .content {
     width:calc(100% - 0.5rem);
-    height: calc(100% - 3rem);
+    height: calc(100% - var(--tabs-height));
     min-height: calc(100% - 3rem);
     overflow: auto;
   }
@@ -153,7 +155,7 @@ $notesMediaScreenSize: 1000px;
     bottom:0;
     right:0;
     left:0;
-    height:3rem;
+    height:var(--tabs-height);
     display:flex;
     flex-direction: row;
     > div {
@@ -164,6 +166,7 @@ $notesMediaScreenSize: 1000px;
       flex-basis: 0;
       flex-grow: 1;
       font-size: 1rem;
+      flex-direction: column;
       @media screen and (max-width: $notesMediaScreenSize){
         font-size:0.9rem;
       }
@@ -178,10 +181,29 @@ $notesMediaScreenSize: 1000px;
         background:unset;
       }
     }
+    i {
+      font-size:2rem;
+      text-align: center;
+      height:var(--tab-icon-height);
+      display: block;
+    }
+    svg {
+      padding-bottom: 0.6rem;
+      height: calc(var(--tab-icon-height) - 0.6rem);      
+    }
+    img {
+      padding-bottom: 0.6rem;
+      height: calc(var(--tab-icon-height) - 0.6rem);
+    }
+    span.label {
+      font-size:0.7rem;
+      display: block;
+      text-align: center;
+    }
   }
 
   .fdrive-modes {
-    height: calc(100% - 3rem);
+    height: calc(100% - var(--tabs-height));
     .fdrive-pane-title {
       height:3rem;
     }
@@ -249,5 +271,8 @@ body.drawer-item-opened {
 
   .expander {
     display:none;
+  }
+  .resizer:not(:hover){
+    //background-color:transparent !important;
   }
 }
