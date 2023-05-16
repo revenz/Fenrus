@@ -33,7 +33,7 @@
 }
 #fdrive-apps .name {
   text-align: center;
-  word-break: break-all;
+  word-break: break-word;
   display: block;
   font-size: 0.9rem;
   height: calc(45% - 0.5rem);

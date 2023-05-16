@@ -67,7 +67,19 @@ class FenrusDriveApps
 
         app.classList.add('selected');
         
+        let noVNC = app.getAttribute('data-app-name') === 'NoVNC';
+        
         let url = app.getAttribute('data-src');
+        if(noVNC){
+
+            const regex = /^((?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}|(?:[a-fA-F0-9]{1,4}:)*:[a-fA-F0-9]{1,4}|(?:\d{1,3}\.){3}\d{1,3}|[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?::(\d{1,5}))?$/;
+
+            const match = regex.exec(url);
+            const hostname = match[1];
+            const port = match[2] || 5900;
+            //url = `/NoVNC/vnc_lite.html?host=${encodeURIComponent(hostname)}&port=${encodeURIComponent(port)}&scale=true`;
+            url = `/NoVNC/vnc_lite.html?scale=true&path=websockify/${encodeURIComponent(hostname)}/${encodeURIComponent(port)}`;
+        }
         this.eleIframe.src = url;
         this.eleIframeAddress.value = url;
         

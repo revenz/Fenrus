@@ -68,9 +68,11 @@
                         @foreach (var app in AppDrawerGroup.Items)
                         {
                             string url;
+                            string appName = null;
                             @if (app is AppItem appItem)
                             {
                                 url = appItem.Url;
+                                appName = appItem.AppName;
                             }
                             else if (app is LinkItem linkItem)
                             {
@@ -80,7 +82,7 @@
                             {
                                 continue;
                             }
-                            <div class="drive-app" data-src="@url">
+                            <div class="drive-app" data-app-name="@appName" data-src="@url">
                                 <div class="drive-app-inner">
                                     <span class="icon">
                                         <img draggable="false" src="@GetIcon(app)"/>

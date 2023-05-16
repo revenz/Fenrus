@@ -47,7 +47,14 @@
                     <InputSelectOption TItem="string" StringValue="Default" Label="Default" />
                     <InputSelectOption TItem="string" StringValue="IFrame" Label="IFrame" />
                 </InputSelect>
-                <InputText @bind-Value="@Model.Url" Label="URL" Required="true" Pattern="^[^:]+://."></InputText>
+                @if (SelectedApp?.Name == "NoVNC")
+                {
+                    <InputText @bind-Value="@Model.Url" Label="Server" Required="true"></InputText>
+                }
+                else
+                {
+                    <InputText @bind-Value="@Model.Url" Label="URL" Required="true" Pattern="^[^:]+://."></InputText>
+                }
             }
             <InputSelect Page="GroupItem" TItem="string" Label="Size" @bind-Value="@Model.SizeString">
                 <InputSelectOption TItem="string" Value="nameof(ItemSize.Small)" Label="Small" />
@@ -140,6 +147,14 @@
                             break;
                         case AppPropertyType.Password:
                             <InputText Label="@prop.Name" Help="@prop.Help" Password="true" Value="@(Model.GetValue(prop) as string ?? string.Empty)" ValueChanged="((val) => Model.SetValue(prop, val))"/>
+                            break;
+                        case AppPropertyType.Integer:
+                            int value = 0;
+                            if (prop.DefaultValue is string strValue && int.TryParse(strValue, out int defaultValue))
+                                value = defaultValue;
+                            if (Model.GetValue(prop) is int modelValue)
+                                value = modelValue;
+                            <InputNumber TItem="int" Label="@prop.Name" Help="@prop.Help" Value="@value" ValueChanged="((val) => Model.SetValue(prop, val))"/>
                             break;
                         case AppPropertyType.Select:
                             <InputSelect TItem="string" Label="@prop.Name" Help="@prop.Help" 
