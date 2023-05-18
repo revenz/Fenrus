@@ -1,4 +1,5 @@
 using LiteDB;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Fenrus.Helpers;
 
@@ -66,7 +67,6 @@ public static class StartUpHelper
     /// <param name="previousVersion">the previous version number</param>
     private static void Upgrade(Version previousVersion)
     {
-        if (previousVersion < new Version(0, 9, 2))
-            new Upgrades.Upgrade_0_9_2().Execute();
+        new Upgrades.Upgrade_0_9_2().Execute(previousVersion);
     }
 }
