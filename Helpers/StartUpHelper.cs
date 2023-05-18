@@ -1,3 +1,5 @@
+using LiteDB;
+
 namespace Fenrus.Helpers;
 
 /// <summary>
@@ -36,6 +38,11 @@ public static class StartUpHelper
         // future proofing, saving the database version here so we can run upgrade scripts if needed
         var db = DbHelper.GetDb();
         var coll = db.GetCollection<Fenrus>(nameof(Fenrus));
+        var firstItem = coll.FindOne(Query.All());
+        if (Version.TryParse(firstItem?.Version ?? string.Empty, out Version previous))
+        {
+            Upgrade(previous);
+        }
         coll.DeleteAll();
         var version = new Fenrus { Version = Globals.Version };
         coll.Insert(version);
@@ -50,5 +57,16 @@ public static class StartUpHelper
         /// Gets or sets the version of Fenrus
         /// </summary>
         public string Version { get; set; }
+    }
+
+
+    /// <summary>
+    /// Runs upgrades from previous versions
+    /// </summary>
+    /// <param name="previousVersion">the previous version number</param>
+    private static void Upgrade(Version previousVersion)
+    {
+        if (previousVersion < new Version(0, 9, 2))
+            new Upgrades.Upgrade_0_9_2().Execute();
     }
 }
