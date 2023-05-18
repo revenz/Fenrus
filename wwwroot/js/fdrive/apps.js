@@ -2,6 +2,7 @@ class FenrusDriveApps
 {
     initDone = false;
     constructor(){
+        this.divLaunchingApp = document.getElementById('launching-app');
         this.container = document.getElementById('apps-actual');
         this.eleIframeContainer = document.createElement('div');
         this.eleIframeContainer.innerHTML = '<div class="browser-container">' +
@@ -84,6 +85,24 @@ class FenrusDriveApps
             window.open(url, "_blank", "noopener,noreferrer");
             return;
         }
+        else if(type === 'externalsame')
+        {
+            let a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('target', 'fenrus-popup');
+            a.style.display ='none';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            return;
+        }
+        else if(type === 'internal'){
+            this.divLaunchingApp.querySelector('.title').textContent = 'Launching ' + app.querySelector('.name').textContent;
+            this.divLaunchingApp.querySelector('img').src = app.querySelector('img').src;
+            this.divLaunchingApp.style.display = 'unset';
+            window.location.href = url;
+            return;
+        }
         this.eleIframe.src = url;
         this.eleIframeAddress.value = url;
         
@@ -92,7 +111,6 @@ class FenrusDriveApps
         this.eleIframeContainer.className = 'visible';
         document.body.classList.add('drawer-item-opened');
     }
-
 
     closeIframe(){
         this.eleIframeContainer.className = '';

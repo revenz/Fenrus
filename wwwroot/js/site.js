@@ -496,3 +496,17 @@ document.addEventListener('mousedown', () => {
 document.addEventListener('mouseup', () => {
     isMouseDown = false;
 });
+
+window.focusElement = (element, delay) => {
+    if(typeof(element) === 'string')
+        element = document.getElementById(element);
+    if(!element)
+        return;
+    if(delay){
+        setTimeout(() => {
+            element.focus();
+        }, delay);
+    }else {
+        element.focus();
+    }
+};

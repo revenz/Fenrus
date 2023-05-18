@@ -1,6 +1,8 @@
 using Fenrus.Models;
+using Fenrus.Pages;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 
 namespace Fenrus.Components.Dialogs;
 
@@ -38,11 +40,27 @@ public partial class IconPickerDialog: ComponentBase
     private List<AppIcon> Apps;
 
     /// <summary>
+    /// A unique identifier for the filter text input
+    /// </summary>
+    private readonly string Uid = Guid.NewGuid().ToString();
+    
+    /// <summary>
+    /// Gets or sets the javascript runtime
+    /// </summary>
+    [Inject]
+    public IJSRuntime JsRuntime { get; set; }
+
+    /// <summary>
+    /// If the filter needs to be focused
+    /// </summary>
+    private bool focusFilter = false;
+
+    /// <summary>
     /// Initializes the component
     /// </summary>
     protected override void OnInitialized()
     {
-        Apps = AppService.Apps.Values.OrderBy(x => x.Name.ToLowerInvariant()).Select(x =>
+        Apps = AppService.Apps.Values.Select(x =>
             new AppIcon()
             {
                 Name = x.Name,
@@ -57,10 +75,26 @@ public partial class IconPickerDialog: ComponentBase
                 Url = "/images/icons/" + file.Name
             });
         }
+
+        Apps = Apps.OrderBy(x => x.Name.ToLowerInvariant()).ToList();
+        
         this.lblOk = Translator.Instant("Labels.Ok");
         this.lblCancel = Translator.Instant("Labels.Cancel");
         this.Title = Translator.Instant("Labels.IconPicker");
         Instance = this;
+    }
+
+    /// <summary>
+    /// Called after the the component is rendered
+    /// </summary>
+    /// <param name="firstRender">if this is the first time the component is being rendered</param>
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (focusFilter)
+        {
+            JsRuntime.InvokeVoidAsync("focusElement", Uid);
+            focusFilter = false;
+        }
     }
 
     /// <summary>
@@ -85,6 +119,7 @@ public partial class IconPickerDialog: ComponentBase
         Value = string.Empty;
         Filter = string.Empty;
         this.Visible = true;
+        focusFilter = true;
         this.StateHasChanged();
 
         Instance.ShowTask = new TaskCompletionSource<string>();
@@ -137,6 +172,7 @@ public partial class IconPickerDialog: ComponentBase
         // StateHasChanged();
         Value = string.Empty;
     }
+
 
     /// <summary>
     /// An application icon

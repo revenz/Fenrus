@@ -32,6 +32,7 @@ public class DbHelper
             serialize: (x) => EncryptionHelper.Encrypt(x.Value),
             deserialize: (x) => (EncryptedString)EncryptionHelper.Decrypt(x.AsString)
         );
+        EnumSerializer.RegisterEnums(BsonMapper.Global);
         return db;
     }
 

@@ -2,7 +2,6 @@ using Blazored.Toast.Services;
 using Fenrus.Models;
 using Fenrus.Models.UiModels;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 namespace Fenrus.Components.SideEditors;
 
@@ -57,24 +56,25 @@ public partial class CloudAppEditor : SideEditorBase
     /// Gets or sets the address for a VNC app
     /// </summary>
     private string AddressVnc { get; set; }
-    
-    /// <summary>
-    /// Gets or sets the address for a external app
-    /// </summary>
-    private string AddressExternal { get; set; }
 
 
     /// <summary>
     /// Gets or sets the icon of the app
     /// </summary>
     private string Icon { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the app type
     /// </summary>
     private CloudAppType AppType { get; set; }
-
     private string SelectedItem;
+
+    private string GetAddress(CloudAppType type)
+    {
+        if(AppType == CloudAppType.Vnc)
+            return AddressVnc;
+        return Address;
+    }
     
     
     private List<ListOption> Types;
@@ -86,19 +86,19 @@ public partial class CloudAppEditor : SideEditorBase
         lblCancel = Translator.Instant("Labels.Cancel");
 
         Name = Item?.Name ?? string.Empty;
-        AppType = Item?.Type ?? CloudAppType.Link;
-        if(AppType == CloudAppType.External)
-            AddressExternal = Item?.Address ?? string.Empty;
-        else if (AppType == CloudAppType.Vnc)
+        AppType = Item?.Type ?? CloudAppType.IFrame;
+        if (AppType == CloudAppType.Vnc)
             AddressVnc = Item?.Address ?? "http://";
         else
             Address = Item?.Address ?? "https://";
         Icon = Item?.Icon ?? string.Empty;
         Types = new()
         {
-            new() { Label = nameof(CloudAppType.Link), Value = CloudAppType.Link },
-            new() { Label = nameof(CloudAppType.External), Value = CloudAppType.External },
-            new() { Label = nameof(CloudAppType.Vnc).ToUpper(), Value = CloudAppType.Vnc },
+            new() { Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.IFrame)}"), Value = CloudAppType.IFrame },
+            new() { Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.Internal)}"), Value = CloudAppType.Internal },
+            new() { Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.External)}"), Value = CloudAppType.External },
+            new() { Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.ExternalSame)}"), Value = CloudAppType.ExternalSame },
+            new() { Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.Vnc)}"), Value = CloudAppType.Vnc },
         };
     }
 
@@ -113,12 +113,7 @@ public partial class CloudAppEditor : SideEditorBase
             return;
         var item = new CloudApp();
         item.Name = Name;
-        if(AppType == CloudAppType.Vnc)
-            item.Address = AddressVnc;
-        else if(AppType == CloudAppType.External)
-            item.Address = AddressExternal;
-        else
-            item.Address = Address;
+        item.Address = GetAddress(AppType);
         item.Icon = Icon;
         item.Type = AppType;
         await OnSaved.InvokeAsync(item);

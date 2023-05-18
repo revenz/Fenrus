@@ -15,13 +15,13 @@
     {
         <InputText Page="CloudAppEditor" Label="AddressVnc" @bind-Value="AddressVnc" Required="true" Pattern="^([\w.-]+|\[[0-9a-fA-F:]+\])(:\d+)?$"></InputText>
     }
-    else if(AppType == CloudAppType.External)
+    else if(AppType == CloudAppType.IFrame)
     {
-        <InputText Page="CloudAppEditor" Label="AddressExternal" @bind-Value="AddressExternal" Required="true" Pattern="^[^:]+://."></InputText>
+        <InputText Page="CloudAppEditor" Label="Address" @bind-Value="Address" Required="true" Pattern="^[^:]+://."></InputText>
     }
     else
     {
-        <InputText Page="CloudAppEditor" Label="Address" @bind-Value="Address" Required="true" Pattern="^[^:]+://."></InputText>
+        <InputText Page="CloudAppEditor" Label="AddressExternal" @bind-Value="Address" Required="true" Pattern="^[^:]+://."></InputText>
     }
     
     

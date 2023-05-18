@@ -76,6 +76,13 @@
     "UpdateHistory": "Update History"
   },
   "Enums": {
+    "CloudAppType": {
+      "IFrame": "IFrame",
+      "Internal": "Open in this tab",
+      "External": "Open in new tab",
+      "ExternalSame": "Open in same tab",
+      "Vnc": "VNC"
+    },
     "ItemSize": {
       "Small": "Small",
       "Medium": "Medium",
@@ -154,9 +161,9 @@
       "Title": "Edit App",
       "Fields": {
         "Address": "URL",
-        "Address-Help": "The URL of the site to open, you will likely need to use a https URL.  Not all sites will allow you to open them in an IFrame, and may need to be switched to an external type.",
+        "Address-Help": "The URL of the site to open, you will likely need to use a https URL.\nNot all sites will allow you to open them in an IFrame, and may need to be switched to an external type.",
         "AddressExternal": "URL",
-        "AddressExternal-Help": "The URL that will be opened in a new tab when clicked.",
+        "AddressExternal-Help": "The URL to the webpage that will be opened.",
         "Icon": "Icon",
         "Type": "Type",
         "AddressVnc": "Address",

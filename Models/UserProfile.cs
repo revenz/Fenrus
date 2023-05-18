@@ -155,13 +155,21 @@ public enum CloudAppType
     /// <summary>
     /// Basic link that opens in the iframe
     /// </summary>
-    Link = 0,
+    IFrame = 0,
+    /// <summary>
+    /// App that opens in this tab
+    /// </summary>
+    Internal = 1,
     /// <summary>
     /// App that opens in a new tab
     /// </summary>
-    External = 1,
+    External = 2,
+    /// <summary>
+    /// App that opens in a same tab
+    /// </summary>
+    ExternalSame = 3,
     /// <summary>
     /// VNC app
     /// </summary>
-    Vnc = 2
+    Vnc = 4
 }
