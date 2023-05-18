@@ -22,9 +22,13 @@ if (args?.Any() == true && args[0] == "--init-config")
 Console.WriteLine("Starting Fenrus...");
 StartUpHelper.Run();
 
+bool debug = Environment.GetEnvironmentVariable("DEBUG") == "1";
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddMvc();
+if(debug)
+    builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
 builder.Services.AddWebOptimizer(pipeline =>
 {
     pipeline.MinifyJsFiles("js/**/*.js");
@@ -98,7 +102,6 @@ else
 
 var app = builder.Build();
 
-bool debug = Environment.GetEnvironmentVariable("DEBUG") == "1";
 app.UseWhen(context =>
 {
     if(debug)
