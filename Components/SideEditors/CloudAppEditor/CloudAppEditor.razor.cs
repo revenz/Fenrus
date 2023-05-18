@@ -90,9 +90,9 @@ public partial class CloudAppEditor : SideEditorBase
         if(AppType == CloudAppType.External)
             AddressExternal = Item?.Address ?? string.Empty;
         else if (AppType == CloudAppType.Vnc)
-            AddressVnc = Item?.Address ?? string.Empty;
+            AddressVnc = Item?.Address ?? "http://";
         else
-            Address = Item?.Address ?? string.Empty;
+            Address = Item?.Address ?? "https://";
         Icon = Item?.Icon ?? string.Empty;
         Types = new()
         {

@@ -80,7 +80,8 @@
 .fenrus-modal-body {
   margin: 1rem 0;
 }
-.fenrus-modal-body input[type=text], .fenrus-modal-body input[type=datetime-local] {
+
+.fenrus-modal input[type=text], .fenrus-modal input[type=datetime-local] {
   margin-top: 1rem;
   width: calc(100% - 1rem);
   background: var(--input-background);
@@ -88,7 +89,7 @@
   border: solid 1px var(--input-border);
   padding: 0.5rem;
 }
-.fenrus-modal-body input[type=text]:focus, .fenrus-modal-body input[type=datetime-local]:focus {
+.fenrus-modal input[type=text]:focus, .fenrus-modal input[type=datetime-local]:focus {
   outline: solid 1px var(--accent);
 }
 

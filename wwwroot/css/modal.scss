@@ -79,13 +79,15 @@
 
 .fenrus-modal-body {
   margin: 1rem 0;
+}
 
+.fenrus-modal {
   input[type=text], input[type=datetime-local] {
-    margin-top:1rem;
-    width:calc(100% - 1rem); 
-    background:var(--input-background);
+    margin-top: 1rem;
+    width: calc(100% - 1rem);
+    background: var(--input-background);
     color: var(--input-color);
-    border:solid 1px var(--input-border);
+    border: solid 1px var(--input-border);
     padding: 0.5rem;
 
     &:focus {

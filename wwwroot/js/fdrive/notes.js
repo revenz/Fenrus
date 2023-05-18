@@ -14,9 +14,9 @@ class FenrusDriveNotes
         this.eleTabs['nt-shared'] = document.getElementById('nt-shared');
         this.setSelectedNoteClass();
 
-        document.getElementById('nt-personal').addEventListener('click', () => this.selectedTab('nt-personal'));
-        document.getElementById('nt-dashboard').addEventListener('click', () => this.selectedTab('nt-dashboard'));
-        document.getElementById('nt-shared').addEventListener('click', () => this.selectedTab('nt-shared'));
+        document.getElementById('nt-personal').addEventListener('click', () => this.selectTab('nt-personal'));
+        document.getElementById('nt-dashboard').addEventListener('click', () => this.selectTab('nt-dashboard'));
+        document.getElementById('nt-shared').addEventListener('click', () => this.selectTab('nt-shared'));
         document.querySelector('#fdrive-notes .fdrive-add-button i').addEventListener('click', () => this.add());
     }
     

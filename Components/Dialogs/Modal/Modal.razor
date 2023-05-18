@@ -7,7 +7,14 @@
     <div class="fenrus-modal" style="@Styling">
         <div class="fenrus-modal-inner">
             <div class="fenrus-modal-title">
-                <span>@Title</span>
+                @if (Head != null)
+                {
+                    @Head
+                }
+                else
+                {
+                    <span>@Title</span>
+                }
             </div>
             <div class="fenrus-modal-body">
                 @Body

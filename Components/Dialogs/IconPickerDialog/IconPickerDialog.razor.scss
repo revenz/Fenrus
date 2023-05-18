@@ -1,9 +1,30 @@
-
+.filter {
+  text-align: right;
+  input {
+    max-width:20rem;
+  }
+}
+.header {
+  display:flex;
+  flex-direction: row;
+  place-items: center;
+  span {
+    flex-grow:1;
+    display: inline-block;;
+  }
+  input {
+    display: inline-block;;
+    width:14rem;
+    margin:0;
+  }
+}
 
 .icon-picker {
   max-height: 70vh;
-  height: 28rem;
+  height: 32rem;
   overflow: auto;
+  max-width: 70vw;
+  width: 35.5rem;
   div {
     display: inline-block;
     margin: 0.5rem;

@@ -1,3 +1,7 @@
+#fdrive-apps {
+  --grid-width:84px;
+  --grid-height:96px;
+}
 #fdrive-apps #apps-actual {
   padding: 1rem;
   width: calc(100% - 2rem);
@@ -14,14 +18,13 @@
 }
 #fdrive-apps .group .apps {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-  grid-auto-rows: 96px;
-  grid-gap: 10px; /* optional: add some space between items */
+  grid-template-columns: repeat(auto-fill, minmax(var(--grid-width), 1fr));
+  grid-auto-rows: var(--grid-height);
+  grid-gap: 0;
 }
 #fdrive-apps .drive-app {
-  width: 96px;
-  height: 96px;
-  max-width: 96px;
+  width: 100%;
+  height: var(--grid-height);
 }
 #fdrive-apps .drive-app.selected .drive-app-inner {
   background: rgba(var(--accent-rgb), 0.3) !important;

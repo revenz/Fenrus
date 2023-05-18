@@ -2,16 +2,30 @@
 @namespace Fenrus.Components.Dialogs
 
 <Modal Title="@Title" Visible="Visible">
-
-    <Body>
-        <div class="icon-picker">
-            @foreach (var app in AppService.Apps)
-            {
-                <div class="icon-file @(Value == app.Key ? "selected" : string.Empty)" @onclick="() => SelectItem(app.Key)" @ondblclick="() => SelectItem(app.Key, true)">
-                    <img title="@app.Key" src="/apps/@app.Key/@app.Value.Icon" />
-                </div>
-            }
+    <Head>
+        <div class="header">
+            <span>@Title</span>
+            <input placeholder="Filter" type="text" value="@Filter" @oninput="(e) => Filter = e.Value.ToString()"/>
         </div>
+    </Head>
+    <Body>
+    <div class="icon-picker">
+        @{
+            string filterText = Filter?.Replace(" ", string.Empty).ToLowerInvariant();
+            bool filter = string.IsNullOrWhiteSpace(filterText) == false;
+
+        }
+        @foreach (var app in Apps)
+        {
+            if (filter && app.Name.Replace(" ", string.Empty).ToLowerInvariant().Contains(filterText) == false)
+            {
+                continue;
+            }
+            <div class="icon-file @(Value == app.Url ? "selected" : string.Empty)" @onclick="() => SelectItem(app.Url)" @ondblclick="() => SelectItem(app.Url, true)">
+                <img title="@app.Name" src="@app.Url"/>
+            </div>
+        }
+    </div>
 
     </Body>
     <Footer>

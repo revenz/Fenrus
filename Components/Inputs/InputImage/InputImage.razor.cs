@@ -56,10 +56,7 @@ public partial class InputImage : Input<string>
         var result = await Dialogs.IconPickerDialog.Show();
         if (string.IsNullOrEmpty(result))
             return;
-        var app = AppService.GetByName(result);
-        if (app == null)
-            return;
-        this.Value = $"/apps/{app.Name}/{app.Icon}";
+        this.Value = result;
         StateHasChanged();
     }
 }

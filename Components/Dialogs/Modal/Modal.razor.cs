@@ -16,6 +16,11 @@ public partial class Modal: ComponentBase
     /// Gets or set the body
     /// </summary>
     [Parameter] public RenderFragment Body { get; set; }
+
+    /// <summary>
+    /// Gets or set the head
+    /// </summary>
+    [Parameter] public RenderFragment Head { get; set; }
     
     /// <summary>
     /// Gets or sets the title

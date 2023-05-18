@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="Apps\Basic" />
+    <Folder Include="wwwroot\images\icons\" />
     <Folder Include="wwwroot\NoVNC\" />
   </ItemGroup>
 
@@ -57,6 +58,10 @@
     <Content Remove="data\drive\**" />
     <Content Remove="data\logs\**" />
     <Content Remove="Assemblies\**" />
+    <Content Update="Apps\Basic\Fenrus\icon.svg">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

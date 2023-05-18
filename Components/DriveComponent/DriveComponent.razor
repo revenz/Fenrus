@@ -90,6 +90,10 @@
                                                     {
                                                         <img draggable="false" src="/favicon?version=@Globals.Version"/>
                                                     }
+                                                    else if (app.Icon.StartsWith("db:/image/"))
+                                                    {
+                                                        <img src="/fimage/@app.Icon["db:/image/".Length..]?version=@Globals.Version" />
+                                                    }
                                                     else
                                                     {
                                                         <img draggable="false" src="@app.Icon"/>
