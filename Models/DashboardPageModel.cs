@@ -44,4 +44,14 @@ public class DashboardPageModel
     /// Gets the up-time states of URLs
     /// </summary>
     public Dictionary<string, int> UpTimeStates { get; init; }
+    
+    /// <summary>
+    /// Gets the the system settings
+    /// </summary>
+    public SystemSettings SystemSettings { get; init; }
+    
+    /// <summary>
+    /// Gets the the users profile
+    /// </summary>
+    public UserProfile UserProfile { get; init; }
 }

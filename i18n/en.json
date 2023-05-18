@@ -59,7 +59,11 @@
     "Personal": "Personal",
     "Shared": "Shared",
     "Files": "Files",
-    "Calendar": "Calendar"
+    "Calendar": "Calendar",
+    "Cloud": "Cloud",
+    "IconPicker": "Icon Picker",
+    "Address": "Address",
+    "Icon": "Icon"
   },
   "ContextMenu": {
     "EditDashboard": "Edit Dashboard",
@@ -144,6 +148,20 @@
         "CacheMinutes-Help": "The number of minutes to cache this feed for before refreshing it, keep this number high to reduce excess querying of the calendar data.",
         "Color": "Color",
         "Color-Help": "The color to show these events in.  Leave blank to use the default color."
+      }
+    },
+    "CloudAppEditor": {
+      "Title": "Edit App",
+      "Fields": {
+        "Address": "URL",
+        "Address-Help": "The URL of the site to open, you will likely need to use a https URL.  Not all sites will allow you to open them in an IFrame, and may need to be switched to an external type.",
+        "AddressExternal": "URL",
+        "AddressExternal-Help": "The URL that will be opened in a new tab when clicked.",
+        "Icon": "Icon",
+        "Type": "Type",
+        "AddressVnc": "Address",
+        "AddressVnc-Help": "The address for the VNC server",
+        "AddressVnc-Placeholder": "192.168.1.10:5900"
       }
     },
     "Dashboards":{
@@ -282,13 +300,17 @@
       "Title": "Profile",
       "Labels": {
         "PageDescription": "This page allows you to change your user profile settings.",
+        "Apps": "Apps",
+        "Email": "Email",
         "General": "General",
         "ChangePassword": "Password",
         "Calendar": "Calendar",
         "FileStorage": "File Storage",
         "PageDescription-Calendar": "This allows you to customize the calendar source for your personal calendar.\n\nYou can specify a CalDAV source and if so, all events will be saved to that source, otherwise they will be saved into Fenrus directly.",
         "PageDescription-FileStorage": "This allows you to customize the file storage source you can either use the built-in locally hosted file system storage or use an external WebDAV source.",
-        "PageDescription-Email": "This allows you to configure an IMAP server to use for retrieving your emails."
+        "PageDescription-Email": "This allows you to configure an IMAP server to use for retrieving your emails.",
+        "PageDescription-Apps": "This allows you to configure that apps that are shown in the Cloud drawer.",
+        "NewGroup": "New Group"
       },
       "Messages": {
         "InvalidEmail": "Invalid email address",
@@ -327,7 +349,12 @@
         "EmailSmtpServer-Help": "The SMTP server address used to send emails",
         "EmailSmtpPort": "Port",
         "EmailSmtpUsername": "Username",
-        "EmailSmtpPassword": "Password"
+        "EmailSmtpPassword": "Password",
+        "CalendarEnabled": "Enabled",
+        "FilesEnabled": "Enabled",
+        "EmailEnabled": "Enabled",
+        "NotesEnabled": "Notes Enabled",
+        "AppsEnabled": "Enabled"
       }
     },
     "SearchEngines": {
@@ -358,6 +385,7 @@
         "PageDescription": "This page allows you to configure system wide settings",
         "Smtp": "SMTP",
         "SmtpDescription": "Configure an SMTP server, this will be used to send password reset emails.",
+        "CloudDescription": "Configure which cloud features you wish end user to be able to use, the cloud is the users side panel and gives them access to these features.",
         "Importing": "Importing previous configuration, this may take a while, please wait.",
         "UpdateApps": "Update Apps",
         "UpdatingApps": "Updating apps, please wait"
@@ -377,7 +405,13 @@
         "SmtpUser": "User",
         "SmtpPassword": "Password",
         "SmtpSender": "Sender",
-        "SmtpSenderHelp": "The email address Fenrus will send emails from."
+        "SmtpSenderHelp": "The email address Fenrus will send emails from.",
+        "CloudEnabled": "Enabled",
+        "CloudApps": "Apps",
+        "CloudCalendar": "Calendar",
+        "CloudEmail": "Email",
+        "CloudFiles": "Files",
+        "CloudNotes": "Notes"
       }
     },
     "Users": {

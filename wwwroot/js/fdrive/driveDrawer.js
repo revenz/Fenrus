@@ -7,16 +7,17 @@ class FenrusDriveDrawer {
 
     constructor() {
         document.addEventListener('mousedown', (event) => this.mouseDownEventListener(event));
-        this.features = [
-            { name: 'Notes', instance: fDriveNotes, icon: 'fa-solid fa-file-pen' },
-            { name: 'Files', instance: fDrive, icon: 'fa-solid fa-hard-drive' },
-            { name: 'Calendar', instance: fDriveCalendar, icon: 'fa-solid fa-calendar', displayName: 'Cal' },
-            { name: 'Email', instance: fDriveEmail, icon: 'fa-solid fa-envelope' },
-        ];
+        this.features = [];
+        if(document.getElementById('fdrive-notes'))
+            this.features.push({ name: 'Notes', instance: new FenrusDriveNotes(), icon: 'fa-solid fa-file-pen' });
+        if(document.getElementById('fdrive-files'))
+            this.features.push({ name: 'Files', instance: new FenrusDrive(), icon: 'fa-solid fa-hard-drive' });
+        if(document.getElementById('fdrive-calendar'))
+            this.features.push({ name: 'Calendar', instance: new FenrusDriveCalendar(), icon: 'fa-solid fa-calendar', displayName: 'Cal' });
+        if(document.getElementById('fdrive-email'))
+            this.features.push({ name: 'Email', instance: new FenrusDriveEmail(), icon: 'fa-solid fa-envelope' });
         if(document.getElementById('fdrive-apps'))
-        {
             this.features.push({ name: 'Apps', instance: new FenrusDriveApps(), icon: '/images/apps.svg'});
-        }
         
         let ftabs = document.getElementById('fdrive-tabs');
         for(let i=0;i<this.features.length;i++)
@@ -148,17 +149,9 @@ class FenrusDriveDrawer {
 }
 
 
-var fDrive;
 var fDriveDrawer;
-var fDriveNotes;
-var fDriveCalendar;
-var fDriveEmail;
 document.addEventListener("DOMContentLoaded", () => {    
     if(document.querySelector('.dashboard')) {
-        fDrive = new FenrusDrive();
-        fDriveNotes = new FenrusDriveNotes();
-        fDriveCalendar = new FenrusDriveCalendar();
-        fDriveEmail = new FenrusDriveEmail();
         fDriveDrawer = new FenrusDriveDrawer();
     }
 });

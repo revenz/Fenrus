@@ -83,6 +83,7 @@ namespace Fenrus.Middleware
             NetworkStream networkStream,
             CancellationToken cancellationToken = default)
         {
+            bool wasOpened = false;
             try
             {
                 var receiveBuffer = new byte[ReceiveChunkSize];
@@ -105,10 +106,13 @@ namespace Fenrus.Middleware
                         WebSocketMessageType.Binary,
                         true,
                         cancellationToken);
+                    wasOpened = true;
                 }
             }
             catch (WebSocketException ex)
             {
+                if (wasOpened)
+                    return;
                 if (ex.WebSocketErrorCode != WebSocketError.ConnectionClosedPrematurely)
                 {
                     throw;

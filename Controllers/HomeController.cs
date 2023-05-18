@@ -52,10 +52,11 @@ public class HomeController : BaseController
         if (Guid.TryParse(Request.Cookies["dashboard"] ?? string.Empty, out Guid uid))
             dashboard = dashboards.FirstOrDefault(x => x.Uid == uid);
         dashboard ??= dashboards.MinBy(x => x.IsDefault ? 0 : 1) ?? new();
-        return ShowDashboard(dashboard, settings);
+        var profile = new UserService().GetProfileByUid(settings.UserUid);
+        return ShowDashboard(dashboard, settings, profile);
     }
 
-    private IActionResult ShowDashboard(Dashboard dashboard, UserSettings settings)
+    private IActionResult ShowDashboard(Dashboard dashboard, UserSettings settings, UserProfile profile)
     {
         if (string.IsNullOrEmpty(dashboard.BackgroundImage) == false)
             ViewBag.CustomBackground = "true";
@@ -84,6 +85,8 @@ public class HomeController : BaseController
         }
 
         var isUp = new UpTimeService().GetUpStates();
+
+        var systemSettings = new SystemSettingsService().Get();
         
         DashboardPageModel model = new DashboardPageModel
         {
@@ -94,7 +97,9 @@ public class HomeController : BaseController
             Translator = Translator,
             Dashboards = dashboards,
             SearchEngines = searchEngines,
-            UpTimeStates = isUp
+            UpTimeStates = isUp,
+            SystemSettings = systemSettings,
+            UserProfile = profile
         };
         ViewBag.Translator = Translator;
         ViewBag.IsGuest = isGuest;
@@ -332,7 +337,7 @@ public class HomeController : BaseController
             return Redirect("/login");
 
         var dashboard = new DashboardService().GetGuestDashboard();
-        return ShowDashboard(dashboard, new UserSettingsService().SettingsForGuest());
+        return ShowDashboard(dashboard, new UserSettingsService().SettingsForGuest(), new ());
     }
 
     /// <summary>

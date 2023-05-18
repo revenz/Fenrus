@@ -16,6 +16,10 @@
                     <InputText Page="Profile" Label="Name" @bind-Value="@Username" Required="true" ReadOnly="@SystemSettingsService.UsingOAuth" />
                     <InputText Page="Profile" Label="FullName" @bind-Value="@FullName" />
                     <InputText Page="Profile" Label="Email" @bind-Value="@Email" Required="true" Email="true"/>
+                    @if (CloudNotesGlobalEnabled)
+                    {
+                        <InputSwitch Page="Profile" Label="NotesEnabled" @bind-Value="NotesEnabled"></InputSwitch>
+                    }
                     <div class="buttons">
                         <button class="btn" @onclick="() => Save()">@lblSave</button>
                     </div>
@@ -39,83 +43,157 @@
                     </Editor>
                 </FenrusTab>
             }
-            <FenrusTab Title="@lblCalendar">
-                <Editor @ref=CalendarEditor>
-                    <div class="page-description">@lblCalendarPageDescription</div>
-                    @if (string.IsNullOrEmpty(ErrorCalendar) == false)
-                    {
-                        <div class="error">@ErrorCalendar</div>
-                    }
-                    <InputSelect Page="Profile" Label="CalendarProvider" @bind-Value="@CalendarProvider" TItem="string">
-                        <InputSelectOption TItem="string" StringValue="" Label="None" />
-                        <InputSelectOption TItem="string" StringValue="Custom" Label="Custom" />
-                        <InputSelectGroup TItem="string" Label="Providers" Items="CalendarProviders" />
-                    </InputSelect>
-                    @if (string.IsNullOrEmpty(CalendarProvider) == false)
-                    {
-                        <InputText Page="Profile" Label="CalendarUrl" @bind-Value="CalendarUrl"/>
-                        <InputText Page="Profile" Label="CalendarName" @bind-Value="CalendarName"/>
-                        <InputText Page="Profile" Label="CalendarUsername" @bind-Value="CalendarUsername"/>
-                        <InputText Page="Profile" Label="CalendarPassword" @bind-Value="CalendarPassword" Password="true"/>
-                    }
-                    <div class="buttons">
+            
+            @if (CloudCalendarGlobalEnabled)
+            {
+                <FenrusTab Title="@lblCalendar">
+                    <Editor @ref=CalendarEditor>
+                        <div class="page-description">@lblCalendarPageDescription</div>
+                        @if (string.IsNullOrEmpty(ErrorCalendar) == false)
+                        {
+                            <div class="error">@ErrorCalendar</div>
+                        }
+                        <InputSwitch Page="Profile" Label="CalendarEnabled" @bind-Value="CalendarEnabled"></InputSwitch>
+                        <InputSelect Page="Profile" Label="CalendarProvider" @bind-Value="@CalendarProvider" TItem="string">
+                            <InputSelectOption TItem="string" StringValue="" Label="None"/>
+                            <InputSelectOption TItem="string" StringValue="Custom" Label="Custom"/>
+                            <InputSelectGroup TItem="string" Label="Providers" Items="CalendarProviders"/>
+                        </InputSelect>
                         @if (string.IsNullOrEmpty(CalendarProvider) == false)
                         {
-                            <button class="btn" @onclick="() => CalendarTest()">@lblTest</button>
+                            <InputText Page="Profile" Label="CalendarUrl" @bind-Value="CalendarUrl"/>
+                            <InputText Page="Profile" Label="CalendarName" @bind-Value="CalendarName"/>
+                            <InputText Page="Profile" Label="CalendarUsername" @bind-Value="CalendarUsername"/>
+                            <InputText Page="Profile" Label="CalendarPassword" @bind-Value="CalendarPassword" Password="true"/>
                         }
-                        <button class="btn" @onclick="() => CalendarSave()">@lblSave</button>
-                    </div>
-                </Editor>
-            </FenrusTab>
-            
-            <FenrusTab Title="@lblFileStorage">
-                <Editor @ref=FileStorageEditor>
-                    <div class="page-description">@lblFileStoragePageDescription</div>
-                    @if (string.IsNullOrEmpty(ErrorFileStorage) == false)
-                    {
-                        <div class="error">@ErrorFileStorage</div>
-                    }
-                    <InputSelect Page="Profile" Label="FileStorageProvider" @bind-Value="@FileStorageProvider" TItem="string">
-                        <InputSelectOption TItem="string" StringValue="" Label="None" />
-                        <InputSelectOption TItem="string" StringValue="Custom" Label="Custom" />
-                        <InputSelectGroup TItem="string" Label="Providers" Items="FileStorageProviders" />
-                    </InputSelect>
-                    @if (string.IsNullOrEmpty(FileStorageProvider) == false)
-                    {
-                        <InputText Page="Profile" Label="FileStorageUrl" @bind-Value="FileStorageUrl"/>
-                        <InputText Page="Profile" Label="FileStorageUsername" @bind-Value="FileStorageUsername"/>
-                        <InputText Page="Profile" Label="FileStoragePassword" @bind-Value="FileStoragePassword" Password="true"/>
-                    }
-                    <div class="buttons">
+                        <div class="buttons">
+                            @if (string.IsNullOrEmpty(CalendarProvider) == false)
+                            {
+                                <button class="btn" @onclick="() => CalendarTest()">@lblTest</button>
+                            }
+                            <button class="btn" @onclick="() => CalendarSave()">@lblSave</button>
+                        </div>
+                    </Editor>
+                </FenrusTab>
+            }
+            @if (CloudFilesGlobalEnabled)
+            {
+                <FenrusTab Title="@lblFileStorage">
+                    <Editor @ref=FileStorageEditor>
+                        <div class="page-description">@lblFileStoragePageDescription</div>
+                        @if (string.IsNullOrEmpty(ErrorFileStorage) == false)
+                        {
+                            <div class="error">@ErrorFileStorage</div>
+                        }
+                        <InputSwitch Page="Profile" Label="FilesEnabled" @bind-Value="FilesEnabled"></InputSwitch>
+                        
+                        <InputSelect Page="Profile" Label="FileStorageProvider" @bind-Value="@FileStorageProvider" TItem="string">
+                            <InputSelectOption TItem="string" StringValue="" Label="None"/>
+                            <InputSelectOption TItem="string" StringValue="Custom" Label="Custom"/>
+                            <InputSelectGroup TItem="string" Label="Providers" Items="FileStorageProviders"/>
+                        </InputSelect>
                         @if (string.IsNullOrEmpty(FileStorageProvider) == false)
                         {
-                            <button class="btn" @onclick="() => FileStorageTest()">@lblTest</button>
+                            <InputText Page="Profile" Label="FileStorageUrl" @bind-Value="FileStorageUrl"/>
+                            <InputText Page="Profile" Label="FileStorageUsername" @bind-Value="FileStorageUsername"/>
+                            <InputText Page="Profile" Label="FileStoragePassword" @bind-Value="FileStoragePassword" Password="true"/>
                         }
-                        <button class="btn" @onclick="() => FileStorageSave()">@lblSave</button>
-                    </div>
-                </Editor>
-            </FenrusTab>
+                        <div class="buttons">
+                            @if (string.IsNullOrEmpty(FileStorageProvider) == false)
+                            {
+                                <button class="btn" @onclick="() => FileStorageTest()">@lblTest</button>
+                            }
+                            <button class="btn" @onclick="() => FileStorageSave()">@lblSave</button>
+                        </div>
+                    </Editor>
+                </FenrusTab>
+            }
+            @if(CloudEmailGlobalEnabled)
+            {
+                <FenrusTab Title="@lblEmail">
+                    <Editor @ref=EmailEditor>
+                        <div class="page-description">@lblEmailPageDescription</div>
+                        
+                        <InputSwitch Page="Profile" Label="EmailEnabled" @bind-Value="EmailEnabled"></InputSwitch>
+                        
+                        <InputText Page="Profile" Label="EmailImapServer" @bind-Value="EmailImapServer"/>
+                        <InputNumber Page="Profile" Label="EmailImapPort" @bind-Value="EmailImapPort" Minimum="1" Maximum="65535"/>
+                        <InputText Page="Profile" Label="EmailImapUsername" @bind-Value="EmailImapUsername"/>
+                        <InputText Page="Profile" Label="EmailImapPassword" @bind-Value="EmailImapPassword" Password="true"/>
+                        <hr/>
+
+                        <InputText Page="Profile" Label="EmailSmtpServer" @bind-Value="EmailSmtpServer"/>
+                        <InputNumber Page="Profile" Label="EmailSmtpPort" @bind-Value="EmailSmtpPort" Minimum="1" Maximum="65535"/>
+                        <InputText Page="Profile" Label="EmailSmtpUsername" @bind-Value="EmailSmtpUsername"/>
+                        <InputText Page="Profile" Label="EmailSmtpPassword" @bind-Value="EmailSmtpPassword" Password="true"/>
+
+                        <div class="buttons">
+                            <button class="btn" @onclick="() => EmailTest()">@lblTest</button>
+                            <button class="btn" @onclick="() => EmailSave()">@lblSave</button>
+                        </div>
+                    </Editor>
+                </FenrusTab>
+            }
             
-            <FenrusTab Title="@lblEmail">
-                <Editor @ref=EmailEditor>
-                    <div class="page-description">@lblEmailPageDescription</div>
-                    <InputText Page="Profile" Label="EmailImapServer" @bind-Value="EmailImapServer"/>
-                    <InputNumber Page="Profile" Label="EmailImapPort" @bind-Value="EmailImapPort" Minimum="1" Maximum="65535" />
-                    <InputText Page="Profile" Label="EmailImapUsername" @bind-Value="EmailImapUsername"/>
-                    <InputText Page="Profile" Label="EmailImapPassword" @bind-Value="EmailImapPassword" Password="true"/>
-                    <hr />
-                    
-                    <InputText Page="Profile" Label="EmailSmtpServer" @bind-Value="EmailSmtpServer"/>
-                    <InputNumber Page="Profile" Label="EmailSmtpPort" @bind-Value="EmailSmtpPort" Minimum="1" Maximum="65535" />
-                    <InputText Page="Profile" Label="EmailSmtpUsername" @bind-Value="EmailSmtpUsername"/>
-                    <InputText Page="Profile" Label="EmailSmtpPassword" @bind-Value="EmailSmtpPassword" Password="true"/>
-                    
-                    <div class="buttons">
-                        <button class="btn" @onclick="() => EmailTest()">@lblTest</button>
-                        <button class="btn" @onclick="() => EmailSave()">@lblSave</button>
-                    </div>
-                </Editor>
-            </FenrusTab>
+            @if (CloudAppsGlobalEnabled)
+            {
+                <FenrusTab Title="@lblApps">
+                    <Editor>
+                        <div class="page-description">@lblAppsPageDescription</div>
+                        
+                        <div class="apps">
+                            <InputSwitch Page="Profile" Label="AppsEnabled" @bind-Value="AppsEnabled"></InputSwitch>
+                        
+                            
+                        <div class="apps-groups">
+                            <DraggableList TItem="Models.CloudAppGroup" Items="AppGroups" CssClassName="app-group">
+                                <ItemTemplate Context="grp">
+                                    <div class="app-group">
+                                        <div class="title">
+                                            <input required type="text" @bind-value="grp.Name"/>
+
+                                            <div class="app-group-buttons">
+                                                <i @onclick="() => AppsDeleteGroup(grp)" class="fa-solid fa-trash"></i>
+                                                <i @onclick="() => AppsAddItem(grp)" class="fa-solid fa-plus"></i>
+                                            </div>
+                                        </div>
+                                        <div class="items">
+                                            <DraggableList TItem="Models.CloudApp" Items="grp.Items" CssClassName="app">
+                                                <ItemTemplate Context="app">
+                                                    <div class="app-inner" @ondblclick="() => AppsEditItem(app)">
+                                                        @if (string.IsNullOrEmpty(app.Icon))
+                                                        {
+                                                            <img src="/favicon?version=@Globals.Version"/>
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="@app.Icon"/>
+                                                        }
+                                                        <span class="name">@app.Name</span>
+                                                        <span class="delete" title="@lblDelete" @onclick="() => AppsDeleteItem(grp, app)">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </span>
+                                                    </div>
+                                                </ItemTemplate>
+                                            </DraggableList>
+                                        </div>
+                                    </div>
+                                </ItemTemplate>
+                            </DraggableList>
+                            </div>
+
+                            <div class="buttons">
+                                @if (AppsEnabled)
+                                {
+                                    <button class="btn" @onclick="() => AppsAddGroup()">@lblNewGroup</button>
+                                }
+                                <button class="btn" @onclick="() => AppsSave()">@lblSave</button>
+                            </div>
+                        </div>
+                    </Editor>
+                </FenrusTab>
+                
+            }
         </FenrusTabs>
     </div>
     </Body>

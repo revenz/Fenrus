@@ -23,6 +23,7 @@
         <button class="btn" onclick="document.getElementById('@Uid-file-chooser').click()">
             Browse...
         </button>
+        <button class="btn" @onclick="() => OpenIconPicker()">Icon Picker</button>
         @if (Reset)
         {
             <button class="btn" @onclick="() => ResetImage()">Reset</button>

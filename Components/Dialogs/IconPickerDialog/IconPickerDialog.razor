@@ -1,0 +1,21 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@namespace Fenrus.Components.Dialogs
+
+<Modal Title="@Title" Visible="Visible">
+
+    <Body>
+        <div class="icon-picker">
+            @foreach (var app in AppService.Apps)
+            {
+                <div class="icon-file @(Value == app.Key ? "selected" : string.Empty)" @onclick="() => SelectItem(app.Key)" @ondblclick="() => SelectItem(app.Key, true)">
+                    <img title="@app.Key" src="/apps/@app.Key/@app.Value.Icon" />
+                </div>
+            }
+        </div>
+
+    </Body>
+    <Footer>
+        <button class="btn" @onclick=@Close>@lblOk</button>
+        <button class="btn" @onclick=@Cancel>@lblCancel</button>
+    </Footer>
+</Modal>

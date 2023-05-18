@@ -1,4 +1,5 @@
 using Fenrus.Components.Dialogs;
+using Fenrus.Models;
 
 namespace Fenrus.Pages;
 
@@ -10,9 +11,12 @@ public partial class SystemSettings:UserPage
 {
     private string lblTitle, lblDescription,
         lblImportConfig, lblImporting, lblUpdateApps, lblUpdatingApps, 
-        lblSmtp, lblSmtpDescription, 
+        lblSmtp, lblSmtpDescription,
+        lblCloud, lblCloudDescription,
         lblSmtpServer, lblSmtpPort, lblSmtpUser, lblSmtpPassword,
         lblSmtpSender, lblStmpSenderHelp, lblTest;
+
+    private bool CloudEnabled, CloudNotes, CloudFiles, CloudCalendar, CloudEmail, CloudApps;
 
     private Models.SystemSettings Model;
     private string SmtpPassword;
@@ -29,12 +33,20 @@ public partial class SystemSettings:UserPage
         Model = new SystemSettingsService().Get();
         if (Model.SmtpPort < 1 || Model.SmtpPort > 65535)
             Model.SmtpPort = 25;
-        SmtpPassword = string.IsNullOrEmpty(Model.SmtpPasswordEncrypted) ? string.Empty : Globals.DUMMY_PASSWORD; 
+        SmtpPassword = string.IsNullOrEmpty(Model.SmtpPasswordEncrypted) ? string.Empty : Globals.DUMMY_PASSWORD;
+        CloudEnabled = (int)Model.CloudFeatures > 0;
+        CloudNotes = (CloudFeature.Notes & Model.CloudFeatures) == CloudFeature.Notes;
+        CloudFiles = (CloudFeature.Files & Model.CloudFeatures) == CloudFeature.Files;
+        CloudCalendar = (CloudFeature.Calendar & Model.CloudFeatures) == CloudFeature.Calendar;
+        CloudEmail = (CloudFeature.Email & Model.CloudFeatures) == CloudFeature.Email;
+        CloudApps = (CloudFeature.Apps & Model.CloudFeatures) == CloudFeature.Apps;
         
         lblTitle = Translator.Instant("Pages.SystemSettings.Title");
         lblDescription = Translator.Instant("Pages.SystemSettings.Labels.PageDescription");
         lblSmtp = Translator.Instant("Pages.SystemSettings.Labels.Smtp");
         lblSmtpDescription = Translator.Instant("Pages.SystemSettings.Labels.SmtpDescription");
+        lblCloud = Translator.Instant("Labels.Cloud");
+        lblCloudDescription = Translator.Instant("Pages.SystemSettings.Labels.CloudDescription");
         lblSmtpServer = Translator.Instant("Pages.SystemSettings.Fields.SmtpServer");
         lblSmtpPort = Translator.Instant("Pages.SystemSettings.Fields.SmtpPort");
         lblSmtpUser = Translator.Instant("Pages.SystemSettings.Fields.SmtpUser");
@@ -55,6 +67,16 @@ public partial class SystemSettings:UserPage
     {
         if (SmtpPassword != Globals.DUMMY_PASSWORD)
             Model.SmtpPasswordEncrypted = EncryptionHelper.Encrypt(SmtpPassword);
+
+        this.Model.CloudFeatures = CloudFeature.None;
+        if (CloudEnabled)
+        {
+            if (CloudNotes) this.Model.CloudFeatures |= CloudFeature.Notes;
+            if (CloudFiles) this.Model.CloudFeatures |= CloudFeature.Files;
+            if (CloudCalendar) this.Model.CloudFeatures |= CloudFeature.Calendar;
+            if (CloudEmail) this.Model.CloudFeatures |= CloudFeature.Email;
+            if (CloudApps) this.Model.CloudFeatures |= CloudFeature.Apps;
+        }
         
         new SystemSettingsService().SaveFromEditor(this.Model);
         ToastService.ShowSuccess(Translator.Instant("Labels.Saved"));

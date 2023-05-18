@@ -1,0 +1,22 @@
+
+
+.icon-picker {
+  max-height: 70vh;
+  height: 28rem;
+  overflow: auto;
+  div {
+    display: inline-block;
+    margin: 0.5rem;
+    border:solid 2px transparent;
+    border-radius:0.5rem;
+    &.selected {
+      border-color:var(--accent);
+      background:#333;
+    }
+  }
+  img {
+    width:3rem;
+    height:3rem;
+    contain: content;
+  }
+}

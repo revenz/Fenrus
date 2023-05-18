@@ -10,6 +10,7 @@ class FenrusDriveCalendar
             if(this.calendar)
                 this.calendar.render();
         })
+        document.querySelector('#fdrive-calendar .add-button i').addEventListener('click', () => this.add());
     }
     
     hide(){

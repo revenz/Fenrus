@@ -3,11 +3,23 @@
     padding:1rem;
     width:calc(100% - 2rem);
     height:calc(100% - 2rem);
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-    grid-auto-rows: 96px;
-    grid-gap: 10px; /* optional: add some space between items */
     user-select: none;
+  }
+  .group {
+    + .group {
+      margin-top:1rem;
+    }
+    > .title {
+      display: block;
+      margin: 0 0 0.5rem 0.5rem;
+      text-transform: uppercase;
+    }
+    .apps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+      grid-auto-rows: 96px;
+      grid-gap: 10px; /* optional: add some space between items */
+    }
   }
   .drive-app {
     width:96px;

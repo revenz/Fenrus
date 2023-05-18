@@ -1,0 +1,19 @@
+@namespace Fenrus.Components
+
+@typeparam TItem
+
+<div class="grid-container">
+    @foreach (var item in Items)
+    {
+        <div class="grid-item @CssClassName"
+             draggable="true"
+             @ondragstart="(() => DragStart(item))"
+             @ondragenter="(() => DragEnter(item))"
+             @ondragover:preventDefault
+             @ondrop="((e) => Drop(e, item))" 
+             @onblur="(() => Blur(item))" 
+             tabindex="@GetTabIndex(item)">
+            @ItemTemplate(item)
+        </div>
+    }
+</div>

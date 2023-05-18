@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.JSInterop;
 
 namespace Fenrus.Components.Inputs;
@@ -25,13 +26,6 @@ public partial class InputImage : Input<string>
 
     private async Task ImageChosen(ChangeEventArgs e)
     {
-        var value = e.Value;
-        if(value == null)
-            Console.WriteLine("VAlue is null");
-        else
-        {
-            Console.WriteLine("VAlue is not null: " + JsonSerializer.Serialize(value));
-        }
     }
 
     protected override void OnAfterRender(bool firstRender)
@@ -55,5 +49,17 @@ public partial class InputImage : Input<string>
     {
         this.Value = "";
         this.InitialImage = "";
+    }
+
+    private async Task OpenIconPicker()
+    {
+        var result = await Dialogs.IconPickerDialog.Show();
+        if (string.IsNullOrEmpty(result))
+            return;
+        var app = AppService.GetByName(result);
+        if (app == null)
+            return;
+        this.Value = $"/apps/{app.Name}/{app.Icon}";
+        StateHasChanged();
     }
 }

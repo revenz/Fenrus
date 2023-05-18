@@ -1,5 +1,4 @@
 using Fenrus.Controllers;
-using Fenrus.Services;
 using LiteDB;
 
 namespace Fenrus.Models;
@@ -27,6 +26,11 @@ public class SystemSettings
     /// Gets or sets if registrations are allowed
     /// </summary>
     public bool AllowRegister { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if users are allowed their cloud/side bar
+    /// </summary>
+    public CloudFeature CloudFeatures { get; set; }
     
     /// <summary>
     /// Gets or sets if guests are allowed
@@ -92,4 +96,36 @@ public class SystemSettings
     public void Save()
         => new SystemSettingsService().Save();
 
+}
+
+/// <summary>
+/// Cloud features that can be used by end users
+/// </summary>
+[Flags]
+public enum CloudFeature
+{
+    /// <summary>
+    /// No features are enabled
+    /// </summary>
+    None = 0,
+    /// <summary>
+    /// Notes feature
+    /// </summary>
+    Notes = 1,
+    /// <summary>
+    /// Files feature
+    /// </summary>
+    Files = 2,
+    /// <summary>
+    /// Calendar feature
+    /// </summary>
+    Calendar = 4,
+    /// <summary>
+    /// Email feature
+    /// </summary>
+    Email = 8,
+    /// <summary>
+    /// Apps feature
+    /// </summary>
+    Apps = 16
 }

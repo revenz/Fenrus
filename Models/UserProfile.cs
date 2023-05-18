@@ -13,6 +13,11 @@ public class UserProfile:IModalUid
     [BsonId]
     public Guid Uid { get; set; }
     
+    /// <summary>
+    /// Gets or sets if users are allowed their cloud/side bar
+    /// </summary>
+    public CloudFeature CloudFeatures { get; set; }
+    
     #region Calendar
     /// <summary>
     /// Gets or sets the calendar provider
@@ -89,4 +94,74 @@ public class UserProfile:IModalUid
     /// </summary>
     public EncryptedString EmailSmtpPassword { get; set; }
     #endregion
+    
+    #region Apps
+    /// <summary>
+    /// Gets or sets the cloud app groups for this user
+    /// </summary>
+    public List<CloudAppGroup> AppGroups { get; set; }
+    #endregion
+}
+
+/// <summary>
+/// A cloud app group
+/// </summary>
+public class CloudAppGroup
+{
+    /// <summary>
+    /// Gets or sets the name of the cloud app group
+    /// </summary>
+    public string Name { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this group is enabled
+    /// </summary>
+    public bool Enabled { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the apps in the group
+    /// </summary>
+    public List<CloudApp> Items { get; set; }
+}
+
+/// <summary>
+/// Cloud app that appears in a users cloud app drawer
+/// </summary>
+public class CloudApp
+{
+    /// <summary>
+    /// Gets or sets the name of the app
+    /// </summary>
+    public string Name { get; set; }
+    /// <summary>
+    /// Gets or sets the Icon for the app
+    /// </summary>
+    public string Icon { get; set; }
+    /// <summary>
+    /// Gets or sets the address of the app
+    /// </summary>
+    public string Address { get; set; }
+    /// <summary>
+    /// Gets or sets the type of the app
+    /// </summary>
+    public CloudAppType Type { get; set; }
+}
+
+/// <summary>
+/// Types of cloud apps
+/// </summary>
+public enum CloudAppType
+{
+    /// <summary>
+    /// Basic link that opens in the iframe
+    /// </summary>
+    Link = 0,
+    /// <summary>
+    /// App that opens in a new tab
+    /// </summary>
+    External = 1,
+    /// <summary>
+    /// VNC app
+    /// </summary>
+    Vnc = 2
 }

@@ -1,4 +1,3 @@
-@using Fenrus.Models
 @namespace Fenrus.Components
 
 <div id="fdrive-wrapper" class="dashboard-drive collapsed">
@@ -9,85 +8,97 @@
     <div class="resizer"></div>
     <div class="fdrive-inner">
         <div class="fdrive-modes">
-            <div id="fdrive-notes">
-                <div class="fdrive-pane-title">
-                    <div id="nt-personal" onclick="fDriveNotes.selectTab('nt-personal')">@lblPersonal</div>
-                    <div id="nt-dashboard" onclick="fDriveNotes.selectTab('nt-dashboard')">@lblDashboard</div>
-                    <div id="nt-shared" onclick="fDriveNotes.selectTab('nt-shared')">@lblShared</div>
+            @if (NotesEnabled)
+            {
+                <div id="fdrive-notes">
+                    <div class="fdrive-pane-title">
+                        <div id="nt-personal">@lblPersonal</div>
+                        <div id="nt-dashboard">@lblDashboard</div>
+                        <div id="nt-shared">@lblShared</div>
+                    </div>
+                    <div class="content" id="notes-list">
+                    </div>
+                    <div class="fdrive-add-button">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
                 </div>
-                <div class="content" id="notes-list">
-                </div>
-                <div class="fdrive-add-button">
-                    <i class="fa-solid fa-plus" onclick="fDriveNotes.add()"></i>
-                </div>
-            </div>
+            }
 
-            <div id="fdrive-files">
-                <div class="fdrive-pane-title">
-                    <div id="fdrive-files-address"></div>
-                    <div class="toolbar"></div>
+            @if (FilesEnabled)
+            {
+                <div id="fdrive-files">
+                    <div class="fdrive-pane-title">
+                        <div id="fdrive-files-address"></div>
+                        <div class="toolbar"></div>
+                    </div>
+                    <div class="content" id="fdrive-list">
+                    </div>
+                    <div class="fdrive-add-button">
+                        <ul id="fdrive-add-menu">
+                            <li class="new-folder"><i class="fa-solid fa-folder-plus"></i>New Folder</li>
+                            <li class="separator"></li>
+                            <li class="upload"><i class="fa-solid fa-upload"></i>Upload File</li>
+                        </ul>
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
                 </div>
-                <div class="content" id="fdrive-list">
+            }
+
+            @if (CalendarEnabled)
+            {
+                <div id="fdrive-calendar">
+                    <div class="fdrive-pane-title">
+                        <span class="title">@lblCalendar</span>
+                    </div>
+                    <div class="content" id="calendar-actual">
+                    </div>
+                    <div class="fdrive-add-button add-button">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
                 </div>
-                <div class="fdrive-add-button">
-                    <ul id="fdrive-add-menu">
-                        <li onclick="fDrive.add('folder')"><i class="fa-solid fa-folder-plus"></i>New Folder</li>
-                        <li class="separator"></li>
-                        <li onclick="fDrive.add('upload')"><i class="fa-solid fa-upload"></i>Upload File</li>
-                    </ul>
-                    <i class="fa-solid fa-plus" onclick="fDrive.addClicked()"></i>
+            }
+
+            @if (EmailEnabled)
+            {
+                <div id="fdrive-email">
+                    <div class="fdrive-pane-title">
+                        <span class="title">@lblEmail</span>
+                    </div>
+                    <div class="content" id="email-actual">
+                    </div>
                 </div>
-            </div>
-            
-            <div id="fdrive-calendar">
-                <div class="fdrive-pane-title">
-                    <span class="title">@lblCalendar</span>
-                </div>
-                <div class="content" id="calendar-actual">
-                </div>
-                <div class="fdrive-add-button">
-                    <i class="fa-solid fa-plus" onclick="fDriveCalendar.add(event)"></i>
-                </div>
-            </div>
-            
-            <div id="fdrive-email">
-                <div class="fdrive-pane-title">
-                    <span class="title">@lblEmail</span>
-                </div>
-                <div class="content" id="email-actual">
-                </div>
-            </div>
-                
-            @if (AppDrawerGroup != null)
+            }
+
+            @if (AppsEnabled && UserProfile.AppGroups?.Any() == true)
             {
                 <div id="fdrive-apps">
                     <div class="fdrive-pane-title">
                         <span class="title">Apps</span>
                     </div>
                     <div class="content" id="apps-actual">
-                        @foreach (var app in AppDrawerGroup.Items)
+                        @foreach (var grp in UserProfile.AppGroups)
                         {
-                            string url;
-                            string appName = null;
-                            @if (app is AppItem appItem)
-                            {
-                                url = appItem.Url;
-                                appName = appItem.AppName;
-                            }
-                            else if (app is LinkItem linkItem)
-                            {
-                                url = linkItem.Url;
-                            }
-                            else
-                            {
-                                continue;
-                            }
-                            <div class="drive-app" data-app-name="@appName" data-src="@url">
-                                <div class="drive-app-inner">
-                                    <span class="icon">
-                                        <img draggable="false" src="@GetIcon(app)"/>
-                                    </span>
-                                    <span class="name">@app.Name</span>
+                            <div class="group">
+                                <span class="title">@grp.Name</span>
+                                <div class="apps">
+                                    @foreach (var app in grp.Items)
+                                    {
+                                        <div class="drive-app" data-app-type="@app.Type" data-src="@app.Address">
+                                            <div class="drive-app-inner">
+                                                <span class="icon">
+                                                    @if (string.IsNullOrEmpty(app.Icon))
+                                                    {
+                                                        <img draggable="false" src="/favicon?version=@Globals.Version"/>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img draggable="false" src="@app.Icon"/>
+                                                    }
+                                                </span>
+                                                <span class="name">@app.Name</span>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         }

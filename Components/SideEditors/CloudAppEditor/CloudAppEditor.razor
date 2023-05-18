@@ -1,0 +1,45 @@
+@namespace Fenrus.Components.SideEditors
+
+@using Fenrus.Models
+@inherits SideEditorBase
+
+<SideEditor Title=@Title @ref=Editor>
+    <Buttons>
+        <button class="btn" @onclick="() => Save()">@lblSave</button>
+        <button class="btn" @onclick="() => Cancel()">@lblCancel</button>
+    </Buttons>
+    <Body>
+    <InputText Page="CloudAppEditor" Label="Name" @bind-Value="Name" Required="true"></InputText>
+    <InputSelect Page="CloudAppEditor" Label="Type" TItem="CloudAppType" Options="Types" @bind-Value="@AppType" />
+    @if (AppType == CloudAppType.Vnc)
+    {
+        <InputText Page="CloudAppEditor" Label="AddressVnc" @bind-Value="AddressVnc" Required="true" Pattern="^([\w.-]+|\[[0-9a-fA-F:]+\])(:\d+)?$"></InputText>
+    }
+    else if(AppType == CloudAppType.External)
+    {
+        <InputText Page="CloudAppEditor" Label="AddressExternal" @bind-Value="AddressExternal" Required="true" Pattern="^[^:]+://."></InputText>
+    }
+    else
+    {
+        <InputText Page="CloudAppEditor" Label="Address" @bind-Value="Address" Required="true" Pattern="^[^:]+://."></InputText>
+    }
+    
+    
+    <InputImage  Page="CloudAppEditor" Label="Icon" @bind-value="Icon">
+        <PreviewTemplate Context="previewIcon">
+            @{
+                string icon = previewIcon;
+                if (string.IsNullOrEmpty(icon))
+                {
+                    icon = "/favicon?version=" + Globals.Version;
+                }
+                else if (icon.StartsWith("db:/image/"))
+                {
+                    icon = "/fimage/" + icon["db:/image/".Length..] + "?version=" + Globals.Version;
+                }
+                <img src="@icon">
+            }
+        </PreviewTemplate>
+    </InputImage>
+    </Body>
+</SideEditor>

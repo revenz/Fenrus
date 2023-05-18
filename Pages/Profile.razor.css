@@ -25,7 +25,7 @@ h3 i {
 }
 
 .buttons {
-  margin-left: 15rem;
+  margin: 1rem 0 0 15rem;
 }
 .buttons button {
   margin: 0 0.5rem 0 0 !important;
@@ -33,6 +33,68 @@ h3 i {
 
 .page-description {
   margin-bottom: 1rem;
+}
+
+.apps ::deep .app-group .title {
+  display: flex;
+  flex-direction: row;
+}
+.apps ::deep .app-group .title input[type=text] {
+  flex-grow: 1;
+}
+.apps ::deep .app-group .title .app-group-buttons {
+  display: flex;
+  flex-direction: row;
+}
+.apps ::deep .app-group .title .app-group-buttons i {
+  width: 1.2rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border: solid 1px var(--accent);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
+  color: var(--color);
+  margin: 0.2rem;
+}
+.apps ::deep .app-group .title .app-group-buttons i:hover {
+  background: var(--accent);
+}
+.apps ::deep .app-group .app {
+  display: inline-block;
+}
+.apps ::deep .app-group .app .app-inner {
+  text-align: center;
+  width: 5rem;
+  margin: 0.75rem;
+  height: 6.5rem;
+  overflow: hidden;
+  position: relative;
+}
+.apps ::deep .app-group .app img {
+  display: block;
+  height: 4rem;
+  border-radius: 0.5rem;
+  width: calc(100% - 0.5rem);
+  margin: 0 0.25rem 0.25rem;
+  object-fit: contain;
+}
+.apps ::deep .app-group .app .name {
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.apps ::deep .app-group .app .delete {
+  display: none;
+}
+.apps ::deep .app-group .app:hover .delete {
+  display: unset;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  text-shadow: -1px -1px 8px #000, 1px -1px 8px #000, -1px 1px 8px #000, 1px 1px 8px #000;
 }
 
 /*# sourceMappingURL=Profile.razor.css.map */

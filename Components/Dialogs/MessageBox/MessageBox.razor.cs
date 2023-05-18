@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 namespace Fenrus.Components.Dialogs;
 
 /// <summary>
-/// Message bog
+/// Message box
 /// </summary>
 public partial class MessageBox: ComponentBase, IDisposable
 {

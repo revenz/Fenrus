@@ -18,6 +18,8 @@
     ViewBag.BackgroundCOlor = Model.Dashboard.BackgroundColor?.EmptyAsNull() ?? "#009099";
     var systemSearchEngines = ViewBag.SystemSearchEngines as List<SearchEngine>;
 
+    bool cloudEnabled = Model.SystemSettings.CloudFeatures != CloudFeature.None && Model.UserProfile.CloudFeatures != CloudFeature.None;
+
     string translations = JsonSerializer.Serialize(new
     {
         Ok = Model.Translator.Instant("Labels.Ok"),
@@ -52,11 +54,13 @@
 <input type="hidden" id="translations" value="@translations" />
 
 <div class="dashboard-view">
-    @if (isGuest == false)
+    @if (isGuest == false && cloudEnabled)
     {
         @(await Html.RenderComponentAsync<DriveComponent>(RenderMode.Static, new
         {
             Model.Translator,
+            Model.SystemSettings,
+            Model.UserProfile,
             ViewBag.AccentColor,
             settings.UserUid
         }))

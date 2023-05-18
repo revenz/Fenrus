@@ -19,12 +19,35 @@ public partial class DriveComponent
     [Parameter] public Guid UserUid { get; set; }
     
     /// <summary>
+    /// Gets or sets the system settings
+    /// </summary>
+    [Parameter] public SystemSettings SystemSettings { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the user profile
+    /// </summary>
+    [Parameter] public UserProfile UserProfile { get; set; }
+    
+    /// <summary>
     /// Gets or sets the accent colour
     /// </summary>
     [Parameter] public string AccentColor { get; set; }
 
     private string lblTitle, lblNotes, lblPersonal, lblDashboard, lblShared, lblFiles, lblCalendar, lblEmail;
-    private Group? AppDrawerGroup;
+    private bool NotesEnabled, FilesEnabled, AppsEnabled, CalendarEnabled, EmailEnabled;
+    
+    /// <summary>
+    /// Checks if a cloud feature is enabled
+    /// </summary>
+    /// <param name="feature">the feature to check</param>
+    /// <returns>true if enable, otherwise false</returns>
+    private bool FeatureEnable(CloudFeature feature)
+    {
+        if ((SystemSettings.CloudFeatures & feature) != feature)
+            return false;
+
+        return (UserProfile.CloudFeatures & feature) == feature;
+    }
 
     protected override void OnInitialized()
     {
@@ -37,10 +60,11 @@ public partial class DriveComponent
         this.lblCalendar = Translator.Instant("Labels.Calendar");
         this.lblEmail = Translator.Instant("Labels.Email");
 
-        if (UserUid != Guid.Empty)
-        {
-            AppDrawerGroup = new GroupService().GetAllForUser(UserUid).FirstOrDefault(x => x.Name == "Drive");
-        }
+        this.NotesEnabled = FeatureEnable(CloudFeature.Notes);
+        this.AppsEnabled = FeatureEnable(CloudFeature.Apps);
+        this.CalendarEnabled = FeatureEnable(CloudFeature.Calendar);
+        this.FilesEnabled = FeatureEnable(CloudFeature.Files);
+        this.EmailEnabled = FeatureEnable(CloudFeature.Email);
     }
     
     

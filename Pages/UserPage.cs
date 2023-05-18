@@ -125,7 +125,7 @@ public abstract class UserPage : ComponentBase
         lblAdd = Translator.Instant("Labels.Add");
         lblEnabled = Translator.Instant("Labels.Enabled");
         lblActions = Translator.Instant("Labels.Actions");
-        lblDefault  = Translator.Instant("Labels.Default");
+        lblDefault = Translator.Instant("Labels.Default");
         
         SystemSettings = new Services.SystemSettingsService().Get();
 

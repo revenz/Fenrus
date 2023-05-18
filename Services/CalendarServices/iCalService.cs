@@ -79,7 +79,7 @@ public class iCalService
             response.EnsureSuccessStatusCode();
             return response.Content.ReadAsStringAsync().Result;
         }
-        catch (HttpRequestException)
+        catch (Exception)
         {
             return null;
         }

@@ -61,6 +61,9 @@ class FenrusDrive {
             sort: 0
         };
         this.container =  document.getElementById('fdrive-list');
+        document.querySelector('#fdrive-files #fdrive-add-menu .new-folder').addEventListener('click', () => this.add('folder'));
+        document.querySelector('#fdrive-files #fdrive-add-menu .upload').addEventListener('click', () => this.add('upload'));
+        document.querySelector('#fdrive-files .fdrive-add-button .fa-plus').addEventListener('click', () => this.addClicked());
         this.currentPath = localStorage.getItem('DRIVE_FOLDER') || '';
         this.addressBar = new AddressBar();
         this.addressBar.onSearch((path, searchPattern) => {
