@@ -68,8 +68,13 @@ class FenrusDriveApps
     initApps(){
         for(let app of this.container.querySelectorAll('.drive-app'))
         {
-            app.addEventListener('click', () => {
-               this.openApp(app) 
+            app.addEventListener('click', (event) => {
+               this.openApp(app, event.ctrlKey) 
+            });
+            app.addEventListener('mousedown', (e) => {
+                if(e.which === 2) {
+                    this.openApp(app, true)
+                }
             });
         }
     }
@@ -88,7 +93,7 @@ class FenrusDriveApps
         this.container.innerHTML = '';
     }
     
-    async openApp(app)
+    async openApp(app, newTab)
     {
         for(let ele of this.container.querySelectorAll('.drive-app.selected'))
             ele.classList.remove('selected');
@@ -98,44 +103,14 @@ class FenrusDriveApps
         let type = app.getAttribute('data-app-type').toLowerCase();
         
         let url = app.getAttribute('data-src');
-        if(type === 'vnc'){
-            const regex = /^((?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}|(?:[a-fA-F0-9]{1,4}:)*:[a-fA-F0-9]{1,4}|(?:\d{1,3}\.){3}\d{1,3}|[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?::(\d{1,5}))?$/;
-
-            const match = regex.exec(url);
-            const hostname = match[1];
-            const port = match[2] || 5900;
-            //url = `/NoVNC/vnc_lite.html?host=${encodeURIComponent(hostname)}&port=${encodeURIComponent(port)}&scale=true`;
-            url = `/NoVNC/vnc_lite.html?scale=true&path=websockify/${encodeURIComponent(hostname)}/${encodeURIComponent(port)}`;
-        }
-        else if(type === 'external')
+        if(type === 'ssh')
         {
-            window.open(url, "_blank", "noopener,noreferrer");
-            return;
-        }
-        else if(type === 'externalsame')
-        {
-            let a = document.createElement('a');
-            a.setAttribute('href', url);
-            a.setAttribute('target', 'fenrus-popup');
-            a.style.display ='none';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            return;
-        }
-        else if(type === 'internal'){
-            this.divLaunchingApp.querySelector('.title').textContent = 'Launching ' + app.querySelector('.name').textContent;
-            this.divLaunchingApp.querySelector('img').src = app.querySelector('img').src;
-            this.divLaunchingApp.style.display = 'unset';
-            window.location.href = url;
-            return;
-        }
-        else if(type === 'ssh')
-        {
+            if(newTab)
+                return; // dont support this yet
             let uid = app.getAttribute('x-uid');
             if(this.openedTerminal === uid)
                 return; // already opened
-            
+
             this.closeIframe();
             this.closeTerminal(this.openedTerminal);
             this.openedTerminal = uid;
@@ -145,7 +120,7 @@ class FenrusDriveApps
             let user = '';
             let pwd = ''
             let server = url;
-            let atIndex = url.indexOf('@'); 
+            let atIndex = url.indexOf('@');
             if(atIndex > 0) {
                 server = url.substring(atIndex + 1);
                 user = url.substring(0, atIndex);
@@ -161,7 +136,40 @@ class FenrusDriveApps
                 this.closeTerminal(uid);
             });
             return;
+        }
+        
+        if(type === 'vnc'){
+            const regex = /^((?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}|(?:[a-fA-F0-9]{1,4}:)*:[a-fA-F0-9]{1,4}|(?:\d{1,3}\.){3}\d{1,3}|[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?::(\d{1,5}))?$/;
 
+            const match = regex.exec(url);
+            const hostname = match[1];
+            const port = match[2] || 5900;
+            //url = `/NoVNC/vnc_lite.html?host=${encodeURIComponent(hostname)}&port=${encodeURIComponent(port)}&scale=true`;
+            url = `/NoVNC/vnc_lite.html?scale=true&path=websockify/${encodeURIComponent(hostname)}/${encodeURIComponent(port)}`;
+        }        
+        
+        if(type === 'external' || newTab)
+        {
+            window.open(url, "_blank", "noopener,noreferrer");
+            return;
+        }
+        else if(type === 'externalsame')
+        {
+            let a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('target', 'fenrus-popup');
+            a.style.display ='none';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            return;
+        }
+        else if(type === 'internal' && !newTab){
+            this.divLaunchingApp.querySelector('.title').textContent = 'Launching ' + app.querySelector('.name').textContent;
+            this.divLaunchingApp.querySelector('img').src = app.querySelector('img').src;
+            this.divLaunchingApp.style.display = 'unset';
+            window.location.href = url;
+            return;
         }
         this.closeTerminal(this.openedTerminal);
         this.eleIframe.src = url;

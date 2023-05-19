@@ -43,7 +43,9 @@
   letter-spacing: 0.3rem;
 }
 #fdrive-wrapper .expander > span > i {
-  margin-bottom: 0.5rem;
+  transform: rotate(90deg);
+  padding-right: 1.5rem;
+  padding-top: 0.25rem;
 }
 #fdrive-wrapper .expander > i {
   position: relative;
