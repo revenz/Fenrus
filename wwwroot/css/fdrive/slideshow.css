@@ -1,85 +1,34 @@
-.fdrive-slideshow {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
-  /* Slideshow buttons */
-}
-.fdrive-slideshow .slideshow-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-}
-.fdrive-slideshow .slideshow-image-container {
-  position: absolute;
+.fdrive-preview .header {
   display: flex;
-  justify-content: center;
-  object-position: center;
-  top: 0;
-  left: 0;
+  margin-bottom: 1rem;
+}
+.fdrive-preview .header .title {
+  flex-grow: 1;
+  align-self: center;
+}
+.fdrive-preview .body {
+  flex-grow: 1;
+  display: flex;
+  place-items: center;
+  text-align: center;
+  position: relative;
+  overflow: auto;
+}
+.fdrive-preview .body img {
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+}
+.fdrive-preview .body .text-preview {
   height: 100%;
   width: 100%;
-  place-items: center;
-  flex-direction: column;
+  min-width: 100%;
+  min-height: 100%;
+  text-align: left;
 }
-.fdrive-slideshow .slideshow-image-container img {
-  max-width: 80%;
-  max-height: 80%;
-}
-.fdrive-slideshow .slideshow-image-container .slideshow-info {
-  width: 50%;
-}
-.fdrive-slideshow .slideshow-image-container .slideshow-info > div {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: #fff;
-  background: black;
-  padding: 1rem 1rem;
-}
-.fdrive-slideshow .slideshow-image-container .slideshow-dimensions {
-  float: left;
-}
-.fdrive-slideshow .slideshow-image-container .slideshow-filename {
-  float: right;
-}
-.fdrive-slideshow .slideshow-close,
-.fdrive-slideshow .slideshow-prev,
-.fdrive-slideshow .slideshow-next {
-  position: absolute;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: opacity 0.2s ease-in-out;
-  user-select: none;
-  opacity: 0.5;
-}
-.fdrive-slideshow .slideshow-close:hover,
-.fdrive-slideshow .slideshow-prev:hover,
-.fdrive-slideshow .slideshow-next:hover {
-  opacity: 1;
-}
-.fdrive-slideshow .slideshow-close {
-  right: 2rem;
-  top: 2rem;
-  font-size: 2rem;
-}
-.fdrive-slideshow .slideshow-prev, .fdrive-slideshow .slideshow-next {
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 4rem;
-}
-.fdrive-slideshow .slideshow-prev {
-  left: 2rem;
-}
-.fdrive-slideshow .slideshow-next {
-  right: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
+.fdrive-preview .footer {
+  text-align: center;
+  padding: 0.5rem;
 }
 
 /*# sourceMappingURL=slideshow.css.map */

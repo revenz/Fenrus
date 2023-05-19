@@ -99,7 +99,11 @@
                                                     {
                                                         <img draggable="false" src="@app.Icon"/>
                                                     }
-                                                    @if (app.Type == CloudAppType.Internal || app.Type == CloudAppType.External || app.Type == CloudAppType.ExternalSame)
+                                                    @if (app.Type == CloudAppType.Internal)
+                                                    {
+                                                        <img class="shortcut" src="/images/internal.svg" />
+                                                    }
+                                                    else if(app.Type == CloudAppType.External || app.Type == CloudAppType.ExternalSame)
                                                     {
                                                         <img class="shortcut" src="/images/shortcut.svg" />
                                                     }

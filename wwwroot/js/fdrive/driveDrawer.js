@@ -126,7 +126,6 @@ class FenrusDriveDrawer {
         if(this.selectedFeature !== feature) {
             this.selectedFeature = feature;
             localStorage.setItem('DRIVE_MODE', this.features[feature].name);
-            console.log('set drive mode to: ' + localStorage.getItem('DRIVE_MODE'));
 
             this.features[current].hide();
         }

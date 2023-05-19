@@ -20,12 +20,23 @@ class SlideShow
         if(this.index < 0)
             return;
         document.addEventListener('keydown', this.onKeyDown);
-        this.createDomElements();
+        if(!this.slideshowDiv)
+            this.createDomElements();
+        if(this.slideshowDiv.className.indexOf('visible') < 0)
+            this.slideshowDiv.classList.add('visible');
+        if(document.body.className.indexOf('drawer-item-opened') < 0)
+            document.body.classList.add('drawer-item-opened');
+        if(this.visible)
+            this.initImage();
+        this.visible = true;
     }
     
     close() {
-        this.slideshowDiv.remove();
+        if(this.slideshowDiv)
+            this.slideshowDiv.classList.remove('visible');
+        document.body.classList.remove('drawer-item-opened');
         document.removeEventListener('keydown', this.onKeyDown);
+        this.visible = false;
     }
     
     prevImage()
@@ -53,65 +64,54 @@ class SlideShow
     updateDimensions()
     {
         this.dimensions.textContent = `${this.image.naturalWidth} x ${this.image.naturalHeight}`;
-        let maxWidth = document.body.clientWidth * 0.8;
-        this.infoContainer.style.width =  Math.max(100, (((this.image.naturalWidth > maxWidth) ? maxWidth : this.image.naturalWidth) - 30) )+ 'px';
     }
     
-    createDomElements(){
-
+    createDomElements(){       
         // Create slideshow elements
         this.slideshowDiv = document.createElement("div");
-        this.slideshowDiv.className = "fdrive-slideshow fdrive-preview";
+        this.slideshowDiv.setAttribute('id', 'fdrive-files-item');
+        this.slideshowDiv.className = "fdrive-slideshow fdrive-preview fdrive-item-content";
+        this.slideshowDiv.innerHTML = `
+<div class="header">
+    <span class="title"></span>
+    <div class="actions">
+        <button class="btn-previous" title="Previous"><i class="fa-solid fa-caret-left"></i></button>
+        <button class="btn-next" title="Next"><i class="fa-solid fa-caret-right"></i></button>
+        <button class="btn-close" title="Close"><i class="fa-solid fa-times"></i></button>
+    </div>
+</div>
+<div class="body">
+    <img />
+</div>
+<div class="footer">
+    <span class="slideshow-dimensions"></span>
+</div>`;
 
         const backgroundDiv = document.createElement("div");
         backgroundDiv.className = "slideshow-background";
         backgroundDiv.addEventListener("click", () => this.close());
         this.slideshowDiv.appendChild(backgroundDiv);
 
-        const imageContainer = document.createElement("div");
-        imageContainer.className = "slideshow-image-container";
-        this.slideshowDiv.appendChild(imageContainer);
-
-        const closeButton = document.createElement("div");
-        closeButton.className = "slideshow-close";
-        closeButton.innerHTML = "<i class=\"fa-solid fa-xmark\"></i>";
+        const closeButton = this.slideshowDiv.querySelector('.btn-close');
         closeButton.addEventListener("click", () => this.close());
-        this.slideshowDiv.appendChild(closeButton);
 
-        const prevButton = document.createElement("div");
-        prevButton.className = "slideshow-prev";
-        prevButton.innerHTML = "&#8249;";
+        const prevButton = this.slideshowDiv.querySelector('.btn-previous');
         prevButton.addEventListener("click", () => this.prevImage());
-        this.slideshowDiv.appendChild(prevButton);
 
-        const nextButton = document.createElement("div");
-        nextButton.className = "slideshow-next";
-        nextButton.innerHTML = "&#8250;";
+        const nextButton = this.slideshowDiv.querySelector('.btn-next');
         nextButton.addEventListener("click", () => this.nextImage());
-        this.slideshowDiv.appendChild(nextButton);
-
-        this.image = document.createElement("img");
+        
+        this.image = this.slideshowDiv.querySelector('img');
         this.image.onload = () => {
             this.updateDimensions();
         };
-        imageContainer.appendChild(this.image);
 
-        // Display image dimensions below the image
-        this.infoContainer = document.createElement('div');
-        this.infoContainer.className = 'slideshow-info';
-        imageContainer.appendChild(this.infoContainer);
-
-        this.filename = document.createElement("div");
-        this.filename.className = "slideshow-filename";
-        this.infoContainer.appendChild(this.filename);
-
-        this.dimensions = document.createElement("div");
-        this.dimensions.className = "slideshow-dimensions";
-        this.infoContainer.appendChild(this.dimensions);
+        this.filename =  this.slideshowDiv.querySelector('.title');
+        this.dimensions = this.slideshowDiv.querySelector('.slideshow-dimensions');
 
         //this.updateDimensions();
         // Add slideshow elements to the page
-        document.body.appendChild(this.slideshowDiv);
+        document.querySelector('.dashboard-main').appendChild(this.slideshowDiv);
         this.initImage();
     }
 

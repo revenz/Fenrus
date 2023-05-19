@@ -52,19 +52,27 @@ public class EmailController : BaseController
 
         string cacheKey = "EmailGetAll_" + userUid.Value;
         bool done = false;
-        
+
+        var cachedList = Cache.TryGetValue(cacheKey, out object obj) && obj is List<EmailMessage> cast ?
+            cast : new List<EmailMessage>();
+
         Task<List<EmailMessage>> cached = Task.Run(async () =>
         {
-            await Task.Delay(500);
-            if(Cache.TryGetValue(cacheKey, out object obj) && obj is List<EmailMessage> cached)
-                return cached;
-            await Task.Delay(5000);
-            return new ();
+            await Task.Delay(250);
+            return cachedList ?? new ();
         });
         
         Task<List<EmailMessage>> notCached = Task.Run(async () =>
         {
-            var result = await Workers.MailWorker.Instance.GetLatest(userUid.Value);
+            var result = await MailWorker.Instance.GetLatest(userUid.Value);
+            if (result.Count == cachedList.Count)
+            {
+                // check if they are the same
+                var cachedUids = cachedList.Select(x => x.Uid);
+                bool different = result.Any(x => cachedUids.Contains(x.Uid) == false);
+                if (different == false)
+                    return result;
+            }
             Cache.Set(cacheKey, result);
             if (done)
                 MailWorker.Instance.TriggerEmailReloadEvent(userUid.Value);

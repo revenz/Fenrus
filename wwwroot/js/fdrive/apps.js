@@ -95,10 +95,13 @@ class FenrusDriveApps
     
     async openApp(app, newTab)
     {
-        for(let ele of this.container.querySelectorAll('.drive-app.selected'))
-            ele.classList.remove('selected');
-
-        app.classList.add('selected');
+        
+        let addSelectedClass = () =>
+        {
+            for(let ele of this.container.querySelectorAll('.drive-app.selected'))
+                ele.classList.remove('selected');
+            app.classList.add('selected');
+        }
         
         let type = app.getAttribute('data-app-type').toLowerCase();
         
@@ -108,11 +111,14 @@ class FenrusDriveApps
             if(newTab)
                 return; // dont support this yet
             let uid = app.getAttribute('x-uid');
-            if(this.openedTerminal === uid)
+            if(this.openedTerminal === uid) {
+                addSelectedClass();
                 return; // already opened
+            }
 
             this.closeIframe();
             this.closeTerminal(this.openedTerminal);
+            addSelectedClass();
             this.openedTerminal = uid;
             this.eleTerminalFavicon.src = app.querySelector('img').src;
             this.eleTerminalContainer.className = 'visible';
@@ -172,6 +178,7 @@ class FenrusDriveApps
             return;
         }
         this.closeTerminal(this.openedTerminal);
+        addSelectedClass();
         this.eleIframe.src = url;
         this.eleIframeAddress.value = url;
         

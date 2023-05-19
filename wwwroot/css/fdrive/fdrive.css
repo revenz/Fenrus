@@ -130,7 +130,7 @@
 #fdrive-wrapper .content {
   width: calc(100% - 0.5rem);
   height: calc(100% - var(--tabs-height));
-  min-height: calc(100% - 3rem);
+  min-height: calc(100% - var(--tabs-height));
   overflow: auto;
 }
 #fdrive-wrapper .fdrive-tabs {
@@ -242,6 +242,40 @@ body.drawer-item-opened ul.main-menu {
 }
 body.drawer-item-opened .expander {
   display: none;
+}
+.fdrive-item-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 2rem;
+  height: calc(100% - 4rem);
+  width: calc(100% - 4rem);
+  transition: transform 0.2s ease-in-out;
+  transform: translateX(100%);
+  background: var(--base);
+  flex-direction: column;
+}
+.fdrive-item-content.visible {
+  transform: translateX(0);
+  display: flex;
+  z-index: 5;
+}
+.fdrive-item-content .header button {
+  background-color: #222222;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: var(--color);
+  border-radius: 0.5rem;
+  height: 2.5rem;
+  width: 3rem;
+}
+.fdrive-item-content .header button + button {
+  margin-left: 0.5rem;
+}
+.fdrive-item-content .header button:hover {
+  background: rgba(var(--accent-rgb), 0.4);
 }
 
 /*# sourceMappingURL=fdrive.css.map */

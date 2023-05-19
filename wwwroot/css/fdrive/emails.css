@@ -70,24 +70,6 @@
   overflow: hidden;
 }
 
-#fdrive-email-message {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 2rem;
-  height: calc(100% - 4rem);
-  width: calc(100% - 4rem);
-  transition: transform 0.2s ease-in-out;
-  transform: translateX(100%);
-  background: var(--base);
-  flex-direction: column;
-}
-#fdrive-email-message.visible {
-  transform: translateX(0);
-  display: flex;
-  z-index: 5;
-}
 #fdrive-email-message .email-header {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -107,22 +89,6 @@
   display: flex;
   grid-column: 2/span 1;
   grid-row: 1/span 1;
-}
-#fdrive-email-message .email-header-actions button {
-  background-color: #222222;
-  border: none;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  color: var(--color);
-  border-radius: 0.5rem;
-  height: 2.5rem;
-  width: 3rem;
-}
-#fdrive-email-message .email-header-actions button + button {
-  margin-left: 0.5rem;
-}
-#fdrive-email-message .email-header-actions button:hover {
-  background: rgba(var(--accent-rgb), 0.4);
 }
 #fdrive-email-message .email-header-info {
   grid-column: 1/span 2;

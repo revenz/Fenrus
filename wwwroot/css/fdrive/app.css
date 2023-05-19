@@ -1,18 +1,27 @@
 #fdrive-apps {
   --grid-width:84px;
   --grid-height:96px;
+  --font-size:0.9rem;
 }
 #fdrive-apps #apps-actual {
   padding: 1rem;
   width: calc(100% - 2rem);
-  height: calc(100% - 2rem);
+  height: calc(100% - var(--tabs-height));
   user-select: none;
+}
+@media (max-width: 1300px) {
+  #fdrive-apps {
+    --grid-width:72px;
+    --grid-height:80px;
+    --font-size:0.85rem;
+  }
 }
 #fdrive-apps .group + .group {
   margin-top: 1rem;
 }
 #fdrive-apps .group > .title {
   display: block;
+  font-size: calc(var(--font-size) * 1.1);
   margin: 0 0 0.5rem 0.5rem;
   text-transform: uppercase;
 }
@@ -48,7 +57,7 @@
   text-align: center;
   word-break: break-word;
   display: block;
-  font-size: 0.9rem;
+  font-size: var(--font-size);
   height: calc(45% - 0.5rem);
   text-overflow: ellipsis;
   overflow: hidden;

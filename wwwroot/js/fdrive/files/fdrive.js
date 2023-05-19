@@ -10,51 +10,6 @@ class FenrusDrive {
     
     addressBar;
 
-    extensions = {
-        plain: "clike",
-        plaintext: "clike",
-        text: "clike",
-        txt: "clike",
-        extend: "markup",
-        insertBefore: "markup",
-        dfs: "markup",
-        markup: "markup",
-        html: "html",
-        mathml: "markup",
-        svg: "markup",
-        xml: "markup",
-        ssml: "markup",
-        atom: "markup",
-        rss: "markup",
-        css: "css",
-        clike: "clike",
-        javascript: "javascript",
-        js: "javascript",
-        bash: "bash",
-        sh: "bash",
-        shell: "bash",
-        batch: "batch",
-        c: "c",
-        csharp: "csharp",
-        cs: "csharp",
-        csproj: "xml",
-        sln: 'text',
-        user: 'xml',
-        dotnet: "markup",
-        cpp: "cpp",
-        csv: "csv",
-        docker: "docker",
-        dockerfile: "docker",
-        dockerignore: 'docker',
-        json: "json",
-        webmanifest: "json",
-        sql: "sql",
-        typescript: "typescript",
-        ts: "typescript",
-        yaml: "yaml",
-        yml: "yaml",
-        gitignore: 'txt'
-    };
     constructor() {
         this.currentFolderInfo = { 
             view: 'list',
@@ -88,12 +43,15 @@ class FenrusDrive {
         this.fileList.onFileDblClick((file) =>
         {   
             if(file.mimeType.startsWith('image')) {
+                this.textPreview.close();
                 this.slideshow.open(this.fileList.items, file);
                 return;
             }
             let extension = file.fullPath.substring(file.fullPath.lastIndexOf('.') + 1).toLowerCase();
-            if(this.extensions[extension] || extension === 'txt')
-                this.openTextPreview('/files/download?path=' + encodeURIComponent(file.fullPath));
+            if(this.textPreview.extensions[extension] || extension === 'txt') {
+                this.slideshow.close();
+                this.textPreview.open(file);
+            }
             else
                 this.download(file.fullPath);
         });
@@ -170,12 +128,17 @@ class FenrusDrive {
             this.folderInfo = {};
         // if (this.folderInfo[''])
         //     this.changeView(this.folderInfo['']);
-
+        
         this.slideshow = new SlideShow();
+        this.textPreview = new TextPreview();
     }
 
     show() {
         this.loadFolder(this.currentPath);
+    }
+    hide(){
+        this.slideshow.close();
+        this.textPreview.close();
     }
 
     changeFolder(path) {
@@ -501,41 +464,6 @@ class FenrusDrive {
         }
     }
 
-
-    highlightCode(filename, text, textContainer) {
-        const extension = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
-
-        if (this.extensions[extension]) {
-            textContainer.innerHTML = `<pre><code class="language-${this.extensions[extension]}">${Prism.highlight(text, Prism.languages[this.extensions[extension]], this.extensions[extension])}</code></pre>`;
-        } else {
-            textContainer.textContent = text;
-        }
-    }
-
-
-    getFileNameFromContentDisposition(contentDisposition) {
-        if (!contentDisposition) {
-            return null;
-        }
-
-        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-        const matches = contentDisposition.match(filenameRegex);
-
-        if (!matches) {
-            return null;
-        }
-
-        let filename = matches[1];
-
-        if (filename.startsWith('"') && filename.endsWith('"')) {
-            filename = filename.slice(1, -1);
-        }
-
-        filename = decodeURIComponent(filename);
-
-        return filename;
-    }
-    
     createToolbar()
     {
         let toolbar = document.querySelector('#fdrive-files .toolbar');

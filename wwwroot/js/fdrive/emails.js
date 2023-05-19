@@ -5,6 +5,7 @@ class FenrusDriveEmail
         this.container = document.getElementById('email-actual');
         this.eleMessage = document.createElement('div');
         this.eleMessage.setAttribute('id', 'fdrive-email-message');
+        this.eleMessage.classList.add('fdrive-item-content');
         document.querySelector('.dashboard-main').appendChild(this.eleMessage);
 
         document.addEventListener('fenrusEmail', (event) => {
@@ -132,9 +133,9 @@ class FenrusDriveEmail
         
         ele.classList.add('selected');
         
-        this.eleMessage.className = 'visible';
+        this.eleMessage.className = 'fdrive-item-content visible';
         this.eleMessage.innerHTML = '' +
-            '  <div class="email-header">' +  
+            '  <div class="email-header header">' +  
             '    <span class="email-header-subject"></span>' +
             '    <div class="email-header-actions">' +
             '       <button class="btn-reply" title="Reply"><i class="fa-solid fa-reply"></i></button>' +
@@ -150,7 +151,7 @@ class FenrusDriveEmail
             '      <span class="email-header-date"></span>' +
             '    </div>' +
             '  </div>' +
-            '  <div class="email-body">' +
+            '  <div class="email-body body">' +
             '    <span class="email-body-content"></span>' +
             '  </div>' +
             ' <div class="blocker visible"><div class="blocker-indicator"><div class="blocker-spinner"></div></div>';        
@@ -209,7 +210,7 @@ class FenrusDriveEmail
 
     closeMessage(){
         this.openedMessageUid = null;
-        this.eleMessage.className = '';
+        this.eleMessage.className = 'fdrive-item-content';
         for(let ele of this.container.querySelectorAll('.email.selected'))
             ele.classList.remove('selected');
         document.body.classList.remove('drawer-item-opened');
