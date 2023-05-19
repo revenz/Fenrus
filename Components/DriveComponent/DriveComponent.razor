@@ -1,3 +1,4 @@
+@using Fenrus.Models
 @namespace Fenrus.Components
 
 <div id="fdrive-wrapper" class="dashboard-drive collapsed">
@@ -83,7 +84,7 @@
                                 <div class="apps">
                                     @foreach (var app in grp.Items)
                                     {
-                                        <div class="drive-app" data-app-type="@app.Type" data-src="@GetAddress(app)" x-uid="@app.Uid">
+                                        <div class="drive-app type-@app.Type.ToString().ToLowerInvariant()" data-app-type="@app.Type" data-src="@GetAddress(app)" x-uid="@app.Uid">
                                             <div class="drive-app-inner">
                                                 <span class="icon">
                                                     @if (string.IsNullOrEmpty(app.Icon))
@@ -97,6 +98,10 @@
                                                     else
                                                     {
                                                         <img draggable="false" src="@app.Icon"/>
+                                                    }
+                                                    @if (app.Type == CloudAppType.Internal || app.Type == CloudAppType.External || app.Type == CloudAppType.ExternalSame)
+                                                    {
+                                                        <img class="shortcut" src="/images/shortcut.svg" />
                                                     }
                                                 </span>
                                                 <span class="name">@app.Name</span>

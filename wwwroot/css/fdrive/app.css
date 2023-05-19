@@ -59,14 +59,24 @@
   height: 60%;
   display: flex;
   justify-content: center;
+  position: relative;
+  margin-bottom: 0.25rem;
 }
-#fdrive-apps .icon img {
+#fdrive-apps .icon img:not(.shortcut) {
   border-radius: 0.25rem;
   object-fit: contain;
   max-width: 120%;
 }
 #fdrive-apps .icon i {
   font-size: 10rem;
+}
+#fdrive-apps .shortcut {
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+  bottom: 0rem;
+  left: 0.5rem;
 }
 
 #fdrive-apps-iframe, #fdrive-apps-terminal {
@@ -154,7 +164,7 @@
   display: flex;
   flex-direction: row;
 }
-#fdrive-apps-iframe .app-target-container .header .address-bar img, #fdrive-apps-terminal .app-target-container .header .address-bar img {
+#fdrive-apps-iframe .app-target-container .header .address-bar img:not(.shortcut), #fdrive-apps-terminal .app-target-container .header .address-bar img:not(.shortcut) {
   height: 90%;
   width: 2rem;
   margin-right: 0.5rem;
