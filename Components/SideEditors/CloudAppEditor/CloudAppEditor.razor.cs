@@ -56,6 +56,11 @@ public partial class CloudAppEditor : SideEditorBase
     /// Gets or sets the address for a VNC app
     /// </summary>
     private string AddressVnc { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the address for a SSH app
+    /// </summary>
+    private string AddressSsh { get; set; }
 
 
     /// <summary>
@@ -73,6 +78,8 @@ public partial class CloudAppEditor : SideEditorBase
     {
         if(AppType == CloudAppType.Vnc)
             return AddressVnc;
+        if (AppType == CloudAppType.Ssh)
+            return AddressSsh;
         return Address;
     }
     
@@ -89,6 +96,8 @@ public partial class CloudAppEditor : SideEditorBase
         AppType = Item?.Type ?? CloudAppType.IFrame;
         if (AppType == CloudAppType.Vnc)
             AddressVnc = Item?.Address ?? "http://";
+        else if (AppType == CloudAppType.Ssh)
+            AddressSsh = Item?.Address ?? string.Empty;
         else
             Address = Item?.Address ?? "https://";
         Icon = Item?.Icon ?? string.Empty;
@@ -99,6 +108,7 @@ public partial class CloudAppEditor : SideEditorBase
             new() { Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.External)}"), Value = CloudAppType.External },
             new() { Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.ExternalSame)}"), Value = CloudAppType.ExternalSame },
             new() { Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.Vnc)}"), Value = CloudAppType.Vnc },
+            new() { Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.Ssh)}"), Value = CloudAppType.Ssh },
         };
     }
 
@@ -113,7 +123,7 @@ public partial class CloudAppEditor : SideEditorBase
             return;
         var item = new CloudApp();
         item.Name = Name;
-        item.Address = GetAddress(AppType);
+        item.Address = (EncryptedString)GetAddress(AppType);
         item.Icon = Icon;
         item.Type = AppType;
         await OnSaved.InvokeAsync(item);

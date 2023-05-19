@@ -1,4 +1,5 @@
 using System.Net.WebSockets;
+using Docker.DotNet.Models;
 using Renci.SshNet;
 
 namespace Fenrus.Terminals;
@@ -73,12 +74,21 @@ public class SshTerminal : Terminal
     /// </summary>
     public async Task<SshClient> Login()
     {
+        string server = this.Server;
+        int atIndex = server.IndexOf("@");
+        string user = this.UserName;
+        if (atIndex > 0)
+        {
+            if (string.IsNullOrEmpty(UserName))
+                user = server[..atIndex];
+            server = server[(atIndex + 1)..];
+        }
         if (string.IsNullOrEmpty(this.UserName) == false)
         {
             SshClient? client = null;
             try
             {
-                client = new SshClient(this.Server, this.Port, this.UserName ?? string.Empty, this.Password ?? string.Empty);
+                client = new SshClient(server, this.Port, this.UserName ?? string.Empty, this.Password ?? string.Empty);
                 client.Connect();
                 return client;
             }
@@ -90,7 +100,11 @@ public class SshTerminal : Terminal
             }
         }
 
-        this.UserName = await RequestInput("User", false);
+        if (string.IsNullOrEmpty(user))
+            this.UserName = await RequestInput("User", false);
+        else
+            this.UserName = user;
+        
         this.Password = await RequestInput("Password", true);
         return await Login();
     }
@@ -175,7 +189,9 @@ public class SshTerminal : Terminal
         {
             if (ex is ObjectDisposedException)
                 return; // happens if the user ends the session
-            Logger.ELog("Failed reading docker stream input: " + ex.GetType().FullName + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+            if (ex is OperationCanceledException)
+                return; // user closed terminal usually
+            Logger.ELog("Failed reading stream input: " + ex.GetType().FullName + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
         }
     }
 }

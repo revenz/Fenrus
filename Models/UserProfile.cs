@@ -109,6 +109,10 @@ public class UserProfile:IModalUid
 public class CloudAppGroup
 {
     /// <summary>
+    /// Gets or sets a UID to identify this app group
+    /// </summary>
+    public Guid Uid { get; set; }
+    /// <summary>
     /// Gets or sets the name of the cloud app group
     /// </summary>
     public string Name { get; set; }
@@ -130,6 +134,10 @@ public class CloudAppGroup
 public class CloudApp
 {
     /// <summary>
+    /// Gets or sets a UID to identify this app
+    /// </summary>
+    public Guid Uid { get; set; }
+    /// <summary>
     /// Gets or sets the name of the app
     /// </summary>
     public string Name { get; set; }
@@ -140,7 +148,7 @@ public class CloudApp
     /// <summary>
     /// Gets or sets the address of the app
     /// </summary>
-    public string Address { get; set; }
+    public EncryptedString Address { get; set; }
     /// <summary>
     /// Gets or sets the type of the app
     /// </summary>
@@ -171,5 +179,9 @@ public enum CloudAppType
     /// <summary>
     /// VNC app
     /// </summary>
-    Vnc = 4
+    Vnc = 4,
+    /// <summary>
+    /// SSH App
+    /// </summary>
+    Ssh = 5
 }

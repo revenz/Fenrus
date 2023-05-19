@@ -5,25 +5,25 @@ class FenrusDriveApps
         this.divLaunchingApp = document.getElementById('launching-app');
         this.container = document.getElementById('apps-actual');
         this.eleIframeContainer = document.createElement('div');
-        this.eleIframeContainer.innerHTML = '<div class="browser-container">' +
-            '  <div class="browser-header">' +
-            '    <div class="browser-address-bar">' +
+        this.eleIframeContainer.innerHTML = '<div class="browser-container app-target-container">' +
+            '  <div class="header">' +
+            '    <div class="address-bar">' +
             '      <img />' +
             '      <input type="text" readonly>' +  
             '    </div>' +
-            '    <div class="browser-controls">' +
+            '    <div class="controls">' +
             '      <button class="open-new-tab"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>' +
             '      <button class="close-button"><i class="fa-solid fa-xmark"></i></button>' +
             '    </div>' +
             '  </div>' +
-            '  <div class="browser-iframe-container">' +
+            '  <div class="inner-container">' +
             '    <iframe></iframe>' +
             '  </div>' +
             '</div>';
         this.eleIframeContainer.setAttribute('id', 'fdrive-apps-iframe');
         this.eleIframe = this.eleIframeContainer.querySelector('iframe');
-        this.eleIframeAddress = this.eleIframeContainer.querySelector('.browser-address-bar input[type=text]');
-        this.eleIframeFavicon = this.eleIframeContainer.querySelector('.browser-address-bar img');
+        this.eleIframeAddress = this.eleIframeContainer.querySelector('.address-bar input[type=text]');
+        this.eleIframeFavicon = this.eleIframeContainer.querySelector('.address-bar img');
         this.eleIframeContainer.querySelector('.close-button').addEventListener('click', () => this.closeIframe());
         this.eleIframeContainer.querySelector('.open-new-tab').addEventListener('click', () => {
             let url = this.eleIframeAddress.value;
@@ -34,8 +34,35 @@ class FenrusDriveApps
         // this.eleIframe.setAttribute('sandbox', 'allow-scripts');
         
         document.querySelector('.dashboard-main').appendChild(this.eleIframeContainer);
+
+        this.createTerminalContainer();
         
         this.initApps();
+    }
+    
+    createTerminalContainer(){
+
+        this.eleTerminalContainer = document.createElement('div');
+        this.eleTerminalContainer.innerHTML = '<div class="terminal-container app-target-container">' +
+            '  <div class="header">' +
+            '    <div class="address-bar">' +
+            '      <img />' +
+            '      <input type="text" readonly>' +
+            '    </div>' +
+            '    <div class="controls">' +
+            '      <button class="close-button"><i class="fa-solid fa-xmark"></i></button>' +
+            '    </div>' +
+            '  </div>' +
+            '  <div class="inner-container">' +
+            '    <div></div>' +
+            '  </div>' +
+            '</div>';
+        this.eleTerminalContainer.setAttribute('id', 'fdrive-apps-terminal');
+        this.eleTerminal = this.eleTerminalContainer.querySelector('.inner-container div');
+        this.eleTerminalAddress = this.eleTerminalContainer.querySelector('.address-bar input[type=text]');
+        this.eleTerminalFavicon = this.eleTerminalContainer.querySelector('.address-bar img');
+        this.eleTerminalContainer.querySelector('.close-button').addEventListener('click', () => this.closeTerminal(this.openedTerminal));
+        document.querySelector('.dashboard-main').appendChild(this.eleTerminalContainer);
     }
     
     initApps(){
@@ -103,6 +130,40 @@ class FenrusDriveApps
             window.location.href = url;
             return;
         }
+        else if(type === 'ssh')
+        {
+            let uid = app.getAttribute('x-uid');
+            if(this.openedTerminal === uid)
+                return; // already opened
+            
+            this.closeIframe();
+            this.closeTerminal(this.openedTerminal);
+            this.openedTerminal = uid;
+            this.eleTerminalFavicon.src = app.querySelector('img').src;
+            this.eleTerminalContainer.className = 'visible';
+            document.body.classList.add('drawer-item-opened');
+            let user = '';
+            let pwd = ''
+            let server = url;
+            let atIndex = url.indexOf('@'); 
+            if(atIndex > 0) {
+                server = url.substring(atIndex + 1);
+                user = url.substring(0, atIndex);
+                let colonIndex = user.indexOf(':');
+                if (colonIndex > 0) {
+                    pwd = user.substring(colonIndex + 1);
+                    user = user.substring(0, colonIndex);
+                }
+            }
+            this.eleTerminalAddress.value = server;
+            this.fenrusTerminal = new FenrusTerminal({container: this.eleTerminal, server: server, user: user, password: pwd});
+            this.fenrusTerminal.onDisconnected(() => {
+                this.closeTerminal(uid);
+            });
+            return;
+
+        }
+        this.closeTerminal(this.openedTerminal);
         this.eleIframe.src = url;
         this.eleIframeAddress.value = url;
         
@@ -114,7 +175,23 @@ class FenrusDriveApps
 
     closeIframe(){
         this.eleIframeContainer.className = '';
-        for(let ele of this.container.querySelectorAll('.email.selected'))
+        for(let ele of this.container.querySelectorAll('.selected'))
+            ele.classList.remove('selected');
+        document.body.classList.remove('drawer-item-opened');
+    }
+
+    closeTerminal(uid){
+        if(uid && uid !== this.openedTerminal)
+            return; // opening a different terminal, dont close this
+        if(this.fenrusTerminal)
+        {
+            this.fenrusTerminal.onDisconnected(null);
+            this.fenrusTerminal.close();
+        }
+        this.openedTerminal = null;
+        this.fenrusTerminal = null;
+        this.eleTerminalContainer.className = '';
+        for(let ele of this.container.querySelectorAll('.selected'))
             ele.classList.remove('selected');
         document.body.classList.remove('drawer-item-opened');
     }

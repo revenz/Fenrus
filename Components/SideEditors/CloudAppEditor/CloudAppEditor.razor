@@ -15,6 +15,10 @@
     {
         <InputText Page="CloudAppEditor" Label="AddressVnc" @bind-Value="AddressVnc" Required="true" Pattern="^([\w.-]+|\[[0-9a-fA-F:]+\])(:\d+)?$"></InputText>
     }
+    else if(AppType == CloudAppType.Ssh)
+    {
+        <InputText Page="CloudAppEditor" Label="AddressSsh" @bind-Value="AddressSsh" Required="true"></InputText>
+    }
     else if(AppType == CloudAppType.IFrame)
     {
         <InputText Page="CloudAppEditor" Label="Address" @bind-Value="Address" Required="true" Pattern="^[^:]+://."></InputText>

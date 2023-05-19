@@ -83,7 +83,7 @@
                                 <div class="apps">
                                     @foreach (var app in grp.Items)
                                     {
-                                        <div class="drive-app" data-app-type="@app.Type" data-src="@app.Address">
+                                        <div class="drive-app" data-app-type="@app.Type" data-src="@GetAddress(app)" x-uid="@app.Uid">
                                             <div class="drive-app-inner">
                                                 <span class="icon">
                                                     @if (string.IsNullOrEmpty(app.Icon))

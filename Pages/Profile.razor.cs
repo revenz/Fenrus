@@ -164,10 +164,12 @@ public partial class Profile: UserPage
         this.AppGroups = profile.AppGroups?.Select(grp =>
             new CloudAppGroup()
             {
+                Uid = grp.Uid,
                 Enabled = grp.Enabled,
                 Name = grp.Name,
                 Items = grp.Items?.Select(x => new CloudApp()
                 {
+                    Uid = x.Uid,
                     Name = x.Name,
                     Icon = x.Icon,
                     Address = x.Address,
@@ -456,6 +458,8 @@ public partial class Profile: UserPage
         {
             foreach (var group in AppGroups)
             {
+                if (group.Uid == Guid.Empty)
+                    group.Uid = Guid.NewGuid();
                 group.Enabled = true; // hardcoded for now
                 group.Items ??= new();
                 foreach (var item in group.Items)
@@ -465,6 +469,9 @@ public partial class Profile: UserPage
                         // base64 encoded file
                         item.Icon = ImageHelper.SaveImageFromBase64(item.Icon);
                     }
+
+                    if (item.Uid == Guid.Empty)
+                        item.Uid = Guid.NewGuid();
                 }
             }
 
@@ -482,6 +489,7 @@ public partial class Profile: UserPage
     {
         AppGroups.Add(new ()
         {
+            Uid = Guid.NewGuid(),
             Name = "New Group",
             Enabled = true,
             Items = new ()
@@ -511,6 +519,7 @@ public partial class Profile: UserPage
         var result = await Popup.OpenEditor<CloudAppEditor, CloudApp>(Translator, new CloudApp());
         if (result.Success == false)
             return;
+        result.Data.Uid = Guid.NewGuid();
         group.Items.Add(result.Data);
         StateHasChanged();
     }

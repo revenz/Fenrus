@@ -69,7 +69,7 @@
   font-size: 10rem;
 }
 
-#fdrive-apps-iframe {
+#fdrive-apps-iframe, #fdrive-apps-terminal {
   display: none;
   position: absolute;
   right: 0;
@@ -83,12 +83,12 @@
   flex-direction: column;
   background: #1e1e1e;
 }
-#fdrive-apps-iframe.visible {
+#fdrive-apps-iframe.visible, #fdrive-apps-terminal.visible {
   transform: translateX(0);
   display: flex;
   z-index: 5;
 }
-#fdrive-apps-iframe .browser-container {
+#fdrive-apps-iframe .app-target-container, #fdrive-apps-terminal .app-target-container {
   position: relative;
   width: 100%;
   height: 100%;
@@ -98,7 +98,7 @@
   color: var(--color);
   border-radius: 1rem;
 }
-#fdrive-apps-iframe .browser-container .browser-header {
+#fdrive-apps-iframe .app-target-container .header, #fdrive-apps-terminal .app-target-container .header {
   position: absolute;
   top: 0;
   left: 0;
@@ -112,14 +112,14 @@
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
 }
-#fdrive-apps-iframe .browser-container .browser-header .browser-controls {
+#fdrive-apps-iframe .app-target-container .header .controls, #fdrive-apps-terminal .app-target-container .header .controls {
   display: flex;
   align-items: center;
 }
-#fdrive-apps-iframe .browser-container .browser-header .browser-controls button + button {
+#fdrive-apps-iframe .app-target-container .header .controls button + button, #fdrive-apps-terminal .app-target-container .header .controls button + button {
   margin-left: 0.75rem;
 }
-#fdrive-apps-iframe .browser-container .browser-header .browser-controls button {
+#fdrive-apps-iframe .app-target-container .header .controls button, #fdrive-apps-terminal .app-target-container .header .controls button {
   color: var(--color);
   border: none;
   font-size: 1rem;
@@ -132,16 +132,16 @@
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
-#fdrive-apps-iframe .browser-container .browser-header .browser-controls .open-new-tab {
+#fdrive-apps-iframe .app-target-container .header .controls .open-new-tab, #fdrive-apps-terminal .app-target-container .header .controls .open-new-tab {
   background: var(--success);
 }
-#fdrive-apps-iframe .browser-container .browser-header .browser-controls .close-button {
+#fdrive-apps-iframe .app-target-container .header .controls .close-button, #fdrive-apps-terminal .app-target-container .header .controls .close-button {
   background-color: var(--danger);
 }
-#fdrive-apps-iframe .browser-container .browser-header .browser-controls .close-button:hover {
+#fdrive-apps-iframe .app-target-container .header .controls .close-button:hover, #fdrive-apps-terminal .app-target-container .header .controls .close-button:hover {
   background-color: #ff5555;
 }
-#fdrive-apps-iframe .browser-container .browser-header .browser-address-bar {
+#fdrive-apps-iframe .app-target-container .header .address-bar, #fdrive-apps-terminal .app-target-container .header .address-bar {
   display: flex;
   align-items: center;
   flex-grow: 1;
@@ -154,13 +154,13 @@
   display: flex;
   flex-direction: row;
 }
-#fdrive-apps-iframe .browser-container .browser-header .browser-address-bar img {
+#fdrive-apps-iframe .app-target-container .header .address-bar img, #fdrive-apps-terminal .app-target-container .header .address-bar img {
   height: 90%;
   width: 2rem;
   margin-right: 0.5rem;
   object-fit: contain;
 }
-#fdrive-apps-iframe .browser-container .browser-header .browser-address-bar input[type=text] {
+#fdrive-apps-iframe .app-target-container .header .address-bar input[type=text], #fdrive-apps-terminal .app-target-container .header .address-bar input[type=text] {
   height: 1.5rem;
   border: none;
   font-size: 1.1rem;
@@ -168,11 +168,11 @@
   flex-grow: 1;
   color: var(--color);
 }
-#fdrive-apps-iframe .browser-container .browser-header .browser-address-bar input[type=text]:focus {
+#fdrive-apps-iframe .app-target-container .header .address-bar input[type=text]:focus, #fdrive-apps-terminal .app-target-container .header .address-bar input[type=text]:focus {
   background-color: black;
   outline: none;
 }
-#fdrive-apps-iframe .browser-container .browser-iframe-container {
+#fdrive-apps-iframe .app-target-container .inner-container, #fdrive-apps-terminal .app-target-container .inner-container {
   position: absolute;
   top: 50px;
   left: 0;
@@ -180,12 +180,18 @@
   bottom: 0;
   overflow: hidden;
 }
-#fdrive-apps-iframe .browser-container .browser-iframe-container iframe {
+#fdrive-apps-iframe .app-target-container .inner-container iframe, #fdrive-apps-iframe .app-target-container .inner-container > div, #fdrive-apps-terminal .app-target-container .inner-container iframe, #fdrive-apps-terminal .app-target-container .inner-container > div {
   width: 100%;
   height: 100%;
   border: none;
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
+}
+#fdrive-apps-iframe .app-target-container .inner-container > div, #fdrive-apps-terminal .app-target-container .inner-container > div {
+  width: calc(100% - 2rem);
+  height: calc(100% - 2rem);
+  padding: 1rem;
+  background: #000;
 }
 
 /*# sourceMappingURL=app.css.map */

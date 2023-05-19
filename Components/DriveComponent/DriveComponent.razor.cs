@@ -90,4 +90,26 @@ public partial class DriveComponent
             return $"/apps/{Uri.EscapeDataString(app.Name)}/{app.Icon}?version=" + Globals.Version;
         return $"/favicon?color={AccentColor?.Replace("#", string.Empty)}&version={Globals.Version}";
     }
+
+    /// <summary>
+    /// Gets the address for a app
+    /// </summary>
+    /// <param name="app">the app</param>
+    /// <returns>the address to put into the HTML</returns>
+    private string GetAddress(CloudApp app)
+    {
+        if (app.Type != CloudAppType.Ssh)
+            return app.Address;
+        string address = app.Address;
+        int atIndex = address.IndexOf("@");
+        if (atIndex < 0)
+            return address;
+        string user = address[0..atIndex];
+        address = address.Substring(atIndex + 1);
+        int colonIndex = user.IndexOf(":");
+        if (colonIndex < 0)
+            return app.Uid + "@" + address;
+        // so we never ever every not in a million years send the password to the client
+        return app.Uid + ":" + app.Uid + "@" + address;
+    }
 }

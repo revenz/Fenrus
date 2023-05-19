@@ -22,6 +22,19 @@ public class BaseController : Controller
         var settings = new UserSettingsService().Load(uid.Value);
         return settings;
     }
+    /// <summary>
+    /// Gets the users profile for currently logged in user
+    /// </summary>
+    /// <returns>the user profile, or null if user not logged in</returns>
+    protected UserProfile? GetUserProfile()
+    {
+        var uid = User.GetUserUid();
+        if (uid == null)
+            return null;
+        
+        var profile = new UserService().GetProfileByUid(uid.Value);
+        return profile;
+    }
 
     /// <summary>
     /// Gets the user uid

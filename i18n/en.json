@@ -81,7 +81,8 @@
       "Internal": "Open in this tab",
       "External": "Open in new tab",
       "ExternalSame": "Open in same tab",
-      "Vnc": "VNC"
+      "Vnc": "VNC",
+      "Ssh": "SSH"
     },
     "ItemSize": {
       "Small": "Small",
@@ -168,7 +169,9 @@
         "Type": "Type",
         "AddressVnc": "Address",
         "AddressVnc-Help": "The address for the VNC server",
-        "AddressVnc-Placeholder": "192.168.1.10:5900"
+        "AddressVnc-Placeholder": "192.168.1.10:5900",
+        "AddressSsh": "Address",
+        "AddressSsh-Help": "The address for the SSH server, can be in the format user@host or user:password@host"
       }
     },
     "Dashboards":{

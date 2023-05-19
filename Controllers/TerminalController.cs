@@ -1,5 +1,4 @@
 using Fenrus.Models;
-using Fenrus.Services;
 using Fenrus.Terminals;
 using Microsoft.AspNetCore.Mvc;
 
@@ -75,6 +74,63 @@ public class TerminalController : BaseController
     
     
     /// <summary>
+    /// Opens a terminal connection
+    /// </summary>
+    /// <param name="rows">the number of rows for the terminal</param>
+    /// <param name="cols">the number of columns for the terminal</param>
+    [HttpGet("ssh")]
+    public async Task Ssh([FromQuery] string info, [FromQuery] int rows = 24, [FromQuery] int cols = 24)
+    {
+        var profile = GetUserProfile();
+        if (profile == null)
+            throw new UnauthorizedAccessException();
+
+        string decrypted = EncryptionHelper.DecryptAes(info);
+        var serverInfo = JsonSerializer.Deserialize<SshInfo>(decrypted, new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true
+        });
+
+        if (Guid.TryParse(serverInfo.User, out Guid uid))
+        {
+            var app = profile.AppGroups.SelectMany(x => x.Items).FirstOrDefault(x => x.Uid == uid);
+            if (app != null)
+            {
+                (serverInfo.User, serverInfo.Password) = ParseAddress(app.Address, serverInfo.User, serverInfo.Password);
+            }
+        }
+            
+        
+
+        using var ws = await HttpContext.WebSockets.AcceptWebSocketAsync();
+        var terminal = new SshTerminal(ws, rows, cols, serverInfo.Server, 0, serverInfo.User, serverInfo.Password);
+        await terminal.Connect();
+    }
+
+    /// <summary>
+    /// Parses an address and gets the username/password from it if set
+    /// </summary>
+    /// <param name="address">the address</param>
+    /// <param name="currentUser">the current username to return if not set here</param>
+    /// <param name="currentPassword">the current password to return if not set here</param>
+    /// <returns>the username and password if available</returns>
+    private (string User, string Password) ParseAddress(string address, string currentUser, string currentPassword)
+    {
+        if (string.IsNullOrEmpty(address))
+            return (currentUser, currentPassword);
+        int atIndex = address.IndexOf("@");
+        if (atIndex < 0)
+            return (currentUser, currentPassword);
+        string user = address[..atIndex];
+        int caretIndex = user.IndexOf(":");
+        if (caretIndex < 0)
+            return (user, currentPassword);
+        string pwd = user.Substring(caretIndex + 1);
+        user = user[..caretIndex];
+        return (user, pwd);
+    }
+
+    /// <summary>
     /// Opens a terminal log
     /// </summary>
     /// <param name="uid">the Uid of the app container</param>
@@ -128,5 +184,12 @@ public class TerminalController : BaseController
         }
 
         await terminal.Log();
+    }
+
+    private class SshInfo
+    {
+        public string Server { get; set; }
+        public string User { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -7,7 +7,7 @@ function openTerminal(type, uid){
         document.body.classList.add('terminal');
 
         const fitAddon = new FitAddon.FitAddon();
-        var term = new Terminal({ 
+        var term = new FenrusTerminal({ 
             cursorBlink: true, 
             fontFamily: 'Courier New',
             fontSize: 16,            
