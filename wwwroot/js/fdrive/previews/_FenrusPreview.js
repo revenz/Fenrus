@@ -79,7 +79,7 @@ class FenrusPreview {
     static closeActive(type){
         if(!FenrusPreview.openedInstance)
             return;
-        if(type && FenrusPreview._type !== type)
+        if(type && FenrusPreview.openedInstance._type !== type)
             return; // no longer opened
         FenrusPreview.openedInstance.close();        
     }

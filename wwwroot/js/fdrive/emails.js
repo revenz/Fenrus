@@ -146,7 +146,7 @@ class FenrusDriveEmail
         });
         if(result.ok)
         {
-            if(this.openedMessageUid === message.uid)
+            if(this.openedMessageUid === message.uid) 
                 FenrusPreview.closeActive('email');
             return;            
         }
