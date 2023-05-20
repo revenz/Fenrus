@@ -86,7 +86,8 @@ class _FenrusTerminal {
     onKey(ev)
     {
         let key = ev.key;
-        this.socket.emit('data', key);
+        if(this.socket)
+            this.socket.emit('data', key);
     }
 
     /**
