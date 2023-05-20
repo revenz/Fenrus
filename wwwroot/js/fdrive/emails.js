@@ -17,10 +17,6 @@ class FenrusDriveEmail
         });
     }
 
-    hide(){
-        this.closeMessage();
-    }
-
     show(){
         if(this.initDone)
             return;
@@ -129,135 +125,16 @@ class FenrusDriveEmail
     {
         this.openedMessageUid = message.uid;
         for(let ele of this.container.querySelectorAll('.email.selected'))
-            ele.classList.remove('selected');
+            ele.classList.remove('selected');       
         
         ele.classList.add('selected');
         
-        this.eleMessage.className = 'fdrive-item-content visible';
-        this.eleMessage.innerHTML = '' +
-            '  <div class="email-header header">' +  
-            '    <span class="email-header-subject"></span>' +
-            '    <div class="email-header-actions">' +
-            '       <button class="btn-reply" title="Reply"><i class="fa-solid fa-reply"></i></button>' +
-            '       <button class="btn-forward" title="Forward"><i class="fa-solid fa-share"></i></button>' +
-            '       <button class="btn-archive" title="Archive"><i class="fa-solid fa-boxes-packing"></i></button>' +
-            '       <button class="btn-delete" title="Delete"><i class="fa-solid fa-trash"></i></button>' +
-            '       <button class="btn-close" title="Close"><i class="fa-solid fa-times"></i></button>' +
-            '    </div>' +
-            '    <div class="email-header-info">' +
-            '      <span class="email-header-icon"></span>' +
-            '      <span class="email-header-from"></span>' +
-            '      <span class="email-header-to"></span>' +
-            '      <span class="email-header-date"></span>' +
-            '    </div>' +
-            '  </div>' +
-            '  <div class="email-body body">' +
-            '    <span class="email-body-content"></span>' +
-            '  </div>' +
-            ' <div class="blocker visible"><div class="blocker-indicator"><div class="blocker-spinner"></div></div>';        
-        document.body.classList.add('drawer-item-opened');
-        this.setInitials(message.from, this.eleMessage.querySelector('.email-header-icon'));
-        this.eleMessage.querySelector('.email-header-from').innerText = message.from;
-        this.eleMessage.querySelector('.email-header-to').innerText = message.to.join('; ');
-        this.eleMessage.querySelector('.email-header-date').innerText = this.formatDate(message.dateUtc);
-        this.eleMessage.querySelector('.email-header-subject').innerText = message.subject || 'No Subject';
-        let url = '/email/' + message.uid;
-        const json = await this.fetchData(url);        
-        console.log('json', json);
-        let eleBlocker = this.eleMessage.querySelector('.blocker');
-        
-        this.eleMessage.querySelector('.btn-close').addEventListener('click', () => {
-            this.closeMessage();
+        FenrusPreview.open('email', message, (action, msg) => {
+            if(action === 'delete')
+                this.deleteMessage(msg);
+            else if(action === 'archive')
+                this.archiveMessage(msg);
         });
-        this.eleMessage.querySelector('.btn-delete').addEventListener('click', () => {
-            this.deleteMessage(message);
-        });
-        this.eleMessage.querySelector('.btn-archive').addEventListener('click', () => {
-            this.archiveMessage(message);
-        });
-        
-        this.eleMessage.querySelector('.email-header-from').innerText = json.from;
-        this.eleMessage.querySelector('.email-header-to').innerText = json.to.join('; ');
-        this.eleMessage.querySelector('.email-header-date').innerText = this.formatDate(json.dateUtc);
-        this.eleMessage.querySelector('.email-header-subject').innerText = json.subject || 'No Subject';
-        this.setInitials(json.from, this.eleMessage.querySelector('.email-header-icon'));
-
-        let target = this.eleMessage.querySelector('.email-body-content');
-        let targetChild = document.createElement('div');
-        let targetChild2 = document.createElement('div');
-        targetChild.appendChild(targetChild2)
-        target.appendChild(targetChild)
-        this.getSafeHtml(json.body, targetChild2);
-        eleBlocker.remove();
-    }
-
-    async fetchData(url) {
-        const cache = await caches.open('fenrus-cache');
-        const cachedResponse = await cache.match(url);
-    
-        if (cachedResponse) {
-            console.log('Data found in cache');
-            return cachedResponse.json();
-        } else {
-            console.log('Data not found in cache. Fetching from network...');
-            const response = await fetch(url);
-            const data = await response.json();
-            await cache.put(url, new Response(JSON.stringify(data)));
-            return data;
-        }
-    }
-
-
-    closeMessage(){
-        this.openedMessageUid = null;
-        this.eleMessage.className = 'fdrive-item-content';
-        for(let ele of this.container.querySelectorAll('.email.selected'))
-            ele.classList.remove('selected');
-        document.body.classList.remove('drawer-item-opened');
-    }
-    getGmailMessageUrl(message) {
-        let messageId = message.messageId;        
-        var url = `https://mail.google.com/mail/u/0/#search/rfc822msgid:${encodeURIComponent(messageId)}`;
-        console.log('url', url);
-        return url;
-    }
-
-    getSafeHtml(html, sanitizedDiv) {
-        // Create a new div element
-        const div = document.createElement('div');
-
-        // Set the innerHTML of the div element to the email's HTML
-        div.innerHTML = html;
-
-        // Remove all external resources (e.g. images, stylesheets)
-        Array.from(div.getElementsByTagName('*')).forEach((element) => {
-            const tag = element.tagName.toLowerCase();
-            if (tag === 'script' || tag === 'link' || tag === 'iframe') {
-                element.remove();
-            } else if (tag === 'img' && element.src.startsWith('http')) {
-                element.src = '/proxy/safe-image/' + btoa(element.src).replace(/\//g, '-');
-            } else if (tag === 'a') {
-                // element.removeAttribute('href');
-                element.setAttribute('rel', 'noopener noreferrer');
-            }
-        });
-
-        // Sanitize the HTML to remove any potentially dangerous tags and attributes
-        const sanitizedHtml = DOMPurify.sanitize(div.innerHTML);
-        
-        // Set the innerHTML of the sanitized div element to the sanitized HTML
-        sanitizedDiv.innerHTML = sanitizedHtml;
-        sanitizedDiv.style.backgroundColor = '#fff';
-        
-        let child = sanitizedDiv.firstElementChild || sanitizedDiv;
-
-        // Set the styles to be scoped to the sanitized div element
-        sanitizedDiv.style.all = 'initial';
-        sanitizedDiv.style.fontFamily = 'inherit';
-        sanitizedDiv.style.fontSize = 'inherit';
-        sanitizedDiv.style.color = 'inherit';
-
-        return sanitizedDiv.innerHTML;
     }
     
     async deleteMessage(message) {
@@ -270,7 +147,7 @@ class FenrusDriveEmail
         if(result.ok)
         {
             if(this.openedMessageUid === message.uid)
-                this.closeMessage();
+                FenrusPreview.closeActive('email');
             return;            
         }
         let msg = await result.text();
@@ -287,7 +164,7 @@ class FenrusDriveEmail
         if(result.ok)
         {
             if(this.openedMessageUid === message.uid)
-                this.closeMessage();
+                FenrusPreview.closeActive('email');
             return;
         }
         let msg = await result.text();

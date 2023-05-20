@@ -1,6 +1,6 @@
-class TextPreview
+class TextPreview extends FenrusPreview
 {
-    extensions = {
+    static extensions = {
         plain: "clike",
         plaintext: "clike",
         text: "clike",
@@ -45,14 +45,7 @@ class TextPreview
         yml: "yaml",
         gitignore: 'txt'
     };
-    
-    close(){
-        if(this.container)
-            this.container.classList.remove('visible');
-        document.body.classList.remove('drawer-item-opened');
-        this.visible = false;
-    }   
-    
+        
     async open(file){
         if(this.visible)
             this.close();
@@ -69,13 +62,8 @@ class TextPreview
         this.filename = result.name;
         this.title.innerText = result.name;
         this.highlightCode();        
-        this.visible = true;
 
-        if(this.container.className.indexOf('visible') < 0)
-            this.container.classList.add('visible');
-        if(document.body.className.indexOf('drawer-item-opened') < 0)
-            document.body.classList.add('drawer-item-opened');
-
+        super.open();
     }
 
 
@@ -124,8 +112,8 @@ class TextPreview
     highlightCode() {
         const extension = this.filename.substring(this.filename.lastIndexOf('.') + 1).toLowerCase();
 
-        if (this.extensions[extension]) {
-            this.textPreview.innerHTML = `<pre><code class="language-${this.extensions[extension]}">${Prism.highlight(this.text, Prism.languages[this.extensions[extension]], this.extensions[extension])}</code></pre>`;
+        if (TextPreview.extensions[extension]) {
+            this.textPreview.innerHTML = `<pre><code class="language-${TextPreview.extensions[extension]}">${Prism.highlight(this.text, Prism.languages[TextPreview.extensions[extension]], TextPreview.extensions[extension])}</code></pre>`;
         } else {
             this.textPreview.textContent = this.text;
         }

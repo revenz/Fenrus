@@ -124,6 +124,7 @@ class FenrusDriveDrawer {
     setMode(feature){
         let current = this.selectedFeature;
         if(this.selectedFeature !== feature) {
+            FenrusPreview.closeActive();
             this.selectedFeature = feature;
             localStorage.setItem('DRIVE_MODE', this.features[feature].name);
 

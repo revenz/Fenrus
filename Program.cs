@@ -28,7 +28,16 @@ builder.Services.AddMvc();
 builder.Services.AddWebOptimizer(pipeline =>
 {
     pipeline.MinifyJsFiles("js/**/*.js");
-    pipeline.AddJavaScriptBundle("/js/_fenrus.js", "js/**/*.js");
+    var jsFiles = Directory.GetFiles("wwwroot/js", "*.js", SearchOption.AllDirectories)
+        .OrderBy(f => f)
+        .Select(x =>
+        {
+            int index = x.IndexOf("wwwroot/js");
+            return x[(index + 7)..];
+        })
+        .ToArray();
+    pipeline.AddJavaScriptBundle("/js/_fenrus.js", jsFiles);
+    
     pipeline.CompileScssFiles(new () { MinifyCss = true, SourceComments = false});
     pipeline.AddScssBundle("/css/_fenrus.css", "css/**/*.scss");
 });

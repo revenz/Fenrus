@@ -1,6 +1,7 @@
-class SlideShow
+class SlideShow extends FenrusPreview
 {
     constructor() {
+        super();
         this.onKeyDown = (event) => {
             if (event.key === 'ArrowLeft')
                 this.prevImage();
@@ -20,23 +21,17 @@ class SlideShow
         if(this.index < 0)
             return;
         document.addEventListener('keydown', this.onKeyDown);
-        if(!this.slideshowDiv)
+        if(!this.container)
             this.createDomElements();
-        if(this.slideshowDiv.className.indexOf('visible') < 0)
-            this.slideshowDiv.classList.add('visible');
-        if(document.body.className.indexOf('drawer-item-opened') < 0)
-            document.body.classList.add('drawer-item-opened');
+
         if(this.visible)
             this.initImage();
-        this.visible = true;
+        super.open();
     }
     
     close() {
-        if(this.slideshowDiv)
-            this.slideshowDiv.classList.remove('visible');
-        document.body.classList.remove('drawer-item-opened');
+        super.close();
         document.removeEventListener('keydown', this.onKeyDown);
-        this.visible = false;
     }
     
     prevImage()
@@ -68,10 +63,10 @@ class SlideShow
     
     createDomElements(){       
         // Create slideshow elements
-        this.slideshowDiv = document.createElement("div");
-        this.slideshowDiv.setAttribute('id', 'fdrive-files-item');
-        this.slideshowDiv.className = "fdrive-slideshow fdrive-preview fdrive-item-content";
-        this.slideshowDiv.innerHTML = `
+        this.container = document.createElement("div");
+        this.container.setAttribute('id', 'fdrive-files-item');
+        this.container.className = "fdrive-slideshow fdrive-preview fdrive-item-content";
+        this.container.innerHTML = `
 <div class="header">
     <span class="title"></span>
     <div class="actions">
@@ -90,28 +85,28 @@ class SlideShow
         const backgroundDiv = document.createElement("div");
         backgroundDiv.className = "slideshow-background";
         backgroundDiv.addEventListener("click", () => this.close());
-        this.slideshowDiv.appendChild(backgroundDiv);
+        this.container.appendChild(backgroundDiv);
 
-        const closeButton = this.slideshowDiv.querySelector('.btn-close');
+        const closeButton = this.container.querySelector('.btn-close');
         closeButton.addEventListener("click", () => this.close());
 
-        const prevButton = this.slideshowDiv.querySelector('.btn-previous');
+        const prevButton = this.container.querySelector('.btn-previous');
         prevButton.addEventListener("click", () => this.prevImage());
 
-        const nextButton = this.slideshowDiv.querySelector('.btn-next');
+        const nextButton = this.container.querySelector('.btn-next');
         nextButton.addEventListener("click", () => this.nextImage());
         
-        this.image = this.slideshowDiv.querySelector('img');
+        this.image = this.container.querySelector('img');
         this.image.onload = () => {
             this.updateDimensions();
         };
 
-        this.filename =  this.slideshowDiv.querySelector('.title');
-        this.dimensions = this.slideshowDiv.querySelector('.slideshow-dimensions');
+        this.filename =  this.container.querySelector('.title');
+        this.dimensions = this.container.querySelector('.slideshow-dimensions');
 
         //this.updateDimensions();
         // Add slideshow elements to the page
-        document.querySelector('.dashboard-main').appendChild(this.slideshowDiv);
+        document.querySelector('.dashboard-main').appendChild(this.container);
         this.initImage();
     }
 

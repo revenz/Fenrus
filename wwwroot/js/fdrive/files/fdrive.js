@@ -43,14 +43,12 @@ class FenrusDrive {
         this.fileList.onFileDblClick((file) =>
         {   
             if(file.mimeType.startsWith('image')) {
-                this.textPreview.close();
-                this.slideshow.open(this.fileList.items, file);
+                FenrusPreview.open('slideshow', this.fileList.items, file);
                 return;
             }
             let extension = file.fullPath.substring(file.fullPath.lastIndexOf('.') + 1).toLowerCase();
-            if(this.textPreview.extensions[extension] || extension === 'txt') {
-                this.slideshow.close();
-                this.textPreview.open(file);
+            if(TextPreview.extensions[extension] || extension === 'txt') {
+                FenrusPreview.open('text', file);
             }
             else
                 this.download(file.fullPath);
@@ -128,17 +126,10 @@ class FenrusDrive {
             this.folderInfo = {};
         // if (this.folderInfo[''])
         //     this.changeView(this.folderInfo['']);
-        
-        this.slideshow = new SlideShow();
-        this.textPreview = new TextPreview();
     }
 
     show() {
         this.loadFolder(this.currentPath);
-    }
-    hide(){
-        this.slideshow.close();
-        this.textPreview.close();
     }
 
     changeFolder(path) {
@@ -181,7 +172,7 @@ class FenrusDrive {
 
 
     download(path) {
-        var link = document.createElement("a");
+        let link = document.createElement("a");
         let url = '/files/download?path=' + encodeURIComponent(path);
         link.href = url;
         link.download = url.split("/").pop();
@@ -305,7 +296,7 @@ class FenrusDrive {
         if (mode === 'upload')
             this.uploader.openDialog(this.currentPath);
         else if (mode === 'folder') {
-            var name = await modalPrompt('New Folder', 'Enter a name of the the folder to create');
+            let name = await modalPrompt('New Folder', 'Enter a name of the the folder to create');
             if (/[~"#%&*:<>?/\\{|}]+/.test(name))
                 return; // invalid
             if (!name)
@@ -373,97 +364,6 @@ class FenrusDrive {
     }
 
     
-
-    async openTextPreview(url) {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            let filename = this.getFileNameFromContentDisposition(response.headers.get("content-disposition"));
-            const fileSize = response.headers.get("content-length");
-
-            const previewContainer = document.createElement("div");
-            previewContainer.className = 'fdrive-text-preview-container fdrive-preview';
-
-            const previewBox = document.createElement("div");
-            previewBox.classList.add("fdrive-text-preview-box");
-
-            const header = document.createElement("div");
-            header.classList.add("fdrive-text-preview-header");
-
-            const text = await response.text();
-            
-            const filenameLink = document.createElement("a");
-            filenameLink.classList.add("fdrive-text-preview-filename");
-            filenameLink.innerText = filename;
-            filenameLink.innerHTML = '<i class="fas fa-download"></i>' + filenameLink.innerHTML;
-            filenameLink.addEventListener('click', () => {
-                this.download(url);
-            })
-            header.appendChild(filenameLink);
-
-            const close = () => {
-                document.body.removeChild(previewContainer);
-                document.removeEventListener("keydown",keyDownListener);
-            }
-            const keyDownListener = (event) => {
-                if (event.key === "Escape") {
-                    close();
-                }
-            };
-
-
-            const closeSpan = document.createElement("span");
-            closeSpan.classList.add("fdrive-text-preview-close");
-            closeSpan.innerHTML = '<i class="fas fa-times"></i>';
-            closeSpan.addEventListener("click", () => {
-                close();
-            });
-            header.appendChild(closeSpan);
-
-            const footer = document.createElement("div");
-            footer.classList.add("fdrive-text-preview-footer");
-
-            if (location.protocol === "https:") {
-                const copySpan = document.createElement("span");
-                copySpan.classList.add("fdrive-text-preview-copy");
-                copySpan.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
-                copySpan.addEventListener('click', async() => {
-                    try {
-                        await navigator.clipboard.writeText(text);
-                        Toast.info('Copied to clipboard');
-                    } catch (err) {
-                        console.error('Failed to copy text: ', err);
-                    }
-                });
-                footer.appendChild(copySpan);                
-            }
-
-            const fileSizeSpan = document.createElement("span");
-            fileSizeSpan.classList.add("fdrive-text-preview-filesize");
-            fileSizeSpan.innerText = humanizeFileSize(fileSize);
-            footer.appendChild(fileSizeSpan);
-
-            const textContainer = document.createElement("div");
-            textContainer.classList.add("fdrive-text-preview-text-container");
-            
-            this.highlightCode(filename, text, textContainer);
-
-            previewBox.appendChild(header);
-            previewBox.appendChild(textContainer);
-            previewBox.appendChild(footer);
-            previewContainer.appendChild(previewBox);
-
-            document.body.appendChild(previewContainer);
-            document.addEventListener("keydown", keyDownListener);
-            
-        } catch (error) {
-            console.error("There was a problem with the text preview", error);
-        }
-    }
-
     createToolbar()
     {
         let toolbar = document.querySelector('#fdrive-files .toolbar');
