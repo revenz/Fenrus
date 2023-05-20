@@ -25,7 +25,7 @@ class SshTerminal extends _FenrusTerminal {
         this.promptForUser = false;
         this.promptForPassword = false;
         this.authError = false;
-        
+                
         this.changeMode(!!this.server ? 
             !!this.user ? 
                 !!this.password ? this.MODE_TERMINAL 
@@ -42,7 +42,7 @@ class SshTerminal extends _FenrusTerminal {
      */
     onKey(ev)
     {
-        if(this.mode !== 3)
+        if(this.mode > 2)
             return super.onKey(ev);
         let key = ev.key; 
         let keyCode = key.charCodeAt(0);

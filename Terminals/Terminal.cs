@@ -70,14 +70,21 @@ public abstract class Terminal
             new ArraySegment<byte>(buffer), CancellationToken.None);
 
         string value = string.Empty;
+        int bsCount = 0;
         while (!receiveResult.CloseStatus.HasValue)
         {
             if (buffer[0] == 127)
             {
+                ++bsCount;
                 if (value.Length > 0)
                 {
                     value = value[..^1];
                     await SendMessage("\b \b");
+                }
+                else if (bsCount > 2)
+                {
+                    bsCount = 0;
+                    await HandleBackspaceCleared(field);
                 }
             }
             else if(buffer[0] == 13)
@@ -86,6 +93,7 @@ public abstract class Terminal
             }
             else
             {
+                bsCount = 0;
                 if (hidden == false)
                 {
                     await this.Socket.SendAsync(
@@ -105,5 +113,15 @@ public abstract class Terminal
         await SendMessage("\n");
 
         return value.Trim();
+    }
+
+    /// <summary>
+    /// Called if the user presses backspace 3 times on an empty input
+    /// </summary>
+    /// <param name="field">the currently being asked for</param>
+    /// <returns>a task to await</returns>
+    protected virtual Task HandleBackspaceCleared(string field)
+    {
+        return Task.CompletedTask;
     }
 }

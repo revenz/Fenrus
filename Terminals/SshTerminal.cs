@@ -111,6 +111,23 @@ public class SshTerminal : Terminal
 
 
     /// <summary>
+    /// Called if the user presses backspace 3 times on an empty input
+    /// </summary>
+    /// <param name="field">the currently being asked for</param>
+    /// <returns>a task to await</returns>
+    protected override async Task HandleBackspaceCleared(string field)
+    {
+        if(field != "Password")
+            return;
+        // get the password again
+        await SendMessage("\n");
+        this.UserName = await RequestInput("User", false);
+        
+        // we need to prompt for the password again
+        await SendMessage("\x1b[1;32m" + field + ":\x1b[37m ");
+    }
+
+    /// <summary>
     /// Reads the output from the SSH socket
     /// </summary>
     /// <param name="webSocket">the browsers websocket</param>
