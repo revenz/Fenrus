@@ -47,7 +47,8 @@ class TextPreview
     };
     
     close(){
-        this.container.classList.remove('visible');
+        if(this.container)
+            this.container.classList.remove('visible');
         document.body.classList.remove('drawer-item-opened');
         this.visible = false;
     }   
