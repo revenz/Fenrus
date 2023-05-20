@@ -19,6 +19,16 @@
     {
         <InputText Page="CloudAppEditor" Label="AddressSsh" @bind-Value="AddressSsh" Required="true"></InputText>
     }
+    else if (AppType == CloudAppType.Docker)
+    {
+        <InputSelect Page="CloudAppEditor" @bind-Value="@DockerUid" Label="DockerUid" Options="DockerServers"/>
+        <InputText Page="CloudAppEditor" Label="AddressDocker" @bind-Value="AddressDocker" Required="true"></InputText>
+        <InputSelect Page="CloudAppEditor" TItem="string" Label="DockerCommand" @bind-Value="DockerCommand">
+            <InputSelectOption TItem="string" StringValue="/bin/ash" Label="/bin/ash"/>
+            <InputSelectOption TItem="string" StringValue="/bin/bash" Label="/bin/bash"/>
+            <InputSelectOption TItem="string" StringValue="/bin/sh" Label="/bin/sh"/>
+        </InputSelect>
+    }
     else if(AppType == CloudAppType.IFrame)
     {
         <InputText Page="CloudAppEditor" Label="Address" @bind-Value="Address" Required="true" Pattern="^[^:]+://."></InputText>

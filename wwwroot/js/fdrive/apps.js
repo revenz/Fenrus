@@ -66,6 +66,20 @@ class FenrusDriveApps
             );
             return;
         }
+        if(type === 'docker')
+        {
+            if(newTab)
+                return; // dont support this yet
+
+            addSelectedClass();
+
+            FenrusPreview.open('docker',
+                app.querySelector('.name').textContent,
+                url,
+                app.querySelector('img').src
+            );
+            return;
+        }
         
         if(type === 'vnc'){
             const regex = /^((?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}|(?:[a-fA-F0-9]{1,4}:)*:[a-fA-F0-9]{1,4}|(?:\d{1,3}\.){3}\d{1,3}|[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)(?::(\d{1,5}))?$/;

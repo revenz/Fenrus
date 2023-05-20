@@ -1,5 +1,13 @@
-class SshTerminal extends FenrusPreview
+/**
+ * A SSH terminal pane
+ */
+class SshTerminalPane extends _TerminalPane
 {
+    /**
+     * Opens a SSH Terminal 
+     * @param url the URL for the SSH terminal
+     * @param icon the icon image url to show in the title bar
+     */
     open(url, icon){        
         if(url === this.url)
             return; // already opened
@@ -10,8 +18,7 @@ class SshTerminal extends FenrusPreview
         
         this.url = url;
         this.eleTerminalFavicon.src = icon;
-        this.container.className = 'visible';
-        document.body.classList.add('drawer-item-opened');
+        super.open();
         let user = '';
         let pwd = ''
         let server = url;
@@ -26,47 +33,10 @@ class SshTerminal extends FenrusPreview
             }
         }
         this.eleTerminalAddress.value = server;
-        this.fenrusTerminal = new FenrusTerminal({container: this.eleTerminal, server: server, user: user, password: pwd});
-        this.fenrusTerminal.onDisconnected(() => {
+        this.terminal = new SshTerminal({container: this.eleTerminal, server: server, user: user, password: pwd});
+        this.terminal.onDisconnected(() => {
             this.close();
         });
     }
-    
-    close(){
-        if(this.fenrusTerminal)
-        {
-            this.fenrusTerminal.onDisconnected(null);
-            this.fenrusTerminal.close();
-        }
-        this.fenrusTerminal = null;
-        this.url = null;
-        super.close();
-    }
 
-    createDomElements()
-    {
-        if(this.container)
-            return;
-        this.container = document.createElement('div');
-        this.container.innerHTML = '<div class="terminal-container app-target-container">' +
-            '  <div class="header">' +
-            '    <div class="address-bar">' +
-            '      <img />' +
-            '      <input type="text" readonly>' +
-            '    </div>' +
-            '    <div class="controls">' +
-            '      <button class="close-button"><i class="fa-solid fa-xmark"></i></button>' +
-            '    </div>' +
-            '  </div>' +
-            '  <div class="inner-container">' +
-            '    <div></div>' +
-            '  </div>' +
-            '</div>';
-        this.container.setAttribute('id', 'fdrive-apps-terminal');
-        this.eleTerminal = this.container.querySelector('.inner-container div');
-        this.eleTerminalAddress = this.container.querySelector('.address-bar input[type=text]');
-        this.eleTerminalFavicon = this.container.querySelector('.address-bar img');
-        this.container.querySelector('.close-button').addEventListener('click', () => this.close());
-        document.querySelector('.dashboard-main').appendChild(this.container);
-    }
 }

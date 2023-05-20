@@ -61,7 +61,15 @@ public partial class CloudAppEditor : SideEditorBase
     /// Gets or sets the address for a SSH app
     /// </summary>
     private string AddressSsh { get; set; }
-
+    
+    /// <summary>
+    /// Gets or sets the address for a docker app
+    /// </summary>
+    private string AddressDocker { get; set; }
+    /// <summary>
+    /// Gets or sets the docker command 
+    /// </summary>
+    private string DockerCommand { get; set; }
 
     /// <summary>
     /// Gets or sets the icon of the app
@@ -73,6 +81,14 @@ public partial class CloudAppEditor : SideEditorBase
     /// </summary>
     private CloudAppType AppType { get; set; }
     private string SelectedItem;
+    /// <summary>
+    /// a list of docker servers in the system
+    /// </summary>
+    private List<ListOption> DockerServers;
+    /// <summary>
+    /// Gets or sets the UID of the selected docker server
+    /// </summary>
+    private Guid DockerUid { get; set; }
 
     private string GetAddress(CloudAppType type)
     {
@@ -80,6 +96,8 @@ public partial class CloudAppEditor : SideEditorBase
             return AddressVnc;
         if (AppType == CloudAppType.Ssh)
             return AddressSsh;
+        if (AppType == CloudAppType.Docker)
+            return DockerUid + ":" + AddressDocker + ":" + DockerCommand;
         return Address;
     }
     
@@ -91,6 +109,12 @@ public partial class CloudAppEditor : SideEditorBase
         Title = Translator.Instant("Pages.CloudAppEditor.Title");
         lblSave = Translator.Instant("Labels.Save");
         lblCancel = Translator.Instant("Labels.Cancel");
+        
+        DockerServers = new DockerService().GetAll()?.OrderBy(x => x.Name)?.Select(x => new ListOption()
+        {
+            Label = x.Name,
+            Value = x.Uid
+        })?.ToList() ?? new ();
 
         Name = Item?.Name ?? string.Empty;
         AppType = Item?.Type ?? CloudAppType.IFrame;
@@ -98,6 +122,21 @@ public partial class CloudAppEditor : SideEditorBase
             AddressVnc = Item?.Address ?? "http://";
         else if (AppType == CloudAppType.Ssh)
             AddressSsh = Item?.Address ?? string.Empty;
+        else if (AppType == CloudAppType.Docker)
+        {
+            var parts = Item?.Address?.Value?.Split(':');
+            if (parts?.Length >= 2 && Guid.TryParse(parts[0], out Guid dockerUid))
+            {
+                DockerUid = dockerUid;
+                AddressDocker = parts[1];
+                if (parts.Length > 2)
+                    DockerCommand = parts[2];
+            }
+            else if(DockerServers.Any())
+            {
+                DockerUid = (Guid)DockerServers.First().Value!;
+            }
+        }
         else
             Address = Item?.Address ?? "https://";
         Icon = Item?.Icon ?? string.Empty;
@@ -110,6 +149,17 @@ public partial class CloudAppEditor : SideEditorBase
             new() { Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.Vnc)}"), Value = CloudAppType.Vnc },
             new() { Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.Ssh)}"), Value = CloudAppType.Ssh },
         };
+        if (DockerServers.Any())
+        {
+            if(DockerUid == Guid.Empty)
+                DockerUid = (Guid)DockerServers.First().Value!;
+            DockerCommand = DockerCommand?.EmptyAsNull() ?? "/bin/bash";
+            Types.Add(new()
+            {
+                Label = Translator.Instant($"Enums.{nameof(CloudAppType)}.{nameof(CloudAppType.Docker)}"),
+                Value = CloudAppType.Docker
+            });
+        }
     }
 
     /// <summary>
@@ -120,6 +170,8 @@ public partial class CloudAppEditor : SideEditorBase
     {
         // validate
         if (await Editor.Validate() == false)
+            return;
+        if (AppType == CloudAppType.Docker && DockerUid == Guid.Empty)
             return;
         var item = new CloudApp();
         item.Name = Name;

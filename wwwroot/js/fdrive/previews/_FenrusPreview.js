@@ -1,9 +1,28 @@
+/**
+ * An abstract class that is the base class for all the fenrus cloud app panes
+ */
 class FenrusPreview {
-    
-    isOpened() {
-        return this.visible;
+
+    /**
+     * Constructs a new instance of a Fenrus preview
+     */
+    constructor() {
+        if (new.target === FenrusPreview) {
+            throw new Error('Cannot instantiate abstract class');
+        }
     }
     
+    /**
+     * If this pane instance is open
+     * @returns {boolean} true if open, otherwise false
+     */
+    isOpened() {
+        return !!this.visible;
+    }
+
+    /**
+     * Opens the pane
+     */
     open(){
         this.visible = true;
         if(this.container && this.container.className.indexOf('visible') < 0)
@@ -11,25 +30,41 @@ class FenrusPreview {
         if(document.body.className.indexOf('drawer-item-opened') < 0)
             document.body.classList.add('drawer-item-opened');
     }
+
+    /**
+     * Closes the pane
+     */
     close(){
         if(this.container)
             this.container.classList.remove('visible');
         
-        if(document.body.className.indexOf('drawer-item-opened') < 0)
-            document.body.classList.add('drawer-item-opened');
+        if(document.body.className.indexOf('drawer-item-opened') >= 0)
+            document.body.classList.remove('drawer-item-opened');
         this.visible = false;
         if(FenrusPreview.openedInstance === this)
             FenrusPreview.openedInstance = null;
     }
-    
+
+    /**
+     * Shows a blocker in this pane, used for loading
+     */
     showBlocker(){
 
         //' <div class="blocker visible"><div class="blocker-indicator"><div class="blocker-spinner"></div></div>';
     }
+
+    /**
+     * Closes the blocker
+     */
     hideBlocker(){
         
     }
 
+    /**
+     * Fetches data from a URL
+     * @param url the URL to fetch the data from
+     * @returns {Promise<any>} the response from the fetch
+     */
     async fetchData(url) {
         const cache = await caches.open('fenrus-cache');
         const cachedResponse = await cache.match(url);
@@ -48,6 +83,12 @@ class FenrusPreview {
     
     static openedInstance;
     static constructedInstances = {};
+
+    /**
+     * Opens a pane
+     * @param type the type of pane to open
+     * @param args any additional arguments to pass to the opening pane
+     */
     static open(type, ...args){
         if(!type)
             return;
@@ -59,7 +100,9 @@ class FenrusPreview {
             else if(type === 'iframe')
                 instance = new IFrame();
             else if(type === 'ssh')
-                instance = new SshTerminal();
+                instance = new SshTerminalPane();
+            else if(type === 'docker')
+                instance = new DockerTerminalPane();
             else if(type === 'text')
                 instance = new TextPreview();
             else if(type === 'email')
@@ -75,7 +118,11 @@ class FenrusPreview {
         FenrusPreview.openedInstance = instance;
         instance.open(...args);            
     }
-    
+
+    /**
+     * Closes the active pane
+     * @param type an optional type, the pane will only be closed if the currently open pane is of this type
+     */
     static closeActive(type){
         if(!FenrusPreview.openedInstance)
             return;

@@ -108,6 +108,38 @@ public class TerminalController : BaseController
     }
 
     /// <summary>
+    /// Opens a docker terminal connection
+    /// </summary>
+    /// <param name="uid">the UID of the docker server</param>
+    /// <param name="name">the name of the docker container</param>
+    /// <param name="rows">the number of rows for the terminal</param>
+    /// <param name="cols">the number of columns for the terminal</param>
+    /// <param name="command">the command to run to open the terminal inside the docker container</param>
+    [HttpGet("docker/{uid}/{name}")]
+    public async Task Docker([FromRoute] Guid uid, [FromRoute] string name, [FromQuery] int rows = 24, [FromQuery] int cols = 24, [FromQuery] string? command = null)
+    {
+        var settings = GetUserSettings();
+        if (settings == null)
+            throw new UnauthorizedAccessException();
+
+        var docker = new DockerService().GetByUid(uid);
+        if (docker == null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+            return;
+            
+        }
+        
+        // ensure only these commands are allowed
+        if(command != "/bin/sh" && command != "/bin/ash")
+            command = "/bin/bash";
+
+        using var ws = await HttpContext.WebSockets.AcceptWebSocketAsync();
+        var terminal = new DockerTerminal(ws, rows, cols, docker.Address, docker.Port, name, command);
+        await terminal.Connect();
+    }
+    
+    /// <summary>
     /// Parses an address and gets the username/password from it if set
     /// </summary>
     /// <param name="address">the address</param>

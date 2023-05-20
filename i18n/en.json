@@ -82,7 +82,8 @@
       "External": "Open in new tab",
       "ExternalSame": "Open in same tab",
       "Vnc": "VNC",
-      "Ssh": "SSH"
+      "Ssh": "SSH",
+      "Docker": "Docker"
     },
     "ItemSize": {
       "Small": "Small",
@@ -171,7 +172,12 @@
         "AddressVnc-Help": "The address for the VNC server",
         "AddressVnc-Placeholder": "192.168.1.10:5900",
         "AddressSsh": "Address",
-        "AddressSsh-Help": "The address for the SSH server, can be in the format user@host or user:password@host"
+        "AddressSsh-Help": "The address for the SSH server, can be in the format user@host or user:password@host",
+        "DockerUid": "Docker Server",
+        "AddressDocker": "Container",
+        "AddressDocker-Help": "The name of the docker container.",
+        "DockerCommand": "Command",
+        "DockerCommand-Help": "The docker command to run to open the terminal, if in doubt try /bin/bash, if that fails try /bin/sh"
       }
     },
     "Dashboards":{

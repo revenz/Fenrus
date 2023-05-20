@@ -183,5 +183,9 @@ public enum CloudAppType
     /// <summary>
     /// SSH App
     /// </summary>
-    Ssh = 5
+    Ssh = 5,
+    /// <summary>
+    /// Docker App
+    /// </summary>
+    Docker = 6
 }
