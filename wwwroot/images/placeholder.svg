@@ -1,21 +1,9 @@
-
-<!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
-<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="100%" height="100%" fill="#111"/>
-    <g fill="none" fill-rule="evenodd" transform="scale(2), translate(31, 20)" stroke="#fff">
-        <g transform="translate(1 1)" stroke-width="2">
-            <circle stroke-opacity=".5" cx="18" cy="18" r="18"/>
-            <path d="M36 18c0-9.94-8.06-18-18-18">
-                <animateTransform
-                        attributeName="transform"
-                        type="rotate"
-                        from="0 18 18"
-                        to="360 18 18"
-                        dur="1s"
-                        repeatCount="indefinite"/>
-            </path>
-        </g>
-    </g>
-    <text x="50%" y="75%" dominant-baseline="middle"  font-family="Arial"
-          font-weight="100" text-anchor="middle" font-size="12" fill="#fff">LOADING</text>
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+	<title>internal-svg</title>
+	<style>
+		.s0 { fill: #ffffff } 
+		.s1 { fill: #000000 } 
+	</style>
+	<path id="Shape 3" class="s0" d="m94.5 5.5q-5.5-5.5-13.2-5.5h-62.5q-7.8 0-13.3 5.5-5.5 5.5-5.5 13.2v62.6q0 7.7 5.5 13.2 5.5 5.5 13.3 5.5h62.5q7.7 0 13.2-5.5 5.5-5.5 5.5-13.2v-62.6q0-7.7-5.5-13.2z"/>
+	<path id="Shape 4" class="s1" d="m78.8 43.2q-1.2-1.2-2.9-1.2h-17.7v-17.1q0-1.6-1.2-2.8-1.2-1.1-2.9-1.1h-8.2q-1.7 0-2.9 1.1-1.2 1.2-1.2 2.8v17.1h-17.7q-1.7 0-2.9 1.2-1.2 1.1-1.2 2.7v7.9q0 1.7 1.2 2.8 1.2 1.2 2.9 1.2h17.7v17q0 1.7 1.2 2.8 1.2 1.2 2.9 1.2h8.2q1.7 0 2.9-1.2 1.2-1.1 1.2-2.8v-17h17.7q1.7 0 2.9-1.2 1.2-1.1 1.2-2.8v-7.9q0-1.6-1.2-2.7z"/>
 </svg>

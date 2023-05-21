@@ -42,8 +42,7 @@ class FenrusDriveApps
     }
     
     async openApp(app, newTab)
-    {
-        
+    {        
         let addSelectedClass = () =>
         {
             this.clearSelected();
