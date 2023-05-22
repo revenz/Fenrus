@@ -8,7 +8,7 @@ class _FenrusTerminal {
 
     /**
      * Constructs a new instance
-     * @param container the container dom element to render the termianl into
+     * @param {HTMLElement} container the container dom element to render the termianl into
      */
     constructor(container){
         if (new.target === _FenrusTerminal) {
@@ -59,7 +59,7 @@ class _FenrusTerminal {
 
     /**
      * Event that is fired when the window is resized
-     * @param event the resized event
+     * @param {UIEvent} event the resized event
      */
     resizeEvent(event)
     {
@@ -76,7 +76,7 @@ class _FenrusTerminal {
 
     /**
      * Sets the action to execute when the terminal is disconnected
-     * @param action the action/function to execute when the terminal is disconnected
+     * @param {function} action the action/function to execute when the terminal is disconnected
      */
     onDisconnected(action) {
         this.onDisconnectedAction = action;
@@ -96,7 +96,7 @@ class _FenrusTerminal {
 
     /**
      * Event fired when a key is pressed
-     * @param ev the event
+     * @param {KeyboardEvent} ev the event
      */
     onKey(ev)
     {
@@ -139,10 +139,6 @@ class _FenrusTerminal {
         this.socket.onopen = (event)=> {
         }
         this.socket.onclose = (event)=> {
-            // if(this.authError && (this.promptForPassword || this.promptForUser))
-            //     return;
-            // if(this.mode === 3)
-            //     this.term?.write('\r\closed\r\n');
             if(this.socket) 
             {
                 this.socket.close();
@@ -174,8 +170,7 @@ class _FenrusTerminal {
         if (navigator.clipboard && typeof navigator.clipboard.readText === 'function') {
             try {
                 // Read text from the clipboard
-                const text = await navigator.clipboard.readText();
-                return text;
+                return await navigator.clipboard.readText();
             } catch (error) {
                 throw new Error('Failed to read from clipboard: ' + error);
             }
