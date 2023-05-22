@@ -35,6 +35,21 @@ class _FenrusTerminal {
 
         this.term.write('Welcome to the Fenrus Terminal\r\n');
         this.term.focus();
+        this.container.addEventListener('contextmenu', async (e) => {
+            e.preventDefault();
+            if(!this.term)
+                return;
+            
+            if (this.term.hasSelection()) {
+                let selected = this.term.getSelection();
+                if(selected)
+                    await this.copyTextToClipboard(selected);
+            } else {
+                let text = await this.readTextFromClipboard();
+                if(this.socket)
+                    this.socket.emit('data', text);
+            }
+        })
 
         this.rows = this.term.rows;
         this.cols = this.term.cols;
@@ -148,4 +163,42 @@ class _FenrusTerminal {
         }
         this.onConnected();
     }
+
+    /**
+     * Read text from the clipboard using the Clipboard API.
+     * @returns {Promise<string>} A promise that resolves with the retrieved text.
+     * @throws {Error} If the Clipboard API is not supported or an error occurs during reading.
+     */
+    async readTextFromClipboard() {
+        // Check if the Clipboard API is supported by the browser
+        if (navigator.clipboard && typeof navigator.clipboard.readText === 'function') {
+            try {
+                // Read text from the clipboard
+                const text = await navigator.clipboard.readText();
+                return text;
+            } catch (error) {
+                throw new Error('Failed to read from clipboard: ' + error);
+            }
+        } else {
+            throw new Error('Clipboard API not supported');
+        }
+    }
+    /**
+     * Copy text to the clipboard using the Clipboard API.
+     * @param {string} text - The text to be copied to the clipboard.
+     * @returns {Promise<void>} A promise that resolves when the text is successfully copied.
+     * @throws {Error} If the Clipboard API is not supported or an error occurs during copying.
+     */
+    async copyTextToClipboard(text) {
+        try {
+            await navigator.clipboard.writeText(text);
+            if(text.length < 30)
+                Toast.info('Copied to clipboard', text);
+            else
+                Toast.info('Copied to clipboard', text.substring(0, 27) + '...');
+        } catch (error) {
+            throw new Error('Failed to copy text to clipboard: ' + error);
+        }
+    }
+
 }
