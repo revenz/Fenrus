@@ -63,7 +63,9 @@
     "Cloud": "Cloud",
     "IconPicker": "Icon Picker",
     "Address": "Address",
-    "Icon": "Icon"
+    "Icon": "Icon",
+    "UnsavedTitle": "Warning Unsaved Changed", 
+    "UnsavedMessage": "Warning: Leaving this page without saving will result in the loss of any unsaved changes. Please make sure to save your work before navigating away."
   },
   "ContextMenu": {
     "EditDashboard": "Edit Dashboard",

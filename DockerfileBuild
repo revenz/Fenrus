@@ -1,0 +1,14 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+WORKDIR /app
+
+# Create a volume and copy the output to it
+VOLUME /build
+
+# Copy everything
+COPY . ./
+# sets the version
+RUN chmod +x ./setversion.sh && ./setversion.sh
+# Restore as distinct layers
+RUN dotnet restore
+# Build and publish a release
+CMD dotnet publish -c Release -o /build /app/Fenrus.csproj

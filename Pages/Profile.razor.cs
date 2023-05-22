@@ -6,8 +6,6 @@ using Fenrus.Models;
 using Fenrus.Models.UiModels;
 using Fenrus.Services.CalendarServices;
 using Fenrus.Services.FileStorages;
-using Ical.Net;
-using Jint.Runtime.Modules;
 
 namespace Fenrus.Pages;
 
@@ -29,7 +27,7 @@ public partial class Profile: UserPage
 
     private int EmailImapPort, EmailSmtpPort;
 
-    private EditorForm GeneralEditor, PasswordEditor, CalendarEditor, FileStorageEditor, EmailEditor;
+    private EditorForm GeneralEditor, PasswordEditor, CalendarEditor, FileStorageEditor, EmailEditor, AppsEditor;
 
     private List<ListOption> CalendarProviders = new()
     {
@@ -46,6 +44,7 @@ public partial class Profile: UserPage
     private string Username, Email, FullName, PasswordCurrent, PasswordNew, PasswordConfirm;
 
     private Models.SystemSettings _systemSettings;
+    private bool AppsDirty = false;
 
     /// <summary>
     /// Gets if the cloud is enabled globally
@@ -177,6 +176,7 @@ public partial class Profile: UserPage
                 })?.ToList() ?? new()
             }
         ).ToList() ?? new();
+        CleanAppGroupNames = AppGroups.Select(x => x.Name).ToList();
         
         return Task.CompletedTask;
     }
@@ -222,6 +222,7 @@ public partial class Profile: UserPage
 
         }
         service.Update(Model);
+        GeneralEditor.MarkClean();
         ToastService.ShowSuccess("Labels.Saved");
     }
 
@@ -254,6 +255,7 @@ public partial class Profile: UserPage
         profile.CloudFeatures = CalendarEnabled ? profile.CloudFeatures | CloudFeature.Calendar : profile.CloudFeatures & ~CloudFeature.Calendar;
 
         service.UpdateProfile(profile);
+        CalendarEditor.MarkClean();
         ToastService.ShowSuccess("Calendar Saved");
     }
     
@@ -304,6 +306,7 @@ public partial class Profile: UserPage
         }
         profile.CloudFeatures = FilesEnabled ? profile.CloudFeatures | CloudFeature.Files : profile.CloudFeatures & ~CloudFeature.Files;
         service.UpdateProfile(profile);
+        FileStorageEditor.MarkClean();
         ToastService.ShowSuccess("File Storage Saved");
     }
     
@@ -369,6 +372,7 @@ public partial class Profile: UserPage
         profile.CloudFeatures = EmailEnabled ? profile.CloudFeatures | CloudFeature.Email : profile.CloudFeatures & ~CloudFeature.Email;
         service.UpdateProfile(profile);
         Workers.MailWorker.Instance.UserMailServer(profile);
+        EmailEditor.MarkClean();
         ToastService.ShowSuccess("Email Saved");
     }
 
@@ -446,6 +450,11 @@ public partial class Profile: UserPage
     private List<CloudAppGroup> AppGroups = new();
 
     /// <summary>
+    /// A clean list of app groups names, used to determine if the groups are dirty and should prevent user navigating away if not saved
+    /// </summary>
+    private List<string> CleanAppGroupNames = new();
+
+    /// <summary>
     /// Saves the App settings
     /// </summary>
     private void AppsSave()
@@ -479,6 +488,9 @@ public partial class Profile: UserPage
         }
 
         service.UpdateProfile(profile);
+        AppsDirty = false;
+        AppsEditor.MarkClean();
+        CleanAppGroupNames = AppGroups.Select(x => x.Name).ToList();
         ToastService.ShowSuccess("Apps Saved");
     }
 
@@ -494,6 +506,7 @@ public partial class Profile: UserPage
             Enabled = true,
             Items = new ()
         });
+        AppsDirty = true;
     }
 
     /// <summary>
@@ -506,6 +519,7 @@ public partial class Profile: UserPage
         if (result)
         {
             AppGroups.Remove(group);
+            AppsDirty = true;
             StateHasChanged();
         }
     }
@@ -521,6 +535,7 @@ public partial class Profile: UserPage
             return;
         result.Data.Uid = Guid.NewGuid();
         group.Items.Add(result.Data);
+        AppsDirty = true;
         StateHasChanged();
     }
 
@@ -537,6 +552,7 @@ public partial class Profile: UserPage
         item.Icon = result.Data.Icon;
         item.Type = result.Data.Type;
         item.Address = result.Data.Address;
+        AppsDirty = true;
         StateHasChanged();
     }
 
@@ -551,6 +567,26 @@ public partial class Profile: UserPage
         if (result == false)
             return;
         group.Items.Remove(item);
+        AppsDirty = true;
         StateHasChanged();
+    }
+
+    /// <summary>
+    /// Gets or sets if this is dirty
+    /// </summary>
+    protected override bool IsDirty
+    {
+        get
+        {
+            if (AppsDirty)
+                return true;
+            if (AppsEditor.IsDirty() || CalendarEditor.IsDirty() || EmailEditor.IsDirty() || GeneralEditor.IsDirty() || FileStorageEditor.IsDirty())
+                return true;
+            bool differences = AppGroups.Any(x => CleanAppGroupNames.Contains(x.Name) == false);
+            if (differences)
+                return true;
+            return base.IsDirty;
+        }
+        set => base.IsDirty = value;
     }
 }

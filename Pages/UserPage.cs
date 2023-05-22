@@ -1,10 +1,12 @@
 using Blazored.Toast.Services;
 using Fenrus.Components;
+using Fenrus.Components.Dialogs;
 using Fenrus.Models;
 using Fenrus.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace Fenrus.Pages;
 
@@ -21,6 +23,11 @@ public abstract class UserPage : ComponentBase
     /// Gets the translator to use for this page
     /// </summary>
     protected Translator Translator => App.Translator;
+    
+    /// <summary>
+    /// Gets or sets if the page is dirty and if dirty the user will be prompt to dismiss changes
+    /// </summary>
+    protected virtual bool IsDirty { get; set; }
     
     /// <summary>
     /// Gets or sets the Authentication state provider
@@ -130,14 +137,37 @@ public abstract class UserPage : ComponentBase
         SystemSettings = new Services.SystemSettingsService().Get();
 
         var accent = new DashboardService().GetAccentColorForUser(UserUid);
-        App.UpdateAccentColor(accent);
+        App.UpdateAccentColor(accent);       
+        
+        Router.RegisterLocationChangingHandler(OnLocationChanging);
+
 
         await PostGotUser();
     }
+
 
     /// <summary>
     /// Called after the user has been loaded
     /// </summary>
     protected virtual Task PostGotUser()
         => Task.CompletedTask;
+    
+
+    /// <summary>
+    /// Called prior to the navigation changing
+    /// </summary>
+    /// <param name="context">the location changing context</param>
+    /// <returns>an awaited task</returns>
+    private async ValueTask OnLocationChanging(LocationChangingContext context)
+    {
+        if (IsDirty)
+        {
+            var confirmed = await Confirm.Show(
+                Translator.Instant("Labels.UnsavedTitle"),
+                Translator.Instant("Labels.UnsavedMessage")
+            );
+            if(confirmed == false)
+                context.PreventNavigation();
+        }
+    }
 }

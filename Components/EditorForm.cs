@@ -40,4 +40,43 @@ public class EditorForm:ComponentBase
         if (Controls.Contains(control))
             Controls.Remove(control);
     }
+
+    /// <summary>
+    /// Gets if this editor is dirty
+    /// </summary>
+    /// <returns>true if dirty, otherwise false</returns>
+    public bool IsDirty()
+    {
+        foreach (var control in this.Controls)
+        {
+            if (control.Visible == false)
+                continue;
+            if (control.Dirty)
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Marks all inputs in this editor as clean
+    /// </summary>
+    public void MarkClean()
+    {
+        foreach (var control in this.Controls)
+        {
+            control.Dirty = false;
+        }
+    }
+
+    /// <summary>
+    /// Called after rendering
+    /// </summary>
+    /// <param name="firstRender">if the first render or not</param>
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+            this.MarkClean();
+        base.OnAfterRender(firstRender);
+    }
 }

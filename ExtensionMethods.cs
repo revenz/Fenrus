@@ -1,4 +1,6 @@
 using System.Security.Claims;
+using Blazored.Toast;
+using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Fenrus;

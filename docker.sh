@@ -12,6 +12,7 @@ hyperlink(){
 }
 
 cleanup() {
+  rm -rf build
   docker buildx rm fenrusbuilder >/dev/null 2>&1
   exit  
 }
@@ -21,20 +22,28 @@ docker container stop fenrus  >/dev/null 2>&1
 docker container rm fenrus >/dev/null 2>&1
 docker buildx rm fenrusbuilder >/dev/null 2>&1
 
+rm -rf build
+docker build -t docker-build -f DockerfileBuild . && docker run --rm -v "$(pwd)/build:/build" docker-build
+if [ -n "$(find "build" -maxdepth 0 -type d -empty 2>/dev/null)" ]; then
+  echo "Build failed"
+  exit 1
+fi
+rm -rf build/runtimes/win*
+rm -rf build/runtimes/osx*
+rm -rf build/ru-*
+
 docker buildx create --name fenrusbuilder --driver docker-container --platform linux/amd64,linux/arm64
 docker buildx use fenrusbuilder
 if [ "$1" = "--publish" ]; then
   docker buildx build --push --platform linux/arm64,linux/amd64 -t revenz/fenrus:dotnet -f Dockerfile .
-  cleanup
 elif [ "$1" = "--dev" ]; then
   docker buildx build --push --platform linux/arm64,linux/amd64 -t revenz/fenrus:develop -f Dockerfile .  
-  cleanup
+  # docker buildx build --push --platform linux/amd64 -t revenz/fenrus:develop -f Dockerfile .
 else
   docker buildx build -t fenrus --platform linux/amd64 -f Dockerfile .
 fi
 
-docker buildx rm fenrusbuilder
-# docker build -t fenrus -f Dockerfile .
+cleanup
 
 if [ "$1" = "--publish" ]; then
   read -p "Do you want to publish to Dockerhub? (Y/N) " answer

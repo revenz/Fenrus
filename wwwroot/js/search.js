@@ -62,7 +62,7 @@ class Searcher {
 
 
     /**
-     * Performs the actual serach
+     * Performs the actual search
      */
     performSearch()
     {
@@ -77,6 +77,9 @@ class Searcher {
             searchText = searchText.substring(1);
             if(!searchText) return;
         }
+        
+        if(!forceSearch && searchText.indexOf(' ') > 0)
+            forceSearch = true;
 
         if(!forceSearch) {
             if (/^(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}($|\/)/.test(searchText)) {
