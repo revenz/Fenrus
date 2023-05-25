@@ -48,7 +48,7 @@ public class HomeController : BaseController
         if (string.IsNullOrWhiteSpace(settings.Language) == false)
             Translator = Translator.GetForLanguage(settings.Language);
 
-        Dashboard dashboard = null;
+        Dashboard? dashboard = null;
         if (Guid.TryParse(Request.Cookies["dashboard"] ?? string.Empty, out Guid uid))
             dashboard = dashboards.FirstOrDefault(x => x.Uid == uid);
         dashboard ??= dashboards.MinBy(x => x.IsDefault ? 0 : 1) ?? new();
@@ -340,23 +340,54 @@ public class HomeController : BaseController
         return ShowDashboard(dashboard, new UserSettingsService().SettingsForGuest(), new ());
     }
 
+    // [HttpGet("signin-oidc")]
+    // [Authorize]
+    // public async Task<IActionResult> SigninOidc()
+    // {
+    //     Console.WriteLine("method: /signin-oidc");
+    //     Console.WriteLine("Username: " + (User?.Identity?.Name ?? string.Empty));
+    //     return await OAuthLogin();
+    // }
+
     /// <summary>
     /// Request an OAuth login
     /// </summary>
     [HttpGet("sso")]
-    [HttpGet("signin-oidc")]
     [Authorize]
     public async Task<IActionResult> OAuthLogin()
     {
+        Console.WriteLine("method: /sso");
         var settings = GetSystemSettings();
         if (settings.Strategy != AuthStrategy.OAuthStrategy)
             return Redirect("/login");
+        
+        if (User == null)
+            return ReturnUnauthorized("User is null");
+
+        // foreach (var claim in User.Claims)
+        // {
+        //     Console.WriteLine("Claim subject: " + claim.Subject);
+        //     Console.WriteLine("Claim type: " + claim.Type);
+        //     Console.WriteLine("Claim ValueType: " + claim.ValueType);
+        //     Console.WriteLine("Claim Issuer: " + claim.Issuer);
+        //     Console.WriteLine("Claim value: " + claim.Value);
+        // }
+        //
         string username = User?.Identity?.Name ?? string.Empty;
-        if (string.IsNullOrEmpty(username) || User?.Identity?.IsAuthenticated != true)
-            return new UnauthorizedResult();
-        User.Claims.Where(x =>
+        if (string.IsNullOrEmpty(username))
+            username = User.Claims.FirstOrDefault(x => x.Type == "name")?.Value ?? string.Empty;
+        
+        if (string.IsNullOrEmpty(username))
+            return ReturnUnauthorized("No username returned from OAuth");
+        
+        Console.WriteLine("User from signin-oidc: " + username);
+
+        if (User?.Identity?.IsAuthenticated != true)
+            return ReturnUnauthorized("User is not authenticated");
+        
+        var claims = User.Claims.Where(x =>
         {
-            string value = x.Value;
+            var value = x.Value;
             return value?.Contains("@") == true;
         }).ToList();
         
@@ -365,18 +396,24 @@ public class HomeController : BaseController
         if (user == null)
         {
             if(settings.AllowRegister == false)
-                return new UnauthorizedResult();
+                return ReturnUnauthorized("User registration is turned off.");
 
             var usersCount = service.GetAll().Count;
             user = service.Register(username,
                 PasswordGenerator.Generate(20, 5),
                 usersCount == 0);
-            if(user == null)
-                return new UnauthorizedResult();
+            if (user == null)
+                return ReturnUnauthorized("Failed to register new user.");
         }
             
         await CreateClaim(user.Uid, user.Name, user.IsAdmin);
         return Redirect("/");
+
+        IActionResult ReturnUnauthorized(string message)
+        {
+            Console.WriteLine(message);
+            return Unauthorized(message);
+        }
     }
 
     private async Task CreateClaim(Guid uid, string username, bool isAdmin)
