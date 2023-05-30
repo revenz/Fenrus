@@ -26,7 +26,10 @@ $notesMediaScreenSize: 1000px;
     background: $notesBackground;
     z-index: 2;
     border:solid 1px var(--border-color);
-    border-left: solid 7px $notesBackground;
+    border-left: solid 1px $notesBackground;
+    &:has( + .resizer:hover ){
+      border-left: solid 7px $notesBackground;
+    }
     cursor:pointer;
     opacity: 0.75;
     &:hover{ opacity: 1;}

@@ -27,6 +27,7 @@ class Searcher {
      */
     onKeyDown(event)
     {
+        console.log('search keydown', event.target.value);
         let original = event.target.value;
         setTimeout(()=> {
             let searchText = event.target.value;

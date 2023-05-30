@@ -1,7 +1,7 @@
 #fdrive-apps {
-  --grid-width:84px;
-  --grid-height:96px;
-  --font-size:0.9rem;
+  --grid-width:72px;
+  --grid-height:80px;
+  --font-size:1rem;
 }
 #fdrive-apps #apps-actual {
   padding: 1rem;
@@ -9,11 +9,11 @@
   height: calc(100% - var(--tabs-height));
   user-select: none;
 }
-@media (max-width: 1300px) {
+@media only screen and (min-resolution: 108dpi), only screen and (min-resolution: 1.08dppx) {
   #fdrive-apps {
-    --grid-width:72px;
-    --grid-height:80px;
-    --font-size:0.85rem;
+    --grid-width:84px;
+    --grid-height:96px;
+    --font-size:0.9rem;
   }
 }
 #fdrive-apps .group + .group {
@@ -84,7 +84,7 @@
   width: 1.5rem;
   height: 1.5rem;
   object-fit: contain;
-  bottom: 0rem;
+  bottom: 0.25rem;
   left: 0.5rem;
 }
 
@@ -151,14 +151,14 @@
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
-#fdrive-apps-iframe .app-target-container .header .controls .open-new-tab, #fdrive-apps-terminal .app-target-container .header .controls .open-new-tab {
+#fdrive-apps-iframe .app-target-container .header .controls .btn-newtab, #fdrive-apps-terminal .app-target-container .header .controls .btn-newtab {
+  background: var(--info);
+}
+#fdrive-apps-iframe .app-target-container .header .controls .btn-refresh, #fdrive-apps-terminal .app-target-container .header .controls .btn-refresh {
   background: var(--success);
 }
-#fdrive-apps-iframe .app-target-container .header .controls .close-button, #fdrive-apps-terminal .app-target-container .header .controls .close-button {
+#fdrive-apps-iframe .app-target-container .header .controls .btn-close, #fdrive-apps-terminal .app-target-container .header .controls .btn-close {
   background-color: var(--danger);
-}
-#fdrive-apps-iframe .app-target-container .header .controls .close-button:hover, #fdrive-apps-terminal .app-target-container .header .controls .close-button:hover {
-  background-color: #ff5555;
 }
 #fdrive-apps-iframe .app-target-container .header .address-bar, #fdrive-apps-terminal .app-target-container .header .address-bar {
   display: flex;

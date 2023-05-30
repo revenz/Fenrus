@@ -72,8 +72,9 @@ class IFrame extends FenrusPreview
             '      <input type="text" readonly>' +
             '    </div>' +
             '    <div class="controls">' +
-            '      <button class="open-new-tab"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>' +
-            '      <button class="close-button"><i class="fa-solid fa-xmark"></i></button>' +
+            '      <button class="btn-refresh"><i class="fa-solid fa-arrow-rotate-right"></i></button>' +
+            '      <button class="btn-newtab"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>' +
+            '      <button class="btn-close"><i class="fa-solid fa-xmark"></i></button>' +
             '    </div>' +
             '  </div>' +
             '  <div class="inner-container">' +
@@ -83,8 +84,12 @@ class IFrame extends FenrusPreview
         this.eleIframeAddress = this.container.querySelector('.address-bar input[type=text]');
         this.eleIframeFavicon = this.container.querySelector('.address-bar img');
         this.eleIframeContainer = this.container.querySelector('.inner-container');
-        this.container.querySelector('.close-button').addEventListener('click', () => this.close());
-        this.container.querySelector('.open-new-tab').addEventListener('click', () => {
+        this.container.querySelector('.btn-close').addEventListener('click', () => this.close());
+        this.container.querySelector('.btn-refresh').addEventListener('click', () =>
+        {
+            this.current.iframe.src = this.current.url;
+        });
+        this.container.querySelector('.btn-newtab').addEventListener('click', () => {
             let url = this.eleIframeAddress.value;
             if(!url)
                 return;

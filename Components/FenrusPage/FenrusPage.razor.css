@@ -41,6 +41,7 @@
   flex-direction: column;
   position: relative;
   flex-grow: 1;
+  overflow: auto;
 }
 
 /*# sourceMappingURL=FenrusPage.razor.css.map */

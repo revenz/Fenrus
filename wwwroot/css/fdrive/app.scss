@@ -5,13 +5,13 @@
     height:calc(100% - var(--tabs-height));
     user-select: none;
   }
-  --grid-width:84px;
-  --grid-height:96px;
-  --font-size:0.9rem;
-  @media (max-width:1300px) {
-    --grid-width:72px;
-    --grid-height:80px;
-    --font-size:0.85rem;    
+  --grid-width:72px;
+  --grid-height:80px;
+  --font-size:1rem;
+  @media only screen and (min-resolution: 108dpi), only screen and (min-resolution: 1.08dppx) {
+    --grid-width:84px;
+    --grid-height:96px;
+    --font-size:0.9rem;
   }
   .group {
     + .group {
@@ -84,7 +84,7 @@
     width: 1.5rem;
     height: 1.5rem;
     object-fit: contain;
-    bottom: 0rem;
+    bottom: 0.25rem;
     left: 0.5rem;
   }
 }
@@ -159,16 +159,14 @@
           transition: background-color 0.2s ease-in-out;
           
         }
-        .open-new-tab {
+        .btn-newtab {
+          background: var(--info);
+        }
+        .btn-refresh {
           background: var(--success);
         }
-
-        .close-button {
+        .btn-close {
           background-color: var(--danger);
-
-          &:hover {
-            background-color: #ff5555;
-          }
         }
       }
 
