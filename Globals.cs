@@ -7,10 +7,11 @@ public class Globals
 {
 
     private const string BuildNumber = "0";
+    private const string VersionNumber = "1.0.0";
     /// <summary>
     /// Gets the version number of Fenrus
     /// </summary>
-    public const string Version = "0.9.2." + BuildNumber;
+    public const string Version = VersionNumber + "." + BuildNumber;
     
     /// <summary>
     /// Gets or sets the encryption key used for data
