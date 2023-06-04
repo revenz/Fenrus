@@ -580,9 +580,9 @@ public partial class Profile: UserPage
         {
             if (AppsDirty)
                 return true;
-            if (AppsEditor.IsDirty() || CalendarEditor.IsDirty() || EmailEditor.IsDirty() || GeneralEditor.IsDirty() || FileStorageEditor.IsDirty())
+            if (AppsEditor?.IsDirty() == true || CalendarEditor?.IsDirty() == true || EmailEditor?.IsDirty() == true || GeneralEditor?.IsDirty() == true || FileStorageEditor?.IsDirty() == true)
                 return true;
-            bool differences = AppGroups.Any(x => CleanAppGroupNames.Contains(x.Name) == false);
+            bool differences = AppGroups?.Any(x => CleanAppGroupNames.Contains(x.Name) == false) == true;
             if (differences)
                 return true;
             return base.IsDirty;
