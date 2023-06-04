@@ -16,6 +16,12 @@ cleanup() {
   docker buildx rm fenrusbuilder >/dev/null 2>&1
   exit  
 }
+get_version() {
+  local date=$(date -u -d "+12 hours" +"%y.%m") # NZST date (yy.MM)
+  echo "$date"
+}
+
+version=$(get_version)
 
 git rev-list --count HEAD > gitversion.txt
 docker container stop fenrus  >/dev/null 2>&1
@@ -35,7 +41,12 @@ rm -rf build/ru-*
 docker buildx create --name fenrusbuilder --driver docker-container --platform linux/amd64,linux/arm64
 docker buildx use fenrusbuilder
 if [ "$1" = "--publish" ]; then
-  docker buildx build --push --platform linux/arm64,linux/amd64 -t revenz/fenrus:dotnet -f Dockerfile .
+  docker buildx build --push --platform linux/arm64,linux/amd64 \
+    -t revenz/fenrus:$version \
+    -t revenz/fenrus:latest \
+    -t revenz/fenrus \
+    -f Dockerfile .
+
 elif [ "$1" = "--dev" ]; then
   docker buildx build --push --platform linux/arm64,linux/amd64 -t revenz/fenrus:develop -f Dockerfile .  
   # docker buildx build --push --platform linux/amd64 -t revenz/fenrus:develop -f Dockerfile .
@@ -46,15 +57,21 @@ fi
 cleanup
 
 if [ "$1" = "--publish" ]; then
-  read -p "Do you want to publish to Dockerhub? (Y/N) " answer
-  if [ "$answer" == "Y" ] || [ "$answer" == "y" ]; then
-    echo Publishing docker image
-    docker tag fenrus revenz/fenrus:dotnet
-    docker push revenz/fenrus:dotnet
-  else
-      # do something else
-    echo Exited without pushing 
-  fi
+  # read -p "Do you want to publish to Dockerhub? (Y/N) " answer
+  # echo 'bob'
+  # exit
+  # if [ "$answer" == "Y" ] || [ "$answer" == "y" ]; then
+  #   echo Publishing docker image
+  #   docker tag fenrus revenz/fenrus
+  #   docker push revenz/fenrus
+  #   docker tag fenrus revenz/fenrus:latest
+  #   docker push revenz/fenrus:latest    
+  #   docker tag fenrus revenz/fenrus:$version
+  #   docker push revenz/fenrus:$version
+  # else
+  #     # do something else
+  #   echo Exited without pushing 
+  # fi
 elif [ "$1" = "--dev" ]; then
   echo Publishing develop docker image
   docker push revenz/fenrus:develop
