@@ -7,7 +7,6 @@ class Searcher {
      * Constructs a new instance of the Seacher
      */
     constructor(){
-        this.eleSearch = document.getElementById('search-text');
         this.divLaunchingApp = document.getElementById('launching-app');
         this.eleSerachIcon = document.getElementById('search-icon');
         if(document.getElementById('search-container'))
@@ -140,5 +139,6 @@ class Searcher {
     }
 }
 document.addEventListener('DOMContentLoaded', () => {
-    new Searcher();
+    if(document.getElementById('search-text'))
+        new Searcher();
 });
