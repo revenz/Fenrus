@@ -66,11 +66,15 @@ public class DashboardAppController: BaseController
 
         List<Group> groups;
         string groupKey = userUid + "_Groups";
-        if (Cache.TryGetValue<List<Group>>(groupKey, out groups) == false)
+        lock (Cache)
         {
-            groups = new GroupService().GetAllForUser(userUid) ?? new();
-            // short cache of ths, just so if many apps are requesting at once
-            Cache.Set(groupKey, groups, TimeSpan.FromSeconds(30));
+            if (Cache.TryGetValue<List<Group>>(groupKey, out groups) == false)
+            {
+                var service = new GroupService();
+                groups = service.GetAllForUser(userUid).Union(service.GetSystemGroups(enabledOnly: true)).ToList();
+                // short cache of ths, just so if many apps are requesting at once
+                Cache.Set(groupKey, groups, TimeSpan.FromSeconds(30));
+            }
         }
 
 
