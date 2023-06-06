@@ -12,7 +12,7 @@ hyperlink(){
 }
 
 cleanup() {
-  rm -rf build
+  rm -rf build >/dev/null 2>&1
   docker buildx rm fenrusbuilder >/dev/null 2>&1
   exit  
 }
@@ -29,6 +29,11 @@ docker container rm fenrus >/dev/null 2>&1
 docker buildx rm fenrusbuilder >/dev/null 2>&1
 
 rm -rf build
+if [ -d "build" ]; then
+  echo /build exists, delete before continuing
+  exit
+fi
+
 docker build -t docker-build -f DockerfileBuild . && docker run --rm -v "$(pwd)/build:/build" docker-build
 if [ -n "$(find "build" -maxdepth 0 -type d -empty 2>/dev/null)" ]; then
   echo "Build failed"
@@ -53,6 +58,8 @@ elif [ "$1" = "--dev" ]; then
 else
   docker buildx build -t fenrus --platform linux/amd64 -f Dockerfile .
 fi
+
+echo Docker built
 
 cleanup
 

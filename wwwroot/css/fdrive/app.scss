@@ -5,14 +5,9 @@
     height:calc(100% - var(--tabs-height));
     user-select: none;
   }
-  --grid-width:72px;
-  --grid-height:80px;
+  --grid-width: 7rem;
+  --grid-height: 7.5rem;
   --font-size:1rem;
-  @media only screen and (min-resolution: 108dpi), only screen and (min-resolution: 1.08dppx) {
-    --grid-width:84px;
-    --grid-height:96px;
-    --font-size:0.9rem;
-  }
   .group {
     + .group {
       margin-top:1rem;
