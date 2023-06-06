@@ -7,7 +7,7 @@
   }
   --grid-width: 7rem;
   --grid-height: 8rem;
-  --font-size:1rem;
+  --font-size:0.95rem;
   .group {
     + .group {
       margin-top:1rem;
@@ -28,6 +28,7 @@
   .drive-app {
     width:100%;
     height:var(--grid-height);
+    cursor:pointer;
     &.selected .drive-app-inner {
       background: rgba(var(--accent-rgb), 0.3) !important;
 

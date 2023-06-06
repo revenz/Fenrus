@@ -128,6 +128,8 @@ public class SettingsController : BaseController
                 Error = "Invalid dashboard"
             });
         }
+
+        string linkTarget = null;
         switch (setting)
         {
             case nameof(dashboard.AccentColor):
@@ -153,6 +155,7 @@ public class SettingsController : BaseController
                 break;
             case nameof(dashboard.LinkTarget):
                 dashboard.LinkTarget = value;
+                linkTarget = value;
                 break;
             case nameof(dashboard.ShowSearch):
                 dashboard.ShowSearch = bool.Parse(value);
@@ -173,6 +176,7 @@ public class SettingsController : BaseController
             showGroupTitles = dashboard.ShowGroupTitles,
             showStatusIndicators = dashboard.ShowStatusIndicators,
             showSearch = dashboard.ShowSearch,
+            linkTarget,
             reload
         });
     }

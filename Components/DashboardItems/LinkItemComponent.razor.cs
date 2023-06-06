@@ -34,11 +34,26 @@ public partial class LinkItemComponent
     /// </summary>
     [Parameter] public Dictionary<string, int> UpTimeStates { get; init; }
 
-    private string Target, OnClickCode, SerializedJsSafeModel, Css;
+    private string? Target;
+    private string OnClickCode, SerializedJsSafeModel, Css;
 
+    /// <summary>
+    /// Gets the link target to use
+    /// </summary>
+    /// <returns>the link target to use</returns>
+    private string? GetLinkTarget()
+    {
+        string target = Model.Target?.EmptyAsNull() ?? Dashboard?.LinkTarget?.EmptyAsNull() ?? "_self";
+        return target switch
+        {
+            "_this" => "_blank",
+            "_self" => null,
+            _ => target
+        };
+    }
     protected override void OnInitialized()
     {
-        Target = Model.Target?.EmptyAsNull() ?? Dashboard.LinkTarget?.EmptyAsNull() ?? "_self";
+        Target = GetLinkTarget();
         SerializedJsSafeModel = JsonSerializer.Serialize(Model).Replace("'", "\\'");
         OnClickCode = Target == "IFrame"
             ? $"openIframe(event, '{SerializedJsSafeModel}'); return false;"

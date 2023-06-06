@@ -415,10 +415,15 @@ function UpdateSettingValue(url, event)
             
             if(json.linkTarget){
                 // need to update all the targets
-                for(let a of eleDashboard.querySelectorAll('a'))
+                for(let a of eleDashboard.querySelectorAll('a.db-item'))
                 {
-                    if(a.getAttribute('href').length > 1)
-                        a.setAttribute('target', json.linkTarget);
+                    let target = json.linkTarget === '_this' ? "_blank" : json.linkTarget === '_self' ? null : json.linkTarget;
+                    if(a.getAttribute('href')?.length > 1) {
+                        if(target)
+                            a.setAttribute('target', target);
+                        else
+                            a.removeAttribute('target');
+                    }
                 }
             }
             resolve({ result: json, value: value});

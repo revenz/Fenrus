@@ -45,12 +45,28 @@ public partial class AppItemComponent
     private FenrusApp App { get; set; }
 
     private string Css;
-    private string Target, OnClickCode, SerializedJsSafeModel, Icon, Title;
+    private string? Target;
+    private string OnClickCode, SerializedJsSafeModel, Icon, Title;
     private string isUpClass = string.Empty;
+
+    /// <summary>
+    /// Gets the link target to use
+    /// </summary>
+    /// <returns>the link target to use</returns>
+    private string? GetLinkTarget()
+    {
+        string target = Model.Target?.EmptyAsNull() ?? Dashboard?.LinkTarget?.EmptyAsNull() ?? "_self";
+        return target switch
+        {
+            "_this" => "_blank",
+            "_self" => null,
+            _ => target
+        };
+    }
 
     protected override void OnInitialized()
     {
-        Target = Model.Target?.EmptyAsNull() ?? Dashboard?.LinkTarget?.EmptyAsNull() ?? "_self";
+        Target = GetLinkTarget();
         SerializedJsSafeModel = JsonSerializer.Serialize(Model).Replace("'", "\\'");
         OnClickCode = Target == "IFrame"
             ? $"openIframe(event, '{SerializedJsSafeModel}'); return false;"

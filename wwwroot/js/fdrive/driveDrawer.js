@@ -19,6 +19,9 @@ class FenrusDriveDrawer {
         if(document.getElementById('fdrive-apps'))
             this.features.push({ name: 'Apps', instance: new FenrusDriveApps(), icon: '/images/apps.svg'});
         
+        if(this.features.length === 0)
+            return;
+        
         let ftabs = document.getElementById('fdrive-tabs');
         for(let i=0;i<this.features.length;i++)
         {
