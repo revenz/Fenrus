@@ -535,11 +535,11 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function sizeAdjustment(size){
-    document.documentElement.style.fontSize = `calc(var(--site-font-size) + ${size}px)`;
+    document.documentElement.style.fontSize = `calc(var(--site-font-size) + ${size / 2}px)`;
     let ele = document.getElementById('slider-SizeAdjustment');
     if(ele) {
-        let min = -5;
-        let max = 5;
+        let min = -10;
+        let max = 10;
         let percent = ((size - min) / (max - min)) * 100;
         ele.style.backgroundSize = `${percent}% 100%`;
         if(ele.value !== size)

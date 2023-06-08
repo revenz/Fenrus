@@ -73,8 +73,8 @@
         <span class="value">
             @{
                 var value = 0;
-                int min = -5;
-                int max = 5;
+                int min = -10;
+                int max = 10;
                 var percent = (double)(value - min) / (max - min) * 100;
                 var style = $"background-size: {percent}% 100%";
                 <input onchange="UpdateSetting('SizeAdjustment', event)" id="slider-SizeAdjustment" style="@style" type="range" min="@min" max="@max" value="@value" />
