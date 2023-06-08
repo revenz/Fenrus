@@ -1,21 +1,23 @@
 #fdrive-apps {
   #apps-actual {
-    padding:1rem;
-    width:calc(100% - 2rem);
+    padding:1em;
+    width:calc(100% - 2em);
     height:calc(100% - var(--tabs-height));
     user-select: none;
+    font-size:0.9rem;
+    
   }
-  --grid-width: 7rem;
-  --grid-height: 8rem;
-  --font-size:0.95rem;
+  --grid-width: 7em;
+  --grid-height: 8em;
+  --font-size:0.95em;
   .group {
     + .group {
-      margin-top:1rem;
+      margin-top:1em;
     }
     > .title {
       display: block;
       font-size:calc(var(--font-size) * 1.1);
-      margin: 0 0 0.5rem 0.5rem;
+      margin: 0 0 0.5em 0.5em;
       text-transform: uppercase;
     }
     .apps {
@@ -40,11 +42,11 @@
   .drive-app-inner {
     position:relative;
     overflow: hidden;
-    margin:0.25rem;
-    padding:0.25rem;
-    width:calc(100% - 1rem);
-    height:calc(100% - 1rem);
-    border-radius:0.5rem;
+    margin:0.25em;
+    padding:0.25em;
+    width:calc(100% - 1em);
+    height:calc(100% - 1em);
+    border-radius:0.5em;
     &:hover {
       background: rgba(var(--accent-rgb), 0.4) !important;      
     }
@@ -54,34 +56,34 @@
     word-break: break-word;
     display: block;
     font-size:var(--font-size);
-    height: calc(45% - 0.5rem);
+    height: calc(45% - 0.5em);
     text-overflow: ellipsis;
     overflow: hidden;
   }
   .icon {
-    width: calc(100% - 2rem);
-    padding:0 1rem 0.25rem;
+    width: calc(100% - 2em);
+    padding:0 1em 0.25em;
     height: 60%;
     display: flex;
     justify-content: center;
     position: relative;
-    margin-bottom:0.25rem;
+    margin-bottom:0.25em;
     img:not(.shortcut) {
-      border-radius: 0.25rem;
+      border-radius: 0.25em;
       object-fit: contain;
       max-width: 120%;
     }
     i {
-      font-size:10rem;
+      font-size:10em;
     }
   }
   .shortcut {
     position: absolute;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.5em;
+    height: 1.5em;
     object-fit: contain;
-    bottom: 0.25rem;
-    left: 0.5rem;
+    bottom: 0.25em;
+    left: 0.5em;
   }
 }
 
@@ -91,9 +93,9 @@
   position: absolute;
   right: 0;
   top: 0;
-  padding: 2rem;
-  height: calc(100% - 4rem);
-  width: calc(100% - 4rem);
+  padding: 2em;
+  height: calc(100% - 4em);
+  width: calc(100% - 4em);
   transition: transform 0.2s ease-in-out;
   transform: translateX(100%);
   background: var(--base);
@@ -118,35 +120,35 @@
     background-color: $background-color;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     color: var(--color);
-    border-radius:1rem;
+    border-radius:1em;
 
     .header {
       position: absolute;
       top: 0;
       left: 0;
-      width: calc(100% - 2rem);
+      width: calc(100% - 2em);
       height: 50px;
       background-color: lighten($background-color, 3%);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1rem;
-      border-top-left-radius: 1rem;
-      border-top-right-radius: 1rem;
+      padding: 0 1em;
+      border-top-left-radius: 1em;
+      border-top-right-radius: 1em;
 
       .controls {
         display: flex;
         align-items: center;
         button + button {
-          margin-left:0.75rem;
+          margin-left:0.75em;
         }
         
         button {
           color: var(--color);
           border: none;
-          font-size: 1rem;
-          width: 1.5rem;
-          height: 1.5rem;
+          font-size: 1em;
+          width: 1.5em;
+          height: 1.5em;
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -172,24 +174,24 @@
         flex-grow:1;
         transition: background-color 0.2s ease-in-out;
         background-color: #090909;
-        border-radius: 0.75rem;
-        padding: 0.5rem 1rem;
+        border-radius: 0.75em;
+        padding: 0.5em 1em;
         margin-right: 10px;
-        width: calc(100% - 3rem);
+        width: calc(100% - 3em);
         display:flex;
         flex-direction: row;
         
         img:not(.shortcut) {
           height:90%;
-          width:2rem;
-          margin-right: 0.5rem;
+          width:2em;
+          margin-right: 0.5em;
           object-fit: contain;
         }
 
         input[type="text"] {
-          height: 1.5rem;
+          height: 1.5em;
           border: none;
-          font-size: 1.1rem;
+          font-size: 1.1em;
           background: transparent;
           flex-grow:1;
           color: var(--color);
@@ -214,13 +216,13 @@
         width: 100%;
         height: 100%;
         border: none;
-        border-bottom-left-radius: 1rem;
-        border-bottom-right-radius: 1rem;
+        border-bottom-left-radius: 1em;
+        border-bottom-right-radius: 1em;
       }
       > div {
-        width: calc(100% - 2rem);
-        height: calc(100% - 2rem);
-        padding:1rem;
+        width: calc(100% - 2em);
+        height: calc(100% - 2em);
+        padding:1em;
         background:#000;
       }
     }
