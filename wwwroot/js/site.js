@@ -218,6 +218,12 @@ function UpdateSetting(setting, event)
         changeDashboard(event);
         return;
     }
+    if(setting === 'SizeAdjustment'){
+        let value = event.target.value;
+        localStorage.setItem('SizeAdjustment', value);
+        sizeAdjustment(value);
+        return;
+    }
     UpdateSettingValue(`/settings/update-setting/${setting}/#VALUE#`, event);
 }
 
@@ -367,6 +373,7 @@ async function UpdateThemeSetting(theme, setting, event)
 
 function UpdateSettingValue(url, event)
 {
+    let dashboardSetting = url.indexOf('/dashboard') >= 0;
     return new Promise((resolve, reject) => {
        
         if(event?.target?.className === 'slider round') {
@@ -399,6 +406,9 @@ function UpdateSettingValue(url, event)
                 window.location.reload();
                 return;
             }
+            
+            if(!dashboardSetting)
+                return;
     
             let eleDashboard = document.querySelector('.dashboard');
             eleDashboard.classList.remove('hide-group-titles');
@@ -515,3 +525,27 @@ window.focusElement = (element, delay) => {
         element.focus();
     }
 };
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    let size = parseInt(localStorage.getItem('SizeAdjustment') || 0);
+    if (isNaN(size))
+        size = 0;
+    sizeAdjustment(size);
+});
+
+function sizeAdjustment(size){
+    document.documentElement.style.fontSize = `calc(var(--site-font-size) + ${size}px)`;
+    let ele = document.getElementById('slider-SizeAdjustment');
+    if(ele) {
+        let min = -5;
+        let max = 5;
+        let percent = ((size - min) / (max - min)) * 100;
+        ele.style.backgroundSize = `${percent}% 100%`;
+        if(ele.value !== size)
+            ele.value = size;
+    }
+    let eleValue = document.getElementById('SizeAdjustment-value');
+    if(eleValue)
+        eleValue.innerText = size;
+}

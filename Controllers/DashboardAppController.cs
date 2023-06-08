@@ -63,7 +63,6 @@ public class DashboardAppController: BaseController
     /// <returns>the app</returns>
     private AppInstance? GetAppInstance(Guid userUid, string name, Guid uid)
     {
-
         List<Group> groups;
         string groupKey = userUid + "_Groups";
         lock (Cache)
@@ -76,7 +75,6 @@ public class DashboardAppController: BaseController
                 Cache.Set(groupKey, groups, TimeSpan.FromSeconds(30));
             }
         }
-
 
         if (groups.SelectMany(x => x.Items).FirstOrDefault(x => x.Uid == uid) is AppItem userApp == false)
             return null;

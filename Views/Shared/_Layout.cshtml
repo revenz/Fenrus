@@ -12,7 +12,7 @@
     var themeInstance = ViewBag.Theme;
     var theme = themeInstance.Name;
     bool isGuest = ViewBag.IsGuest;
-    var userSettings = ViewBag.UserSettings;
+    var userSettings = ViewBag.UserSettings as UserSettings;
     var dashboards = ViewBag.Dashboards;
     var dashboard = ViewBag.Dashboard;
     var searchEngines = ViewBag.SearchEngines;
@@ -41,6 +41,7 @@
             }
         </style>
     }
+    
     
     @{
         var accentColor = ViewBag.AccentColor ?? "#FF0090";

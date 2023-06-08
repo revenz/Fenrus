@@ -28,7 +28,7 @@ public class UserSettings: IModal
     /// Gets or sets the language for this user
     /// </summary>
     public string Language { get; set; }
-
+    
     /// <summary>
     /// Gets or sets the users theme settings
     /// </summary>

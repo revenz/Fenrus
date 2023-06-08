@@ -66,6 +66,25 @@
                               Code="UpdateDashboardSetting('LinkTarget', event)" />
         </span>
     </div>
+    
+    
+    <div class="setting integer">
+        <span class="label">@Translator.Instant($"Labels.SizeAdjustment")</span>
+        <span class="value">
+            @{
+                var value = 0;
+                int min = -5;
+                int max = 5;
+                var percent = (double)(value - min) / (max - min) * 100;
+                var style = $"background-size: {percent}% 100%";
+                <input onchange="UpdateSetting('SizeAdjustment', event)" id="slider-SizeAdjustment" style="@style" type="range" min="@min" max="@max" value="@value" />
+                <span class="range-value" id="SizeAdjustment-value">@value</span>
+            }
+        </span>
+    </div>
+    
+    
+    
     @if (SearchEngines?.Any() == true || SystemSearchEngines?.Any() == true)
     {
         <div class="setting">
