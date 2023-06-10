@@ -54,7 +54,9 @@ where T : IModal
 
     protected virtual async Task Add()
     {
-        Router.NavigateTo($"/settings/{GetTypeNameRoute()}/" + Guid.Empty + 
-                          (IsSystem ? "isSystem=true" : string.Empty));   
+        if(IsSystem)
+            Router.NavigateTo($"/settings/system/{GetTypeNameRoute()}/" + Guid.Empty);
+        else
+            Router.NavigateTo($"/settings/{GetTypeNameRoute()}/" + Guid.Empty);   
     }
 }
