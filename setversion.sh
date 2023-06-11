@@ -6,25 +6,18 @@ get_version() {
   local version=$(date -u -d "$date" +"%y.%m.")$week_number
   echo "$version"
 }
-
 get_week_number() {
-  local date=$1
-  local first_day_of_month=$(date -u -d "$(date -u -d "$date" +"%Y-%m-01T00:00:00%z")" +"%Y-%m-%dT%H:%M:%S%z") # First day of the month
-  local days_until_first_monday=$(( ( $(date -u -d "$first_day_of_month" +"%u") + 7 - 1 ) % 7 )) # Days until the first Monday of the month
-  local first_monday_of_month=$(date -u -d "$first_day_of_month +$days_until_first_monday days" +"%Y-%m-%dT%H:%M:%S%z") # First Monday of the month
+    local date="$1"
+    local first_day_of_month=$(date -d "$date" +%Y-%m-01)
+    local first_day_of_week="Monday"
 
-  if [[ $date < $first_monday_of_month ]]; then
-    echo 1
-  else
-    local week_number=$(( ( $(date -u -d "$date" +"%d") - $(date -u -d "$first_monday_of_month" +"%d") ) / 7 + 1 ))
-    local next_monday=$(date -u -d "$first_monday_of_month +$((week_number * 7)) days" +"%Y-%m-%dT%H:%M:%S%z")
-    
-    if [[ $next_monday > $date ]]; then
-      echo $week_number
-    else
-      echo $((week_number + 1))
-    fi
-  fi
+    # Find the first day of the week that falls on or before the first day of the month
+    while [[ $(date -d "$first_day_of_month" +%A) != "$first_day_of_week" ]]; do
+        first_day_of_month=$(date -d "$first_day_of_month - 1 day" +%Y-%m-%d)
+    done
+
+    local week_number=$((($(date -d "$date" +%s) - $(date -d "$first_day_of_month" +%s)) / (60 * 60 * 24 * 7) + 1))
+    echo "$week_number"
 }
 
 versionNumber=$(get_version)
