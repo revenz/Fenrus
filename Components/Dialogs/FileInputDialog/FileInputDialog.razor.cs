@@ -55,8 +55,8 @@ public partial class FileInputDialog
         if (this.browserFile == null)
             return;
         
-        // maximum of 10MiB
-        var content = await new StreamReader(this.browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024)).ReadToEndAsync();
+        // maximum of 50MiB
+        var content = await new StreamReader(this.browserFile.OpenReadStream(maxAllowedSize: 50 * 1024 * 1024)).ReadToEndAsync();
         
         this.Visible = false;
         Instance.ShowTask.TrySetResult(content);
