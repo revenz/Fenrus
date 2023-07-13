@@ -21,7 +21,7 @@ For support use our [Discord Server](https://discord.gg/xbYK8wFMeU)
 ## Installation
 
 ### Dotnet
-Fenrus is a Dotnet application and requires [ASP.NET Core Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) to run.  
+Fenrus is a Dotnet application and requires [ASP.NET Core Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) to run.  
 
 Then you can run Fenrus
 ```
