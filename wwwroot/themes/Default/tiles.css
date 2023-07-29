@@ -341,7 +341,7 @@
   max-width: 100%;
 }
 
-.db-item.update-error::before {
+.db-item.update-error[x-monitor="1"]::before {
   content: "";
   position: absolute;
   left: 0;

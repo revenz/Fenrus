@@ -413,7 +413,7 @@ $margin:0;
     }
 }
 
-.db-item.update-error {
+.db-item.update-error[x-monitor='1'] {
     &::before {
         content: '';
         position: absolute;
