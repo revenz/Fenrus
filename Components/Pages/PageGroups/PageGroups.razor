@@ -27,7 +27,7 @@
                 <Header></Header>
                 <Cell Context="item">
                     <div class="actions">
-                        <a title="@lblEdit" class="fa-solid fa-pen-to-square" href="/settings/dashboards/@item.Uid"></a>
+                        <a title="@lblEdit" class="fa-solid fa-pen-to-square" href="/settings/@(IsSystem ? "system/" : "")groups/@item.Uid"></a>
                         <span title="@lblDelete" class="fa-solid fa-trash" @onclick="() => Remove(item)"></span>
                     </div>
                 </Cell>
