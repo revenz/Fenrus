@@ -2,6 +2,7 @@ using Fenrus.Controllers;
 using Fenrus.Models;
 using Fenrus.Pages;
 using Markdig.Extensions.Tables;
+using Microsoft.AspNetCore.Components;
 using Renci.SshNet.Messages.Transport;
 using Group = Fenrus.Models.Group;
 

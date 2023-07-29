@@ -42,6 +42,11 @@
                         <Fenrus.Components.DashboardItems.AppItemComponent 
                             Model=@app Settings=@Settings UpTimeStates="@UpTimeStates" IsGuest="@IsGuest" />
                     }
+                    else if (item is DashboardLinkItem dbLink)
+                    {
+                        <Fenrus.Components.DashboardItems.DashboardLinkComponent 
+                            Model=@dbLink Settings=@Settings IsGuest="@IsGuest" />
+                    }
                 }
             </div>
         </div>

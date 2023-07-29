@@ -56,6 +56,33 @@ public class HomeController : BaseController
         return ShowDashboard(dashboard, settings, profile);
     }
 
+    /// <summary>
+    /// Shows a specific dashboard
+    /// </summary>
+    /// <param name="uid">the UID of the dashboard</param>
+    /// <returns>>the response</returns>
+    [HttpGet("{uid:Guid}")]
+    public IActionResult Dashboard([FromRoute] Guid uid)
+    {
+        var settings = GetUserSettings();
+        if(settings == null)
+            return Redirect("/login");
+        var dbService = new DashboardService();
+        var dashboards = dbService.GetAllForUser(settings.UserUid);
+        var db = dashboards.FirstOrDefault(x => x.Uid == uid);
+        if (db == null)
+        {
+            // check if its the default dashboard
+            var guest = dbService.GetGuestDashboard();
+            if(guest != null && guest.Uid != uid)
+                return Redirect("/");
+            db = guest;
+        }
+        var profile = new UserService().GetProfileByUid(settings.UserUid);
+        return ShowDashboard(db, settings, profile);
+        
+    }
+
     private IActionResult ShowDashboard(Dashboard dashboard, UserSettings settings, UserProfile profile)
     {
         if (string.IsNullOrEmpty(dashboard.BackgroundImage) == false)

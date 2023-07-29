@@ -17,8 +17,10 @@ public partial class FenrusPopup
     /// This differs from the other editor as this will yield multiple items back if kept open
     /// </summary>
     /// <param name="translator">The translator to use</param>
+    /// <param name="isSystem">if this is for a system group or not</param>
+    /// <param name="user">the user</param>
     /// <returns>a async list of items being added, each item is returned as it is added</returns>
-    public async IAsyncEnumerable<PopupResult<GroupItem>> GroupItemEditorNew(Translator translator)
+    public async IAsyncEnumerable<PopupResult<GroupItem>> GroupItemEditorNew(Translator translator, bool isSystem, User user)
     {
         bool done = false;
         TaskCompletionSource<PopupResult<GroupItem>> task = new ();
@@ -29,6 +31,8 @@ public partial class FenrusPopup
             Parameters = new()
             {
                 { nameof(SideEditors.GroupItemEditor.Translator), translator },
+                { nameof(SideEditors.GroupItemEditor.IsSystem), isSystem },
+                { nameof(SideEditors.GroupItemEditor.User), user },
                 { nameof(SideEditors.GroupItemEditor.Item), null },
                 {
                     // this event fires, but keeps the editor opened, so we're not done yet
@@ -81,9 +85,11 @@ public partial class FenrusPopup
     /// Opens a group item editor
     /// </summary> 
     /// <param name="translator">The translator to use</param>
-    /// <param name="item">the group item to edit/param>
+    /// <param name="item">the group item to edit</param>
+    /// <param name="isSystem">if this is for a system group or not</param>
+    /// <param name="user">the user</param>
     /// <returns>the result of the editor</returns>
-    public Task<PopupResult<GroupItem>> GroupItemEditor(Translator translator, GroupItem item)
+    public Task<PopupResult<GroupItem>> GroupItemEditor(Translator translator, GroupItem item, bool isSystem, User user)
     {
         TaskCompletionSource<PopupResult<GroupItem>> task = new ();
         FenrusPopupItem popup = null;
@@ -93,6 +99,8 @@ public partial class FenrusPopup
             Parameters = new()
             {
                 { nameof(SideEditors.GroupItemEditor.Translator), translator },
+                { nameof(SideEditors.GroupItemEditor.IsSystem), isSystem },
+                { nameof(SideEditors.GroupItemEditor.User), user },
                 { nameof(SideEditors.GroupItemEditor.Item), item },
                 {
                     nameof(SideEditors.GroupItemEditor.OnSaved),

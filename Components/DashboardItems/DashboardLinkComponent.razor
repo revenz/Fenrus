@@ -1,0 +1,14 @@
+<a id="@Model.Uid" title="@TargetDashboard?.Name" href="/@Model.DashboardUid" 
+   class="db-item db-dashboard db-basic @Model.Size.ToString().ToLower()"
+   oncontextmenu="@(IsGuest ? string.Empty : $"openContextMenu(event, '{SerializedJsSafeModel}'); return false;")"
+>
+    <div class="inner">
+        <div class="icon">
+            <img src="@GetIcon()" />
+        </div>
+        <div class="content">
+            <div class="title">@TargetDashboard?.Name</div>
+        </div>
+        <div class="arrow"></div>
+    </div>
+</a>

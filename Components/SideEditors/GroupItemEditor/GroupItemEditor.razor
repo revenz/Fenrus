@@ -40,7 +40,14 @@
                     }
                 </InputSelect>
             }
-            <InputText Page="GroupItem" @bind-Value="@Model.Name" Label="Name" Required="true"></InputText>
+            else if (Model.Type == "Dashboard")
+            {
+                <InputSelect TItem="Guid"  Page="GroupItem" Label="Dashboard" Options="@Dashboards" @bind-Value="@Model.DashboardUid" />
+            }
+            @if (Model.Type != "Dashboard")
+            {
+                <InputText Page="GroupItem" @bind-Value="@Model.Name" Label="Name" Required="true"></InputText>
+            }
             @if (Model.Type == "DashboardApp" || Model.Type == "DashboardLink")
             {
                 <InputSelect Page="GroupItem" TItem="string" Label="Target" @bind-Value="@Model.Target">

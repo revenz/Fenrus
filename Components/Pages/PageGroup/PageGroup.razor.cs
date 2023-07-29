@@ -147,7 +147,7 @@ public partial class PageGroup: CommonPage<Models.Group>
     /// </summary>
     async Task AddItem()
     {
-        await foreach(var result in Popup.GroupItemEditorNew(Translator))
+        await foreach(var result in Popup.GroupItemEditorNew(Translator, IsSystem, User))
         {
             if (result.Success)
             {
@@ -197,7 +197,7 @@ public partial class PageGroup: CommonPage<Models.Group>
     async Task Edit(GroupItem item)
     {
         var index = Model.Items.IndexOf(item);
-        var result = await Popup.GroupItemEditor(Translator, item);
+        var result = await Popup.GroupItemEditor(Translator, item, IsSystem, User);
         if (result.Success == false)
             return;
         Model.Items[index] = result.Data;

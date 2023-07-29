@@ -41,9 +41,7 @@ function openDefaultContextMenu(event) {
         menu.init();
         contextMenus['DEFAULT'] = menu;
     }
-    
-    console.log('contextMenus[\'DEFAULT\']', contextMenus['DEFAULT']);
-    
+        
     contextMenus['DEFAULT'].open(event);
 }
 
@@ -62,7 +60,7 @@ function openContextMenu(event, app){
     let monitor = ele.getAttribute('x-monitor') === '1';
     let docker = ele.getAttribute('x-docker');
     let systemGroup = group.className.indexOf('system-group') > 0;
-    let smart = ele.getAttribute('class').indexOf('db-smart');
+    let smart = ele.getAttribute('class').indexOf('db-smart') && app.Type !== 'Dashboard';
     if(!contextMenus[uid])
     {
         let menuItems = [];

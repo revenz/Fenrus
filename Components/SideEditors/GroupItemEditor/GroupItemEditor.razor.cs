@@ -26,6 +26,14 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
     /// </summary>
     [Parameter] public GroupItem Item { get; set; }
     /// <summary>
+    /// Gets or sets if this is for a system group or not
+    /// </summary>
+    [Parameter] public bool IsSystem { get; set; }
+    /// <summary>
+    /// Gets or sets the user
+    /// </summary>
+    [Parameter] public User User { get; set; }
+    /// <summary>
     /// Gets or sets the callback when this editor is saved (and not kept open)
     /// </summary>
     [Parameter] public EventCallback<GroupItem> OnSaved { get; set; }
@@ -157,6 +165,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
         lblTestSuccesful, lblTestFailed;
 
     private List<ListOption> DockerServers;
+    private List<ListOption> Dashboards = new ();
     protected override void OnInitialized()
     {
         lblAdd = Translator.Instant("Labels.Add");
@@ -201,7 +210,19 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
                 Value = Guid.Empty
             });
         }
-        
+
+        if (IsSystem == false && User != null)
+        {
+            var dashboards = new DashboardService().GetAllForUser(User.Uid)
+                .Where(x => x.Enabled)
+                .OrderBy(x => x.Name);
+            Dashboards.Clear();
+            foreach (var db in dashboards)
+            {
+                Dashboards.Add(new ListOption() { Label = db.Name, Value = db.Uid });
+            } 
+        }
+
         this.Model = new();
         Title = "Edit Item";
         IsNew = false;
@@ -238,6 +259,14 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             Model.Size = link.Size;
             Model.Uid = link.Uid;
             Model.Monitor = link.Monitor;
+        }
+        else if (Item is DashboardLinkItem dbLink)
+        {
+            Model.ItemType = dbLink.Type;
+            Model.DashboardUid = dbLink.DashboardUid;
+            Model.Icon = dbLink.Icon;
+            Model.Size = dbLink.Size;
+            Model.Uid = dbLink.Uid;
         }
         else
         {
@@ -321,6 +350,16 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
                     link.Size = Model.Size;
                     link.Uid = Model.Uid;
                     result = link;
+                }
+                break;
+            case "Dashboard":
+                {
+                    var dbLink = new DashboardLinkItem();
+                    dbLink.Icon = Model.Icon;
+                    dbLink.Size = Model.Size;
+                    dbLink.Uid = Model.Uid;
+                    dbLink.DashboardUid = Model.DashboardUid;
+                    result = dbLink;
                 }
                 break;
             default:
@@ -495,6 +534,10 @@ class GroupItemEditorModel : GroupItem
     /// Gets or sets the target to open this item
     /// </summary>
     public string Target { get; set; }
+    /// <summary>
+    /// Gets or sets the Dashboard UID for this item
+    /// </summary>
+    public Guid DashboardUid { get; set; }
 
     /// <summary>
     /// Gets or sets the SSH Server for this item
