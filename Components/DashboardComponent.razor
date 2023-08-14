@@ -47,6 +47,11 @@
                         <Fenrus.Components.DashboardItems.DashboardLinkComponent 
                             Model=@dbLink Settings=@Settings IsGuest="@IsGuest" />
                     }
+                    else if (item is TerminalItem terminal)
+                    {
+                        <Fenrus.Components.DashboardItems.TerminalItemComponent 
+                            Model=@terminal Settings=@Settings />
+                    }
                 }
             </div>
         </div>

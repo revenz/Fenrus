@@ -362,6 +362,39 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
                     result = dbLink;
                 }
                 break;
+            case "DashboardTerminal":
+                {
+                    var terminal = new TerminalItem();
+                    terminal.Icon = Model.Icon;
+                    terminal.Size = Model.Size;
+                    terminal.Uid = Model.Uid;
+                    terminal.TerminalType = Model.TerminalType.ToLowerInvariant() == "docker"
+                        ? TerminalType.Docker
+                        : TerminalType.Ssh;
+                    if (terminal.TerminalType == TerminalType.Ssh)
+                    {
+                        terminal.SshServer = Model.SshServer;
+                        terminal.SshUserName = Model.SshUserName;
+                        terminal.SshPassword = Model.SshPassword;
+
+                        terminal.DockerCommand = string.Empty;
+                        terminal.DockerContainer = string.Empty;
+                        terminal.DockerUid = null;
+                    }
+                    else
+                    {
+                        terminal.SshServer = string.Empty;
+                        terminal.SshUserName = string.Empty;
+                        terminal.SshPassword = string.Empty;
+
+                        terminal.DockerCommand = Model.DockerCommand;
+                        terminal.DockerContainer = Model.DockerContainer;
+                        terminal.DockerUid = Model.DockerUid;
+                    }
+                    result = terminal;
+                    
+                }
+                break;
             default:
                 throw new Exception("Unknown type: " + Model.ItemType);
         }

@@ -32,14 +32,22 @@
                     if (string.IsNullOrEmpty(icon))
                     {
                         if (item is AppItem app)
+                        {
                             icon = $"/apps/{Uri.EscapeDataString(app.AppName)}/app.png";
+                        }
                         else
+                        {
                             icon = "/favicon?color=" + App.AccentColor?.Replace("#", string.Empty);
+                        }
                     }
                     else if (icon.StartsWith("db:/image/"))
+                    {
                         icon = "/fimage/" + icon["db:/image/".Length..];
-                    if(icon.StartsWith("data:") == false)
-                        icon += (icon.IndexOf("?") > 0 ? "&" : "?") + "version=" + Globals.Version;
+                    }
+                    if (icon.StartsWith("data:") == false)
+                    {
+                        icon += (icon.Contains('?') ? "&" : "?") + "version=" + Globals.Version;
+                    }
                     <a class="@item.Size.ToString().ToLower().Replace("xl", "x-l") db-@item.Type[9..].ToLower() db-item db-basic" title="@item.Name">
                         <div class="inner">
                             <div class="icon">
