@@ -30,7 +30,7 @@ public partial class TerminalItemComponent
     protected override void OnInitialized()
     {
         SerializedJsSafeModel = JsonSerializer.Serialize(Model).Replace("'", "\\'");
-
+        OnClickCode = $"openTerminalNew('{Model.TerminalType.ToString().ToLower()}', '{Model.Uid.ToString()}', `{Model.Name}`,`{GetIcon()}`)";
     }
 
     /// <summary>

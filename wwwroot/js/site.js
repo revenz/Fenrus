@@ -149,6 +149,27 @@ function launch(event, uid) {
     }
 }
 
+function openTerminalNew(type, url, name, img){
+
+    if(type === 'ssh')
+    {
+        FenrusPreview.open('ssh',
+            url,
+            img
+        );
+        return;
+    }
+    if(type === 'docker')
+    {
+        FenrusPreview.open('docker',
+            name,
+            url,
+            img
+        );
+        return;
+    }
+}
+
 window.onpageshow = function(event) {
     if (event.persisted) 
         hideLaunchingSplash();

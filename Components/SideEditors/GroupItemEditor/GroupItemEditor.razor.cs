@@ -268,6 +268,35 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
             Model.Size = dbLink.Size;
             Model.Uid = dbLink.Uid;
         }
+        else if (Item is TerminalItem terminal)
+        {
+            Model.ItemType = terminal.Type;
+            Model.Icon = terminal.Icon;
+            Model.Name = terminal.Name;
+            Model.Size = terminal.Size;
+            Model.Uid = terminal.Uid;
+            Model.TerminalType = terminal.TerminalType == TerminalType.Ssh ? "SSH" : "Docker";
+            if (terminal.TerminalType == TerminalType.Ssh)
+            {
+                Model.SshServer = terminal.SshServer;
+                Model.SshUserName = terminal.SshUserName;
+                Model.SshPassword = terminal.SshPassword;
+
+                Model.DockerCommand = string.Empty;
+                Model.DockerContainer = string.Empty;
+                Model.DockerUid = null;
+            }
+            else
+            {
+                Model.SshServer = string.Empty;
+                Model.SshUserName = string.Empty;
+                Model.SshPassword = string.Empty;
+
+                Model.DockerCommand = terminal.DockerCommand;
+                Model.DockerContainer = terminal.DockerContainer;
+                Model.DockerUid = terminal.DockerUid;
+            }
+        }
         else
         {
             Title = "New Item";
@@ -366,6 +395,7 @@ public partial class GroupItemEditor : SideEditorBase, IDisposable
                 {
                     var terminal = new TerminalItem();
                     terminal.Icon = Model.Icon;
+                    terminal.Name = Model.Name;
                     terminal.Size = Model.Size;
                     terminal.Uid = Model.Uid;
                     terminal.TerminalType = Model.TerminalType.ToLowerInvariant() == "docker"
