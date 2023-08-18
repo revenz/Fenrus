@@ -96,7 +96,7 @@ public class SshTerminal : Terminal
             {
                 if(client != null)
                     client.Dispose();
-                await SendMessage("Failed to login: " + ex.Message + "\nserver:" + server + ", " +  UserName);
+                await SendMessage("Failed to login: " + ex.Message);
             }
         }
 
