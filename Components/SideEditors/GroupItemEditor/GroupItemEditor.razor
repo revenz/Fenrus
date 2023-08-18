@@ -181,7 +181,7 @@
             }
         </FenrusTab>
             
-        <FenrusTab Title="@lblSsh" Visible="@(Model.Type != "DashboardTerminal" || Model.TerminalType == "SSH")">
+        <FenrusTab Title="@lblSsh" Visible="@(Model.Type == "DashboardTerminal" && Model.TerminalType == "SSH")">
             <p>@lblSshDescription</p>
             <InputText Page="GroupItem" @bind-Value="@Model.SshServer" Label="SshAddress" />
             <InputText Page="GroupItem" @bind-Value="@Model.SshUserName" Label="SshUsername"/>
