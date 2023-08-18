@@ -30,7 +30,14 @@ public partial class TerminalItemComponent
     protected override void OnInitialized()
     {
         SerializedJsSafeModel = JsonSerializer.Serialize(Model).Replace("'", "\\'");
-        OnClickCode = $"openTerminalNew('{Model.TerminalType.ToString().ToLower()}', '{Model.Uid.ToString()}', `{Model.Name}`,`{GetIcon()}`)";
+        string url = Model.TerminalType == TerminalType.Ssh && string.IsNullOrEmpty(Model.SshUserName) == false
+            ?
+            Model.SshUserName + "@" + Model.SshServer
+            :
+            Model.TerminalType == TerminalType.Ssh
+                ? Model.SshServer
+                : Model.DockerUid.ToString();
+        OnClickCode = $"openTerminalNew('{Model.TerminalType.ToString().ToLower()}', `{url}`, `{Model.Name}`,`{GetIcon()}`)";
     }
 
     /// <summary>

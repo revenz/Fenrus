@@ -185,7 +185,7 @@
             <p>@lblSshDescription</p>
             <InputText Page="GroupItem" @bind-Value="@Model.SshServer" Label="SshAddress" />
             <InputText Page="GroupItem" @bind-Value="@Model.SshUserName" Label="SshUsername"/>
-            <InputText Page="GroupItem" @bind-Value="@Model.SshPassword" Label="SshPassword" Password="true" />
+            <!-- <InputText Page="GroupItem" @bind-Value="@Model.SshPassword" Label="SshPassword" Password="true" /> -->
         </FenrusTab>
             
         @if (DockerServers.Any())

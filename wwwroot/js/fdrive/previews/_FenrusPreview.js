@@ -29,12 +29,15 @@ class FenrusPreview {
             this.container.classList.add('visible');
         if(document.body.className.indexOf('drawer-item-opened') < 0)
             document.body.classList.add('drawer-item-opened');
+        document.getElementById('search-text')?.setAttribute('disabled', '');
     }
 
     /**
      * Closes the pane
      */
     close(){
+        document.getElementById('search-text')?.removeAttribute('disabled');
+        
         if(this.container)
             this.container.classList.remove('visible');
         
