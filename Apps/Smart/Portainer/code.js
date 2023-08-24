@@ -5,9 +5,10 @@
         let password = args.properties['password'];
         if(!username)
             return;
+        let res;
         try
         {
-            let res = args.fetch({
+            res = args.fetch({
                 url: 'api/auth',
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json'},
@@ -24,7 +25,9 @@
         {
             throw err;
         }
-        throw res.body;
+        if(res && res.body)
+            throw res.body;
+        throw 'Failed to authorize Portainer';
     }
 
     status(args) {
