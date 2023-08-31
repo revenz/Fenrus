@@ -47,7 +47,7 @@ revenz/fenrus:latest
 
 Note: You can customise the port used by using the environmental variable "Port"
 ```
--e Port=1234
+-e PORT=1234
 ```
 
 ```
