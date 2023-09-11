@@ -1,0 +1,18 @@
+{
+    "Name": "Coder",
+    "Icon": "coder.png",
+    "TestFunction":true,
+    "Interval": 10,
+    "Info":{
+      "Authors": ["mindofbeholder"],
+      "AppUrl":"https://coder.com"
+    },
+    "Properties": [
+      {
+        "Name": "Token",
+        "Id": "token",
+        "Type": "string",
+          "Help" : "Found at Account -> Tokens"
+      }
+    ]
+  }
