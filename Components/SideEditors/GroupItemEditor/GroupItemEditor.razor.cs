@@ -527,8 +527,6 @@ var test = instance.test(testArgs);");
                 else
                     ToastService.ShowError(lblTestFailed);
             }
-            else if (str?.ToLowerInvariant() == "false")
-                ToastService.ShowInfo(message: logStr, heading: str?.EmptyAsNull() ?? "Test Unknown");
             else
                 ToastService.ShowInfo(str?.EmptyAsNull() ?? "Test Unknown");
         }
