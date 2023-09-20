@@ -150,11 +150,11 @@
       },
       "Buttons":
       {
-        "Login": "Anmeldung",
-        "Register": "Registrieren",
-        "Guest": "Gast",
-        "Reset": "Zurücksetzen",
-        "Cancel": "Stornieren"
+        "Login": "Registrazione",
+        "Register": "Registrazione",
+        "Guest": "Ospite",
+        "Reset": "Reset",
+        "Cancel": "Annulla"
       },
       "Fields":
       {
@@ -175,17 +175,18 @@
         "UpdatingApps": "Le applicazioni sono in fase di aggiornamento, attendere"
       },
       "Buttons": {
-        "ImportConfig": "Konfig importieren"
+        "ImportConfig": "Importare la configurazione"
       },
       "Messages": {
         "TestEmailSent": "Testate l'e-mail inviata al Password, controllate la vostra e-mail per confermare il funzionamento..",
-        "FailedToDownload": "Apps konnten nicht heruntergeladen werden",
-        "UpdateRequired": "Ihre Version von Fenrus ist veraltet. Sie müssen Fenrus aktualisieren, um die neuesten Apps zu erhalten.",
-        "AppsUpdated": "{total} Anwendungen aktualisiert {newCount, plural, zero {} one {(1 neue app)} other {({newCount} neue apps)}}"
+        "FailedToDownload": "Non è stato possibile scaricare le applicazioni",
+        "UpdateRequired": "La versione di Fenrus in uso non è aggiornata. È necessario aggiornare Fenrus per ottenere le applicazioni più recenti..",
+        "AppsUpdated": "{total} applicazioni aggiornate {newCount, plural, zero {} one {(1 neue app)} altre {({newCount} neue apps)}}"
+      }
       },
       "Fields": {
         "SmtpServer": "Server",
-        "SmtpPort": "Port",
+        "SmtpPort": "Porta",
         "SmtpUser": "Utente",
         "SmtpPassword": "Password",
         "SmtpSender": "Mittente",
