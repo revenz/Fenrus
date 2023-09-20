@@ -1,21 +1,21 @@
 {
   "Language": "Italian",
   "Labels": {
-    "VersionNumber": "Ausführung: {version}",
-    "Version":"Ausführung",
-    "Cancel": "Stornieren",
+    "VersionNumber": "Versione: {version}",
+    "Version":"Versione",
+    "Cancel": "Annulla",
     "Close": "Schließen",
-    "Yes": "Ja",
-    "No": "Nein",
-    "Add": "Hinzufügen",
-    "MoveUp": "Nach Oben Bewegen",
-    "MoveDown": "Sich Abwärts Bewegen",
-    "Delete": "Löschen",
-    "Help": "Hilfe",
-    "Edit": "Bearbeiten",
-    "Copy": "Kopieren",
-    "Save": "Speichern",
-    "Saved": "Gerettet",
+    "Yes": "Si",
+    "No": "No",
+    "Add": "Aggiungi",
+    "MoveUp": "Sposta in alto",
+    "MoveDown": "Sposta in basso",
+    "Delete": "Cancella",
+    "Help": "Aiuto",
+    "Edit": "Modifica",
+    "Copy": "Copia",
+    "Save": "Salva",
+    "Saved": "Salvato",
     "Actions": "Aktionen",
     "Enabled": "Ermöglicht",
     "Search": "Suchen",
@@ -35,7 +35,7 @@
     "Language": "Sprache",
     "UpdatedSuccessfully": "Erfolgreich Geupdated",
     "General": "Allgemein",
-    "AddGroup": "Gruppe hinzufügen",
+    "AddGroup": "Gruppe Aggiungi",
     "Import": "Importieren",
     "Browse": "Durchsuche",
     "NoGroupAddedToDashboard": "Keine Gruppen zum Dashboard hinzugefügt",
@@ -43,7 +43,7 @@
     "Author": "Autor",
     "Confirm": "Bestätigen",
     "Message": "Nachricht",
-    "DeleteItem": "Löschen Sie {typeName} ''{name}''?",
+    "DeleteItem": "Cancella Sie {typeName} ''{name}''?",
     "DeletedItem": "{typeName} ''{name}'' gelöscht",
     "Test": "Prüfen",
     "Testing": "Testen",
@@ -55,8 +55,8 @@
     "Files": "Dateien"
   },
   "ContextMenu": {
-    "EditDashboard": "Dashboard bearbeiten",
-    "EditGroup": "Gruppe bearbeiten",
+    "EditDashboard": "Dashboard Modifica",
+    "EditGroup": "Gruppe Modifica",
     "Terminal": "Terminal",
     "UpTime": "Betriebszeit",
     "Resize": "Größe ändern",
@@ -78,7 +78,7 @@
   },
   "Dialogs": {
     "CopyItem": {
-      "Title": "Artikel kopieren",
+      "Title": "Artikel Copia",
       "Description": "Wählen Sie eine Gruppe aus, in die dieses Element kopiert werden soll",
       "ThisGroup": "Diese Gruppe",
       "System": "System",
@@ -112,14 +112,14 @@
     "Dashboards":{
       "Title": "Dashboards",
       "Labels": {
-        "PageDescription": "Auf dieser Seite können Sie Dashboards erstellen. Wenn Sie mehr als ein Dashboard haben, können Sie auf dem Startbildschirm zwischen ihnen wechseln.\n\nUm Elemente zu Ihrem Dashboard hinzuzufügen, erstellen Sie zunächst eine Gruppe mit den Elementen, die Sie hinzufügen möchten. Anschließend können Sie diese neue Gruppe zu einem Dashboard hinzufügen."
+        "PageDescription": "Auf dieser Seite können Sie Dashboards erstellen. Wenn Sie mehr als ein Dashboard haben, können Sie auf dem Startbildschirm zwischen ihnen wechseln.\n\nUm Elemente zu Ihrem Dashboard hinzuzufügen, erstellen Sie zunächst eine Gruppe mit den Elementen, die Sie Aggiungi möchten. Anschließend können Sie diese neue Gruppe zu einem Dashboard Aggiungi."
       }
     }, 
     "Dashboard": {
       "Title": "Dashboard",
       "Title-Guest": "Gast-Dashboard",
       "Messages": {
-        "NoAvailableGroups": "Keine verfügbaren Gruppen zum Hinzufügen",
+        "NoAvailableGroups": "Keine verfügbaren Gruppen zum Aggiungi",
         "GuestPageDescription": "Auf dieser Seite können Sie das Gast-Dashboard konfigurieren, das Dashboard, das Utenten angezeigt wird, wenn sie sich nicht angemeldet haben. Dies ist auch das Standard-Dashboard für neue Utente.\n\nSie können dieses Dashboard deaktivieren, wenn Sie möchten, dass sich Utente anmelden, bevor Sie Fenrus verwenden.",
         "RemoveGroupTitle": "Gruppe entfernen",
         "RemoveGroupMessage": "Möchten Sie die Gruppe ''{name}'' entfernen?"
