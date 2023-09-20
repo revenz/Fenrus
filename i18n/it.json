@@ -82,7 +82,7 @@
       "Description": "Wählen Sie eine Gruppe aus, in die dieses Element kopiert werden soll",
       "ThisGroup": "Diese Gruppe",
       "System": "System",
-      "User": "Benutzer"
+      "User": "Utente"
     },
     "ImportConfig": {
       "Title": "Konfig importieren",
@@ -120,7 +120,7 @@
       "Title-Guest": "Gast-Dashboard",
       "Messages": {
         "NoAvailableGroups": "Keine verfügbaren Gruppen zum Hinzufügen",
-        "GuestPageDescription": "Auf dieser Seite können Sie das Gast-Dashboard konfigurieren, das Dashboard, das Benutzern angezeigt wird, wenn sie sich nicht angemeldet haben. Dies ist auch das Standard-Dashboard für neue Benutzer.\n\nSie können dieses Dashboard deaktivieren, wenn Sie möchten, dass sich Benutzer anmelden, bevor Sie Fenrus verwenden.",
+        "GuestPageDescription": "Auf dieser Seite können Sie das Gast-Dashboard konfigurieren, das Dashboard, das Utenten angezeigt wird, wenn sie sich nicht angemeldet haben. Dies ist auch das Standard-Dashboard für neue Utente.\n\nSie können dieses Dashboard deaktivieren, wenn Sie möchten, dass sich Utente anmelden, bevor Sie Fenrus verwenden.",
         "RemoveGroupTitle": "Gruppe entfernen",
         "RemoveGroupMessage": "Möchten Sie die Gruppe ''{name}'' entfernen?"
       },
@@ -138,15 +138,15 @@
       "Title": "Anmeldung",
       "ErrorMessages": {
         "LoginFailed": "Fehler bei der Anmeldung",
-        "RegistrationNotAllowed": "Benutzerregistrierungen sind nicht zulässig\n",
+        "RegistrationNotAllowed": "Utenteregistrierungen sind nicht zulässig\n",
         "GuestNotAllowed": "Gastzugang ist nicht erlaubt"
       },
       "Labels": {
-        "PasswordReset": "Passwort wurde zurückgesetzt. Eine neue E-Mail wurde an Sie gesendet und auf der Konsole gedruckt.",
+        "PasswordReset": "Password wurde zurückgesetzt. Eine neue E-Mail wurde an Sie gesendet und auf der Konsole gedruckt.",
         "PasswordResetFailed": "Kennwort konnte nicht zurückgesetzt werden",
         "PasswordResetTokenInvalid": "Ungültiger Token zum Zurücksetzen des Kennworts oder Zurücksetzen des Kennworts ist abgelaufen.",
-        "PasswordResetSent": "Wenn der Benutzer existiert, wurde ein Passwort-Reset an Ihre E-Mail-Adresse gesendet oder auf der Konsole ausgedruckt.",
-        "ForgotPasswordDescription": "Geben Sie Ihren Benutzernamen oder Ihre E-Mail-Adresse ein und ein Link zum Zurücksetzen des Passworts wird Ihnen per E-Mail zugesendet und in das Konsolenprotokoll gedruckt."
+        "PasswordResetSent": "Wenn der Utente existiert, wurde ein Password-Reset an Ihre E-Mail-Adresse gesendet oder auf der Konsole ausgedruckt.",
+        "ForgotPasswordDescription": "Geben Sie Ihren Utentenamen oder Ihre E-Mail-Adresse ein und ein Link zum Zurücksetzen des Passwords wird Ihnen per E-Mail zugesendet und in das Konsolenprotokoll gedruckt."
       },
       "Buttons":
       {
@@ -158,27 +158,27 @@
       },
       "Fields":
       {
-        "Username": "Nutzername",
-        "Password": "Passwort",
-        "ForgotPassword": "Passwort vergessen?",
-        "UsernameOrEmailAddress": "Benutzername oder E-mail Adresse"
+        "Username": "Nome utente",
+        "Password": "Password",
+        "ForgotPassword": "Password dimenticata?",
+        "UsernameOrEmailAddress": "Utente o indirizzo E-mail"
       }
     },
     "SystemSettings": {
-      "Title": "Systemeinstellungen",
+      "Title": "Impostazioni del sistema",
       "Labels": {
-        "PageDescription": "Auf dieser Seite können Sie systemweite Einstellungen konfigurieren",
+        "PageDescription": "In questa pagina è possibile configurare le impostazioni dell'intero sistema",
         "Smtp": "SMTP",
-        "SmtpDescription": "Konfigurieren Sie einen SMTP-Server, dieser wird zum Senden von E-Mails zum Zurücksetzen des Passworts verwendet.",
-        "Importing": "Vorherige Konfiguration wird importiert, dies kann eine Weile dauern, bitte warten.",
-        "UpdateApps": "Apps aktualisieren",
-        "UpdatingApps": "Apps werden aktualisiert, bitte warten"
+        "SmtpDescription": "Configurare un server SMTP, utilizzato per inviare le e-mail di reimpostazione della password..",
+        "Importing": "La configurazione precedente è in fase di importazione, potrebbe essere necessario un po' di tempo, si prega di attendere..",
+        "UpdateApps": "Aggiornamento delle applicazioni",
+        "UpdatingApps": "Le applicazioni sono in fase di aggiornamento, attendere"
       },
       "Buttons": {
         "ImportConfig": "Konfig importieren"
       },
       "Messages": {
-        "TestEmailSent": "Testen Sie die an den Absender gesendete E-Mail, überprüfen Sie Ihre E-Mail, um zu bestätigen, dass sie funktioniert.",
+        "TestEmailSent": "Testate l'e-mail inviata al Password, controllate la vostra e-mail per confermare il funzionamento..",
         "FailedToDownload": "Apps konnten nicht heruntergeladen werden",
         "UpdateRequired": "Ihre Version von Fenrus ist veraltet. Sie müssen Fenrus aktualisieren, um die neuesten Apps zu erhalten.",
         "AppsUpdated": "{total} Anwendungen aktualisiert {newCount, plural, zero {} one {(1 neue app)} other {({newCount} neue apps)}}"
@@ -186,10 +186,10 @@
       "Fields": {
         "SmtpServer": "Server",
         "SmtpPort": "Port",
-        "SmtpUser": "Benutzer",
-        "SmtpPassword": "Passwort",
-        "SmtpSender": "Absender",
-        "SmtpSenderHelp": "Die E-Mail-Adresse, von der Fenrus E-Mails sendet."
+        "SmtpUser": "Utente",
+        "SmtpPassword": "Password",
+        "SmtpSender": "Mittente",
+        "SmtpSenderHelp": "L'indirizzo e-mail da cui Fenrus invia i messaggi di posta elettronica."
       }
     }
   }
