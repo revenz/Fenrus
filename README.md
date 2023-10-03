@@ -10,7 +10,6 @@ It allows you to have a custom home page/new tab page with quick access to your 
 For support use our [Discord Server](https://discord.gg/xbYK8wFMeU)
 
 [![Donate](https://img.shields.io/badge/Donate-Patreon-blue.svg)](https://www.patreon.com/revenz)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=CT28PFMUMLTU8)
 
 ---
 
