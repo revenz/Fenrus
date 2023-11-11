@@ -1,10 +1,13 @@
+using System.Net;
 using Blazored.Toast;
 using Fenrus;
+using Fenrus.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.HttpOverrides;
 using NUglify.Helpers;
 
 if (args?.Any() == true && args[0] == "--init-config")
@@ -23,8 +26,15 @@ Console.WriteLine("Starting Fenrus...");
 StartUpHelper.Run();
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllersWithViews();
 builder.Services.AddMvc();
+ReverseProxySettings reverseProxySettings = builder.Configuration.GetSection(nameof(ReverseProxySettings)).Get<ReverseProxySettings>();
+
+if(reverseProxySettings.UseForwardedHeaders)
+{
+    ConfigureUsingForwardedHeaders(builder, reverseProxySettings);
+}
 builder.Services.AddWebOptimizer(pipeline =>
 {
     pipeline.MinifyJsFiles("js/**/*.js");
@@ -83,7 +93,6 @@ if (oAuth)
             options.ClientId = system.OAuthStrategyClientId;
             options.ClientSecret = system.OAuthStrategySecret;
             options.Authority = system.OAuthStrategyIssuerBaseUrl;
-
             options.Scope.Add("email");
             options.Scope.Add("openid");
             options.Scope.Add("profile");
@@ -91,8 +100,9 @@ if (oAuth)
             options.DisableTelemetry = true;
             options.Events.OnRedirectToIdentityProvider = context =>
             {
-                context.ProtocolMessage.Prompt = "login";
-                return Task.CompletedTask;
+                if(reverseProxySettings.DebugPrintRequestHeaders)
+                    Logger.DLog($"Request headers: {string.Join(Environment.NewLine, context.Request.Headers)}");
+                return Task.FromResult(0);
             };
         });
 }
@@ -109,6 +119,8 @@ else
 
 var app = builder.Build();
 
+if(reverseProxySettings.UseForwardedHeaders)
+    app.UseForwardedHeaders();
 bool debug = Environment.GetEnvironmentVariable("DEBUG") == "1";
 app.UseWhen(context =>
 {
@@ -185,3 +197,28 @@ Logger.ILog($"Fenrus v{Fenrus.Globals.Version} started");
 app.Run();
 Logger.ILog($"Fenrus v{Fenrus.Globals.Version} stopped");
 workers.ForEach(x => x.Stop());
+
+void ConfigureUsingForwardedHeaders(WebApplicationBuilder webApplicationBuilder,
+    ReverseProxySettings reverseProxySettings1)
+{
+    webApplicationBuilder.Services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders =
+            ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+        foreach (var knownProxy in reverseProxySettings1.KnownProxies)
+            options.KnownProxies.Add(IPAddress.Parse($"{knownProxy}"));
+        if (reverseProxySettings1.KnownIpv4Network.Enabled)
+        {
+            if (string.IsNullOrWhiteSpace(reverseProxySettings1.KnownIpv4Network.IpAddress) ||
+                reverseProxySettings1.KnownIpv4Network.PrefixLength == 0)
+                throw new InvalidOperationException("Invalid IPv4 network configuration");
+            options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse(reverseProxySettings1.KnownIpv4Network.IpAddress),
+                reverseProxySettings1.KnownIpv4Network.PrefixLength));
+        }
+
+        if (!reverseProxySettings1.KnownIpv6Network.Enabled) return;
+        if(string.IsNullOrWhiteSpace(reverseProxySettings1.KnownIpv6Network.IpAddress) || reverseProxySettings1.KnownIpv6Network.PrefixLength == 0)
+            throw new InvalidOperationException("Invalid IPv6 network configuration");
+        options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse(reverseProxySettings1.KnownIpv6Network.IpAddress), reverseProxySettings1.KnownIpv6Network.PrefixLength));
+    });
+}

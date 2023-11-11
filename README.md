@@ -68,6 +68,25 @@ All the configuration is saved into LiteDB file, Fenrus.db.   There is an encryp
 
 ---
 
+### Reverse Proxy configuration
+
+If you want to host Fenrus behind a ReverseProxy in combination with oauth authentication, you need to make sure that you are passing X-Forwarded-Proto and X-Forwarded-For headers from your reverse proxy to Fenrus.
+Fenrus will use these headers to generate the correct urls for oauth authentication.
+
+The following environment variables can be set to change the reverse proxy settings:
+
+| Variable                                             | Description                                                                                               | Default    | Example                          |
+|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|------------|----------------------------------|
+| ReverseProxySettings__UseForwardedHeaders            | Enable reverse proxy support, all the below settings are negated, if this setting is false                | false      | true                             |
+| ReverseProxySettings__DebugPrintRequestHeaders       | Print request headers to console, to verify if X-Forwarded-X headers are present                          | false      | true                             |
+| ReverseProxySettings__KnownProxies                   | String array of trusted proxy IP addresses                                                                | []         | ["192.168.2.15", "192.168.2.16"] |
+| ReverseProxySettings__KnownIPv4Network__Enabled      | Enable adding a Known IPv4 Network                                                                        | true       | false                            |
+| ReverseProxySettings__KnownIPv4Network__IpAddress    | Network network to add, for example 192.168.2.0/24 (the prefixLength, will be added in the below variable | "10.0.0.0" | "192.168.2.0"                    |
+| ReverseProxySettings__KnownIPv4Network__PrefixLength | The prefix length for the Known network to add.                                                           | 8          | 24                               |
+| ReverseProxySettings__KnownIPv6Network__Enabled      | Enable adding a Known IPv6 Network                                                                        | true       | false                            |
+| ReverseProxySettings__KnownIPv6Network__IpAddress    | Network network to add, for example fe80::/24 (the prefixLength, will be added in the below variable      | "fe80::"   | "fe80::"                         |
+| ReverseProxySettings__KnownIPv6Network__PrefixLength | The prefix length for the Known network to add.                                                           | 64         | 24                               |
+
 ## Getting Started
 
 First, you need to register a user, you can do this on the login page by entering a username and password and clicking "Register" if no user with that username exists, a new one will be created.
