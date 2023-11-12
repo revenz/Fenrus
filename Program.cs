@@ -29,6 +29,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllersWithViews();
 builder.Services.AddMvc();
+
+//Gets the reverse proxy settings from the appsettings.json file
+//to check if the app is running behind a reverse proxy
 ReverseProxySettings reverseProxySettings = builder.Configuration.GetSection(nameof(ReverseProxySettings)).Get<ReverseProxySettings>();
 
 if(reverseProxySettings.UseForwardedHeaders)
@@ -100,6 +103,8 @@ if (oAuth)
             options.DisableTelemetry = true;
             options.Events.OnRedirectToIdentityProvider = context =>
             {
+                //Added option to debug request headers for reverse proxy
+                //Sometimes it can be difficult to find out if X-Forwarded-X headers are set correctly
                 if(reverseProxySettings.DebugPrintRequestHeaders)
                     Logger.DLog($"Request headers: {string.Join(Environment.NewLine, context.Request.Headers)}");
                 return Task.FromResult(0);
@@ -198,6 +203,10 @@ app.Run();
 Logger.ILog($"Fenrus v{Fenrus.Globals.Version} stopped");
 workers.ForEach(x => x.Stop());
 
+// Configure the app to use forwarded headers
+//If the app is running behind a reverse proxy, the app needs to be configured to use the forwarded headers
+//This means that X-Forwarded-For and X-Forwarded-Proto headers are used to determine if the request goes over https, 
+//but is using ssl termination
 void ConfigureUsingForwardedHeaders(WebApplicationBuilder webApplicationBuilder,
     ReverseProxySettings reverseProxySettings1)
 {
