@@ -86,10 +86,10 @@ public partial class InputColor : Input<string>
         baseB = AdjustColorPercent(c1b, c2b, newP);
         BaseColor = "#" + baseR.ToString("X2") + baseG.ToString("X2") + baseB.ToString("X2");
 
-        CalcuateColor();
+        CalculateColor();
     }
 
-    void CalcuateColor()
+    void CalculateColor()
     {
         var wPercent = PointerX / 211.2d;
         var r = AdjustColorPercent(255, baseR, wPercent);
@@ -110,6 +110,6 @@ public partial class InputColor : Input<string>
     {
         PointerX = e.OffsetX;
         PointerY = e.OffsetY;
-        CalcuateColor();
+        CalculateColor();
     }
 }
