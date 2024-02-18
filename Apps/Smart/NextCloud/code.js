@@ -1,7 +1,7 @@
 ﻿class NextCloud
 {
     doFetch (args) {
-        let url = `ocs/v1.php/cloud/users/${args.properties['username']}?format=json`;
+        let url = `ocs/v2.php/cloud/users/${args.properties['username']}?format=json`;
         return args.fetch({
             url: url, timeout: 10, headers: {
                 'Authorization': 'Basic ' + args.Utils.btoa(args.properties['username'] + ':' + args.properties['password']),
