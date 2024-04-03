@@ -4,13 +4,22 @@
     
     fetch(args, url) {
         args.log('Fetching URL: ' + url);
-        return args.fetch(url).data;
+        if(!args.properties["apiToken"])
+            return args.fetch(url).data;
+
+        return args.fetch({
+            url: url,
+            method: 'GET',
+            headers: {
+                'x-token': args.properties['apiToken']                
+            }            
+        }).data;
     }
     
     status(args)
     {
-        let data = this.fetch(args, 'api/status');
-        let shrinkage = this.fetch(args, 'api/library-file/shrinkage-groups');
+        let data = this.fetch(args, 'remote/info/status');
+        let shrinkage = this.fetch(args, 'remote/info/shrinkage-groups');
         let updateAvailable = this.updateAvailable(args);
 
         args.setStatusIndicator(updateAvailable ? 'update' : '');
@@ -27,7 +36,7 @@
     }
 
     updateAvailable(args){
-        let data = this.fetch(args, 'api/status/update-available');
+        let data = this.fetch(args, 'remote/info/update-available');
         if(data.exception)
         {
             args.log('Exception fetching update-available: ' + (data.message || 'Unknown reason'));
@@ -163,7 +172,7 @@
     }
 
     test(args){
-        let data = args.fetch(args.url + '/api/status').data;
+        let data = this.fetch(args, args.url + '/remote/info/status');
         args.log('data: ' + (data === null ? 'null' : JSON.stringify(data)));
         return isNaN(data.processed) === false;          
     }

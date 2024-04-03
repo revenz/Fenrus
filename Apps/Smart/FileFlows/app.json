@@ -7,5 +7,12 @@
     "Authors": ["John Andrews"],
     "AppUrl":"https://fileflows.com/",
     "Description": "Shows information from FileFlows including files that are currently processing, files that have been processed.\n\nCan show a carousel for currently processing files.  Bar charts for processed files, or basic information if the size of app is set to medium."
-  }
+  },
+  "Properties": [
+    {
+      "Name": "API Token",
+      "Id": "apiToken",
+      "Type": "string"
+    }
+  ]
 }
