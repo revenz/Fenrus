@@ -3,6 +3,10 @@
     pfImages = {};
     
     fetch(args, url) {
+        let prefix = args.url;
+        if(prefix.endsWith('/') === false)
+            prefix += '/';
+        url = prefix + url;
         args.log('Fetching URL: ' + url);
         if(!args.properties["apiToken"])
             return args.fetch(url).data;
@@ -55,7 +59,7 @@
 
     statusXLarge(args, data, shrinkage){
         if(!data.processingFiles?.length){
-            if(shrinkage && Object.keys(shrinkage).length)
+            if(shrinkage?.length)
                 return this.statusShrinkage(args, shrinkage)
             return this.statusMedium(args, data);
         }
@@ -128,13 +132,17 @@
     statusShrinkage(args, shrinkage){
         let items = [];
             
-        Object.keys(shrinkage).forEach(group => 
+        for(let item of shrinkage) 
         {            
-            let item = shrinkage[group];
             let increase = item.FinalSize > item.OriginalSize;
             let percent;
             let tooltip;
-            if(increase){
+            if(item.FinalSize === 0)
+            {
+                percent = 100;
+                tooltip = 'No Change';
+            }
+            else if(increase){
                 percent = 100 + ((item.FinalSize - item.OriginalSize) / item.OriginalSize * 100);
                 tooltip = args.Utils.formatBytes(item.FinalSize - item.OriginalSize) + ' Increase';
             }else{
@@ -142,12 +150,12 @@
                 tooltip = args.Utils.formatBytes(item.OriginalSize - item.FinalSize) + ' Saved';
             }
             items.push({
-                label: group === '###TOTAL###' ? 'Total' : group,
+                label: item.Library === '###TOTAL###' ? 'Total' : item.Library,
                 percent: percent,
                 tooltip: tooltip,
                 icon: '/common/hdd.svg'
             });
-        });
+        }
         
         return args.barInfo(items);
     }
@@ -171,8 +179,8 @@
 `;
     }
 
-    test(args){
-        let data = this.fetch(args, args.url + '/remote/info/status');
+    test(args){        
+        let data = this.fetch(args, 'remote/info/status');
         args.log('data: ' + (data === null ? 'null' : JSON.stringify(data)));
         return isNaN(data.processed) === false;          
     }
