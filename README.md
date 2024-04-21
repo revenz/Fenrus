@@ -7,8 +7,6 @@ Fenrus personal home page/dashboard.
 
 It allows you to have a custom home page/new tab page with quick access to your personal apps.
 
-For support use our [Discord Server](https://discord.gg/xbYK8wFMeU)
-
 [![Donate](https://img.shields.io/badge/Donate-Patreon-blue.svg)](https://www.patreon.com/revenz)
 
 ---
