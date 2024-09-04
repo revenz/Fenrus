@@ -403,6 +403,9 @@ public class HomeController : BaseController
         string username = User?.Identity?.Name ?? string.Empty;
         if (string.IsNullOrEmpty(username))
             username = User.Claims.FirstOrDefault(x => x.Type == "name")?.Value ?? string.Empty;
+
+        if (string.IsNullOrEmpty(username))
+            username = User.Claims.FirstOrDefault(x => x.Type == "preferred_username")?.Value ?? string.Empty;
         
         if (string.IsNullOrEmpty(username))
             return ReturnUnauthorized("No username returned from OAuth");
