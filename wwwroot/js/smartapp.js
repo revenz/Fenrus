@@ -281,7 +281,9 @@ class SmartApp
         else {
             this.setItemClass(eleItem, 'db-basic');
         }
-        ele.innerHTML = content;
+        if (content !== 'undefined') {
+            ele.innerHTML = content;
+        }
     }
 
     initialCarouselContent(content){
