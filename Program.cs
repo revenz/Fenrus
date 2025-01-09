@@ -1,10 +1,13 @@
+using System.Net;
 using Blazored.Toast;
 using Fenrus;
+using Fenrus.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.HttpOverrides;
 using NUglify.Helpers;
 
 if (args?.Any() == true && args[0] == "--init-config")
@@ -23,8 +26,18 @@ Console.WriteLine("Starting Fenrus...");
 StartUpHelper.Run();
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllersWithViews();
 builder.Services.AddMvc();
+
+//Gets the reverse proxy settings from the appsettings.json file
+//to check if the app is running behind a reverse proxy
+ReverseProxySettings reverseProxySettings = builder.Configuration.GetSection(nameof(ReverseProxySettings)).Get<ReverseProxySettings>();
+
+if(reverseProxySettings.UseForwardedHeaders)
+{
+    ConfigureUsingForwardedHeaders(builder, reverseProxySettings);
+}
 builder.Services.AddWebOptimizer(pipeline =>
 {
     pipeline.MinifyJsFiles("js/**/*.js");
@@ -83,7 +96,6 @@ if (oAuth)
             options.ClientId = system.OAuthStrategyClientId;
             options.ClientSecret = system.OAuthStrategySecret;
             options.Authority = system.OAuthStrategyIssuerBaseUrl;
-
             options.Scope.Add("email");
             options.Scope.Add("openid");
             options.Scope.Add("profile");
@@ -91,8 +103,11 @@ if (oAuth)
             options.DisableTelemetry = true;
             options.Events.OnRedirectToIdentityProvider = context =>
             {
-                context.ProtocolMessage.Prompt = "login";
-                return Task.CompletedTask;
+                //Added option to debug request headers for reverse proxy
+                //Sometimes it can be difficult to find out if X-Forwarded-X headers are set correctly
+                if(reverseProxySettings.DebugPrintRequestHeaders)
+                    Logger.DLog($"Request headers: {string.Join(Environment.NewLine, context.Request.Headers)}");
+                return Task.FromResult(0);
             };
         });
 }
@@ -109,6 +124,8 @@ else
 
 var app = builder.Build();
 
+if(reverseProxySettings.UseForwardedHeaders)
+    app.UseForwardedHeaders();
 bool debug = Environment.GetEnvironmentVariable("DEBUG") == "1";
 app.UseWhen(context =>
 {
@@ -185,3 +202,32 @@ Logger.ILog($"Fenrus v{Fenrus.Globals.Version} started");
 app.Run();
 Logger.ILog($"Fenrus v{Fenrus.Globals.Version} stopped");
 workers.ForEach(x => x.Stop());
+
+// Configure the app to use forwarded headers
+//If the app is running behind a reverse proxy, the app needs to be configured to use the forwarded headers
+//This means that X-Forwarded-For and X-Forwarded-Proto headers are used to determine if the request goes over https, 
+//but is using ssl termination
+void ConfigureUsingForwardedHeaders(WebApplicationBuilder webApplicationBuilder,
+    ReverseProxySettings reverseProxySettings1)
+{
+    webApplicationBuilder.Services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders =
+            ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+        foreach (var knownProxy in reverseProxySettings1.KnownProxies)
+            options.KnownProxies.Add(IPAddress.Parse($"{knownProxy}"));
+        if (reverseProxySettings1.KnownIpv4Network.Enabled)
+        {
+            if (string.IsNullOrWhiteSpace(reverseProxySettings1.KnownIpv4Network.IpAddress) ||
+                reverseProxySettings1.KnownIpv4Network.PrefixLength == 0)
+                throw new InvalidOperationException("Invalid IPv4 network configuration");
+            options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse(reverseProxySettings1.KnownIpv4Network.IpAddress),
+                reverseProxySettings1.KnownIpv4Network.PrefixLength));
+        }
+
+        if (!reverseProxySettings1.KnownIpv6Network.Enabled) return;
+        if(string.IsNullOrWhiteSpace(reverseProxySettings1.KnownIpv6Network.IpAddress) || reverseProxySettings1.KnownIpv6Network.PrefixLength == 0)
+            throw new InvalidOperationException("Invalid IPv6 network configuration");
+        options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse(reverseProxySettings1.KnownIpv6Network.IpAddress), reverseProxySettings1.KnownIpv6Network.PrefixLength));
+    });
+}
