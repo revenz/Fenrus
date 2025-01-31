@@ -1,0 +1,197 @@
+{
+  "Language": "Italian",
+  "Labels": {
+    "VersionNumber": "Versione: {version}",
+    "Version":"Versione",
+    "Cancel": "Annulla",
+    "Close": "Schließen",
+    "Yes": "Si",
+    "No": "No",
+    "Add": "Aggiungi",
+    "MoveUp": "Sposta in alto",
+    "MoveDown": "Sposta in basso",
+    "Delete": "Cancella",
+    "Help": "Aiuto",
+    "Edit": "Modifica",
+    "Copy": "Copia",
+    "Save": "Salva",
+    "Saved": "Salvato",
+    "Actions": "Aktionen",
+    "Enabled": "Ermöglicht",
+    "Search": "Suchen",
+    "Dashboard": "Armaturenbrett",
+    "Theme": "Thema",
+    "AccentColor": "Akzentfarbe",
+    "LinkTarget": "Linkziel",
+    "Background": "Hintergrund",
+    "BackgroundColor": "Hintergrundfarbe",
+    "GroupTitles": "Gruppentitel",
+    "StatusIndicators": "Statusanzeigen",
+    "ShowSearch": "Suche Anzeigen",
+    "Default": "Standard",
+    "ChooseImage":"Wählen Sie Bild...", 
+    "CurrentImage": "Aktuelles Bild",
+    "ColorBackground": "Einfarbig",
+    "Language": "Sprache",
+    "UpdatedSuccessfully": "Erfolgreich Geupdated",
+    "General": "Allgemein",
+    "AddGroup": "Gruppe Aggiungi",
+    "Import": "Importieren",
+    "Browse": "Durchsuche",
+    "NoGroupAddedToDashboard": "Keine Gruppen zum Dashboard hinzugefügt",
+    "Website": "Webseite",
+    "Author": "Autor",
+    "Confirm": "Bestätigen",
+    "Message": "Nachricht",
+    "DeleteItem": "Cancella Sie {typeName} ''{name}''?",
+    "DeletedItem": "{typeName} ''{name}'' gelöscht",
+    "Test": "Prüfen",
+    "Testing": "Testen",
+    "Home": "Heim",
+    "Logout": "Ausloggen",
+    "None": "Keiner",
+    "Personal": "Persönlich",
+    "Shared": "Geteilt",
+    "Files": "Dateien"
+  },
+  "ContextMenu": {
+    "EditDashboard": "Dashboard Modifica",
+    "EditGroup": "Gruppe Modifica",
+    "Terminal": "Terminal",
+    "UpTime": "Betriebszeit",
+    "Resize": "Größe ändern",
+    "Refresh": "Aktualisierung",
+    "UpdateHistory": "Verlauf aktualisieren"
+  },
+  "Enums": {
+    "ItemSize": {
+      "Small": "Klein",
+      "Medium": "Mittel",
+      "Large": "Groß",
+      "Larger": "Größer"
+    },
+    "LinkTarget": {
+      "OpenInThisTab":"In diesem Tab öffnen", 
+      "OpenInNewTab": "In neuem Tab öffnen",
+      "OpenInSameTab": "In derselben Registerkarte öffnen"
+    }
+  },
+  "Dialogs": {
+    "CopyItem": {
+      "Title": "Artikel Copia",
+      "Description": "Wählen Sie eine Gruppe aus, in die dieses Element kopiert werden soll",
+      "ThisGroup": "Diese Gruppe",
+      "System": "System",
+      "User": "Utente"
+    },
+    "ImportConfig": {
+      "Title": "Konfig importieren",
+      "Description": "Dadurch können Sie eine Konfiguration aus einer älteren Fenrus-Installation in die neue .NET-Version importieren.",
+      "Result": "Ergebnis importieren"
+    },
+    "UpTime": {
+      "Columns": {
+        "Date": "Datum",
+        "Up": "Hoch",
+        "Message": "Nachricht",
+        "Success": "Erfolg"
+      },
+      "Labels": {
+        "Success": "Erfolg",
+        "NoData": "Keine Verfügbarkeitsdaten verfügbar"
+      }
+    }
+  },
+  "Pages": {
+    "About": {
+      "Title": "Um",
+      "Labels": {
+        "ThirdParty": "Dritte Seite"
+      }
+    },
+    "Dashboards":{
+      "Title": "Dashboards",
+      "Labels": {
+        "PageDescription": "Auf dieser Seite können Sie Dashboards erstellen. Wenn Sie mehr als ein Dashboard haben, können Sie auf dem Startbildschirm zwischen ihnen wechseln.\n\nUm Elemente zu Ihrem Dashboard hinzuzufügen, erstellen Sie zunächst eine Gruppe mit den Elementen, die Sie Aggiungi möchten. Anschließend können Sie diese neue Gruppe zu einem Dashboard Aggiungi."
+      }
+    }, 
+    "Dashboard": {
+      "Title": "Dashboard",
+      "Title-Guest": "Gast-Dashboard",
+      "Messages": {
+        "NoAvailableGroups": "Keine verfügbaren Gruppen zum Aggiungi",
+        "GuestPageDescription": "Auf dieser Seite können Sie das Gast-Dashboard konfigurieren, das Dashboard, das Utenten angezeigt wird, wenn sie sich nicht angemeldet haben. Dies ist auch das Standard-Dashboard für neue Utente.\n\nSie können dieses Dashboard deaktivieren, wenn Sie möchten, dass sich Utente anmelden, bevor Sie Fenrus verwenden.",
+        "RemoveGroupTitle": "Gruppe entfernen",
+        "RemoveGroupMessage": "Möchten Sie die Gruppe ''{name}'' entfernen?"
+      },
+      "Fields": {
+        "Name-Help": "Der Name des Dashboards",
+        "ShowGroupTitles": "Gruppentitel anzeigen",
+        "ShowSearch": "Suche anzeigen",
+        "LinkTarget": "Linkziel",
+        "AccentColor": "Akzentfarbe",
+        "BackgroundColor": "Hintergrundfarbe",
+        "Theme": "Thema"
+      }
+    },
+    "Login": {
+      "Title": "Anmeldung",
+      "ErrorMessages": {
+        "LoginFailed": "Fehler bei der Anmeldung",
+        "RegistrationNotAllowed": "Utenteregistrierungen sind nicht zulässig\n",
+        "GuestNotAllowed": "Gastzugang ist nicht erlaubt"
+      },
+      "Labels": {
+        "PasswordReset": "Password wurde zurückgesetzt. Eine neue E-Mail wurde an Sie gesendet und auf der Konsole gedruckt.",
+        "PasswordResetFailed": "Kennwort konnte nicht zurückgesetzt werden",
+        "PasswordResetTokenInvalid": "Ungültiger Token zum Zurücksetzen des Kennworts oder Zurücksetzen des Kennworts ist abgelaufen.",
+        "PasswordResetSent": "Wenn der Utente existiert, wurde ein Password-Reset an Ihre E-Mail-Adresse gesendet oder auf der Konsole ausgedruckt.",
+        "ForgotPasswordDescription": "Geben Sie Ihren Utentenamen oder Ihre E-Mail-Adresse ein und ein Link zum Zurücksetzen des Passwords wird Ihnen per E-Mail zugesendet und in das Konsolenprotokoll gedruckt."
+      },
+      "Buttons":
+      {
+        "Login": "Registrazione",
+        "Register": "Registrazione",
+        "Guest": "Ospite",
+        "Reset": "Reset",
+        "Cancel": "Annulla"
+      },
+      "Fields":
+      {
+        "Username": "Nome utente",
+        "Password": "Password",
+        "ForgotPassword": "Password dimenticata?",
+        "UsernameOrEmailAddress": "Utente o indirizzo E-mail"
+      }
+    },
+    "SystemSettings": {
+      "Title": "Impostazioni del sistema",
+      "Labels": {
+        "PageDescription": "In questa pagina è possibile configurare le impostazioni dell'intero sistema",
+        "Smtp": "SMTP",
+        "SmtpDescription": "Configurare un server SMTP, utilizzato per inviare le e-mail di reimpostazione della password..",
+        "Importing": "La configurazione precedente è in fase di importazione, potrebbe essere necessario un po' di tempo, si prega di attendere..",
+        "UpdateApps": "Aggiornamento delle applicazioni",
+        "UpdatingApps": "Le applicazioni sono in fase di aggiornamento, attendere"
+      },
+      "Buttons": {
+        "ImportConfig": "Importare la configurazione"
+      },
+      "Messages": {
+        "TestEmailSent": "Testate l'e-mail inviata al Password, controllate la vostra e-mail per confermare il funzionamento..",
+        "FailedToDownload": "Non è stato possibile scaricare le applicazioni",
+        "UpdateRequired": "La versione di Fenrus in uso non è aggiornata. È necessario aggiornare Fenrus per ottenere le applicazioni più recenti..",
+        "AppsUpdated": "{total} applicazioni aggiornate {newCount, plural, zero {} one {(1 neue app)} altre {({newCount} neue apps)}}"
+      }
+      },
+      "Fields": {
+        "SmtpServer": "Server",
+        "SmtpPort": "Porta",
+        "SmtpUser": "Utente",
+        "SmtpPassword": "Password",
+        "SmtpSender": "Mittente",
+        "SmtpSenderHelp": "L'indirizzo e-mail da cui Fenrus invia i messaggi di posta elettronica."
+      }
+    }
+  }
+}
