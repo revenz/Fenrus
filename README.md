@@ -18,7 +18,7 @@ It allows you to have a custom home page/new tab page with quick access to your 
 ## Installation
 
 ### Dotnet
-Fenrus is a Dotnet application and requires [ASP.NET Core Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) to run.  
+Fenrus is a Dotnet application and requires [ASP.NET Core Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) to run.  
 
 Then you can run Fenrus
 ```
