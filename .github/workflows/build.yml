@@ -25,15 +25,18 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      # Target the project, not the solution: 'dotnet' otherwise resolves the lone
+      # .sln, and '--output' at solution level is unsupported (NETSDK1194). This also
+      # matches how DockerfileBuild invokes the publish.
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore Fenrus.csproj
 
       # publish compiles as part of its run, so a separate build step would only
       # compile the project twice. The release image ships published output, not build
       # output, so exercising the publish pipeline (content copying, the Apps icon
       # rules) is the more faithful compile check anyway.
       - name: Build and publish
-        run: dotnet publish --no-restore -c Release -o ./publish
+        run: dotnet publish Fenrus.csproj --no-restore -c Release -o ./publish
 
       # Reported, not enforced: several pinned dependencies are old enough to have
       # advisories, and failing here would block every branch until they are bumped.
