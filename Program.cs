@@ -221,42 +221,20 @@ void ConfigureUsingForwardedHeaders(WebApplicationBuilder webApplicationBuilder,
             if (string.IsNullOrWhiteSpace(reverseProxySettings1.KnownIpv4Network.IpAddress) ||
                 reverseProxySettings1.KnownIpv4Network.PrefixLength == 0)
                 throw new InvalidOperationException("Invalid IPv4 network configuration");
-            options.KnownNetworks.Add(CreateKnownNetwork(reverseProxySettings1.KnownIpv4Network.IpAddress,
+            // .NET 8+ added System.Net.IPNetwork, so the unqualified 'IPNetwork' the
+            // original code used is now ambiguous. ForwardedHeadersOptions.KnownNetworks
+            // is still IList<Microsoft.AspNetCore.HttpOverrides.IPNetwork>, so qualify to
+            // that type rather than switching to the System.Net one.
+            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(
+                IPAddress.Parse(reverseProxySettings1.KnownIpv4Network.IpAddress),
                 reverseProxySettings1.KnownIpv4Network.PrefixLength));
         }
 
         if (!reverseProxySettings1.KnownIpv6Network.Enabled) return;
         if(string.IsNullOrWhiteSpace(reverseProxySettings1.KnownIpv6Network.IpAddress) || reverseProxySettings1.KnownIpv6Network.PrefixLength == 0)
             throw new InvalidOperationException("Invalid IPv6 network configuration");
-        options.KnownNetworks.Add(CreateKnownNetwork(reverseProxySettings1.KnownIpv6Network.IpAddress, reverseProxySettings1.KnownIpv6Network.PrefixLength));
+        options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(
+            IPAddress.Parse(reverseProxySettings1.KnownIpv6Network.IpAddress),
+            reverseProxySettings1.KnownIpv6Network.PrefixLength));
     });
-}
-
-/// <summary>
-/// Creates a known network entry for the forwarded headers options.
-/// </summary>
-/// <remarks>
-/// ForwardedHeadersOptions.KnownNetworks changed from Microsoft.AspNetCore.HttpOverrides.IPNetwork
-/// to System.Net.IPNetwork. The framework type rejects a base address that has any bit set beyond
-/// the prefix, so the address is masked here to keep configurations such as 10.1.2.3/8 working.
-/// </remarks>
-/// <param name="ipAddress">the base address of the network</param>
-/// <param name="prefixLength">the length of the network prefix, in bits</param>
-/// <returns>the network</returns>
-System.Net.IPNetwork CreateKnownNetwork(string ipAddress, int prefixLength)
-{
-    if (IPAddress.TryParse(ipAddress, out var address) == false)
-        throw new InvalidOperationException($"Invalid known network address '{ipAddress}'");
-
-    var bytes = address.GetAddressBytes();
-    if (prefixLength < 0 || prefixLength > bytes.Length * 8)
-        throw new InvalidOperationException($"Invalid prefix length '{prefixLength}' for address '{ipAddress}'");
-
-    for (int i = 0; i < bytes.Length; i++)
-    {
-        int bitsInByte = Math.Clamp(prefixLength - (i * 8), 0, 8);
-        bytes[i] &= bitsInByte == 0 ? (byte)0 : (byte)(0xFF << (8 - bitsInByte));
-    }
-
-    return new System.Net.IPNetwork(new IPAddress(bytes), prefixLength);
 }
