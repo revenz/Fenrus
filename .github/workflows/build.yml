@@ -2,13 +2,20 @@ name: Build
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "**" ]
   pull_request:
     branches: [ "master" ]
   workflow_dispatch:
 
+# A push to every branch means several runs can queue up on an active branch.
+# Only the newest commit on a ref is worth building.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
+    name: Compile
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,8 +28,121 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build
-        run: dotnet build --no-restore -c Release
+      # publish compiles as part of its run, so a separate build step would only
+      # compile the project twice. The release image ships published output, not build
+      # output, so exercising the publish pipeline (content copying, the Apps icon
+      # rules) is the more faithful compile check anyway.
+      - name: Build and publish
+        run: dotnet publish --no-restore -c Release -o ./publish
 
+      # Reported, not enforced: several pinned dependencies are old enough to have
+      # advisories, and failing here would block every branch until they are bumped.
       - name: Check for vulnerable packages
         run: dotnet list package --vulnerable --include-transitive
+
+  smoke-test:
+    name: Smoke test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # setversion.sh stamps the build from the commit count.
+          fetch-depth: 0
+
+      - name: Set version
+        run: git rev-list --count HEAD > gitversion.txt
+
+      # Mirrors docker.sh: compile in the SDK image, publish into ./build, then bake
+      # that output into the runtime image. Testing the image we actually ship is the
+      # point -- the .NET 10 risks here are runtime ones the compiler cannot see.
+      - name: Build publish output
+        run: |
+          docker build -t fenrus-build -f DockerfileBuild .
+          docker run --rm -v "$(pwd)/build:/build" fenrus-build
+          if [ -z "$(ls -A build 2>/dev/null)" ]; then
+            echo "::error::dotnet publish produced no output"
+            exit 1
+          fi
+          sudo rm -rf build/runtimes/win* build/runtimes/osx* build/ru-*
+
+      - name: Build runtime image
+        run: docker build -t fenrus -f Dockerfile .
+
+      - name: Start container
+        run: docker run -d -p 3000:3000 --name fenrus fenrus
+
+      - name: Wait for startup
+        run: |
+          for i in $(seq 1 90); do
+            if ! docker ps --filter name=fenrus --filter status=running -q | grep -q .; then
+              echo "::error::container exited during startup"
+              exit 1
+            fi
+            if curl -fsS -o /dev/null http://localhost:3000/init-config; then
+              echo "Fenrus responded after ${i}s"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::Fenrus did not respond within 90s"
+          exit 1
+
+      - name: Check responses
+        run: |
+          set -euo pipefail
+          fail=0
+
+          check() {
+            local path="$1" expected="$2"
+            local status
+            status=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:3000${path}")
+            if [ "$status" = "$expected" ]; then
+              echo "ok    ${path} -> ${status}"
+            else
+              echo "::error::${path} returned ${status}, expected ${expected}"
+              fail=1
+            fi
+          }
+
+          # An unconfigured instance sends the root at the setup page. This covers
+          # routing, the initial-config middleware and MVC view rendering.
+          check / 302
+          check /init-config 200
+
+          # '|| true' so a missing Location header reports below instead of
+          # tripping pipefail and skipping the message.
+          location=$(curl -s -o /dev/null -D - http://localhost:3000/ \
+            | tr -d '\r' | grep -i '^location:' | awk '{print $2}' || true)
+          if [ "$location" = "/init-config" ]; then
+            echo "ok    / redirects to ${location}"
+          else
+            echo "::error::/ redirected to '${location}', expected /init-config"
+            fail=1
+          fi
+
+          # WebOptimizer compiles the Scss and bundles the JS at request time. It is the
+          # oldest dependency in the tree and the one most likely to break on a new
+          # runtime, so assert the bundles are served and non-empty rather than just 200.
+          for bundle in /css/_fenrus.css /js/_fenrus.js; do
+            check "$bundle" 200
+            size=$(curl -s "http://localhost:3000${bundle}" | wc -c)
+            if [ "$size" -gt 0 ]; then
+              echo "ok    ${bundle} is ${size} bytes"
+            else
+              echo "::error::${bundle} served an empty body"
+              fail=1
+            fi
+          done
+
+          exit $fail
+
+      - name: Container logs
+        if: failure()
+        run: docker logs fenrus
+
+      # '|| true' so a failure before the container was created (e.g. the image build)
+      # doesn't add a spurious "No such container" error to an already-failed run.
+      - name: Stop container
+        if: always()
+        run: docker rm -f fenrus || true
