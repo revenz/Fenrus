@@ -43,6 +43,15 @@ revenz/fenrus:latest
 ```
 
 Note: You can customise the port used by using the environmental variable "Port"
+
+### Easypanel
+
+[Easypanel](https://easypanel.io) is a self-hosted Docker deployment platform, and Fenrus has a one-click deployment template there:
+
+[![Deploy on Easypanel][easypanel-btn]][easypanel-deploy]
+
+[easypanel-btn]: https://easypanel.io/img/deploy-on-easypanel-40.svg
+[easypanel-deploy]: https://easypanel.io/templates/fenrus
 ```
 -e PORT=1234
 ```
