@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using NUglify.Helpers;
 
@@ -28,7 +29,7 @@ StartUpHelper.Run();
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllersWithViews();
-builder.Services.AddMvc();
+builder.Services.AddMvc().AddRazorRuntimeCompilation();
 
 //Gets the reverse proxy settings from the appsettings.json file
 //to check if the app is running behind a reverse proxy
@@ -50,13 +51,6 @@ builder.Services.AddWebOptimizer(pipeline =>
         })
         .ToArray();
     pipeline.AddJavaScriptBundle("/js/_fenrus.js", jsFiles);
-    
-    pipeline.CompileScssFiles(new () { MinifyCss = true, SourceComments = false});
-    pipeline.AddScssBundle("/css/_fenrus.css", "css/**/*.scss");
-});
-builder.Services.Configure<IISServerOptions>(options =>
-{
-    options.MaxRequestBodySize = long.MaxValue;
 });
 builder.Services.AddBlazoredToast();
 if(Environment.GetEnvironmentVariable("DetailedErrors") == "1")
@@ -126,6 +120,22 @@ var app = builder.Build();
 
 if(reverseProxySettings.UseForwardedHeaders)
     app.UseForwardedHeaders();
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Method == HttpMethods.Connect)
+    {
+        context.Response.StatusCode = 200;
+        return;
+    }
+    await next();
+});
+app.Use((context, next) =>
+{
+    if (context.Features.Get<IHttpMaxRequestBodySizeFeature>() is { } feature)
+        feature.MaxRequestBodySize = long.MaxValue;
+    return next();
+});
 bool debug = Environment.GetEnvironmentVariable("DEBUG") == "1";
 app.UseWhen(context =>
 {
@@ -173,18 +183,13 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseEndpoints(x =>
-{
-    x.MapControllers();
-});
 
+app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapBlazorHub(options =>
-{
-});
+app.MapRazorPages();
+app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 // create an uptime service to monitor the uptime status for monitor apps/links
@@ -218,16 +223,16 @@ void ConfigureUsingForwardedHeaders(WebApplicationBuilder webApplicationBuilder,
             options.KnownProxies.Add(IPAddress.Parse($"{knownProxy}"));
         if (reverseProxySettings1.KnownIpv4Network.Enabled)
         {
-            if (string.IsNullOrWhiteSpace(reverseProxySettings1.KnownIpv4Network.IpAddress) ||
-                reverseProxySettings1.KnownIpv4Network.PrefixLength == 0)
-                throw new InvalidOperationException("Invalid IPv4 network configuration");
-            options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse(reverseProxySettings1.KnownIpv4Network.IpAddress),
-                reverseProxySettings1.KnownIpv4Network.PrefixLength));
+                if (string.IsNullOrWhiteSpace(reverseProxySettings1.KnownIpv4Network.IpAddress) ||
+                    reverseProxySettings1.KnownIpv4Network.PrefixLength == 0)
+                    throw new InvalidOperationException("Invalid IPv4 network configuration");
+                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse(reverseProxySettings1.KnownIpv4Network.IpAddress),
+                    reverseProxySettings1.KnownIpv4Network.PrefixLength));
         }
 
         if (!reverseProxySettings1.KnownIpv6Network.Enabled) return;
         if(string.IsNullOrWhiteSpace(reverseProxySettings1.KnownIpv6Network.IpAddress) || reverseProxySettings1.KnownIpv6Network.PrefixLength == 0)
             throw new InvalidOperationException("Invalid IPv6 network configuration");
-        options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse(reverseProxySettings1.KnownIpv6Network.IpAddress), reverseProxySettings1.KnownIpv6Network.PrefixLength));
+        options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse(reverseProxySettings1.KnownIpv6Network.IpAddress), reverseProxySettings1.KnownIpv6Network.PrefixLength));
     });
 }

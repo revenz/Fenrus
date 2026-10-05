@@ -59,9 +59,11 @@ public class iCalService
 
         // Get the events between the start and end dates
         List<Models.CalendarEventModel> events = new ();
+        DateOnly startDay = DateOnly.FromDateTime(startDate);
+        DateOnly endDay = DateOnly.FromDateTime(endDate);
         foreach (CalendarEvent calendarEvent in calendar.Events)
         {
-            if (calendarEvent.Start.Date >= startDate.Date && calendarEvent.Start.Date <= endDate.Date)
+            if (calendarEvent.Start.Date >= startDay && calendarEvent.Start.Date <= endDay)
             {
                 events.Add(Models.CalendarEventModel.From(calendarEvent.Uid, calendarEvent.Summary?.EmptyAsNull() ?? calendarEvent.Name,
                     calendarEvent.Start.AsUtc, calendarEvent.End.AsUtc, true));

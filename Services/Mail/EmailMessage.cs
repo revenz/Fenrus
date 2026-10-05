@@ -1,6 +1,8 @@
 using MailKit;
 using MimeKit;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
+using SixLabors.ImageSharp.Processing;
 
 namespace Fenrus.Services;
 

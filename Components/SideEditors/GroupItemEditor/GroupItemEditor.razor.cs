@@ -516,7 +516,7 @@ var test = instance.test(testArgs);");
             if (str?.ToLowerInvariant() == "true")
             {
                 if(Debug && string.IsNullOrEmpty(logStr) == false)
-                    ToastService.ShowSuccess(message: logStr, heading: lblTestSuccesful);
+                    ToastService.ShowSuccess(logStr);
                 else
                     ToastService.ShowSuccess(lblTestSuccesful);
             }
@@ -525,7 +525,7 @@ var test = instance.test(testArgs);");
                 if (string.IsNullOrEmpty(logStr))
                     ToastService.ShowError(lblTestFailed);
                 else
-                    ToastService.ShowError(message: logStr, heading: lblTestFailed);
+                    ToastService.ShowError(logStr);
             }
             else
                 ToastService.ShowInfo(str?.EmptyAsNull() ?? "Test Unknown");

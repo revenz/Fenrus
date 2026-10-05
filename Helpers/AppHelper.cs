@@ -33,9 +33,9 @@ public class AppHeler
         string code = File.ReadAllText(codeFile);
         code += $"\n\nlet instance = new {appName}()\nexport {{ instance }};";
 
-        var engine = new Engine(options => { });
-        engine.AddModule(appName, code);
-        var module = engine.ImportModule(appName);
+                var engine = new Engine();
+        engine.Modules.Add(appName, code);
+        var module = engine.Modules.Import(appName);
 
         var instance = module.Get("instance").AsObject();
 

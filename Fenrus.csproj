@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <NoWarn>CS8618;CS0162;CS8602</NoWarn>
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,24 +15,27 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-    <PackageReference Include="Blazored.Toast" Version="3.2.2" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.1" />
+    <PackageReference Include="Blazored.Toast" Version="4.2.1" />
     <PackageReference Include="Docker.DotNet" Version="3.125.15" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
-    <PackageReference Include="Ical.Net" Version="4.2.0" />
-    <PackageReference Include="Jint" Version="3.0.0-beta-2047" />
-    <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.384" />
-    <PackageReference Include="LigerShark.WebOptimizer.Sass" Version="3.0.91" />
-    <PackageReference Include="LiteDB" Version="5.0.16" />
-    <PackageReference Include="MailKit" Version="4.0.0" />
-    <PackageReference Include="Markdig" Version="0.31.0" />
-    <PackageReference Include="MessageFormat" Version="6.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.5" />
-    <PackageReference Include="NLog" Version="5.1.4" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
-    <PackageReference Include="SSH.NET" Version="2020.0.2" />
-    <PackageReference Include="System.Runtime.Caching" Version="7.0.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.13.0" />
+    <PackageReference Include="Humanizer.Core" Version="3.0.10" />
+    <PackageReference Include="Ical.Net" Version="5.2.3" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.31.0" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Jint" Version="3.35.2" />
+    <PackageReference Include="Jint" Version="4.16.4" />
+    <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.477" />
+    <PackageReference Include="LigerShark.WebOptimizer.Sass" Version="3.0.147" />
+    <PackageReference Include="LiteDB" Version="5.0.21" />
+    <PackageReference Include="MailKit" Version="4.18.1" />
+    <PackageReference Include="Markdig" Version="1.4.0" />
+    <PackageReference Include="MessageFormat" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.12" />
+    <PackageReference Include="NLog" Version="6.2.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="4.1.2" />
+    <PackageReference Include="SSH.NET" Version="2026.0.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="10.0.12" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,16 +59,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="data\drive\**" />
-    <Content Remove="data\logs\**" />
-    <Content Remove="Assemblies\**" />
-    <Content Update="Apps\Basic\Fenrus\icon.svg">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="data\drive\**" />
     <None Remove="data\logs\**" />
     <None Remove="Assemblies\**" />
@@ -74,6 +68,22 @@
     <Reference Include="CalDAV.NET">
       <HintPath>Assemblies\CalDAV.NET.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="**\*.razor" ExcludeFromSingleFile="true" Exclude="data\**;Assemblies\**;obj\**;bin\**" />
+    <Content Include="wwwroot\**\*" ExcludeFromSingleFile="true" Exclude="obj\**;bin\**" />
+    <Content Include="Pages\**\*.cshtml" ExcludeFromSingleFile="true" Exclude="obj\**;bin\**" />
+    <Content Include="Views\**\*.cshtml" ExcludeFromSingleFile="true" Exclude="obj\**;bin\**" />
+    <Content Include="Apps\**\*.json" ExcludeFromSingleFile="true" />
+    <Content Include="i18n\**\*.json" ExcludeFromSingleFile="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Apps\Basic\Fenrus\icon.svg">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

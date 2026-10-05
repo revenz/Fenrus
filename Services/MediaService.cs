@@ -1,5 +1,3 @@
-using Microsoft.ClearScript.JavaScript;
-
 namespace Fenrus.Services;
 
 /// <summary>
