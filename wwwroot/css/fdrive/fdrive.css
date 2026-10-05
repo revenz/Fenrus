@@ -1,3 +1,1129 @@
+#fdrive-files-address {
+  direction: rtl;
+  overflow: hidden;
+  background: #1c1c1c;
+  padding: 2px;
+  margin: 0.5rem 0 0.5rem 0.5rem;
+  flex-grow: 1;
+  border-radius: 7px;
+}
+#fdrive-files-address .address-bar {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-block;
+  white-space: nowrap;
+}
+#fdrive-files-address button {
+  font-size: 0.9rem;
+  background: transparent;
+  border: none;
+  color: rgba(var(--color-rgb), 0.7);
+  height: calc(100% - 0.6rem);
+  margin: 0.25rem;
+  padding: 0 0.75rem;
+  border-radius: 0.35rem;
+}
+#fdrive-files-address button i {
+  margin-right: 0.25rem;
+}
+#fdrive-files-address button:hover {
+  background: rgba(var(--accent-rgb), 0.3);
+  color: var(--color);
+}
+#fdrive-files-address button:first-child {
+  font-weight: bold;
+  color: var(--color);
+}
+#fdrive-files-address .address-bar button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+#fdrive-files-address .address-bar button:hover {
+  text-decoration: none;
+}
+#fdrive-files-address.searching {
+  display: flex;
+  flex-direction: row;
+}
+#fdrive-files-address.searching i {
+  width: 2rem;
+  opacity: 0.3;
+  padding-top: 0.65rem;
+}
+#fdrive-files-address.searching i.fa-xmark {
+  cursor: pointer;
+}
+#fdrive-files-address.searching i.fa-xmark:hover {
+  opacity: 1;
+}
+#fdrive-files-address.searching .file-search {
+  flex-grow: 1;
+  height: 100%;
+  text-align: left;
+  background: transparent;
+  color: var(--color);
+  border: none;
+  outline: none;
+  direction: ltr;
+  font-size: 0.9rem;
+}
+
+#fdrive-files .btn-file-search {
+  position: absolute;
+  background: var(--base);
+  right: 5.9rem;
+  top: 7px;
+  padding: 0.5rem;
+  border: solid 1px var(--border-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background: none;
+  cursor: pointer;
+  color: rgba(var(--color-rgb), 0.7);
+  display: flex;
+  align-items: center;
+  height: 2rem;
+}
+#fdrive-files .btn-file-search i {
+  opacity: 0.5;
+}
+#fdrive-files .btn-file-search:hover {
+  color: var(--color);
+}
+
+#fdrive-apps #apps-actual {
+  padding: 1em;
+  width: calc(100% - 2em);
+  height: calc(100% - var(--tabs-height));
+  user-select: none;
+  font-size: 0.9rem;
+}
+#fdrive-apps {
+  --grid-width: 7em;
+  --grid-height: 8em;
+  --font-size:0.95em;
+}
+#fdrive-apps .group + .group {
+  margin-top: 1em;
+}
+#fdrive-apps .group > .title {
+  display: block;
+  font-size: calc(var(--font-size) * 1.1);
+  margin: 0 0 0.5em 0.5em;
+  text-transform: uppercase;
+}
+#fdrive-apps .group .apps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--grid-width), 1fr));
+  grid-auto-rows: var(--grid-height);
+  grid-gap: 0;
+}
+#fdrive-apps .drive-app {
+  width: 100%;
+  height: var(--grid-height);
+  cursor: pointer;
+}
+#fdrive-apps .drive-app.selected .drive-app-inner {
+  background: rgba(var(--accent-rgb), 0.3) !important;
+}
+#fdrive-apps .drive-app.selected .drive-app-inner:hover {
+  background: rgba(var(--accent-rgb), 0.4) !important;
+}
+#fdrive-apps .drive-app-inner {
+  position: relative;
+  overflow: hidden;
+  margin: 0.25em;
+  padding: 0.25em;
+  width: calc(100% - 1em);
+  height: calc(100% - 1em);
+  border-radius: 0.5em;
+}
+#fdrive-apps .drive-app-inner:hover {
+  background: rgba(var(--accent-rgb), 0.4) !important;
+}
+#fdrive-apps .name {
+  text-align: center;
+  word-break: break-word;
+  display: block;
+  font-size: var(--font-size);
+  height: calc(45% - 0.5em);
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#fdrive-apps .icon {
+  width: calc(100% - 2em);
+  padding: 0 1em 0.25em;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 0.25em;
+}
+#fdrive-apps .icon img:not(.shortcut) {
+  border-radius: 0.25em;
+  object-fit: contain;
+  max-width: 120%;
+}
+#fdrive-apps .icon i {
+  font-size: 10em;
+}
+#fdrive-apps .shortcut {
+  position: absolute;
+  width: 1.5em;
+  height: 1.5em;
+  object-fit: contain;
+  bottom: 0.25em;
+  left: 0.5em;
+}
+
+#fdrive-apps-iframe, #fdrive-apps-terminal {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 2em;
+  height: calc(100% - 4em);
+  width: calc(100% - 4em);
+  transition: transform 0.2s ease-in-out;
+  transform: translateX(100%);
+  background: var(--base);
+  flex-direction: column;
+  background: #1e1e1e;
+}
+#fdrive-apps-iframe.visible, #fdrive-apps-terminal.visible {
+  transform: translateX(0);
+  display: flex;
+  z-index: 5;
+}
+#fdrive-apps-iframe .app-target-container, #fdrive-apps-terminal .app-target-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgb(8.5, 8.5, 8.5);
+  background-color: #222;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  color: var(--color);
+  border-radius: 1em;
+}
+#fdrive-apps-iframe .app-target-container .header, #fdrive-apps-terminal .app-target-container .header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 2em);
+  height: 50px;
+  background-color: rgb(41.65, 41.65, 41.65);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1em;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+}
+#fdrive-apps-iframe .app-target-container .header .controls, #fdrive-apps-terminal .app-target-container .header .controls {
+  display: flex;
+  align-items: center;
+}
+#fdrive-apps-iframe .app-target-container .header .controls button + button, #fdrive-apps-terminal .app-target-container .header .controls button + button {
+  margin-left: 0.75em;
+}
+#fdrive-apps-iframe .app-target-container .header .controls button, #fdrive-apps-terminal .app-target-container .header .controls button {
+  color: var(--color);
+  border: none;
+  font-size: 1em;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+#fdrive-apps-iframe .app-target-container .header .controls .btn-newtab, #fdrive-apps-terminal .app-target-container .header .controls .btn-newtab {
+  background: var(--info);
+}
+#fdrive-apps-iframe .app-target-container .header .controls .btn-refresh, #fdrive-apps-terminal .app-target-container .header .controls .btn-refresh {
+  background: var(--success);
+}
+#fdrive-apps-iframe .app-target-container .header .controls .btn-close, #fdrive-apps-terminal .app-target-container .header .controls .btn-close {
+  background-color: var(--danger);
+}
+#fdrive-apps-iframe .app-target-container .header .address-bar, #fdrive-apps-terminal .app-target-container .header .address-bar {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  transition: background-color 0.2s ease-in-out;
+  background-color: #090909;
+  border-radius: 0.75em;
+  padding: 0.5em 1em;
+  margin-right: 10px;
+  width: calc(100% - 3em);
+  display: flex;
+  flex-direction: row;
+}
+#fdrive-apps-iframe .app-target-container .header .address-bar img:not(.shortcut), #fdrive-apps-terminal .app-target-container .header .address-bar img:not(.shortcut) {
+  height: 90%;
+  width: 2em;
+  margin-right: 0.5em;
+  object-fit: contain;
+}
+#fdrive-apps-iframe .app-target-container .header .address-bar input[type=text], #fdrive-apps-terminal .app-target-container .header .address-bar input[type=text] {
+  height: 1.5em;
+  border: none;
+  font-size: 1.1em;
+  background: transparent;
+  flex-grow: 1;
+  color: var(--color);
+}
+#fdrive-apps-iframe .app-target-container .header .address-bar input[type=text]:focus, #fdrive-apps-terminal .app-target-container .header .address-bar input[type=text]:focus {
+  background-color: black;
+  outline: none;
+}
+#fdrive-apps-iframe .app-target-container .inner-container, #fdrive-apps-terminal .app-target-container .inner-container {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+#fdrive-apps-iframe .app-target-container .inner-container iframe, #fdrive-apps-iframe .app-target-container .inner-container > div, #fdrive-apps-terminal .app-target-container .inner-container iframe, #fdrive-apps-terminal .app-target-container .inner-container > div {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+}
+#fdrive-apps-iframe .app-target-container .inner-container > div, #fdrive-apps-terminal .app-target-container .inner-container > div {
+  width: calc(100% - 2em);
+  height: calc(100% - 2em);
+  padding: 1em;
+  background: #000;
+}
+
+#fdrive-email #email-actual .email {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 3rem 1fr 8rem;
+  grid-gap: 10px;
+  align-items: center;
+  margin: 0.5rem 0 0.5rem 1rem;
+  background: #222222;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  user-select: none;
+  color: rgba(var(--color-rgb), 0.7);
+}
+#fdrive-email #email-actual .email:not(.seen) {
+  color: var(--color);
+  font-weight: 600;
+}
+#fdrive-email #email-actual .email:not(.seen) .icon {
+  position: relative;
+}
+#fdrive-email #email-actual .email:not(.seen) .icon::after {
+  content: "NEW";
+  position: absolute;
+  border: solid 1px;
+  border-radius: 0.25rem;
+  font-size: 0.6rem;
+  bottom: -0.25rem;
+  padding: 0.2rem;
+  left: 0.75rem;
+  background: #222;
+}
+#fdrive-email #email-actual .email.selected {
+  background: rgba(var(--accent-rgb), 0.4);
+}
+#fdrive-email #email-actual .email:hover {
+  cursor: pointer;
+  background: rgba(var(--accent-rgb), 0.6);
+}
+#fdrive-email #email-actual .email .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-row: 1/span 2;
+  grid-column: 1;
+  border-radius: 50%;
+  background: #1a1a1a;
+  font-size: 1.2rem;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+#fdrive-email #email-actual .email .sender {
+  grid-row: 1;
+  grid-column: 2;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#fdrive-email #email-actual .email .date {
+  grid-row: 1;
+  grid-column: 3;
+  text-align: right;
+  padding-right: 0.5rem;
+}
+#fdrive-email #email-actual .email .subject {
+  grid-row: 2;
+  grid-column: 2/span 2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+#fdrive-email-message .email-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 10px;
+}
+#fdrive-email-message .email-header-subject {
+  grid-column: 1/span 1;
+  grid-row: 1/span 1;
+  font-size: 1.5rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#fdrive-email-message .email-header-actions {
+  display: flex;
+  grid-column: 2/span 1;
+  grid-row: 1/span 1;
+}
+#fdrive-email-message .email-header-info {
+  grid-column: 1/span 2;
+  grid-row: 2/span 1;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: repeat(4, auto);
+  background: #222222;
+  border-radius: 1rem;
+  padding: 0.5rem;
+}
+#fdrive-email-message .email-header-info .email-header-icon {
+  grid-column: 1/2;
+  grid-row: 1/span 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #1a1a1a;
+  font-size: 1.4rem;
+  height: 3rem;
+  width: 3rem;
+  margin-top: 0.5rem;
+}
+#fdrive-email-message .email-header-info .email-header-from {
+  grid-column: 2/3;
+  grid-row: 1/2;
+  padding: 10px;
+}
+#fdrive-email-message .email-header-info .email-header-to {
+  grid-column: 2/3;
+  grid-row: 2/3;
+  padding: 10px;
+}
+#fdrive-email-message .email-header-info .email-header-date {
+  grid-column: 3/4;
+  grid-row: 1/2;
+  padding: 10px;
+}
+#fdrive-email-message .email-body {
+  flex-grow: 1;
+  white-space: pre-wrap;
+  margin-top: 1rem;
+  border-radius: 1rem;
+  position: relative;
+  background: #222;
+}
+#fdrive-email-message .email-body * {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+}
+#fdrive-email-message .email-body {
+  /* Optional: set the box-sizing property to border-box to make box sizing more intuitive */
+}
+#fdrive-email-message .email-body *,
+#fdrive-email-message .email-body *::before,
+#fdrive-email-message .email-body *::after {
+  box-sizing: border-box;
+}
+#fdrive-email-message .email-body .email-body-content {
+  margin: 1rem;
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  right: 0;
+  overflow: auto;
+  border-radius: 1rem;
+}
+#fdrive-email-message .email-body.dark .email-body-content > div {
+  background: #ddd;
+  color: #000;
+  filter: invert(1);
+}
+#fdrive-email-message .email-body.dark img {
+  filter: invert(1);
+}
+
+.initials-a {
+  color: #ff6347;
+}
+
+.initials-b {
+  color: #87cefa;
+}
+
+.initials-c {
+  color: #ff69b4;
+}
+
+.initials-d {
+  color: #7fff00;
+}
+
+.initials-e {
+  color: #00bfff;
+}
+
+.initials-f {
+  color: #ff8c00;
+}
+
+.initials-g {
+  color: #4169e1;
+}
+
+.initials-h {
+  color: #ffa07a;
+}
+
+.initials-i {
+  color: #1e90ff;
+}
+
+.initials-j {
+  color: #ff00ff;
+}
+
+.initials-k {
+  color: #008080;
+}
+
+.initials-l {
+  color: #dc143c;
+}
+
+.initials-m {
+  color: #00ff7f;
+}
+
+.initials-n {
+  color: #9932cc;
+}
+
+.initials-o {
+  color: #ffd700;
+}
+
+.initials-p {
+  color: #add8e6;
+}
+
+.initials-q {
+  color: #9400d3;
+}
+
+.initials-r {
+  color: #ffff00;
+}
+
+.initials-s {
+  color: #00ffff;
+}
+
+.initials-t {
+  color: #ffa500;
+}
+
+.initials-u {
+  color: #a0522d;
+}
+
+.initials-v {
+  color: #00fa9a;
+}
+
+.initials-w {
+  color: #b22222;
+}
+
+.initials-x {
+  color: #00ced1;
+}
+
+.initials-y {
+  color: #ff69b4;
+}
+
+.initials-z {
+  color: #8b008b;
+}
+
+.initials-digit {
+  color: #f0e68c;
+}
+
+.initials-other {
+  color: #add8e6;
+}
+
+body {
+  --fc-button-bg-color: var(--base);
+  --fc-button-border-color: rgba(var(--accent-rgb), 0.7);
+  --fc-button-text-color: var(--color);
+  --fc-button-hover-bg-color: var(--base);
+  --fc-button-hover-border-color: var(--accent);
+  --fc-button-active-bg-color: var(--base);
+  --fc-button-active-border-color: var(--accent);
+  --fc-non-business-color: rgba(var(--color-rgb), 0.05);
+  --fc-border-color: var(--border-color);
+  --fc-event-bg-color: rgba(var(--accent-rgb), 0.3);
+  --fc-event-border-color: var(--accent);
+  --fc-today-bg-color: rgba(var(--accent-rgb), 0.3);
+  --fc-small-font-size: 1rem;
+  --fc-neutral-bg-color: var(--base);
+  --fc-list-event-hover-bg-color:rgba(var(--accent-rgb), 0.3);
+  --fc-highlight-color: rgba(var(--accent-rgb), 0.2);
+}
+
+#fdrive-wrapper.small #calendar-actual {
+  padding-top: 0.5rem !important;
+}
+#fdrive-wrapper.small .fc-header-toolbar {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+#fdrive-wrapper.small .fc-header-toolbar > div {
+  text-align: right;
+}
+#fdrive-wrapper.small .fc-header-toolbar > div:nth-child(2n) {
+  grid-row: 1;
+  grid-column: 1/span 2;
+}
+#fdrive-wrapper.small .fc-header-toolbar > div:first-child {
+  grid-row: 2;
+  grid-column: 1;
+  text-align: left;
+}
+#fdrive-wrapper.small .fc-header-toolbar > div:last-child {
+  grid-row: 2;
+  grid-column: 2;
+}
+#fdrive-wrapper.small .fc-toolbar-title {
+  font-size: 1.4rem;
+}
+
+#fdrive-calendar .fdrive-pane-title, #fdrive-email .fdrive-pane-title, #fdrive-apps .fdrive-pane-title {
+  background: #000;
+  text-align: center;
+}
+#fdrive-calendar .fdrive-pane-title > span, #fdrive-email .fdrive-pane-title > span, #fdrive-apps .fdrive-pane-title > span {
+  line-height: 3rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 0.3rem;
+}
+#fdrive-calendar .fdrive-pane-title .title, #fdrive-email .fdrive-pane-title .title, #fdrive-apps .fdrive-pane-title .title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 70%;
+  width: 70%;
+  white-space: nowrap;
+  direction: rtl;
+  display: inline-block;
+}
+
+#fdrive-calendar #calendar-actual {
+  padding: 1rem 2rem 7rem;
+}
+#fdrive-calendar #calendar-actual > .fc-view-harness {
+  background: var(--base);
+}
+#fdrive-calendar #calendar-actual .fc-timegrid-event-harness {
+  line-height: 1.1rem !important;
+}
+#fdrive-calendar #calendar-actual table tr > :first-child:not(.fc-list-event-time) {
+  padding-left: unset !important;
+}
+#fdrive-calendar .fc-daygrid-day-events {
+  position: absolute;
+  width: 100%;
+}
+#fdrive-calendar .fc-daygrid-day-events .fc-daygrid-event-dot {
+  display: none;
+}
+#fdrive-calendar .fc-daygrid-day-events .fc-daygrid-event-harness a {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: rgba(var(--accent-rgb), 0.1);
+  padding: 0.5rem 0.25rem;
+}
+#fdrive-calendar .fc-daygrid-day-events .fc-daygrid-event-harness a b {
+  margin-right: 0.5rem;
+}
+#fdrive-calendar .fc .fc-daygrid-day-frame {
+  overflow: hidden;
+}
+#fdrive-calendar .fc-timeGridWeek-view .fc-event-main b {
+  display: block;
+}
+#fdrive-calendar .fc-timeGridWeek-view tbody > tr:first-child td .fc-daygrid-day-frame {
+  height: fit-content;
+  overflow: unset;
+}
+#fdrive-calendar .fc-timeGridWeek-view tbody > tr:first-child td .fc-daygrid-day-frame .fc-daygrid-day-events {
+  position: unset;
+}
+#fdrive-calendar .fc-timeGridWeek-view tbody > tr:first-child td .fc-daygrid-day-frame .fc-daygrid-day-events a {
+  white-space: normal;
+}
+#fdrive-calendar td.fc-day {
+  line-height: 1.1rem;
+}
+#fdrive-calendar .fc-event {
+  overflow: hidden;
+}
+
+#fdrive-calendar-popover {
+  background: rgba(var(--base-rgb), 0.9);
+  border: solid 1px var(--accent);
+  padding: 0.5rem;
+  z-index: 1000;
+  position: relative;
+}
+#fdrive-calendar-popover .pointer {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 1rem 0 1rem 1rem;
+  border-color: transparent transparent transparent var(--accent);
+  transform: translateX(-100%) translateY(-50%) rotate(180deg);
+  position: absolute;
+  left: 0;
+  top: 50%;
+}
+#fdrive-calendar-popover .title {
+  display: flex;
+  flex-direction: column;
+}
+#fdrive-calendar-popover .title .name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  max-height: 5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#fdrive-calendar-popover .title .day {
+  color: var(--accent);
+}
+#fdrive-calendar-popover .controls {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  flex-direction: column-reverse;
+}
+#fdrive-calendar-popover .controls i {
+  opacity: 0.5;
+  margin: 0.5rem 0;
+  cursor: pointer;
+  font-size: 1.2rem;
+  width: 2rem;
+  text-align: center;
+}
+#fdrive-calendar-popover .controls i:hover {
+  opacity: 1;
+}
+
+.fc-daygrid-day-number {
+  color: rgba(var(--color-rgb), 0.8);
+}
+
+.fc-day-today .fc-daygrid-day-number {
+  color: var(--color);
+  font-weight: 600;
+}
+
+#fdrive-files {
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+#fdrive-files > .content.file-drag {
+  cursor: grabbing !important;
+}
+#fdrive-files > .content.file-drag .file-inner {
+  opacity: 0.5;
+}
+#fdrive-files > .content.file-drag .file.folder:not(.selected):hover .file-inner {
+  opacity: 1 !important;
+  background: rgba(var(--accent-rgb), 0.5) !important;
+}
+#fdrive-files .file {
+  overflow: hidden;
+}
+#fdrive-files .fdrive-pane-title {
+  background: #000;
+  text-align: center;
+  flex-direction: row;
+  display: flex;
+}
+#fdrive-files .file-inner {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+#fdrive-files #fdrive-add-menu.visible {
+  max-height: 20rem;
+  visibility: visible;
+}
+#fdrive-files #fdrive-add-menu {
+  visibility: hidden;
+  max-height: 0;
+  transition: max-height 0.25s ease-in-out, visibility 0.25s ease-out;
+  padding: 0.5rem;
+  position: absolute;
+  bottom: 8rem;
+  right: 1rem;
+  overflow: hidden;
+  background: black;
+  border: solid 1px var(--border-color);
+}
+#fdrive-files #fdrive-add-menu li {
+  list-style: none;
+  padding: 0.5rem;
+  text-transform: uppercase;
+  min-width: 10rem;
+  cursor: pointer;
+}
+#fdrive-files #fdrive-add-menu li i {
+  margin-right: 0.5rem;
+}
+#fdrive-files #fdrive-add-menu li:hover {
+  background: rgba(var(--accent-rgb), 0.3);
+}
+#fdrive-files #fdrive-add-menu li.separator {
+  cursor: default;
+  height: 0;
+  border-bottom: solid 1px var(--border-color);
+  display: inline-block;
+  padding: 0 0.5rem;
+  margin: 0;
+  position: relative;
+  top: -0.25rem;
+}
+#fdrive-files #fdrive-list .file.no-img .icon img {
+  object-fit: contain !important;
+  max-width: 6rem;
+  max-height: 6rem;
+}
+#fdrive-files #fdrive-list {
+  position: relative;
+}
+#fdrive-files .file.selected .file-inner {
+  background: rgba(var(--accent-rgb), 0.3) !important;
+}
+#fdrive-files .file.selected .file-inner:hover {
+  background: rgba(var(--accent-rgb), 0.4) !important;
+}
+#fdrive-files .toolbar {
+  display: flex;
+  flex-direction: row;
+  place-items: center;
+  margin-right: 0.75rem;
+}
+#fdrive-files .toolbar i {
+  cursor: pointer;
+  opacity: 0.5;
+  font-size: 0.9rem;
+}
+#fdrive-files .toolbar i:hover {
+  opacity: 1;
+}
+#fdrive-files .toolbar .fdt-btn {
+  flex: 1;
+  box-sizing: border-box;
+  position: relative;
+  background: transparent;
+  color: var(--color);
+  border: solid 1px var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  min-width: 1rem;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  max-height: 2rem;
+  max-width: 2.25rem;
+  margin: 0 0 0 0.5rem;
+}
+#fdrive-files .toolbar .fdt-btn:hover {
+  opacity: 1;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown {
+  max-width: 3.5rem;
+  min-width: 3.5rem;
+  width: 3.5rem;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .caret {
+  font-size: 0.8rem;
+  margin: 0;
+  width: unset;
+  position: relative;
+  left: -0.125rem;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown i:not(.caret) {
+  width: 1.1rem;
+  min-width: 1.1rem;
+  max-width: 1.1rem;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .line {
+  padding: 0 0.35rem;
+  position: relative;
+  top: -1px;
+  opacity: 0.5;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-toggle {
+  border: solid 1px var(--border-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background: none;
+  cursor: pointer;
+  color: rgba(var(--color-rgb), 0.7);
+  display: flex;
+  align-items: center;
+  height: 2rem;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-toggle .view-icon {
+  padding-right: 0.5rem;
+  border-right: solid 2px var(--border-color);
+  width: 1rem;
+  height: 1rem;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-toggle .caret {
+  height: 2rem;
+  width: 1rem;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-toggle .caret:before {
+  position: relative;
+  top: 0.65rem;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-toggle .dropdown-label {
+  margin-right: 5px;
+  font-size: 14px;
+  color: #777;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-toggle i {
+  display: inline-block;
+  vertical-align: middle;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-toggle .fa-caret-down {
+  margin-left: 5px;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  display: none;
+  min-width: 9rem;
+  padding: 0.25rem 0.75rem 0.75rem;
+  background-color: var(--base);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  border-radius: 0.5rem;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-menu .dropdown-label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  opacity: 0.5;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-menu .advanced {
+  text-align: left;
+  border-top: solid 1px #333;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-menu .advanced label > input[type=checkbox] {
+  margin-right: 0.75rem;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-menu .radio-group {
+  display: flex;
+  flex-direction: column;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-menu .radio-group label {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  place-items: flex-end;
+  line-height: 100%;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-menu .radio-group label input[type=radio] {
+  margin-right: 5px;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-menu .radio-group label:hover {
+  background: rgba(var(--accent-rgb), 0.3);
+  border-radius: 0.5rem;
+}
+#fdrive-files .toolbar .fdt-btn-dropdown .dropdown-menu.visible {
+  display: block;
+}
+
+.file-drag-handle {
+  transform: translateY(-50%) translateX(-50%);
+  z-index: 10000;
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  pointer-events: none;
+}
+.file-drag-handle img {
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  object-fit: contain;
+  position: absolute;
+}
+.file-drag-handle img + img {
+  z-index: 2;
+  left: -0.5rem;
+  top: -0.5rem;
+}
+.file-drag-handle img + img + img {
+  z-index: 1;
+  left: -1rem;
+  top: -1rem;
+}
+
+#fdrive-notes .fdrive-pane-title {
+  display: flex;
+  flex-direction: row;
+}
+#fdrive-notes .fdrive-pane-title > div {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-basis: 0;
+  flex-grow: 1;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.3rem;
+  background: #000;
+  user-select: none;
+  color: rgba(var(--color-rgb), 0.3);
+}
+#fdrive-notes .fdrive-pane-title > div.active {
+  color: var(--color);
+  background: unset;
+}
+#fdrive-notes .note {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  border: solid 1px var(--border-color);
+  padding: 0.5rem;
+  max-height: 8rem;
+  transition: max-height 0.25s ease-in-out;
+  overflow: hidden;
+  position: relative;
+}
+#fdrive-notes .note.readonly::after {
+  content: "\f502"; /* Font Awesome 6 lock icon unicode */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0.5rem;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 3rem;
+}
+#fdrive-notes .note input, #fdrive-notes .note .content-editor {
+  padding: 0.5rem;
+  width: calc(100% - 3rem);
+  outline: none;
+  border: solid 1px transparent;
+}
+#fdrive-notes .note input, #fdrive-notes .note textarea {
+  background: transparent;
+  color: var(--input-color);
+  font-family: sans-serif;
+}
+#fdrive-notes .note input {
+  font-size: 1.2rem;
+}
+#fdrive-notes .note .content-editor {
+  overflow: hidden;
+  font-size: 1.1rem;
+}
+#fdrive-notes .note:hover .controls, #fdrive-notes .note:focus-within .controls {
+  display: flex;
+}
+#fdrive-notes .note:focus-within {
+  background: var(--input-background);
+  max-height: 80vh;
+}
+#fdrive-notes .note:focus-within .content-editor {
+  overflow: auto;
+}
+#fdrive-notes .note:focus-within .content-editor > div {
+  overflow: auto;
+}
+#fdrive-notes .note .controls {
+  display: none;
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  flex-direction: column;
+  min-height: 7rem;
+  width: 2rem;
+  font-size: 1.3rem;
+  text-align: center;
+}
+#fdrive-notes .note .controls > i {
+  height: 2rem;
+  vertical-align: center;
+  cursor: pointer;
+  opacity: 0.6;
+}
+#fdrive-notes .note .controls > i:hover {
+  opacity: 1;
+}
+
 #fdrive-wrapper {
   position: relative;
   --tabs-height:5.5rem;
@@ -22,11 +1148,13 @@
   z-index: 2;
   border: solid 1px var(--border-color);
   border-left: solid 1px rgba(17, 17, 17, 0.9333333333);
-  cursor: pointer;
-  opacity: 0.75;
 }
 #fdrive-wrapper .expander:has(+ .resizer:hover) {
   border-left: solid 7px rgba(17, 17, 17, 0.9333333333);
+}
+#fdrive-wrapper .expander {
+  cursor: pointer;
+  opacity: 0.75;
 }
 #fdrive-wrapper .expander:hover {
   opacity: 1;
@@ -109,22 +1237,26 @@
   background: rgba(var(--accent-rgb), 0.3);
   cursor: pointer;
   transition: transform 0.1s ease-in-out;
+}
+#fdrive-wrapper .fdrive-add-button > i:hover {
+  background: rgba(var(--accent-rgb), 0.7);
+  transform: scale(1.1);
+}
+#fdrive-wrapper .fdrive-add-button > i {
   font-size: 2rem;
   font-weight: 900;
   color: var(--color);
   width: 2rem;
   height: 2rem;
   margin: auto;
-  -webkit-text-stroke: 0.5rem var(--color);
-}
-#fdrive-wrapper .fdrive-add-button > i:hover {
-  background: rgba(var(--accent-rgb), 0.7);
-  transform: scale(1.1);
 }
 @-moz-document url-prefix() {
   #fdrive-wrapper .fdrive-add-button > i {
     text-shadow: -1px -1px 0 var(--color), 1px -1px 0 var(--color), -1px 1px 0 var(--color), 1px 1px 0 var(--color), -2px -2px 0 var(--color), 2px -2px 0 var(--color), -2px 2px 0 var(--color), 2px 2px 0 var(--color);
   }
+}
+#fdrive-wrapper .fdrive-add-button > i {
+  -webkit-text-stroke: 0.5rem var(--color);
 }
 #fdrive-wrapper .fdrive-add-button > i::before {
   position: relative;
@@ -154,17 +1286,19 @@
   flex-grow: 1;
   font-size: 1rem;
   flex-direction: column;
+}
+@media screen and (max-width: 1000px) {
+  #fdrive-wrapper .fdrive-tabs > div {
+    font-size: 0.9rem;
+  }
+}
+#fdrive-wrapper .fdrive-tabs > div {
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.3rem;
   opacity: 0.2;
   background: #000;
   user-select: none;
-}
-@media screen and (max-width: 1000px) {
-  #fdrive-wrapper .fdrive-tabs > div {
-    font-size: 0.9rem;
-  }
 }
 #fdrive-wrapper .fdrive-tabs > div.active {
   opacity: 1;
@@ -279,6 +1413,376 @@ body.drawer-item-opened .expander {
 }
 .fdrive-item-content .header button:hover {
   background: rgba(var(--accent-rgb), 0.4);
+}
+
+.file-uploader-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: min(90vw, 32rem);
+  background-color: rgba(var(--base-rgb), 0.9);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  padding: 1rem 1rem 0;
+  display: flex;
+  flex-direction: column;
+}
+.file-uploader-container.hidden {
+  display: none;
+}
+
+.file-uploader-item {
+  display: block;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.file-uploader-item.complete {
+  transition: opacity 0.2s ease-in-out;
+  opacity: 0;
+}
+
+.file-uploader-name {
+  margin-right: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-uploader-progress {
+  width: 100%;
+  height: 10px;
+  background-color: #666;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.file-uploader-progress-fill {
+  height: 100%;
+  width: 0%;
+  background-color: #e0de57;
+  border-radius: 5px;
+  transition: width 0.2s ease-in-out;
+}
+.file-uploader-progress-fill.success {
+  background-color: var(--success);
+}
+.file-uploader-progress-fill.failure {
+  background-color: var(--error);
+}
+
+.file-uploader-cancel {
+  position: absolute;
+  right: 0.25rem;
+  top: -0.5rem;
+  cursor: pointer;
+  color: var(--error);
+  font-size: 20px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease-in-out;
+  font-weight: 900;
+}
+.file-uploader-cancel:hover {
+  opacity: 1;
+}
+
+.fdrive-preview .header {
+  display: flex;
+}
+.fdrive-preview .header .title {
+  flex-grow: 1;
+  align-self: center;
+}
+.fdrive-preview .header {
+  margin-bottom: 1rem;
+}
+.fdrive-preview .body {
+  flex-grow: 1;
+  display: flex;
+  place-items: center;
+  text-align: center;
+  position: relative;
+  overflow: auto;
+}
+.fdrive-preview .body img {
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+}
+.fdrive-preview .body .text-preview {
+  height: 100%;
+  width: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  text-align: left;
+}
+.fdrive-preview .footer {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.fdrive-text-preview-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  font-size: 1.2rem;
+}
+
+.fdrive-text-preview-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 80%;
+  width: 80%;
+  max-height: 90%;
+  height: 90%;
+  background-color: var(--base);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.fdrive-text-preview-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+  opacity: 0.5;
+}
+.fdrive-text-preview-close:hover {
+  opacity: 1;
+}
+
+.fdrive-text-preview-text-container {
+  overflow: auto;
+  flex-grow: 1;
+  padding: 0 1rem;
+  margin: 0 1rem 1rem;
+  white-space: pre-wrap;
+}
+.fdrive-text-preview-text-container .pre {
+  margin: 0;
+}
+
+.fdrive-text-preview-footer {
+  position: relative;
+  height: 2rem;
+  min-height: 2rem;
+}
+
+.fdrive-text-preview-filename {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0.5rem 0 0.5rem 2rem;
+  color: var(--color);
+  cursor: pointer;
+}
+.fdrive-text-preview-filename:hover {
+  text-decoration: none;
+}
+.fdrive-text-preview-filename i {
+  margin-right: 0.5rem;
+  color: var(--accent);
+}
+
+.fdrive-text-preview-copy {
+  display: inline-block;
+  position: absolute;
+  bottom: 1.25rem;
+  left: 2rem;
+  color: var(--color);
+  cursor: pointer;
+  opacity: 0.5;
+}
+.fdrive-text-preview-copy:hover {
+  opacity: 1;
+}
+.fdrive-text-preview-copy i {
+  margin-right: 0.5rem;
+  color: var(--accent);
+}
+
+.fdrive-text-preview-filesize {
+  display: block;
+  position: absolute;
+  right: 2rem;
+  bottom: 1.25rem;
+}
+
+#fdrive-list.grid .check {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+#fdrive-list.grid .file {
+  width: 240px;
+  height: 240px;
+}
+#fdrive-list.grid .file-inner {
+  position: relative;
+  overflow: hidden;
+  margin: 0.25rem;
+  padding: 0.25rem;
+  width: calc(100% - 1rem);
+  height: calc(100% - 1rem);
+  border-radius: 0.5rem;
+}
+#fdrive-list.grid .size, #fdrive-list.grid .modified {
+  display: none;
+}
+#fdrive-list.grid .file.folder {
+  cursor: pointer;
+}
+#fdrive-list.grid .name {
+  text-align: center;
+  word-break: break-all;
+  display: block;
+  font-size: 0.9rem;
+  height: calc(45% - 0.5rem);
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#fdrive-list.grid .icon {
+  width: calc(100% - 2rem);
+  padding: 0 1rem 0.25rem;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+}
+#fdrive-list.grid .icon img {
+  border-radius: 0.25rem;
+  object-fit: contain;
+  max-width: 120%;
+}
+#fdrive-list.grid .icon i {
+  font-size: 10rem;
+}
+
+#fdrive-list.list .file .file-inner {
+  background: rgba(var(--color-rgb), 0.01);
+}
+#fdrive-list.list .file:nth-of-type(even) .file-inner {
+  background: rgba(var(--color-rgb), 0.03);
+}
+#fdrive-list.list .file:nth-of-type(even):hover .file-inner {
+  background: rgba(var(--color-rgb), 0.2);
+}
+#fdrive-list.list .file-inner {
+  --margin: 2px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  margin: var(--margin);
+  height: calc(100% - var(--margin) * 2);
+  width: calc(100% - var(--margin) * 4);
+  border-radius: 5px;
+  position: relative;
+}
+#fdrive-list.list .file-inner:hover {
+  background: rgba(var(--color-rgb), 0.2);
+}
+#fdrive-list.list .file-inner .icon {
+  width: 1.5rem;
+  min-width: 1.5rem;
+  height: 100%;
+  margin: 0 0.5rem;
+  font-size: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#fdrive-list.list .file-inner .icon img {
+  width: 100%;
+  height: 65%;
+  object-fit: cover;
+}
+#fdrive-list.list .file-inner .name {
+  flex-grow: 1;
+  white-space: nowrap;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 11rem);
+}
+#fdrive-list.list .file-inner > span {
+  margin: auto;
+}
+#fdrive-list.list .file-inner .size {
+  width: 10rem;
+  min-width: 10rem;
+  justify-content: right;
+  text-align: right;
+}
+#fdrive-list.list .file-inner .modified {
+  width: 7rem;
+  min-width: 7rem;
+  text-align: center;
+}
+
+#fdrive-wrapper.small #fdrive-list.list .size {
+  padding-right: 1rem;
+}
+#fdrive-wrapper.small #fdrive-list.list .modified {
+  display: none;
+}
+
+#fdrive-list.thumbnail .file {
+  height: 240px;
+  position: relative;
+}
+#fdrive-list.thumbnail .size, #fdrive-list.thumbnail .modified {
+  display: none;
+}
+#fdrive-list.thumbnail .file.no-img .icon {
+  background: #222;
+}
+#fdrive-list.thumbnail .file.no-img .name {
+  display: unset !important;
+}
+#fdrive-list.thumbnail .file.folder {
+  cursor: pointer;
+}
+#fdrive-list.thumbnail .name {
+  position: absolute;
+  display: none;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  line-height: 2rem;
+  background: rgba(var(--base-rgb), 0.8);
+  text-align: center;
+}
+#fdrive-list.thumbnail .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#fdrive-list.thumbnail .icon, #fdrive-list.thumbnail img {
+  width: 100%;
+  height: 100%;
+}
+#fdrive-list.thumbnail .icon i {
+  font-size: 10rem;
+}
+#fdrive-list.thumbnail img {
+  object-fit: cover;
+}
+#fdrive-list.thumbnail {
+  position: relative;
+  transition: opacity 0.25s ease-in-out;
+}
+#fdrive-list.thumbnail .file:hover {
+  opacity: 1;
+}
+#fdrive-list.thumbnail .file:hover .name {
+  display: unset;
 }
 
 /*# sourceMappingURL=fdrive.css.map */

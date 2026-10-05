@@ -1,0 +1,328 @@
+$notesBackground: #111111ee;
+$notesMediaScreenSize: 1000px;
+
+#fdrive-wrapper
+{
+  position: relative;  
+  --tabs-height:5.5rem;
+  --tab-icon-height:2.5rem;
+  &.init-done {    
+    transition: width 0.5s ease-in-out,
+                min-width 0.5s ease-in-out;
+  }
+  &.is-resizing
+  {
+    transition: none !important;
+    user-select: none;
+  }
+  .expander {
+    position: absolute;
+    user-select: none;
+    top: 50%;
+    transform: translateY(-50%);
+    right:-2rem;
+    width:2rem;
+    height:13rem;
+    background: $notesBackground;
+    z-index: 2;
+    border:solid 1px var(--border-color);
+    border-left: solid 1px $notesBackground;
+    &:has( + .resizer:hover ){
+      border-left: solid 7px $notesBackground;
+    }
+    cursor:pointer;
+    opacity: 0.75;
+    &:hover{ opacity: 1;}
+    > span {
+      writing-mode: vertical-lr;
+      transform: rotate(-180deg);
+      text-align: center;
+      width: 100%;
+      height: calc(100% - 2rem); 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: 0.3rem;
+      > i {
+        transform: rotate(90deg);
+        padding-right: 1.5rem;
+        padding-top: 0.25rem;
+      }
+    }
+    > i {
+      position: relative;
+      top: 0.65rem;
+      left: 0.65rem;
+    }
+  }
+  .resizer {
+    position:absolute;
+    right:0;
+    top:0;
+    bottom:0;
+    width:1px;
+    background: var(--border-color);
+    z-index:1;
+    cursor:ew-resize;
+  }
+  &.is-resizing .resizer, .resizer:hover {
+    width:6px;
+  }
+  .fdrive-inner {
+    height:100%;
+    overflow: hidden;
+    background:$notesBackground;
+    position: relative;
+  }
+  &.collapsed {
+    width: 0 !important;
+    min-width: 0 !important;
+  }
+  &.expanded {
+    .expander
+    {
+      opacity: 1;
+      > i {
+        transform: rotate(-180deg);
+      }
+    }
+    .nope-fdrive-inner {
+      @media screen and (max-width:$notesMediaScreenSize)
+      {
+        width:min(90vw, 40rem);
+
+        #calendar-actual {
+          width: min(90vw, 40rem);
+        }
+      }
+      @media screen and (min-width:($notesMediaScreenSize + .001))
+      {
+        width:60rem;
+        #calendar-actual {
+          width: 60rem;
+        }
+      }
+    }
+  }
+
+  .fdrive-add-button
+  {
+    > i {
+      position: absolute;
+      bottom: 6.5rem;
+      right: 2.5rem;
+      padding: 1rem;
+      border-radius: 51rem;
+      background: rgba(var(--accent-rgb), 0.3);
+      cursor: pointer;
+      transition: transform 0.1s ease-in-out;
+
+      &:hover {
+        background: rgba(var(--accent-rgb), 0.7);
+        transform: scale(1.1);
+      }
+
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--color);
+      width: 2rem;
+      height: 2rem;
+      margin: auto;
+      @-moz-document url-prefix() {
+        text-shadow: -1px -1px 0 var(--color),
+        1px -1px 0 var(--color),
+        -1px 1px 0 var(--color),
+        1px 1px 0 var(--color),
+        -2px -2px 0 var(--color),
+        2px -2px 0 var(--color),
+        -2px 2px 0 var(--color),
+        2px 2px 0 var(--color);
+      }
+      -webkit-text-stroke: 0.5rem var(--color);
+
+      &::before {
+        position: relative;
+        left: 1px;
+      }
+    }
+  }
+  .content {
+    width:calc(100% - 0.5rem);
+    height: calc(100% - var(--tabs-height));
+    min-height: calc(100% - var(--tabs-height));
+    overflow: auto;
+  }
+  .fdrive-tabs {
+    position:absolute;
+    bottom:0;
+    right:0;
+    left:0;
+    height:var(--tabs-height);
+    display:flex;
+    flex-direction: row;
+    > div {
+      cursor:pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-basis: 0;
+      flex-grow: 1;
+      font-size: 1rem;
+      flex-direction: column;
+      @media screen and (max-width: $notesMediaScreenSize){
+        font-size:0.9rem;
+      }
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.3rem;
+      opacity:0.2;
+      background:#000;
+      user-select: none;
+      &.active {
+        opacity:1;
+        background:unset;
+      }
+    }
+    i {
+      font-size:2rem;
+      text-align: center;
+      height:var(--tab-icon-height);
+      display: block;
+    }
+    svg {
+      padding-bottom: 0.6rem;
+      height: calc(var(--tab-icon-height) - 0.6rem);      
+    }
+    img {
+      padding-bottom: 0.6rem;
+      height: calc(var(--tab-icon-height) - 0.6rem);
+    }
+    span.label {
+      font-size:0.7rem;
+      display: block;
+      text-align: center;
+    }
+  }
+
+  .fdrive-modes {
+    height: calc(100% - var(--tabs-height));
+    .fdrive-pane-title {
+      height:3rem;
+    }
+    > div {
+      height:100%;
+    }
+     > div:not(.visible) {
+       display:none !important;
+     }
+  }
+}
+
+
+
+
+
+
+.media {
+  position:relative;
+  transition: opacity 0.25s ease-in-out;
+  .controls {
+    position:absolute;
+    bottom:4rem;
+    left:1rem;
+    font-size:2rem;
+    display:none;
+    > i {
+      cursor: pointer;
+      position:absolute;
+    }
+    .delete {
+      left: 0.85rem;
+      top: 0.7rem;
+      color: rgba(var(--color-rgb), 0.8);
+    }
+    .fa-circle {
+      color: rgba(var(--accent-rgb), 0.3);
+      font-size:3.5rem;
+    }
+    &:hover {
+      .delete {
+        color: var(--color);
+      }
+      .fa-circle {
+        color: rgba(var(--accent-rgb), 0.7);
+      }
+    }
+  }
+  &:hover {
+    .controls {
+      display: unset;
+    }
+  }
+}
+.media:hover {
+  opacity: 1;
+}
+
+
+
+body.drawer-item-opened {
+  ul.main-menu {
+    display:none;
+  }
+
+  .expander {
+    display:none;
+  }
+  .resizer:not(:hover){
+    //background-color:transparent !important;
+  }
+}
+
+
+
+
+
+.fdrive-item-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 2rem;
+  height: calc(100% - 4rem);
+  width: calc(100% - 4rem);
+  transition: transform 0.2s ease-in-out;
+  transform: translateX(100%);
+  background: var(--base);
+  flex-direction: column;
+
+  &.visible {
+    transform: translateX(0);
+    display: flex;
+    z-index: 5;
+  }
+  
+  .header {
+    button {
+      background-color: #222222;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      color: var(--color);
+      border-radius: 0.5rem;
+      height: 2.5rem;
+      width: 3rem;
+      + button {
+        margin-left:0.5rem;
+      }
+
+
+      &:hover {
+        background: rgba(var(--accent-rgb), 0.4);
+      }
+    }
+  }
+}
