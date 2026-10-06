@@ -1,10 +1,13 @@
 ﻿class FileFlows
 {
     fetch(args) {
-        let prefix = args.url;
-        if(prefix.endsWith('/') === false)
-            prefix += '/';
-        let url = prefix + 'webhook/fenrus';
+        let url = args.url;
+        if(url.endsWith('/') === false)
+            url += '/';
+        
+        if(url.contains('/webhook/') === false)
+            url += 'webhook/fenrus';
+        
         args.log('Fetching URL: ' + url);
         if(!args.properties["apiToken"])
             return args.fetch(url).data;
@@ -13,7 +16,7 @@
             url: url,
             method: 'GET',
             headers: {
-                'x-token': args.properties['apiToken']                
+                'x-webhook-token': args.properties['apiToken']                
             }            
         }).data;
     }
