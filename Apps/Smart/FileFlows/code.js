@@ -1,12 +1,10 @@
 ﻿class FileFlows
 {
     fetch(args) {
-        let url = args.url;
-        if(url.endsWith('/') === false)
-            url += '/';
+        let url = args.url.replace(/\/+$/, '');
         
-        if(url.contains('/webhook/') === false)
-            url += 'webhook/fenrus';
+        if (!/\/webhook/i.test(url))
+            url += '/webhook/fenrus';
         
         args.log('Fetching URL: ' + url);
         if(!args.properties["apiToken"])
