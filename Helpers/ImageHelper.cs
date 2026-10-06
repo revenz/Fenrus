@@ -94,6 +94,9 @@ public class ImageHelper
     /// <param name="id">the image id</param>
     public static void DeleteImage(string id)
     {
+        if (string.IsNullOrEmpty(id) || Regex.IsMatch(id, "^[a-zA-Z0-9_-]+$") == false)
+            return; // disallowed characters, we dont want them use ../ or anything invalid here
+
         using var db = DbHelper.GetDb();
         id = "db:/image/" + id;
         db.FileStorage.Delete(id);
