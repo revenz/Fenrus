@@ -26,7 +26,7 @@
 
         args.setStatusIndicator(updateAvailable ? 'update' : '');
 
-        if (!data || isNaN(data.queue)) {
+        if (!data || isNaN(data.Unprocessed)) {
             throw 'no data';
         }
 
@@ -68,7 +68,7 @@
         }
 
         return args.liveStats([
-            ['Queue', data.Queue],
+            ['Queue', data.Unprocessed],
             [secondlbl, secondValue]
         ]);    
     }
