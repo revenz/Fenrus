@@ -118,7 +118,7 @@ else
 
 var app = builder.Build();
 
-if(reverseProxySettings.UseForwardedHeaders)
+if(reverseProxySettings?.UseForwardedHeaders == true)
     app.UseForwardedHeaders();
 
 app.Use(async (context, next) =>
