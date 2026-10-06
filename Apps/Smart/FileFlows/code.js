@@ -4,7 +4,7 @@
         let prefix = args.url;
         if(prefix.endsWith('/') === false)
             prefix += '/';
-        url = prefix + 'webhook/fenrus';
+        let url = prefix + 'webhook/fenrus';
         args.log('Fetching URL: ' + url);
         if(!args.properties["apiToken"])
             return args.fetch(url).data;
