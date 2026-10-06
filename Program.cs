@@ -33,9 +33,9 @@ builder.Services.AddMvc().AddRazorRuntimeCompilation();
 
 //Gets the reverse proxy settings from the appsettings.json file
 //to check if the app is running behind a reverse proxy
-ReverseProxySettings reverseProxySettings = builder.Configuration.GetSection(nameof(ReverseProxySettings)).Get<ReverseProxySettings>();
+ReverseProxySettings? reverseProxySettings = builder.Configuration.GetSection(nameof(ReverseProxySettings)).Get<ReverseProxySettings>();
 
-if(reverseProxySettings.UseForwardedHeaders)
+if(reverseProxySettings?.UseForwardedHeaders == true)
 {
     ConfigureUsingForwardedHeaders(builder, reverseProxySettings);
 }
@@ -99,7 +99,7 @@ if (oAuth)
             {
                 //Added option to debug request headers for reverse proxy
                 //Sometimes it can be difficult to find out if X-Forwarded-X headers are set correctly
-                if(reverseProxySettings.DebugPrintRequestHeaders)
+                if(reverseProxySettings?.DebugPrintRequestHeaders == true)
                     Logger.DLog($"Request headers: {string.Join(Environment.NewLine, context.Request.Headers)}");
                 return Task.FromResult(0);
             };
