@@ -1,6 +1,12 @@
 # ASP.NET Core 10.0 runtime base image
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 
+# what the image is; Fortilla (and other docker tools) show its version from it, else the base image's
+ARG BUILD_VERSION=0.0.0.0
+LABEL org.opencontainers.image.title="Fenrus" \
+      org.opencontainers.image.description="Fenrus: your personal home page and dashboard" \
+      org.opencontainers.image.version="${BUILD_VERSION}"
+
 WORKDIR /app
 
 # Copy application files
